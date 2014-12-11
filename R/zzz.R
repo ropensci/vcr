@@ -5,3 +5,5 @@ pluck <- function(x, name, type) {
     vapply(x, "[[", name, FUN.VALUE = type)
   }
 }
+
+last <- function(x) x[length(x)][[1]]

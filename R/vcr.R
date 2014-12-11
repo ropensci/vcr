@@ -1,4 +1,4 @@
-#' Use cassette
+#' Use a cassette to record an HTTP call
 #'
 #' @export
 #'
@@ -66,7 +66,18 @@
 #'  are done.
 #'
 #' @examples \dontrun{
+#' x <- cassettes()[[1]]
+#' (cas <- as.cassette(x))
+#' as.cassette(cas)
+#' as.cassette(cassettes()[[1]])
+#' as.cassette(cassettes()[[2]])
+#' as.cassette("foobar")
+#'
 #' insert_cassette(name = "foobar")
+#'
+#' use_cassette("foobar", {
+#'    GET("http://google.com")
+#' })
 #' }
 
 use_cassette <- function(name, record="once", match_requests_on=NULL, re_record_interval=NULL,
@@ -77,8 +88,8 @@ use_cassette <- function(name, record="once", match_requests_on=NULL, re_record_
 {
   if(block) stop(errmssg, call. = FALSE)
   cassette <- insert_cassette(name, ...)
-  call_block(block, cassette)
-  eject_cassette()
+  call_block(cassette, block)
+  # eject_cassette(cassette)
 }
 
 #' @export
@@ -125,7 +136,7 @@ cassette_new <- function(name, record, match_requests_on, re_record_interval,
     cat(sprintf("%s: %s", names(m[i]), m[i]), file = sprintf("%s/%s_metadata.yml", path.expand(cassette_path()), name), sep = "\n", append = TRUE)
   }
   cat("\n", file = sprintf("%s/%s.yml", path.expand(cassette_path()), name))
-  return( structure(metadata, class="cassette") )
+  return( structure(m, class="cassette") )
 }
 
 print.cassette <- function(x, ...){
@@ -141,18 +152,6 @@ print.cassette <- function(x, ...){
   cat(paste0("  preserve_exact_body_bytes: ", x$preserve_exact_body_bytes), sep = "\n")
 }
 
-cassettes <- function(){
-  path <- path.expand(cassette_path())
-  check_create_path(path)
-  list.files(path)
-}
-
-cassette_path <- function() '~/vcr/vcr_cassettes'
-
-check_create_path <- function(x){
-  if(file.exists(x)) dir.create(x, recursive = TRUE, showWarnings = FALSE)
-}
-
 #' @export
 #' @rdname use_cassette
 #' @param skip_no_unused_interactions_assertion (logical) If \code{TRUE}, this will skip
@@ -161,7 +160,7 @@ check_create_path <- function(x){
 #' when your test has had an error, but your test framework has already handled it.
 #' @return The ejected cassette if there was one
 eject_cassette <- function(cassettes, options = list()){
-  cassette <- cassettes.last
+  cassette <- last(cassettes())
   cassette.eject(options) if cassette
   cassette
   ensure
