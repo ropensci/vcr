@@ -2,9 +2,9 @@
 #'
 #' @examples \dontrun{
 #' cassette <- cassettes()[[3]]
-call_block(cassette, {
-  GET("http://httpbin.org/get")
-})
+#' call_block(cassette, {
+#'   GET("http://httpbin.org/get")
+#' })
 #' }
 
 call_block <- function(cassette, block) {

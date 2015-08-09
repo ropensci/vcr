@@ -10,4 +10,6 @@ BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 LazyData: true
 Imports:
-    yaml
+    yaml,
+    digest,
+    R6

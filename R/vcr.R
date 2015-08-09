@@ -84,9 +84,9 @@ use_cassette <- function(name, record="once", match_requests_on=NULL, re_record_
   tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
   serialize_with="yaml", persist_with="file_system", preserve_exact_body_bytes=TRUE,
-  block = FALSE)
-{
-  if(block) stop(errmssg, call. = FALSE)
+  block = FALSE) {
+
+  if (block) stop(errmssg, call. = FALSE)
   cassette <- insert_cassette(name, ...)
   call_block(cassette, block)
   # eject_cassette(cassette)
@@ -97,10 +97,10 @@ use_cassette <- function(name, record="once", match_requests_on=NULL, re_record_
 insert_cassette <- function(name, record="once", match_requests_on=NULL, re_record_interval=NULL,
   tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
 	allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
-	serialize_with="yaml", persist_with="file_system", preserve_exact_body_bytes=TRUE)
-{
-  if(turned_on()){
-    if( any( name %in% names(cassettes()) ) )
+	serialize_with="yaml", persist_with="file_system", preserve_exact_body_bytes=TRUE) {
+
+  if (turned_on()) {
+    if ( any( name %in% names(cassettes()) ) )
       stop(sprintf("There is already a cassette with the same name: %s", name), call. = FALSE)
 
     cassette_new(name, record=record, match_requests_on=match_requests_on,
@@ -112,7 +112,7 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL, re_reco
         preserve_exact_body_bytes=preserve_exact_body_bytes)
     # cassettes.push(cassette)
   } else {
-    if(ignore_cassettes){
+    if (ignore_cassettes) {
       message <- "VCR is turned off.  You must turn it on before you can insert a cassette.
       Or you can use the ignore_cassettes=TRUE option to completely ignore cassette insertions."
       stop(message, call. = FALSE)
@@ -122,8 +122,8 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL, re_reco
 
 cassette_new <- function(name, record, match_requests_on, re_record_interval,
   tag, tags, update_content_length_header, decode_compressed_response, allow_playback_repeats,
-  allow_unused_http_interactions, exclusive, serialize_with, persist_with, preserve_exact_body_bytes)
-{
+  allow_unused_http_interactions, exclusive, serialize_with, persist_with, preserve_exact_body_bytes) {
+
   args <- list(record=record, match_requests_on=match_requests_on,
                re_record_interval=re_record_interval, tag=tag, tags=tags,
                update_content_length_header=update_content_length_header,
@@ -131,12 +131,12 @@ cassette_new <- function(name, record, match_requests_on, re_record_interval,
                allow_unused_http_interactions=allow_unused_http_interactions, exclusive=exclusive,
                serialize_with=serialize_with, persist_with=persist_with,
                preserve_exact_body_bytes=preserve_exact_body_bytes)
-  m <- c(name=name, args)
-  for(i in seq_along(m)){
+  m <- c(name = name, args)
+  for (i in seq_along(m)) {
     cat(sprintf("%s: %s", names(m[i]), m[i]), file = sprintf("%s/%s_metadata.yml", path.expand(cassette_path()), name), sep = "\n", append = TRUE)
   }
   cat("\n", file = sprintf("%s/%s.yml", path.expand(cassette_path()), name))
-  return( structure(m, class="cassette") )
+  return( structure(m, class = "cassette") )
 }
 
 print.cassette <- function(x, ...){
@@ -152,6 +152,8 @@ print.cassette <- function(x, ...){
   cat(paste0("  preserve_exact_body_bytes: ", x$preserve_exact_body_bytes), sep = "\n")
 }
 
+####### IN DEVELOPMENT ----------------
+#' Eject cassette
 #' @export
 #' @rdname use_cassette
 #' @param skip_no_unused_interactions_assertion (logical) If \code{TRUE}, this will skip
@@ -159,12 +161,20 @@ print.cassette <- function(x, ...){
 #' \code{allow_unused_http_interactions=FALSE} cassette option. This is intended for use
 #' when your test has had an error, but your test framework has already handled it.
 #' @return The ejected cassette if there was one
-eject_cassette <- function(cassettes, options = list()){
+eject_cassette <- function(cassettes, options = list()) {
   cassette <- last(cassettes())
-  cassette.eject(options) if cassette
+  cassette.eject(options) if cassette # use cassette_eject()
   cassette
   ensure
   cassettes.pop
+}
+
+cassette_eject <- function(x) {
+  x
+}
+
+response_summary <- function(x) {
+  httr::http_condition(x, "message")$message
 }
 
 #' Turns VCR off for the duration of a block.
