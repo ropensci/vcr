@@ -1,7 +1,7 @@
 vcr
 =======
 
-
+[![Build Status](https://api.travis-ci.org/ropensci/vcr.png?branch=master)](https://travis-ci.org/ropensci/vcr)
 
 An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
