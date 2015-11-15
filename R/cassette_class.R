@@ -1,8 +1,6 @@
 #' Cassette handler
 #'
 #' @export
-#' @importFrom digest digest
-#' @importFrom R6 R6Class
 #' @examples \dontrun{
 #' res <- Cassette$new("foobar")
 #' res <- Cassette$new("foobar", record = "all")
@@ -12,47 +10,47 @@
 #' res$serializable_hash()
 #' res$eject()
 #' }
-Cassette <- R6Class("Cassette",
-      public = list(
-        name = NA,
-        record = "none",
-        manfile = NA,
-        recorded_at = NA,
-        initialize = function(name, record) {
-          self$name <- name
-          if (!missing(record)) self$record <- record
-          make_dir("~/vcr/vcr_cassettes")
-          self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()), self$name)
-          cat("\n", file = self$manfile)
-          self$recorded_at <- file.info(res$file())$mtime
-          message("Initialized with options: ", self$record)
-        },
-        eject = function() {
-          write_recorded_interactions_to_disk()
-          message("coming soon...")
-        },
-        file = function() {
-          self$manfile
-        },
-        recording = function() {
-          if (self$record == "none") {
-            FALSE
-          } else {
-            TRUE
-          }
-        },
-        originally_recorded_at = function() {
-          self$recorded_at
-        },
-        serializable_hash = function() {
-          list(
-            "http_interactions" = "fixme",
-              # interactions_to_record.map(&:to_hash),
-            "recorded_with"     = "fixme"
-            # "VCR #{VCR.version}"
-          )
-        }
+Cassette <- R6::R6Class("Cassette",
+  public = list(
+    name = NA,
+    record = "none",
+    manfile = NA,
+    recorded_at = NA,
+    initialize = function(name, record) {
+      self$name <- name
+      if (!missing(record)) self$record <- record
+      make_dir("~/vcr/vcr_cassettes")
+      self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()), self$name)
+      cat("\n", file = self$manfile)
+      self$recorded_at <- file.info(res$file())$mtime
+      message("Initialized with options: ", self$record)
+    },
+    eject = function() {
+      write_recorded_interactions_to_disk()
+      message("coming soon...")
+    },
+    file = function() {
+      self$manfile
+    },
+    recording = function() {
+      if (self$record == "none") {
+        FALSE
+      } else {
+        TRUE
+      }
+    },
+    originally_recorded_at = function() {
+      self$recorded_at
+    },
+    serializable_hash = function() {
+      list(
+        "http_interactions" = "fixme",
+          # interactions_to_record.map(&:to_hash),
+        "recorded_with"     = "fixme"
+        # "VCR #{VCR.version}"
       )
+    }
+  )
 )
 
 make_dir <- function(x) {

@@ -163,10 +163,10 @@ print.cassette <- function(x, ...){
 #' @return The ejected cassette if there was one
 eject_cassette <- function(cassettes, options = list()) {
   cassette <- last(cassettes())
-  cassette.eject(options) if cassette # use cassette_eject()
-  cassette
-  ensure
-  cassettes.pop
+  # cassette.eject(options) if cassette # use cassette_eject()
+  # cassette
+  # ensure
+  # cassettes.pop
 }
 
 cassette_eject <- function(x) {
@@ -186,7 +186,7 @@ response_summary <- function(x) {
 #'  will be ignored; otherwise an error will be raised.
 #' @seealso turn_off, turn_on, turned_on
 turned_off <- function(options = list(), ignore_cassettes = FALSE){
-  turn_off!(options)
+  # turn_off!(options)
 # begin
 # yield
 # ensure
