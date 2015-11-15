@@ -22,7 +22,7 @@ Cassette <- R6::R6Class("Cassette",
       make_dir("~/vcr/vcr_cassettes")
       self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()), self$name)
       cat("\n", file = self$manfile)
-      self$recorded_at <- file.info(res$file())$mtime
+      self$recorded_at <- file.info(self$file())$mtime
       message("Initialized with options: ", self$record)
     },
     eject = function() {
@@ -58,7 +58,7 @@ make_dir <- function(x) {
 }
 
 write_recorded_interactions_to_disk <- function(x) {
-  if (length(new_recorded_interactions) == 0) {
+  if (length(any_new_recorded_interactions()) == 0) {
     message("none")
   }
 #   hash = serializable_hash()
@@ -71,18 +71,98 @@ write_recorded_interactions_to_disk <- function(x) {
   # @persister[storage_key] = @serializer.serialize(hash)
 }
 
+# @return [Hash] The hash that will be serialized when the cassette is written to disk.
+serializable_hash <- function() {
+  "http_interactions" => interactions_to_record.map(&:to_hash),
+  "recorded_with"     => "VCR #{VCR.version}"
+}
+
+interactions_to_record <- function(x) {
+  "X"
+}
+
+interactions_to_record <- function() {
+  # We deep-dup the interactions by roundtripping them to/from a hash.
+  # This is necessary because `before_record` can mutate the interactions.
+  merged_interactions.map { |i| HTTPInteraction.from_hash(i.to_hash) }.tap do |interactions|
+    invoke_hook(:before_record, interactions)
+  end
+}
+
+merged_interactions <- function(x) {
+  old_interactions = previously_recorded_interactions
+
+  if should_remove_matching_existing_interactions?
+    new_interaction_list = HTTPInteractionList.new(new_recorded_interactions, match_requests_on)
+    old_interactions = old_interactions.reject do |i|
+      new_interaction_list.response_for(i.request)
+    end
+  end
+
+  old_interactions + new_recorded_interactions
+}
+
+previously_recorded_interactions <- function() {
+  @previously_recorded_interactions ||= if !raw_cassette_bytes.to_s.empty?
+    deserialized_hash['http_interactions'].map { |h| HTTPInteraction.from_hash(h) }.tap do |interactions|
+      invoke_hook(:before_playback, interactions)
+
+      interactions.reject! do |i|
+        i.request.uri.is_a?(String) && VCR.request_ignorer.ignore?(i.request)
+      end
+    end
+  else
+    []
+  end
+}
+
+raw_cassette_bytes <- function() {
+  @raw_cassette_bytes ||= VCR::Cassette::ERBRenderer.new(@persister[storage_key], erb, name).render
+}
+
+deserialized_hash <- function() {
+  @deserialized_hash ||= @serializer.deserialize(raw_cassette_bytes).tap do |hash|
+    unless hash.is_a?(Hash) && hash['http_interactions'].is_a?(Array)
+      raise Errors::InvalidCassetteFormatError.new \
+        "#{file} does not appear to be a valid VCR 2.0 cassette. " +
+        "VCR 1.x cassettes are not valid with VCR 2.0. When upgrading from " +
+        "VCR 1.x, it is recommended that you delete all your existing cassettes and " +
+        "re-record them, or use the provided vcr:migrate_cassettes rake task to migrate " +
+        "them. For more info, see the VCR upgrade guide."
+    end
+  end
+}
+
 # library("httr")
-# x <- GET("http://google.com")
-# record_http_interaction(x)
+# library("magrittr")
+# Sys.setenv(VCR_LOG_PATH = "vcr.log")
+
+# GET("http://google.com") %>% record_http_interaction
 # ls(new_recorded_interactions)
-# get(ls(new_recorded_interactions), new_recorded_interactions)
+# get(ls(new_recorded_interactions), envir = new_recorded_interactions)
+#
+# GET("http://api.crossref.org/members/78") %>% record_http_interaction
 record_http_interaction <- function(x) {
   # FIXME - should be logged
+  log_write(log_prepare(x))
   message(sprintf("Recorded HTTP interaction: %s => %s", x$request$url, response_summary(x)))
   assign(digest::digest(x), x, envir = new_recorded_interactions)
 }
 
 new_recorded_interactions <- new.env(parent = .GlobalEnv)
+
+# any_new_recorded_interactions()
+any_new_recorded_interactions <- function() {
+  ls(new_recorded_interactions, envir = new_recorded_interactions)
+}
+
+log_prepare <- function(x) {
+  sprintf("%s => %s", x$request$url, response_summary(x))
+}
+
+log_write <- function(x) {
+  cat("\n", x, file = Sys.getenv("VCR_LOG_PATH"), append = TRUE)
+}
 
 # interactions_to_record <- function() {
 # # We deep-dup the interactions by roundtripping them to/from a hash.

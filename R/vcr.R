@@ -84,7 +84,7 @@ use_cassette <- function(name, record="once", match_requests_on=NULL, re_record_
   tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
   serialize_with="yaml", persist_with="file_system", preserve_exact_body_bytes=TRUE,
-  block = FALSE) {
+  block = FALSE, ...) {
 
   if (block) stop(errmssg, call. = FALSE)
   cassette <- insert_cassette(name, ...)
@@ -100,8 +100,9 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL, re_reco
 	serialize_with="yaml", persist_with="file_system", preserve_exact_body_bytes=TRUE) {
 
   if (turned_on()) {
-    if ( any( name %in% names(cassettes()) ) )
+    if ( any( name %in% names(cassettes()) ) ) {
       stop(sprintf("There is already a cassette with the same name: %s", name), call. = FALSE)
+    }
 
     cassette_new(name, record=record, match_requests_on=match_requests_on,
         re_record_interval=re_record_interval, tag=tag, tags=tags,
@@ -166,7 +167,7 @@ eject_cassette <- function(cassettes, options = list()) {
   # cassette.eject(options) if cassette # use cassette_eject()
   # cassette
   # ensure
-  # cassettes.pop
+  #   cassettes.pop
 }
 
 cassette_eject <- function(x) {

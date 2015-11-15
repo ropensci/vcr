@@ -25,14 +25,16 @@ write_cassette <- function(cassette, result){
 }
 
 write_yaml <- function(x, file){
-  cat("---\nhttp_interactions:\n- request:", sep="\n", file=file)
+  cat("---\nhttp_interactions:\n- request:", sep = "\n", file = file)
   cf(sprintf("method: %s", x$request$method), file)
   cf(sprintf("uri: %s", x$url), file)
   forwrite("body:", x$request$opts, file)
-  cat("  response:", file=file, append=TRUE, sep="\n")
+  cat("  response:", file = file, append = TRUE, sep = "\n")
   cf(sprintf("status_code: %s", x$status_code), file)
   forwrite("headers:", x$headers, file)
-  cat("   body:", file=file, append=TRUE)
+  # cat("headers: \n", file = file)
+  # cat(yaml::as.yaml(x$headers, indent = 4), file = file, append = TRUE)
+  cat("   body:", file = file, append = TRUE)
   cat("\n",
       strwrap(
         gsub('\"', '\\\\"',
@@ -40,20 +42,19 @@ write_yaml <- function(x, file){
              sprintf("  string: '%s'", content(x, as = "text"))
         )),
       indent = 5, exdent = 10),
-    file=file, fill=80, append = TRUE
+    file = file, fill = 80, append = TRUE
   )
-  cat(sprintf("   recorded_at: %s", Sys.time()), file=file, sep = "\n", append = TRUE)
-  cat(sprintf("   recorded_with: %s", packageVersion("vcr")), file=file, sep = "\n", append = TRUE)
+  cat(sprintf("   recorded_at: %s", Sys.time()), file = file, sep = "\n", append = TRUE)
+  cat(sprintf("   recorded_with: %s", packageVersion("vcr")), file = file, sep = "\n", append = TRUE)
 }
 
 forwrite <- function(name, x, file){
   cf(name, file)
-  for(i in seq_along(x)){
-    # cf(sprintf("  %s:\n     -%s", names(x[i]), x[[i]]), file)
-    cf(sprintf("  %s: %s", names(x[i]), x[[i]]), file)
+  for (i in seq_along(x)) {
+    cf(sprintf("  %s: '%s'", names(x[i]), x[[i]]), file)
   }
 }
 
 cf <- function(x, f){
-  cat(paste0("   ", x), sep="\n", file=f, append = TRUE)
+  cat(paste0("   ", x), sep = "\n", file = f, append = TRUE)
 }
