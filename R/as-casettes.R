@@ -39,4 +39,4 @@ as.cassettepath.character <- function(x) {
 }
 
 #' @export
-print.cassettepath <- function(x) cat(paste0("<cassette path>"), x[[1]])
+print.cassettepath <- function(x, ...) cat(paste0("<cassette path>"), x[[1]])
