@@ -123,9 +123,11 @@ raw_cassette_bytes <- function(name) {
 }
 
 erbr_renderer <- function(key, erb, name) {
-  return @raw_template if @raw_template.nil? || !use_erb?
-  binding = binding_for_variables if erb_variables
-  template.result(binding)
+  ### FIXME - this doesn't quite make sense yet - not sure where the erb
+  ###   object is coming from
+  # return @raw_template if @raw_template.nil? || !use_erb?
+  # binding = binding_for_variables if erb_variables
+  # template.result(binding)
   # rescue NameError => e
   #   handle_name_error(e)
 }

@@ -24,7 +24,7 @@ cassette_current <- function() last(cassettes())
 cassette_path <- function() '~/vcr/vcr_cassettes'
 
 read_cassette_meta <- function(x, ...){
-  structure(yaml::yaml.load_file(x, ...), class="cassette")
+  structure(yaml::yaml.load_file(x, ...), class = "cassette")
 }
 
 get_cassette_meta_paths <- function(){
@@ -40,7 +40,7 @@ cassette_files <- function(){
 
 # get_cassette_path("foobar")
 get_cassette_path <- function(x){
-  if( x %in% get_cassette_names() ) get_cassette_meta_paths()[[x]]
+  if ( x %in% get_cassette_names() ) get_cassette_meta_paths()[[x]]
 }
 
 is_path <- function(x) file.exists(path.expand(x))
@@ -57,5 +57,5 @@ get_cassette_data_paths <- function(){
 }
 
 check_create_path <- function(x){
-  if(file.exists(x)) dir.create(x, recursive = TRUE, showWarnings = FALSE)
+  if (file.exists(x)) dir.create(x, recursive = TRUE, showWarnings = FALSE)
 }
