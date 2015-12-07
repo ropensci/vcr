@@ -26,8 +26,8 @@ Cassette <- R6::R6Class("Cassette",
       message("Initialized with options: ", self$record)
     },
     eject = function() {
+      stop("coming soon...")
       write_recorded_interactions_to_disk()
-      message("coming soon...")
     },
     file = function() {
       self$manfile
@@ -90,7 +90,7 @@ interactions_to_record <- function() {
 }
 
 merged_interactions <- function(x) {
-  old_interactions = previously_recorded_interactions
+  old_interactions <- previously_recorded_interactions()
 
   if should_remove_matching_existing_interactions?
     new_interaction_list = HTTPInteractionList.new(new_recorded_interactions, match_requests_on)
@@ -116,21 +116,32 @@ previously_recorded_interactions <- function() {
   end
 }
 
-raw_cassette_bytes <- function() {
-  @raw_cassette_bytes ||= VCR::Cassette::ERBRenderer.new(@persister[storage_key], erb, name).render
+# raw_cassette_bytes()
+raw_cassette_bytes <- function(name) {
+  erbr_renderer(storage_key(name), erb, name)
+  # @raw_cassette_bytes ||= VCR::Cassette::ERBRenderer.new(@persister[storage_key], erb, name).render
 }
 
+erbr_renderer <- function(key, erb, name) {
+  return @raw_template if @raw_template.nil? || !use_erb?
+  binding = binding_for_variables if erb_variables
+  template.result(binding)
+  # rescue NameError => e
+  #   handle_name_error(e)
+}
+
+storage_key <- function(name) {
+  paste0(name, serializer$file_extension, collapse = ".")
+}
+
+# deserialized_hash <- deserialized_hash(...)
 deserialized_hash <- function() {
-  @deserialized_hash ||= @serializer.deserialize(raw_cassette_bytes).tap do |hash|
-    unless hash.is_a?(Hash) && hash['http_interactions'].is_a?(Array)
-      raise Errors::InvalidCassetteFormatError.new \
-        "#{file} does not appear to be a valid VCR 2.0 cassette. " +
-        "VCR 1.x cassettes are not valid with VCR 2.0. When upgrading from " +
-        "VCR 1.x, it is recommended that you delete all your existing cassettes and " +
-        "re-record them, or use the provided vcr:migrate_cassettes rake task to migrate " +
-        "them. For more info, see the VCR upgrade guide."
-    end
-  end
+  tmp <- serializer$deserialize_string(raw_cassette_bytes()).tap
+  if (is(tmp, "list") && length(tmp$http_interactions) > 0)) {
+    tmp
+  } else {
+    stop(sprintf("%s does not appear to be a valid cassette", ), call. = FALSE)
+  }
 }
 
 # library("httr")

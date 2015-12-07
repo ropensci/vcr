@@ -20,7 +20,7 @@ persisters <- R6::R6Class("persisters",
    private = list(
      # Gets and sets a named persister
      persister_get = function() {
-       if (!self$name %in% 'yaml') {
+       if (!self$name %in% 'FileSystem') {
          stop(sprintf("The requested VCR cassette persister (%s) is not registered.", self$name),
               call. = FALSE)
        }

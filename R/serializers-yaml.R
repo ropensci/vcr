@@ -3,10 +3,10 @@
 #' @examples
 #' (yy <- YAML$new())
 #' library("httr")
-#' x <- GET("http://api.crossref.org/works?rows=1")
+#' x <- GET("http://localhost:9200/plos/")
 #' yy$serialize(x)
 #' yy$deserialize_path()
-#' yy$deserialize_string() # if passed on instantiation
+#' # yy$deserialize_string() # if passed on instantiation
 #' yy$deserialize_string(string = "adfdf") # if not
 YAML <- R6::R6Class("YAML",
   public = list(
