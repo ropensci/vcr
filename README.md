@@ -1,5 +1,5 @@
 vcr
-=======
+===
 
 
 
@@ -9,20 +9,9 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 __>>>>>Not yet useable<<<<<__
 
-## Quick start
+## Installation
 
-### Install vcr
-
-
-```r
-install.packages("devtools")
-devtools::install_github("ropenscilabs/vcr")
-```
-
-
-```r
-library('vcr')
-```
+coming soon...
 
 ## Meta
 
