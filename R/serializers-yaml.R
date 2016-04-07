@@ -3,11 +3,12 @@
 #' @examples
 #' (yy <- YAML$new())
 #' library("httr")
-#' x <- GET("http://localhost:9200/plos/")
+#' x <- GET("http://httpbin.org/get")
 #' yy$serialize(x)
 #' yy$deserialize_path()
 #' # yy$deserialize_string() # if passed on instantiation
-#' yy$deserialize_string(string = "adfdf") # if not
+#' yy$deserialize_string(string = "- hey\n- hi\n- hello")
+#' yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
 YAML <- R6::R6Class("YAML",
   public = list(
     file_extension = ".yml",
@@ -15,7 +16,11 @@ YAML <- R6::R6Class("YAML",
     string = NULL,
     initialize = function(file_extension = ".yml", path = NULL, string = NULL) {
       self$file_extension <- file_extension
-      if (is.null(path)) self$path <- paste0(cassette_path(), "/", basename(tempfile()), file_extension)
+      if (is.null(path)) {
+        self$path <- paste0(cassette_path(), "/", basename(tempfile()), file_extension)
+      } else {
+        self$path <- paste0(cassette_path(), "/", path, file_extension)
+      }
       self$string <- string
     },
     # Serializes the given hash using internal fxn write_yaml

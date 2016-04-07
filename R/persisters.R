@@ -1,5 +1,7 @@
 #' Keeps track of the cassette persisters in a hash-like object
 #'
+#' @export
+#' @keywords internal
 #' @details There's only one: file system
 #' @examples
 #' (aa <- persisters$new())
@@ -30,3 +32,11 @@ persisters <- R6::R6Class("persisters",
      }
    )
 )
+
+#' @export
+#' @rdname persisters
+persister_fetch <- function(x = "FileSystem") {
+  per <- persisters$new(name = x)
+  per <- per$persisters
+  per$new()
+}

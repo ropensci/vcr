@@ -1,6 +1,8 @@
 #' Keeps track of the cassette serializers in a hash-like object
 #' Note: LETS JUST USE YAML, EASY PEASY FOR NOW
 #'
+#' @export
+#' @keywords internal
 #' @examples
 #' (aa <- serializers$new())
 #' aa$name
@@ -30,3 +32,11 @@ serializers <- R6::R6Class("serializers",
     }
   )
 )
+
+#' @export
+#' @rdname serializers
+serializer_fetch <- function(x = "yaml", name) {
+  ser <- serializers$new(name = x)
+  ser <- ser$serializers
+  ser$new(path = name)
+}

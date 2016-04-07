@@ -1,0 +1,85 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{vcr introduction}
+%\VignetteEncoding{UTF-8}
+-->
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+	comment = "#>",
+	collapse = TRUE,
+	warning = FALSE,
+	message = FALSE
+)
+```
+
+vr introduction
+===============
+
+Record 'HTTP' Calls to Disk
+
+Right now `vcr` is not yet using previously cached requests, but will soon.
+
+## installation
+
+Development version from GitHub
+
+```{r eval=FALSE}
+devtools::install_github("ropenscilabs/vcr")
+```
+
+Load `vcr`
+
+```{r}
+library("vcr")
+```
+
+## examples
+
+list cassettes
+
+```{r}
+cassettes()
+```
+
+list the current cassette
+
+```{r}
+cassette_current()
+```
+
+coerce various things to cassette objects
+
+```{r eval=FALSE}
+as.cassette("helloworld")
+as.cassette(cassettes()[1])
+as.cassette(as.cassettepath("~/vcr/vcr_cassettes/cheese.yml"))
+```
+
+list the path to where cassettes are stored
+
+```{r}
+cassette_path()
+```
+
+insert a cassette
+
+```{r}
+insert_cassette(name = "fartloud")
+```
+
+use a cassette (if cassette not found, we'll create the cassette)
+
+```{r}
+use_cassette("helloworld", GET("http://localhost:9200"))
+```
+
+You can also pass a code block, instead of an inline call
+
+```{r}
+insert_cassette("foobar")
+call_block("foobar", {
+  url <- "http://localhost:9200"
+  GET(url)
+})
+```

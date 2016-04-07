@@ -16,6 +16,17 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 __>>>>>Not yet useable<<<<<__
 
+## Overview/Terminology
+
+* Cassette: A _thing_ to record HTTP interactions to. Right now the only option is file system, but in the future could be other things, e.g. a key-value store
+* Persisters: defines how to save requests - currently only option is the file system
+* Serializers: defines how to serialize the HTTP response - currently only option is YAML
+* _insert cassette_: aka, create a cassette
+* _eject cassette_: aka, check for saved interactions, and replay if found
+* _replay_: refers to using a cached result of a http request that was recorded earlier
+* How `vcr` matches: By default it matches on the HTTP method and the URI, but you can tweak this using the `match_requests_on` option.
+* x
+
 ## Installation
 
 coming soon...

@@ -23,12 +23,14 @@ cassette_current <- function() last(cassettes())
 #' @rdname cassettes
 cassette_path <- function() '~/vcr/vcr_cassettes'
 
+cassette_exists <- function(x) x %in% get_cassette_names()
+
 read_cassette_meta <- function(x, ...){
   structure(yaml::yaml.load_file(x, ...), class = "cassette")
 }
 
 get_cassette_meta_paths <- function(){
-  metafiles <- names(grep("metadata", sapply(cassette_files(), basename), value = TRUE))
+  metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
   as.list(setNames(metafiles, unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))))
 }
 
@@ -47,12 +49,13 @@ is_path <- function(x) file.exists(path.expand(x))
 
 # get_cassette_names()
 get_cassette_names <- function(){
-  metafiles <- names(grep("metadata", sapply(cassette_files(), basename), value = TRUE))
+  metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
   unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))
+  #vapply(strsplit(unname(vapply(cassette_files(), basename, "")), "\\."), "[[", "", 1)
 }
 
 get_cassette_data_paths <- function(){
-  files <- names(grep("metadata", sapply(cassette_files(), basename), invert = TRUE, value = TRUE))
+  files <- names(grep("metadata", vapply(cassette_files(), basename, ""), invert = TRUE, value = TRUE))
   as.list(setNames(files, get_cassette_names()))
 }
 

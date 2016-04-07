@@ -1,0 +1,3 @@
+
+ http://google.com => success: (200) OK
+ http://api.crossref.org/members/78 => success: (200) OK
