@@ -1,10 +1,24 @@
 #' HTTPInteraction class
 #' @export
 #' @examples \dontrun{
-#' (x <- HTTPInteraction$new())
+#' # make the request
+#' url <- "http://httpbin.org/post"
+#' body <- list(foo = "bar")
+#' res <- httr::POST(url, body = body)
+#'
+#' # request
+#' (request <- Request$new("POST", url, body, res$headers))
+#' # response
+#' (response <- Response$new(
+#'    http_status(res),
+#'    res$headers,
+#'    content(res, "text"),
+#'    res$all_headers[[1]]$version))
+#'
+#' (x <- HTTPInteraction$new(request = request, response = response))
 #' x$recorded_at
-#' x$to_hash
-#' x$from_hash
+#' x$to_hash()
+#' x$from_hash()
 #' }
 HTTPInteraction <- R6::R6Class('HTTPInteraction',
   public = list(
@@ -25,9 +39,9 @@ HTTPInteraction <- R6::R6Class('HTTPInteraction',
     },
 
     from_hash = function() {
-      list(self$request$from_hash(hash['request']),
-           self$response$from_hash(hash['response']),
-           hash['recorded_at'])
+      list(self$request$from_hash(),
+           self$response$from_hash(),
+           self$recorded_at)
     }
   )
 )

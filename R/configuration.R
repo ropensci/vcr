@@ -3,7 +3,7 @@
 #' @export
 #' @param dir Cassette directory
 #' @param record (character) On of once, ...
-#' @param match_requests_on xx
+#' @param match_requests_on vector of matchers. Default: (\code{method}, \code{uri})
 #' @param allow_unused_http_interactions (logical) Default: \code{TRUE}
 #' @param serialize_with (character) Right now only "yaml"
 #' @param persist_with (character) Right now only "FileSystem"
@@ -22,7 +22,7 @@
 vcr_configure <- function(
   dir = cassette_path(),
   record = "once",
-  match_requests_on = "deafault_matchers",
+  match_requests_on = c("method", "uri"),
   allow_unused_http_interactions = TRUE,
   serialize_with = "yaml",
   persist_with = "FileSystem",
@@ -35,6 +35,7 @@ vcr_configure <- function(
 
   Sys.setenv(vcr_config.dir = dir)
   Sys.setenv(vcr_config.record = record)
+  vcr_config$vcr_config$match_requests_on <- match_requests_on
   Sys.setenv(vcr_config.uri_parser = uri_parser)
   Sys.setenv(vcr_config.preserve_exact_body_bytes = preserve_exact_body_bytes)
   Sys.setenv(vcr_config.preserve_exact_body_bytes_for = preserve_exact_body_bytes_for)
@@ -45,10 +46,12 @@ vcr_configure <- function(
 vcr_configuration <- function() {
   d <- Sys.getenv("vcr_config.dir", "")
   rec <- Sys.getenv("vcr_config.record", "")
+  mro <- vcr_config$vcr_config$match_requests_on
   up <- Sys.getenv("vcr_config.uri_parser", "")
   pebb <- as.logical(Sys.getenv("vcr_config.preserve_exact_body_bytes", ""))
   pebbfor <- as.logical(Sys.getenv("vcr_config.preserve_exact_body_bytes_for", ""))
-  structure(list(dir = d, record = rec, uri_parser = up,
+  structure(list(dir = d, record = rec,
+                 match_requests_on = mro, uri_parser = up,
                  preserve_exact_body_bytes = pebb,
                  preserve_exact_body_bytes_for = pebbfor), class = "vcr_config")
 }
@@ -58,8 +61,12 @@ print.vcr_config <- function(x) {
   cat("<vcr configuration>", sep = "\n")
   cat(paste0("  Cassette Dir: ", x$dir), sep = "\n")
   cat(paste0("  Record: ", x$record), sep = "\n")
-  cat(paste0("  URI Parser: ", x$uri_parser))
+  cat(paste0("  URI Parser: ", x$uri_parser), sep = "\n")
+  cat(paste0("  Match Requests on: ", paste0(vcr_config$vcr_config$match_requests_on, collapse = ", ")), sep = "\n")
 }
+
+# vcr env to store configuration variables in
+vcr_config <- new.env()
 
 # default_cassette_options <- list(
 #   record = "once",
