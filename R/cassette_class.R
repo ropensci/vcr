@@ -120,12 +120,15 @@ Cassette <- R6::R6Class("Cassette",
         stop(tmp, " does not appear to be a valid cassette", call. = FALSE)
       }
     },
+
     # previously_recorded_interactions = function() {
     #   #if (!raw_cassette_bytes.to_s.empty?) {
     #   lapply(self$deserialized_hash()[['http_interactions']], function(z) {
-    #     lapply(HTTPInteraction$from_hash(z), function(y) {
-    #       Filter(function(w) w$, y)
-    #     })
+    #     zz <- HTTPInteraction$new(request = z$request, response = z$response)
+    #     zz$from_hash()
+    #     # lapply(HTTPInteraction$from_hash(z), function(y) {
+    #     #   Filter(function(w) w$, y)
+    #     # })
     #   })
     #   # deserialized_hash['http_interactions'].map { |h| HTTPInteraction.from_hash(h) } do |int|
     #     invoke_hook(:before_playback, int)
@@ -134,7 +137,8 @@ Cassette <- R6::R6Class("Cassette",
     #       i.request.uri.is_a?(String) && VCR.request_ignorer.ignore?(i.request)
     #     end
     #   end
-    # }
+    # },
+
     make_args = function() {
       self$args <- list(record = self$record, match_requests_on = self$match_requests_on,
         re_record_interval = self$re_record_interval, tag = self$tag, tags = self$tags,

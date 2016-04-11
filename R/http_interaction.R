@@ -20,7 +20,8 @@
 #' x$to_hash()
 #' x$from_hash()
 #' }
-HTTPInteraction <- R6::R6Class('HTTPInteraction',
+HTTPInteraction <- R6::R6Class(
+  'HTTPInteraction',
   public = list(
     request = NULL,
     response = NULL,

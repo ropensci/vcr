@@ -14,6 +14,7 @@
 #' @param preserve_exact_body_bytes (logical) preserve exact body bytes for
 #' @param preserve_exact_body_bytes_for (logical) preserve exact body bytes
 #' @examples
+#' vcr_c <- VCRConfig$new()
 #' vcr_configure()
 #' vcr_configure(
 #'  dir = "fixtures/vcr_cassettes",
