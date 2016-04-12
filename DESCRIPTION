@@ -13,5 +13,6 @@ Imports:
     httr (>= 1.1.0),
     yaml,
     digest,
-    R6
+    R6,
+    lazyeval
 RoxygenNote: 5.0.1

@@ -4,6 +4,8 @@
 #' @importFrom R6 R6Class
 #' @importFrom httr http_condition
 #' @importFrom yaml yaml.load_file
+#' @importFrom lazyeval lazy_dots
+#' @importFrom base64enc base64decode base64encode
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
 #' @docType package
 #' @aliases vcr-package

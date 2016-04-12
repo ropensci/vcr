@@ -1,5 +1,6 @@
 #' Use a cassette to record an HTTP call
 #'
+#' @export
 #' @examples \dontrun{
 #' res <- Cassette$new("foobar")
 #'
@@ -30,7 +31,8 @@ use_cassette <- function(name, ..., record="once", match_requests_on=NULL, re_re
 insert_cassette <- function(name, record="once", match_requests_on=NULL, re_record_interval=NULL,
   tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
-  serialize_with="yaml", persist_with="FileSystem", preserve_exact_body_bytes=TRUE) {
+  serialize_with="yaml", persist_with="FileSystem", preserve_exact_body_bytes=TRUE,
+  ignore_cassettes = TRUE) {
 
   if (turned_on()) {
     if ( any( name %in% names(cassettes()) ) ) {
