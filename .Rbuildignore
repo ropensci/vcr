@@ -7,3 +7,5 @@ NEWS\.md
 ^cran-comments\.md$
 ^README\.Rmd$
 ^.*\.yml
+^.*\.log
+Makefile
