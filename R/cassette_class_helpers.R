@@ -27,20 +27,20 @@ serializable_hash <- function() {
 interactions_to_record <- function() {
   # We deep-dup the interactions by roundtripping them to/from a hash.
   # This is necessary because `before_record` can mutate the interactions.
-  merged_interactions.map { |i| HTTPInteraction.from_hash(i.to_hash) }.tap do |interactions|
-    invoke_hook(:before_record, interactions)
-  end
+  # merged_interactions.map { |i| HTTPInteraction.from_hash(i.to_hash) }.tap do |interactions|
+  #   invoke_hook(:before_record, interactions)
+  # end
 }
 
 merged_interactions <- function(x) {
   old_interactions <- previously_recorded_interactions()
 
-  if (self$should_remove_matching_existing_interactions()) {
-    new_interaction_list <- HTTPInteractionList.new(new_recorded_interactions, match_requests_on)
-    old_interactions <- old_interactions.reject do |i|
-      new_interaction_list.response_for(i.request)
-    end
-  }
+  # if (self$should_remove_matching_existing_interactions()) {
+  #   new_interaction_list <- HTTPInteractionList.new(new_recorded_interactions, match_requests_on)
+  #   old_interactions <- old_interactions.reject do |i|
+  #     new_interaction_list.response_for(i.request)
+  #   end
+  # }
 
   return(c(old_interactions, new_recorded_interactions))
 }
@@ -48,13 +48,13 @@ merged_interactions <- function(x) {
 # previously_recorded_interactions()
 previously_recorded_interactions <- function() {
   #if (!raw_cassette_bytes.to_s.empty?) {
-  deserialized_hash['http_interactions'].map { |h| HTTPInteraction.from_hash(h) } do |int|
-    invoke_hook(:before_playback, int)
-
-    int.reject! do |i|
-      i.request.uri.is_a?(String) && VCR.request_ignorer.ignore?(i.request)
-    end
-  end
+  # deserialized_hash['http_interactions'].map { |h| HTTPInteraction.from_hash(h) } do |int|
+  #   invoke_hook(:before_playback, int)
+  #
+  #   int.reject! do |i|
+  #     i.request.uri.is_a?(String) && VCR.request_ignorer.ignore?(i.request)
+  #   end
+  # end
   # } else {
   #   list()
   # }

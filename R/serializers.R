@@ -4,12 +4,13 @@
 #' @export
 #' @keywords internal
 #' @examples
-#' (aa <- serializers$new())
+#' (aa <- Serializers$new())
 #' aa$name
 #' aa$serializers
 #' yaml_serializer <- aa$serializers$new()
 #' yaml_serializer
-serializers <- R6::R6Class("serializers",
+Serializers <- R6::R6Class(
+  "Serializers",
   public = list(
     serializers = list(),
     name = "yaml",
@@ -34,9 +35,9 @@ serializers <- R6::R6Class("serializers",
 )
 
 #' @export
-#' @rdname serializers
+#' @rdname Serializers
 serializer_fetch <- function(x = "yaml", name) {
-  ser <- serializers$new(name = x)
+  ser <- Serializers$new(name = x)
   ser <- ser$serializers
   ser$new(path = name)
 }

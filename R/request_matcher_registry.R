@@ -1,9 +1,9 @@
 #' RequestMatcherRegistry class
 #' @export
 #' @examples \dontrun{
-(x <- RequestMatcherRegistry$new())
-x$default_matchers
-x$registry
+#' (x <- RequestMatcherRegistry$new())
+#' x$default_matchers
+#' x$registry
 #' }
 RequestMatcherRegistry <- R6::R6Class(
   'RequestMatcherRegistry',

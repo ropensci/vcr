@@ -65,13 +65,13 @@ cassette_path()
 insert a cassette
 
 ```{r}
-insert_cassette(name = "fartloud")
+insert_cassette(name = "helloworld")
 ```
 
 use a cassette (if cassette not found, we'll create the cassette)
 
 ```{r}
-use_cassette("helloworld", GET("http://localhost:9200"))
+use_cassette("helloworld", GET("http://google.com"))
 ```
 
 You can also pass a code block, instead of an inline call
@@ -79,7 +79,36 @@ You can also pass a code block, instead of an inline call
 ```{r}
 insert_cassette("foobar")
 call_block("foobar", {
-  url <- "http://localhost:9200"
+  url <- "http://httpbin.org/get"
   GET(url)
 })
 ```
+
+After running the above, `vcr` will record the HTTP request to disk as a cassette,
+with content like:
+
+```
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://example.com/
+    body: ''
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/html;charset=utf-8
+      Content-Length:
+      - '26'
+    body: This is the response body
+    http_version: '1.1'
+  recorded_at: Tue, 01 Nov 2011 04:58:44 GMT
+recorded_with: VCR 2.0.0
+```
+
+Disconnect your computer from the internet.  Run the test again. It should pass since
+VCR is automatically replaying the recorded response when the request is made.

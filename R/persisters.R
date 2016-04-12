@@ -2,14 +2,16 @@
 #'
 #' @export
 #' @keywords internal
-#' @details There's only one: file system
-#' @examples
-#' (aa <- persisters$new())
+#' @details There's only one option: \code{FileSystem}
+#' @examples \dontrun{
+#' (aa <- Persisters$new())
 #' aa$name
 #' aa$persisters
 #' yaml_serializer <- aa$persisters$new()
 #' yaml_serializer
-persisters <- R6::R6Class("persisters",
+#' }
+Persisters <- R6::R6Class(
+  "Persisters",
    public = list(
      persisters = list(),
      name = "FileSystem",
@@ -33,10 +35,9 @@ persisters <- R6::R6Class("persisters",
    )
 )
 
-#' @export
-#' @rdname persisters
+#' @rdname Persisters
 persister_fetch <- function(x = "FileSystem") {
-  per <- persisters$new(name = x)
+  per <- Persisters$new(name = x)
   per <- per$persisters
   per$new()
 }

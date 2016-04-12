@@ -11,15 +11,20 @@ Cassette
 \description{
 Cassette handler
 }
+\details{
+erb - a logical or list of variables
+}
 \examples{
 \dontrun{
-res <- Cassette$new("foobar")
+res <- Cassette$new("teddybear")
 res <- Cassette$new("foobar", record = "all")
 res$file()
 res$originally_recorded_at()
 res$recording()
 res$serializable_hash()
 res$eject()
+res$should_remove_matching_existing_interactions()
+res$storage_key()
 }
 }
 \keyword{datasets}

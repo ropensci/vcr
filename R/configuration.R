@@ -2,19 +2,26 @@
 #'
 #' @export
 #' @param dir Cassette directory
-#' @param record (character) On of once, ...
+#' @param record (character) On of 'all', 'none', 'new_episodes', or 'once'.
+#' See \link{recording}.
 #' @param match_requests_on vector of matchers. Default: (\code{method}, \code{uri})
 #' @param allow_unused_http_interactions (logical) Default: \code{TRUE}
 #' @param serialize_with (character) Right now only "yaml"
 #' @param persist_with (character) Right now only "FileSystem"
-#' @param ignore_hosts List of hosts to ignore
+#' @param ignore_hosts Vector of hosts to ignore
 #' @param ignore_localhost (logical) Default: \code{FALSE}
 #' @param ignore_request Lists of requests to ignore
 #' @param uri_parser the uri parser, default: \code{\link[httr]{parse_url}}
 #' @param preserve_exact_body_bytes (logical) preserve exact body bytes for
 #' @param preserve_exact_body_bytes_for (logical) preserve exact body bytes
+#' @param turned_off (logical) VCR is turned on by default. Default: \code{FALSE}
+#' @param ignore_cassettes (logical) Ignore cassettes. You can set this to \code{TRUE}
+#' when you don't have a cassette in use but still want to make HTTP requests. Otherwise,
+#' you can't make requests unless a cassette is in use. Default: \code{FALSE}
+#' @param cassettes (list) don't use
+#' @param linked_context (logical) linked context
+#'
 #' @examples
-#' vcr_c <- VCRConfig$new()
 #' vcr_configure()
 #' vcr_configure(
 #'  dir = "fixtures/vcr_cassettes",
@@ -34,7 +41,11 @@ vcr_configure <- function(
   ignore_request = NULL,
   uri_parser = "httr::parse_url",
   preserve_exact_body_bytes = FALSE,
-  preserve_exact_body_bytes_for = FALSE) {
+  preserve_exact_body_bytes_for = FALSE,
+  turned_off = FALSE,
+  ignore_cassettes = FALSE,
+  cassettes = list(),
+  linked_context = NULL) {
 
   calls <- as.list(environment(), all = TRUE)
   for (i in seq_along(calls)) {
@@ -42,6 +53,10 @@ vcr_configure <- function(
   }
   return(vcr_c)
 }
+
+#' @export
+#' @rdname vcr_configure
+vcr_configure_reset <- function() vcr_configure()
 
 #' @export
 #' @rdname vcr_configure
@@ -66,6 +81,10 @@ VCRConfig <- R6::R6Class(
     uri_parser = NULL,
     preserve_exact_body_bytes = NULL,
     preserve_exact_body_bytes_for = NULL,
+    turned_off = NULL,
+    ignore_cassettes = NULL,
+    cassettes = NULL,
+    linked_context = NULL,
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
@@ -95,5 +114,9 @@ vcr_default_config_vars <- list(
   ignore_request = NULL,
   uri_parser = "httr::parse_url",
   preserve_exact_body_bytes = FALSE,
-  preserve_exact_body_bytes_for = FALSE
+  preserve_exact_body_bytes_for = FALSE,
+  turned_off = FALSE,
+  ignore_cassettes = FALSE,
+  cassettes = list(),
+  linked_context = NULL
 )

@@ -131,10 +131,10 @@ Cassette <- R6::R6Class("Cassette",
     #     # })
     #   })
     #   # deserialized_hash['http_interactions'].map { |h| HTTPInteraction.from_hash(h) } do |int|
-    #     invoke_hook(:before_playback, int)
+    #     invoke_hook("before_playback", int)
     #
     #     int.reject! do |i|
-    #       i.request.uri.is_a?(String) && VCR.request_ignorer.ignore?(i.request)
+    #       i.request.uri.is_a?(String) && VCRConfig$request_ignorer.ignore?(i.request)
     #     end
     #   end
     # },
