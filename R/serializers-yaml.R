@@ -1,6 +1,7 @@
 #' The YAML serializer
 #'
-#' @examples
+#' @keywords internal
+#' @examples \dontrun{
 #' (yy <- YAML$new())
 #' library("httr")
 #' x <- GET("http://httpbin.org/get")
@@ -9,6 +10,7 @@
 #' # yy$deserialize_string() # if passed on instantiation
 #' yy$deserialize_string(string = "- hey\n- hi\n- hello")
 #' yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
+#' }
 YAML <- R6::R6Class("YAML",
   public = list(
     file_extension = ".yml",

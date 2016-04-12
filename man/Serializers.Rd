@@ -17,11 +17,13 @@ Keeps track of the cassette serializers in a hash-like object
 Note: LETS JUST USE YAML, EASY PEASY FOR NOW
 }
 \examples{
+\dontrun{
 (aa <- Serializers$new())
 aa$name
 aa$serializers
 yaml_serializer <- aa$serializers$new()
 yaml_serializer
+}
 }
 \keyword{internal}
 

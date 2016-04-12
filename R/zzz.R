@@ -15,3 +15,7 @@ last <- function(x) {
 }
 
 errmssg <- "use_cassette requires a block.\nIf you cannot wrap your code in a block, use\ninsert_cassette / eject_cassette instead."
+
+response_summary <- function(x) {
+  httr::http_condition(x, "message")$message
+}

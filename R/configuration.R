@@ -21,7 +21,7 @@
 #' @param cassettes (list) don't use
 #' @param linked_context (logical) linked context
 #'
-#' @examples
+#' @examples \dontrun{
 #' vcr_configure()
 #' vcr_configure(
 #'  dir = "fixtures/vcr_cassettes",
@@ -29,6 +29,7 @@
 #' )
 #' vcr_configuration()
 #' vcr_config_defaults()
+#' }
 vcr_configure <- function(
   dir = cassette_path(),
   record = "once",

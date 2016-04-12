@@ -12,6 +12,7 @@ YAML
 The YAML serializer
 }
 \examples{
+\dontrun{
 (yy <- YAML$new())
 library("httr")
 x <- GET("http://httpbin.org/get")
@@ -21,5 +22,6 @@ yy$deserialize_path()
 yy$deserialize_string(string = "- hey\\n- hi\\n- hello")
 yy$deserialize_string(string = "- foo\\n- bar\\n- 3.14")
 }
-\keyword{datasets}
+}
+\keyword{internal}
 

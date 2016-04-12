@@ -3,12 +3,13 @@
 #'
 #' @export
 #' @keywords internal
-#' @examples
+#' @examples \dontrun{
 #' (aa <- Serializers$new())
 #' aa$name
 #' aa$serializers
 #' yaml_serializer <- aa$serializers$new()
 #' yaml_serializer
+#' }
 Serializers <- R6::R6Class(
   "Serializers",
   public = list(

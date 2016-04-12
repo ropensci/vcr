@@ -1,8 +1,7 @@
-#' Use a cassette
+#' Insert a cassette to record an HTTP call
 #'
 #' @export
 #' @param name The name of the cassette. vcr will sanitize this to ensure it is a valid file name.
-#' @param ... a block of code to evalulate, wrapped in curly braces
 #' @param record The record mode. One of "all", "none", "new_episodes", "once". See Details.
 #' @param match_requests_on List of request matchers
 #'  to use to determine what recorded HTTP interaction to replay. Defaults to
@@ -45,13 +44,6 @@
 #'  to base64 encode the bytes of the requests and responses for this cassette
 #'  when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.
 #'
-#' @details
-#' \itemize{
-#'  \item \code{use_cassette} Initialize a cassett. Returns the inserted cassette.
-#'  \item \code{insert_cassette} Internally used within \code{use_cassette}.
-#'  \item \code{eject_cassette} ejects the current cassette. The cassette will no longer be used.
-#'  In addition, any newly recorded HTTP interactions will be written to disk.
-#' }
 #' @examples \dontrun{
 #' res <- Cassette$new("foobar")
 #'
@@ -65,14 +57,32 @@
 #'
 #' use_cassette("foobar", GET("http://google.com"))
 #' }
-
-use_cassette <- function(name, ..., record="once", match_requests_on=NULL, re_record_interval=NULL,
+insert_cassette <- function(name, record="once", match_requests_on=NULL, re_record_interval=NULL,
   tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
-  serialize_with="yaml", persist_with="FileSystem", preserve_exact_body_bytes=TRUE) {
+  serialize_with="yaml", persist_with="FileSystem", preserve_exact_body_bytes=TRUE,
+  ignore_cassettes = TRUE) {
 
-  #if (block) stop(errmssg, call. = FALSE)
-  cassette <- if (!cassette_exists(name)) insert_cassette(name) else name
-  call_block(cassette, ...)
-  # eject_cassette(cassette)
+  if (turned_on()) {
+    if ( any( name %in% names(cassettes()) ) ) {
+      stop(sprintf("There is already a cassette with the same name: %s", name), call. = FALSE)
+    }
+
+    Cassette$new(name = name, record = record, match_requests_on = match_requests_on,
+                 re_record_interval = re_record_interval, tag = tag, tags = tags,
+                 update_content_length_header = update_content_length_header,
+                 decode_compressed_response = decode_compressed_response,
+                 allow_playback_repeats = allow_playback_repeats,
+                 allow_unused_http_interactions = allow_unused_http_interactions,
+                 exclusive = exclusive,
+                 serialize_with = serialize_with, persist_with = persist_with,
+                 preserve_exact_body_bytes = preserve_exact_body_bytes)
+    # cassettes.push(cassette)
+  } else {
+    if (ignore_cassettes) {
+      message <- "VCR is turned off.  You must turn it on before you can insert a cassette.
+      Or you can use the ignore_cassettes=TRUE option to completely ignore cassette insertions."
+      stop(message, call. = FALSE)
+    }
+  }
 }

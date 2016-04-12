@@ -1,5 +1,13 @@
 #' HTTPInteraction class
+#'
 #' @export
+#' @docType class
+#' @section Methods:
+#' \describe{
+#'   \item{\code{request}}{A Request class object}
+#'   \item{\code{response}}{A Response class object}
+#'   \item{\code{recorded_at}}{Time http interaction recorded at}
+#' }
 #' @examples \dontrun{
 #' # make the request
 #' url <- "http://httpbin.org/post"

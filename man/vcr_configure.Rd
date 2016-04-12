@@ -62,6 +62,7 @@ you can't make requests unless a cassette is in use. Default: \code{FALSE}}
 Configuration
 }
 \examples{
+\dontrun{
 vcr_configure()
 vcr_configure(
  dir = "fixtures/vcr_cassettes",
@@ -69,5 +70,6 @@ vcr_configure(
 )
 vcr_configuration()
 vcr_config_defaults()
+}
 }
 

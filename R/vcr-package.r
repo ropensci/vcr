@@ -1,4 +1,4 @@
-#' vcr: Record 'HTTP' Calls to Disk
+#' vcr: Record HTTP Calls to Disk
 #'
 #' @importFrom digest digest
 #' @importFrom R6 R6Class
