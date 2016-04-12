@@ -14,5 +14,6 @@ Imports:
     yaml,
     digest,
     R6,
-    lazyeval
+    lazyeval,
+    base64enc
 RoxygenNote: 5.0.1
