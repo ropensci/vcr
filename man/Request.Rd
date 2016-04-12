@@ -20,6 +20,17 @@ Request
 \description{
 The request of an HTTPInteraction
 }
+\details{
+\strong{Methods}
+  \describe{
+    \item{\code{to_hash()}}{
+      Create a hash.
+    }
+    \item{\code{from_hash()}}{
+      Get a hash back to an R list.
+    }
+  }
+}
 \examples{
 \dontrun{
 url <- "http://httpbin.org/post"
@@ -40,5 +51,5 @@ vcr_configure(
 )
 }
 }
-\keyword{datasets}
+\keyword{internal}
 

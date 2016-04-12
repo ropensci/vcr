@@ -2,7 +2,18 @@
 #'
 #' @export
 #' @keywords internal
+#' @param persisters A list
+#' @param name (character) Persister name, only option right now is "FileSystem"
 #' @details There's only one option: \code{FileSystem}
+#'
+#' \strong{Private Methods}
+#'  \describe{
+#'     \item{\code{persister_get()}}{
+#'       Gets and sets a named persister
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' (aa <- Persisters$new())
 #' aa$name
@@ -15,12 +26,14 @@ Persisters <- R6::R6Class(
    public = list(
      persisters = list(),
      name = "FileSystem",
+
      initialize = function(persisters = list(), name = "FileSystem") {
        self$persisters <- persisters
        self$name <- name
        private$persister_get()
      }
    ),
+
    private = list(
      # Gets and sets a named persister
      persister_get = function() {

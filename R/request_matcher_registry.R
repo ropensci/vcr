@@ -1,5 +1,24 @@
 #' RequestMatcherRegistry class
+#'
 #' @export
+#' @param name matcher name
+#' @param func function that describes a matcher, should return a boolean
+#' @param r1,r2 two requests, each of class \code{HTTPInteraction}
+#' @details
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{register(name, func)}}{
+#'       Register a custom matcher.
+#'     }
+#'     \item{\code{register_built_ins()}}{
+#'       Register all built in matchers.
+#'     }
+#'     \item{\code{try_to_register_body_as_json(r1, r2)}}{
+#'       Try to register body as JSON.
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' (x <- RequestMatcherRegistry$new())
 #' x$default_matchers

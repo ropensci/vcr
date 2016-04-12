@@ -1,14 +1,40 @@
 #' Request ignorer
 #'
 #' @keywords internal
+#' @param LOCALHOST_ALIASES A constant with values: 'localhost', '127.0.0.1', and '0.0.0.0'
+#' @param ignored_hosts Vector of ignored hosts
+#' @param fun A function, of the form: coming...
+#' @param value A localhost value to ignore, e.g, 'localhost'
+#' @param hosts Character vector of hosts to ignore
+#' @param request A request
 #' @details Hook to handle request ignorers, including:
-#' \itemize{
-#'  \item ignore_request -  will ignore any request for which the given
-#'  function returns \code{TRUE}
-#'  \item ignore_hosts - ignore any named host
-#'  \item ignore_localhost - ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
-#'  \item ignore_localhost_value - ignore a specific named localhost
-#' }
+#'
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{ignore_request(fun)}}{
+#'       Will ignore any request for which the given function returns \code{TRUE}
+#'     }
+#'     \item{\code{ignore_localhost()}}{
+#'       ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
+#'     }
+#'     \item{\code{ignore_localhost_value(value)}}{
+#'       ignore a specific named localhost
+#'     }
+#'     \item{\code{ignore_hosts(hosts)}}{
+#'       ignore any named host
+#'     }
+#'     \item{\code{ignore(request)}}{
+#'
+#'     }
+#'   }
+#' \strong{Private Methods}
+#'  \describe{
+#'     \item{\code{ignored_hosts_init()}}{
+#'       Initialize an empty ignored hosts object on package load
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' (x <- RequestIgnorer$new())
 #' x$LOCALHOST_ALIASES

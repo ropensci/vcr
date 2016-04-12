@@ -1,13 +1,32 @@
-#' @title File system persister
+#' File system persister
 #'
-#' @description  The only built-in cassette persister. Persists cassettes
+#' @keywords internal
+#' @param file_name (character) Just he fiile name, not whole path
+#' @param content (character) content to record to a cassette
+#' @param path (character) Storage directory for cassettes
+#' @details The only built-in cassette persister. Persists cassettes
 #' to the file system.
 #'
-#' @export
-#' @param file_name (character) Just he fiile name, not whole path
-#' @param path (character) Storage directory for cassettes
-#' @param content (character) content to record to a cassette
-#'
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{get_cassette(file_name = NULL, content = NULL, path = NULL)}}{
+#'       Gets the cassette for the given storage key (file name).
+#'     }
+#'     \item{\code{set_cassette(file_name = NULL, content)}}{
+#'       Sets the cassette for the given storage key (file name).
+#'     }
+#'   }
+#' \strong{Private Methods}
+#'  \describe{
+#'     \item{\code{storage_location()}}{
+#'       Get storage location
+#'     }
+#'     \item{\code{absolute_path_to_file()}}{
+#'       Get absolute path to the \code{storage_location}
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' nn <- list.files(cassette_path())
 #'
@@ -25,6 +44,7 @@ FileSystem <- R6::R6Class("FileSystem",
     file_name = NULL,
     content = NULL,
     path = NULL,
+
     initialize = function(file_name = NULL, content = NULL, path = NULL) {
       self$file_name <- file_name
       self$content <- content
@@ -57,10 +77,12 @@ FileSystem <- R6::R6Class("FileSystem",
       cat(yaml::as.yaml(content), file = path)
     }
   ),
+
   private = list(
     storage_location = function() {
       self$path
     },
+
     absolute_path_to_file = function(x, y) {
       if (is.null(self$path)) {
         NULL

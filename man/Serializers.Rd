@@ -4,17 +4,25 @@
 \name{Serializers}
 \alias{Serializers}
 \alias{serializer_fetch}
-\title{Keeps track of the cassette serializers in a hash-like object
-Note: LETS JUST USE YAML, EASY PEASY FOR NOW}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\title{Keeps track of the cassette serializers in a hash-like object}
 \usage{
-Serializers
-
 serializer_fetch(x = "yaml", name)
+}
+\arguments{
+\item{name}{Name of a serializer. Only option is "yaml" for now}
+
+\item{serializers}{List of serializers}
 }
 \description{
 Keeps track of the cassette serializers in a hash-like object
-Note: LETS JUST USE YAML, EASY PEASY FOR NOW
+}
+\details{
+\strong{Private Methods}
+  \describe{
+    \item{\code{serialize_get()}}{
+      Gets a named serializer. This is also run on initialize of this function
+    }
+  }
 }
 \examples{
 \dontrun{

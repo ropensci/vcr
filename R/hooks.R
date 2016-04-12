@@ -1,6 +1,33 @@
 #' Hooks class
+#'
 #' @keywords internal
+#' @param hooks List of hooks
+#' @param hook_type,x (character) Hook name
+#' @param args Args passed when invoking a hook
+#' @param plac Placement, one of "start" or "end"
+#' @param fun A function
+#' @param prepend Whether to prepend or add to the end of the string. Default: \code{FALSE}
 #' @details Helps define new hooks, hold hooks, and accessors to get and use hooks.
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{invoke_hook(hook_type, args)}}{
+#'       Invoke a hook, i.e., call a hook.
+#'     }
+#'     \item{\code{clear_hooks()}}{
+#'       Remove all hooks.
+#'     }
+#'     \item{\code{define_hook(hook_type, fun, prepend = FALSE)}}{
+#'       Define a hook.
+#'     }
+#'   }
+#' \strong{Private Methods}
+#'   \describe{
+#'     \item{\code{make_hook(x, plac, fun)}}{
+#'       Make a hook.
+#'     }
+#'  }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' (x <- Hooks$new())
 #' x$hooks
@@ -23,21 +50,24 @@ Hooks <- R6::R6Class(
       self$hooks <- list()
     },
 
+    define_hook = function(hook_type, fun, prepend = FALSE) {
+      private$make_hook(hook_type, if (prepend) "start" else "end", fun)
+    }
+  ),
+
+  private = list(
     make_hook = function(x, plac, fun) {
       defhk <- DefinedHooks$new()
       self$hooks[[x]] <-
         defhk$set_hook(name = x,
-          placement_method = plac,
-          fun = fun
+                       placement_method = plac,
+                       fun = fun
         )
-    },
-
-    define_hook = function(hook_type, fun, prepend = FALSE) {
-      self$make_hook(hook_type, if (prepend) "start" else "end", fun)
     }
   )
 )
 
+# defined hooks - xxx
 DefinedHooks <- R6::R6Class(
   'DefinedHooks',
   public = list(

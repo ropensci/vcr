@@ -4,22 +4,49 @@
 \name{RequestIgnorer}
 \alias{RequestIgnorer}
 \title{Request ignorer}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-RequestIgnorer
+\arguments{
+\item{LOCALHOST_ALIASES}{A constant with values: 'localhost', '127.0.0.1', and '0.0.0.0'}
+
+\item{ignored_hosts}{Vector of ignored hosts}
+
+\item{fun}{A function, of the form: coming...}
+
+\item{value}{A localhost value to ignore, e.g, 'localhost'}
+
+\item{hosts}{Character vector of hosts to ignore}
+
+\item{request}{A request}
 }
 \description{
 Request ignorer
 }
 \details{
 Hook to handle request ignorers, including:
-\itemize{
- \item ignore_request -  will ignore any request for which the given
- function returns \code{TRUE}
- \item ignore_hosts - ignore any named host
- \item ignore_localhost - ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
- \item ignore_localhost_value - ignore a specific named localhost
-}
+
+\strong{Methods}
+  \describe{
+    \item{\code{ignore_request(fun)}}{
+      Will ignore any request for which the given function returns \code{TRUE}
+    }
+    \item{\code{ignore_localhost()}}{
+      ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
+    }
+    \item{\code{ignore_localhost_value(value)}}{
+      ignore a specific named localhost
+    }
+    \item{\code{ignore_hosts(hosts)}}{
+      ignore any named host
+    }
+    \item{\code{ignore(request)}}{
+
+    }
+  }
+\strong{Private Methods}
+ \describe{
+    \item{\code{ignored_hosts_init()}}{
+      Initialize an empty ignored hosts object on package load
+    }
+  }
 }
 \examples{
 \dontrun{

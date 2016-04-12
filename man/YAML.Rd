@@ -4,12 +4,29 @@
 \name{YAML}
 \alias{YAML}
 \title{The YAML serializer}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-YAML
+\arguments{
+\item{file_extension}{(character) A file extension}
+
+\item{path}{(character) full path to the yaml file}
+
+\item{string}{(character) path string}
 }
 \description{
 The YAML serializer
+}
+\details{
+\strong{Methods}
+  \describe{
+    \item{\code{serialize(x)}}{
+      Serializes the given hash using internal fxn write_yaml
+    }
+    \item{\code{deserialize_string(string = NULL)}}{
+      Deserializes the given string using yaml::yaml.load
+    }
+    \item{\code{deserialize_path()}}{
+      Deserializes the given string using yaml::yaml.load_file
+    }
+  }
 }
 \examples{
 \dontrun{

@@ -43,6 +43,7 @@
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #'  to base64 encode the bytes of the requests and responses for this cassette
 #'  when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.
+#' @param ignore_cassettes (logical) xx. Default: \code{TRUE}
 #'
 #' @examples \dontrun{
 #' res <- Cassette$new("foobar")

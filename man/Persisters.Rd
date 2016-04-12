@@ -5,17 +5,26 @@
 \alias{Persisters}
 \alias{persister_fetch}
 \title{Keeps track of the cassette persisters in a hash-like object}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-Persisters
-
 persister_fetch(x = "FileSystem")
+}
+\arguments{
+\item{persisters}{A list}
+
+\item{name}{(character) Persister name, only option right now is "FileSystem"}
 }
 \description{
 Keeps track of the cassette persisters in a hash-like object
 }
 \details{
 There's only one option: \code{FileSystem}
+
+\strong{Private Methods}
+ \describe{
+    \item{\code{persister_get()}}{
+      Gets and sets a named persister
+    }
+  }
 }
 \examples{
 \dontrun{

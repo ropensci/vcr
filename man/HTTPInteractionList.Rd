@@ -4,10 +4,6 @@
 \name{HTTPInteractionList}
 \alias{HTTPInteractionList}
 \title{HTTPInteractionList class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-HTTPInteractionList
-}
 \arguments{
 \item{interactions}{list of interaction class}
 
@@ -20,9 +16,55 @@ HTTPInteractionList
 \item{used_interactions}{xxx}
 
 \item{log_prefix}{xxx}
+
+\item{request}{xxx}
 }
 \description{
 HTTPInteractionList class
+}
+\details{
+\strong{Methods}
+  \describe{
+    \item{\code{response_for()}}{
+      xxx.
+    }
+    \item{\code{has_interaction_matching()}}{
+      xx.
+    }
+    \item{\code{has_used_interaction_matching()}}{
+      xxx.
+    }
+    \item{\code{remaining_unused_interaction_count()}}{
+      Number of unused interactions.
+    }
+    \item{\code{assert_no_unused_interactions()}}{
+      xxx.
+    }
+  }
+\strong{Private Methods}
+ \describe{
+    \item{\code{has_unused_interactions()}}{
+      Are there areny unused interactions?
+    }
+    \item{\code{matching_interaction_index_for()}}{
+      xxx.
+    }
+    \item{\code{matching_used_interaction_for()}}{
+      xxxx.
+    }
+    \item{\code{interaction_matches_request()}}{
+      Check if a request matches an interaction.
+    }
+    \item{\code{from_hash()}}{
+      Get a hash back.
+    }
+    \item{\code{request_summary()}}{
+      Get a request summary.
+    }
+    \item{\code{response_summary()}}{
+      Get a response summary.
+    }
+  }
 }
 \examples{
 \dontrun{

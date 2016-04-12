@@ -4,15 +4,89 @@
 \name{Cassette}
 \alias{Cassette}
 \title{Cassette handler}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-Cassette
+\arguments{
+\item{name}{(character) A cassette name}
+
+\item{record}{(character) Record mode. See \link{recording}}
+
+\item{manfile}{(character) path to man file for the cassette}
+
+\item{recorded_at}{(character) time recorded at}
+
+\item{serialize_with}{(character) Only choice is "yaml"}
+
+\item{persist_with}{Only choice is FileSystem}
+
+\item{root_dir}{Root directory for storing cassettes. Default: \code{~/vcr/vcr_cassettes}}
+
+\item{match_requests_on}{what to match requests on}
+
+\item{re_record_interval}{Interval to re-record}
+
+\item{tag}{Tag}
+
+\item{tags}{Tags}
+
+\item{update_content_length_header}{xx Default: \code{FALSE}}
+
+\item{decode_compressed_response}{xx Default: \code{FALSE}}
+
+\item{allow_playback_repeats}{xx Default: \code{FALSE}}
+
+\item{allow_unused_http_interactions}{xx Default: \code{TRUE}}
+
+\item{exclusive}{xx Default: \code{FALSE}}
+
+\item{preserve_exact_body_bytes}{xx Default: \code{TRUE}}
+
+\item{args}{A list of args}
 }
 \description{
 Cassette handler
 }
 \details{
-erb - a logical or list of variables
+\strong{Methods}
+  \describe{
+    \item{\code{eject()}}{
+      Coming soon.
+    }
+    \item{\code{file()}}{
+      Get path to the man file for the cassette.
+    }
+    \item{\code{recording()}}{
+      Find out whether recording is happening or not.
+    }
+    \item{\code{originally_recorded_at()}}{
+      Time interaction was originally recorded at.
+    }
+    \item{\code{serializable_hash()}}{
+      A hash with stuff.
+    }
+    \item{\code{should_remove_matching_existing_interactions()}}{
+      Set record mode to "all".
+    }
+    \item{\code{storage_key()}}{
+      Generate file name = cassette name plus file extension.
+    }
+    \item{\code{make_dir()}}{
+      Make cassette directory.
+    }
+    \item{\code{raw_string()}}{
+      Get raw string of the cassette (cached interaction).
+    }
+    \item{\code{deserialized_hash()}}{
+      Get a deserialized hash.
+    }
+    \item{\code{make_args()}}{
+      Initialize default args.
+    }
+    \item{\code{write_metadata()}}{
+      Write metadata to disk.
+    }
+    \item{\code{previously_recorded_interactions()}}{
+      Coming soon.
+    }
+  }
 }
 \examples{
 \dontrun{
@@ -27,5 +101,5 @@ res$should_remove_matching_existing_interactions()
 res$storage_key()
 }
 }
-\keyword{datasets}
+\keyword{internal}
 

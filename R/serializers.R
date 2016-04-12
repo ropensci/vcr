@@ -1,8 +1,18 @@
 #' Keeps track of the cassette serializers in a hash-like object
-#' Note: LETS JUST USE YAML, EASY PEASY FOR NOW
 #'
 #' @export
 #' @keywords internal
+#' @param serializers List of serializers
+#' @param name Name of a serializer. Only option is "yaml" for now
+#' @details
+#' \strong{Private Methods}
+#'   \describe{
+#'     \item{\code{serialize_get()}}{
+#'       Gets a named serializer. This is also run on initialize of this function
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' (aa <- Serializers$new())
 #' aa$name
@@ -15,12 +25,14 @@ Serializers <- R6::R6Class(
   public = list(
     serializers = list(),
     name = "yaml",
+
     initialize = function(serializers = list(), name = "yaml") {
       self$serializers <- serializers
       self$name <- name
       private$serialize_get()
     }
   ),
+
   private = list(
     # Gets and sets a named serializer
     serialize_get = function() {

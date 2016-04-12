@@ -4,20 +4,38 @@
 \name{FileSystem}
 \alias{FileSystem}
 \title{File system persister}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-FileSystem
-}
 \arguments{
 \item{file_name}{(character) Just he fiile name, not whole path}
 
-\item{path}{(character) Storage directory for cassettes}
-
 \item{content}{(character) content to record to a cassette}
+
+\item{path}{(character) Storage directory for cassettes}
 }
 \description{
+File system persister
+}
+\details{
 The only built-in cassette persister. Persists cassettes
 to the file system.
+
+\strong{Methods}
+  \describe{
+    \item{\code{get_cassette(file_name = NULL, content = NULL, path = NULL)}}{
+      Gets the cassette for the given storage key (file name).
+    }
+    \item{\code{set_cassette(file_name = NULL, content)}}{
+      Sets the cassette for the given storage key (file name).
+    }
+  }
+\strong{Private Methods}
+ \describe{
+    \item{\code{storage_location()}}{
+      Get storage location
+    }
+    \item{\code{absolute_path_to_file()}}{
+      Get absolute path to the \code{storage_location}
+    }
+  }
 }
 \examples{
 \dontrun{
@@ -33,5 +51,5 @@ yy$get_cassette()
 yy$set_cassette(content = "hello world!")
 }
 }
-\keyword{datasets}
+\keyword{internal}
 

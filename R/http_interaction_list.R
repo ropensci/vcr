@@ -8,6 +8,7 @@ NullList <- R6::R6Class(
   )
 )
 
+
 #' HTTPInteractionList class
 #'
 #' @export
@@ -17,6 +18,52 @@ NullList <- R6::R6Class(
 #' @param parent_list xxx
 #' @param used_interactions xxx
 #' @param log_prefix xxx
+#' @param request xxx
+#' @details
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{response_for()}}{
+#'       xxx.
+#'     }
+#'     \item{\code{has_interaction_matching()}}{
+#'       xx.
+#'     }
+#'     \item{\code{has_used_interaction_matching()}}{
+#'       xxx.
+#'     }
+#'     \item{\code{remaining_unused_interaction_count()}}{
+#'       Number of unused interactions.
+#'     }
+#'     \item{\code{assert_no_unused_interactions()}}{
+#'       xxx.
+#'     }
+#'   }
+#' \strong{Private Methods}
+#'  \describe{
+#'     \item{\code{has_unused_interactions()}}{
+#'       Are there areny unused interactions?
+#'     }
+#'     \item{\code{matching_interaction_index_for()}}{
+#'       xxx.
+#'     }
+#'     \item{\code{matching_used_interaction_for()}}{
+#'       xxxx.
+#'     }
+#'     \item{\code{interaction_matches_request()}}{
+#'       Check if a request matches an interaction.
+#'     }
+#'     \item{\code{from_hash()}}{
+#'       Get a hash back.
+#'     }
+#'     \item{\code{request_summary()}}{
+#'       Get a request summary.
+#'     }
+#'     \item{\code{response_summary()}}{
+#'       Get a response summary.
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(
 #'  dir = "fixtures/vcr_cassettes",
@@ -89,11 +136,12 @@ HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
      },
 
      response_for = function(request) {
-        if (index == matching_interaction_index_for(request)) {
-          "adf"
-        } else {
-          "adf"
-        }
+       # FIXME - finish this function, see bottom of page
+       if (index == matching_interaction_index_for(request)) {
+         "adf"
+       } else {
+         "adf"
+       }
      },
 
      has_interaction_matching = function(request) {

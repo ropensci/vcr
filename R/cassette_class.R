@@ -1,8 +1,70 @@
 #' Cassette handler
 #'
 #' @export
+#' @keywords internal
+#' @param name (character) A cassette name
+#' @param record (character) Record mode. See \link{recording}
+#' @param manfile (character) path to man file for the cassette
+#' @param recorded_at (character) time recorded at
+#' @param serialize_with (character) Only choice is "yaml"
+#' @param persist_with Only choice is FileSystem
+#' @param root_dir Root directory for storing cassettes. Default: \code{~/vcr/vcr_cassettes}
+#' @param match_requests_on what to match requests on
+#' @param re_record_interval Interval to re-record
+#' @param tag Tag
+#' @param tags Tags
+#' @param update_content_length_header xx Default: \code{FALSE}
+#' @param decode_compressed_response xx Default: \code{FALSE}
+#' @param allow_playback_repeats xx Default: \code{FALSE}
+#' @param allow_unused_http_interactions xx Default: \code{TRUE}
+#' @param exclusive xx Default: \code{FALSE}
+#' @param preserve_exact_body_bytes xx Default: \code{TRUE}
+#' @param args A list of args
 #' @details
-#' erb - a logical or list of variables
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{eject()}}{
+#'       Coming soon.
+#'     }
+#'     \item{\code{file()}}{
+#'       Get path to the man file for the cassette.
+#'     }
+#'     \item{\code{recording()}}{
+#'       Find out whether recording is happening or not.
+#'     }
+#'     \item{\code{originally_recorded_at()}}{
+#'       Time interaction was originally recorded at.
+#'     }
+#'     \item{\code{serializable_hash()}}{
+#'       A hash with stuff.
+#'     }
+#'     \item{\code{should_remove_matching_existing_interactions()}}{
+#'       Set record mode to "all".
+#'     }
+#'     \item{\code{storage_key()}}{
+#'       Generate file name = cassette name plus file extension.
+#'     }
+#'     \item{\code{make_dir()}}{
+#'       Make cassette directory.
+#'     }
+#'     \item{\code{raw_string()}}{
+#'       Get raw string of the cassette (cached interaction).
+#'     }
+#'     \item{\code{deserialized_hash()}}{
+#'       Get a deserialized hash.
+#'     }
+#'     \item{\code{make_args()}}{
+#'       Initialize default args.
+#'     }
+#'     \item{\code{write_metadata()}}{
+#'       Write metadata to disk.
+#'     }
+#'     \item{\code{previously_recorded_interactions()}}{
+#'       Coming soon.
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' res <- Cassette$new("teddybear")
 #' res <- Cassette$new("foobar", record = "all")

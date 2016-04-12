@@ -1,9 +1,20 @@
 #' The request of an HTTPInteraction
 #'
+#' @keywords internal
 #' @param method the HTTP method (i.e. :head, :options, :get, :post, :put, :patch or :delete)
 #' @param uri the request URI
 #' @param body the request body
 #' @param headers the request headers
+#' @details
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{to_hash()}}{
+#'       Create a hash.
+#'     }
+#'     \item{\code{from_hash()}}{
+#'       Get a hash back to an R list.
+#'     }
+#'   }
 #' @examples \dontrun{
 #' url <- "http://httpbin.org/post"
 #' body <- list(foo = "bar")

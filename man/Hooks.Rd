@@ -4,15 +4,42 @@
 \name{Hooks}
 \alias{Hooks}
 \title{Hooks class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-Hooks
+\arguments{
+\item{hooks}{List of hooks}
+
+\item{hook_type, x}{(character) Hook name}
+
+\item{args}{Args passed when invoking a hook}
+
+\item{plac}{Placement, one of "start" or "end"}
+
+\item{fun}{A function}
+
+\item{prepend}{Whether to prepend or add to the end of the string. Default: \code{FALSE}}
 }
 \description{
 Hooks class
 }
 \details{
 Helps define new hooks, hold hooks, and accessors to get and use hooks.
+\strong{Methods}
+  \describe{
+    \item{\code{invoke_hook(hook_type, args)}}{
+      Invoke a hook, i.e., call a hook.
+    }
+    \item{\code{clear_hooks()}}{
+      Remove all hooks.
+    }
+    \item{\code{define_hook(hook_type, fun, prepend = FALSE)}}{
+      Define a hook.
+    }
+  }
+\strong{Private Methods}
+  \describe{
+    \item{\code{make_hook(x, plac, fun)}}{
+      Make a hook.
+    }
+ }
 }
 \examples{
 \dontrun{

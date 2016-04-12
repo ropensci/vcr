@@ -1,13 +1,21 @@
 #' HTTPInteraction class
 #'
 #' @export
-#' @docType class
-#' @section Methods:
-#' \describe{
-#'   \item{\code{request}}{A Request class object}
-#'   \item{\code{response}}{A Response class object}
-#'   \item{\code{recorded_at}}{Time http interaction recorded at}
-#' }
+#' @param request A Request class object
+#' @param response A Response class object
+#' @param recorded_at Time http interaction recorded at
+#' @details
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{to_hash()}}{
+#'       Create a hash.
+#'     }
+#'     \item{\code{from_hash()}}{
+#'       Get a hash back to an R list.
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' # make the request
 #' url <- "http://httpbin.org/post"

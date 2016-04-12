@@ -67,6 +67,8 @@ custom persister.}
 \item{preserve_exact_body_bytes}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for this cassette
 when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.}
+
+\item{ignore_cassettes}{(logical) xx. Default: \code{TRUE}}
 }
 \description{
 Insert a cassette to record an HTTP call

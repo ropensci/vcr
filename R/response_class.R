@@ -1,9 +1,23 @@
 #' The response of an HTTPInteraction
 #'
+#' @keywords internal
 #' @param status the status of the response
+#' @param headers the response headers
 #' @param body the response body
 #' @param http_version the HTTP version
 #' @param adapter_metadata Additional metadata used by a specific VCR adapter.
+#' @details
+#' \strong{Methods}
+#'   \describe{
+#'     \item{\code{to_hash()}}{
+#'       Create a hash.
+#'     }
+#'     \item{\code{from_hash()}}{
+#'       Get a hash back to an R list.
+#'     }
+#'   }
+#' @format NULL
+#' @usage NULL
 #' @examples \dontrun{
 #' url <- "http://httpbin.org/post"
 #' body <- list(foo = "bar")

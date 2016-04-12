@@ -4,12 +4,10 @@
 \name{Response}
 \alias{Response}
 \title{The response of an HTTPInteraction}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-Response
-}
 \arguments{
 \item{status}{the status of the response}
+
+\item{headers}{the response headers}
 
 \item{body}{the response body}
 
@@ -19,6 +17,17 @@ Response
 }
 \description{
 The response of an HTTPInteraction
+}
+\details{
+\strong{Methods}
+  \describe{
+    \item{\code{to_hash()}}{
+      Create a hash.
+    }
+    \item{\code{from_hash()}}{
+      Get a hash back to an R list.
+    }
+  }
 }
 \examples{
 \dontrun{
@@ -38,5 +47,5 @@ x$to_hash()
 x$from_hash()
 }
 }
-\keyword{datasets}
+\keyword{internal}
 
