@@ -4,14 +4,7 @@
 %\VignetteEncoding{UTF-8}
 -->
 
-```{r echo=FALSE}
-knitr::opts_chunk$set(
-	comment = "#>",
-	collapse = TRUE,
-	warning = FALSE,
-	message = FALSE
-)
-```
+
 
 vr introduction
 ===============
@@ -24,13 +17,15 @@ Right now `vcr` is not yet using previously cached requests, but will soon.
 
 Development version from GitHub
 
-```{r eval=FALSE}
+
+```r
 devtools::install_github("ropenscilabs/vcr")
 ```
 
 Load `vcr`
 
-```{r}
+
+```r
 library("vcr")
 ```
 
@@ -38,7 +33,8 @@ library("vcr")
 
 list cassettes
 
-```{r eval=FALSE}
+
+```r
 cassettes()
 #> $foobar
 #> <cassette> foobar
@@ -67,7 +63,8 @@ cassettes()
 
 list the current cassette
 
-```{r eval=FALSE}
+
+```r
 cassette_current()
 #> $helloworld
 #> <cassette> helloworld
@@ -84,7 +81,8 @@ cassette_current()
 
 coerce various things to cassette objects
 
-```{r eval=FALSE}
+
+```r
 as.cassette("helloworld")
 #> $helloworld
 #> <cassette> helloworld
@@ -99,7 +97,8 @@ as.cassette("helloworld")
 #>   preserve_exact_body_bytes: TRUE
 ```
 
-```{r eval=FALSE}
+
+```r
 as.cassette(cassettes()[1])
 #> $foobar
 #> <cassette> foobar
@@ -114,7 +113,8 @@ as.cassette(cassettes()[1])
 #>   preserve_exact_body_bytes: TRUE
 ```
 
-```{r eval=FALSE}
+
+```r
 as.cassette(as.cassettepath("~/vcr/vcr_cassettes/foobar.yml"))
 #> $foobar
 #> <cassette> foobar
@@ -131,29 +131,35 @@ as.cassette(as.cassettepath("~/vcr/vcr_cassettes/foobar.yml"))
 
 list the path to where cassettes are stored
 
-```{r}
+
+```r
 cassette_path()
+#> [1] "~/vcr/vcr_cassettes"
 ```
 
 insert a cassette
 
-```{r echo=FALSE}
-insert_cassette(name = "helloworld")
+
+```
+#> Error: There is already a cassette with the same name: helloworld
 ```
 
-```{r eval=FALSE}
+
+```r
 insert_cassette(name = "helloworld")
 ```
 
 use a cassette (if cassette not found, we'll create the cassette)
 
-```{r eval=FALSE}
+
+```r
 use_cassette("helloworld", GET("http://google.com"))
 ```
 
 You can also pass a code block, instead of an inline call
 
-```{r eval=FALSE}
+
+```r
 insert_cassette("foobar")
 call_block("foobar", {
   url <- "http://httpbin.org/get"
