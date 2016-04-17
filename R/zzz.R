@@ -19,3 +19,5 @@ errmssg <- "use_cassette requires a block.\nIf you cannot wrap your code in a bl
 response_summary <- function(x) {
   httr::http_condition(x, "message")$message
 }
+
+compact <- function(x) Filter(Negate(is.null), x)

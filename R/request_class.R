@@ -23,6 +23,8 @@
 #' x$body
 #' x$method
 #' x$uri
+#' x$host
+#' x$path
 #' x$headers
 #' x$to_hash()
 #'
@@ -36,6 +38,8 @@ Request <- R6::R6Class('Request',
    public = list(
      method = NULL,
      uri = NULL,
+     host = NULL,
+     path = NULL,
      body = NULL,
      headers = NULL,
      skip_port_stripping = FALSE,
@@ -56,6 +60,10 @@ Request <- R6::R6Class('Request',
          } else {
            self$uri <- uri
          }
+         # parse URI to get host and path
+         tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
+         self$host <- tmp$hostname
+         self$path <- tmp$path
        }
      },
 

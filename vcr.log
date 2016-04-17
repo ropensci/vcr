@@ -1,25 +1,6 @@
-2016-04-16 17:51:29.745 - INFO - Activating logging to vcr.log
-2016-04-16 17:51:31.176 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 17:51:33.109 - INFO
-2016-04-16 17:51:33.110 - INFO -    Recorded HTTP interaction: http://api.crossref.org/works => OK (HTTP 200).
-2016-04-16 17:51:40.990 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 17:51:42.205 - INFO
-2016-04-16 17:51:42.206 - INFO -    Recorded HTTP interaction: http://api.crossref.org/works => OK (HTTP 200).
-2016-04-16 17:52:51.229 - SIMPLEMESSAGE - Loading vcr
-2016-04-16 17:53:18.178 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 17:53:36.902 - SIMPLEMESSAGE - No encoding supplied: defaulting to UTF-8.
-2016-04-16 17:53:42.414 - SIMPLEMESSAGE - No encoding supplied: defaulting to UTF-8.
-2016-04-16 17:56:13.100 - SIMPLEERROR - there is no package called ‘cassette’
-2016-04-16 17:56:14.695 - SIMPLEERROR - there is no package called ‘cassette’
-2016-04-16 17:58:14.350 - SIMPLEERROR - there is no package called ‘variable’
-2016-04-16 17:58:35.820 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 17:58:45.970 - SIMPLEMESSAGE - No encoding supplied: defaulting to UTF-8.
-2016-04-16 17:58:51.347 - SIMPLEMESSAGE - Loading vcr
-2016-04-16 17:59:35.358 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 17:59:39.421 - SIMPLEERROR - there is no package called ‘cassette’
-2016-04-16 17:59:41.078 - SIMPLEERROR - there is no package called ‘cassette’
-2016-04-16 18:00:44.504 - SIMPLEMESSAGE - Loading vcr
-2016-04-16 18:00:48.698 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 18:02:59.678 - SIMPLEMESSAGE - Loading vcr
-2016-04-16 18:03:06.818 - SIMPLEMESSAGE - Initialized with options: once
-2016-04-16 18:03:17.943 - SIMPLEMESSAGE - using old
+2016-04-17 16:23:30.149 - INFO - Activating logging to vcr.log
+2016-04-17 16:23:32.085 - SIMPLEMESSAGE - Initialized with options: once
+2016-04-17 16:23:32.103 - SIMPLEMESSAGE - No encoding supplied: defaulting to UTF-8.
+2016-04-17 16:23:37.754 - SIMPLEMESSAGE - Initialized with options: once
+2016-04-17 16:23:37.840 - INFO
+2016-04-17 16:23:37.841 - INFO -    Recorded HTTP interaction: http://api.plos.org/search?q=*:*&wt=json => OK (HTTP 200).

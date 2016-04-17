@@ -236,10 +236,12 @@ Cassette <- R6::R6Class("Cassette",
 
     parse_http = function(x) {
       tmp <- as.list(x)
-      #cat(paste0(tmp, collapse = ","), sep = "\n")
+      uri <- get_uri(tmp)
       list(
         method = get_method(tmp),
-        uri = get_uri(tmp),
+        uri = uri,
+        host = get_host(uri),
+        path = get_path(uri),
         query = get_query(tmp)
       )
     },

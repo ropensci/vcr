@@ -49,13 +49,17 @@ RequestMatcherRegistry <- R6::R6Class(
 
     register_built_ins = function() {
       self$register("method", function(r1, r2) r1$method == r2$method)
+
       self$register("uri", function(r1, r2) r1$uri == r2$uri)
+
       self$register("body", function(r1, r2) r1$body == r2$body)
+
       self$register('headers', function(r1, r2) r1$headers == r2$headers)
 
       self$register("host", function(r1, r2) {
         r1$parsed_uri$host == r2$parsed_uri$host
       })
+
       self$register("path", function(r1, r2) {
         r1$parsed_uri$path == r2$parsed_uri$path
       })

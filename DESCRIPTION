@@ -12,6 +12,7 @@ LazyData: true
 VignetteBuilder: knitr
 Imports:
     httr (>= 1.1.0),
+    curl (>= 0.9.7),
     yaml,
     digest,
     R6,

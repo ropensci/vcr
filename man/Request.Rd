@@ -40,6 +40,8 @@ res <- httr::POST(url, body = body)
 x$body
 x$method
 x$uri
+x$host
+x$path
 x$headers
 x$to_hash()
 

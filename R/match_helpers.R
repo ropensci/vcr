@@ -11,6 +11,14 @@ get_uri <- function(x) {
   if (length(tmp) == 0) NULL else tmp
 }
 
+get_host <- function(x) {
+  eval(parse(text = vcr_c$uri_parser))(x)$hostname
+}
+
+get_path <- function(x) {
+  eval(parse(text = vcr_c$uri_parser))(x)$path
+}
+
 get_query <- function(x) {
   if ("query" %in% names(x)) {
     x[["query"]]
