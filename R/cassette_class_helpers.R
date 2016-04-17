@@ -2,19 +2,19 @@
 #   dir.create(x, showWarnings = FALSE, recursive = TRUE)
 # }
 
-write_recorded_interactions_to_disk <- function(x) {
-  if (length(any_new_recorded_interactions()) == 0) {
-    message("none")
-  }
-  # hash = serializable_hash()
-  # if (length(hash["http_interactions"])) {
-  #   message("none")
-  # }
-
-  message("fix me")
-  # FIXME - need to make a persisters and serializer class/object
-  # @persister[storage_key] = @serializer.serialize(hash)
-}
+# write_recorded_interactions_to_disk <- function(x) {
+#   if (length(any_new_recorded_interactions()) == 0) {
+#     message("none")
+#   }
+#   # hash = serializable_hash()
+#   # if (length(hash["http_interactions"])) {
+#   #   message("none")
+#   # }
+#
+#   message("fix me")
+#   # FIXME - need to make a persisters and serializer class/object
+#   # @persister[storage_key] = @serializer.serialize(hash)
+# }
 
 # @return [Hash] The hash that will be serialized when the cassette is written to disk.
 serializable_hash <- function() {
@@ -46,7 +46,7 @@ merged_interactions <- function(x) {
 }
 
 # previously_recorded_interactions()
-previously_recorded_interactions <- function() {
+#previously_recorded_interactions <- function() {
   #if (!raw_cassette_bytes.to_s.empty?) {
   # deserialized_hash['http_interactions'].map { |h| HTTPInteraction.from_hash(h) } do |int|
   #   invoke_hook(:before_playback, int)
@@ -58,7 +58,7 @@ previously_recorded_interactions <- function() {
   # } else {
   #   list()
   # }
-}
+#}
 
 # raw_cassette_bytes()
 # raw_cassette_bytes <- function(name) {

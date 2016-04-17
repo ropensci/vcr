@@ -29,7 +29,23 @@ __>>>>>Not yet useable<<<<<__
 
 ## Installation
 
-coming soon...
+```{r eval=FALSE}
+devtools::install_github("ropenscilabs/vcr")
+```
+
+```{r}
+library("vcr")
+```
+
+## Basic usage
+
+```{r}
+use_casette("helloworld", {
+  
+})
+```
+
+The request gets recorded 
 
 ## Meta
 

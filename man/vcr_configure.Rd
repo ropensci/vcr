@@ -14,7 +14,8 @@ vcr_configure(dir = cassette_path(), record = "once",
   ignore_localhost = FALSE, ignore_request = NULL,
   uri_parser = "httr::parse_url", preserve_exact_body_bytes = FALSE,
   preserve_exact_body_bytes_for = FALSE, turned_off = FALSE,
-  ignore_cassettes = FALSE, cassettes = list(), linked_context = NULL)
+  ignore_cassettes = FALSE, cassettes = list(), linked_context = NULL,
+  vcr_logging = "vcr.log", vcr_logging_opts = list())
 
 vcr_configure_reset()
 
@@ -57,6 +58,10 @@ you can't make requests unless a cassette is in use. Default: \code{FALSE}}
 \item{cassettes}{(list) don't use}
 
 \item{linked_context}{(logical) linked context}
+
+\item{vcr_logging}{(character) one of a file path to log to, "console", or "stdout"}
+
+\item{...}{(list) Additional options passed to \code{\link[loggr]{log_file}}}
 }
 \description{
 Configuration
@@ -70,6 +75,10 @@ vcr_configure(
 )
 vcr_configuration()
 vcr_config_defaults()
+
+vcr_configure(
+ ignore_localhost = TRUE
+)
 }
 }
 

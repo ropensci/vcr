@@ -35,7 +35,7 @@ url <- "http://httpbin.org/post"
 body <- list(foo = "bar")
 (res <- httr::POST(url, body = body))
 (x <- Response$new(
-   c(status_code = res$status_code, http_status(res)),
+   c(status_code = res$status_code, httr::http_status(res)),
    res$headers,
    content(res, "text"),
    res$all_headers[[1]]$version))

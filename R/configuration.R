@@ -20,6 +20,8 @@
 #' you can't make requests unless a cassette is in use. Default: \code{FALSE}
 #' @param cassettes (list) don't use
 #' @param linked_context (logical) linked context
+#' @param vcr_logging (character) one of a file path to log to, "console", or "stdout"
+#' @param ... (list) Additional options passed to \code{\link[loggr]{log_file}}
 #'
 #' @examples \dontrun{
 #' vcr_configure()
@@ -29,6 +31,10 @@
 #' )
 #' vcr_configuration()
 #' vcr_config_defaults()
+#'
+#' vcr_configure(
+#'  ignore_localhost = TRUE
+#' )
 #' }
 vcr_configure <- function(
   dir = cassette_path(),
@@ -46,7 +52,9 @@ vcr_configure <- function(
   turned_off = FALSE,
   ignore_cassettes = FALSE,
   cassettes = list(),
-  linked_context = NULL) {
+  linked_context = NULL,
+  vcr_logging = "vcr.log",
+  vcr_logging_opts = list()) {
 
   calls <- as.list(environment(), all = TRUE)
   for (i in seq_along(calls)) {
@@ -86,6 +94,8 @@ VCRConfig <- R6::R6Class(
     ignore_cassettes = NULL,
     cassettes = NULL,
     linked_context = NULL,
+    vcr_logging = NULL,
+    vcr_logging_opts = NULL,
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
@@ -119,5 +129,7 @@ vcr_default_config_vars <- list(
   turned_off = FALSE,
   ignore_cassettes = FALSE,
   cassettes = list(),
-  linked_context = NULL
+  linked_context = NULL,
+  vcr_logging = "vcr.log",
+  vcr_logging_opts = list()
 )

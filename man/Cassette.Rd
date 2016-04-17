@@ -90,7 +90,9 @@ Cassette handler
 }
 \examples{
 \dontrun{
-res <- Cassette$new("teddybear")
+vcr_configure()
+
+res <- Cassette$new(name = "bob")
 res <- Cassette$new("foobar", record = "all")
 res$file()
 res$originally_recorded_at()
@@ -101,5 +103,5 @@ res$should_remove_matching_existing_interactions()
 res$storage_key()
 }
 }
-\keyword{internal}
+\keyword{datasets}
 

@@ -46,10 +46,13 @@ YAML <- R6::R6Class("YAML",
     },
 
     # Serializes the given hash using internal fxn write_yaml
-    serialize = function(x) {
+    serialize = function(x, path) {
       # @param [Hash] x the object to serialize
       # @return [String] the YAML string
-      write_yaml(x, self$path)
+      #write_yaml(x, self$path)
+      function(x, path) {
+        write_yaml(x, path)
+      }
     },
 
     # Deserializes the given string using yaml::yaml.load
@@ -65,7 +68,8 @@ YAML <- R6::R6Class("YAML",
     deserialize_path = function() {
       # @param [String] string path to a YAML file
       # @return [Hash] the deserialized object, an R list
-      yaml::yaml.load_file(self$path)
+      tmp <- yaml::yaml.load_file(self$path)
+      if (is.null(tmp)) list() else tmp
     }
   )
 )

@@ -42,13 +42,18 @@
 FileSystem <- R6::R6Class("FileSystem",
   public = list(
     file_name = NULL,
+    write_fxn = NULL,
     content = NULL,
     path = NULL,
 
-    initialize = function(file_name = NULL, content = NULL, path = NULL) {
+    initialize = function(file_name = NULL, write_fxn = NULL, content = NULL, path = NULL) {
       self$file_name <- file_name
       self$content <- content
+      self$write_fxn <- write_fxn
       self$path <- if (is.null(path)) cassette_path() else path
+
+      # write to disk
+      self$write_fxn(self$content, self$path)
     },
 
     # Gets the cassette for the given storage key (file name).

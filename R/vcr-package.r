@@ -6,6 +6,7 @@
 #' @importFrom yaml yaml.load_file
 #' @importFrom lazyeval lazy_dots
 #' @importFrom base64enc base64decode base64encode
+#' @importFrom loggr log_file log_info
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
 #' @docType package
 #' @aliases vcr-package

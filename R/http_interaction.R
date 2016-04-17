@@ -53,12 +53,12 @@ HTTPInteraction <- R6::R6Class(
       list(request = self$request$to_hash(),
            response = self$response$to_hash(),
            recorded_at = self$recorded_at)
-    },
-
-    from_hash = function() {
-      list(self$request$from_hash(),
-           self$response$from_hash(),
-           self$recorded_at)
     }
+#
+#     from_hash = function() {
+#       list(self$request$from_hash(),
+#            self$response$from_hash(),
+#            self$recorded_at)
+#     }
   )
 )

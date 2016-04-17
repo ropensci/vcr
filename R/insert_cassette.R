@@ -65,11 +65,11 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL, re_reco
   ignore_cassettes = TRUE) {
 
   if (turned_on()) {
-    if ( any( name %in% names(cassettes()) ) ) {
+    if ( any( name %in% names(cassettes_session()) ) ) {
       stop(sprintf("There is already a cassette with the same name: %s", name), call. = FALSE)
     }
 
-    Cassette$new(name = name, record = record, match_requests_on = match_requests_on,
+    tmp <- Cassette$new(name = name, record = record, match_requests_on = match_requests_on,
                  re_record_interval = re_record_interval, tag = tag, tags = tags,
                  update_content_length_header = update_content_length_header,
                  decode_compressed_response = decode_compressed_response,
@@ -78,7 +78,11 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL, re_reco
                  exclusive = exclusive,
                  serialize_with = serialize_with, persist_with = persist_with,
                  preserve_exact_body_bytes = preserve_exact_body_bytes)
+    include_cassette(tmp)
+    # write cassette to disk - maybe?
     # cassettes.push(cassette)
+    # return cassette
+    return(tmp)
   } else {
     if (ignore_cassettes) {
       message <- "VCR is turned off.  You must turn it on before you can insert a cassette.

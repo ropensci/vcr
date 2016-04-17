@@ -53,26 +53,42 @@
 #'  In addition, any newly recorded HTTP interactions will be written to disk.
 #' }
 #' @examples \dontrun{
-#' res <- Cassette$new("foobar")
+#' library("httr")
+#' use_cassette(name = "beesknees", {
+#'    httr::GET("http://api.plos.org/search?q=*:*&wt=json")
+#' })
 #'
-#' x <- cassettes()
-#' (cas <- as.cassette(x[[1]]))
-#' as.cassette(cas)
-#' as.cassette(cassettes()[[1]])
-#' as.cassette("foobar")
+#' # use logging
+#' loggr::log_file("vcr.log")
+#' use_cassette(name = "farts", {
+#'   GET("http://api.crossref.org/works")
+#' })
 #'
-#' insert_cassette(name = "fartloud")
-#'
-#' use_cassette("foobar", GET("http://google.com"))
+#' # sacbox::load_defaults(use_cassette)
+#' # name = "sky"
+#' # cassette$call_block(httr::GET("http://api.crossref.org/works"))
 #' }
 
-use_cassette <- function(name, ..., record="once", match_requests_on=NULL, re_record_interval=NULL,
-  tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
-  allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
-  serialize_with="yaml", persist_with="FileSystem", preserve_exact_body_bytes=TRUE) {
+use_cassette <- function(name, ..., record = "once", match_requests_on = NULL, re_record_interval = NULL,
+  tag = NULL, tags = NULL, update_content_length_header = FALSE, decode_compressed_response = FALSE,
+  allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE, exclusive = FALSE,
+  serialize_with = "yaml", persist_with = "FileSystem", preserve_exact_body_bytes = TRUE) {
 
-  #if (block) stop(errmssg, call. = FALSE)
-  cassette <- if (!cassette_exists(name)) insert_cassette(name) else name
-  call_block(cassette, ...)
-  # eject_cassette(cassette)
+  # insert cassette - returns cassette class object
+  cassette <- insert_cassette(
+    name, record = record, match_requests_on = match_requests_on, re_record_interval = re_record_interval,
+    tag = tag, tags = tags, update_content_length_header = update_content_length_header,
+    decode_compressed_response = decode_compressed_response, allow_playback_repeats = allow_playback_repeats,
+    allow_unused_http_interactions = allow_unused_http_interactions, exclusive = exclusive,
+    serialize_with = serialize_with, persist_with = persist_with,
+    preserve_exact_body_bytes = preserve_exact_body_bytes)
+
+  # eject cassette - writes interactions to disk
+  #on.exit(cassette$eject())
+
+  # call block
+  cassette$call_block(...)
+
+  # eject cassette - writes interactions to disk
+  #cassette$eject()
 }

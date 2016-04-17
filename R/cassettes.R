@@ -12,7 +12,12 @@
 #' cassette_path()
 #' }
 cassettes <- function(){
-  lapply(get_cassette_meta_paths(), read_cassette_meta)
+  # combine cassettes on disk with cassettes in session
+  out <- unlist(list(
+    lapply(get_cassette_meta_paths(), read_cassette_meta),
+    cassettes_session()
+  ), FALSE)
+  out[!duplicated(names(out))]
 }
 
 #' @export
@@ -61,4 +66,18 @@ get_cassette_data_paths <- function(){
 
 check_create_path <- function(x){
   if (file.exists(x)) dir.create(x, recursive = TRUE, showWarnings = FALSE)
+}
+
+cassettes_session <- function(x) {
+  xx <- ls(envir = vcr_cassettes)
+  if (length(xx) > 0) {
+    setNames(lapply(xx, get, envir = vcr_cassettes), xx)
+  } else {
+    list()
+  }
+}
+
+include_cassette <- function(cassette) {
+  # assign cassette to bucket of cassettes in session
+  assign(cassette$name, cassette, envir = vcr_cassettes)
 }

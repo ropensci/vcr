@@ -42,7 +42,6 @@ x$method
 x$uri
 x$headers
 x$to_hash()
-x$from_hash()
 
 vcr_configure(
  dir = "fixtures/vcr_cassettes",

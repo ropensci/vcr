@@ -136,12 +136,13 @@ HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
      },
 
      response_for = function(request) {
+       TRUE
        # FIXME - finish this function, see bottom of page
-       if (index == matching_interaction_index_for(request)) {
-         "adf"
-       } else {
-         "adf"
-       }
+       # if (index == matching_interaction_index_for(request)) {
+       #   "adf"
+       # } else {
+       #   "adf"
+       # }
      },
 
      has_interaction_matching = function(request) {

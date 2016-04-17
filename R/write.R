@@ -4,25 +4,49 @@ write_cassette <- function(cassette, result){
 }
 
 write_yaml <- function(x, file){
-  cat("---\nhttp_interactions:\n- request:", sep = "\n", file = file)
-  cf(sprintf("method: %s", x$request$method), file)
-  cf(sprintf("uri: %s", x$url), file)
-  forwrite("body:", x$request$opts, file)
-  cat("  response:", file = file, append = TRUE, sep = "\n")
-  cf(sprintf("status_code: %s", x$status_code), file)
-  forwrite("headers:", x$headers, file)
-  cat("   body:", file = file, append = TRUE)
-  str <- base64enc::base64encode(httr::content(x, as = "raw", encoding = "UTF-8"))
-  ncar <- nchar(str)
-  cat("\n",
-      strwrap(
-        paste0(substring(str, seq(1, ncar, 60), seq(60, ncar, 60)), collapse = "\n"),
-        width = 60, indent = 6, exdent = 6
-      ),
-      file = file, fill = 80, append = TRUE
-  )
-  cat(sprintf("   recorded_at: %s", Sys.time()), file = file, sep = "\n", append = TRUE)
-  cat(sprintf("   recorded_with: %s", packageVersion("vcr")), file = file, sep = "\n", append = TRUE)
+  write_header(file)
+  lapply(x, write_interactions, file = file)
+}
+
+write_header <- function(file) {
+  cat("http_interactions:", sep = "\n", file = file)
+  # if (!file.exists(file)) {
+  #   cat("http_interactions:", sep = "\n", file = file)
+  # } else {
+  #   if (length(readLines(file, n = 1)) == 0) {
+  #     cat("http_interactions:", sep = "\n", file = file)
+  #   }
+  # }
+}
+
+write_interactions <- function(x, file) {
+  cat(yaml::as.yaml(
+    list(
+      list(
+        request = list(
+          method = x$request$method,
+          uri = x$request$uri,
+          body = list(
+            encoding = "",
+            string = get_body(x$request$body)
+          ),
+          headers = x$request$headers
+        ),
+        response = list(
+          status = x$response$status,
+          headers = x$response$headers,
+          body = list(
+            encoding = "",
+            # FIXME - be able to toggle whether to base64encode or not
+            string = get_body(x$response$body)
+            #string = base64enc::base64encode(charToRaw(get_body(x$response$body)))
+          )
+        ),
+        recorded_at = Sys.time(),
+        recorded_with = paste0("vcr/", packageVersion("vcr"))
+      )
+    )
+  ), file = file, append = TRUE)
 }
 
 forwrite <- function(name, x, file){
@@ -35,3 +59,43 @@ forwrite <- function(name, x, file){
 cf <- function(x, f){
   cat(paste0("   ", x), sep = "\n", file = f, append = TRUE)
 }
+
+get_body <- function(x) {
+  if (is.null(x)) '' else x
+}
+
+strex <- function(string, pattern) {
+  regmatches(string, regexpr(pattern, string))
+}
+
+
+
+# write_interactions <- function(x, file){
+#   cat("- request:", sep = "\n", file = file, append = TRUE)
+#   cf(sprintf("method: %s", x$request$method), file)
+#   cf(sprintf("uri: %s", x$request$uri), file)
+#   cf(sprintf("body:"), file)
+#   cf(sprintf("   encoding: "), file)
+#   cf(sprintf("   string: %s", get_body(x$request$body)), file)
+#   forwrite("headers:", x$request$headers, file)
+#   cat("  response:", file = file, append = TRUE, sep = "\n")
+#   cf(sprintf("status:"), file)
+#   cf(sprintf("   code: %s", strex(x$response$status$message, "[0-9]{3}")), file)
+#   cf(sprintf("   message: %s", x$response$status$reason), file)
+#   forwrite("headers:", x$response$headers, file)
+#   cf(sprintf("body:"), file)
+#   cf(sprintf("   encoding: %s", Encoding(x$response$body)), file)
+#   cf("   string:", file)
+#   # FIXME - we shouldn't always be base64 encoding, only when user requests it
+#   str <- base64enc::base64encode(charToRaw(get_body(x$response$body)))
+#   ncar <- nchar(str)
+#   cat(
+#       strwrap(
+#         paste0(substring(str, seq(1, ncar, 60), seq(60, ncar, 60)), collapse = "\n"),
+#         width = 60, indent = 10, exdent = 10
+#       ),
+#       file = file, fill = 80, append = TRUE
+#   )
+#   cat(sprintf("   recorded_at: %s", Sys.time()), file = file, sep = "\n", append = TRUE)
+#   cat(sprintf("   recorded_with: %s", paste0("vcr/", packageVersion("vcr"))), file = file, sep = "\n", append = TRUE)
+# }

@@ -16,7 +16,10 @@ Imports:
     digest,
     R6,
     lazyeval,
-    base64enc
+    base64enc,
+    loggr (>= 0.3)
 Suggests:
-    knitr
+    testthat,
+    knitr,
+    covr
 RoxygenNote: 5.0.1

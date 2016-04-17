@@ -25,7 +25,6 @@
 #' x$uri
 #' x$headers
 #' x$to_hash()
-#' x$from_hash()
 #'
 #' vcr_configure(
 #'  dir = "fixtures/vcr_cassettes",
@@ -61,24 +60,32 @@ Request <- R6::R6Class('Request',
      },
 
      to_hash = function() {
-       self$hash <- list(
+       list(
          method  = self$method,
          uri     = self$uri,
          body    = serializable_body(self$body),
          headers = self$headers
        )
-       return(self$hash)
-     },
-
-     from_hash = function() {
-       method <- self$hash[['method']]
-       list(
-         self$hash[['uri']],
-         body_from(self$hash[['body']]),
-         self$hash[['headers']],
-         self$skip_port_stripping
-       )
      }
+
+#      from_hash = function(hash) {
+#        self <- Request$new(
+#          method  = hash[['method']],
+#          uri     = hash[['uri']],
+#          body    = body_from(hash[['body']]),
+#          headers = hash[['headers']]
+#        )
+#      },
+#
+#      from_hash_old = function() {
+#        method <- self$hash[['method']]
+#        list(
+#          self$hash[['uri']],
+#          body_from(self$hash[['body']]),
+#          self$hash[['headers']],
+#          self$skip_port_stripping
+#        )
+#     }
    ),
    private = list(
      without_standard_port = function(uri) {
@@ -110,12 +117,20 @@ serializable_body <- function(x) {
 body_from <- function(x) {
   # return hash_or_string unless hash_or_string.is_a?(Hash)
   # hash = hash_or_string
-  if (attr(x, "base64")) {
+  if (is.null(x)) x <- ""
+  if (is.null(attr(x, "base64"))) return(try_encode_string(x, Encoding(x)))
+  if (attr(x, "base64") || is_base64(x)) {
     rawToChar(base64enc::base64decode(x))
   } else {
     try_encode_string(x, Encoding(x))
   }
 }
+
+is_base64 <- function(x) {
+  grepl(b64_pattern, x)
+}
+
+b64_pattern <- "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"
 
 try_encode_string <- function(string, encoding) {
   #return string if encoding.nil? || string.encoding.name == encoding
