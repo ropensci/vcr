@@ -83,18 +83,10 @@ Use a cassette
 }
 \examples{
 \dontrun{
-res <- Cassette$new("howdy")
-
-x <- cassettes()
-(cas <- as.cassette(x[[1]]))
-as.cassette(cas)
-as.cassette(cassettes()[[1]])
-as.cassette("foobar")
-
-insert_cassette(name = "fartloud")
-
 library("httr")
-use_cassette(name = "hollowness", httr::GET("http://google.com"))
+use_cassette(name = "beesknees", {
+   httr::GET("http://api.plos.org/search?q=*:*&wt=json")
+})
 
 # use logging
 loggr::log_file("vcr.log")

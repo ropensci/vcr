@@ -61,7 +61,7 @@ you can't make requests unless a cassette is in use. Default: \code{FALSE}}
 
 \item{vcr_logging}{(character) one of a file path to log to, "console", or "stdout"}
 
-\item{...}{(list) Additional options passed to \code{\link[loggr]{log_file}}}
+\item{vcr_logging_opts}{(list) Additional options passed to \code{\link[loggr]{log_file}}}
 }
 \description{
 Configuration

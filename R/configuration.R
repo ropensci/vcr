@@ -21,7 +21,7 @@
 #' @param cassettes (list) don't use
 #' @param linked_context (logical) linked context
 #' @param vcr_logging (character) one of a file path to log to, "console", or "stdout"
-#' @param ... (list) Additional options passed to \code{\link[loggr]{log_file}}
+#' @param vcr_logging_opts (list) Additional options passed to \code{\link[loggr]{log_file}}
 #'
 #' @examples \dontrun{
 #' vcr_configure()
