@@ -60,12 +60,12 @@
 #'
 #' # use logging
 #' loggr::log_file("vcr.log")
-#' use_cassette(name = "nightcheese", {
-#'   GET("http://api.crossref.org/works")
+#' use_cassette(name = "helium", {
+#'   v <- GET("http://api.crossref.org/works")
 #' })
 #'
 #' # sacbox::load_defaults(use_cassette)
-#' # name = "sky"
+#' # name = "skyfart"
 #' # cassette$call_block(httr::GET("http://api.crossref.org/works"))
 #' }
 
@@ -86,7 +86,9 @@ use_cassette <- function(name, ..., record = "once", match_requests_on = NULL, r
   # eject cassette - writes interactions to disk
   #on.exit(cassette$eject())
 
-  # call block
+  # call block - and ejects afterwards
+  ## FIXME - may want to change this behavior so that call_block and eject happen separately
+  ## so that insert_cassette(), then eject() can work
   cassette$call_block(...)
 
   # eject cassette - writes interactions to disk

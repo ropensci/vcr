@@ -10,6 +10,9 @@
 \item{content}{(character) content to record to a cassette}
 
 \item{path}{(character) Storage directory for cassettes}
+
+\item{write2disk}{(logical) write to disk or just make a new FileSystem object.
+Default: \code{FALSE}}
 }
 \description{
 File system persister

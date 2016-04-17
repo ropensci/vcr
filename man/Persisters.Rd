@@ -6,7 +6,7 @@
 \alias{persister_fetch}
 \title{Keeps track of the cassette persisters in a hash-like object}
 \usage{
-persister_fetch(x = "FileSystem")
+persister_fetch(x = "FileSystem", file_name)
 }
 \arguments{
 \item{persisters}{A list}

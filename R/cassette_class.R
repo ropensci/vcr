@@ -133,7 +133,7 @@ Cassette <- R6::R6Class("Cassette",
       if (!file.exists(self$manfile)) self$write_metadata()
       self$recorded_at <- file.info(self$file())$mtime
       self$serializer = serializer_fetch(self$serialize_with, self$name)
-      # self$persister = persister_fetch(self$persist_with)
+      self$persister = persister_fetch(self$persist_with, self$serializer$path)
       message("Initialized with options: ", self$record)
 
       # create new env for recorded interactions
@@ -287,10 +287,16 @@ Cassette <- R6::R6Class("Cassette",
 
     recording = function() {
       if (self$record == "none") {
-        FALSE
+        return(FALSE)
+      } else if (self$record == "once") {
+        return(self$is_empty())
       } else {
-        TRUE
+        return(TRUE)
       }
+    },
+
+    is_empty = function() {
+      self$persister$is_empty()
     },
 
     originally_recorded_at = function() {
@@ -334,17 +340,11 @@ Cassette <- R6::R6Class("Cassette",
     },
 
     storage_key = function() {
-      #paste0(self$name, self$serializer$file_extension)
       self$serializer$path
     },
 
     make_dir = function() {
       dir.create(path.expand(self$root_dir), showWarnings = FALSE, recursive = TRUE)
-    },
-
-    raw_string = function() {
-      # in place of raw_cassette_bytes()
-      readLines(self$file)
     },
 
     deserialized_hash = function() {
@@ -383,7 +383,8 @@ Cassette <- R6::R6Class("Cassette",
           file_name = self$serializer$path,
           write_fxn = self$serializer$serialize(),
           content = hash$http_interactions,
-          path = self$serializer$path
+          path = self$serializer$path,
+          write2disk = TRUE
         )
       # FileSystem$new(
       #   file_name = cassette$serializer$path,

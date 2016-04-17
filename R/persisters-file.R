@@ -4,6 +4,8 @@
 #' @param file_name (character) Just he fiile name, not whole path
 #' @param content (character) content to record to a cassette
 #' @param path (character) Storage directory for cassettes
+#' @param write2disk (logical) write to disk or just make a new FileSystem object.
+#' Default: \code{FALSE}
 #' @details The only built-in cassette persister. Persists cassettes
 #' to the file system.
 #'
@@ -45,15 +47,19 @@ FileSystem <- R6::R6Class("FileSystem",
     write_fxn = NULL,
     content = NULL,
     path = NULL,
+    write2disk = FALSE,
 
-    initialize = function(file_name = NULL, write_fxn = NULL, content = NULL, path = NULL) {
+    initialize = function(file_name = NULL, write_fxn = NULL,
+                          content = NULL, path = NULL,
+                          write2disk = FALSE) {
       self$file_name <- file_name
       self$content <- content
       self$write_fxn <- write_fxn
+      self$write2disk <- write2disk
       self$path <- if (is.null(path)) cassette_path() else path
 
       # write to disk
-      self$write_fxn(self$content, self$path)
+      if (self$write2disk) self$write_fxn(self$content, self$path)
     },
 
     # Gets the cassette for the given storage key (file name).
@@ -65,6 +71,16 @@ FileSystem <- R6::R6Class("FileSystem",
       path <- private$absolute_path_to_file(self$path, file_name)
       if (!file.exists(path)) stop("File doesn't exist", call. = FALSE)
       yaml::yaml.load_file(path)
+    },
+
+    is_empty = function() {
+      path <- private$absolute_path_to_file(self$path, self$file_name)
+      if (!file.exists(path)) return(TRUE)
+      if (is.null(yaml::yaml.load_file(path))) {
+        return(TRUE)
+      } else {
+        return(FALSE)
+      }
     },
 
     # Sets the cassette for the given storage key (file name).

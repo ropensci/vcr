@@ -49,8 +49,8 @@ Persisters <- R6::R6Class(
 )
 
 #' @rdname Persisters
-persister_fetch <- function(x = "FileSystem") {
+persister_fetch <- function(x = "FileSystem", file_name) {
   per <- Persisters$new(name = x)
   per <- per$persisters
-  per$new()
+  per$new(file_name = file_name)
 }

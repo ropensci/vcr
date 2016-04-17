@@ -90,12 +90,12 @@ use_cassette(name = "beesknees", {
 
 # use logging
 loggr::log_file("vcr.log")
-use_cassette(name = "farts", {
+use_cassette(name = "nightcheese", {
   GET("http://api.crossref.org/works")
 })
 
 # sacbox::load_defaults(use_cassette)
-# name = "sky"
+# name = "skyfart"
 # cassette$call_block(httr::GET("http://api.crossref.org/works"))
 }
 }
