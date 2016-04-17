@@ -54,7 +54,7 @@
 #' }
 #' @examples \dontrun{
 #' library("httr")
-#' use_cassette(name = "legs", {
+#' use_cassette(name = "aaa", {
 #'    httr::GET("http://api.plos.org/search?q=*:*&wt=json")
 #' })
 #'

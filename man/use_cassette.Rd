@@ -84,11 +84,12 @@ Use a cassette
 \examples{
 \dontrun{
 library("httr")
-use_cassette(name = "beesknees", {
+use_cassette(name = "legs", {
    httr::GET("http://api.plos.org/search?q=*:*&wt=json")
 })
 
 # use logging
+library("loggr")
 loggr::log_file("vcr.log")
 use_cassette(name = "helium", {
   v <- GET("http://api.crossref.org/works")

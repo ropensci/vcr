@@ -1,6 +1,8 @@
 get_method <- function(x) {
   x <- as.character(x)
-  tmp <- grep("(get)|(post)|(put)|(delete)|(options)|(patch)|(head)", tolower(x), value = TRUE)
+  tmp <- grep(
+    "^(get)|^(post)$|^(put)$|^(delete)$|^(options)$|^(patch)$|^(head)$",
+    tolower(x), value = TRUE)
   tmp <- sub("httr::", "", tmp)
   if (length(tmp) == 0) NULL else tmp
 }
@@ -22,6 +24,14 @@ get_path <- function(x) {
 get_query <- function(x) {
   if ("query" %in% names(x)) {
     x[["query"]]
+  } else {
+    NULL
+  }
+}
+
+get_body <- function(x) {
+  if ("body" %in% names(x)) {
+    x[["body"]]
   } else {
     NULL
   }

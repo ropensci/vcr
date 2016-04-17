@@ -242,7 +242,8 @@ Cassette <- R6::R6Class("Cassette",
         uri = uri,
         host = get_host(uri),
         path = get_path(uri),
-        query = get_query(tmp)
+        query = get_query(tmp),
+        body = get_body(tmp)
       )
     },
 
