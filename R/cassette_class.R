@@ -193,7 +193,7 @@ Cassette <- R6::R6Class("Cassette",
         # cat(new$method, sep = "\n")
         # cat(old[[i]]$request$method, sep = "\n")
         for (j in seq_along(matchby)) {
-          res[j] <- request_matchers$registry[[matchby[j]]]$func(new, old[[i]]$request)
+          res[j] <- request_matchers$registry[[matchby[j]]]$matches(new, old[[i]]$request)
         }
         # cat(paste0(res, collapse = ","))
 

@@ -60,7 +60,7 @@
 #'
 #' # use logging
 #' loggr::log_file("vcr.log")
-#' use_cassette(name = "farts", {
+#' use_cassette(name = "nightcheese", {
 #'   GET("http://api.crossref.org/works")
 #' })
 #'
