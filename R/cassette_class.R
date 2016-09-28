@@ -309,7 +309,7 @@ Cassette <- R6::R6Class("Cassette",
     serializable_hash = function() {
       list(
         http_interactions = self$interactions_to_record(),
-        recorded_with = packageVersion("vcr")
+        recorded_with = utils::packageVersion("vcr")
       )
     },
 

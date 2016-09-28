@@ -43,7 +43,7 @@ write_interactions <- function(x, file) {
           )
         ),
         recorded_at = Sys.time(),
-        recorded_with = paste0("vcr/", packageVersion("vcr"))
+        recorded_with = paste0("vcr/", utils::packageVersion("vcr"))
       )
     )
   ), file = file, append = TRUE)
@@ -97,5 +97,5 @@ strex <- function(string, pattern) {
 #       file = file, fill = 80, append = TRUE
 #   )
 #   cat(sprintf("   recorded_at: %s", Sys.time()), file = file, sep = "\n", append = TRUE)
-#   cat(sprintf("   recorded_with: %s", paste0("vcr/", packageVersion("vcr"))), file = file, sep = "\n", append = TRUE)
+#   cat(sprintf("   recorded_with: %s", paste0("vcr/", utils::packageVersion("vcr"))), file = file, sep = "\n", append = TRUE)
 # }

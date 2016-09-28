@@ -43,7 +43,7 @@ read_cassette_meta <- function(x, ...){
 
 get_cassette_meta_paths <- function(){
   metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
-  as.list(setNames(metafiles, unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))))
+  as.list(stats::setNames(metafiles, unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))))
 }
 
 cassette_files <- function(){
@@ -69,7 +69,7 @@ get_cassette_names <- function(){
 
 get_cassette_data_paths <- function(){
   files <- names(grep("metadata", vapply(cassette_files(), basename, ""), invert = TRUE, value = TRUE))
-  as.list(setNames(files, get_cassette_names()))
+  as.list(stats::setNames(files, get_cassette_names()))
 }
 
 check_create_path <- function(x){
@@ -79,7 +79,7 @@ check_create_path <- function(x){
 cassettes_session <- function(x) {
   xx <- ls(envir = vcr_cassettes)
   if (length(xx) > 0) {
-    setNames(lapply(xx, get, envir = vcr_cassettes), xx)
+    stats::setNames(lapply(xx, get, envir = vcr_cassettes), xx)
   } else {
     list()
   }
