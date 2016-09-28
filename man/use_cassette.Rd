@@ -84,15 +84,22 @@ Use a cassette
 \examples{
 \dontrun{
 library("httr")
-use_cassette(name = "legs", {
-   httr::GET("http://api.plos.org/search?q=*:*&wt=json")
+url <- "http://api.plos.org/search?q=*:*&wt=json"
+url <- "http://localhost:9200"
+
+use_cassette(name = "stuff", {
+   httr::GET("http://localhost:9200")
+})
+
+use_cassette(name = "stuff2", {
+   httr::GET("http://localhost:9200/_search?size=500")
 })
 
 # use logging
 library("loggr")
 loggr::log_file("vcr.log")
 use_cassette(name = "helium", {
-  v <- GET("http://api.crossref.org/works")
+  GET("http://localhost:9200/_search")
 })
 
 # sacbox::load_defaults(use_cassette)

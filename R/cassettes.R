@@ -14,7 +14,7 @@
 cassettes <- function(){
   # combine cassettes on disk with cassettes in session
   out <- unlist(list(
-    lapply(get_cassette_meta_paths(), read_cassette_meta),
+    lapply(get_cassette_data_paths(), read_cassette_meta),
     cassettes_session()
   ), FALSE)
   out[!duplicated(names(out))]
@@ -31,7 +31,7 @@ cassette_path <- function() '~/vcr/vcr_cassettes'
 cassette_exists <- function(x) x %in% get_cassette_names()
 
 read_cassette_meta <- function(x, ...){
-  structure(yaml::yaml.load_file(x, ...), class = "cassette")
+  structure(yaml::yaml.load_file(x, ...)$http_interactions[[1]], class = "cassette")
 }
 
 get_cassette_meta_paths <- function(){
@@ -47,15 +47,16 @@ cassette_files <- function(){
 
 # get_cassette_path("foobar")
 get_cassette_path <- function(x){
-  if ( x %in% get_cassette_names() ) get_cassette_meta_paths()[[x]]
+  if ( x %in% get_cassette_names() ) get_cassette_data_paths()[[x]]
 }
 
 is_path <- function(x) file.exists(path.expand(x))
 
 # get_cassette_names()
 get_cassette_names <- function(){
-  metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
-  unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))
+  #metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
+  sub("\\.yml", "", basename(names(vapply(cassette_files(), basename, ""))))
+  #unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))
   #vapply(strsplit(unname(vapply(cassette_files(), basename, "")), "\\."), "[[", "", 1)
 }
 

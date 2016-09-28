@@ -54,15 +54,22 @@
 #' }
 #' @examples \dontrun{
 #' library("httr")
-#' use_cassette(name = "aaa", {
-#'    httr::GET("http://api.plos.org/search?q=*:*&wt=json")
+#' url <- "http://api.plos.org/search?q=*:*&wt=json"
+#' url <- "http://localhost:9200"
+#'
+#' use_cassette(name = "stuff", {
+#'    httr::GET("http://localhost:9200")
+#' })
+#'
+#' use_cassette(name = "stuff2", {
+#'    httr::GET("http://localhost:9200/_search?size=500")
 #' })
 #'
 #' # use logging
 #' library("loggr")
 #' loggr::log_file("vcr.log")
 #' use_cassette(name = "helium", {
-#'   v <- GET("http://api.crossref.org/works")
+#'   GET("http://localhost:9200/_search")
 #' })
 #'
 #' # sacbox::load_defaults(use_cassette)
@@ -70,10 +77,12 @@
 #' # cassette$call_block(httr::GET("http://api.crossref.org/works"))
 #' }
 
-use_cassette <- function(name, ..., record = "once", match_requests_on = NULL, re_record_interval = NULL,
-  tag = NULL, tags = NULL, update_content_length_header = FALSE, decode_compressed_response = FALSE,
-  allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE, exclusive = FALSE,
-  serialize_with = "yaml", persist_with = "FileSystem", preserve_exact_body_bytes = TRUE) {
+use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
+  re_record_interval = NULL, tag = NULL, tags = NULL,
+  update_content_length_header = FALSE, decode_compressed_response = FALSE,
+  allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE,
+  exclusive = FALSE, serialize_with = "yaml", persist_with = "FileSystem",
+  preserve_exact_body_bytes = TRUE) {
 
   # insert cassette - returns cassette class object
   cassette <- insert_cassette(
