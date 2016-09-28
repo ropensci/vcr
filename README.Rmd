@@ -14,8 +14,6 @@ knitr::opts_chunk$set(
 
 An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
-__>>>>>Not yet useable<<<<<__
-
 ## Overview/Terminology
 
 * Cassette: A _thing_ to record HTTP interactions to. Right now the only option is file system, but in the future could be other things, e.g. a key-value store
@@ -25,7 +23,6 @@ __>>>>>Not yet useable<<<<<__
 * _eject cassette_: aka, check for saved interactions, and replay if found
 * _replay_: refers to using a cached result of a http request that was recorded earlier
 * How `vcr` matches: By default it matches on the HTTP method and the URI, but you can tweak this using the `match_requests_on` option.
-* x
 
 ## Installation
 
@@ -48,7 +45,7 @@ library("httr")
 * `vcr` as a dependency in a package (i.e., Depends, Imports)
   * probably best to allow the user of your package to determine where cassettes are cached, so exposing `vcr` configuration tools to users
 * `vcr` in your R analysis/project
-  * xxx
+  * still to come ...
 
 ## Configuration
 
@@ -108,7 +105,7 @@ unlink(file.path(cassette_path(), "helloworld.yml"))
 ```{r}
 system.time(
   use_cassette("helloworld", {
-    GET("http://localhost:9200/_search?size=900")
+    GET("https://httpbin.org/get")
   })
 )
 ```
@@ -118,7 +115,7 @@ The request gets recorded, and all subsequent requests of the same form used the
 ```{r}
 system.time(
   use_cassette("helloworld", {
-    GET("http://localhost:9200/_search?size=900")
+    GET("https://httpbin.org/get")
   })
 )
 ```
@@ -154,11 +151,15 @@ unlink(file.path(cassette_path(), "one.yml"))
 
 ```{r}
 use_cassette(name = "one", {
-    httr::GET("http://localhost:9200/_search?size=3", add_headers(a = 5))
+    POST("https://httpbin.org/post", add_headers(a = 5))
   }, 
   match_requests_on = c('method', 'headers', 'query')
 )
 ```
+
+## vcr in other languages
+
+The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.com/vcr/vcr>
 
 ## Meta
 

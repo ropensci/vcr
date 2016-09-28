@@ -7,8 +7,6 @@ vcr
 
 An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
-__>>>>>Not yet useable<<<<<__
-
 ## Overview/Terminology
 
 * Cassette: A _thing_ to record HTTP interactions to. Right now the only option is file system, but in the future could be other things, e.g. a key-value store
@@ -18,7 +16,6 @@ __>>>>>Not yet useable<<<<<__
 * _eject cassette_: aka, check for saved interactions, and replay if found
 * _replay_: refers to using a cached result of a http request that was recorded earlier
 * How `vcr` matches: By default it matches on the HTTP method and the URI, but you can tweak this using the `match_requests_on` option.
-* x
 
 ## Installation
 
@@ -43,7 +40,7 @@ library("httr")
 * `vcr` as a dependency in a package (i.e., Depends, Imports)
   * probably best to allow the user of your package to determine where cassettes are cached, so exposing `vcr` configuration tools to users
 * `vcr` in your R analysis/project
-  * xxx
+  * still to come ...
 
 ## Configuration
 
@@ -119,11 +116,11 @@ vcr_configuration()
 ```r
 system.time(
   use_cassette("helloworld", {
-    GET("http://localhost:9200/_search?size=900")
+    GET("https://httpbin.org/get")
   })
 )
 #>    user  system elapsed 
-#>   0.056   0.008   0.457
+#>   0.090   0.014   0.561
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -132,11 +129,11 @@ The request gets recorded, and all subsequent requests of the same form used the
 ```r
 system.time(
   use_cassette("helloworld", {
-    GET("http://localhost:9200/_search?size=900")
+    GET("https://httpbin.org/get")
   })
 )
 #>    user  system elapsed 
-#>   0.041   0.002   0.063
+#>   0.018   0.002   0.066
 ```
 
 `use_cassette()` is an easier approach. An alternative is to use 
@@ -169,16 +166,31 @@ You can set your own options like:
 
 ```r
 use_cassette(name = "one", {
-    httr::GET("http://localhost:9200/_search?size=3", add_headers(a = 5))
+    POST("https://httpbin.org/post", add_headers(a = 5))
   }, 
   match_requests_on = c('method', 'headers', 'query')
 )
-#> Response [http://localhost:9200/_search?size=3]
-#>   Date: 2016-09-27 20:28
+#> Response [https://httpbin.org/post]
+#>   Date: 2016-09-28 19:07
 #>   Status: 200
-#>   Content-Type: application/json; charset=UTF-8
-#>   Size: 594 B
+#>   Content-Type: application/json
+#>   Size: 406 B
+#> {
+#>   "args": {}, 
+#>   "data": "", 
+#>   "files": {}, 
+#>   "form": {}, 
+#>   "headers": {
+#>     "A": "5", 
+#>     "Accept": "application/json, text/xml, application/xml, */*", 
+#>     "Accept-Encoding": "gzip, deflate", 
+#>     "Content-Length": "0", 
+#> ...
 ```
+
+## vcr in other languages
+
+The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.com/vcr/vcr>
 
 ## Meta
 
