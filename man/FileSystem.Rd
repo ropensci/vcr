@@ -29,6 +29,9 @@ to the file system.
     \item{\code{set_cassette(file_name = NULL, content)}}{
       Sets the cassette for the given storage key (file name).
     }
+    \item{\code{is_empty()}}{
+      Checks if a cassette is empty or not. Returns boolean
+    }
   }
 \strong{Private Methods}
  \describe{
@@ -52,6 +55,7 @@ yy$get_cassette()
 
 (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
 yy$set_cassette(content = "hello world!")
+yy$is_empty()
 }
 }
 \keyword{internal}

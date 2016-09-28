@@ -15,13 +15,15 @@
 
 \item{fun}{A function}
 
-\item{prepend}{Whether to prepend or add to the end of the string. Default: \code{FALSE}}
+\item{prepend}{Whether to prepend or add to the end of the string.
+Default: \code{FALSE}}
 }
 \description{
 Hooks class
 }
 \details{
-Helps define new hooks, hold hooks, and accessors to get and use hooks.
+Helps define new hooks, hold hooks, and accessors to get and
+use hooks.
 \strong{Methods}
   \describe{
     \item{\code{invoke_hook(hook_type, args)}}{

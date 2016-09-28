@@ -23,4 +23,5 @@ Suggests:
     testthat,
     knitr,
     covr
+Remotes: smbache/loggr
 RoxygenNote: 5.0.1

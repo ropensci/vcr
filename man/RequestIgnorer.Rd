@@ -5,7 +5,8 @@
 \alias{RequestIgnorer}
 \title{Request ignorer}
 \arguments{
-\item{LOCALHOST_ALIASES}{A constant with values: 'localhost', '127.0.0.1', and '0.0.0.0'}
+\item{LOCALHOST_ALIASES}{A constant with values: 'localhost', '127.0.0.1',
+and '0.0.0.0'}
 
 \item{ignored_hosts}{Vector of ignored hosts}
 
@@ -26,7 +27,8 @@ Hook to handle request ignorers, including:
 \strong{Methods}
   \describe{
     \item{\code{ignore_request(fun)}}{
-      Will ignore any request for which the given function returns \code{TRUE}
+      Will ignore any request for which the given function
+      returns \code{TRUE}
     }
     \item{\code{ignore_localhost()}}{
       ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)

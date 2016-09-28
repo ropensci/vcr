@@ -6,8 +6,10 @@
 #' @param args Args passed when invoking a hook
 #' @param plac Placement, one of "start" or "end"
 #' @param fun A function
-#' @param prepend Whether to prepend or add to the end of the string. Default: \code{FALSE}
-#' @details Helps define new hooks, hold hooks, and accessors to get and use hooks.
+#' @param prepend Whether to prepend or add to the end of the string.
+#' Default: \code{FALSE}
+#' @details Helps define new hooks, hold hooks, and accessors to get and
+#' use hooks.
 #' \strong{Methods}
 #'   \describe{
 #'     \item{\code{invoke_hook(hook_type, args)}}{
