@@ -6,11 +6,16 @@
 \alias{cassettes}
 \title{List cassettes, get current cassette, etc.}
 \usage{
-cassettes()
+cassettes(on_disk = TRUE)
 
 cassette_current()
 
 cassette_path()
+}
+\arguments{
+\item{on_disk}{(logical) Check for cassettes on disk + cassettes in session
+(\code{TRUE}), or check for only cassettes in session (\code{FALSE})
+Default: \code{TRUE}}
 }
 \description{
 List cassettes, get current cassette, etc.

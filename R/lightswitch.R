@@ -27,7 +27,7 @@ turned_off <- function(..., ignore_cassettes = FALSE){
   off_block(...)
 }
 
-off_block <- function(...){
+off_block <- function(...) {
   tmp <- lazyeval::lazy_dots(...)
   out <- eval(tmp[[1]]$expr)
   return( out )

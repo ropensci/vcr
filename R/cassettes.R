@@ -1,6 +1,9 @@
 #' List cassettes, get current cassette, etc.
 #'
 #' @export
+#' @param on_disk (logical) Check for cassettes on disk + cassettes in session
+#' (\code{TRUE}), or check for only cassettes in session (\code{FALSE})
+#' Default: \code{TRUE}
 #' @examples \dontrun{
 #' # list all cassettes
 #' cassettes()
@@ -11,18 +14,22 @@
 #' # list the path to cassettes
 #' cassette_path()
 #' }
-cassettes <- function(){
+cassettes <- function(on_disk = TRUE){
   # combine cassettes on disk with cassettes in session
-  out <- unlist(list(
-    lapply(get_cassette_data_paths(), read_cassette_meta),
+  if (on_disk) {
+    out <- unlist(list(
+      lapply(get_cassette_data_paths(), read_cassette_meta),
+      cassettes_session()
+    ), FALSE)
+    out[!duplicated(names(out))]
+  } else {
     cassettes_session()
-  ), FALSE)
-  out[!duplicated(names(out))]
+  }
 }
 
 #' @export
 #' @rdname cassettes
-cassette_current <- function() last(cassettes())
+cassette_current <- function() last(cassettes(FALSE))
 
 #' @export
 #' @rdname cassettes
