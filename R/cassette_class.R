@@ -7,7 +7,8 @@
 #' @param recorded_at (character) time recorded at
 #' @param serialize_with (character) Only choice is "yaml"
 #' @param persist_with Only choice is FileSystem
-#' @param root_dir Root directory for storing cassettes. Default: \code{~/vcr/vcr_cassettes}
+#' @param root_dir Root directory for storing cassettes. Default:
+#' \code{~/vcr/vcr_cassettes}
 #' @param match_requests_on what to match requests on
 #' @param re_record_interval Interval to re-record
 #' @param tag Tag
@@ -104,11 +105,13 @@ Cassette <- R6::R6Class("Cassette",
     new_recording = FALSE,
     to_return = NULL,
 
-    initialize = function(name, record, serialize_with = "yaml", persist_with = "FileSystem",
-        root_dir = "~/vcr/vcr_cassettes", match_requests_on = c("method", "uri"),
+    initialize = function(name, record, serialize_with = "yaml",
+        persist_with = "FileSystem", root_dir = "~/vcr/vcr_cassettes",
+        match_requests_on = c("method", "uri"),
         re_record_interval, tag, tags, update_content_length_header,
-        decode_compressed_response, allow_playback_repeats, allow_unused_http_interactions,
-        exclusive, preserve_exact_body_bytes, new_recording = FALSE) {
+        decode_compressed_response, allow_playback_repeats,
+        allow_unused_http_interactions, exclusive, preserve_exact_body_bytes,
+        new_recording = FALSE) {
 
       self$name <- name
       self$new_recording <- FALSE
@@ -117,18 +120,26 @@ Cassette <- R6::R6Class("Cassette",
       self$persist_with <- persist_with
       if (!missing(record)) self$record <- record
       self$make_dir()
-      self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()), self$name)
+      self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()),
+                              self$name)
       if (!file.exists(self$manfile)) cat("\n", file = self$manfile)
-      if (!missing(match_requests_on)) self$match_requests_on = match_requests_on
-      if (!missing(re_record_interval)) self$re_record_interval = re_record_interval
+      if (!missing(match_requests_on))
+        self$match_requests_on <- match_requests_on
+      if (!missing(re_record_interval))
+        self$re_record_interval <- re_record_interval
       if (!missing(tag)) self$tag = tag
       if (!missing(tags)) self$tags = tags
-      if (!missing(update_content_length_header)) self$update_content_length_header = update_content_length_header
-      if (!missing(decode_compressed_response)) self$decode_compressed_response = decode_compressed_response
-      if (!missing(allow_playback_repeats)) self$allow_playback_repeats = allow_playback_repeats
-      if (!missing(allow_unused_http_interactions)) self$allow_unused_http_interactions = allow_unused_http_interactions
+      if (!missing(update_content_length_header))
+        self$update_content_length_header = update_content_length_header
+      if (!missing(decode_compressed_response))
+        self$decode_compressed_response = decode_compressed_response
+      if (!missing(allow_playback_repeats))
+        self$allow_playback_repeats = allow_playback_repeats
+      if (!missing(allow_unused_http_interactions))
+        self$allow_unused_http_interactions = allow_unused_http_interactions
       if (!missing(exclusive)) self$exclusive = exclusive
-      if (!missing(preserve_exact_body_bytes)) self$preserve_exact_body_bytes = preserve_exact_body_bytes
+      if (!missing(preserve_exact_body_bytes))
+        self$preserve_exact_body_bytes = preserve_exact_body_bytes
       self$make_args()
       if (!file.exists(self$manfile)) self$write_metadata()
       self$recorded_at <- file.info(self$file())$mtime
@@ -145,12 +156,17 @@ Cassette <- R6::R6Class("Cassette",
       cat(paste0("  Record method: ", self$record), sep = "\n")
       cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
       cat(paste0("  Persist with: ", self$persist_with), sep = "\n")
-      cat(paste0("  update_content_length_header: ", self$update_content_length_header), sep = "\n")
-      cat(paste0("  decode_compressed_response: ", self$decode_compressed_response), sep = "\n")
-      cat(paste0("  allow_playback_repeats: ", self$allow_playback_repeats), sep = "\n")
-      cat(paste0("  allow_unused_http_interactions: ", self$allow_unused_http_interactions), sep = "\n")
+      cat(paste0("  update_content_length_header: ",
+                 self$update_content_length_header), sep = "\n")
+      cat(paste0("  decode_compressed_response: ",
+                 self$decode_compressed_response), sep = "\n")
+      cat(paste0("  allow_playback_repeats: ",
+                 self$allow_playback_repeats), sep = "\n")
+      cat(paste0("  allow_unused_http_interactions: ",
+                 self$allow_unused_http_interactions), sep = "\n")
       cat(paste0("  exclusive: ", self$exclusive), sep = "\n")
-      cat(paste0("  preserve_exact_body_bytes: ", self$preserve_exact_body_bytes), sep = "\n")
+      cat(paste0("  preserve_exact_body_bytes: ",
+                 self$preserve_exact_body_bytes), sep = "\n")
       invisible(self)
     },
 
@@ -193,7 +209,9 @@ Cassette <- R6::R6Class("Cassette",
         # cat(new$method, sep = "\n")
         # cat(old[[i]]$request$method, sep = "\n")
         for (j in seq_along(matchby)) {
-          res[j] <- request_matchers$registry[[matchby[j]]]$matches(new, old[[i]]$request)
+          res[j] <-
+            request_matchers$registry[[matchby[j]]]$matches(new,
+                                                            old[[i]]$request)
         }
         # cat(paste0(res, collapse = ","))
 
@@ -258,7 +276,7 @@ Cassette <- R6::R6Class("Cassette",
         # FIXME - be able to toggle whether to base64 decode here
         content = self$conv_body(x$response$body),
         #content = base64enc::base64decode(x$response$body),
-        date = strptime(x$response$recorded_at, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+        date = strptime(x$response$recorded_at, "%Y-%m-%d %H:%M:%S", tz ="GMT"),
         times = NULL,
         request = httr:::request_build(x$request$method, x$request$uri),
         handle = httr::handle(x$request$uri)
@@ -330,9 +348,11 @@ Cassette <- R6::R6Class("Cassette",
 
       if (self$should_remove_matching_existing_interactions()) {
         new_interaction_list <-
-          HTTPInteractionList$new(self$new_recorded_interactions, self$match_requests_on)
+          HTTPInteractionList$new(self$new_recorded_interactions,
+                                  self$match_requests_on)
         old_interactions <-
-          Filter(function(x) new_interaction_list$response_for(x$request), old_interactions)
+          Filter(function(x) new_interaction_list$response_for(x$request),
+                 old_interactions)
       }
 
       return(c(old_interactions, self$new_recorded_interactions))
@@ -347,7 +367,8 @@ Cassette <- R6::R6Class("Cassette",
     },
 
     make_dir = function() {
-      dir.create(path.expand(self$root_dir), showWarnings = FALSE, recursive = TRUE)
+      dir.create(path.expand(self$root_dir), showWarnings = FALSE,
+                 recursive = TRUE)
     },
 
     deserialized_hash = function() {
@@ -366,8 +387,10 @@ Cassette <- R6::R6Class("Cassette",
       #if (!raw_cassette_bytes.to_s.empty?) {
       lapply(self$deserialized_hash()[['http_interactions']], function(z) {
         zz <- HTTPInteraction$new(
-          request = Request$new(z$request$method, z$request$uri, z$request$body, z$request$headers),
-          response = Response$new(z$response$status, z$response$headers, z$response$body$string)
+          request = Request$new(z$request$method, z$request$uri, z$request$body,
+                                z$request$headers),
+          response = Response$new(z$response$status, z$response$headers,
+                                  z$response$body$string)
         )
         zz$to_hash()
         # FIXME - not quite ready yet, request_ignorer not quite working
@@ -419,8 +442,10 @@ Cassette <- R6::R6Class("Cassette",
     },
 
     make_args = function() {
-      self$args <- list(record = self$record, match_requests_on = self$match_requests_on,
-        re_record_interval = self$re_record_interval, tag = self$tag, tags = self$tags,
+      self$args <- list(record = self$record,
+                        match_requests_on = self$match_requests_on,
+        re_record_interval = self$re_record_interval, tag = self$tag,
+        tags = self$tags,
         update_content_length_header = self$update_content_length_header,
         decode_compressed_response = self$decode_compressed_response,
         allow_playback_repeats = self$allow_playback_repeats,
@@ -434,7 +459,8 @@ Cassette <- R6::R6Class("Cassette",
       aa <- c(name = self$name, self$args)
       for (i in seq_along(aa)) {
         cat(sprintf("%s: %s", names(aa[i]), aa[i]),
-            file = sprintf("%s/%s_metadata.yml", path.expand(cassette_path()), self$name),
+            file = sprintf("%s/%s_metadata.yml",
+                           path.expand(cassette_path()), self$name),
             sep = "\n", append = TRUE)
       }
     },

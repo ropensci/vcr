@@ -12,15 +12,17 @@ insert_cassette(name, record = "once", match_requests_on = NULL,
   preserve_exact_body_bytes = TRUE, ignore_cassettes = TRUE)
 }
 \arguments{
-\item{name}{The name of the cassette. vcr will sanitize this to ensure it is a valid file name.}
+\item{name}{The name of the cassette. vcr will sanitize this to ensure it
+is a valid file name.}
 
-\item{record}{The record mode. One of "all", "none", "new_episodes", "once". See Details.}
+\item{record}{The record mode. One of "all", "none", "new_episodes", "once".
+See Details.}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
-("method", "uri"). The built-in matchers are "method", "uri", "host", "path", "headers"
-and "body". You can also pass the name of a registered custom request matcher or
-any object that responds to #call.}
+("method", "uri"). The built-in matchers are "method", "uri", "host",
+"path", "headers" and "body". You can also pass the name of a registered
+custom request matcher or any object that responds to #call.}
 
 \item{re_record_interval}{(integer) When given, the
 cassette will be re-recorded at the given interval, in seconds.}

@@ -17,7 +17,8 @@
 
 \item{persist_with}{Only choice is FileSystem}
 
-\item{root_dir}{Root directory for storing cassettes. Default: \code{~/vcr/vcr_cassettes}}
+\item{root_dir}{Root directory for storing cassettes. Default:
+\code{~/vcr/vcr_cassettes}}
 
 \item{match_requests_on}{what to match requests on}
 

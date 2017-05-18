@@ -1,13 +1,15 @@
 #' Insert a cassette to record an HTTP call
 #'
 #' @export
-#' @param name The name of the cassette. vcr will sanitize this to ensure it is a valid file name.
-#' @param record The record mode. One of "all", "none", "new_episodes", "once". See Details.
+#' @param name The name of the cassette. vcr will sanitize this to ensure it
+#' is a valid file name.
+#' @param record The record mode. One of "all", "none", "new_episodes", "once".
+#' See Details.
 #' @param match_requests_on List of request matchers
 #'  to use to determine what recorded HTTP interaction to replay. Defaults to
-#'  ("method", "uri"). The built-in matchers are "method", "uri", "host", "path", "headers"
-#'  and "body". You can also pass the name of a registered custom request matcher or
-#'  any object that responds to #call.
+#'  ("method", "uri"). The built-in matchers are "method", "uri", "host",
+#'  "path", "headers" and "body". You can also pass the name of a registered
+#'  custom request matcher or any object that responds to #call.
 #' @param re_record_interval (integer) When given, the
 #'  cassette will be re-recorded at the given interval, in seconds.
 #' @param tag (character) Used to apply tagged `before_record`
@@ -58,26 +60,29 @@
 #'
 #' use_cassette("foobar", GET("http://google.com"))
 #' }
-insert_cassette <- function(name, record="once", match_requests_on=NULL, re_record_interval=NULL,
-  tag=NULL, tags=NULL, update_content_length_header=FALSE, decode_compressed_response=FALSE,
-  allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE, exclusive=FALSE,
-  serialize_with="yaml", persist_with="FileSystem", preserve_exact_body_bytes=TRUE,
-  ignore_cassettes = TRUE) {
+insert_cassette <- function(name, record="once", match_requests_on=NULL,
+  re_record_interval=NULL, tag=NULL, tags=NULL,
+  update_content_length_header=FALSE, decode_compressed_response=FALSE,
+  allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,
+  exclusive=FALSE, serialize_with="yaml", persist_with="FileSystem",
+  preserve_exact_body_bytes=TRUE, ignore_cassettes = TRUE) {
 
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
-      stop(sprintf("There is already a cassette with the same name: %s", name), call. = FALSE)
+      stop(sprintf("There is already a cassette with the same name: %s", name),
+           call. = FALSE)
     }
 
-    tmp <- Cassette$new(name = name, record = record, match_requests_on = match_requests_on,
-                 re_record_interval = re_record_interval, tag = tag, tags = tags,
-                 update_content_length_header = update_content_length_header,
-                 decode_compressed_response = decode_compressed_response,
-                 allow_playback_repeats = allow_playback_repeats,
-                 allow_unused_http_interactions = allow_unused_http_interactions,
-                 exclusive = exclusive,
-                 serialize_with = serialize_with, persist_with = persist_with,
-                 preserve_exact_body_bytes = preserve_exact_body_bytes)
+    tmp <- Cassette$new(
+      name = name, record = record, match_requests_on = match_requests_on,
+      re_record_interval = re_record_interval, tag = tag, tags = tags,
+      update_content_length_header = update_content_length_header,
+      decode_compressed_response = decode_compressed_response,
+      allow_playback_repeats = allow_playback_repeats,
+      allow_unused_http_interactions = allow_unused_http_interactions,
+      exclusive = exclusive,
+      serialize_with = serialize_with, persist_with = persist_with,
+      preserve_exact_body_bytes = preserve_exact_body_bytes)
     include_cassette(tmp)
     # write cassette to disk - maybe?
     # cassettes.push(cassette)
