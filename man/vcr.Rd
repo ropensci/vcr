@@ -4,6 +4,7 @@
 \name{vcr}
 \alias{vcr}
 \alias{vcr-package}
+\alias{vcr-package}
 \title{vcr: Record HTTP Calls to Disk}
 \description{
 vcr: Record HTTP Calls to Disk
@@ -11,4 +12,3 @@ vcr: Record HTTP Calls to Disk
 \author{
 Scott Chamberlain \email{myrmecocystus@gmail.com}
 }
-

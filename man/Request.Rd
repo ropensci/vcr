@@ -53,4 +53,3 @@ vcr_configure(
 }
 }
 \keyword{internal}
-

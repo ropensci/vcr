@@ -59,4 +59,3 @@ yy$is_empty()
 }
 }
 \keyword{internal}
-

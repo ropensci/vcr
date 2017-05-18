@@ -20,4 +20,3 @@ x <- insert_cassette(name = "fartloud")
 eject(x)
 }
 }
-

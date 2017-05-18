@@ -2,6 +2,9 @@ language: r
 sudo: false
 cache: packages
 
+r_github_packages:
+  - jimhester/covr
+
 env:
    global:
      - R_BUILD_ARGS="--no-manual"

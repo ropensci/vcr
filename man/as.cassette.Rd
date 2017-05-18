@@ -17,4 +17,3 @@ Coerce names, etc. to cassettes
 
 Coerce to a cassette path
 }
-

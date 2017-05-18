@@ -88,4 +88,3 @@ insert_cassette(name = "fartloud")
 use_cassette("foobar", GET("http://google.com"))
 }
 }
-

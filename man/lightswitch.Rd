@@ -2,10 +2,10 @@
 % Please edit documentation in R/lightswitch.R
 \name{lightswitch}
 \alias{lightswitch}
-\alias{turn_off}
-\alias{turn_on}
 \alias{turned_off}
+\alias{turn_on}
 \alias{turned_on}
+\alias{turn_off}
 \title{Turn vcr on and off, check on/off status, and turn off for a given http call}
 \usage{
 turned_off(..., ignore_cassettes = FALSE)
@@ -44,4 +44,3 @@ turned_off(
 )
 }
 }
-

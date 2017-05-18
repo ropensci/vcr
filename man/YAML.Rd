@@ -41,4 +41,3 @@ yy$deserialize_string(string = "- foo\\n- bar\\n- 3.14")
 }
 }
 \keyword{internal}
-

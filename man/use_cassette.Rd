@@ -107,4 +107,3 @@ use_cassette(name = "helium", {
 # cassette$call_block(httr::GET("http://api.crossref.org/works"))
 }
 }
-
