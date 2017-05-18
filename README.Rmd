@@ -103,9 +103,10 @@ unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
 ```{r}
+cli <- crul::HttpClient$new(url = "https://httpbin.org/get")
 system.time(
   use_cassette("helloworld", {
-    GET("https://httpbin.org/get")
+    cli$get()
   })
 )
 ```
