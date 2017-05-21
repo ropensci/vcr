@@ -53,28 +53,30 @@
 #'  In addition, any newly recorded HTTP interactions will be written to disk.
 #' }
 #' @examples \dontrun{
-#' library("httr")
+#' library("crul")
 #' url <- "http://api.plos.org/search?q=*:*&wt=json"
 #' url <- "http://localhost:9200"
 #'
+#' cli <- HttpClient$new(url = "https://httpbin.org")
+#'
 #' use_cassette(name = "stuff", {
-#'    httr::GET("http://localhost:9200")
+#'   cli$get("get")
 #' })
 #'
 #' use_cassette(name = "stuff2", {
-#'    httr::GET("http://localhost:9200/_search?size=500")
+#'   cli$post("post")
 #' })
 #'
 #' # use logging
 #' library("loggr")
 #' loggr::log_file("vcr.log")
 #' use_cassette(name = "helium", {
-#'   GET("http://localhost:9200/_search")
+#'   cli$get("get", query = list(foo = "bar"))
 #' })
 #'
 #' # sacbox::load_defaults(use_cassette)
-#' # name = "skyfart"
-#' # cassette$call_block(httr::GET("http://api.crossref.org/works"))
+#' # name = "skycheese"
+#' # cassette$call_block(cli$get("get"))
 #' }
 
 use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
