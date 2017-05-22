@@ -79,7 +79,7 @@ NullList <- R6::R6Class(
 #' ## request
 #' (request <- Request$new("POST", url, body, res$headers))
 #' ## response
-#' (response <- Response$new(
+#' (response <- VcrResponse$new(
 #'    c(status_code = res$status_code, http_status(res)),
 #'    res$headers,
 #'    content(res, "text"),

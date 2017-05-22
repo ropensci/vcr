@@ -389,7 +389,7 @@ Cassette <- R6::R6Class("Cassette",
         zz <- HTTPInteraction$new(
           request = Request$new(z$request$method, z$request$uri, z$request$body,
                                 z$request$headers),
-          response = Response$new(z$response$status, z$response$headers,
+          response = VcrResponse$new(z$response$status, z$response$headers,
                                   z$response$body$string)
         )
         zz$to_hash()
@@ -478,7 +478,7 @@ Cassette <- R6::R6Class("Cassette",
         x$url,
         x$body,
         x$headers)
-      response <- Response$new(
+      response <- VcrResponse$new(
         http_status(x),
         x$headers,
         httr::content(x, "text"),

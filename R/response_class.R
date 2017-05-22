@@ -22,7 +22,7 @@
 #' url <- "http://httpbin.org/post"
 #' body <- list(foo = "bar")
 #' (res <- httr::POST(url, body = body))
-#' (x <- Response$new(
+#' (x <- VcrResponse$new(
 #'    c(status_code = res$status_code, httr::http_status(res)),
 #'    res$headers,
 #'    content(res, "text"),
@@ -34,7 +34,8 @@
 #' x$to_hash()
 #' x$from_hash()
 #' }
-Response <- R6::R6Class('Response',
+VcrResponse <- R6::R6Class(
+  'VcrResponse',
    public = list(
      status = NULL,
      headers = NULL,

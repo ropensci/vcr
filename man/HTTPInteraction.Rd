@@ -5,9 +5,9 @@
 \alias{HTTPInteraction}
 \title{HTTPInteraction class}
 \arguments{
-\item{request}{A Request class object}
+\item{request}{A `Request` class object}
 
-\item{response}{A Response class object}
+\item{response}{A `VcrResponse` class object}
 
 \item{recorded_at}{Time http interaction recorded at}
 }
@@ -35,7 +35,7 @@ res <- httr::POST(url, body = body)
 # request
 (request <- Request$new("POST", url, body, res$headers))
 # response
-(response <- Response$new(
+(response <- VcrResponse$new(
    http_status(res),
    res$headers,
    content(res, "text"),

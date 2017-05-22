@@ -1,8 +1,8 @@
 #' HTTPInteraction class
 #'
 #' @export
-#' @param request A Request class object
-#' @param response A Response class object
+#' @param request A `Request` class object
+#' @param response A `VcrResponse` class object
 #' @param recorded_at Time http interaction recorded at
 #' @details
 #' \strong{Methods}
@@ -25,7 +25,7 @@
 #' # request
 #' (request <- Request$new("POST", url, body, res$headers))
 #' # response
-#' (response <- Response$new(
+#' (response <- VcrResponse$new(
 #'    http_status(res),
 #'    res$headers,
 #'    content(res, "text"),
