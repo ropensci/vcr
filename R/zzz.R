@@ -10,7 +10,7 @@ last <- function(x) {
   if (length(x) == 0) {
     return(list())
   } else {
-    x[length(x)][[1]]
+    x[length(x)][1]
   }
 }
 

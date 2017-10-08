@@ -1,7 +1,7 @@
 #' File system persister
 #'
 #' @keywords internal
-#' @param file_name (character) Just he fiile name, not whole path
+#' @param file_name (character) Just the file name, not whole path
 #' @param content (character) content to record to a cassette
 #' @param path (character) Storage directory for cassettes
 #' @param write2disk (logical) write to disk or just make a new FileSystem
@@ -78,6 +78,7 @@ FileSystem <- R6::R6Class("FileSystem",
     },
 
     is_empty = function() {
+      if (is.null(self$file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, self$file_name)
       if (!file.exists(path)) return(TRUE)
       if (is.null(yaml::yaml.load_file(path))) {

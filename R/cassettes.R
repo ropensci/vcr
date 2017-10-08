@@ -32,7 +32,10 @@ cassettes <- function(on_disk = TRUE, verb = FALSE){
 
 #' @export
 #' @rdname cassettes
-cassette_current <- function() last(cassettes(FALSE))
+cassette_current <- function() {
+  tmp <- last(cassettes(FALSE))
+  if (length(tmp) == 1) tmp[[1]] else tmp
+}
 
 #' @export
 #' @rdname cassettes
