@@ -3,25 +3,29 @@
 #' @export
 #' @param dir Cassette directory
 #' @param record (character) On of 'all', 'none', 'new_episodes', or 'once'.
-#' See \link{recording}.
-#' @param match_requests_on vector of matchers. Default: (\code{method}, \code{uri})
-#' @param allow_unused_http_interactions (logical) Default: \code{TRUE}
+#' See [recording]
+#' @param match_requests_on vector of matchers. Default: (`method`, `uri`)
+#' @param allow_unused_http_interactions (logical) Default: `TRUE`
 #' @param serialize_with (character) Right now only "yaml"
 #' @param persist_with (character) Right now only "FileSystem"
 #' @param ignore_hosts Vector of hosts to ignore
-#' @param ignore_localhost (logical) Default: \code{FALSE}
+#' @param ignore_localhost (logical) Default: `FALSE`
 #' @param ignore_request Lists of requests to ignore
-#' @param uri_parser the uri parser, default: \code{\link[httr]{parse_url}}
+#' @param uri_parser the uri parser, default: [crul::url_parse()]
 #' @param preserve_exact_body_bytes (logical) preserve exact body bytes for
 #' @param preserve_exact_body_bytes_for (logical) preserve exact body bytes
-#' @param turned_off (logical) VCR is turned on by default. Default: \code{FALSE}
-#' @param ignore_cassettes (logical) Ignore cassettes. You can set this to \code{TRUE}
-#' when you don't have a cassette in use but still want to make HTTP requests. Otherwise,
-#' you can't make requests unless a cassette is in use. Default: \code{FALSE}
+#' @param turned_off (logical) VCR is turned on by default. Default:
+#' `FALSE`
+#' @param ignore_cassettes (logical) Ignore cassettes. You can set this to
+#' `TRUE` when you don't have a cassette in use but still want to make
+#' HTTP requests. Otherwise, you can't make requests unless a cassette is in
+#' use. Default: `FALSE`
 #' @param cassettes (list) don't use
 #' @param linked_context (logical) linked context
-#' @param vcr_logging (character) one of a file path to log to, "console", or "stdout"
-#' @param vcr_logging_opts (list) Additional options passed to \code{\link[loggr]{log_file}}
+#' @param vcr_logging (character) one of a file path to log to, "console",
+#' or "stdout"
+#' @param vcr_logging_opts (list) Additional options passed to
+#' [loggr::log_file()]
 #'
 #' @examples \dontrun{
 #' vcr_configure()
@@ -37,7 +41,8 @@
 #' )
 #' }
 vcr_configure <- function(
-  dir = cassette_path(),
+  #dir = cassette_path(),
+  dir = ".",
   record = "once",
   match_requests_on = c("method", "uri"),
   allow_unused_http_interactions = TRUE,
@@ -46,7 +51,7 @@ vcr_configure <- function(
   ignore_hosts = NULL,
   ignore_localhost = FALSE,
   ignore_request = NULL,
-  uri_parser = "httr::parse_url",
+  uri_parser = "crul::url_parse",
   preserve_exact_body_bytes = FALSE,
   preserve_exact_body_bytes_for = FALSE,
   turned_off = FALSE,
@@ -114,7 +119,8 @@ VCRConfig <- R6::R6Class(
 )
 
 vcr_default_config_vars <- list(
-  dir = cassette_path(),
+  #dir = cassette_path(),
+  dir = ".",
   record = "once",
   match_requests_on = c("method", "uri"),
   allow_unused_http_interactions = TRUE,
@@ -123,7 +129,7 @@ vcr_default_config_vars <- list(
   ignore_hosts = NULL,
   ignore_localhost = FALSE,
   ignore_request = NULL,
-  uri_parser = "httr::parse_url",
+  uri_parser = "crul::url_parse",
   preserve_exact_body_bytes = FALSE,
   preserve_exact_body_bytes_for = FALSE,
   turned_off = FALSE,

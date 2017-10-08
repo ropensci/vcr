@@ -9,7 +9,8 @@
 Request
 }
 \arguments{
-\item{method}{the HTTP method (i.e. :head, :options, :get, :post, :put, :patch or :delete)}
+\item{method}{the HTTP method (i.e. :head, :options, :get, :post, :put,
+:patch or :delete)}
 
 \item{uri}{the request URI}
 
@@ -22,34 +23,32 @@ The request of an HTTPInteraction
 }
 \details{
 \strong{Methods}
-  \describe{
-    \item{\code{to_hash()}}{
-      Create a hash.
-    }
-    \item{\code{from_hash()}}{
-      Get a hash back to an R list.
-    }
-  }
+\describe{
+\item{\code{to_hash()}}{
+Get a hash from the class itself
+}
+\item{\code{from_hash()}}{
+Create a \code{Request} class object from a hash
+}
+}
 }
 \examples{
 \dontrun{
-url <- "http://httpbin.org/post"
+library("crul")
+url <- "https://httpbin.org/post"
 body <- list(foo = "bar")
-res <- httr::POST(url, body = body)
-(x <- Request$new("POST", url, body, res$headers))
+cli <- crul::HttpClient$new(url = url)
+res <- cli$post(body = body)
+
+(x <- Request$new("POST", url, body, res$request_headers))
 x$body
 x$method
 x$uri
 x$host
 x$path
 x$headers
-x$to_hash()
-
-vcr_configure(
- dir = "fixtures/vcr_cassettes",
- record = "once",
- preserve_exact_body_bytes_for = TRUE
-)
+h <- x$to_hash()
+x$from_hash(h)
 }
 }
 \keyword{internal}

@@ -42,7 +42,7 @@ write_interactions <- function(x, file) {
             #string = base64enc::base64encode(charToRaw(get_body(x$response$body)))
           )
         ),
-        recorded_at = Sys.time(),
+        recorded_at = as.character(Sys.time()),
         recorded_with = paste0("vcr/", utils::packageVersion("vcr"))
       )
     )

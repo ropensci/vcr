@@ -20,11 +20,11 @@ Keeps track of the cassette persisters in a hash-like object
 There's only one option: \code{FileSystem}
 
 \strong{Private Methods}
- \describe{
-    \item{\code{persister_get()}}{
-      Gets and sets a named persister
-    }
-  }
+\describe{
+\item{\code{persister_get()}}{
+Gets and sets a named persister
+}
+}
 }
 \examples{
 \dontrun{

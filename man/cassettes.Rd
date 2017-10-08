@@ -6,24 +6,28 @@
 \alias{cassette_path}
 \title{List cassettes, get current cassette, etc.}
 \usage{
-cassettes(on_disk = TRUE)
+cassettes(on_disk = TRUE, verb = FALSE)
 
 cassette_current()
 
-cassette_path()
+cassette_path(def = "~/vcr/vcr_cassettes")
 }
 \arguments{
 \item{on_disk}{(logical) Check for cassettes on disk + cassettes in session
-(\code{TRUE}), or check for only cassettes in session (\code{FALSE})
-Default: \code{TRUE}}
+(\code{TRUE}), or check for only cassettes in session (\code{FALSE}). Default: \code{TRUE}}
+
+\item{def}{(character) base directory for cassettes}
 }
 \description{
 List cassettes, get current cassette, etc.
 }
 \examples{
 \dontrun{
+vcr_configure("~/fixtures/vcr_cassettes")
+
 # list all cassettes
 cassettes()
+cassettes(on_disk = FALSE)
 
 # list the currently active cassette
 cassette_current()

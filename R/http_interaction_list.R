@@ -72,18 +72,18 @@ NullList <- R6::R6Class(
 #'
 #' # make interactions
 #' ## make the request
-#' url <- "http://httpbin.org/post"
-#' body <- list(foo = "bar")
-#' res <- httr::POST(url, body = body)
+#' url <- "https://httpbin.org/post"
+#' cli <- crul::HttpClient$new(url = url)
+#' res <- cli$post(body = body)
 #'
 #' ## request
 #' (request <- Request$new("POST", url, body, res$headers))
 #' ## response
 #' (response <- VcrResponse$new(
-#'    c(status_code = res$status_code, http_status(res)),
-#'    res$headers,
-#'    content(res, "text"),
-#'    res$all_headers[[1]]$version))
+#'    res$status_http(),
+#'    res$response_headers,
+#'    res$parse("UTF-8"),
+#'    res$response_headers$status))
 #' ## make an interaction
 #' (inter <- HTTPInteraction$new(request = request, response = response))
 #'

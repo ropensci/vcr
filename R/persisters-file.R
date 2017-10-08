@@ -4,8 +4,8 @@
 #' @param file_name (character) Just he fiile name, not whole path
 #' @param content (character) content to record to a cassette
 #' @param path (character) Storage directory for cassettes
-#' @param write2disk (logical) write to disk or just make a new FileSystem object.
-#' Default: \code{FALSE}
+#' @param write2disk (logical) write to disk or just make a new FileSystem
+#' object. Default: `FALSE`
 #' @details The only built-in cassette persister. Persists cassettes
 #' to the file system.
 #'
@@ -27,7 +27,7 @@
 #'       Get storage location
 #'     }
 #'     \item{\code{absolute_path_to_file()}}{
-#'       Get absolute path to the \code{storage_location}
+#'       Get absolute path to the `storage_location`
 #'     }
 #'   }
 #' @format NULL

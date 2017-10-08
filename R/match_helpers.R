@@ -44,3 +44,16 @@ get_body <- function(x) {
     NULL
   }
 }
+
+#' @importFrom urltools url_parse
+parseurl <- function(x) {
+  tmp <- urltools::url_parse(x)
+  tmp <- as.list(tmp)
+  if (!is.na(tmp$parameter)) {
+    tmp$parameter <- sapply(strsplit(tmp$parameter, "&")[[1]], function(z) {
+      zz <- strsplit(z, split = "=")[[1]]
+      as.list(stats::setNames(zz[2], zz[1]))
+    }, USE.NAMES = FALSE)
+  }
+  tmp
+}

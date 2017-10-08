@@ -4,7 +4,7 @@
 #' @param name The name of the cassette. vcr will sanitize this to ensure it
 #' is a valid file name.
 #' @param record The record mode. One of "all", "none", "new_episodes", "once".
-#' See Details.
+#' See [recording]
 #' @param match_requests_on List of request matchers
 #'  to use to determine what recorded HTTP interaction to replay. Defaults to
 #'  ("method", "uri"). The built-in matchers are "method", "uri", "host",
@@ -45,10 +45,12 @@
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #'  to base64 encode the bytes of the requests and responses for this cassette
 #'  when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.
-#' @param ignore_cassettes (logical) xx. Default: \code{TRUE}
+#' @param ignore_cassettes (logical) xx. Default: `TRUE`
+#'
+#' @seealso [use_cassette], [eject_cassette]
 #'
 #' @examples \dontrun{
-#' res <- Cassette$new("foobar")
+#' res <- Cassette2$new("foobar")
 #'
 #' x <- cassettes()
 #' (cas <- as.cassette(x[[1]]))
@@ -56,9 +58,24 @@
 #' as.cassette(cassettes()[[1]])
 #' as.cassette("foobar")
 #'
-#' insert_cassette(name = "fartloud")
+#' insert_cassette(name = "loud")
 #'
-#' use_cassette("foobar", GET("http://google.com"))
+#' library(crul)
+#' cli <- crul::HttpClient$new(url = "http://google.com")
+#' use_cassette("foobar", cli$get())
+#'
+# vcr_configure(dir = "~/fixtures/vcr_cassettes")
+# sacbox::load_defaults(insert_cassette)
+# name <- "farts9"
+# # run tmp below
+# tmp$name
+# # tmp$deserialized_hash()
+# # intr <- tmp$previously_recorded_interactions()[[1]]
+# # intr <- yaml.load_file("~/fixtures/vcr_cassettes/farts7.yml")[[1]][[1]]
+# tmp$call_block({
+#   cli <- HttpClient$new(url = "https://httpbin.org")
+#   resp <- cli$get("get")
+# })
 #' }
 insert_cassette <- function(name, record="once", match_requests_on=NULL,
   re_record_interval=NULL, tag=NULL, tags=NULL,
@@ -82,11 +99,9 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
       allow_unused_http_interactions = allow_unused_http_interactions,
       exclusive = exclusive,
       serialize_with = serialize_with, persist_with = persist_with,
-      preserve_exact_body_bytes = preserve_exact_body_bytes)
+      preserve_exact_body_bytes = preserve_exact_body_bytes,
+      new_recording = TRUE)
     include_cassette(tmp)
-    # write cassette to disk - maybe?
-    # cassettes.push(cassette)
-    # return cassette
     return(tmp)
   } else {
     if (ignore_cassettes) {

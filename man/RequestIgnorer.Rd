@@ -25,30 +25,30 @@ Request ignorer
 Hook to handle request ignorers, including:
 
 \strong{Methods}
-  \describe{
-    \item{\code{ignore_request(fun)}}{
-      Will ignore any request for which the given function
-      returns \code{TRUE}
-    }
-    \item{\code{ignore_localhost()}}{
-      ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
-    }
-    \item{\code{ignore_localhost_value(value)}}{
-      ignore a specific named localhost
-    }
-    \item{\code{ignore_hosts(hosts)}}{
-      ignore any named host
-    }
-    \item{\code{ignore(request)}}{
+\describe{
+\item{\code{ignore_request(fun)}}{
+Will ignore any request for which the given function
+returns \code{TRUE}
+}
+\item{\code{ignore_localhost()}}{
+ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
+}
+\item{\code{ignore_localhost_value(value)}}{
+ignore a specific named localhost
+}
+\item{\code{ignore_hosts(hosts)}}{
+ignore any named host
+}
+\item{\code{ignore(request)}}{\preformatted{}
+}
 
-    }
-  }
+}
 \strong{Private Methods}
- \describe{
-    \item{\code{ignored_hosts_init()}}{
-      Initialize an empty ignored hosts object on package load
-    }
-  }
+\describe{
+\item{\code{ignored_hosts_init()}}{
+Initialize an empty ignored hosts object on package load
+}
+}
 }
 \examples{
 \dontrun{

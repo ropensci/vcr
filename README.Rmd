@@ -24,6 +24,25 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 * _replay_: refers to using a cached result of a http request that was recorded earlier
 * How `vcr` matches: By default it matches on the HTTP method and the URI, but you can tweak this using the `match_requests_on` option.
 
+<details> <summary><strong>How it works in way too much detail</strong></summary> <p>
+
+The very very short version is: `vcr` helps you stub HTTP requests so you 
+don't have to repeat yourself.
+
+**The Steps**
+
+1. Make a request inside of a call to either `vcr::use_cassette` or xxx
+2. `webmockr` constructs a HTTP request, without executing that request
+3. `webmockr` looks for a match of that request to cached requests 
+wherever you chose to cache requests
+4. One of two things then happens:
+4a. If the request is not matched, we execute that request
+4b. If the request is matched, we serve back the cached response
+in the same exact format as you'd get back by using the HTTP client
+without `vcr`
+
+****
+
 ## Installation
 
 ```{r eval=FALSE}

@@ -4,7 +4,7 @@
 #' @keywords internal
 #' @param persisters A list
 #' @param name (character) Persister name, only option right now is "FileSystem"
-#' @details There's only one option: \code{FileSystem}
+#' @details There's only one option: `FileSystem`
 #'
 #' \strong{Private Methods}
 #'  \describe{

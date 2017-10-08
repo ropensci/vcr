@@ -10,20 +10,20 @@ BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 LazyData: true
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.3.6),
-    httr (>= 1.1.0),
     curl (>= 0.9.7),
-    webmockr (>= 0.1.0),
+    webmockr (>= 0.1.1.9213),
+    urltools,
     yaml,
     digest,
     R6,
     lazyeval,
     base64enc,
-    loggr (>= 0.3)
+    magrittr
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
     knitr
-Remotes: smbache/loggr
 RoxygenNote: 6.0.1

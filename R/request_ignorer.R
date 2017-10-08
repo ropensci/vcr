@@ -14,7 +14,7 @@
 #'   \describe{
 #'     \item{\code{ignore_request(fun)}}{
 #'       Will ignore any request for which the given function
-#'       returns \code{TRUE}
+#'       returns `TRUE`
 #'     }
 #'     \item{\code{ignore_localhost()}}{
 #'       ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)

@@ -11,8 +11,8 @@
 
 \item{path}{(character) Storage directory for cassettes}
 
-\item{write2disk}{(logical) write to disk or just make a new FileSystem object.
-Default: \code{FALSE}}
+\item{write2disk}{(logical) write to disk or just make a new FileSystem
+object. Default: \code{FALSE}}
 }
 \description{
 File system persister
@@ -22,26 +22,26 @@ The only built-in cassette persister. Persists cassettes
 to the file system.
 
 \strong{Methods}
-  \describe{
-    \item{\code{get_cassette(file_name = NULL, content = NULL, path = NULL)}}{
-      Gets the cassette for the given storage key (file name).
-    }
-    \item{\code{set_cassette(file_name = NULL, content)}}{
-      Sets the cassette for the given storage key (file name).
-    }
-    \item{\code{is_empty()}}{
-      Checks if a cassette is empty or not. Returns boolean
-    }
-  }
+\describe{
+\item{\code{get_cassette(file_name = NULL, content = NULL, path = NULL)}}{
+Gets the cassette for the given storage key (file name).
+}
+\item{\code{set_cassette(file_name = NULL, content)}}{
+Sets the cassette for the given storage key (file name).
+}
+\item{\code{is_empty()}}{
+Checks if a cassette is empty or not. Returns boolean
+}
+}
 \strong{Private Methods}
- \describe{
-    \item{\code{storage_location()}}{
-      Get storage location
-    }
-    \item{\code{absolute_path_to_file()}}{
-      Get absolute path to the \code{storage_location}
-    }
-  }
+\describe{
+\item{\code{storage_location()}}{
+Get storage location
+}
+\item{\code{absolute_path_to_file()}}{
+Get absolute path to the \code{storage_location}
+}
+}
 }
 \examples{
 \dontrun{

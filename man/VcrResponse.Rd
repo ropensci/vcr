@@ -20,25 +20,26 @@ The response of an HTTPInteraction
 }
 \details{
 \strong{Methods}
-  \describe{
-    \item{\code{to_hash()}}{
-      Create a hash.
-    }
-    \item{\code{from_hash()}}{
-      Get a hash back to an R list.
-    }
-  }
+\describe{
+\item{\code{to_hash()}}{
+Create a hash.
+}
+\item{\code{from_hash()}}{
+Get a hash back to an R list.
+}
+}
 }
 \examples{
 \dontrun{
-url <- "http://httpbin.org/post"
+url <- "https://httpbin.org/post"
 body <- list(foo = "bar")
-(res <- httr::POST(url, body = body))
+(cli <- crul::HttpClient$new(url = url))
+(res <- cli$post(body = body))
 (x <- VcrResponse$new(
-   c(status_code = res$status_code, httr::http_status(res)),
-   res$headers,
-   content(res, "text"),
-   res$all_headers[[1]]$version))
+   res$status_http(),
+   res$response_headers,
+   res$parse("UTF-8"),
+   res$response_headers$status))
 x$body
 x$status
 x$headers

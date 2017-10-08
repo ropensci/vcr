@@ -20,18 +20,19 @@ turn_off(ignore_cassettes = FALSE)
 \item{...}{Any block of code to run, presumably an http request}
 
 \item{ignore_cassettes}{(logical) Controls what happens when a cassette is
-inserted while vcr is turned off. If \code{TRUE} is passed, the cassette insertion
-will be ignored; otherwise an error will be raised.}
+inserted while vcr is turned off. If \code{TRUE} is passed, the cassette
+insertion will be ignored; otherwise an error will be raised.}
 }
 \description{
 Turn vcr on and off, check on/off status, and turn off for a given http call
 }
 \details{
 \itemize{
- \item turned_off - Turns vcr off for the duration of a block.
- \item turn_off - Turns vcr off, so that it no longer handles every HTTP request.
- \item turn_on - turns vcr on
- \item turned_on - Asks if vcr is turned on, gives a boolean
+\item turned_off - Turns vcr off for the duration of a block.
+\item turn_off - Turns vcr off, so that it no longer handles every
+HTTP request
+\item turn_on - turns vcr on
+\item turned_on - Asks if vcr is turned on, gives a boolean
 }
 }
 \examples{
@@ -40,7 +41,7 @@ turn_on()
 turned_on()
 turn_off()
 turned_off(
- httr::GET("http://httpbin.org/get")
+ crul::HttpClient$new(url = "https://httpbin.org/get")$get()
 )
 }
 }

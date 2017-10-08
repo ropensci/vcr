@@ -18,11 +18,11 @@ Keeps track of the cassette serializers in a hash-like object
 }
 \details{
 \strong{Private Methods}
-  \describe{
-    \item{\code{serialize_get()}}{
-      Gets a named serializer. This is also run on initialize of this function
-    }
-  }
+\describe{
+\item{\code{serialize_get()}}{
+Gets a named serializer. This is also run on initialize of this function
+}
+}
 }
 \examples{
 \dontrun{

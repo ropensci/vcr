@@ -21,6 +21,10 @@ initialize_ivars <- function() {
 }
 
 .onLoad <- function(libname, pkgname){
+  webmockr::enable()
+  crul::mock()
+  webmockr::webmockr_allow_net_connect()
+
   # vcr config object
   vcr_c <<- VCRConfig$new()
   # initialize default configuration vars

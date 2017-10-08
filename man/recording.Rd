@@ -2,18 +2,18 @@
 % Please edit documentation in R/recording.R
 \name{recording}
 \alias{recording}
-\title{VCR recording options}
+\title{vcr recording options}
 \description{
-VCR recording options
+vcr recording options
 }
 \section{once}{
 
 The \code{once} record mode will:
 \itemize{
- \item Replay previously recorded interactions.
- \item Record new interactions if there is no cassette file.
- \item Cause an error to be raised for new requests if there is a cassette file.
- }
+\item Replay previously recorded interactions.
+\item Record new interactions if there is no cassette file.
+\item Cause an error to be raised for new requests if there is a cassette file.
+}
 
 It is similar to the \code{new_episodes} record mode, but will prevent new,
 unexpected requests from being made (i.e. because the request URI changed
@@ -26,8 +26,8 @@ or whatever).
 
 The \code{none} record mode will:
 \itemize{
- \item Replay previously recorded interactions.
- \item Cause an error to be raised for any new requests.
+\item Replay previously recorded interactions.
+\item Cause an error to be raised for any new requests.
 }
 
 This is useful when your code makes potentially dangerous
@@ -39,8 +39,8 @@ new HTTP requests will be made.
 
 The \code{new_episodes} record mode will:
 \itemize{
- \item Record new interactions.
- \item Replay previously recorded interactions.
+\item Record new interactions.
+\item Replay previously recorded interactions.
 }
 
 It is similar to the \code{once} record mode, but will \strong{always} record new
@@ -52,8 +52,8 @@ interactions, even if you have an existing recorded one that is similar
 
 The \code{all} record mode will:
 \itemize{
- \item Record new interactions.
- \item Never replay previously recorded interactions.
+\item Record new interactions.
+\item Never replay previously recorded interactions.
 }
 
 This can be temporarily used to force VCR to re-record

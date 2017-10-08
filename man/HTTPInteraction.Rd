@@ -5,9 +5,9 @@
 \alias{HTTPInteraction}
 \title{HTTPInteraction class}
 \arguments{
-\item{request}{A `Request` class object}
+\item{request}{A \code{Request} class object}
 
-\item{response}{A `VcrResponse` class object}
+\item{response}{A \code{VcrResponse} class object}
 
 \item{recorded_at}{Time http interaction recorded at}
 }
@@ -16,30 +16,32 @@ HTTPInteraction class
 }
 \details{
 \strong{Methods}
-  \describe{
-    \item{\code{to_hash()}}{
-      Create a hash.
-    }
-    \item{\code{from_hash()}}{
-      Get a hash back to an R list.
-    }
-  }
+\describe{
+\item{\code{to_hash()}}{
+Create a hash.
+}
+\item{\code{from_hash()}}{
+Get a hash back to an R list.
+}
+}
 }
 \examples{
 \dontrun{
 # make the request
-url <- "http://httpbin.org/post"
+url <- "https://httpbin.org/post"
 body <- list(foo = "bar")
-res <- httr::POST(url, body = body)
+cli <- crul::HttpClient$new(url = url)
+res <- cli$post(body = body)
 
 # request
-(request <- Request$new("POST", url, body, res$headers))
+(request <- Request$new("POST", uri = url,
+  body = body, headers = res$response_headers))
 # response
 (response <- VcrResponse$new(
-   http_status(res),
-   res$headers,
-   content(res, "text"),
-   res$all_headers[[1]]$version))
+   res$status_http(),
+   res$response_headers,
+   res$parse("UTF-8"),
+   res$response_headers$status))
 
 (x <- HTTPInteraction$new(request = request, response = response))
 x$recorded_at

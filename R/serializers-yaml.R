@@ -21,9 +21,11 @@
 #' @usage NULL
 #' @examples \dontrun{
 #' (yy <- YAML$new())
-#' library("httr")
-#' x <- GET("http://httpbin.org/get")
-#' yy$serialize(x)
+#' library("crul")
+#' cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#' x <- cli$get("get")
+#' file <- tempfile()
+#' yy$serialize()(x, file)
 #' yy$deserialize_path()
 #' # yy$deserialize_string() # if passed on instantiation
 #' yy$deserialize_string(string = "- hey\n- hi\n- hello")

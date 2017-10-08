@@ -2,11 +2,14 @@
 #'
 #' @export
 #' @param on_disk (logical) Check for cassettes on disk + cassettes in session
-#' (\code{TRUE}), or check for only cassettes in session (\code{FALSE})
-#' Default: \code{TRUE}
+#' (`TRUE`), or check for only cassettes in session (`FALSE`). Default: `TRUE`
+#' @param def (character) base directory for cassettes
 #' @examples \dontrun{
+#' vcr_configure("~/fixtures/vcr_cassettes")
+#'
 #' # list all cassettes
 #' cassettes()
+#' cassettes(on_disk = FALSE)
 #'
 #' # list the currently active cassette
 #' cassette_current()
@@ -14,11 +17,11 @@
 #' # list the path to cassettes
 #' cassette_path()
 #' }
-cassettes <- function(on_disk = TRUE){
+cassettes <- function(on_disk = TRUE, verb = FALSE){
   # combine cassettes on disk with cassettes in session
   if (on_disk) {
     out <- unlist(list(
-      lapply(get_cassette_data_paths(), read_cassette_meta),
+      lapply(get_cassette_data_paths(), read_cassette_meta, verbose = verb),
       cassettes_session()
     ), FALSE)
     out[!duplicated(names(out))]
@@ -33,12 +36,22 @@ cassette_current <- function() last(cassettes(FALSE))
 
 #' @export
 #' @rdname cassettes
-cassette_path <- function() '~/vcr/vcr_cassettes'
+cassette_path <- function(def = '~/vcr/vcr_cassettes') {
+  dr <- tryCatch(vcr_configuration()$dir)
+  if (inherits(dr, "error")) def else dr
+}
+#cassette_path <- function() '~/vcr/vcr_cassettes'
 
 cassette_exists <- function(x) x %in% get_cassette_names()
 
-read_cassette_meta <- function(x, ...){
-  structure(yaml::yaml.load_file(x, ...)$http_interactions[[1]], class = "cassette")
+read_cassette_meta <- function(x, verbose = TRUE, ...){
+  tmp <- yaml::yaml.load_file(x, ...)
+  if (!inherits(tmp, "list") | !"http_interactions" %in% names(tmp)) {
+    if (verbose) message(x, " not found, missing data, or malformed")
+    return(list())
+  } else {
+    structure(tmp$http_interactions[[1]], class = "cassette")
+  }
 }
 
 get_cassette_meta_paths <- function(){
