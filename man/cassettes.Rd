@@ -16,6 +16,8 @@ cassette_path(def = "~/vcr/vcr_cassettes")
 \item{on_disk}{(logical) Check for cassettes on disk + cassettes in session
 (\code{TRUE}), or check for only cassettes in session (\code{FALSE}). Default: \code{TRUE}}
 
+\item{verb}{(logical) verbose messages}
+
 \item{def}{(character) base directory for cassettes}
 }
 \description{

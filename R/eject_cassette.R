@@ -25,7 +25,8 @@
 #' # can also select by cassette name
 #' eject_cassette(cassette = "hello")
 #' }
-eject_cassette <- function(cassette = NULL, options = list()) {
+eject_cassette <- function(cassette = NULL, options = list(),
+                           skip_no_unused_interactions_assertion = NULL) {
   if (is.null(cassette)) {
     # current cassette
     cas <- cassette_current()

@@ -9,3 +9,4 @@ NEWS\.md
 ^.*\.yml
 ^.*\.log
 Makefile
+scott_notes.md

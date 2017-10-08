@@ -5,7 +5,7 @@
 \alias{FileSystem}
 \title{File system persister}
 \arguments{
-\item{file_name}{(character) Just he fiile name, not whole path}
+\item{file_name}{(character) Just the file name, not whole path}
 
 \item{content}{(character) content to record to a cassette}
 

@@ -4,6 +4,7 @@
 #' @param on_disk (logical) Check for cassettes on disk + cassettes in session
 #' (`TRUE`), or check for only cassettes in session (`FALSE`). Default: `TRUE`
 #' @param def (character) base directory for cassettes
+#' @param verb (logical) verbose messages
 #' @examples \dontrun{
 #' vcr_configure("~/fixtures/vcr_cassettes")
 #'
