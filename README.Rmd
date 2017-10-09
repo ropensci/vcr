@@ -143,9 +143,9 @@ system.time(
 `use_cassette()` is an easier approach. An alternative is to use 
 `insert_cassett()` + `eject_cassette()`. 
 
-`use_cassette()` does both inject and eject operations for you, but 
+`use_cassette()` does both insert and eject operations for you, but 
 you can instead do them manually by using the above functions. You do have
-to eject the cassette after using inject.
+to eject the cassette after using insert.
 
 ## Matchers
 
