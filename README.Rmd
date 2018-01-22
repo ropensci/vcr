@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![Build Status](https://api.travis-ci.org/ropenscilabs/vcr.png?branch=master)](https://travis-ci.org/ropenscilabs/vcr)
+[![Build Status](https://travis-ci.org/ropensci/vcr.svg?branch=webmockit)](https://travis-ci.org/ropensci/vcr)
 
 An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
@@ -46,7 +46,7 @@ without `vcr`
 ## Installation
 
 ```{r eval=FALSE}
-devtools::install_github("ropenscilabs/vcr")
+devtools::install_github("ropensci/vcr")
 ```
 
 ```{r}
@@ -183,9 +183,9 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 
 ## Meta
 
-* Please [report any issues or bugs](https://github.com/ropenscilabs/vcr/issues)
+* Please [report any issues or bugs](https://github.com/ropensci/vcr/issues)
 * License: MIT
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
-* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+* Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

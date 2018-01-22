@@ -1,7 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
-^CONDUCT\.md$
+^CODE_OF_CONDUCT\.md$
 man-roxygen
 NEWS\.md
 ^cran-comments\.md$
