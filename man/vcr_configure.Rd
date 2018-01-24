@@ -68,7 +68,7 @@ re-recorded at the given interval, in seconds.}
 or "stdout"}
 
 \item{vcr_logging_opts}{(list) Additional options passed to
-\code{\link[loggr:log_file]{loggr::log_file()}}}
+\code{loggr::log_file()} (ignored for now)}
 }
 \description{
 Configuration

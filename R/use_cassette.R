@@ -82,6 +82,7 @@
 #' # name = "skycheese"
 #' # cassette$call_block(cli$get("get"))
 #'
+# library(crul)
 # vcr_configure(dir = "~/fixtures/vcr_cassettes")
 # aaa
 # rm(aaa)

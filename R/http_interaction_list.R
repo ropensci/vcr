@@ -22,17 +22,17 @@ NullList <- R6::R6Class(
 #' @details
 #' \strong{Methods}
 #'   \describe{
-#'     \item{\code{response_for()}}{
+#'     \item{\code{response_for(request)}}{
 #'       xxx.
 #'     }
-#'     \item{\code{has_interaction_matching()}}{
+#'     \item{\code{has_interaction_matching(request)}}{
 #'       xx.
 #'     }
-#'     \item{\code{has_used_interaction_matching()}}{
+#'     \item{\code{has_used_interaction_matching(request)}}{
 #'       xxx.
 #'     }
 #'     \item{\code{remaining_unused_interaction_count()}}{
-#'       Number of unused interactions.
+#'       Number of unused interactions (numeric)
 #'     }
 #'     \item{\code{assert_no_unused_interactions()}}{
 #'       xxx.
@@ -46,20 +46,20 @@ NullList <- R6::R6Class(
 #'     \item{\code{matching_interaction_index_for()}}{
 #'       xxx.
 #'     }
-#'     \item{\code{matching_used_interaction_for()}}{
+#'     \item{\code{matching_used_interaction_for(request)}}{
 #'       xxxx.
 #'     }
-#'     \item{\code{interaction_matches_request()}}{
-#'       Check if a request matches an interaction.
+#'     \item{\code{interaction_matches_request(request, interaction)}}{
+#'       Check if a request matches an interaction (logical)
 #'     }
 #'     \item{\code{from_hash()}}{
 #'       Get a hash back.
 #'     }
-#'     \item{\code{request_summary()}}{
-#'       Get a request summary.
+#'     \item{\code{request_summary(z)}}{
+#'       Get a request summary (character)
 #'     }
-#'     \item{\code{response_summary()}}{
-#'       Get a response summary.
+#'     \item{\code{response_summary(z)}}{
+#'       Get a response summary (character)
 #'     }
 #'   }
 #' @format NULL
@@ -72,9 +72,11 @@ NullList <- R6::R6Class(
 #'
 #' # make interactions
 #' ## make the request
+#' ### turn off mocking
+#' crul::mock(FALSE)
 #' url <- "https://httpbin.org/post"
 #' cli <- crul::HttpClient$new(url = url)
-#' res <- cli$post(body = body)
+#' res <- cli$post(body = list(a = 5))
 #'
 #' ## request
 #' (request <- Request$new("POST", url, body, res$headers))
@@ -95,11 +97,17 @@ NullList <- R6::R6Class(
 #' x$request_matchers
 #' x$log_prefix
 #' x$parent_list
+#' x$parent_list$response_for()
+#' x$parent_list$has_interaction_matching()
+#' x$parent_list$has_used_interaction_matching()
+#' x$parent_list$remaining_unused_interaction_count()
 #' x$used_interactions
 #' x$allow_playback_repeats
 #' x$interactions
+#' x$response_for(request)
 #' }
-HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
+HTTPInteractionList <- R6::R6Class(
+  'HTTPInteractionList',
    public = list(
      interactions           = NULL,
      request_matchers       = NULL,
@@ -136,13 +144,23 @@ HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
      },
 
      response_for = function(request) {
-       TRUE
-       # FIXME - finish this function, see bottom of page
-       # if (index == matching_interaction_index_for(request)) {
-       #   "adf"
-       # } else {
-       #   "adf"
-       # }
+       index <- private$matching_interaction_index_for(request)
+       if (length(index) > 0) {
+         # delete the http interaction at <index>, and capture it into `interaction`
+         interaction <- self$interactions[[index]]
+         self$interactions <- delete_at(self$interactions, index)
+         # put `interaction` at front of list with `unshift`
+         self$used_interactions <- unshift(self$used_interactions, list(interaction))
+         cat(sprintf("Found matching interaction for %s at index %s: %s",
+             private$request_summary(request),
+             index,
+             private$response_summary(interaction$response)), sep = "\n")
+         interaction$response
+       } else if (interaction == self$matching_used_interaction_for(request)) {
+         interaction$response
+       } else {
+         self$parent_list$response_for(request)
+       }
      },
 
      has_interaction_matching = function(request) {
@@ -165,13 +183,17 @@ HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
      # @raise [VCR::Errors::UnusedHTTPInteractionError] if not all interactions were played back.
      assert_no_unused_interactions = function() {
         if (!has_unused_interactions()) return()
-        logger <- Logger$new(nil)
+        # FIXME: replace cat() with logging
+        # logger <- Logger$new(nil)
 
         descriptions <- lapply(self$interactions, function(x) {
           #"  - #{logger.request_summary(x.request, @request_matchers)} => #{logger.response_summary(x.response)}"
-          sprintf("  - %s => %s",
-                  logger$request_summary(x$request, self$request_matchers),
-                  logger$response_summary(x$response))
+          # sprintf("  - %s => %s",
+          #         logger$request_summary(x$request, self$request_matchers),
+          #         logger$response_summary(x$response))
+          cat(sprintf("  - %s => %s",
+                  private$request_summary(x$request, self$request_matchers),
+                  private$response_summary(x$response)))
         })
 
         stop("There are unused HTTP interactions left in the cassette:\n",
@@ -180,16 +202,23 @@ HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
    ),
 
    private = list(
+     # return: logical
      has_unused_interactions = function() {
        length(self$interactions) > 0
      },
 
+     # return: integer
      matching_interaction_index_for = function(request) {
-       vapply(self$interactions, function(x) {
-         self$interaction_matches_request(request, x)
-       }, logical(1))
+       which(vapply(self$interactions, function(w) {
+         private$interaction_matches_request(request, w)
+       }, logical(1)))
      },
 
+     # which(lapply(x$interactions, function(w) {
+     #   x$.__enclos_env__$private$interaction_matches_request(request, w)
+     # }))
+
+     # return: interactions list
      matching_used_interaction_for = function(request) {
        if (!self$allow_playback_repeats) return(NULL)
 
@@ -197,57 +226,91 @@ HTTPInteractionList <- R6::R6Class('HTTPInteractionList',
        i <- 0
        while (!tmp) {
          i <- i + 1
-         tmp <- self$interaction_matches_request(request, self$used_interactions[[i]])
+         tmp <- private$interaction_matches_request(request, self$used_interactions[[i]])
        }
 
        if (tmp) self$used_interactions[[i]] else NULL
      },
 
+     # return: interactions list
      interaction_matches_request = function(request, interaction) {
        # FIXME - log instead
-       cat("Checking if %s matches %s using %s",
-           request_summary(request),
-           request_summary(interaction$request),
-           paste0(self$request_matchers, collapse = ", "))
+       cat(sprintf("Checking if %s matches %s using %s",
+           private$request_summary(request),
+           private$request_summary(interaction$request),
+           paste0(self$request_matchers, collapse = ", ")),
+           sep = "\n")
 
-       lapply(self$request_matchers, function(y) {
+       all(unlist(lapply(self$request_matchers, function(y) {
          matcher <- RequestMatcherRegistry$new()$registry[[y]]
          res <- matcher$matches(request, interaction$request)
          msg <- if (res) "matched" else "did not match"
          # FIXME - log instead
-         cat("%s %s: current request %s vs %s",
-             y, msg, request_summary(request), request_summary(interaction.request))
+         cat(sprintf("%s %s: current request %s vs %s",
+             y, msg,
+             private$request_summary(request),
+             private$request_summary(interaction$request)), sep = "\n")
          return(res)
-       })
+       })))
      },
 
-     from_hash = function() {
-       list(self$request$from_hash(hash['request']),
-            self$response$from_hash(hash['response']),
-            hash['recorded_at'])
-     },
+     # FIXME: not sure why this is here, should only belong in HTTPInteraction I think
+     # from_hash = function() {
+     #   list(self$request$from_hash(hash['request']),
+     #        self$response$from_hash(hash['response']),
+     #        hash['recorded_at'])
+     # },
 
+     # return: character
      request_summary = function(z) {
         paste(z$method, z$uri)
      },
 
+     # return: character
      response_summary = function(z) {
        paste(
          z$status$status_code,
-         sprintf("'%s ...'", substring(gsub("\n", "\\\\n", z$body), 1, 15)))
+         sprintf("['%s ...'", substring(gsub("\n", "\\\\n", z$body), 1, 50)),
+         "]"
+       )
      }
    )
 )
 
+# makes a copy - does not modify in place
+# x: must be a list
+# y: must be numeric; ignores values out of range
+delete_at <- function(x, y) {
+  stopifnot(is.list(x))
+  stopifnot(is.numeric(y))
+  x[-y]
+}
+# makes a copy - does not modify in place
+# x: a list with objects of class HttpInteraction
+# y: a list with an object of class HttpInteraction
+unshift <- function(x, y) {
+  stopifnot(inherits(x, "list"))
+  stopifnot(inherits(y, "list"))
+  stopifnot(inherits(y[[1]], "HTTPInteraction"))
+  c(y, x)
+}
+
 # response_for = function(request) {
-#   if (index == matching_interaction_index_for(request)) {
-#      interaction = @interactions.delete_at(index)
-#      @used_interactions.unshift interaction
-#      log "Found matching interaction for #{request_summary(request)} at index #{index}: #{response_summary(interaction.response)}", 1
-#      interaction.response
-#    } elsif interaction = matching_used_interaction_for(request)
-#     interaction.response
+#   index <- private$matching_interaction_index_for(request)
+#   if (length(index) > 0) {
+#     # delete the http interaction at <index>, and capture it into `interaction`
+#     interaction <- self$interactions[[index]]
+#     self$interactions <- delete_at(self$interactions, index)
+#     # put `interaction` at front of list with `unshift`
+#     self$used_interactions <- unshift(self$used_interactions, interaction)
+#     cat("Found matching interaction for %s at index %s: %s",
+#         private$request_summary(request),
+#         index,
+#         private$response_summary(interaction$response))
+#     interaction$response
+#   } else if (interaction == self$matching_used_interaction_for(request)) {
+#     interaction$response
 #   } else {
-#     parent_list.response_for(request)
+#     self$parent_list$response_for(request)
 #   }
 # }

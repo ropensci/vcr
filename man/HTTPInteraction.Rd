@@ -18,10 +18,10 @@ HTTPInteraction class
 \strong{Methods}
 \describe{
 \item{\code{to_hash()}}{
-Create a hash.
+Create a hash from the HTTPInteraction object
 }
-\item{\code{from_hash()}}{
-Get a hash back to an R list.
+\item{\code{from_hash(hash)}}{
+Create a HTTPInteraction object from a hash
 }
 }
 }
@@ -33,20 +33,27 @@ body <- list(foo = "bar")
 cli <- crul::HttpClient$new(url = url)
 res <- cli$post(body = body)
 
-# request
+# build a Request object
 (request <- Request$new("POST", uri = url,
   body = body, headers = res$response_headers))
-# response
+# build a VcrResponse object
 (response <- VcrResponse$new(
    res$status_http(),
    res$response_headers,
    res$parse("UTF-8"),
    res$response_headers$status))
 
+# make HTTPInteraction object
 (x <- HTTPInteraction$new(request = request, response = response))
 x$recorded_at
 x$to_hash()
-x$from_hash()
+
+# make an HTTPInteraction from a hash with the object already made
+x$from_hash(x$to_hash())
+
+# Make an HTTPInteraction from a hash alone
+my_hash <- x$to_hash()
+HTTPInteraction$new()$from_hash(my_hash)
 }
 }
 \keyword{datasets}

@@ -33,7 +33,8 @@
 #' h <- x$to_hash()
 #' x$from_hash(h)
 #' }
-Request <- R6::R6Class('Request',
+Request <- R6::R6Class(
+  'Request',
    public = list(
      method = NULL,
      uri = NULL,

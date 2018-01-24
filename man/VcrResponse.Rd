@@ -45,7 +45,7 @@ x$status
 x$headers
 x$http_version
 x$to_hash()
-x$from_hash()
+x$from_hash(x$to_hash())
 }
 }
 \keyword{internal}

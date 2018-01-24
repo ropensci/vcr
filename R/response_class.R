@@ -33,7 +33,7 @@
 #' x$headers
 #' x$http_version
 #' x$to_hash()
-#' x$from_hash()
+#' x$from_hash(x$to_hash())
 #' }
 VcrResponse <- R6::R6Class(
   'VcrResponse',
@@ -66,16 +66,16 @@ VcrResponse <- R6::R6Class(
          http_version = self$http_version
        )
        return(self$hash)
-     }
+     },
 
-     # from_hash = function() {
-     #   list(
-     #     self$hash[['status']],
-     #     self$hash[['headers']],
-     #     body_from(self$hash[['body']]),
-     #     self$hash[['http_version']],
-     #     self$hash[['adapater_metadata']]
-     #   )
-     # }
+     from_hash = function(hash) {
+       VcrResponse$new(
+         hash[['status']],
+         hash[['headers']],
+         body_from(hash[['body']]),
+         hash[['http_version']],
+         hash[['adapater_metadata']]
+       )
+     }
    )
 )

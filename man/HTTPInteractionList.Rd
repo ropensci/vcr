@@ -25,17 +25,17 @@ HTTPInteractionList class
 \details{
 \strong{Methods}
 \describe{
-\item{\code{response_for()}}{
+\item{\code{response_for(request)}}{
 xxx.
 }
-\item{\code{has_interaction_matching()}}{
+\item{\code{has_interaction_matching(request)}}{
 xx.
 }
-\item{\code{has_used_interaction_matching()}}{
+\item{\code{has_used_interaction_matching(request)}}{
 xxx.
 }
 \item{\code{remaining_unused_interaction_count()}}{
-Number of unused interactions.
+Number of unused interactions (numeric)
 }
 \item{\code{assert_no_unused_interactions()}}{
 xxx.
@@ -49,20 +49,20 @@ Are there areny unused interactions?
 \item{\code{matching_interaction_index_for()}}{
 xxx.
 }
-\item{\code{matching_used_interaction_for()}}{
+\item{\code{matching_used_interaction_for(request)}}{
 xxxx.
 }
-\item{\code{interaction_matches_request()}}{
-Check if a request matches an interaction.
+\item{\code{interaction_matches_request(request, interaction)}}{
+Check if a request matches an interaction (logical)
 }
 \item{\code{from_hash()}}{
 Get a hash back.
 }
-\item{\code{request_summary()}}{
-Get a request summary.
+\item{\code{request_summary(z)}}{
+Get a request summary (character)
 }
-\item{\code{response_summary()}}{
-Get a response summary.
+\item{\code{response_summary(z)}}{
+Get a response summary (character)
 }
 }
 }
@@ -75,9 +75,11 @@ vcr_configure(
 
 # make interactions
 ## make the request
+### turn off mocking
+crul::mock(FALSE)
 url <- "https://httpbin.org/post"
 cli <- crul::HttpClient$new(url = url)
-res <- cli$post(body = body)
+res <- cli$post(body = list(a = 5))
 
 ## request
 (request <- Request$new("POST", url, body, res$headers))
@@ -98,9 +100,14 @@ res <- cli$post(body = body)
 x$request_matchers
 x$log_prefix
 x$parent_list
+x$parent_list$response_for()
+x$parent_list$has_interaction_matching()
+x$parent_list$has_used_interaction_matching()
+x$parent_list$remaining_unused_interaction_count()
 x$used_interactions
 x$allow_playback_repeats
 x$interactions
+x$response_for(request)
 }
 }
 \keyword{datasets}

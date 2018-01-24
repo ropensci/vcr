@@ -280,7 +280,7 @@ Cassette <- R6::R6Class(
       ## just returning exact same input
       self$merged_interactions()
 
-      # We deep-dup the interactions by roundtripping them to/from a hash.
+      # We dee-dupe the interactions by roundtripping them to/from a hash.
       # This is necessary because `before_record` can mutate the interactions.
       # lapply(self$merged_interactions(), function(z) {
       #   VCRHooks$invoke_hook("before_record", z)
@@ -300,6 +300,15 @@ Cassette <- R6::R6Class(
       }
 
       return(c(old_interactions, self$new_recorded_interactions))
+    },
+
+    up_to_date_interactions = function(interactions) {
+      if (clean_outdated_http_interactions && re_record_interval) return(interactions)
+      # return interactions unless clean_outdated_http_interactions && re_record_interval
+      Filter(function(z) {
+        as.POSIXct(z$recorded_at) > (Sys.time() - vcr_c$re_record_interval)
+      }, interactions)
+      # interactions.take_while { |x| x[:recorded_at] > Time.now - re_record_interval }
     },
 
     should_remove_matching_existing_interactions = function() {
@@ -356,6 +365,7 @@ Cassette <- R6::R6Class(
     },
 
     record_http_interaction = function(x) {
+      # FIXME: fix logging at some point
       #do.call(loggr::log_file, list(file_name = vcr_c$vcr_logging, vcr_c$vcr_logging_opts))
       int <- self$make_http_interaction(x)
       #loggr::log_info(self$log_prepare(x))
@@ -431,7 +441,7 @@ Cassette <- R6::R6Class(
       }
 
       # request
-      req <- RequestSignature$new(
+      req <- webmockr::RequestSignature$new(
         method = intr$request$method,
         uri = intr$request$uri,
         options = list(
