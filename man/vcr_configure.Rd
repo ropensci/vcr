@@ -13,8 +13,9 @@ vcr_configure(dir = ".", record = "once", match_requests_on = c("method",
   ignore_localhost = FALSE, ignore_request = NULL,
   uri_parser = "crul::url_parse", preserve_exact_body_bytes = FALSE,
   preserve_exact_body_bytes_for = FALSE, turned_off = FALSE,
-  ignore_cassettes = FALSE, cassettes = list(), linked_context = NULL,
-  vcr_logging = "vcr.log", vcr_logging_opts = list())
+  ignore_cassettes = FALSE, re_record_interval = NULL, cassettes = list(),
+  linked_context = NULL, vcr_logging = "vcr.log",
+  vcr_logging_opts = list())
 
 vcr_configure_reset()
 
@@ -55,6 +56,9 @@ See \link{recording}}
 \code{TRUE} when you don't have a cassette in use but still want to make
 HTTP requests. Otherwise, you can't make requests unless a cassette is in
 use. Default: \code{FALSE}}
+
+\item{re_record_interval}{(numeric) When given, the cassette will be
+re-recorded at the given interval, in seconds.}
 
 \item{cassettes}{(list) don't use}
 

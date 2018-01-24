@@ -20,12 +20,14 @@
 #' `TRUE` when you don't have a cassette in use but still want to make
 #' HTTP requests. Otherwise, you can't make requests unless a cassette is in
 #' use. Default: `FALSE`
+#' @param re_record_interval (numeric) When given, the cassette will be
+#' re-recorded at the given interval, in seconds.
 #' @param cassettes (list) don't use
 #' @param linked_context (logical) linked context
 #' @param vcr_logging (character) one of a file path to log to, "console",
 #' or "stdout"
 #' @param vcr_logging_opts (list) Additional options passed to
-#' [loggr::log_file()]
+#' `loggr::log_file()` (ignored for now)
 #'
 #' @examples \dontrun{
 #' vcr_configure()
@@ -56,6 +58,7 @@ vcr_configure <- function(
   preserve_exact_body_bytes_for = FALSE,
   turned_off = FALSE,
   ignore_cassettes = FALSE,
+  re_record_interval = NULL,
   cassettes = list(),
   linked_context = NULL,
   vcr_logging = "vcr.log",
@@ -97,6 +100,7 @@ VCRConfig <- R6::R6Class(
     preserve_exact_body_bytes_for = NULL,
     turned_off = NULL,
     ignore_cassettes = NULL,
+    re_record_interval = NULL,
     cassettes = NULL,
     linked_context = NULL,
     vcr_logging = NULL,
@@ -134,6 +138,7 @@ vcr_default_config_vars <- list(
   preserve_exact_body_bytes_for = FALSE,
   turned_off = FALSE,
   ignore_cassettes = FALSE,
+  re_record_interval = NULL,
   cassettes = list(),
   linked_context = NULL,
   vcr_logging = "vcr.log",
