@@ -5,7 +5,7 @@ vcr
 
 [![Build Status](https://api.travis-ci.org/ropenscilabs/vcr.png?branch=master)](https://travis-ci.org/ropenscilabs/vcr)
 
-An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
+An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
 
 ## Overview/Terminology
 

@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg?branch=webmockit)](https://travis-ci.org/ropensci/vcr)
 
-An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
+An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
 
 ## Overview/Terminology
 
