@@ -14,7 +14,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.3.6),
     curl (>= 0.9.7),
-    webmockr (>= 0.2.0),
+    webmockr (>= 0.2.1.9222),
     urltools,
     yaml,
     digest,
