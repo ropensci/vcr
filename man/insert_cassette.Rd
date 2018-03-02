@@ -77,15 +77,15 @@ Insert a cassette to record an HTTP call
 }
 \examples{
 \dontrun{
-res <- Cassette2$new("foobar")
+res <- Cassette$new("foobar", new_recording = TRUE)
 
-x <- cassettes()
+insert_cassette(name = "foobar")
+
+(x <- cassettes())
 (cas <- as.cassette(x[[1]]))
 as.cassette(cas)
 as.cassette(cassettes()[[1]])
 as.cassette("foobar")
-
-insert_cassette(name = "loud")
 
 library(crul)
 cli <- crul::HttpClient$new(url = "http://google.com")

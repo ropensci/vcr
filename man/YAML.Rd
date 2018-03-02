@@ -30,12 +30,14 @@ Deserializes the given string using yaml::yaml.load_file
 }
 \examples{
 \dontrun{
+crul::mock(FALSE)
 (yy <- YAML$new())
 library("crul")
 cli <- crul::HttpClient$new(url = "https://httpbin.org")
 x <- cli$get("get")
 file <- tempfile()
-yy$serialize()(x, file)
+fun <- yy$serialize()
+fun(x, file)
 yy$deserialize_path()
 # yy$deserialize_string() # if passed on instantiation
 yy$deserialize_string(string = "- hey\\n- hi\\n- hello")

@@ -31,10 +31,9 @@ Get a hash back to an R list.
 }
 \examples{
 \dontrun{
-url <- "https://httpbin.org/post"
-body <- list(foo = "bar")
+url <- "https://google.com"
 (cli <- crul::HttpClient$new(url = url))
-(res <- cli$post(body = body))
+(res <- cli$get("search", query = list(q = "stuff")))
 (x <- VcrResponse$new(
    res$status_http(),
    res$response_headers,

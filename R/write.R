@@ -36,13 +36,17 @@ write_interactions <- function(x, file) {
           status = x$response$status,
           headers = x$response$headers,
           body = list(
-            encoding = "",
+            # encoding = "",
+            encoding = encoding_guess(x$response$body),
             # FIXME - be able to toggle whether to base64encode or not
-            string = get_body(x$response$body)
-            #string = base64enc::base64encode(charToRaw(get_body(x$response$body)))
+            string = if (vcr_c$preserve_exact_body_bytes) {
+              base64enc::base64encode(charToRaw(get_body(x$response$body)))
+            } else {
+              get_body(x$response$body)
+            }
           )
         ),
-        recorded_at = as.character(Sys.time()),
+        recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
         recorded_with = paste0("vcr/", utils::packageVersion("vcr"))
       )
     )
@@ -68,7 +72,14 @@ strex <- function(string, pattern) {
   regmatches(string, regexpr(pattern, string))
 }
 
-
+encoding_guess <- function(x, force_guess = FALSE) {
+  if (vcr_c$preserve_exact_body_bytes && !force_guess) return("ASCII-8BIT")
+  enc <- Encoding(x)
+  if (enc == "unknown") {
+    message("encoding couldn't be detected; assuming UTF-8")
+  }
+  return("UTF-8")
+}
 
 # write_interactions <- function(x, file){
 #   cat("- request:", sep = "\n", file = file, append = TRUE)

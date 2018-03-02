@@ -96,8 +96,8 @@ The root directory for storing cassettes. Default:
 \dontrun{
 vcr_configure()
 
-res <- Cassette2$new(name = "bob")
-res <- Cassette2$new("foobar", record = "all")
+res <- Cassette$new(name = "bob")
+res <- Cassette$new("foobar", record = "all")
 res$file()
 res$originally_recorded_at()
 res$recording()

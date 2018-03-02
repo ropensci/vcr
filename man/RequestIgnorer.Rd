@@ -39,9 +39,9 @@ ignore a specific named localhost
 \item{\code{ignore_hosts(hosts)}}{
 ignore any named host
 }
-\item{\code{ignore(request)}}{\preformatted{}
+\item{\code{should_be_ignored(request)}}{
+method to determine whether to ignore a request
 }
-
 }
 \strong{Private Methods}
 \describe{

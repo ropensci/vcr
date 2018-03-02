@@ -110,7 +110,7 @@ Request <- R6::R6Class(
 
 serializable_body <- function(x) {
   if (is.null(x)) return(x)
-  if (vcr_configuration()$preserve_exact_body_bytes_for) {
+  if (vcr_configuration()$preserve_exact_body_bytes) {
     structure(base64enc::base64encode(charToRaw(x)), base64 = TRUE)
   } else {
     x

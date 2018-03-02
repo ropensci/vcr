@@ -19,10 +19,9 @@
 #' @format NULL
 #' @usage NULL
 #' @examples \dontrun{
-#' url <- "https://httpbin.org/post"
-#' body <- list(foo = "bar")
+#' url <- "https://google.com"
 #' (cli <- crul::HttpClient$new(url = url))
-#' (res <- cli$post(body = body))
+#' (res <- cli$get("search", query = list(q = "stuff")))
 #' (x <- VcrResponse$new(
 #'    res$status_http(),
 #'    res$response_headers,
@@ -54,7 +53,9 @@ VcrResponse <- R6::R6Class(
          }
          self$body <- body
        }
-       if (!missing(http_version)) self$http_version <- http_version
+       if (!missing(http_version)) {
+         self$http_version <- extract_http_version(http_version)
+       }
        if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
      },
 
@@ -79,3 +80,12 @@ VcrResponse <- R6::R6Class(
      }
    )
 )
+
+extract_http_version <- function(x) {
+  if (!is.character(x)) return(x)
+  if (grepl("HTTP/[0-9]\\.?", x)) {
+    strsplit(stract(x, "HTTP/[12]"), "/")[[1]][2] %||% ""
+  } else {
+    return(x)
+  }
+}

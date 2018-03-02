@@ -72,8 +72,8 @@
 #' @examples \dontrun{
 #' vcr_configure()
 #'
-#' res <- Cassette2$new(name = "bob")
-#' res <- Cassette2$new("foobar", record = "all")
+#' res <- Cassette$new(name = "bob")
+#' res <- Cassette$new("foobar", record = "all")
 #' res$file()
 #' res$originally_recorded_at()
 #' res$recording()
@@ -236,14 +236,19 @@ Cassette <- R6::R6Class(
 
     eject = function() {
       # write interactions to disk
-      ###### FIXME - don't write records to disk if using recorded records ####
-      if (self$new_recording) {
-        self$write_recorded_interactions_to_disk()
-      }
+      # FIXME
+      #  - don't write records to disk if using recorded records
+      #  - probably remove this if statement - just handle with
+      #    the write_recorded_interactions_to_disk method
+      #if (self$new_recording) {
+      self$write_recorded_interactions_to_disk()
+      #}
+
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
       message("ejecting cassette: ", self$name)
-      #return(self$to_return)
+      # disable webmockr
+      webmockr::disable()
     },
 
     file = function() {
@@ -280,6 +285,7 @@ Cassette <- R6::R6Class(
       ## just returning exact same input
       self$merged_interactions()
 
+      # FIXME - not sure what's going on here
       # We dee-dupe the interactions by roundtripping them to/from a hash.
       # This is necessary because `before_record` can mutate the interactions.
       # lapply(self$merged_interactions(), function(z) {
@@ -289,6 +295,12 @@ Cassette <- R6::R6Class(
 
     merged_interactions = function() {
       old_interactions <- self$previously_recorded_interactions()
+      old_interactions <- lapply(old_interactions, function(x) {
+        HTTPInteraction$new(
+          request = x$request,
+          response = x$response,
+          recorded_at = x$recorded_at)
+      })
 
       if (self$should_remove_matching_existing_interactions()) {
         new_interaction_list <-
@@ -299,9 +311,11 @@ Cassette <- R6::R6Class(
                  old_interactions)
       }
 
+      # FIXME: add up_to_date_interactions usage here
       return(c(old_interactions, self$new_recorded_interactions))
     },
 
+    # FIXME: not used yet, from newer version of vcr
     up_to_date_interactions = function(interactions) {
       if (clean_outdated_http_interactions && re_record_interval) return(interactions)
       # return interactions unless clean_outdated_http_interactions && re_record_interval
@@ -319,6 +333,13 @@ Cassette <- R6::R6Class(
       self$serializer$path
     },
 
+    raw_cassette_bytes = function() {
+      file <- self$file()
+      if (is.null(file)) return("")
+      tmp <- readLines(file) %||% ""
+      paste0(tmp, collapse = "")
+    },
+
     make_dir = function() {
       dir.create(path.expand(self$root_dir), showWarnings = FALSE,
                  recursive = TRUE)
@@ -333,27 +354,25 @@ Cassette <- R6::R6Class(
       }
     },
 
-    # serializer = serializer_fetch(serialize_with, name)
-    # tmp = serializer$deserialize_path()
-    # z = tmp[['http_interactions']][[1]]
     previously_recorded_interactions = function() {
-      #if (!raw_cassette_bytes.to_s.empty?) {
-      lapply(self$deserialized_hash()[['http_interactions']], function(z) {
-        zz <- HTTPInteraction$new(
-          request = Request$new(z$request$method,
-                                z$request$uri,
-                                z$request$body$string,
-                                z$request$headers),
-          response = VcrResponse$new(z$response$status$code,
-                                     z$response$headers,
-                                     z$response$body$string)
-        )
-        zz$to_hash()
-        # FIXME - not quite ready yet, request_ignorer not quite working
-        # if ( tmpints$request$uri && request_ignorer$ignore(tmpints$request) ) {
-        #
-        # }
-      })
+      if (nchar(self$raw_cassette_bytes()) > 0) {
+        compact(lapply(self$deserialized_hash()[['http_interactions']], function(z) {
+          zz <- HTTPInteraction$new(
+            request = Request$new(z$request$method,
+                                  z$request$uri,
+                                  z$request$body$string,
+                                  z$request$headers),
+            response = VcrResponse$new(z$response$status$code,
+                                       z$response$headers,
+                                       z$response$body$string)
+          )
+          hash <- zz$to_hash()
+          # FIXME - not quite ready yet, request_ignorer not quite working
+          if (request_ignorer$should_be_ignored(hash$request)) NULL else hash
+        }))
+      } else {
+        return(list())
+      }
     },
 
     write_recorded_interactions_to_disk = function() {
@@ -378,12 +397,17 @@ Cassette <- R6::R6Class(
       length(self$new_recorded_interactions) != 0
     },
 
+    # no logging stuff used for now
     log_prepare = function(x) {
       sprintf("%s => %s", x$request$uri, x$response$status$message)
     },
 
     log_write = function(x) {
       message("\n", x, file = vcr_configuration()$vcr_log_path, append = TRUE)
+    },
+
+    log_prefix = function(x) {
+      sprintf("[Cassette: '%s']", self$name) %||% ""
     },
 
     make_args = function() {
@@ -425,11 +449,12 @@ Cassette <- R6::R6Class(
         x$url,
         x$body,
         x$request_headers)
+      cat(x$status_code)
       response <- VcrResponse$new(
         x$status_http(),
-        x$response_headers,
-        x$parse("UTF-8"),
-        x$response_headers$status)
+        headers = x$response_headers,
+        body = x$parse("UTF-8"),
+        http_version = x$response_headers$status)
       HTTPInteraction$new(request = request, response = response)
     },
 
@@ -456,11 +481,10 @@ Cassette <- R6::R6Class(
       resp <- webmockr::Response$new()
       resp$set_url(intr$request$uri)
       resp$set_body(intr$response$body$string)
-        #charToRaw(intr$response$body$string)
-      #)
       resp$set_request_headers(intr$request$headers)
       resp$set_response_headers(intr$response$headers)
-      resp$set_status(status = intr$response$status$status_code)
+      resp$set_status(status = intr$response$status$status_code %||% 200)
+
       # generate crul response
       webmockr::build_crul_response(req, resp)
     }

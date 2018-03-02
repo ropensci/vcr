@@ -82,29 +82,42 @@
 #' # name = "skycheese"
 #' # cassette$call_block(cli$get("get"))
 #'
-# library(crul)
-# vcr_configure(dir = "~/fixtures/vcr_cassettes")
-# aaa
-# rm(aaa)
-# rm(list = "farts2", envir = vcr_cassettes)
-# library(testthat)
-# use_cassette("farts2", {
-#   cli <- HttpClient$new(url = "https://httpbin.org")
-#   aaa <- cli$get("get")
-#   #expect_is(aaa, "asdfd")
-# })
-#
-# vcr_configure(dir = "~/fixtures/vcr_cassettes")
-# use_cassette("farts9", {
-#   cli <- HttpClient$new(url = "https://httpbin.org")
-#   bbb <- cli$get("get")
-# })
-# library(rcrossref)
-# vcr_configure(dir = "~/fixtures/vcr_cassettes")
-# vcr_configuration()
-# use_cassette("crossref2", {
-#   res <- cr_works(limit = 10)
-# })
+#' library(crul)
+#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' aaa
+#' rm(aaa)
+#' rm(list = "farts2", envir = vcr_cassettes)
+#' library(testthat)
+#' use_cassette("farts2", {
+#'   cli <- HttpClient$new(url = "https://httpbin.org")
+#'   aaa <- cli$get("get")
+#'   #expect_is(aaa, "asdfd")
+#' })
+#'
+#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' use_cassette("farts9", {
+#'   cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#'   bbb <- cli$get("get")
+#' })
+#'
+#' library(rcrossref)
+#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' vcr_configuration()
+#' use_cassette("crossref2", {
+#'   res <- cr_works(limit = 10)
+#' })
+#'
+#'
+#' # preserve exact body bytes - records in base64 encoding
+#' vcr_configure(
+#'   dir = "~/fixtures/vcr_cassettes",
+#'   preserve_exact_body_bytes = TRUE
+#' )
+#' # x <- insert_cassette("things4")
+#' use_cassette("things4", {
+#'   cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#'   bbb <- cli$get("get")
+#' })
 #' }
 
 use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
@@ -128,6 +141,8 @@ use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
     preserve_exact_body_bytes = preserve_exact_body_bytes)
   # call block
   cassette$call_block(...)
+  #return(cassette)
   # eject cassette - records any new interactions to cassettes (i.e., disk)
   cassette$eject()
 }
+

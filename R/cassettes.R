@@ -35,7 +35,12 @@ cassettes <- function(on_disk = TRUE, verb = FALSE){
 #' @rdname cassettes
 cassette_current <- function() {
   tmp <- last(cassettes(FALSE))
-  if (length(tmp) == 1) tmp[[1]] else tmp
+  if (length(tmp) == 0) {
+    stop("there is no current cassette; insert_cassette() or use_cassette()")
+  }
+  tmp <- if (length(tmp) == 1) tmp[[1]] else tmp
+  tmp$initialize(tmp$name, new_recording = TRUE)
+  return(tmp)
 }
 
 #' @export
@@ -44,7 +49,6 @@ cassette_path <- function(def = '~/vcr/vcr_cassettes') {
   dr <- tryCatch(vcr_configuration()$dir)
   if (inherits(dr, "error")) def else dr
 }
-#cassette_path <- function() '~/vcr/vcr_cassettes'
 
 cassette_exists <- function(x) x %in% get_cassette_names()
 

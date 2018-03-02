@@ -22,7 +22,7 @@ get_uri <- function(x) {
 }
 
 get_host <- function(x) {
-  eval(parse(text = vcr_c$uri_parser))(x)$hostname
+  eval(parse(text = x))(x)$hostname
 }
 
 get_path <- function(x) {

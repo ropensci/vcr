@@ -50,15 +50,15 @@
 #' @seealso [use_cassette], [eject_cassette]
 #'
 #' @examples \dontrun{
-#' res <- Cassette2$new("foobar")
+#' res <- Cassette$new("foobar", new_recording = TRUE)
 #'
-#' x <- cassettes()
+#' insert_cassette(name = "foobar")
+#'
+#' (x <- cassettes())
 #' (cas <- as.cassette(x[[1]]))
 #' as.cassette(cas)
 #' as.cassette(cassettes()[[1]])
 #' as.cassette("foobar")
-#'
-#' insert_cassette(name = "loud")
 #'
 #' library(crul)
 #' cli <- crul::HttpClient$new(url = "http://google.com")
@@ -71,7 +71,7 @@
 # tmp$name
 # # tmp$deserialized_hash()
 # # intr <- tmp$previously_recorded_interactions()[[1]]
-# # intr <- yaml.load_file("~/fixtures/vcr_cassettes/farts7.yml")[[1]][[1]]
+# # intr <- yaml::yaml.load_file("~/fixtures/vcr_cassettes/farts9.yml")[[1]][[1]]
 # tmp$call_block({
 #   cli <- HttpClient$new(url = "https://httpbin.org")
 #   resp <- cli$get("get")
@@ -83,6 +83,9 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,
   exclusive=FALSE, serialize_with="yaml", persist_with="FileSystem",
   preserve_exact_body_bytes=TRUE, ignore_cassettes = TRUE) {
+
+  # enable webmockr
+  webmockr::enable()
 
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
@@ -100,7 +103,7 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
       exclusive = exclusive,
       serialize_with = serialize_with, persist_with = persist_with,
       preserve_exact_body_bytes = preserve_exact_body_bytes,
-      new_recording = TRUE)
+      new_recording = FALSE)
     include_cassette(tmp)
     return(tmp)
   } else {
