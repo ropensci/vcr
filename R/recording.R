@@ -2,11 +2,11 @@
 #'
 #' @section once:
 #' The `once` record mode will:
-#' \itemize{
-#'  \item Replay previously recorded interactions.
-#'  \item Record new interactions if there is no cassette file.
-#'  \item Cause an error to be raised for new requests if there is a cassette file.
-#'  }
+#'
+#' - Replay previously recorded interactions.
+#' - Record new interactions if there is no cassette file.
+#' - Cause an error to be raised for new requests if there is a cassette file.
+#'
 #'
 #' It is similar to the `new_episodes` record mode, but will prevent new,
 #' unexpected requests from being made (i.e. because the request URI changed
@@ -16,10 +16,10 @@
 #'
 #' @section none:
 #' The `none` record mode will:
-#' \itemize{
-#'  \item Replay previously recorded interactions.
-#'  \item Cause an error to be raised for any new requests.
-#' }
+#'
+#' - Replay previously recorded interactions.
+#' - Cause an error to be raised for any new requests.
+#'
 #'
 #' This is useful when your code makes potentially dangerous
 #' HTTP requests.  The `none` record mode guarantees that no
@@ -27,10 +27,10 @@
 #'
 #' @section new_episodes:
 #' The `new_episodes` record mode will:
-#' \itemize{
-#'  \item Record new interactions.
-#'  \item Replay previously recorded interactions.
-#' }
+#'
+#' - Record new interactions.
+#' - Replay previously recorded interactions.
+#'
 #'
 #' It is similar to the `once` record mode, but will **always** record new
 #' interactions, even if you have an existing recorded one that is similar
@@ -38,10 +38,10 @@
 #'
 #' @section all:
 #' The `all` record mode will:
-#' \itemize{
-#'  \item Record new interactions.
-#'  \item Never replay previously recorded interactions.
-#' }
+#'
+#' - Record new interactions.
+#' - Never replay previously recorded interactions.
+#'
 #'
 #' This can be temporarily used to force VCR to re-record
 #' a cassette (i.e. to ensure the responses are not out of date)
