@@ -90,14 +90,15 @@ Serialize interaction on disk/casette to a \code{crul} response
 }
 
 The root directory for storing cassettes. Default:
-\code{~/fixtures/vcr_cassettes}. See \code{vcr_configure()}
+\code{~/fixtures/vcr_cassettes}. See \code{\link[=vcr_configure]{vcr_configure()}}
 }
 \examples{
 \dontrun{
-vcr_configure()
+library(vcr)
+library(crul)
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
 
 res <- Cassette$new(name = "bob")
-res <- Cassette$new("foobar", record = "all")
 res$file()
 res$originally_recorded_at()
 res$recording()
@@ -111,12 +112,8 @@ new <- res$call_block({
   resp <- cli$get("get")
 })
 
-## needs to work for any type of request, not just from HTTP client
-### where e.g. foobar is a fxn that uses crul pkg internally
-### and thus we need to hook into the crul request itself
-# new <- res$call_block({
-#   foobar("https://httpbin.org")
-# })
+# record all requests
+res <- Cassette$new("foobar", record = "all")
 }
 }
 \keyword{datasets}

@@ -42,5 +42,5 @@ eject_cassette(cassette = "hello")
 }
 }
 \seealso{
-\link{use_cassette}, \link{insert_cassette}
+\code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
 }

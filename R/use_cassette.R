@@ -36,34 +36,31 @@
 #'  certainly more interesting/important).
 #' @param exclusive (logical) Whether or not to use only this
 #'  cassette and to completely ignore any cassettes in the cassettes stack.
-#'  Default: FALSE.
+#'  Default: `FALSE`
 #' @param serialize_with (character) Which serializer to use.
-#'  Valid values are "yaml" (default), "syck", "psych", "json" or any registered
-#'  custom serializer.
+#'  Valid values are "yaml" (default), the only one supported for now.
 #' @param persist_with (character) Which cassette persister to
 #'  use. Defaults: "file_system". You can also register and use a
 #'  custom persister.
 #' @param preserve_exact_body_bytes (logical) Whether or not
-#'  to base64 encode the bytes of the requests and responses for this cassette
-#'  when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`
+#' to base64 encode the bytes of the requests and responses for
+#' this cassette when serializing it. See also `preserve_exact_body_bytes`
+#' in [vcr_configure()]
 #'
-#' @details
-#' \itemize{
-#'  \item `use_cassette` Initialize a cassett. Returns the inserted
+#' @details A run down of the family of top level \pkg{vcr} functions
+#'
+#' - `use_cassette` Initializes a cassett. Returns the inserted
 #'  cassette.
-#'  \item `insert_cassette` Internally used within `use_cassette`
-#'  \item `eject_cassette` ejects the current cassette. The cassette
+#' - `insert_cassette` Internally used within `use_cassette`
+#' - `eject_cassette` ejects the current cassette. The cassette
 #'  will no longer be used. In addition, any newly recorded HTTP interactions
 #'  will be written to disk.
-#' }
-#' @seealso [insert_cassette], [eject_cassette]
-#' @examples \dontrun{
-#' webmockr::enable()
-#' crul::mock()
-#' library("crul")
-#' url <- "http://api.plos.org/search?q=*:*&wt=json"
-#' # url <- "http://localhost:9200"
 #'
+#' @seealso [insert_cassette()], [eject_cassette()]
+#' @examples \dontrun{
+#' library(vcr)
+#' library(crul)
+#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
 #'
 #' use_cassette(name = "apple7", {
 #'   cli <- HttpClient$new(url = "https://httpbin.org")
@@ -72,32 +69,6 @@
 #'
 #' use_cassette(name = "stuff2", {
 #'   cli$post("post")
-#' })
-#'
-#' use_cassette(name = "helium", {
-#'   cli$get("get", query = list(foo = "bar"))
-#' })
-#'
-#' # sacbox::load_defaults(use_cassette)
-#' # name = "skycheese"
-#' # cassette$call_block(cli$get("get"))
-#'
-#' library(crul)
-#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
-#' aaa
-#' rm(aaa)
-#' rm(list = "farts2", envir = vcr_cassettes)
-#' library(testthat)
-#' use_cassette("farts2", {
-#'   cli <- HttpClient$new(url = "https://httpbin.org")
-#'   aaa <- cli$get("get")
-#'   #expect_is(aaa, "asdfd")
-#' })
-#'
-#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
-#' use_cassette("farts9", {
-#'   cli <- crul::HttpClient$new(url = "https://httpbin.org")
-#'   bbb <- cli$get("get")
 #' })
 #'
 #' library(rcrossref)
@@ -141,7 +112,6 @@ use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
     preserve_exact_body_bytes = preserve_exact_body_bytes)
   # call block
   cassette$call_block(...)
-  #return(cassette)
   # eject cassette - records any new interactions to cassettes (i.e., disk)
   cassette$eject()
 }

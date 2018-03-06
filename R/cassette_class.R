@@ -68,12 +68,13 @@
 #' @usage NULL
 #' @details
 #' The root directory for storing cassettes. Default:
-#' \code{~/fixtures/vcr_cassettes}. See \code{vcr_configure()}
+#' `~/fixtures/vcr_cassettes`. See [vcr_configure()]
 #' @examples \dontrun{
-#' vcr_configure()
+#' library(vcr)
+#' library(crul)
+#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
 #'
 #' res <- Cassette$new(name = "bob")
-#' res <- Cassette$new("foobar", record = "all")
 #' res$file()
 #' res$originally_recorded_at()
 #' res$recording()
@@ -87,12 +88,8 @@
 #'   resp <- cli$get("get")
 #' })
 #'
-#' ## needs to work for any type of request, not just from HTTP client
-#' ### where e.g. foobar is a fxn that uses crul pkg internally
-#' ### and thus we need to hook into the crul request itself
-#' # new <- res$call_block({
-#' #   foobar("https://httpbin.org")
-#' # })
+#' # record all requests
+#' res <- Cassette$new("foobar", record = "all")
 #' }
 Cassette <- R6::R6Class(
   "Cassette",
@@ -119,7 +116,6 @@ Cassette <- R6::R6Class(
     args = list(),
     http_interactions_ = NULL,
     new_recorded_interactions = NULL,
-    new_recording = FALSE,
     to_return = NULL,
 
     initialize = function(
@@ -128,11 +124,9 @@ Cassette <- R6::R6Class(
       match_requests_on = c("method", "uri"),
       re_record_interval, tag, tags, update_content_length_header,
       decode_compressed_response, allow_playback_repeats,
-      allow_unused_http_interactions, exclusive, preserve_exact_body_bytes,
-      new_recording) {
+      allow_unused_http_interactions, exclusive, preserve_exact_body_bytes) {
 
       self$name <- name
-      self$new_recording <- new_recording
       self$root_dir <- vcr_configuration()$dir
       self$serialize_with <- serialize_with
       self$persist_with <- persist_with
@@ -188,14 +182,14 @@ Cassette <- R6::R6Class(
           }
         }))
       }
-      # webmockr::stub_registry()
-      # webmockr::stub_registry_clear()
-      # webmockr:::webmockr_request_registry
 
       message("Initialized with options: ", self$record)
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
+
+      # put cassette in vcr_cassettes environment
+      include_cassette(self)
     },
 
     print = function() {
@@ -220,29 +214,18 @@ Cassette <- R6::R6Class(
     call_block = function(...) {
       # capture block
       tmp <- lazyeval::lazy_dots(...)
-
       # allow http interactions - disallow at end of call_block() below
       webmockr::webmockr_allow_net_connect()
-
       # evaluate request
       resp <- lazyeval::lazy_eval(tmp)
-
-      #self$record_http_interaction(resp[[1]])
-      #self$to_return <- resp[[1]]
-
       # disallow http interactions - allow at start of call_block() above
       webmockr::webmockr_disable_net_connect()
     },
 
     eject = function() {
-      # write interactions to disk
-      # FIXME
+      # FIXME:
       #  - don't write records to disk if using recorded records
-      #  - probably remove this if statement - just handle with
-      #    the write_recorded_interactions_to_disk method
-      #if (self$new_recording) {
       self$write_recorded_interactions_to_disk()
-      #}
 
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
@@ -251,9 +234,7 @@ Cassette <- R6::R6Class(
       webmockr::disable()
     },
 
-    file = function() {
-      self$manfile
-    },
+    file = function() self$manfile,
 
     recording = function() {
       if (self$record == "none") {
@@ -325,13 +306,8 @@ Cassette <- R6::R6Class(
       # interactions.take_while { |x| x[:recorded_at] > Time.now - re_record_interval }
     },
 
-    should_remove_matching_existing_interactions = function() {
-      self$record == "all"
-    },
-
-    storage_key = function() {
-      self$serializer$path
-    },
+    should_remove_matching_existing_interactions = function() self$record == "all",
+    storage_key = function() self$serializer$path,
 
     raw_cassette_bytes = function() {
       file <- self$file()
@@ -449,7 +425,6 @@ Cassette <- R6::R6Class(
         x$url,
         x$body,
         x$request_headers)
-      cat(x$status_code)
       response <- VcrResponse$new(
         x$status_http(),
         headers = x$response_headers,
@@ -462,7 +437,19 @@ Cassette <- R6::R6Class(
       if (length(self$deserialized_hash()) != 0) {
         intr <- self$deserialized_hash()[[1]][[1]]
       } else {
-        intr <- self$previously_recorded_interactions()[[1]]
+        intr <- tryCatch(
+          self$previously_recorded_interactions()[[1]],
+          error = function(e) e
+        )
+        if (inherits(intr, "error")) {
+          intr <- tryCatch(
+            self$new_recorded_interactions[[1]],
+            error = function(e) e
+          )
+          if (inherits(intr, "error")) {
+            stop("no requests found to construct a crul response")
+          }
+        }
       }
 
       # request
@@ -480,7 +467,8 @@ Cassette <- R6::R6Class(
       # response
       resp <- webmockr::Response$new()
       resp$set_url(intr$request$uri)
-      resp$set_body(intr$response$body$string)
+      bod <- intr$response$body
+      resp$set_body(if ("string" %in% names(bod)) bod$string else bod)
       resp$set_request_headers(intr$request$headers)
       resp$set_response_headers(intr$response$headers)
       resp$set_status(status = intr$response$status$status_code %||% 200)

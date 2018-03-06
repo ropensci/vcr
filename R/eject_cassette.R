@@ -9,7 +9,7 @@
 #' for use when your test has had an error, but your test framework has
 #' already handled it - IGNORED FOR NOW
 #' @return The ejected cassette if there was one
-#' @seealso [use_cassette], [insert_cassette]
+#' @seealso [use_cassette()], [insert_cassette()]
 #' @examples \dontrun{
 #' library(crul)
 #'

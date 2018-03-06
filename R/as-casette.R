@@ -30,7 +30,6 @@ as.cassette.character <- function(x) {
 
 #' @export
 as.cassette.cassettepath <- function(x) read_cassette_meta(x)
-# as.cassette.numeric <- function(x) read_cassette_meta(x)
 
 #' @export
 as.cassette.list <- function(x) lapply(x, as.cassette)

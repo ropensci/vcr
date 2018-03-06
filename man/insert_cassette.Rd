@@ -2,7 +2,7 @@
 % Please edit documentation in R/insert_cassette.R
 \name{insert_cassette}
 \alias{insert_cassette}
-\title{Insert a cassette to record an HTTP call}
+\title{Insert a cassette to record HTTP requests}
 \usage{
 insert_cassette(name, record = "once", match_requests_on = NULL,
   re_record_interval = NULL, tag = NULL, tags = NULL,
@@ -73,26 +73,25 @@ when serializing it. See also \code{VCR::Configuration#preserve_exact_body_bytes
 \item{ignore_cassettes}{(logical) xx. Default: \code{TRUE}}
 }
 \description{
-Insert a cassette to record an HTTP call
+Insert a cassette to record HTTP requests
 }
 \examples{
 \dontrun{
-res <- Cassette$new("foobar", new_recording = TRUE)
-
-insert_cassette(name = "foobar")
-
-(x <- cassettes())
-(cas <- as.cassette(x[[1]]))
-as.cassette(cas)
-as.cassette(cassettes()[[1]])
-as.cassette("foobar")
-
+library(vcr)
 library(crul)
-cli <- crul::HttpClient$new(url = "http://google.com")
-use_cassette("foobar", cli$get())
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
 
+(x <- insert_cassette(name = "leo5"))
+cassette_current()
+x$new_recorded_interactions
+cli <- crul::HttpClient$new(url = "https://httpbin.org")
+cli$get("get")
+x$new_recorded_interactions
+# very important when using inject_cassette: use eject cassette when finished
+x$eject()
+eject_cassette("leo5") # same as eject_cassette()
 }
 }
 \seealso{
-\link{use_cassette}, \link{eject_cassette}
+\code{\link[=use_cassette]{use_cassette()}}, \code{\link[=eject_cassette]{eject_cassette()}}
 }
