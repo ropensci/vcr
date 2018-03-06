@@ -23,19 +23,19 @@ NullList <- R6::R6Class(
 #' \strong{Methods}
 #'   \describe{
 #'     \item{\code{response_for(request)}}{
-#'       xxx.
+#'       Check if there's a matching interaction
 #'     }
 #'     \item{\code{has_interaction_matching(request)}}{
-#'       xx.
+#'       Check if has a matching interaction
 #'     }
 #'     \item{\code{has_used_interaction_matching(request)}}{
-#'       xxx.
+#'       check if has used interactions matching a given request
 #'     }
 #'     \item{\code{remaining_unused_interaction_count()}}{
 #'       Number of unused interactions (numeric)
 #'     }
 #'     \item{\code{assert_no_unused_interactions()}}{
-#'       xxx.
+#'       Checks if there are no unused interactions left.
 #'     }
 #'   }
 #' \strong{Private Methods}
@@ -44,10 +44,10 @@ NullList <- R6::R6Class(
 #'       Are there areny unused interactions?
 #'     }
 #'     \item{\code{matching_interaction_index_for()}}{
-#'       xxx.
+#'       asdfadf
 #'     }
 #'     \item{\code{matching_used_interaction_for(request)}}{
-#'       xxxx.
+#'       asdfadfs
 #'     }
 #'     \item{\code{interaction_matches_request(request, interaction)}}{
 #'       Check if a request matches an interaction (logical)
@@ -214,10 +214,6 @@ HTTPInteractionList <- R6::R6Class(
        }, logical(1)))
      },
 
-     # which(lapply(x$interactions, function(w) {
-     #   x$.__enclos_env__$private$interaction_matches_request(request, w)
-     # }))
-
      # return: interactions list
      matching_used_interaction_for = function(request) {
        if (!self$allow_playback_repeats) return(NULL)
@@ -294,23 +290,3 @@ unshift <- function(x, y) {
   stopifnot(inherits(y[[1]], "HTTPInteraction"))
   c(y, x)
 }
-
-# response_for = function(request) {
-#   index <- private$matching_interaction_index_for(request)
-#   if (length(index) > 0) {
-#     # delete the http interaction at <index>, and capture it into `interaction`
-#     interaction <- self$interactions[[index]]
-#     self$interactions <- delete_at(self$interactions, index)
-#     # put `interaction` at front of list with `unshift`
-#     self$used_interactions <- unshift(self$used_interactions, interaction)
-#     cat("Found matching interaction for %s at index %s: %s",
-#         private$request_summary(request),
-#         index,
-#         private$response_summary(interaction$response))
-#     interaction$response
-#   } else if (interaction == self$matching_used_interaction_for(request)) {
-#     interaction$response
-#   } else {
-#     self$parent_list$response_for(request)
-#   }
-# }

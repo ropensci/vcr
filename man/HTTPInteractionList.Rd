@@ -26,19 +26,19 @@ HTTPInteractionList class
 \strong{Methods}
 \describe{
 \item{\code{response_for(request)}}{
-xxx.
+Check if there's a matching interaction
 }
 \item{\code{has_interaction_matching(request)}}{
-xx.
+Check if has a matching interaction
 }
 \item{\code{has_used_interaction_matching(request)}}{
-xxx.
+check if has used interactions matching a given request
 }
 \item{\code{remaining_unused_interaction_count()}}{
 Number of unused interactions (numeric)
 }
 \item{\code{assert_no_unused_interactions()}}{
-xxx.
+Checks if there are no unused interactions left.
 }
 }
 \strong{Private Methods}
@@ -47,10 +47,10 @@ xxx.
 Are there areny unused interactions?
 }
 \item{\code{matching_interaction_index_for()}}{
-xxx.
+asdfadf
 }
 \item{\code{matching_used_interaction_for(request)}}{
-xxxx.
+asdfadfs
 }
 \item{\code{interaction_matches_request(request, interaction)}}{
 Check if a request matches an interaction (logical)
