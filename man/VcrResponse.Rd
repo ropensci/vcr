@@ -24,7 +24,7 @@ The response of an HTTPInteraction
 \item{\code{to_hash()}}{
 Create a hash.
 }
-\item{\code{from_hash()}}{
+\item{\code{from_hash(hash)}}{
 Get a hash back to an R list.
 }
 }
