@@ -17,4 +17,6 @@ test_that("cassettes", {
   cc$eject()
 })
 
+unlink(file.path(vcr_configuration()$dir, "foobar.yml"))
+
 # FIXME: add tests for on_disk and verb params

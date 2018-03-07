@@ -13,9 +13,8 @@ test_that("insert_cassette", {
   expect_is(aa$call_block, "function")
 
   # eject
-  #cat(class(cassette_current()))
   aa$eject()
 })
 
 # cleanup
-unlink("fixtures/vcr_cassettes/foobar.yml")
+unlink(file.path(vcr_configuration()$dir, "foobar.yml"))

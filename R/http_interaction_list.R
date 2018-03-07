@@ -151,10 +151,10 @@ HTTPInteractionList <- R6::R6Class(
          self$interactions <- delete_at(self$interactions, index)
          # put `interaction` at front of list with `unshift`
          self$used_interactions <- unshift(self$used_interactions, list(interaction))
-         cat(sprintf("Found matching interaction for %s at index %s: %s",
+         message(sprintf("\n  Found matching interaction for %s at index %s: %s\n",
              private$request_summary(request),
              index,
-             private$response_summary(interaction$response)), sep = "\n")
+             private$response_summary(interaction$response)))
          interaction$response
        } else if (interaction == self$matching_used_interaction_for(request)) {
          interaction$response
@@ -231,21 +231,20 @@ HTTPInteractionList <- R6::R6Class(
      # return: interactions list
      interaction_matches_request = function(request, interaction) {
        # FIXME - log instead
-       cat(sprintf("Checking if %s matches %s using %s",
+       message(sprintf("Checking if %s matches %s using %s\n",
            private$request_summary(request),
            private$request_summary(interaction$request),
-           paste0(self$request_matchers, collapse = ", ")),
-           sep = "\n")
+           paste0(self$request_matchers, collapse = ", ")))
 
        all(unlist(lapply(self$request_matchers, function(y) {
          matcher <- RequestMatcherRegistry$new()$registry[[y]]
          res <- matcher$matches(request, interaction$request)
          msg <- if (res) "matched" else "did not match"
          # FIXME - log instead
-         cat(sprintf("%s %s: current request %s vs %s",
+         message(sprintf("  %s %s: current request %s vs %s",
              y, msg,
              private$request_summary(request),
-             private$request_summary(interaction$request)), sep = "\n")
+             private$request_summary(interaction$request)))
          return(res)
        })))
      },

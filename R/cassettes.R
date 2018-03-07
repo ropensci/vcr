@@ -82,14 +82,14 @@ is_path <- function(x) file.exists(path.expand(x))
 
 # get_cassette_names()
 get_cassette_names <- function(){
-  #metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
-  sub("\\.yml", "", basename(names(vapply(cassette_files(), basename, ""))))
-  #unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))
-  #vapply(strsplit(unname(vapply(cassette_files(), basename, "")), "\\."), "[[", "", 1)
+  tmp <- grep("metadata|rs-graphics", vapply(cassette_files(), basename, ""),
+       invert = TRUE, value = TRUE)
+  sub("\\.yml", "", basename(names(tmp)))
 }
 
 get_cassette_data_paths <- function(){
-  files <- names(grep("metadata", vapply(cassette_files(), basename, ""), invert = TRUE, value = TRUE))
+  files <- names(grep("metadata|rs-graphics", vapply(cassette_files(), basename, ""),
+                      invert = TRUE, value = TRUE))
   as.list(stats::setNames(files, get_cassette_names()))
 }
 

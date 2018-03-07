@@ -232,6 +232,8 @@ Cassette <- R6::R6Class(
       message("ejecting cassette: ", self$name)
       # disable webmockr
       webmockr::disable()
+      # return self
+      return(self)
     },
 
     file = function() self$manfile,

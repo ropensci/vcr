@@ -22,10 +22,10 @@ test_that("HTTPInteractionList", {
   inter <- HTTPInteraction$new(request = request, response = response)
 
   # make HTTPInteractionList object
-  x <- HTTPInteractionList$new(
+  x <- suppressMessages(HTTPInteractionList$new(
      interactions = list(inter),
      request_matchers = vcr_configuration()$match_requests_on
-  )
+  ))
 
   # objects and methods
   expect_is(x$request_matchers, "character")
@@ -43,5 +43,5 @@ test_that("HTTPInteractionList", {
   expect_is(x$interactions, "list")
   expect_is(x$interactions[[1]], "HTTPInteraction")
   expect_is(x$response_for, "function")
-  expect_is(x$response_for(request), "VcrResponse")
+  expect_is(suppressMessages(x$response_for(request)), "VcrResponse")
 })
