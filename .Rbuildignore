@@ -10,3 +10,5 @@ NEWS\.md
 ^.*\.log
 Makefile
 scott_notes.md
+.github
+^codemeta\.json$
