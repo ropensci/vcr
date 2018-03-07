@@ -2,7 +2,7 @@
 % Please edit documentation in R/insert_cassette.R
 \name{insert_cassette}
 \alias{insert_cassette}
-\title{Insert a cassette to record an HTTP call}
+\title{Insert a cassette to record HTTP requests}
 \usage{
 insert_cassette(name, record = "once", match_requests_on = NULL,
   re_record_interval = NULL, tag = NULL, tags = NULL,
@@ -16,7 +16,7 @@ insert_cassette(name, record = "once", match_requests_on = NULL,
 is a valid file name.}
 
 \item{record}{The record mode. One of "all", "none", "new_episodes", "once".
-See Details.}
+See \link{recording}}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
@@ -27,11 +27,11 @@ custom request matcher or any object that responds to #call.}
 \item{re_record_interval}{(integer) When given, the
 cassette will be re-recorded at the given interval, in seconds.}
 
-\item{tag}{(character) Used to apply tagged `before_record`
-and `before_playback` hooks to the cassette.}
+\item{tag}{(character) Used to apply tagged \code{before_record}
+and \code{before_playback} hooks to the cassette.}
 
 \item{tags}{Used to apply multiple tags to
-a cassette so that tagged `before_record` and `before_playback` hooks
+a cassette so that tagged \code{before_record} and \code{before_playback} hooks
 will apply to the cassette.}
 
 \item{update_content_length_header}{(logical) Whether or
@@ -50,7 +50,7 @@ Defaults to false.}
 false, an error will be raised if a cassette is ejected before all
 previously recorded HTTP interactions have been used.
 Defaults to true. Note that when an error has already occurred
-(as indicated by the `$!` variable) unused interactions will be
+(as indicated by the \code{$!} variable) unused interactions will be
 allowed so that we don't silence the original error (which is almost
 certainly more interesting/important).}
 
@@ -68,25 +68,30 @@ custom persister.}
 
 \item{preserve_exact_body_bytes}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for this cassette
-when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.}
+when serializing it. See also \code{VCR::Configuration#preserve_exact_body_bytes}.}
 
 \item{ignore_cassettes}{(logical) xx. Default: \code{TRUE}}
 }
 \description{
-Insert a cassette to record an HTTP call
+Insert a cassette to record HTTP requests
 }
 \examples{
 \dontrun{
-res <- Cassette$new("foobar")
+library(vcr)
+library(crul)
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
 
-x <- cassettes()
-(cas <- as.cassette(x[[1]]))
-as.cassette(cas)
-as.cassette(cassettes()[[1]])
-as.cassette("foobar")
-
-insert_cassette(name = "fartloud")
-
-use_cassette("foobar", GET("http://google.com"))
+(x <- insert_cassette(name = "leo5"))
+cassette_current()
+x$new_recorded_interactions
+cli <- crul::HttpClient$new(url = "https://httpbin.org")
+cli$get("get")
+x$new_recorded_interactions
+# very important when using inject_cassette: use eject cassette when finished
+x$eject()
+eject_cassette("leo5") # same as eject_cassette()
 }
+}
+\seealso{
+\code{\link[=use_cassette]{use_cassette()}}, \code{\link[=eject_cassette]{eject_cassette()}}
 }

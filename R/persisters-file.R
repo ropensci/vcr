@@ -1,11 +1,11 @@
 #' File system persister
 #'
 #' @keywords internal
-#' @param file_name (character) Just he fiile name, not whole path
+#' @param file_name (character) Just the file name, not whole path
 #' @param content (character) content to record to a cassette
 #' @param path (character) Storage directory for cassettes
-#' @param write2disk (logical) write to disk or just make a new FileSystem object.
-#' Default: \code{FALSE}
+#' @param write2disk (logical) write to disk or just make a new FileSystem
+#' object. Default: `FALSE`
 #' @details The only built-in cassette persister. Persists cassettes
 #' to the file system.
 #'
@@ -27,7 +27,7 @@
 #'       Get storage location
 #'     }
 #'     \item{\code{absolute_path_to_file()}}{
-#'       Get absolute path to the \code{storage_location}
+#'       Get absolute path to the `storage_location`
 #'     }
 #'   }
 #' @format NULL
@@ -78,6 +78,7 @@ FileSystem <- R6::R6Class("FileSystem",
     },
 
     is_empty = function() {
+      if (is.null(self$file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, self$file_name)
       if (!file.exists(path)) return(TRUE)
       if (is.null(yaml::yaml.load_file(path))) {

@@ -24,47 +24,47 @@ HTTPInteractionList class
 }
 \details{
 \strong{Methods}
-  \describe{
-    \item{\code{response_for()}}{
-      xxx.
-    }
-    \item{\code{has_interaction_matching()}}{
-      xx.
-    }
-    \item{\code{has_used_interaction_matching()}}{
-      xxx.
-    }
-    \item{\code{remaining_unused_interaction_count()}}{
-      Number of unused interactions.
-    }
-    \item{\code{assert_no_unused_interactions()}}{
-      xxx.
-    }
-  }
+\describe{
+\item{\code{response_for(request)}}{
+Check if there's a matching interaction
+}
+\item{\code{has_interaction_matching(request)}}{
+Check if has a matching interaction
+}
+\item{\code{has_used_interaction_matching(request)}}{
+check if has used interactions matching a given request
+}
+\item{\code{remaining_unused_interaction_count()}}{
+Number of unused interactions (numeric)
+}
+\item{\code{assert_no_unused_interactions()}}{
+Checks if there are no unused interactions left.
+}
+}
 \strong{Private Methods}
- \describe{
-    \item{\code{has_unused_interactions()}}{
-      Are there areny unused interactions?
-    }
-    \item{\code{matching_interaction_index_for()}}{
-      xxx.
-    }
-    \item{\code{matching_used_interaction_for()}}{
-      xxxx.
-    }
-    \item{\code{interaction_matches_request()}}{
-      Check if a request matches an interaction.
-    }
-    \item{\code{from_hash()}}{
-      Get a hash back.
-    }
-    \item{\code{request_summary()}}{
-      Get a request summary.
-    }
-    \item{\code{response_summary()}}{
-      Get a response summary.
-    }
-  }
+\describe{
+\item{\code{has_unused_interactions()}}{
+Are there areny unused interactions?
+}
+\item{\code{matching_interaction_index_for()}}{
+asdfadf
+}
+\item{\code{matching_used_interaction_for(request)}}{
+asdfadfs
+}
+\item{\code{interaction_matches_request(request, interaction)}}{
+Check if a request matches an interaction (logical)
+}
+\item{\code{from_hash()}}{
+Get a hash back.
+}
+\item{\code{request_summary(z)}}{
+Get a request summary (character)
+}
+\item{\code{response_summary(z)}}{
+Get a response summary (character)
+}
+}
 }
 \examples{
 \dontrun{
@@ -75,18 +75,20 @@ vcr_configure(
 
 # make interactions
 ## make the request
-url <- "http://httpbin.org/post"
-body <- list(foo = "bar")
-res <- httr::POST(url, body = body)
+### turn off mocking
+crul::mock(FALSE)
+url <- "https://httpbin.org/post"
+cli <- crul::HttpClient$new(url = url)
+res <- cli$post(body = list(a = 5))
 
 ## request
 (request <- Request$new("POST", url, body, res$headers))
 ## response
-(response <- Response$new(
-   c(status_code = res$status_code, http_status(res)),
-   res$headers,
-   content(res, "text"),
-   res$all_headers[[1]]$version))
+(response <- VcrResponse$new(
+   res$status_http(),
+   res$response_headers,
+   res$parse("UTF-8"),
+   res$response_headers$status))
 ## make an interaction
 (inter <- HTTPInteraction$new(request = request, response = response))
 
@@ -98,9 +100,14 @@ res <- httr::POST(url, body = body)
 x$request_matchers
 x$log_prefix
 x$parent_list
+x$parent_list$response_for()
+x$parent_list$has_interaction_matching()
+x$parent_list$has_used_interaction_matching()
+x$parent_list$remaining_unused_interaction_count()
 x$used_interactions
 x$allow_playback_repeats
 x$interactions
+x$response_for(request)
 }
 }
 \keyword{datasets}

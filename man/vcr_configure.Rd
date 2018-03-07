@@ -7,15 +7,15 @@
 \alias{vcr_config_defaults}
 \title{Configuration}
 \usage{
-vcr_configure(dir = cassette_path(), record = "once",
-  match_requests_on = c("method", "uri"),
-  allow_unused_http_interactions = TRUE, serialize_with = "yaml",
+vcr_configure(dir = ".", record = "once", match_requests_on = c("method",
+  "uri"), allow_unused_http_interactions = TRUE, serialize_with = "yaml",
   persist_with = "FileSystem", ignore_hosts = NULL,
   ignore_localhost = FALSE, ignore_request = NULL,
-  uri_parser = "httr::parse_url", preserve_exact_body_bytes = FALSE,
-  preserve_exact_body_bytes_for = FALSE, turned_off = FALSE,
-  ignore_cassettes = FALSE, cassettes = list(), linked_context = NULL,
-  vcr_logging = "vcr.log", vcr_logging_opts = list())
+  uri_parser = "crul::url_parse", preserve_exact_body_bytes = FALSE,
+  turned_off = FALSE, ignore_cassettes = FALSE, re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL, cassettes = list(),
+  linked_context = NULL, vcr_logging = "vcr.log",
+  vcr_logging_opts = list())
 
 vcr_configure_reset()
 
@@ -26,42 +26,53 @@ vcr_config_defaults()
 \arguments{
 \item{dir}{Cassette directory}
 
-\item{record}{(character) On of 'all', 'none', 'new_episodes', or 'once'.
-See \link{recording}.}
+\item{record}{(character) One of 'all', 'none', 'new_episodes', or 'once'.
+See \link{recording}}
 
-\item{match_requests_on}{vector of matchers. Default: (\code{method}, \code{uri})}
+\item{match_requests_on}{vector of matchers. Default: (\code{method}, \code{uri})
+See \link{request-matching} for details.}
 
 \item{allow_unused_http_interactions}{(logical) Default: \code{TRUE}}
 
-\item{serialize_with}{(character) Right now only "yaml"}
+\item{serialize_with}{(character) only option is "yaml"}
 
-\item{persist_with}{(character) Right now only "FileSystem"}
+\item{persist_with}{(character) only option is "FileSystem"}
 
-\item{ignore_hosts}{Vector of hosts to ignore}
+\item{ignore_hosts}{(character) Vector of hosts to ignore. e.g., localhost, or
+google.com. These hosts are ignored and real HTTP requests allowed to go
+through}
 
 \item{ignore_localhost}{(logical) Default: \code{FALSE}}
 
-\item{ignore_request}{Lists of requests to ignore}
+\item{ignore_request}{List of requests to ignore}
 
-\item{uri_parser}{the uri parser, default: \code{\link[httr]{parse_url}}}
+\item{uri_parser}{the uri parser, default: \code{\link[crul:url_parse]{crul::url_parse()}}}
 
 \item{preserve_exact_body_bytes}{(logical) preserve exact body bytes for}
 
-\item{preserve_exact_body_bytes_for}{(logical) preserve exact body bytes}
+\item{turned_off}{(logical) VCR is turned on by default. Default:
+\code{FALSE}}
 
-\item{turned_off}{(logical) VCR is turned on by default. Default: \code{FALSE}}
+\item{ignore_cassettes}{(logical) Ignore cassettes. You can set this to
+\code{TRUE} when you don't have a cassette in use but still want to make
+HTTP requests. Otherwise, you can't make requests unless a cassette is in
+use. Default: \code{FALSE}}
 
-\item{ignore_cassettes}{(logical) Ignore cassettes. You can set this to \code{TRUE}
-when you don't have a cassette in use but still want to make HTTP requests. Otherwise,
-you can't make requests unless a cassette is in use. Default: \code{FALSE}}
+\item{re_record_interval}{(numeric) When given, the cassette will be
+re-recorded at the given interval, in seconds.}
+
+\item{clean_outdated_http_interactions}{(logical) Should outdated interactions
+be recorded back to file. Default: \code{FALSE}}
 
 \item{cassettes}{(list) don't use}
 
 \item{linked_context}{(logical) linked context}
 
-\item{vcr_logging}{(character) one of a file path to log to, "console", or "stdout"}
+\item{vcr_logging}{(character) one of a file path to log to, "console",
+or "stdout"}
 
-\item{vcr_logging_opts}{(list) Additional options passed to \code{\link[loggr]{log_file}}}
+\item{vcr_logging_opts}{(list) Additional options passed to
+\code{loggr::log_file()} (ignored for now)}
 }
 \description{
 Configuration

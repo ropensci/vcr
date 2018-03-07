@@ -12,29 +12,30 @@
 #'     \item{\code{to_hash()}}{
 #'       Create a hash.
 #'     }
-#'     \item{\code{from_hash()}}{
+#'     \item{\code{from_hash(hash)}}{
 #'       Get a hash back to an R list.
 #'     }
 #'   }
 #' @format NULL
 #' @usage NULL
 #' @examples \dontrun{
-#' url <- "http://httpbin.org/post"
-#' body <- list(foo = "bar")
-#' (res <- httr::POST(url, body = body))
-#' (x <- Response$new(
-#'    c(status_code = res$status_code, httr::http_status(res)),
-#'    res$headers,
-#'    content(res, "text"),
-#'    res$all_headers[[1]]$version))
+#' url <- "https://google.com"
+#' (cli <- crul::HttpClient$new(url = url))
+#' (res <- cli$get("search", query = list(q = "stuff")))
+#' (x <- VcrResponse$new(
+#'    res$status_http(),
+#'    res$response_headers,
+#'    res$parse("UTF-8"),
+#'    res$response_headers$status))
 #' x$body
 #' x$status
 #' x$headers
 #' x$http_version
 #' x$to_hash()
-#' x$from_hash()
+#' x$from_hash(x$to_hash())
 #' }
-Response <- R6::R6Class('Response',
+VcrResponse <- R6::R6Class(
+  'VcrResponse',
    public = list(
      status = NULL,
      headers = NULL,
@@ -52,7 +53,9 @@ Response <- R6::R6Class('Response',
          }
          self$body <- body
        }
-       if (!missing(http_version)) self$http_version <- http_version
+       if (!missing(http_version)) {
+         self$http_version <- extract_http_version(http_version)
+       }
        if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
      },
 
@@ -64,16 +67,25 @@ Response <- R6::R6Class('Response',
          http_version = self$http_version
        )
        return(self$hash)
-     }
+     },
 
-     # from_hash = function() {
-     #   list(
-     #     self$hash[['status']],
-     #     self$hash[['headers']],
-     #     body_from(self$hash[['body']]),
-     #     self$hash[['http_version']],
-     #     self$hash[['adapater_metadata']]
-     #   )
-     # }
+     from_hash = function(hash) {
+       VcrResponse$new(
+         hash[['status']],
+         hash[['headers']],
+         body_from(hash[['body']]),
+         hash[['http_version']],
+         hash[['adapater_metadata']]
+       )
+     }
    )
 )
+
+extract_http_version <- function(x) {
+  if (!is.character(x)) return(x)
+  if (grepl("HTTP/[0-9]\\.?", x)) {
+    strsplit(stract(x, "HTTP/[12]"), "/")[[1]][2] %||% ""
+  } else {
+    return(x)
+  }
+}

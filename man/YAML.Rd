@@ -16,24 +16,28 @@ The YAML serializer
 }
 \details{
 \strong{Methods}
-  \describe{
-    \item{\code{serialize(x)}}{
-      Serializes the given hash using internal fxn write_yaml
-    }
-    \item{\code{deserialize_string(string = NULL)}}{
-      Deserializes the given string using yaml::yaml.load
-    }
-    \item{\code{deserialize_path()}}{
-      Deserializes the given string using yaml::yaml.load_file
-    }
-  }
+\describe{
+\item{\code{serialize(x)}}{
+Serializes the given hash using internal fxn write_yaml
+}
+\item{\code{deserialize_string(string = NULL)}}{
+Deserializes the given string using yaml::yaml.load
+}
+\item{\code{deserialize_path()}}{
+Deserializes the given string using yaml::yaml.load_file
+}
+}
 }
 \examples{
 \dontrun{
+crul::mock(FALSE)
 (yy <- YAML$new())
-library("httr")
-x <- GET("http://httpbin.org/get")
-yy$serialize(x)
+library("crul")
+cli <- crul::HttpClient$new(url = "https://httpbin.org")
+x <- cli$get("get")
+file <- tempfile()
+fun <- yy$serialize()
+fun(x, file)
 yy$deserialize_path()
 # yy$deserialize_string() # if passed on instantiation
 yy$deserialize_string(string = "- hey\\n- hi\\n- hello")

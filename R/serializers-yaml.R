@@ -20,10 +20,14 @@
 #' @format NULL
 #' @usage NULL
 #' @examples \dontrun{
+#' crul::mock(FALSE)
 #' (yy <- YAML$new())
-#' library("httr")
-#' x <- GET("http://httpbin.org/get")
-#' yy$serialize(x)
+#' library("crul")
+#' cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#' x <- cli$get("get")
+#' file <- tempfile()
+#' fun <- yy$serialize()
+#' fun(x, file)
 #' yy$deserialize_path()
 #' # yy$deserialize_string() # if passed on instantiation
 #' yy$deserialize_string(string = "- hey\n- hi\n- hello")
@@ -69,7 +73,21 @@ YAML <- R6::R6Class("YAML",
       # @param [String] string path to a YAML file
       # @return [Hash] the deserialized object, an R list
       tmp <- yaml::yaml.load_file(self$path)
-      if (is.null(tmp)) list() else tmp
+      if (is.null(tmp)) {
+        return(list())
+      } else {
+        # check for base64 encoding
+        tmp$http_interactions <- lapply(tmp$http_interactions, function(z) {
+          if (is_base64(z$response$body$string)) {
+            z$response$body$string <-
+              rawToChar(base64enc::base64decode(z$response$body$string))
+            z$response$body$encoding <-
+              suppressMessages(encoding_guess(z$response$body$string, TRUE))
+          }
+          return(z)
+        })
+        return(tmp)
+      }
     }
   )
 )

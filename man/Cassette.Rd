@@ -17,9 +17,6 @@
 
 \item{persist_with}{Only choice is FileSystem}
 
-\item{root_dir}{Root directory for storing cassettes. Default:
-\code{~/vcr/vcr_cassettes}}
-
 \item{match_requests_on}{what to match requests on}
 
 \item{re_record_interval}{Interval to re-record}
@@ -47,54 +44,61 @@ Cassette handler
 }
 \details{
 \strong{Methods}
-  \describe{
-    \item{\code{eject()}}{
-      Coming soon.
-    }
-    \item{\code{file()}}{
-      Get path to the man file for the cassette.
-    }
-    \item{\code{recording()}}{
-      Find out whether recording is happening or not.
-    }
-    \item{\code{originally_recorded_at()}}{
-      Time interaction was originally recorded at.
-    }
-    \item{\code{serializable_hash()}}{
-      A hash with stuff.
-    }
-    \item{\code{should_remove_matching_existing_interactions()}}{
-      Set record mode to "all".
-    }
-    \item{\code{storage_key()}}{
-      Generate file name = cassette name plus file extension.
-    }
-    \item{\code{make_dir()}}{
-      Make cassette directory.
-    }
-    \item{\code{raw_string()}}{
-      Get raw string of the cassette (cached interaction).
-    }
-    \item{\code{deserialized_hash()}}{
-      Get a deserialized hash.
-    }
-    \item{\code{make_args()}}{
-      Initialize default args.
-    }
-    \item{\code{write_metadata()}}{
-      Write metadata to disk.
-    }
-    \item{\code{previously_recorded_interactions()}}{
-      Coming soon.
-    }
-  }
+\describe{
+\item{\code{eject()}}{
+Coming soon.
+}
+\item{\code{file()}}{
+Get path to the man file for the cassette.
+}
+\item{\code{recording()}}{
+Find out whether recording is happening or not.
+}
+\item{\code{originally_recorded_at()}}{
+Time interaction was originally recorded at.
+}
+\item{\code{serializable_hash()}}{
+A hash with stuff.
+}
+\item{\code{should_remove_matching_existing_interactions()}}{
+Set record mode to "all".
+}
+\item{\code{storage_key()}}{
+Generate file name = cassette name plus file extension.
+}
+\item{\code{make_dir()}}{
+Make cassette directory.
+}
+\item{\code{raw_string()}}{
+Get raw string of the cassette (cached interaction).
+}
+\item{\code{deserialized_hash()}}{
+Get a deserialized hash.
+}
+\item{\code{make_args()}}{
+Initialize default args.
+}
+\item{\code{write_metadata()}}{
+Write metadata to disk.
+}
+\item{\code{previously_recorded_interactions()}}{
+Coming soon.
+}
+\item{\code{serialize_to_crul}}{
+Serialize interaction on disk/casette to a \code{crul} response
+}
+}
+
+The root directory for storing cassettes. Default:
+\code{~/fixtures/vcr_cassettes}. See \code{\link[=vcr_configure]{vcr_configure()}}
 }
 \examples{
 \dontrun{
-vcr_configure()
+library(vcr)
+library(crul)
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
 
 res <- Cassette$new(name = "bob")
-res <- Cassette$new("foobar", record = "all")
 res$file()
 res$originally_recorded_at()
 res$recording()
@@ -102,6 +106,14 @@ res$serializable_hash()
 res$eject()
 res$should_remove_matching_existing_interactions()
 res$storage_key()
+
+new <- res$call_block({
+  cli <- HttpClient$new(url = "https://httpbin.org")
+  resp <- cli$get("get")
+})
+
+# record all requests
+res <- Cassette$new("foobar", record = "all")
 }
 }
 \keyword{datasets}

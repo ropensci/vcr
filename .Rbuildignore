@@ -1,7 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
-^CONDUCT\.md$
+^CODE_OF_CONDUCT\.md$
 man-roxygen
 NEWS\.md
 ^cran-comments\.md$
@@ -9,3 +9,4 @@ NEWS\.md
 ^.*\.yml
 ^.*\.log
 Makefile
+scott_notes.md

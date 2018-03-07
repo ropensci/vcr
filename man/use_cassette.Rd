@@ -12,26 +12,28 @@ use_cassette(name, ..., record = "once", match_requests_on = NULL,
   preserve_exact_body_bytes = TRUE)
 }
 \arguments{
-\item{name}{The name of the cassette. vcr will sanitize this to ensure it is a valid file name.}
+\item{name}{The name of the cassette. vcr will sanitize this to ensure it
+is a valid file name.}
 
 \item{...}{a block of code to evalulate, wrapped in curly braces}
 
-\item{record}{The record mode. One of "all", "none", "new_episodes", "once". See Details.}
+\item{record}{The record mode. One of "all", "none", "new_episodes", "once".
+See \link{recording}}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
-("method", "uri"). The built-in matchers are "method", "uri", "host", "path", "headers"
-and "body". You can also pass the name of a registered custom request matcher or
-any object that responds to #call.}
+("method", "uri"). The built-in matchers are "method", "uri", "host",
+"path", "headers" and "body". You can also pass the name of a registered
+custom request matcher or any object that responds to #call.}
 
 \item{re_record_interval}{(integer) When given, the
 cassette will be re-recorded at the given interval, in seconds.}
 
-\item{tag}{(character) Used to apply tagged `before_record`
-and `before_playback` hooks to the cassette.}
+\item{tag}{(character) Used to apply tagged \code{before_record}
+and \code{before_playback} hooks to the cassette.}
 
 \item{tags}{Used to apply multiple tags to
-a cassette so that tagged `before_record` and `before_playback` hooks
+a cassette so that tagged \code{before_record} and \code{before_playback} hooks
 will apply to the cassette.}
 
 \item{update_content_length_header}{(logical) Whether or
@@ -50,60 +52,75 @@ Defaults to false.}
 false, an error will be raised if a cassette is ejected before all
 previously recorded HTTP interactions have been used.
 Defaults to true. Note that when an error has already occurred
-(as indicated by the `$!` variable) unused interactions will be
+(as indicated by the \code{$!} variable) unused interactions will be
 allowed so that we don't silence the original error (which is almost
 certainly more interesting/important).}
 
 \item{exclusive}{(logical) Whether or not to use only this
 cassette and to completely ignore any cassettes in the cassettes stack.
-Default: FALSE.}
+Default: \code{FALSE}}
 
 \item{serialize_with}{(character) Which serializer to use.
-Valid values are "yaml" (default), "syck", "psych", "json" or any registered
-custom serializer.}
+Valid values are "yaml" (default), the only one supported for now.}
 
 \item{persist_with}{(character) Which cassette persister to
 use. Defaults: "file_system". You can also register and use a
 custom persister.}
 
 \item{preserve_exact_body_bytes}{(logical) Whether or not
-to base64 encode the bytes of the requests and responses for this cassette
-when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.}
+to base64 encode the bytes of the requests and responses for
+this cassette when serializing it. See also \code{preserve_exact_body_bytes}
+in \code{\link[=vcr_configure]{vcr_configure()}}}
 }
 \description{
 Use a cassette
 }
 \details{
+A run down of the family of top level \pkg{vcr} functions
 \itemize{
- \item \code{use_cassette} Initialize a cassett. Returns the inserted cassette.
- \item \code{insert_cassette} Internally used within \code{use_cassette}.
- \item \code{eject_cassette} ejects the current cassette. The cassette will no longer be used.
- In addition, any newly recorded HTTP interactions will be written to disk.
+\item \code{use_cassette} Initializes a cassett. Returns the inserted
+cassette.
+\item \code{insert_cassette} Internally used within \code{use_cassette}
+\item \code{eject_cassette} ejects the current cassette. The cassette
+will no longer be used. In addition, any newly recorded HTTP interactions
+will be written to disk.
 }
 }
 \examples{
 \dontrun{
-library("httr")
-url <- "http://api.plos.org/search?q=*:*&wt=json"
-url <- "http://localhost:9200"
+library(vcr)
+library(crul)
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
 
-use_cassette(name = "stuff", {
-   httr::GET("http://localhost:9200")
+use_cassette(name = "apple7", {
+  cli <- HttpClient$new(url = "https://httpbin.org")
+  resp <- cli$get("get")
 })
 
 use_cassette(name = "stuff2", {
-   httr::GET("http://localhost:9200/_search?size=500")
+  cli$post("post")
 })
 
-# use logging
-library("loggr")
-loggr::log_file("vcr.log")
-use_cassette(name = "helium", {
-  GET("http://localhost:9200/_search")
+library(rcrossref)
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
+vcr_configuration()
+use_cassette("crossref2", {
+  res <- cr_works(limit = 10)
 })
 
-# sacbox::load_defaults(use_cassette)
-# name = "skyfart"
-# cassette$call_block(httr::GET("http://api.crossref.org/works"))
+
+# preserve exact body bytes - records in base64 encoding
+vcr_configure(
+  dir = "~/fixtures/vcr_cassettes",
+  preserve_exact_body_bytes = TRUE
+)
+# x <- insert_cassette("things4")
+use_cassette("things4", {
+  cli <- crul::HttpClient$new(url = "https://httpbin.org")
+  bbb <- cli$get("get")
+})
 }
+}
+\seealso{
+\code{\link[=insert_cassette]{insert_cassette()}}, \code{\link[=eject_cassette]{eject_cassette()}}
 }

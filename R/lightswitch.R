@@ -4,21 +4,22 @@
 #' @name lightswitch
 #' @param ... Any block of code to run, presumably an http request
 #' @param ignore_cassettes (logical) Controls what happens when a cassette is
-#'  inserted while vcr is turned off. If \code{TRUE} is passed, the cassette insertion
-#'  will be ignored; otherwise an error will be raised.
+#' inserted while vcr is turned off. If `TRUE` is passed, the cassette
+#' insertion will be ignored; otherwise an error will be raised.
 #' @details
-#' \itemize{
-#'  \item turned_off - Turns vcr off for the duration of a block.
-#'  \item turn_off - Turns vcr off, so that it no longer handles every HTTP request.
-#'  \item turn_on - turns vcr on
-#'  \item turned_on - Asks if vcr is turned on, gives a boolean
-#' }
+#'
+#' - turned_off - Turns vcr off for the duration of a block.
+#' - turn_off - Turns vcr off, so that it no longer handles every
+#'  HTTP request
+#' - turn_on - turns vcr on
+#' - turned_on - Asks if vcr is turned on, gives a boolean
+#'
 #' @examples \dontrun{
 #' turn_on()
 #' turned_on()
 #' turn_off()
 #' turned_off(
-#'  httr::GET("http://httpbin.org/get")
+#'  crul::HttpClient$new(url = "https://httpbin.org/get")$get()
 #' )
 #' }
 turned_off <- function(..., ignore_cassettes = FALSE){

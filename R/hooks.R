@@ -7,24 +7,24 @@
 #' @param plac Placement, one of "start" or "end"
 #' @param fun A function
 #' @param prepend Whether to prepend or add to the end of the string.
-#' Default: \code{FALSE}
+#' Default: `FALSE`
 #' @details Helps define new hooks, hold hooks, and accessors to get and
 #' use hooks.
 #' \strong{Methods}
 #'   \describe{
-#'     \item{\code{invoke_hook(hook_type, args)}}{
+#'     \item{`invoke_hook(hook_type, args)`}{
 #'       Invoke a hook, i.e., call a hook.
 #'     }
-#'     \item{\code{clear_hooks()}}{
+#'     \item{`clear_hooks()`}{
 #'       Remove all hooks.
 #'     }
-#'     \item{\code{define_hook(hook_type, fun, prepend = FALSE)}}{
+#'     \item{`define_hook(hook_type, fun, prepend = FALSE)`}{
 #'       Define a hook.
 #'     }
 #'   }
 #' \strong{Private Methods}
 #'   \describe{
-#'     \item{\code{make_hook(x, plac, fun)}}{
+#'     \item{`make_hook(x, plac, fun)`}{
 #'       Make a hook.
 #'     }
 #'  }

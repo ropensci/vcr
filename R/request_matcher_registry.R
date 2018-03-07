@@ -3,7 +3,7 @@
 #' @export
 #' @param name matcher name
 #' @param func function that describes a matcher, should return a boolean
-#' @param r1,r2 two requests, each of class \code{HTTPInteraction}
+#' @param r1,r2 two requests, each of class `HTTPInteraction`
 #' @details
 #' \strong{Methods}
 #'   \describe{

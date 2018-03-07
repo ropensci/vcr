@@ -1,8 +1,8 @@
 Package: vcr
 Title: Record 'HTTP' Calls to Disk
 Description: Record test suite 'HTTP' requests and replay them during
-    future test runs.
-Version: 0.0.5.9143
+    future runs.
+Version: 0.0.7.9314
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus+r@gmail.com"))
 URL: https://github.com/ropensci/vcr
@@ -10,18 +10,21 @@ BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 LazyData: true
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
 Imports:
-    httr (>= 1.1.0),
+    crul (>= 0.3.6),
     curl (>= 0.9.7),
+    webmockr (>= 0.2.1.9222),
+    urltools,
     yaml,
     digest,
     R6,
     lazyeval,
     base64enc,
-    loggr (>= 0.3)
+    magrittr
 Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
     knitr
-Remotes: smbache/loggr
+Remotes: ropensci/webmockr
 RoxygenNote: 6.0.1

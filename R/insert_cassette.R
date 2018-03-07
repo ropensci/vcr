@@ -1,10 +1,10 @@
-#' Insert a cassette to record an HTTP call
+#' Insert a cassette to record HTTP requests
 #'
 #' @export
 #' @param name The name of the cassette. vcr will sanitize this to ensure it
 #' is a valid file name.
 #' @param record The record mode. One of "all", "none", "new_episodes", "once".
-#' See Details.
+#' See [recording]
 #' @param match_requests_on List of request matchers
 #'  to use to determine what recorded HTTP interaction to replay. Defaults to
 #'  ("method", "uri"). The built-in matchers are "method", "uri", "host",
@@ -45,20 +45,24 @@
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #'  to base64 encode the bytes of the requests and responses for this cassette
 #'  when serializing it. See also `VCR::Configuration#preserve_exact_body_bytes`.
-#' @param ignore_cassettes (logical) xx. Default: \code{TRUE}
+#' @param ignore_cassettes (logical) xx. Default: `TRUE`
+#'
+#' @seealso [use_cassette()], [eject_cassette()]
 #'
 #' @examples \dontrun{
-#' res <- Cassette$new("foobar")
+#' library(vcr)
+#' library(crul)
+#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
 #'
-#' x <- cassettes()
-#' (cas <- as.cassette(x[[1]]))
-#' as.cassette(cas)
-#' as.cassette(cassettes()[[1]])
-#' as.cassette("foobar")
-#'
-#' insert_cassette(name = "fartloud")
-#'
-#' use_cassette("foobar", GET("http://google.com"))
+#' (x <- insert_cassette(name = "leo5"))
+#' cassette_current()
+#' x$new_recorded_interactions
+#' cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#' cli$get("get")
+#' x$new_recorded_interactions
+#' # very important when using inject_cassette: use eject cassette when finished
+#' x$eject()
+#' eject_cassette("leo5") # same as eject_cassette()
 #' }
 insert_cassette <- function(name, record="once", match_requests_on=NULL,
   re_record_interval=NULL, tag=NULL, tags=NULL,
@@ -66,6 +70,9 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,
   exclusive=FALSE, serialize_with="yaml", persist_with="FileSystem",
   preserve_exact_body_bytes=TRUE, ignore_cassettes = TRUE) {
+
+  # enable webmockr
+  webmockr::enable()
 
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
@@ -83,10 +90,8 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
       exclusive = exclusive,
       serialize_with = serialize_with, persist_with = persist_with,
       preserve_exact_body_bytes = preserve_exact_body_bytes)
-    include_cassette(tmp)
-    # write cassette to disk - maybe?
-    # cassettes.push(cassette)
-    # return cassette
+    webmockr::webmockr_allow_net_connect()
+    #webmockr::webmockr_disable_net_connect()
     return(tmp)
   } else {
     if (ignore_cassettes) {

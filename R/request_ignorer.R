@@ -14,7 +14,7 @@
 #'   \describe{
 #'     \item{\code{ignore_request(fun)}}{
 #'       Will ignore any request for which the given function
-#'       returns \code{TRUE}
+#'       returns `TRUE`
 #'     }
 #'     \item{\code{ignore_localhost()}}{
 #'       ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
@@ -25,8 +25,8 @@
 #'     \item{\code{ignore_hosts(hosts)}}{
 #'       ignore any named host
 #'     }
-#'     \item{\code{ignore(request)}}{
-#'
+#'     \item{\code{should_be_ignored(request)}}{
+#'       method to determine whether to ignore a request
 #'     }
 #'   }
 #' \strong{Private Methods}
@@ -57,16 +57,20 @@ RequestIgnorer <- R6::R6Class(
 
     initialize = function() {
       private$ignored_hosts_init()
+      self$ignore_request()
     },
 
-    ignore_request = function(fun) {
+    ignore_request = function() {
+      fun <- function(x) {
+        if (is.null(self$ignored_hosts$bucket)) return(FALSE)
+        host <- parseurl(x$uri)$domain %||% NULL
+        if (is.null(host)) return(FALSE)
+        self$ignored_hosts$includes(host)
+      }
       VCRHooks$define_hook(hook_type = "ignore_request", fun = fun)
-      # host <- request$parsed_uri$host
-      # host %in% self$ignored_hosts
     },
 
     ignore_localhost = function() {
-      #self$ignored_hosts$reject(function(x) x %in% self$LOCALHOST_ALIASES)
       self$ignored_hosts$merge(self$LOCALHOST_ALIASES)
     },
 
@@ -78,7 +82,7 @@ RequestIgnorer <- R6::R6Class(
       self$ignored_hosts$merge(hosts)
     },
 
-    ignore = function(request) {
+    should_be_ignored = function(request) {
       VCRHooks$invoke_hook(hook_type = "ignore_request", args = request)
     }
   ),

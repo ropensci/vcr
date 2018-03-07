@@ -1,7 +1,8 @@
 #' The request of an HTTPInteraction
 #'
 #' @keywords internal
-#' @param method the HTTP method (i.e. :head, :options, :get, :post, :put, :patch or :delete)
+#' @param method the HTTP method (i.e. :head, :options, :get, :post, :put,
+#' :patch or :delete)
 #' @param uri the request URI
 #' @param body the request body
 #' @param headers the request headers
@@ -9,32 +10,31 @@
 #' \strong{Methods}
 #'   \describe{
 #'     \item{\code{to_hash()}}{
-#'       Create a hash.
+#'       Get a hash from the class itself
 #'     }
 #'     \item{\code{from_hash()}}{
-#'       Get a hash back to an R list.
+#'       Create a `Request` class object from a hash
 #'     }
 #'   }
 #' @examples \dontrun{
-#' url <- "http://httpbin.org/post"
+#' library("crul")
+#' url <- "https://httpbin.org/post"
 #' body <- list(foo = "bar")
-#' res <- httr::POST(url, body = body)
-#' (x <- Request$new("POST", url, body, res$headers))
+#' cli <- crul::HttpClient$new(url = url)
+#' res <- cli$post(body = body)
+#'
+#' (x <- Request$new("POST", url, body, res$request_headers))
 #' x$body
 #' x$method
 #' x$uri
 #' x$host
 #' x$path
 #' x$headers
-#' x$to_hash()
-#'
-#' vcr_configure(
-#'  dir = "fixtures/vcr_cassettes",
-#'  record = "once",
-#'  preserve_exact_body_bytes_for = TRUE
-#' )
+#' h <- x$to_hash()
+#' x$from_hash(h)
 #' }
-Request <- R6::R6Class('Request',
+Request <- R6::R6Class(
+  'Request',
    public = list(
      method = NULL,
      uri = NULL,
@@ -68,54 +68,49 @@ Request <- R6::R6Class('Request',
      },
 
      to_hash = function() {
-       list(
+       self$hash <- list(
          method  = self$method,
          uri     = self$uri,
          body    = serializable_body(self$body),
          headers = self$headers
        )
-     }
+       return(self$hash)
+     },
 
-#      from_hash = function(hash) {
-#        self <- Request$new(
-#          method  = hash[['method']],
-#          uri     = hash[['uri']],
-#          body    = body_from(hash[['body']]),
-#          headers = hash[['headers']]
-#        )
-#      },
-#
-#      from_hash_old = function() {
-#        method <- self$hash[['method']]
-#        list(
-#          self$hash[['uri']],
-#          body_from(self$hash[['body']]),
-#          self$hash[['headers']],
-#          self$skip_port_stripping
-#        )
-#     }
+     from_hash = function(hash) {
+       Request$new(
+         method  = hash[['method']],
+         uri     = hash[['uri']],
+         body    = body_from(hash[['body']]),
+         headers = hash[['headers']]
+       )
+     }
    ),
    private = list(
      without_standard_port = function(uri) {
        if (is.null(uri)) return(uri)
        u <- private$parsed_uri(uri)
-       if (paste0(u$scheme, u$port) %in% c('http', 'https/443')) {
+       if (paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in% c('http', 'https/443')) {
          return(uri)
        }
-       u$port = NULL
-       # FIXME, don't love that I have to call build_url here
-       return(httr::build_url(u))
+       u$port <- NA
+       return(urltools::url_compose(u))
      },
 
      parsed_uri = function(uri) {
-       eval(parse(text = vcr_configuration()$uri_parser))(uri)
+       #eval(parse(text = vcr_configuration()$uri_parser))(uri)
+       urltools::url_parse(uri)
      }
+
+     # make_uri = function(x) {
+     #   paste0("%s://%s", x$scheme, file.path(x$domain, x$path), )
+     # }
    )
 )
 
 serializable_body <- function(x) {
   if (is.null(x)) return(x)
-  if (vcr_configuration()$preserve_exact_body_bytes_for) {
+  if (vcr_configuration()$preserve_exact_body_bytes) {
     structure(base64enc::base64encode(charToRaw(x)), base64 = TRUE)
   } else {
     x

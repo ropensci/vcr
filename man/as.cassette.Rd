@@ -12,8 +12,17 @@ as.cassettepath(x)
 \arguments{
 \item{x}{Input}
 }
+\value{
+a casette of class \code{Cassette}
+}
 \description{
 Coerce names, etc. to cassettes
 
 Coerce to a cassette path
+}
+\examples{
+vcr_configure(dir = "~/fixtures/vcr_cassettes")
+insert_cassette("foobar")
+as.cassette("foobar")
+eject_cassette()
 }
