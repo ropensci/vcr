@@ -26,4 +26,5 @@ Suggests:
     roxygen2 (>= 6.0.1),
     testthat,
     knitr
+Remotes: ropensci/webmockr
 RoxygenNote: 6.0.1
