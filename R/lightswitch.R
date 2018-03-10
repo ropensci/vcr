@@ -8,11 +8,11 @@
 #' insertion will be ignored; otherwise an error will be raised.
 #' @details
 #'
-#' - turned_off - Turns vcr off for the duration of a block.
-#' - turn_off - Turns vcr off, so that it no longer handles every
+#' - `turned_off()` - Turns vcr off for the duration of a block.
+#' - `turn_off()` - Turns vcr off, so that it no longer handles every
 #'  HTTP request
-#' - turn_on - turns vcr on
-#' - turned_on - Asks if vcr is turned on, gives a boolean
+#' - `turn_on()` - turns vcr on
+#' - `turned_on()` - Asks if vcr is turned on, gives a boolean
 #'
 #' @examples \dontrun{
 #' turn_on()

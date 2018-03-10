@@ -17,54 +17,55 @@ is a valid file name.}
 
 \item{...}{a block of code to evalulate, wrapped in curly braces}
 
-\item{record}{The record mode. One of "all", "none", "new_episodes", "once".
-See \link{recording}}
+\item{record}{The record mode. Default: "once". In the future we'll support
+"once", "all", "none", "new_episodes". See \link{recording} for more information}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
-("method", "uri"). The built-in matchers are "method", "uri", "host",
-"path", "headers" and "body". You can also pass the name of a registered
-custom request matcher or any object that responds to #call.}
+\code{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
+"path", "headers" and "body"}
 
 \item{re_record_interval}{(integer) When given, the
-cassette will be re-recorded at the given interval, in seconds.}
+cassette will be re-recorded at the given interval, in seconds.
+IGNORED FOR NOW.}
 
 \item{tag}{(character) Used to apply tagged \code{before_record}
-and \code{before_playback} hooks to the cassette.}
+and \code{before_playback} hooks to the cassette. IGNORED FOR NOW.}
 
 \item{tags}{Used to apply multiple tags to
 a cassette so that tagged \code{before_record} and \code{before_playback} hooks
-will apply to the cassette.}
+will apply to the cassette. IGNORED FOR NOW.}
 
 \item{update_content_length_header}{(logical) Whether or
-not to overwrite the Content-Length header of the responses to
-match the length of the response body. Defaults to false.}
+not to overwrite the \code{Content-Length} header of the responses to
+match the length of the response body. Default: \code{FALSE}}
 
 \item{decode_compressed_response}{(logical) Whether or
 not to decode compressed responses before recording the cassette.
-This makes the cassette more human readable. Defaults to false.}
+This makes the cassette more human readable. Default: \code{FALSE}.
+IGNORED FOR NOW.}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
-Defaults to false.}
+Default: \code{FALSE}.}
 
 \item{allow_unused_http_interactions}{(logical) If set to
 false, an error will be raised if a cassette is ejected before all
 previously recorded HTTP interactions have been used.
-Defaults to true. Note that when an error has already occurred
+Default: \code{TRUE}. Note that when an error has already occurred
 (as indicated by the \code{$!} variable) unused interactions will be
 allowed so that we don't silence the original error (which is almost
-certainly more interesting/important).}
+certainly more interesting/important). IGNORED FOR NOW.}
 
 \item{exclusive}{(logical) Whether or not to use only this
 cassette and to completely ignore any cassettes in the cassettes stack.
-Default: \code{FALSE}}
+Default: \code{FALSE}. IGNORED FOR NOW.}
 
 \item{serialize_with}{(character) Which serializer to use.
 Valid values are "yaml" (default), the only one supported for now.}
 
 \item{persist_with}{(character) Which cassette persister to
-use. Defaults: "file_system". You can also register and use a
+use. Default: "file_system". You can also register and use a
 custom persister.}
 
 \item{preserve_exact_body_bytes}{(logical) Whether or not

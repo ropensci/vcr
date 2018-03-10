@@ -16,14 +16,14 @@
 #' vcr_configure(dir = "~/fixtures/vcr_cassettes")
 #' insert_cassette("hello")
 #' (x <- cassette_current())
-#' x$call_block({
-#'   res <- crul::HttpClient$new(url = "https://httpbin.org")
-#'   bb <- res$get("get")
-#' })
+#' res <- crul::HttpClient$new(url = "https://httpbin.org")
+#' bb <- res$get("get")
 #' # by default does current cassette
-#' eject_cassette()
+#' x <- eject_cassette()
+#' x
+#' x$deserialized_hash()
 #' # can also select by cassette name
-#' eject_cassette(cassette = "hello")
+#' # eject_cassette(cassette = "hello")
 #' }
 eject_cassette <- function(cassette = NULL, options = list(),
                            skip_no_unused_interactions_assertion = NULL) {

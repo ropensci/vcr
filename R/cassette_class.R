@@ -335,14 +335,16 @@ Cassette <- R6::R6Class(
     previously_recorded_interactions = function() {
       if (nchar(self$raw_cassette_bytes()) > 0) {
         compact(lapply(self$deserialized_hash()[['http_interactions']], function(z) {
+          response <- VcrResponse$new(z$response$status$code,
+            z$response$headers,
+            z$response$body$string)
+          if (self$update_content_length_header) response$update_content_length_header()
           zz <- HTTPInteraction$new(
             request = Request$new(z$request$method,
                                   z$request$uri,
                                   z$request$body$string,
                                   z$request$headers),
-            response = VcrResponse$new(z$response$status$code,
-                                       z$response$headers,
-                                       z$response$body$string)
+            response = response
           )
           hash <- zz$to_hash()
           # FIXME - not quite ready yet, request_ignorer not quite working
@@ -432,6 +434,7 @@ Cassette <- R6::R6Class(
         headers = x$response_headers,
         body = x$parse("UTF-8"),
         http_version = x$response_headers$status)
+      if (self$update_content_length_header) response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)
     },
 

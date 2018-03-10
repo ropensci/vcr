@@ -13,13 +13,14 @@
 
 \item{http_version}{the HTTP version}
 
-\item{adapter_metadata}{Additional metadata used by a specific VCR adapter.}
+\item{adapter_metadata}{Additional metadata used by a specific VCR adapter}
 }
 \description{
 The response of an HTTPInteraction
 }
 \details{
 \strong{Methods}
+
 \describe{
 \item{\code{to_hash()}}{
 Create a hash.
@@ -27,24 +28,78 @@ Create a hash.
 \item{\code{from_hash(hash)}}{
 Get a hash back to an R list.
 }
+\item{\code{update_content_length_header()}}{
+Updates the Content-Length response header so that it is accurate
+for the response body
+}
+\item{\code{get_header(key)}}{
+get a header by key (i.e., name)
+- key: header name to get
+}
+\item{\code{edit_header(key, value = NULL)}}{
+edit header
+- key: header name to edit
+- value: new value to assign
+}
+\item{\code{delete_header(key)}}{
+delete a header
+- key: header name to delete
+}
+\item{\code{content_encoding()}}{
+get content encoding
+}
+\item{\code{is_compressed()}}{
+Checks if the type of encoding is one of "gzip" or "deflate"
+}
 }
 }
 \examples{
 \dontrun{
 url <- "https://google.com"
 (cli <- crul::HttpClient$new(url = url))
-(res <- cli$get("search", query = list(q = "stuff")))
-(x <- VcrResponse$new(
-   res$status_http(),
-   res$response_headers,
-   res$parse("UTF-8"),
-   res$response_headers$status))
+(res <- cli$get("get", query = list(q = "stuff")))
+(x <- VcrResponse$new(res$status_http(), res$response_headers,
+   res$parse("UTF-8"), res$response_headers$status))
 x$body
 x$status
 x$headers
 x$http_version
 x$to_hash()
 x$from_hash(x$to_hash())
+
+
+# update content length header
+## example 1
+### content-length header present, but no change
+url <- "https://fishbase.ropensci.org"
+cli <- crul::HttpClient$new(url = url, headers = list(`Accept-Encoding` = '*'))
+res <- cli$get("species/34")
+x <- VcrResponse$new(res$status_http(), res$response_headers,
+   res$parse("UTF-8"), res$response_headers$status)
+x$headers$`content-length`
+x$update_content_length_header()
+x$headers$`content-length`
+
+## example 2
+### no content-length header
+url <- "https://google.com"
+cli <- crul::HttpClient$new(url = url)
+res <- cli$get()
+x <- VcrResponse$new(res$status_http(), res$response_headers,
+   res$parse("UTF-8"), res$response_headers$status)
+x$headers$`content-length`
+x$update_content_length_header() # no change, b/c header doesn't exist
+
+
+# check if body is compressed
+url <- "https://fishbase.ropensci.org"
+(cli <- crul::HttpClient$new(url = url))
+(res <- cli$get("species/3"))
+res$response_headers
+(x <- VcrResponse$new(res$status_http(), res$response_headers,
+   res$parse("UTF-8"), res$response_headers$status))
+x$content_encoding()
+x$is_compressed()
 }
 }
 \keyword{internal}
