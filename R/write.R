@@ -19,8 +19,9 @@ write_header <- function(file) {
   # }
 }
 
+# changed fxn to write body separately to avoid yaml crashes
 write_interactions <- function(x, file) {
-  cat(yaml::as.yaml(
+  tmp <- yaml::as.yaml(
     list(
       list(
         request = list(
@@ -36,22 +37,58 @@ write_interactions <- function(x, file) {
           status = x$response$status,
           headers = x$response$headers,
           body = list(
-            # encoding = "",
             encoding = encoding_guess(x$response$body),
-            # FIXME - be able to toggle whether to base64encode or not
-            string = if (vcr_c$preserve_exact_body_bytes) {
-              base64enc::base64encode(charToRaw(get_body(x$response$body)))
-            } else {
-              get_body(x$response$body)
-            }
+            string = 'replaceme'
           )
         ),
         recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
         recorded_with = paste0("vcr/", utils::packageVersion("vcr"))
       )
     )
-  ), file = file, append = TRUE)
+  )
+  # FIXME - be able to toggle whether to base64encode or not
+  body <- if (vcr_c$preserve_exact_body_bytes) {
+    base64enc::base64encode(charToRaw(get_body(x$response$body)))
+  } else {
+    get_body(x$response$body)
+  }
+  tmp <- sub("replaceme", body, tmp)
+  cat(tmp, file = file, append = TRUE)
 }
+
+# write_interactions <- function(x, file) {
+#   cat(yaml::as.yaml(
+#     list(
+#       list(
+#         request = list(
+#           method = x$request$method,
+#           uri = x$request$uri,
+#           body = list(
+#             encoding = "",
+#             string = get_body(x$request$body)
+#           ),
+#           headers = x$request$headers
+#         ),
+#         response = list(
+#           status = x$response$status,
+#           headers = x$response$headers,
+#           body = list(
+#             # encoding = "",
+#             encoding = encoding_guess(x$response$body),
+#             # FIXME - be able to toggle whether to base64encode or not
+#             string = if (vcr_c$preserve_exact_body_bytes) {
+#               base64enc::base64encode(charToRaw(get_body(x$response$body)))
+#             } else {
+#               get_body(x$response$body)
+#             }
+#           )
+#         ),
+#         recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
+#         recorded_with = paste0("vcr/", utils::packageVersion("vcr"))
+#       )
+#     )
+#   ), file = file, append = TRUE)
+# }
 
 forwrite <- function(name, x, file){
   cf(name, file)
