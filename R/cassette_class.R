@@ -432,7 +432,7 @@ Cassette <- R6::R6Class(
       response <- VcrResponse$new(
         x$status_http(),
         headers = x$response_headers,
-        body = x$parse("UTF-8"),
+        body = rawToChar(x$content),
         http_version = x$response_headers$status)
       if (self$update_content_length_header) response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)
