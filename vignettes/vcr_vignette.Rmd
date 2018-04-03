@@ -1,10 +1,26 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{vcr introduction}
-%\VignetteEncoding{UTF-8}
--->
+---
+title: "vcr introduction"
+author: "Scott Chamberlain"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: readable
+vignette: >
+  %\VignetteIndexEntry{1. vcr introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+	comment = "#>",
+	collapse = TRUE,
+	warning = FALSE,
+	message = FALSE
+)
+```
 
 vr introduction
 ===============
@@ -15,17 +31,21 @@ Right now `vcr` is not yet using previously cached requests, but will soon.
 
 ## installation
 
+CRAN version
+
+```{r eval=FALSE}
+devtools::install_github("vcr")
+```
+
 Development version from GitHub
 
-
-```r
-devtools::install_github("ropenscilabs/vcr")
+```{r eval=FALSE}
+devtools::install_github("ropensci/vcr")
 ```
 
 Load `vcr`
 
-
-```r
+```{r}
 library("vcr")
 ```
 
@@ -33,8 +53,7 @@ library("vcr")
 
 list cassettes
 
-
-```r
+```{r eval=FALSE}
 cassettes()
 #> $foobar
 #> <cassette> foobar
@@ -63,8 +82,7 @@ cassettes()
 
 list the current cassette
 
-
-```r
+```{r eval=FALSE}
 cassette_current()
 #> $helloworld
 #> <cassette> helloworld
@@ -81,8 +99,7 @@ cassette_current()
 
 coerce various things to cassette objects
 
-
-```r
+```{r eval=FALSE}
 as.cassette("helloworld")
 #> $helloworld
 #> <cassette> helloworld
@@ -97,8 +114,7 @@ as.cassette("helloworld")
 #>   preserve_exact_body_bytes: TRUE
 ```
 
-
-```r
+```{r eval=FALSE}
 as.cassette(cassettes()[1])
 #> $foobar
 #> <cassette> foobar
@@ -113,8 +129,7 @@ as.cassette(cassettes()[1])
 #>   preserve_exact_body_bytes: TRUE
 ```
 
-
-```r
+```{r eval=FALSE}
 as.cassette(as.cassettepath("~/vcr/vcr_cassettes/foobar.yml"))
 #> $foobar
 #> <cassette> foobar
@@ -131,35 +146,29 @@ as.cassette(as.cassettepath("~/vcr/vcr_cassettes/foobar.yml"))
 
 list the path to where cassettes are stored
 
-
-```r
+```{r}
 cassette_path()
-#> [1] "~/vcr/vcr_cassettes"
 ```
 
 insert a cassette
 
-
+```{r echo=FALSE}
+insert_cassette(name = "helloworld")
 ```
-#> Error: There is already a cassette with the same name: helloworld
-```
 
-
-```r
+```{r eval=FALSE}
 insert_cassette(name = "helloworld")
 ```
 
 use a cassette (if cassette not found, we'll create the cassette)
 
-
-```r
+```{r eval=FALSE}
 use_cassette("helloworld", GET("http://google.com"))
 ```
 
 You can also pass a code block, instead of an inline call
 
-
-```r
+```{r eval=FALSE}
 insert_cassette("foobar")
 call_block("foobar", {
   url <- "http://httpbin.org/get"
