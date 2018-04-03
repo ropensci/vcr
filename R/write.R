@@ -36,6 +36,14 @@ dedup_keys <- function(x) {
 
 # changed fxn to write body separately to avoid yaml crashes
 write_interactions <- function(x, file) {
+  # FIXME - be able to toggle whether to base64encode or not
+  body <- if (vcr_c$preserve_exact_body_bytes) {
+    base64enc::base64encode(charToRaw(get_body(x$response$body)))
+  } else {
+    get_body(x$response$body)
+  }
+  body_nchar <- nchar(body)
+
   tmp <- yaml::as.yaml(
     list(
       list(
@@ -53,7 +61,11 @@ write_interactions <- function(x, file) {
           headers = dedup_keys(x$response$headers),
           body = list(
             encoding = encoding_guess(x$response$body),
-            string = 'replaceme'
+            string = if (body_nchar < 1000000L) {
+              body
+            } else {
+              "%s"
+            }
           )
         ),
         recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
@@ -61,13 +73,9 @@ write_interactions <- function(x, file) {
       )
     )
   )
-  # FIXME - be able to toggle whether to base64encode or not
-  body <- if (vcr_c$preserve_exact_body_bytes) {
-    base64enc::base64encode(charToRaw(get_body(x$response$body)))
-  } else {
-    get_body(x$response$body)
-  }
-  tmp <- sub("replaceme", body, tmp)
+  
+  # tmp <- sub("replaceme", body, tmp)
+  if (body_nchar >= 1000000L) tmp <- sprintf(tmp, body)
   cat(tmp, file = file, append = TRUE)
 }
 
