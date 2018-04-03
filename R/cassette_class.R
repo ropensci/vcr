@@ -150,8 +150,10 @@ Cassette <- R6::R6Class(
       if (!missing(allow_unused_http_interactions))
         self$allow_unused_http_interactions = allow_unused_http_interactions
       if (!missing(exclusive)) self$exclusive = exclusive
-      if (!missing(preserve_exact_body_bytes))
-        self$preserve_exact_body_bytes = preserve_exact_body_bytes
+      if (!missing(preserve_exact_body_bytes)) {
+        self$preserve_exact_body_bytes <- preserve_exact_body_bytes
+        vcr_c$preserve_exact_body_bytes <- preserve_exact_body_bytes
+      }
       self$make_args()
       if (!file.exists(self$manfile)) self$write_metadata()
       self$recorded_at <- file.info(self$file())$mtime

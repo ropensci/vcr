@@ -10,13 +10,28 @@ write_yaml <- function(x, file){
 
 write_header <- function(file) {
   cat("http_interactions:", sep = "\n", file = file)
-  # if (!file.exists(file)) {
-  #   cat("http_interactions:", sep = "\n", file = file)
-  # } else {
-  #   if (length(readLines(file, n = 1)) == 0) {
-  #     cat("http_interactions:", sep = "\n", file = file)
-  #   }
-  # }
+}
+
+# dedup header keys so we have unique yaml keys
+# (x <- list(b = "foo", c = list(a = 5, a = 6)))
+# (x <- list(b = "foo", a = 5))
+# (x <- list(b = "foo", a = 5, a = 6))
+# dedup_keys(x)
+dedup_keys <- function(x) {
+  if (length(x) == 0 || is.null(x)) return(x)
+  nms <- names(x)
+  # if repeats, collapse dups under single name
+  if (length(unique(nms)) != length(nms)) {
+    x <- split(x, nms)
+    for (i in seq_along(x)) {
+      if (length(x[[i]]) > 1) {
+        x[[i]] <- unlist(unname(x[[i]])) 
+      } else {
+        x[[i]] <- unlist(unname(x[[i]])) 
+      }
+    }
+  }
+  return(x)
 }
 
 # changed fxn to write body separately to avoid yaml crashes
@@ -31,11 +46,11 @@ write_interactions <- function(x, file) {
             encoding = "",
             string = get_body(x$request$body)
           ),
-          headers = x$request$headers
+          headers = dedup_keys(x$request$headers)
         ),
         response = list(
           status = x$response$status,
-          headers = x$response$headers,
+          headers = dedup_keys(x$response$headers),
           body = list(
             encoding = encoding_guess(x$response$body),
             string = 'replaceme'
