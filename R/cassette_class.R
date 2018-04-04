@@ -194,7 +194,7 @@ Cassette <- R6::R6Class(
           req <- z$request
           res <- z$response
           urip <- crul::url_parse(req$uri)
-          m <- vcr_c$match_requests_on
+          m <- self$match_requests_on
           if (all(m == c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
           } else if (all(m == c("method", "uri", "query")) && length(m) == 3) {
