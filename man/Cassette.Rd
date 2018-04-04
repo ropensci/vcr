@@ -5,39 +5,64 @@
 \alias{Cassette}
 \title{Cassette handler}
 \arguments{
-\item{name}{(character) A cassette name}
+\item{name}{The name of the cassette. vcr will sanitize this to ensure it
+is a valid file name.}
 
-\item{record}{(character) Record mode. See \link{recording}}
+\item{record}{The record mode. Default: "once". In the future we'll support
+"once", "all", "none", "new_episodes". See \link{recording} for more information}
 
-\item{manfile}{(character) path to man file for the cassette}
+\item{serialize_with}{(character) Which serializer to use.
+Valid values are "yaml" (default), the only one supported for now.}
 
-\item{recorded_at}{(character) time recorded at}
+\item{persist_with}{(character) Which cassette persister to
+use. Default: "file_system". You can also register and use a
+custom persister.}
 
-\item{serialize_with}{(character) Only choice is "yaml"}
+\item{match_requests_on}{List of request matchers
+to use to determine what recorded HTTP interaction to replay. Defaults to
+\code{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
+"path", "headers" and "body"}
 
-\item{persist_with}{Only choice is FileSystem}
+\item{re_record_interval}{(integer) When given, the
+cassette will be re-recorded at the given interval, in seconds.
+IGNORED FOR NOW.}
 
-\item{match_requests_on}{what to match requests on}
+\item{tag}{(character) Used to apply tagged \code{before_record}
+and \code{before_playback} hooks to the cassette. IGNORED FOR NOW.}
 
-\item{re_record_interval}{Interval to re-record}
+\item{tags}{Used to apply multiple tags to
+a cassette so that tagged \code{before_record} and \code{before_playback} hooks
+will apply to the cassette. IGNORED FOR NOW.}
 
-\item{tag}{Tag}
+\item{update_content_length_header}{(logical) Whether or
+not to overwrite the \code{Content-Length} header of the responses to
+match the length of the response body. Default: \code{FALSE}}
 
-\item{tags}{Tags}
+\item{decode_compressed_response}{(logical) Whether or
+not to decode compressed responses before recording the cassette.
+This makes the cassette more human readable. Default: \code{FALSE}.
+IGNORED FOR NOW.}
 
-\item{update_content_length_header}{xx Default: \code{FALSE}}
+\item{allow_playback_repeats}{(logical) Whether or not to
+allow a single HTTP interaction to be played back multiple times.
+Default: \code{FALSE}.}
 
-\item{decode_compressed_response}{xx Default: \code{FALSE}}
+\item{allow_unused_http_interactions}{(logical) If set to
+false, an error will be raised if a cassette is ejected before all
+previously recorded HTTP interactions have been used.
+Default: \code{TRUE}. Note that when an error has already occurred
+(as indicated by the \code{$!} variable) unused interactions will be
+allowed so that we don't silence the original error (which is almost
+certainly more interesting/important). IGNORED FOR NOW.}
 
-\item{allow_playback_repeats}{xx Default: \code{FALSE}}
+\item{exclusive}{(logical) Whether or not to use only this
+cassette and to completely ignore any cassettes in the cassettes stack.
+Default: \code{FALSE}. IGNORED FOR NOW.}
 
-\item{allow_unused_http_interactions}{xx Default: \code{TRUE}}
-
-\item{exclusive}{xx Default: \code{FALSE}}
-
-\item{preserve_exact_body_bytes}{xx Default: \code{TRUE}}
-
-\item{args}{A list of args}
+\item{preserve_exact_body_bytes}{(logical) Whether or not
+to base64 encode the bytes of the requests and responses for
+this cassette when serializing it. See also \code{preserve_exact_body_bytes}
+in \code{\link[=vcr_configure]{vcr_configure()}}}
 }
 \description{
 Cassette handler
@@ -88,9 +113,6 @@ Coming soon.
 Serialize interaction on disk/casette to a \code{crul} response
 }
 }
-
-The root directory for storing cassettes. Default:
-\code{~/fixtures/vcr_cassettes}. See \code{\link[=vcr_configure]{vcr_configure()}}
 }
 \examples{
 \dontrun{
@@ -115,5 +137,8 @@ new <- res$call_block({
 # record all requests
 res <- Cassette$new("foobar", record = "all")
 }
+}
+\seealso{
+\code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
 }
 \keyword{datasets}

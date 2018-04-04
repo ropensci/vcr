@@ -1,23 +1,51 @@
 #' Cassette handler
 #'
 #' @export
-#' @param name (character) A cassette name
-#' @param record (character) Record mode. See \link{recording}
-#' @param manfile (character) path to man file for the cassette
-#' @param recorded_at (character) time recorded at
-#' @param serialize_with (character) Only choice is "yaml"
-#' @param persist_with Only choice is FileSystem
-#' @param match_requests_on what to match requests on
-#' @param re_record_interval Interval to re-record
-#' @param tag Tag
-#' @param tags Tags
-#' @param update_content_length_header xx Default: \code{FALSE}
-#' @param decode_compressed_response xx Default: \code{FALSE}
-#' @param allow_playback_repeats xx Default: \code{FALSE}
-#' @param allow_unused_http_interactions xx Default: \code{TRUE}
-#' @param exclusive xx Default: \code{FALSE}
-#' @param preserve_exact_body_bytes xx Default: \code{TRUE}
-#' @param args A list of args
+#' @param name The name of the cassette. vcr will sanitize this to ensure it
+#' is a valid file name.
+#' @param record The record mode. Default: "once". In the future we'll support
+#' "once", "all", "none", "new_episodes". See [recording] for more information
+#' @param serialize_with (character) Which serializer to use.
+#'  Valid values are "yaml" (default), the only one supported for now.
+#' @param persist_with (character) Which cassette persister to
+#'  use. Default: "file_system". You can also register and use a
+#'  custom persister.
+#' @param match_requests_on List of request matchers
+#' to use to determine what recorded HTTP interaction to replay. Defaults to
+#' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
+#' "path", "headers" and "body"
+#' @param re_record_interval (integer) When given, the
+#' cassette will be re-recorded at the given interval, in seconds.
+#' IGNORED FOR NOW.
+#' @param tag (character) Used to apply tagged `before_record`
+#' and `before_playback` hooks to the cassette. IGNORED FOR NOW.
+#' @param tags Used to apply multiple tags to
+#' a cassette so that tagged `before_record` and `before_playback` hooks
+#' will apply to the cassette. IGNORED FOR NOW.
+#' @param update_content_length_header (logical) Whether or
+#' not to overwrite the `Content-Length` header of the responses to
+#' match the length of the response body. Default: `FALSE`
+#' @param decode_compressed_response (logical) Whether or
+#' not to decode compressed responses before recording the cassette.
+#' This makes the cassette more human readable. Default: `FALSE`.
+#' IGNORED FOR NOW.
+#' @param allow_playback_repeats (logical) Whether or not to
+#' allow a single HTTP interaction to be played back multiple times.
+#' Default: `FALSE`.
+#' @param allow_unused_http_interactions (logical) If set to
+#' false, an error will be raised if a cassette is ejected before all
+#' previously recorded HTTP interactions have been used.
+#' Default: `TRUE`. Note that when an error has already occurred
+#' (as indicated by the `$!` variable) unused interactions will be
+#' allowed so that we don't silence the original error (which is almost
+#' certainly more interesting/important). IGNORED FOR NOW.
+#' @param exclusive (logical) Whether or not to use only this
+#'  cassette and to completely ignore any cassettes in the cassettes stack.
+#'  Default: `FALSE`. IGNORED FOR NOW.
+#' @param preserve_exact_body_bytes (logical) Whether or not
+#' to base64 encode the bytes of the requests and responses for
+#' this cassette when serializing it. See also `preserve_exact_body_bytes`
+#' in [vcr_configure()]
 #' @details
 #' \strong{Methods}
 #'   \describe{
@@ -66,9 +94,7 @@
 #'   }
 #' @format NULL
 #' @usage NULL
-#' @details
-#' The root directory for storing cassettes. Default:
-#' `~/fixtures/vcr_cassettes`. See [vcr_configure()]
+#' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
 #' @examples \dontrun{
 #' library(vcr)
 #' library(crul)
