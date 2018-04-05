@@ -46,7 +46,7 @@
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
-#' in [vcr_configure()]
+#' in [vcr_configure()]. Default: `FALSE`
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
@@ -97,7 +97,7 @@ use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
   update_content_length_header = FALSE, decode_compressed_response = FALSE,
   allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE,
   exclusive = FALSE, serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = TRUE) {
+  preserve_exact_body_bytes = FALSE) {
 
   # insert cassette - returns cassette class object
   cassette <- insert_cassette(

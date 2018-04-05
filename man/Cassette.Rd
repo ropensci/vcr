@@ -62,7 +62,7 @@ Default: \code{FALSE}. IGNORED FOR NOW.}
 \item{preserve_exact_body_bytes}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
-in \code{\link[=vcr_configure]{vcr_configure()}}}
+in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 }
 \description{
 Cassette handler

@@ -24,7 +24,7 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
   update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,
   exclusive=FALSE, serialize_with="yaml", persist_with="FileSystem",
-  preserve_exact_body_bytes=TRUE, ignore_cassettes = FALSE) {
+  preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE) {
 
   # enable webmockr
   webmockr::enable()

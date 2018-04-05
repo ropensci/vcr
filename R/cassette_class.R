@@ -45,7 +45,7 @@
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
-#' in [vcr_configure()]
+#' in [vcr_configure()]. Default: `FALSE`
 #' @details
 #' \strong{Methods}
 #'   \describe{
@@ -138,7 +138,7 @@ Cassette <- R6::R6Class(
     allow_playback_repeats = FALSE,
     allow_unused_http_interactions = TRUE,
     exclusive = FALSE,
-    preserve_exact_body_bytes = TRUE,
+    preserve_exact_body_bytes = FALSE,
     args = list(),
     http_interactions_ = NULL,
     new_recorded_interactions = NULL,

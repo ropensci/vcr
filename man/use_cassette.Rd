@@ -9,7 +9,7 @@ use_cassette(name, ..., record = "once", match_requests_on = NULL,
   update_content_length_header = FALSE, decode_compressed_response = FALSE,
   allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE,
   exclusive = FALSE, serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = TRUE)
+  preserve_exact_body_bytes = FALSE)
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
@@ -71,7 +71,7 @@ custom persister.}
 \item{preserve_exact_body_bytes}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
-in \code{\link[=vcr_configure]{vcr_configure()}}}
+in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 }
 \description{
 Use a cassette
