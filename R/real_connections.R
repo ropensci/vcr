@@ -1,0 +1,11 @@
+#' Are real http connections allowed?
+#' 
+#' @export
+#' @return boolean, `TRUE` if real HTTP requests allowed; `FALSE` if not
+#' @examples
+#' real_http_connections_allowed()
+real_http_connections_allowed <- function() {
+  trycurr <- tryCatch(cassette_current(), error = function(e) e)
+  if (!inherits(trycurr, "error")) return(cassette_current()$recording())
+  !(vcr_c$allow_http_connections_when_no_cassette || !turned_on())
+}
