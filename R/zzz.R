@@ -16,8 +16,6 @@ last <- function(x) {
 
 errmssg <- "use_cassette requires a block.\nIf you cannot wrap your code in a block, use\ninsert_cassette / eject_cassette instead."
 
-# response_summary <- function(x) x
-
 compact <- function(x) Filter(Negate(is.null), x)
 
 `%||%` <- function(x, y) {
@@ -25,3 +23,12 @@ compact <- function(x) Filter(Negate(is.null), x)
 }
 
 stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
+
+assert <- function(x, y) {
+  if (!is.null(x)) {
+      if (!class(x) %in% y) {
+          stop(deparse(substitute(x)), " must be of class ",
+              paste0(y, collapse = ", "), call. = FALSE)
+      }
+  }
+}
