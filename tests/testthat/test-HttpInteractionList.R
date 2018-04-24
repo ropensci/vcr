@@ -30,7 +30,6 @@ test_that("HTTPInteractionList", {
   # objects and methods
   expect_is(x$request_matchers, "character")
   expect_equal(x$request_matchers, c('method', 'uri'))
-  expect_is(x$log_prefix, "character")
   ## parent list
   expect_is(x$parent_list, "NullList")
   expect_null(x$parent_list$response_for())
@@ -43,5 +42,5 @@ test_that("HTTPInteractionList", {
   expect_is(x$interactions, "list")
   expect_is(x$interactions[[1]], "HTTPInteraction")
   expect_is(x$response_for, "function")
-  expect_is(suppressMessages(x$response_for(request)), "VcrResponse")
+  expect_is(suppressWarnings(x$response_for(request)), "VcrResponse")
 })

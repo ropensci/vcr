@@ -22,7 +22,7 @@
 #'  crul::HttpClient$new(url = "https://httpbin.org/get")$get()
 #' )
 #' }
-turned_off <- function(..., ignore_cassettes = FALSE){
+turned_off <- function(..., ignore_cassettes = FALSE) {
   turn_off(ignore_cassettes = ignore_cassettes)
   on.exit(turn_on())
   off_block(...)
@@ -48,14 +48,17 @@ turned_on <- function() {
 
 #' @export
 #' @rdname lightswitch
-turn_off <- function(ignore_cassettes = FALSE){
-  cassette <- cassette_current()
-  if (length(cassette) != 0) {
-    stop(
-      sprintf(
-        "A vcr cassette is currently in use: %s.\n  You must eject it before you can turn vcr off",
-        cassette$name), call. = FALSE)
+turn_off <- function(ignore_cassettes = FALSE) {
+  cassette <- tryCatch(cassette_current(), error = function(e) e)
+  if (!inherits(cassette, "error")) {
+    if (length(cassette) != 0) {
+      stop(
+        sprintf(
+          "A vcr cassette is currently in use: %s.\n  You must eject it before you can turn vcr off",
+          cassette$name), call. = FALSE)
+    }
   }
+  vcr_c$ignore_cassettes <- ignore_cassettes
   message("vcr turned off; see ?turn_on to turn vcr back on")
   light_switch$turned_off <- TRUE
 }

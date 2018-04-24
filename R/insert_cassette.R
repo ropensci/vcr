@@ -1,8 +1,10 @@
+vcr__env <- new.env()
+
 #' Insert a cassette to record HTTP requests
 #'
 #' @export
 #' @inheritParams use_cassette
-#' @param ignore_cassettes (logical) turn \pkg{vcr} off and ignore cassette 
+#' @param ignore_cassettes (logical) turn \pkg{vcr} off and ignore cassette
 #' insertions (so that no error is raised). Default: `FALSE`
 #' @seealso [use_cassette()], [eject_cassette()]
 #' @examples \dontrun{
@@ -19,22 +21,26 @@
 #' # very important when using inject_cassette: eject when done
 #' x$eject() # same as eject_cassette("leo5")
 #' }
-insert_cassette <- function(name, record="once", match_requests_on=NULL,
+insert_cassette <- function(name, record="once",
+  match_requests_on=c('method', 'uri'),
   re_record_interval=NULL, tag=NULL, tags=NULL,
   update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,
   exclusive=FALSE, serialize_with="yaml", persist_with="FileSystem",
   preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE) {
 
-  # enable webmockr
-  webmockr::enable()
-
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
-      stop(sprintf("There is already a cassette with the same name: %s", name),
-           call. = FALSE)
+      stop(sprintf("There is already a cassette with the same name: %s", name))
     }
 
+    # enable webmockr
+    webmockr::enable()
+
+    # record cassete name for use in logging, etc.
+    vcr__env$current_cassette <- name
+
+    # make cassette
     tmp <- Cassette$new(
       name = name, record = record, match_requests_on = match_requests_on,
       re_record_interval = re_record_interval, tag = tag, tags = tags,
@@ -45,13 +51,14 @@ insert_cassette <- function(name, record="once", match_requests_on=NULL,
       exclusive = exclusive,
       serialize_with = serialize_with, persist_with = persist_with,
       preserve_exact_body_bytes = preserve_exact_body_bytes)
-    webmockr::webmockr_allow_net_connect()
+    # webmockr::webmockr_allow_net_connect()
     return(tmp)
-  } else {
-    if (ignore_cassettes) {
-      message <- "vcr is turned off.  You must turn it on before you can insert a cassette.
+  } else if (ignore_cassettes) {
+    message <- "vcr is turned off.  You must turn it on before you can insert a cassette.
       Or you can set ignore_cassettes=TRUE option to completely ignore cassette insertions."
-      stop(message, call. = FALSE)
-    }
+    stop(message)
+  } else {
+    # vcr is turned off and `ignore_cassettes=TRUE`, returns NULL
+    return(NULL)
   }
 }

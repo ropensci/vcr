@@ -21,10 +21,6 @@ initialize_ivars <- function() {
 }
 
 .onLoad <- function(libname, pkgname){
-  # webmockr::enable()
-  # crul::mock()
-  #webmockr::webmockr_allow_net_connect()
-
   # vcr config object
   vcr_c <<- VCRConfig$new()
   # initialize default configuration vars
@@ -36,11 +32,3 @@ initialize_ivars <- function() {
   # lots of things
   initialize_ivars()
 }
-
-# this doesn't work, nor in .onLoad
-# .onAttach <- function(libname, pkgname){
-#   # set up logging
-#   setHook(packageEvent("initializelog", "attach"), function(...) {
-#     do.call(loggr::log_file, list(file_name = vcr_c$vcr_logging, vcr_c$vcr_logging_opts))
-#   })
-# }

@@ -1,5 +1,6 @@
 #' The response of an HTTPInteraction
 #'
+#' @export
 #' @keywords internal
 #' @param status the status of the response
 #' @param headers the response headers
@@ -8,7 +9,7 @@
 #' @param adapter_metadata Additional metadata used by a specific VCR adapter
 #' @details
 #' **Methods**
-#' 
+#'
 #'   \describe{
 #'     \item{`to_hash()`}{
 #'       Create a hash.
@@ -54,8 +55,8 @@
 #' x$http_version
 #' x$to_hash()
 #' x$from_hash(x$to_hash())
-#' 
-#' 
+#'
+#'
 #' # update content length header
 #' ## example 1
 #' ### content-length header present, but no change
@@ -67,7 +68,7 @@
 #' x$headers$`content-length`
 #' x$update_content_length_header()
 #' x$headers$`content-length`
-#' 
+#'
 #' ## example 2
 #' ### no content-length header
 #' url <- "https://google.com"
@@ -77,8 +78,8 @@
 #'    res$parse("UTF-8"), res$response_headers$status)
 #' x$headers$`content-length`
 #' x$update_content_length_header() # no change, b/c header doesn't exist
-#' 
-#' 
+#'
+#'
 #' # check if body is compressed
 #' url <- "https://fishbase.ropensci.org"
 #' (cli <- crul::HttpClient$new(url = url))
@@ -198,7 +199,7 @@ VcrResponse <- R6::R6Class(
 extract_http_version <- function(x) {
   if (!is.character(x)) return(x)
   if (grepl("HTTP/[0-9]\\.?", x)) {
-    strsplit(stract(x, "HTTP/[12]"), "/")[[1]][2] %||% ""
+    strsplit(stract(x, "HTTP/[12]\\.?([0-9])?"), "/")[[1]][2] %||% ""
   } else {
     return(x)
   }

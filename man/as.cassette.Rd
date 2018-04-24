@@ -5,12 +5,16 @@
 \alias{as.cassettepath}
 \title{Coerce names, etc. to cassettes}
 \usage{
-as.cassette(x)
+as.cassette(x, ...)
 
 as.cassettepath(x)
 }
 \arguments{
-\item{x}{Input}
+\item{x}{Input, a cassette name (character), or something that
+can be coerced to a cassette}
+
+\item{...}{further arguments passed on to \code{\link[=cassettes]{cassettes()}} or
+[read_cassette_meta()}
 }
 \value{
 a casette of class \code{Cassette}
@@ -21,8 +25,16 @@ Coerce names, etc. to cassettes
 Coerce to a cassette path
 }
 \examples{
-vcr_configure(dir = "~/fixtures/vcr_cassettes")
+\dontrun{
+dir <- tempfile()
+vcr_configure(dir = dir)
 insert_cassette("foobar")
-as.cassette("foobar")
-eject_cassette()
+cassettes(on_disk = FALSE)
+cassettes(on_disk = TRUE)
+as.cassette("foobar", on_disk = FALSE)
+eject_cassette() # eject the current cassette
+
+# cleanup
+unlink(dir)
+}
 }

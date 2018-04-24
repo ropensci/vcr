@@ -26,14 +26,22 @@
 #' re-recorded at the given interval, in seconds.
 #' @param clean_outdated_http_interactions (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
+#' @param allow_http_connections_when_no_cassette (logical) Determines how vcr
+#' treats HTTP requests that are made when no vcr cassette is in use. When
+#' `TRUE`, requests made when there is no vcr cassette in use will be allowed.
+#' When `FALSE` (default), an [UnhandledHTTPRequestError] error will be raised
+#' for any HTTP request made when there is no cassette in use
 #' @param cassettes (list) don't use
 #' @param linked_context (logical) linked context
-#' @param vcr_logging (character) one of a file path to log to, "console",
-#' or "stdout"
-#' @param vcr_logging_opts (list) Additional options passed to
-#' `loggr::log_file()` (ignored for now)
+#' @param log (logical) should we log important vcr things? Default: `FALSE`
+#' @param log_opts (list) Additional logging options. Options include:
 #'
-#' @examples \dontrun{
+#' - file: one of a file path to log to or "console"
+#' - log_prefix: default: "Cassette". We insert the cassette name after
+#' that prefix, then the rest of the message
+#' - more to come
+#'
+#' @examples
 #' vcr_configure()
 #' vcr_configure(
 #'  dir = "fixtures/vcr_cassettes",
@@ -45,9 +53,13 @@
 #' vcr_configure(
 #'  ignore_localhost = TRUE
 #' )
-#' }
+#'
+#' vcr_configure(log = TRUE, log_opts = list(file = "vcr.log"))
+#' vcr_configure(log = TRUE, log_opts = list(file = "console"))
+#' vcr_configure(log = TRUE,
+#'  log_opts = list(file = "vcr.log", log_prefix = "foobar"))
+#' vcr_configure(log = FALSE)
 vcr_configure <- function(
-  #dir = cassette_path(),
   dir = ".",
   record = "once",
   match_requests_on = c("method", "uri"),
@@ -63,10 +75,23 @@ vcr_configure <- function(
   ignore_cassettes = FALSE,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
+  allow_http_connections_when_no_cassette = FALSE,
   cassettes = list(),
   linked_context = NULL,
-  vcr_logging = "vcr.log",
-  vcr_logging_opts = list()) {
+  log = FALSE,
+  log_opts = list(file = "vcr.log", log_prefix = "Cassette")) {
+
+  assert(log, "logical")
+  assert(log_opts, "list")
+  if (length(log_opts) > 0) {
+    if ("file" %in% names(log_opts)) {
+      assert(log_opts$file, "character")
+      vcr_log_file(log_opts$file)
+    }
+    if ("log_prefix" %in% names(log_opts)) {
+      assert(log_opts$log_prefix, "character")
+    }
+  }
 
   calls <- as.list(environment(), all = TRUE)
   for (i in seq_along(calls)) {
@@ -105,10 +130,11 @@ VCRConfig <- R6::R6Class(
     ignore_cassettes = NULL,
     re_record_interval = NULL,
     clean_outdated_http_interactions = NULL,
+    allow_http_connections_when_no_cassette = NULL,
     cassettes = NULL,
     linked_context = NULL,
-    vcr_logging = NULL,
-    vcr_logging_opts = NULL,
+    log = NULL,
+    log_opts = NULL,
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
@@ -118,6 +144,8 @@ VCRConfig <- R6::R6Class(
       cat(paste0("  Match Requests on: ",
                  paste0(self$match_requests_on, collapse = ", ")), sep = "\n")
       cat(paste0("  Preserve Bytes?: ", self$preserve_exact_body_bytes), sep = "\n")
+      logloc <- if (self$log) sprintf(" (%s)", self$log_opts$file) else ""
+      cat(paste0("  Logging?: ", self$log, logloc), sep = "\n")
       invisible(self)
     },
 
@@ -128,7 +156,6 @@ VCRConfig <- R6::R6Class(
 )
 
 vcr_default_config_vars <- list(
-  #dir = cassette_path(),
   dir = ".",
   record = "once",
   match_requests_on = c("method", "uri"),
@@ -144,8 +171,9 @@ vcr_default_config_vars <- list(
   ignore_cassettes = FALSE,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
+  allow_http_connections_when_no_cassette = FALSE,
   cassettes = list(),
   linked_context = NULL,
-  vcr_logging = "vcr.log",
-  vcr_logging_opts = list()
+  log = FALSE,
+  log_opts = list(file = "vcr.log", log_prefix = "Cassette")
 )

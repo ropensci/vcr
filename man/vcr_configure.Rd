@@ -13,9 +13,10 @@ vcr_configure(dir = ".", record = "once", match_requests_on = c("method",
   ignore_localhost = FALSE, ignore_request = NULL,
   uri_parser = "crul::url_parse", preserve_exact_body_bytes = FALSE,
   turned_off = FALSE, ignore_cassettes = FALSE, re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL, cassettes = list(),
-  linked_context = NULL, vcr_logging = "vcr.log",
-  vcr_logging_opts = list())
+  clean_outdated_http_interactions = NULL,
+  allow_http_connections_when_no_cassette = FALSE, cassettes = list(),
+  linked_context = NULL, log = FALSE, log_opts = list(file = "vcr.log",
+  log_prefix = "Cassette"))
 
 vcr_configure_reset()
 
@@ -64,21 +65,30 @@ re-recorded at the given interval, in seconds.}
 \item{clean_outdated_http_interactions}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
 
+\item{allow_http_connections_when_no_cassette}{(logical) Determines how vcr
+treats HTTP requests that are made when no vcr cassette is in use. When
+\code{TRUE}, requests made when there is no vcr cassette in use will be allowed.
+When \code{FALSE} (default), an \link{UnhandledHTTPRequestError} error will be raised
+for any HTTP request made when there is no cassette in use}
+
 \item{cassettes}{(list) don't use}
 
 \item{linked_context}{(logical) linked context}
 
-\item{vcr_logging}{(character) one of a file path to log to, "console",
-or "stdout"}
+\item{log}{(logical) should we log important vcr things? Default: \code{FALSE}}
 
-\item{vcr_logging_opts}{(list) Additional options passed to
-\code{loggr::log_file()} (ignored for now)}
+\item{log_opts}{(list) Additional logging options. Options include:
+\itemize{
+\item file: one of a file path to log to or "console"
+\item log_prefix: default: "Cassette". We insert the cassette name after
+that prefix, then the rest of the message
+\item more to come
+}}
 }
 \description{
 Configuration
 }
 \examples{
-\dontrun{
 vcr_configure()
 vcr_configure(
  dir = "fixtures/vcr_cassettes",
@@ -90,5 +100,10 @@ vcr_config_defaults()
 vcr_configure(
  ignore_localhost = TRUE
 )
-}
+
+vcr_configure(log = TRUE, log_opts = list(file = "vcr.log"))
+vcr_configure(log = TRUE, log_opts = list(file = "console"))
+vcr_configure(log = TRUE,
+ log_opts = list(file = "vcr.log", log_prefix = "foobar"))
+vcr_configure(log = FALSE)
 }

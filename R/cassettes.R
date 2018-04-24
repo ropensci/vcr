@@ -5,7 +5,7 @@
 #' (`TRUE`), or check for only cassettes in session (`FALSE`). Default: `TRUE`
 #' @param def (character) base directory for cassettes
 #' @param verb (logical) verbose messages
-#' @examples \dontrun{
+#' @examples
 #' vcr_configure("~/fixtures/vcr_cassettes")
 #'
 #' # list all cassettes
@@ -13,11 +13,14 @@
 #' cassettes(on_disk = FALSE)
 #'
 #' # list the currently active cassette
+#' insert_cassette("stuffthings")
 #' cassette_current()
+#' eject_cassette()
 #'
 #' # list the path to cassettes
 #' cassette_path()
-#' }
+#' vcr_configure("foo")
+#' cassette_path()
 cassettes <- function(on_disk = TRUE, verb = FALSE){
   # combine cassettes on disk with cassettes in session
   if (on_disk) {

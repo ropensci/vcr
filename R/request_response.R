@@ -1,33 +1,51 @@
 #' request and response summary methods
-#' 
+#'
+#' @export
 #' @name request_response
 #' @keywords internal
-#' @export
 #' @param request a [Request] object
-#' @param request_matchers (character) a vector of matchers
+#' @param request_matchers (character) a vector of matchers.
+#' Default: `""`
 #' @param response a [VcrResponse] object
 #' @return character string, of either request or response
+#' @details By default, method and uri are included
+#' in the request summary - if body and/or headers are
+#' specified in `request_matchers`, then they are also
+#' included
+#'
+#' HTTP status code and response body are included in the
+#' response summary. The response body is truncated to a
+#' max of 80 characters
 #' @examples
 #' # request
-#' library("crul")
 #' url <- "https://httpbin.org"
 #' body <- list(foo = "bar")
-#' cli <- crul::HttpClient$new(url = url)
-#' res <- cli$post("post", body = body)
+#' headers <- list(
+#'   `User-Agent` = "r-curl/3.2",
+#'   `Accept-Encoding` = "gzip, deflate",
+#'   Accept = "application/json"
+#' )
 #'
-#' (x <- Request$new("POST", url, body, res$request_headers))
+#' (x <- Request$new("POST", url, body, headers))
+#' request_summary(request = x)
 #' request_summary(request = x, c('method', 'uri'))
 #' request_summary(request = x, c('method', 'uri', 'body'))
 #' request_summary(request = x, c('method', 'uri', 'headers'))
 #' request_summary(request = x, c('method', 'uri', 'body', 'headers'))
-#' 
+#'
 #' # response
-#' (cli <- crul::HttpClient$new(url = url))
-#' (res <- cli$get("get", query = list(q = "stuff")))
-#' (x <- VcrResponse$new(res$status_http(), res$response_headers,
-#'    res$parse("UTF-8"), res$response_headers$status))
+#' status <- list(status_code = 200, message = "OK",
+#'   explanation = "Request fulfilled, document follows")
+#' headers <- list(
+#'   status = "HTTP/1.1 200 OK",
+#'   connection = "keep-alive",
+#'   date = "Tue, 24 Apr 2018 04:46:56 GMT"
+#' )
+#' response_body <- "{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"application/json\"}}\n"
+#' (x <- VcrResponse$new(status, headers,
+#'    response_body, "HTTP/1.1 200 OK"))
 #' response_summary(x)
-request_summary <- function(request, request_matchers) {
+request_summary <- function(request, request_matchers = "") {
   stopifnot(inherits(request, "Request"))
   stopifnot(inherits(request_matchers, "character"))
   atts <- c(request$method, request$uri)
@@ -44,6 +62,6 @@ request_summary <- function(request, request_matchers) {
 #' @rdname request_response
 response_summary <- function(response) {
   stopifnot(inherits(response, "VcrResponse"))
-  sprintf("%s %s", response$status$status_code, 
+  sprintf("%s %s", response$status$status_code %||% '???',
     substring(gsub("\n", " ", response$body), 1, 80))
 }

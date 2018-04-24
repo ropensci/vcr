@@ -92,7 +92,8 @@
 #' })
 #' }
 
-use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
+use_cassette <- function(name, ..., record = "once",
+  match_requests_on = c("method", "uri"),
   re_record_interval = NULL, tag = NULL, tags = NULL,
   update_content_length_header = FALSE, decode_compressed_response = FALSE,
   allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE,
@@ -111,9 +112,8 @@ use_cassette <- function(name, ..., record = "once", match_requests_on = NULL,
     exclusive = exclusive,
     serialize_with = serialize_with, persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes)
-  # call block
-  cassette$call_block(...)
   # eject cassette - records any new interactions to cassettes (i.e., disk)
-  cassette$eject()
+  on.exit(cassette$eject())
+  cassette$call_block(...)
+  # cassette$eject()
 }
-

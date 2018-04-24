@@ -5,19 +5,19 @@
 \alias{HTTPInteractionList}
 \title{HTTPInteractionList class}
 \arguments{
-\item{interactions}{list of interaction class}
+\item{interactions}{(list) list of interaction class objects}
 
-\item{request_matchers}{xxx}
+\item{request_matchers}{(character) vector of request matchers}
 
-\item{allow_playback_repeats}{xxx}
+\item{allow_playback_repeats}{whether to allow playback repeats or not}
 
-\item{parent_list}{xxx}
+\item{parent_list}{A list for empty objects, see \link{NullList}}
 
-\item{used_interactions}{xxx}
+\item{used_interactions}{(list) Interactions that have been used. That is,
+interactions that are on disk in the current cassette, and a
+request has been made that matches that interaction}
 
-\item{log_prefix}{xxx}
-
-\item{request}{xxx}
+\item{request}{The request from an object of class \code{HttpInteraction}}
 }
 \description{
 HTTPInteractionList class
@@ -26,25 +26,28 @@ HTTPInteractionList class
 \strong{Methods}
 \describe{
 \item{\code{response_for(request)}}{
-Check if there's a matching interaction
+Check if there's a matching interaction, returns a response
+object
 }
 \item{\code{has_interaction_matching(request)}}{
-Check if has a matching interaction
+Check if has a matching interaction. returns boolean
 }
 \item{\code{has_used_interaction_matching(request)}}{
-check if has used interactions matching a given request
+check if has used interactions matching a given request.
+returns boolean
 }
 \item{\code{remaining_unused_interaction_count()}}{
-Number of unused interactions (numeric)
+Number of unused interactions. returns numeric
 }
 \item{\code{assert_no_unused_interactions()}}{
 Checks if there are no unused interactions left.
+returns boolean
 }
 }
 \strong{Private Methods}
 \describe{
 \item{\code{has_unused_interactions()}}{
-Are there areny unused interactions?
+Are there areny unused interactions? returns boolean
 }
 \item{\code{matching_interaction_index_for()}}{
 asdfadf
@@ -97,8 +100,8 @@ res <- cli$post(body = list(a = 5))
    interactions = list(inter),
    request_matchers = vcr_configuration()$match_requests_on
 ))
+x$interactions
 x$request_matchers
-x$log_prefix
 x$parent_list
 x$parent_list$response_for()
 x$parent_list$has_interaction_matching()

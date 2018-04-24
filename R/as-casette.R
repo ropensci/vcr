@@ -1,38 +1,43 @@
 #' Coerce names, etc. to cassettes
 #'
-#' @param x Input
 #' @export
+#' @param x Input, a cassette name (character), or something that
+#' can be coerced to a cassette
+#' @param ... further arguments passed on to [cassettes()] or
+#' [read_cassette_meta()
 #' @return a casette of class `Cassette`
-#' @examples
-#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' @examples \dontrun{
+#' dir <- tempfile()
+#' vcr_configure(dir = dir)
 #' insert_cassette("foobar")
-#' as.cassette("foobar")
-#' eject_cassette()
-as.cassette <- function(x) UseMethod("as.cassette")
+#' cassettes(on_disk = FALSE)
+#' cassettes(on_disk = TRUE)
+#' as.cassette("foobar", on_disk = FALSE)
+#' eject_cassette() # eject the current cassette
+#'
+#' # cleanup
+#' unlink(dir)
+#' }
+as.cassette <- function(x, ...) UseMethod("as.cassette")
 
 #' @export
-as.cassette.default <- function(x) {
+as.cassette.default <- function(x, ...) {
   stop("no 'as.cassette' method for ", class(x), call. = FALSE)
 }
 
 #' @export
-as.cassette.cassette <- function(x) x
+as.cassette.cassette <- function(x, ...) x
 
 #' @export
-as.cassette.character <- function(x) {
-  cassettes()[[x]]
-  # if (is_path(x)) {
-  #   read_cassette_meta(x)
-  # } else {
-  #   read_cassette_meta(get_cassette_path(x))
-  # }
+as.cassette.character <- function(x, ...) {
+  cassettes(...)[[x]]
 }
 
 #' @export
-as.cassette.cassettepath <- function(x) read_cassette_meta(x)
+as.cassette.cassettepath <- function(x, ...) read_cassette_meta(x, ...)
 
 #' @export
-as.cassette.list <- function(x) lapply(x, as.cassette)
+as.cassette.list <- function(x, ...) lapply(x, as.cassette, ...)
 
 #' Coerce to a cassette path
 #'

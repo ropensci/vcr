@@ -24,7 +24,6 @@ cassette_path(def = "~/vcr/vcr_cassettes")
 List cassettes, get current cassette, etc.
 }
 \examples{
-\dontrun{
 vcr_configure("~/fixtures/vcr_cassettes")
 
 # list all cassettes
@@ -32,9 +31,12 @@ cassettes()
 cassettes(on_disk = FALSE)
 
 # list the currently active cassette
+insert_cassette("stuffthings")
 cassette_current()
+eject_cassette()
 
 # list the path to cassettes
 cassette_path()
-}
+vcr_configure("foo")
+cassette_path()
 }

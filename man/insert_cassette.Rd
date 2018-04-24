@@ -4,8 +4,8 @@
 \alias{insert_cassette}
 \title{Insert a cassette to record HTTP requests}
 \usage{
-insert_cassette(name, record = "once", match_requests_on = NULL,
-  re_record_interval = NULL, tag = NULL, tags = NULL,
+insert_cassette(name, record = "once", match_requests_on = c("method",
+  "uri"), re_record_interval = NULL, tag = NULL, tags = NULL,
   update_content_length_header = FALSE, decode_compressed_response = FALSE,
   allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE,
   exclusive = FALSE, serialize_with = "yaml", persist_with = "FileSystem",

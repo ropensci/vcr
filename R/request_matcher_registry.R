@@ -98,8 +98,5 @@ Matcher <- R6::R6Class(
     matches = function(...) {
       self$func(...)
     }
-    # matches = function(request1, request2) {
-    #   self$func(request1, request2)
-    # }
   )
 )

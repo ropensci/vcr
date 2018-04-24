@@ -1,5 +1,6 @@
 #' The request of an HTTPInteraction
 #'
+#' @export
 #' @keywords internal
 #' @param method the HTTP method (i.e. :head, :options, :get, :post, :put,
 #' :patch or :delete)
