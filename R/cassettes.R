@@ -42,7 +42,6 @@ cassette_current <- function() {
     stop("there is no current cassette; insert_cassette() or use_cassette()")
   }
   tmp <- if (length(tmp) == 1) tmp[[1]] else tmp
-  tmp$initialize(tmp$name)
   return(tmp)
 }
 
