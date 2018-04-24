@@ -14,7 +14,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.3.6),
     curl (>= 0.9.7),
-    webmockr (>= 0.2.1.9222),
+    webmockr (>= 0.2.1.9227),
     urltools,
     yaml,
     digest,
@@ -27,7 +27,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-Remotes: ropensci/webmockr
+Remotes: ropensci/webmockr@use-request-handler
 RoxygenNote: 6.0.1
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
