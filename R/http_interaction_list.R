@@ -246,7 +246,7 @@ HTTPInteractionList <- R6::R6Class(
         interaction$request$body,
         interaction$request$headers
        )
-       vcr_log_info(sprintf("Checking if {%s} matches {%s} using matchers: [%s]\n",
+       vcr_log_info(sprintf("Checking if {%s} matches {%s} using matchers: [%s]",
            request_summary(req),
            request_summary(intreq),
            paste0(self$request_matchers, collapse = ", ")))
