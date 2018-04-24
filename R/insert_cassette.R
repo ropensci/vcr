@@ -31,7 +31,8 @@ insert_cassette <- function(name, record="once",
 
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
-      stop(sprintf("There is already a cassette with the same name: %s", name))
+      stop(sprintf("There is already a cassette with the same name: %s", name),
+           "\n  see ?eject_cassette")
     }
 
     # enable webmockr
