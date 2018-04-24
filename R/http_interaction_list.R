@@ -150,7 +150,7 @@ HTTPInteractionList <- R6::R6Class(
        if (length(index) > 0) {
          # index should be length 1 here it seems
          # FIXME: for now just get the first one
-         if (length(index > 1)) warning("more than 1 found, using first")
+         # if (length(index > 1)) warning("more than 1 found, using first")
          index <- index[1]
          # delete the http interaction at <index>, and capture it into `interaction`
          interaction <- self$interactions[[index]]

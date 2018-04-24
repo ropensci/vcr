@@ -100,7 +100,6 @@ use_cassette <- function(name, ..., record = "once",
   exclusive = FALSE, serialize_with = "yaml", persist_with = "FileSystem",
   preserve_exact_body_bytes = FALSE) {
 
-  # insert cassette - returns cassette class object
   cassette <- insert_cassette(
     name, record = record, match_requests_on = match_requests_on,
     re_record_interval = re_record_interval,
@@ -112,8 +111,6 @@ use_cassette <- function(name, ..., record = "once",
     exclusive = exclusive,
     serialize_with = serialize_with, persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes)
-  # eject cassette - records any new interactions to cassettes (i.e., disk)
   on.exit(cassette$eject())
   cassette$call_block(...)
-  # cassette$eject()
 }

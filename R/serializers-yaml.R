@@ -50,12 +50,14 @@ YAML <- R6::R6Class("YAML",
     },
 
     # Serializes the given hash using internal fxn write_yaml
-    serialize = function(x, path) {
-      # @param [Hash] x the object to serialize
-      # @return [String] the YAML string
+    serialize = function(x, path, bytes) {
+      # @param [list] x the object to serialize
+      # @param [character] the file path
+      # @param [logical] whether to preserve exact body bytes or not
+      # @return [String] the YAML string to write to disk
       #write_yaml(x, self$path)
-      function(x, path) {
-        write_yaml(x, path)
+      function(x, path, bytes) {
+        write_yaml(x, path, bytes)
       }
     },
 

@@ -45,8 +45,9 @@ Request <- R6::R6Class(
      headers = NULL,
      skip_port_stripping = FALSE,
      hash = NULL,
+     opts = NULL,
 
-     initialize = function(method, uri, body, headers) {
+     initialize = function(method, uri, body, headers, opts) {
        if (!missing(method)) self$method <- tolower(method)
        if (!missing(body)) {
          if (inherits(body, "list")) {
@@ -66,13 +67,14 @@ Request <- R6::R6Class(
          self$host <- tmp$hostname
          self$path <- tmp$path
        }
+       if (!missing(opts)) self$opts <- opts
      },
 
      to_hash = function() {
        self$hash <- list(
          method  = self$method,
          uri     = self$uri,
-         body    = serializable_body(self$body),
+         body    = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
          headers = self$headers
        )
        return(self$hash)
@@ -109,9 +111,10 @@ Request <- R6::R6Class(
    )
 )
 
-serializable_body <- function(x) {
+serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
   if (is.null(x)) return(x)
-  if (vcr_configuration()$preserve_exact_body_bytes) {
+  # if (vcr_configuration()$preserve_exact_body_bytes) {
+  if (preserve_exact_body_bytes) {
     structure(base64enc::base64encode(charToRaw(x)), base64 = TRUE)
   } else {
     x

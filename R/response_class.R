@@ -75,7 +75,7 @@
 #' cli <- crul::HttpClient$new(url = url)
 #' res <- cli$get()
 #' x <- VcrResponse$new(res$status_http(), res$response_headers,
-#'    res$parse("UTF-8"), res$response_headers$status)
+#'    rawToChar(res$content), res$response_headers$status)
 #' x$headers$`content-length`
 #' x$update_content_length_header() # no change, b/c header doesn't exist
 #'
@@ -97,10 +97,11 @@ VcrResponse <- R6::R6Class(
     headers = NULL,
     body = NULL,
     http_version = NULL,
+    opts = NULL,
     adapter_metadata = NULL,
     hash = NULL,
 
-    initialize = function(status, headers, body, http_version, adapter_metadata = NULL) {
+    initialize = function(status, headers, body, http_version, opts, adapter_metadata = NULL) {
       if (!missing(status)) self$status <- status
       if (!missing(headers)) self$headers <- headers
       if (!missing(body)) {
@@ -112,27 +113,28 @@ VcrResponse <- R6::R6Class(
       if (!missing(http_version)) {
        self$http_version <- extract_http_version(http_version)
       }
+      if (!missing(opts)) self$opts <- opts
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
     },
 
     to_hash = function() {
-     self$hash <- list(
-       status       = self$status,
-       headers      = self$headers,
-       body         = serializable_body(self$body),
-       http_version = self$http_version
-     )
-     return(self$hash)
+      self$hash <- list(
+        status       = self$status,
+        headers      = self$headers,
+        body         = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
+        http_version = self$http_version
+      )
+      return(self$hash)
     },
 
     from_hash = function(hash) {
-       VcrResponse$new(
-         hash[['status']],
-         hash[['headers']],
-         body_from(hash[['body']]),
-         hash[['http_version']],
-         hash[['adapater_metadata']]
-       )
+      VcrResponse$new(
+        hash[['status']],
+        hash[['headers']],
+        body_from(hash[['body']]),
+        hash[['http_version']],
+        hash[['adapater_metadata']]
+      )
     },
 
     update_content_length_header = function() {

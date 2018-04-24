@@ -63,6 +63,7 @@ RequestHandler <- R6::R6Class(
     request = NULL,
     vcr_response = NULL,
     stubbed_response = NULL,
+    cassette = NULL,
 
     initialize = function(request) {
       self$request_original <- request
@@ -70,6 +71,7 @@ RequestHandler <- R6::R6Class(
         Request$new(request$method, request$url$url,
           request$body, request$headers)
       }
+      self$cassette <- tryCatch(cassette_current(), error = function(e) e)
     },
 
     handle = function() {
@@ -90,9 +92,8 @@ RequestHandler <- R6::R6Class(
 
   private = list(
     request_summary = function(request) {
-      tc <- tryCatch(cassette_current(), error = function(e) e)
-      request_matchers <- if (!inherits(tc, "error")) {
-        tc$match_requests_on
+      request_matchers <- if (!inherits(self$cassette, "error")) {
+        self$cassette$match_requests_on
       } else {
         vcr_c$match_requests_on
       }

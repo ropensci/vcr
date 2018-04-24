@@ -86,7 +86,7 @@ url <- "https://google.com"
 cli <- crul::HttpClient$new(url = url)
 res <- cli$get()
 x <- VcrResponse$new(res$status_http(), res$response_headers,
-   res$parse("UTF-8"), res$response_headers$status)
+   rawToChar(res$content), res$response_headers$status)
 x$headers$`content-length`
 x$update_content_length_header() # no change, b/c header doesn't exist
 

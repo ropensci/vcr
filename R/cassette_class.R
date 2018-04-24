@@ -149,6 +149,7 @@ Cassette <- R6::R6Class(
     new_recorded_interactions = NULL,
     clean_outdated_http_interactions = FALSE,
     to_return = NULL,
+    cassette_opts = NULL,
 
     initialize = function(
       name, record, serialize_with = "yaml",
@@ -185,7 +186,7 @@ Cassette <- R6::R6Class(
       if (!missing(exclusive)) self$exclusive = exclusive
       if (!missing(preserve_exact_body_bytes)) {
         self$preserve_exact_body_bytes <- preserve_exact_body_bytes
-        vcr_c$preserve_exact_body_bytes <- preserve_exact_body_bytes
+        # vcr_c$preserve_exact_body_bytes <- preserve_exact_body_bytes
       }
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
@@ -206,20 +207,19 @@ Cassette <- R6::R6Class(
         invisible(lapply(prev, function(z) {
           req <- z$request
           res <- z$response
-          urip <- crul::url_parse(req$uri)
+          uripp <- crul::url_parse(req$uri)
           m <- self$match_requests_on
           if (all(m == c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
           } else if (all(m == c("method", "uri", "query")) && length(m) == 3) {
-            webmockr::stub_request(req$method, req$uri) %>% webmockr::wi_th(query = urip$parameter)
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
           } else if (all(m == c("method", "uri", "headers")) && length(m) == 3) {
-            webmockr::stub_request(req$method, req$uri) %>% webmockr::wi_th(headers = req$headers)
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(query = req$headers))
           } else if (all(m == c("method", "uri", "headers", "query")) && length(m) == 4) {
-            webmockr::stub_request(req$method, req$uri) %>%
-              webmockr::wi_th(
-                query = urip$parameter,
-                headers = req$headers
-              )
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, headers = req$headers))
           }
         }))
       }
@@ -237,6 +237,7 @@ Cassette <- R6::R6Class(
       init_opts <- compact(stats::setNames(tmp, c("name", "record", "serialize_with",
         "persist_with", "match_requests_on", "update_content_length_header",
         "allow_playback_repeats", "preserve_exact_body_bytes")))
+      self$cassette_opts <- init_opts
       init_opts <- paste(names(init_opts), unname(init_opts), sep=": ", collapse=", ")
       vcr_log_info(sprintf("Initialized with options: {%s}", init_opts))
 
@@ -396,9 +397,12 @@ Cassette <- R6::R6Class(
     previously_recorded_interactions = function() {
       if (nchar(self$raw_cassette_bytes()) > 0) {
         tmp <- compact(lapply(self$deserialized_hash()[['http_interactions']], function(z) {
-          response <- VcrResponse$new(z$response$status$code,
+          response <- VcrResponse$new(
+            z$response$status$code,
             z$response$headers,
-            z$response$body$string)
+            z$response$body$string, 
+            self$cassette_opts
+          )
           if (self$update_content_length_header) response$update_content_length_header()
           zz <- HTTPInteraction$new(
             request = Request$new(z$request$method,
@@ -422,7 +426,7 @@ Cassette <- R6::R6Class(
       hash <- self$serializable_hash()
       if (length(hash[["http_interactions"]]) == 0) return(NULL)
       fun <- self$serializer$serialize()
-      fun(hash[[1]], self$persister$file_name)
+      fun(hash[[1]], self$persister$file_name, self$preserve_exact_body_bytes)
     },
 
     record_http_interaction = function(x) {
@@ -475,12 +479,16 @@ Cassette <- R6::R6Class(
         x$request$method,
         x$url,
         x$body,
-        x$request_headers)
+        x$request_headers, 
+        self$cassette_opts
+      )
       response <- VcrResponse$new(
         x$status_http(),
         headers = x$response_headers,
         body = rawToChar(x$content),
-        http_version = x$response_headers$status)
+        http_version = x$response_headers$status, 
+        self$cassette_opts
+      )
       if (self$update_content_length_header) response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)
     },

@@ -3,9 +3,9 @@ write_cassette <- function(cassette, result){
   write_yaml(result, file)
 }
 
-write_yaml <- function(x, file){
+write_yaml <- function(x, file, bytes) {
   write_header(file)
-  lapply(x, write_interactions, file = file)
+  lapply(x, write_interactions, file = file, bytes = bytes)
 }
 
 write_header <- function(file) {
@@ -35,9 +35,9 @@ dedup_keys <- function(x) {
 }
 
 # changed fxn to write body separately to avoid yaml crashes
-write_interactions <- function(x, file) {
+write_interactions <- function(x, file, bytes) {
   # FIXME - be able to toggle whether to base64encode or not
-  body <- if (vcr_c$preserve_exact_body_bytes) {
+  body <- if (bytes) {
     base64enc::base64encode(charToRaw(get_body(x$response$body)))
   } else {
     get_body(x$response$body)
