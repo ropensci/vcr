@@ -25,9 +25,9 @@ dedup_keys <- function(x) {
     x <- split(x, nms)
     for (i in seq_along(x)) {
       if (length(x[[i]]) > 1) {
-        x[[i]] <- unlist(unname(x[[i]])) 
+        x[[i]] <- unlist(unname(x[[i]]))
       } else {
-        x[[i]] <- unlist(unname(x[[i]])) 
+        x[[i]] <- unlist(unname(x[[i]]))
       }
     }
   }
@@ -60,11 +60,11 @@ write_interactions <- function(x, file, bytes) {
           status = x$response$status,
           headers = dedup_keys(x$response$headers),
           body = list(
-            encoding = encoding_guess(x$response$body),
+            encoding = encoding_guess(x$response$body, bytes),
             string = if (body_nchar < 1000000L) {
               body
             } else {
-              "%s"
+              "vcr_replace_me"
             }
           )
         ),
@@ -73,9 +73,10 @@ write_interactions <- function(x, file, bytes) {
       )
     )
   )
-  
+
   # tmp <- sub("replaceme", body, tmp)
-  if (body_nchar >= 1000000L) tmp <- sprintf(tmp, body)
+  # if (body_nchar >= 1000000L) tmp <- sprintf(tmp, body)
+  if (body_nchar >= 1000000L) tmp <- sub('vcr_replace_me', body, tmp)
   cat(tmp, file = file, append = TRUE)
 }
 
@@ -132,8 +133,8 @@ strex <- function(string, pattern) {
   regmatches(string, regexpr(pattern, string))
 }
 
-encoding_guess <- function(x, force_guess = FALSE) {
-  if (vcr_c$preserve_exact_body_bytes && !force_guess) return("ASCII-8BIT")
+encoding_guess <- function(x, bytes = FALSE, force_guess = FALSE) {
+  if (bytes && !force_guess) return("ASCII-8BIT")
   enc <- Encoding(x)
   if (enc == "unknown") {
     message("encoding couldn't be detected; assuming UTF-8")
