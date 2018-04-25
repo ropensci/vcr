@@ -17,8 +17,8 @@ serialize_to_crul <- function(request, response) {
   resp$set_url(request$uri)
   bod <- response$body
   resp$set_body(if ("string" %in% names(bod)) bod$string else bod)
-  resp$set_request_headers(request$headers)
-  resp$set_response_headers(response$headers)
+  resp$set_request_headers(request$headers, capitalize = FALSE)
+  resp$set_response_headers(response$headers, capitalize = FALSE)
   resp$set_status(status = response$status$status_code %||% 200)
 
   # generate crul response
