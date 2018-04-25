@@ -164,7 +164,14 @@ Cassette <- R6::R6Class(
       self$root_dir <- vcr_configuration()$dir
       self$serialize_with <- serialize_with
       self$persist_with <- persist_with
-      if (!missing(record)) self$record <- record
+      if (!missing(record)) {
+        recmodes <- c('none', 'once', 'new_episodes', 'all')
+        if (!record %in% recmodes) {
+          stop("your 'record' option '", record, "' was not in the allowed set: ",
+               paste0(recmodes, collapse = ", "))
+        }
+        self$record <- record
+      }
       self$make_dir()
       self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()),
                               self$name)
@@ -209,15 +216,15 @@ Cassette <- R6::R6Class(
           res <- z$response
           uripp <- crul::url_parse(req$uri)
           m <- self$match_requests_on
-          if (all(m == c("method", "uri")) && length(m) == 2) {
+          if (all(m %in% c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
-          } else if (all(m == c("method", "uri", "query")) && length(m) == 3) {
+          } else if (all(m %in% c("method", "uri", "query")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
-          } else if (all(m == c("method", "uri", "headers")) && length(m) == 3) {
+          } else if (all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = req$headers))
-          } else if (all(m == c("method", "uri", "headers", "query")) && length(m) == 4) {
+          } else if (all(m %in% c("method", "uri", "headers", "query")) && length(m) == 4) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = uripp$parameter, headers = req$headers))
           }
