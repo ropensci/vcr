@@ -9,7 +9,7 @@
 
 \item{func}{function that describes a matcher, should return a boolean}
 
-\item{r1, r2}{two requests, each of class \code{HTTPInteraction}}
+\item{r1, r2}{two requests, each of class \link{HTTPInteraction}}
 }
 \description{
 RequestMatcherRegistry class

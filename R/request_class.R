@@ -41,6 +41,7 @@ Request <- R6::R6Class(
      uri = NULL,
      host = NULL,
      path = NULL,
+     query = NULL,
      body = NULL,
      headers = NULL,
      skip_port_stripping = FALSE,
@@ -66,6 +67,7 @@ Request <- R6::R6Class(
          tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
          self$host <- tmp$hostname
          self$path <- tmp$path
+         self$query <- tmp$parameter
        }
        if (!missing(opts)) self$opts <- opts
      },
