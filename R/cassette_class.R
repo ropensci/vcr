@@ -350,8 +350,10 @@ Cassette <- R6::R6Class(
           HTTPInteractionList$new(self$new_recorded_interactions,
                                   self$match_requests_on)
         old_interactions <-
-          Filter(function(x) new_interaction_list$response_for(x$request),
-                 old_interactions)
+          Filter(function(x) {
+            req <- Request$new()$from_hash(x$request)
+            new_interaction_list$response_for(req)
+          }, old_interactions)
       }
 
       # FIXME: add up_to_date_interactions usage here
@@ -400,7 +402,7 @@ Cassette <- R6::R6Class(
           response <- VcrResponse$new(
             z$response$status$code,
             z$response$headers,
-            z$response$body$string, 
+            z$response$body$string,
             self$cassette_opts
           )
           if (self$update_content_length_header) response$update_content_length_header()
@@ -479,14 +481,14 @@ Cassette <- R6::R6Class(
         x$request$method,
         x$url,
         x$body,
-        x$request_headers, 
+        x$request_headers,
         self$cassette_opts
       )
       response <- VcrResponse$new(
         x$status_http(),
         headers = x$response_headers,
         body = rawToChar(x$content),
-        http_version = x$response_headers$status, 
+        http_version = x$response_headers$status,
         self$cassette_opts
       )
       if (self$update_content_length_header) response$update_content_length_header()
