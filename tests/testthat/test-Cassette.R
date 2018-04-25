@@ -14,5 +14,14 @@ test_that("Cassette fails well", {
   expect_error(Cassette$new(), "\"name\" is missing")
 })
 
+test_that("Cassette fails well with invalid record mode", {
+  expect_error(
+    Cassette$new(name = "stuff2", record = "asdfadfs"),
+    "your 'record' option 'asdfadfs' was not in the allowed set"
+  )
+})
+
+
+
 # cleanup
 unlink(file.path(vcr_configuration()$dir, "stuff.yml"))
