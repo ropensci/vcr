@@ -69,7 +69,7 @@ write_interactions <- function(x, file, bytes) {
           )
         ),
         recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
-        recorded_with = paste0("vcr/", utils::packageVersion("vcr"))
+        recorded_with = pkg_versions()
       )
     )
   )
@@ -84,6 +84,15 @@ write_interactions <- function(x, file, bytes) {
 
   # write to disk/cassette
   cat(tmp, file = file, append = TRUE)
+}
+
+pkg_versions <- function() {
+  paste(
+    paste0("vcr/", utils::packageVersion("vcr")),
+    paste0("webmockr/", utils::packageVersion("webmockr")),
+    paste0("crul/", utils::packageVersion("crul")),
+    sep = ", "
+  )
 }
 
 forwrite <- function(name, x, file){
