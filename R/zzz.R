@@ -32,3 +32,14 @@ assert <- function(x, y) {
       }
   }
 }
+
+merge_list <- function(x, y, ...) {
+  if (length(x) == 0) return(y)
+  if (length(y) == 0) return(x)
+  z <- match(names(y), names(x))
+  z <- is.na(z)
+  if (any(z)) {
+    x[names(y)[which(z)]] = y[which(z)]
+  }
+  x
+}
