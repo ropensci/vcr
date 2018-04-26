@@ -33,7 +33,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.202   0.020   0.814
+#>   0.249   0.023   0.936
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -46,7 +46,7 @@ system.time(
   }, preserve_exact_body_bytes = FALSE)
 )
 #>    user  system elapsed 
-#>   0.073   0.004   0.078
+#>   0.078   0.005   0.083
 ```
 
 
@@ -318,6 +318,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [bold][]
 * [wikitaxa][]
 * [worrms][]
+* [microdemic][]
 
 ## TODO
 
@@ -336,7 +337,8 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
-[rredlist]: https://github.com/ropensci/rredlist/tree/with-vcr
+[rredlist]: https://github.com/ropensci/rredlist/tree/vcr-integration
 [bold]: https://github.com/ropensci/bold/tree/with-vcr
 [wikitaxa]: https://github.com/ropensci/wikitaxa/tree/with-vcr
 [worrms]: https://github.com/ropensci/worrms/tree/with-vcr
+[microdemic]: https://github.com/ropensci/worrms/tree/with-vcr
