@@ -27,7 +27,6 @@
 #' @section Request matching:
 #' See [request-matching] for help on the many request matching options.
 #'
-#' @importFrom digest digest
 #' @importFrom R6 R6Class
 #' @importFrom yaml yaml.load_file
 #' @importFrom lazyeval lazy_dots lazy_eval
