@@ -307,6 +307,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [rredlist][]
 * [bold][]
 * [wikitaxa][]
+* [worrms][]
 
 ## TODO
 
@@ -328,3 +329,4 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [rredlist]: https://github.com/ropensci/rredlist/tree/with-vcr
 [bold]: https://github.com/ropensci/bold/tree/with-vcr
 [wikitaxa]: https://github.com/ropensci/wikitaxa/tree/with-vcr
+[worrms]: https://github.com/ropensci/worrms/tree/with-vcr
