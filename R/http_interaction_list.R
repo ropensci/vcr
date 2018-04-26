@@ -142,7 +142,7 @@ HTTPInteractionList <- R6::R6Class(
          paste0(self$request_matchers, collapse = ", "),
          length(interactions),
          paste0(interaction_summaries, collapse = ', ')
-       ))
+       ), vcr_c$log_opts$date)
      },
 
      response_for = function(request) {
@@ -160,7 +160,8 @@ HTTPInteractionList <- R6::R6Class(
          vcr_log_info(sprintf("Found matching interaction for %s at index %s: %s",
              request_summary(Request$new()$from_hash(request)),
              index,
-             response_summary(VcrResponse$new()$from_hash(interaction$response))))
+             response_summary(VcrResponse$new()$from_hash(interaction$response))),
+             vcr_c$log_opts$date)
          interaction$response
        } else {
         tmp <- private$matching_used_interaction_for(request)
@@ -196,7 +197,7 @@ HTTPInteractionList <- R6::R6Class(
             request_summary(x$request, self$request_matchers),
             response_summary(x$response))
         })
-        vcr_log_info(descriptions)
+        vcr_log_info(descriptions, vcr_c$log_opts$date)
         stop("There are unused HTTP interactions left in the cassette:\n",
              descriptions, call. = FALSE)
      }
@@ -249,14 +250,16 @@ HTTPInteractionList <- R6::R6Class(
        vcr_log_info(sprintf("Checking if {%s} matches {%s} using matchers: [%s]",
            request_summary(req),
            request_summary(intreq),
-           paste0(self$request_matchers, collapse = ", ")))
+           paste0(self$request_matchers, collapse = ", ")), 
+           vcr_c$log_opts$date)
 
        all(unlist(lapply(self$request_matchers, function(y) {
          matcher <- RequestMatcherRegistry$new()$registry[[y]]
          res <- matcher$matches(req, intreq)
          msg <- if (res) "matched" else "did not match"
          vcr_log_info(sprintf("  %s %s: current request [%s] vs [%s]",
-             y, msg, request_summary(req), request_summary(intreq)))
+             y, msg, request_summary(req), request_summary(intreq)), 
+             vcr_c$log_opts$date)
          return(res)
        })))
      },

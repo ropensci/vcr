@@ -79,17 +79,20 @@ vcr_configure <- function(
   cassettes = list(),
   linked_context = NULL,
   log = FALSE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette")) {
+  log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)) {
 
   assert(log, "logical")
   assert(log_opts, "list")
   if (length(log_opts) > 0) {
     if ("file" %in% names(log_opts)) {
       assert(log_opts$file, "character")
-      vcr_log_file(log_opts$file)
+      if (log) vcr_log_file(log_opts$file)
     }
     if ("log_prefix" %in% names(log_opts)) {
       assert(log_opts$log_prefix, "character")
+    }
+    if ("date" %in% names(log_opts)) {
+      assert(log_opts$date, "logical")
     }
   }
 

@@ -246,7 +246,7 @@ Cassette <- R6::R6Class(
         "allow_playback_repeats", "preserve_exact_body_bytes")))
       self$cassette_opts <- init_opts
       init_opts <- paste(names(init_opts), unname(init_opts), sep=": ", collapse=", ")
-      vcr_log_info(sprintf("Initialized with options: {%s}", init_opts))
+      vcr_log_info(sprintf("Initialized with options: {%s}", init_opts), vcr_c$log_opts$date)
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
@@ -442,7 +442,8 @@ Cassette <- R6::R6Class(
       int <- self$make_http_interaction(x)
       self$http_interactions_$response_for(int$request)
       vcr_log_info(sprintf("   Recorded HTTP interaction: %s => %s",
-        request_summary(int$request), response_summary(int$response)))
+        request_summary(int$request), response_summary(int$response)), 
+        vcr_c$log_opts$date)
       self$new_recorded_interactions <- c(self$new_recorded_interactions, int)
     },
 

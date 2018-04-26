@@ -77,14 +77,14 @@ RequestHandler <- R6::R6Class(
     handle = function() {
       vcr_log_info(sprintf("Handling request: %s (disabled: %s)",
         private$request_summary(self$request),
-        private$is_disabled()))
+        private$is_disabled()), vcr_c$log_opts$date)
 
       req_type <- private$request_type()
       req_type_fun <- sprintf("private$on_%s_request", req_type)
 
       vcr_log_info(sprintf("Identified request type: (%s) for %s",
         req_type,
-        private$request_summary(self$request)))
+        private$request_summary(self$request)), vcr_c$log_opts$date)
 
       eval(parse(text = req_type_fun))(self$request)
     }

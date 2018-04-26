@@ -16,7 +16,7 @@ vcr_configure(dir = ".", record = "once", match_requests_on = c("method",
   clean_outdated_http_interactions = NULL,
   allow_http_connections_when_no_cassette = FALSE, cassettes = list(),
   linked_context = NULL, log = FALSE, log_opts = list(file = "vcr.log",
-  log_prefix = "Cassette"))
+  log_prefix = "Cassette", date = TRUE))
 
 vcr_configure_reset()
 
