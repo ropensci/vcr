@@ -74,7 +74,15 @@ YAML <- R6::R6Class("YAML",
     deserialize_path = function() {
       # @param [String] string path to a YAML file
       # @return [Hash] the deserialized object, an R list
-      tmp <- yaml::yaml.load_file(self$path)
+
+      # filter_sensitive_data replacement
+      # FIXME: eventually move to higher level so that this happens
+      #  regardless of serializer
+      str <- sensitive_put_back(readLines(self$path))
+
+      # to yaml
+      tmp <- yaml::yaml.load(str)
+
       if (is.null(tmp)) {
         return(list())
       } else {

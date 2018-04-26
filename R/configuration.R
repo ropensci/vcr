@@ -41,6 +41,16 @@
 #' that prefix, then the rest of the message
 #' - more to come
 #'
+#' @param filter_sensitive_data (list) named list of values to replace. format
+#' is: `list(thing_to_replace = thing_to_replace_it_with)`. We replace all
+#' instances of `thing_to_replace` with `thing_to_replace_it_with`. Before
+#' recording (writing to a cassette) we do the replacement and then when
+#' reading from the cassette we do the reverse replacement to get back
+#' to the real data
+#'
+#' before record replacment happens in internal function `write_interactions()`
+#' before playback replacment happens in internal function `YAML.deserialize_path()`
+#'
 #' @examples
 #' vcr_configure()
 #' vcr_configure(
@@ -54,11 +64,20 @@
 #'  ignore_localhost = TRUE
 #' )
 #'
+#' # logging
 #' vcr_configure(log = TRUE, log_opts = list(file = "vcr.log"))
 #' vcr_configure(log = TRUE, log_opts = list(file = "console"))
 #' vcr_configure(log = TRUE,
 #'  log_opts = list(file = "vcr.log", log_prefix = "foobar"))
 #' vcr_configure(log = FALSE)
+#'
+#' # filter sensitive data
+#' vcr_configure(
+#'   filter_sensitive_data = list(foo = "<bar>")
+#' )
+#' vcr_configure(
+#'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
+#' )
 vcr_configure <- function(
   dir = ".",
   record = "once",
@@ -79,10 +98,13 @@ vcr_configure <- function(
   cassettes = list(),
   linked_context = NULL,
   log = FALSE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)) {
+  log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
+  filter_sensitive_data = NULL
+  ) {
 
   assert(log, "logical")
   assert(log_opts, "list")
+  assert(filter_sensitive_data, "list")
   if (length(log_opts) > 0) {
     if ("file" %in% names(log_opts)) {
       assert(log_opts$file, "character")
@@ -142,6 +164,7 @@ VCRConfig <- R6::R6Class(
     linked_context = NULL,
     log = NULL,
     log_opts = NULL,
+    filter_sensitive_data = NULL,
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
@@ -182,5 +205,6 @@ vcr_default_config_vars <- list(
   cassettes = list(),
   linked_context = NULL,
   log = FALSE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette")
+  log_opts = list(file = "vcr.log", log_prefix = "Cassette"),
+  filter_sensitive_data = NULL
 )

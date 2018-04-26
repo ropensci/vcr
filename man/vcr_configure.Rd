@@ -16,7 +16,7 @@ vcr_configure(dir = ".", record = "once", match_requests_on = c("method",
   clean_outdated_http_interactions = NULL,
   allow_http_connections_when_no_cassette = FALSE, cassettes = list(),
   linked_context = NULL, log = FALSE, log_opts = list(file = "vcr.log",
-  log_prefix = "Cassette", date = TRUE))
+  log_prefix = "Cassette", date = TRUE), filter_sensitive_data = NULL)
 
 vcr_configure_reset()
 
@@ -84,6 +84,16 @@ for any HTTP request made when there is no cassette in use}
 that prefix, then the rest of the message
 \item more to come
 }}
+
+\item{filter_sensitive_data}{(list) named list of values to replace. format
+is: \code{list(thing_to_replace = thing_to_replace_it_with)}. We replace all
+instances of \code{thing_to_replace} with \code{thing_to_replace_it_with}. Before
+recording (writing to a cassette) we do the replacement and then when
+reading from the cassette we do the reverse replacement to get back
+to the real data
+
+before record replacment happens in internal function \code{write_interactions()}
+before playback replacment happens in internal function \code{YAML.deserialize_path()}}
 }
 \description{
 Configuration
@@ -101,9 +111,18 @@ vcr_configure(
  ignore_localhost = TRUE
 )
 
+# logging
 vcr_configure(log = TRUE, log_opts = list(file = "vcr.log"))
 vcr_configure(log = TRUE, log_opts = list(file = "console"))
 vcr_configure(log = TRUE,
  log_opts = list(file = "vcr.log", log_prefix = "foobar"))
 vcr_configure(log = FALSE)
+
+# filter sensitive data
+vcr_configure(
+  filter_sensitive_data = list(foo = "<bar>")
+)
+vcr_configure(
+  filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
+)
 }

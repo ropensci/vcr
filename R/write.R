@@ -60,6 +60,7 @@ write_interactions <- function(x, file, bytes) {
           headers = dedup_keys(x$response$headers),
           body = list(
             encoding = encoding_guess(x$response$body, bytes),
+            # handle large bodies
             string = if (body_nchar < 1000000L) {
               body
             } else {
@@ -73,7 +74,15 @@ write_interactions <- function(x, file, bytes) {
     )
   )
 
+  # handle large bodies
   if (body_nchar >= 1000000L) tmp <- sub('vcr_replace_me', body, tmp)
+
+  # filter_sensitive_data replacement
+  # FIXME: eventually move to higher level so that this happens
+  #  regardless of serializer
+  tmp <- sensitive_remove(tmp)
+
+  # write to disk/cassette
   cat(tmp, file = file, append = TRUE)
 }
 
