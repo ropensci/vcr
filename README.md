@@ -13,6 +13,10 @@ vcr
 
 An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
 
+## Docs
+
+Check out the [vignettes](vignettes)
+
 ## Usage
 
 
@@ -29,7 +33,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.267   0.024   0.671
+#>   0.193   0.021   0.732
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -42,7 +46,7 @@ system.time(
   }, preserve_exact_body_bytes = FALSE)
 )
 #>    user  system elapsed 
-#>   0.076   0.003   0.080
+#>   0.081   0.005   0.088
 ```
 
 
@@ -242,6 +246,7 @@ vcr_configure(
 #>   URI Parser: crul::url_parse
 #>   Match Requests on: method, uri
 #>   Preserve Bytes?: FALSE
+#>   Logging?: FALSE
 ```
 
 Calling `vcr_configuration()` gives you some of the more important defaults in a nice tidy print out
@@ -255,6 +260,7 @@ vcr_configuration()
 #>   URI Parser: crul::url_parse
 #>   Match Requests on: method, uri
 #>   Preserve Bytes?: FALSE
+#>   Logging?: FALSE
 ```
 
 
@@ -306,6 +312,12 @@ There's a number of features in this package that are not yet supported, but for
 
 We've tried to make sure the parameters that are ignored are marked as such. Keep an eye out for package updates for changes in these parameters, and/or let us know you want it and we can move it up in the priority list.
 
+## Example packages using vcr
+
+* [rredlist][]
+* [bold][]
+* [wikitaxa][]
+
 ## TODO
 
 * Logging
@@ -323,3 +335,6 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
+[rredlist]: https://github.com/ropensci/rredlist/tree/with-vcr
+[bold]: https://github.com/ropensci/bold/tree/with-vcr
+[wikitaxa]: https://github.com/ropensci/wikitaxa/tree/with-vcr

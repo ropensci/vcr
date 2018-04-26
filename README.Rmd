@@ -302,6 +302,12 @@ There's a number of features in this package that are not yet supported, but for
 
 We've tried to make sure the parameters that are ignored are marked as such. Keep an eye out for package updates for changes in these parameters, and/or let us know you want it and we can move it up in the priority list.
 
+## Example packages using vcr
+
+* [rredlist][]
+* [bold][]
+* [wikitaxa][]
+
 ## TODO
 
 * Logging
@@ -319,3 +325,6 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
+[rredlist]: https://github.com/ropensci/rredlist/tree/with-vcr
+[bold]: https://github.com/ropensci/bold/tree/with-vcr
+[wikitaxa]: https://github.com/ropensci/wikitaxa/tree/with-vcr
