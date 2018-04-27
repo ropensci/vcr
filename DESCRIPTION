@@ -2,10 +2,11 @@ Package: vcr
 Title: Record 'HTTP' Calls to Disk
 Description: Record test suite 'HTTP' requests and replay them during
     future runs.
-Version: 0.0.8.9238
+Version: 0.0.8.9310
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus+r@gmail.com"))
-URL: https://github.com/ropensci/vcr
+URL: https://github.com/ropensci/vcr/ (devel)
+    https://ropensci.github.io/http-testing-book/ (user manual)
 BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 LazyData: true
