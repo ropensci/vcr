@@ -2,8 +2,9 @@
 #'
 #' @export
 #' @param name matcher name
-#' @param func function that describes a matcher, should return a boolean
-#' @param r1,r2 two requests, each of class [HTTPInteraction]
+#' @param func function that describes a matcher, should return
+#' a single boolean
+#' @param r1,r2 two [Request] class objects
 #' @details
 #' \strong{Methods}
 #'   \describe{
@@ -50,10 +51,10 @@ RequestMatcherRegistry <- R6::R6Class(
     register_built_ins = function() {
       self$register("method", function(r1, r2) r1$method == r2$method)
       self$register("uri", function(r1, r2) r1$uri == r2$uri)
-      self$register("body", function(r1, r2) r1$body == r2$body)
-      self$register('headers', function(r1, r2) r1$headers == r2$headers)
-      self$register("host", function(r1, r2) r1$host == r2$host)
-      self$register("path", function(r1, r2) r1$path == r2$path)
+      self$register("body", function(r1, r2) identical(r1$body, r2$body))
+      self$register('headers', function(r1, r2) identical(r1$headers, r2$headers))
+      self$register("host", function(r1, r2) identical(r1$host, r2$host))
+      self$register("path", function(r1, r2) identical(r1$path, r2$path))
       self$register("query", function(r1, r2) identical(r1$query, r2$query))
       self$try_to_register_body_as_json()
     },
@@ -64,25 +65,22 @@ RequestMatcherRegistry <- R6::R6Class(
       }
 
       self$register("body_as_json", function(r1, r2) {
-        tryCatch(jsonlite::fromJSON(r1$body) == jsonlite::fromJSON(r2$body),
-                 error = function(e) e)
+        tc <- tryCatch(
+          identical(jsonlite::fromJSON(r1$body), jsonlite::fromJSON(r2$body)),
+          error = function(e) e
+        )
+        if (inherits(tc, "error")) FALSE else tc
       })
     }
   )
 )
 
-# closure to generate matcher functions
+# generate matcher functions
 Matcher <- R6::R6Class(
   'Matcher',
   public = list(
     func = NULL,
-
-    initialize = function(func) {
-      self$func <- func
-    },
-
-    matches = function(...) {
-      self$func(...)
-    }
+    initialize = function(func) self$func <- func,
+    matches = function(...) self$func(...)
   )
 )

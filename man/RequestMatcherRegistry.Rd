@@ -7,9 +7,10 @@
 \arguments{
 \item{name}{matcher name}
 
-\item{func}{function that describes a matcher, should return a boolean}
+\item{func}{function that describes a matcher, should return
+a single boolean}
 
-\item{r1, r2}{two requests, each of class \link{HTTPInteraction}}
+\item{r1, r2}{two \link{Request} class objects}
 }
 \description{
 RequestMatcherRegistry class

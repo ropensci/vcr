@@ -39,6 +39,7 @@ Request <- R6::R6Class(
    public = list(
      method = NULL,
      uri = NULL,
+     scheme = NULL,
      host = NULL,
      path = NULL,
      query = NULL,
@@ -65,7 +66,8 @@ Request <- R6::R6Class(
          }
          # parse URI to get host and path
          tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
-         self$host <- tmp$hostname
+         self$scheme <- tmp$scheme
+         self$host <- tmp$domain
          self$path <- tmp$path
          self$query <- tmp$parameter
        }
