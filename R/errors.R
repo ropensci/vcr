@@ -64,8 +64,10 @@ UnhandledHTTPRequestError <- R6::R6Class(
     cassette = NULL,
 
     initialize = function(request, cassette) {
+      assert(request, "Request")
       self$request <- request
       if (!missing(cassette)) {
+        assert(cassette, "character")
         self$cassette <- cassette
       } else {
         self$cassette <- cassette_current()
