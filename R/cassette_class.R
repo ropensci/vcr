@@ -49,6 +49,9 @@
 #' in [vcr_configure()]. Default: `FALSE`
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file. Default: `FALSE`. IGNORED FOR NOW.
+#'
+#' @return an object of class `Cassette`
+#'
 #' @details
 #' \strong{Methods}
 #'   \describe{
@@ -167,8 +170,8 @@ Cassette <- R6::R6Class(
       if (!missing(record)) {
         recmodes <- c('none', 'once', 'new_episodes', 'all')
         if (!record %in% recmodes) {
-          stop("your 'record' option '", record, "' was not in the allowed set: ",
-               paste0(recmodes, collapse = ", "))
+          stop("'record' value of '", record, "' is not in the allowed set: ",
+               paste0(recmodes, collapse = ", "), call. = FALSE)
         }
         self$record <- record
       }
@@ -176,24 +179,36 @@ Cassette <- R6::R6Class(
       self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()),
                               self$name)
       if (!file.exists(self$manfile)) cat("\n", file = self$manfile)
-      if (!missing(match_requests_on))
+      if (!missing(match_requests_on)) {
+        mro <- c("method", "uri", "host", "path", "headers", "body")
+        if (!any(match_requests_on %in% mro)) {
+          stop("1 or more 'match_requests_on' values (",
+               paste0(match_requests_on, collapse = ", "),
+               ") is not in the allowed set: ",
+               paste0(mro, collapse = ", "), call. = FALSE)
+        }
         self$match_requests_on <- match_requests_on
+      }
       if (!missing(re_record_interval))
         self$re_record_interval <- re_record_interval
       if (!missing(tag)) self$tag = tag
       if (!missing(tags)) self$tags = tags
-      if (!missing(update_content_length_header))
+      if (!missing(update_content_length_header)) {
+        assert(update_content_length_header, "logical")
         self$update_content_length_header = update_content_length_header
+      }
       if (!missing(decode_compressed_response))
         self$decode_compressed_response = decode_compressed_response
-      if (!missing(allow_playback_repeats))
+      if (!missing(allow_playback_repeats)) {
+        assert(allow_playback_repeats, "logical")
         self$allow_playback_repeats = allow_playback_repeats
+      }
       if (!missing(allow_unused_http_interactions))
         self$allow_unused_http_interactions = allow_unused_http_interactions
       if (!missing(exclusive)) self$exclusive = exclusive
       if (!missing(preserve_exact_body_bytes)) {
+        assert(preserve_exact_body_bytes, "logical")
         self$preserve_exact_body_bytes <- preserve_exact_body_bytes
-        # vcr_c$preserve_exact_body_bytes <- preserve_exact_body_bytes
       }
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
@@ -277,6 +292,12 @@ Cassette <- R6::R6Class(
     call_block = function(...) {
       # capture block
       tmp <- lazyeval::lazy_dots(...)
+      # check if block is empty
+      if (length(tmp) == 0) {
+        stop("`vcr::use_cassette` requires a code block. ",
+             "If you cannot wrap your code in a block, use ",
+             "`vcr::insert_cassette` / `vcr::eject_cassette` instead")
+      }
       # allow http interactions - disallow at end of call_block() below
       webmockr::webmockr_allow_net_connect()
       # evaluate request
@@ -286,10 +307,7 @@ Cassette <- R6::R6Class(
     },
 
     eject = function() {
-      # FIXME:
-      #  - don't write records to disk if using recorded records
       self$write_recorded_interactions_to_disk()
-
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
       message("ejecting cassette: ", self$name)
@@ -442,7 +460,7 @@ Cassette <- R6::R6Class(
       int <- self$make_http_interaction(x)
       self$http_interactions_$response_for(int$request)
       vcr_log_info(sprintf("   Recorded HTTP interaction: %s => %s",
-        request_summary(int$request), response_summary(int$response)), 
+        request_summary(int$request), response_summary(int$response)),
         vcr_c$log_opts$date)
       self$new_recorded_interactions <- c(self$new_recorded_interactions, int)
     },
