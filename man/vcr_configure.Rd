@@ -90,10 +90,9 @@ is: \code{list(thing_to_replace = thing_to_replace_it_with)}. We replace all
 instances of \code{thing_to_replace} with \code{thing_to_replace_it_with}. Before
 recording (writing to a cassette) we do the replacement and then when
 reading from the cassette we do the reverse replacement to get back
-to the real data
-
-before record replacment happens in internal function \code{write_interactions()}
-before playback replacment happens in internal function \code{YAML.deserialize_path()}}
+to the real data. Before record replacement happens in internal
+function \code{write_interactions()}, while before playback replacement
+happens in internal function \code{YAML$deserialize_path()}}
 }
 \description{
 Configuration

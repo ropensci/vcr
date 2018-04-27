@@ -80,12 +80,10 @@ make_prefix <- function() {
 }
 
 vcr_log_write <- function(message) {
-  # if (!vcr_c$log) stop("logging is off, see ?vcr_configure")
   if (vcr_c$log) {
     if (is.null(vcr_log_env$file)) {
       stop("no connection set up to write to, see ?vcr_logging")
     }
-    # message <- vapply(message, trailing_newline, "")
     if (vcr_log_env$file == "console") {
       cat(message, sep = "\n", append = TRUE)
     } else {

@@ -12,8 +12,7 @@ LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
-    crul (>= 0.3.6),
-    curl (>= 0.9.7),
+    crul (>= 0.5.2),
     webmockr (>= 0.2.2.9113),
     urltools,
     yaml,
@@ -22,6 +21,7 @@ Imports:
     base64enc
 Suggests:
     roxygen2 (>= 6.0.1),
+    jsonlite,
     testthat,
     knitr,
     rmarkdown

@@ -18,12 +18,13 @@ knitr::opts_chunk$set(
 	comment = "#>",
 	collapse = TRUE,
 	warning = FALSE,
-	message = FALSE
+	message = FALSE,
+	eval = FALSE
 )
 ```
 
-vr configuration
-================
+vcr configuration
+=================
 
 `vcr` configuration
 
@@ -33,13 +34,13 @@ library("vcr")
 
 ## Get configuration
 
-Use `vcr_configuration()` to get the current configuration
+Use `vcr_configuration()` to get the current configuration.
 
 ```{r}
 vcr_configuration()
 ```
 
-You can get the default configuration variables via `vcr_config_defaults()`
+You can also get the default configuration variables via `vcr_config_defaults()`
 
 ```{r}
 vcr_config_defaults()
@@ -74,15 +75,19 @@ vcr_configure(
 vcr_configure_reset()
 ```
 
-## Individual config options
+## Details on some of the config options
 
-### dir - directory of where cassettes are stored
+### dir
+
+Directory where cassettes are stored
 
 ```{r}
 vcr_configure(dir = "new/path")
 ```
 
-### record - record mode
+### record
+
+The record mode
 
 One of: 'all', 'none', 'new_episodes', 'once'. See `?recording` for info on the options
 
@@ -90,13 +95,17 @@ One of: 'all', 'none', 'new_episodes', 'once'. See `?recording` for info on the 
 vcr_configure(record = "new_episodes")
 ```
 
-### match_requests_on - customize how vcr matches requests
+### match_requests_on 
+
+Customize how `vcr` matches requests
 
 ```{r}
 vcr_configure(match_requests_on = c('query', 'headers'))
 ```
 
-### allow_unused_http_interactions - Allow HTTP connections when no cassette
+### allow_unused_http_interactions 
+
+Allow HTTP connections when no cassette
 
 Default is `TRUE`, and thus does not error when http interactions are unused. You 
 can set to `FALSE` in which case vcr errors when a cassette is ejected and 
@@ -106,43 +115,53 @@ not all http interactions have been used.
 vcr_configure(allow_unused_http_interactions = FALSE)
 ```
 
-### serialize_with - which serializer to use
+### serialize_with
 
-Right now only option is "yaml"
+Which serializer to use. Right now only option is "yaml"
 
 ```{r}
 vcr_configure(serialize_with = "yaml")
 ```
 
-### persist_with - which persister to use
+### persist_with
 
-Right now only option is "FileSystem"
+Which persister to use. Right now only option is "FileSystem"
 
 ```{r}
 vcr_configure(persist_with = "FileSystem")
 ```
 
-### ignore_hosts - specify particular hosts to ignore
+### ignore_hosts
+
+Specify particular hosts to ignore. By ignore, we mean that 
+real HTTP requests to the ignored host will be allowed to occur, while
+all others will not.
 
 ```{r}
 vcr_configure(ignore_hosts = "google.com")
 ```
 
-### ignore_localhost - ignore all localhost flavors
+### ignore_localhost
+
+Ignore all localhost requests
 
 ```{r}
 vcr_configure(ignore_localhost = TRUE)
 ```
 
-### ignore_request - ignore any request for which function is true
+### ignore_request 
+
+Ignore any request for which function `x` is true
 
 ```{r}
 vcr_configure(ignore_request = function(x) x == 5)
 ```
 
-### uri_parser - which uri parser to use
+### uri_parse
 
-By default we use `httr::parse_url`, but you can use a different one. Remember 
+Which uri parser to use
+
+By default we use `crul::url_parse`, but you can use a different one. Remember 
 to pass in the function quoted, and namespaced.
 
 ```{r}
@@ -160,3 +179,28 @@ of the cassette.
 ```{r}
 vcr_configure(preserve_exact_body_bytes = TRUE)
 ```
+
+### filter_sensitive_data 
+
+A named list of values to replace. Sometimes your package or script is 
+working with sensitive tokens/keys, which you do not want to accidentally 
+share with the world.
+
+Before recording (writing to a cassette) we do the replacement and then when
+reading from the cassette we do the reverse replacement to get back
+to the real data.
+
+```{r}
+vcr_configure(
+  filter_sensitive_data = list("<some_api_key>" = Sys.getenv('MY_API_KEY'))
+)
+```
+
+Before recording to disk, the env var `MY_API_KEY` is retrieved from your machine, 
+and we find instances of it, and replace with `<some_api_key>`. When replaying 
+to create the HTTP response object we put the real value of the env var 
+back in place. 
+
+## More documentation
+
+Check out the [http testing book](https://ropensci.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`

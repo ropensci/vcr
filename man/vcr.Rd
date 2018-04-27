@@ -10,12 +10,16 @@
 \pkg{vcr} records test suite 'HTTP' requests and replay them during
 future runs.
 }
+\details{
+Check out the \href{https://ropensci.github.io/http-testing-book/}{http testing book}
+for a lot more documentation on \code{vcr}, \code{webmockr}, and \code{crul}
+}
 \section{Backstory}{
 
-A Ruby gem of the same name (\code{vcr}, \url{https://github.com/vcr/vcr}) was
-created many years ago and was the original. Ports in many languages
-have been done, including this one for R. Check out that github repo
-for all the details on how the canonical version works.
+A Ruby gem of the same name (\code{VCR}, \url{https://github.com/vcr/vcr}) was
+created many years ago and is the original. Ports in many languages
+have been done. Check out that GitHub repo for all the details on
+how the canonical version works.
 }
 
 \section{Main funcitons}{

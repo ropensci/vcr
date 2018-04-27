@@ -22,185 +22,106 @@ knitr::opts_chunk$set(
 )
 ```
 
-vr introduction
-===============
+vcr introduction
+================
 
-Record 'HTTP' Calls to Disk
+`vcr` is an R port of the Ruby gem [VCR](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
 
-Right now `vcr` is not yet using previously cached requests, but will soon.
+`vcr` helps you stub HTTP requests so you don't have to repeat HTTP requests.
 
-## installation
+The main use case is for unit tests, but you can use it outside of the unit test use case.
 
-CRAN version
+`vcr` currently only works with the `crul` package, but we plan to make it work with other 
+http R packages.
+
+Check out the [http testing book](https://ropensci.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
+
+## Installation
+
+CRAN
 
 ```{r eval=FALSE}
-devtools::install_github("vcr")
+install.packages("vcr")
 ```
 
-Development version from GitHub
+Development version
 
 ```{r eval=FALSE}
-devtools::install_github("ropensci/vcr")
+remotes::install_github("ropensci/vcr")
 ```
-
-Load `vcr`
 
 ```{r}
 library("vcr")
 ```
 
-## examples
-
-list cassettes
-
-```{r eval=FALSE}
-cassettes()
-#> $foobar
-#> <cassette> foobar
-#>   Record method: once
-#>   Serialize with: yaml
-#>   Persist with: FileSystem
-#>   update_content_length_header: FALSE
-#>   decode_compressed_response: FALSE
-#>   allow_playback_repeats: FALSE
-#>   allow_unused_http_interactions: TRUE
-#>   exclusive: FALSE
-#>   preserve_exact_body_bytes: TRUE
-#> 
-#> $helloworld
-#> <cassette> helloworld
-#>   Record method: once
-#>   Serialize with: yaml
-#>   Persist with: FileSystem
-#>   update_content_length_header: FALSE
-#>   decode_compressed_response: FALSE
-#>   allow_playback_repeats: FALSE
-#>   allow_unused_http_interactions: TRUE
-#>   exclusive: FALSE
-#>   preserve_exact_body_bytes: TRUE
-```
-
-list the current cassette
-
-```{r eval=FALSE}
-cassette_current()
-#> $helloworld
-#> <cassette> helloworld
-#>   Record method: once
-#>   Serialize with: yaml
-#>   Persist with: FileSystem
-#>   update_content_length_header: FALSE
-#>   decode_compressed_response: FALSE
-#>   allow_playback_repeats: FALSE
-#>   allow_unused_http_interactions: TRUE
-#>   exclusive: FALSE
-#>   preserve_exact_body_bytes: TRUE
-```
-
-coerce various things to cassette objects
-
-```{r eval=FALSE}
-as.cassette("helloworld")
-#> $helloworld
-#> <cassette> helloworld
-#>   Record method: once
-#>   Serialize with: yaml
-#>   Persist with: FileSystem
-#>   update_content_length_header: FALSE
-#>   decode_compressed_response: FALSE
-#>   allow_playback_repeats: FALSE
-#>   allow_unused_http_interactions: TRUE
-#>   exclusive: FALSE
-#>   preserve_exact_body_bytes: TRUE
-```
-
-```{r eval=FALSE}
-as.cassette(cassettes()[1])
-#> $foobar
-#> <cassette> foobar
-#>   Record method: once
-#>   Serialize with: yaml
-#>   Persist with: FileSystem
-#>   update_content_length_header: FALSE
-#>   decode_compressed_response: FALSE
-#>   allow_playback_repeats: FALSE
-#>   allow_unused_http_interactions: TRUE
-#>   exclusive: FALSE
-#>   preserve_exact_body_bytes: TRUE
-```
-
-```{r eval=FALSE}
-as.cassette(as.cassettepath("~/vcr/vcr_cassettes/foobar.yml"))
-#> $foobar
-#> <cassette> foobar
-#>   Record method: once
-#>   Serialize with: yaml
-#>   Persist with: FileSystem
-#>   update_content_length_header: FALSE
-#>   decode_compressed_response: FALSE
-#>   allow_playback_repeats: FALSE
-#>   allow_unused_http_interactions: TRUE
-#>   exclusive: FALSE
-#>   preserve_exact_body_bytes: TRUE
-```
-
-list the path to where cassettes are stored
-
-```{r}
-cassette_path()
-```
-
-insert a cassette
+## Basic usage
 
 ```{r echo=FALSE}
-insert_cassette(name = "helloworld")
+suppressPackageStartupMessages(require(vcr, quietly = TRUE))
+unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
-```{r eval=FALSE}
-insert_cassette(name = "helloworld")
+```{r}
+library(vcr)
+library(crul)
+
+cli <- crul::HttpClient$new(url = "https://httpbin.org")
+system.time(
+  use_cassette(name = "helloworld", {
+    cli$get("get")
+  })
+)
 ```
 
-use a cassette (if cassette not found, we'll create the cassette)
+The request gets recorded, and all subsequent requests of the same form 
+used the cached HTTP response, and so are much faster
 
-```{r eval=FALSE}
-use_cassette("helloworld", GET("http://google.com"))
+```{r}
+system.time(
+  use_cassette(name = "helloworld", {
+    cli$get("get")
+  }, preserve_exact_body_bytes = FALSE)
+)
 ```
 
-You can also pass a code block, instead of an inline call
-
-```{r eval=FALSE}
-insert_cassette("foobar")
-call_block("foobar", {
-  url <- "http://httpbin.org/get"
-  GET(url)
-})
+```{r echo=FALSE}
+unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
-After running the above, `vcr` will record the HTTP request to disk as a cassette,
-with content like:
+Importantly, your unit test deals with the same inputs and the same outputs - 
+but behind the scenes you use a cached HTTP resonse - thus, your tests run faster.
 
-```
----
+The cached response looks something like (condensed for brevity):
+
+```yaml
 http_interactions:
 - request:
     method: get
-    uri: http://example.com/
-    body: ''
-    headers: {}
+    uri: https://httpbin.org/get
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.2
   response:
     status:
-      code: 200
+      status_code: '200'
       message: OK
+      explanation: Request fulfilled, document follows
     headers:
-      Content-Type:
-      - text/html;charset=utf-8
-      Content-Length:
-      - '26'
-    body: This is the response body
-    http_version: '1.1'
-  recorded_at: Tue, 01 Nov 2011 04:58:44 GMT
-recorded_with: VCR 2.0.0
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+    body:
+      encoding: UTF-8
+      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"application/json,
+        text/xml, application/xml, */*\", \n    \"Accept-Encoding\": \"gzip, deflate\",
+        \n    \"Connection\": \"close\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\":
+        \"libcurl/7.54.0 r-curl/3.2 crul/0.5.2\"\n  }, \n  \"origin\": \"136.152.208.176\",
+        \n  \"url\": \"https://httpbin.org/get\"\n}\n"
+  recorded_at: 2018-04-03 22:55:02 GMT
+  recorded_with: vcr/0.0.7.9324
 ```
 
-Disconnect your computer from the internet.  Run the test again. It should pass since
-VCR is automatically replaying the recorded response when the request is made.
+All components of both the request and response are preserved, so that the HTTP 
+client (in this case `crul`) can reconstruct its own response just as it would 
+if it wasn't using `vcr`.

@@ -46,10 +46,9 @@
 #' instances of `thing_to_replace` with `thing_to_replace_it_with`. Before
 #' recording (writing to a cassette) we do the replacement and then when
 #' reading from the cassette we do the reverse replacement to get back
-#' to the real data
-#'
-#' before record replacment happens in internal function `write_interactions()`
-#' before playback replacment happens in internal function `YAML.deserialize_path()`
+#' to the real data. Before record replacement happens in internal
+#' function `write_interactions()`, while before playback replacement
+#' happens in internal function `YAML$deserialize_path()`
 #'
 #' @examples
 #' vcr_configure()

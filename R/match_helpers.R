@@ -45,7 +45,6 @@ get_body <- function(x) {
   }
 }
 
-#' @importFrom urltools url_parse
 parseurl <- function(x) {
   tmp <- urltools::url_parse(x)
   tmp <- as.list(tmp)

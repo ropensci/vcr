@@ -58,6 +58,11 @@ the URI are not considered as part of the request matching.
 You can set your own options by tweaking the `match_requests_on` parameter in 
 `use_cassette()`:
 
+```{r}
+library(vcr)
+```
+
+
 ```{r echo=FALSE}
 unlink(file.path(cassette_path(), "foo_bar.yml"))
 ```
@@ -105,3 +110,9 @@ two$request_headers
 ```{r echo=FALSE}
 unlink(file.path(cassette_path(), "nothing_new.yml"))
 ```
+
+
+## More documentation
+
+Check out the [http testing book](https://ropensci.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
+
