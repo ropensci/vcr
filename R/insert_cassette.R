@@ -7,6 +7,7 @@ vcr__env <- new.env()
 #' @param ignore_cassettes (logical) turn \pkg{vcr} off and ignore cassette
 #' insertions (so that no error is raised). Default: `FALSE`
 #' @seealso [use_cassette()], [eject_cassette()]
+#' @return an object of class `Cassette`
 #' @examples \dontrun{
 #' library(vcr)
 #' library(crul)
@@ -22,7 +23,7 @@ vcr__env <- new.env()
 #' x$eject() # same as eject_cassette("leo5")
 #' }
 insert_cassette <- function(name, record="once",
-  match_requests_on=c('method', 'uri'),
+  match_requests_on = c('method', 'uri'),
   re_record_interval=NULL, tag=NULL, tags=NULL,
   update_content_length_header=FALSE, decode_compressed_response=FALSE,
   allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,

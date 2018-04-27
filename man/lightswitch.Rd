@@ -40,8 +40,11 @@ HTTP request
 turn_on()
 turned_on()
 turn_off()
-turned_off(
- crul::HttpClient$new(url = "https://httpbin.org/get")$get()
-)
+
+library(crul)
+turned_off({
+ res <- HttpClient$new(url = "https://httpbin.org/get")$get()
+})
+res
 }
 }

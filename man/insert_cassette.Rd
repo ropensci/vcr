@@ -74,6 +74,9 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 \item{ignore_cassettes}{(logical) turn \pkg{vcr} off and ignore cassette
 insertions (so that no error is raised). Default: \code{FALSE}}
 }
+\value{
+an object of class \code{Cassette}
+}
 \description{
 Insert a cassette to record HTTP requests
 }

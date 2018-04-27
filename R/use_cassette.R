@@ -3,7 +3,9 @@
 #' @export
 #' @param name The name of the cassette. vcr will sanitize this to ensure it
 #' is a valid file name.
-#' @param ... a block of code to evalulate, wrapped in curly braces
+#' @param ... a block of code to evalulate, wrapped in curly braces. required.
+#' if you don't pass a code block you'll get a stop message. if you can't pass
+#' a code block use instead [insert_cassette()]
 #' @param record The record mode. Default: "once". In the future we'll support
 #' "once", "all", "none", "new_episodes". See [recording] for more information
 #' @param match_requests_on List of request matchers
@@ -50,12 +52,32 @@
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
-#' - `use_cassette` Initializes a cassett. Returns the inserted
+#' - `use_cassette` Initializes a cassette. Returns the inserted
 #'  cassette.
 #' - `insert_cassette` Internally used within `use_cassette`
 #' - `eject_cassette` ejects the current cassette. The cassette
 #'  will no longer be used. In addition, any newly recorded HTTP interactions
 #'  will be written to disk.
+#'
+#' @section Behavior:
+#' This function handles a few different scenarios:
+#'
+#' - when everything runs smoothly, and we return a `Cassette` class object
+#' so you can inspect the cassette, and the cassette is ejected
+#' - when there is an invalid parameter input on cassette creation,
+#' we fail with a useful message, we don't return a cassette, and the
+#' cassette is ejected
+#' - when there is an error in calling your passed in code block,
+#' we return with a useful message, and since we use `on.exit()`
+#' the cassette is still ejected even though there was an error,
+#' but you don't get an object back
+#'
+#' @section Cassettes on disk:
+#' Note that _"eject"_ only means that the R sesion cassette is no longer
+#' in use. If any interactions were recorded to disk, then there is a file
+#' on disk with those interactions.
+#'
+#' @return an object of class `Cassette`
 #'
 #' @seealso [insert_cassette()], [eject_cassette()]
 #' @examples \dontrun{
@@ -113,4 +135,5 @@ use_cassette <- function(name, ..., record = "once",
     preserve_exact_body_bytes = preserve_exact_body_bytes)
   on.exit(cassette$eject())
   cassette$call_block(...)
+  return(cassette)
 }

@@ -15,7 +15,9 @@ use_cassette(name, ..., record = "once", match_requests_on = c("method",
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
 is a valid file name.}
 
-\item{...}{a block of code to evalulate, wrapped in curly braces}
+\item{...}{a block of code to evalulate, wrapped in curly braces. required.
+if you don't pass a code block you'll get a stop message. if you can't pass
+a code block use instead \code{\link[=insert_cassette]{insert_cassette()}}}
 
 \item{record}{The record mode. Default: "once". In the future we'll support
 "once", "all", "none", "new_episodes". See \link{recording} for more information}
@@ -73,13 +75,16 @@ to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 }
+\value{
+an object of class \code{Cassette}
+}
 \description{
 Use a cassette
 }
 \details{
 A run down of the family of top level \pkg{vcr} functions
 \itemize{
-\item \code{use_cassette} Initializes a cassett. Returns the inserted
+\item \code{use_cassette} Initializes a cassette. Returns the inserted
 cassette.
 \item \code{insert_cassette} Internally used within \code{use_cassette}
 \item \code{eject_cassette} ejects the current cassette. The cassette
@@ -87,6 +92,29 @@ will no longer be used. In addition, any newly recorded HTTP interactions
 will be written to disk.
 }
 }
+\section{Behavior}{
+
+This function handles a few different scenarios:
+\itemize{
+\item when everything runs smoothly, and we return a \code{Cassette} class object
+so you can inspect the cassette, and the cassette is ejected
+\item when there is an invalid parameter input on cassette creation,
+we fail with a useful message, we don't return a cassette, and the
+cassette is ejected
+\item when there is an error in calling your passed in code block,
+we return with a useful message, and since we use \code{on.exit()}
+the cassette is still ejected even though there was an error,
+but you don't get an object back
+}
+}
+
+\section{Cassettes on disk}{
+
+Note that \emph{"eject"} only means that the R sesion cassette is no longer
+in use. If any interactions were recorded to disk, then there is a file
+on disk with those interactions.
+}
+
 \examples{
 \dontrun{
 library(vcr)

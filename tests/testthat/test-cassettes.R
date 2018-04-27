@@ -5,7 +5,7 @@ test_that("cassettes", {
   expect_is(aa, "list")
   expect_equal(length(aa), 0)
 
-  cc <- insert_cassette("foobar")
+  cc <- suppressMessages(insert_cassette("foobar"))
 
   bb <- cassettes()
   # cassette in named list

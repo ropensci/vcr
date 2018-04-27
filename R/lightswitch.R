@@ -18,9 +18,12 @@
 #' turn_on()
 #' turned_on()
 #' turn_off()
-#' turned_off(
-#'  crul::HttpClient$new(url = "https://httpbin.org/get")$get()
-#' )
+#'
+#' library(crul)
+#' turned_off({
+#'  res <- HttpClient$new(url = "https://httpbin.org/get")$get()
+#' })
+#' res
 #' }
 turned_off <- function(..., ignore_cassettes = FALSE) {
   turn_off(ignore_cassettes = ignore_cassettes)
@@ -30,8 +33,7 @@ turned_off <- function(..., ignore_cassettes = FALSE) {
 
 off_block <- function(...) {
   tmp <- lazyeval::lazy_dots(...)
-  out <- eval(tmp[[1]]$expr)
-  return( out )
+  xxx <- lazyeval::lazy_eval(tmp)
 }
 
 #' @rdname lightswitch

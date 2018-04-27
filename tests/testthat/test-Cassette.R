@@ -17,7 +17,7 @@ test_that("Cassette fails well", {
 test_that("Cassette fails well with invalid record mode", {
   expect_error(
     Cassette$new(name = "stuff2", record = "asdfadfs"),
-    "your 'record' option 'asdfadfs' was not in the allowed set"
+    "'record' value of 'asdfadfs' is not in the allowed set"
   )
 })
 

@@ -67,6 +67,9 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file. Default: \code{FALSE}. IGNORED FOR NOW.}
 }
+\value{
+an object of class \code{Cassette}
+}
 \description{
 Cassette handler
 }

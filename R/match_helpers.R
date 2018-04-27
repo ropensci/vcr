@@ -16,7 +16,6 @@ is_url <- function(x) {
 
 get_uri <- function(x) {
   x <- as.character(x)
-  #tmp <- grep("(https?|ftp|file)?:?(//)?[-A-Za-z0-9]+\\.[A-Za-z0-9]+", x, value = TRUE)
   tmp <- x[vapply(x, is_url, logical(1))]
   if (length(tmp) == 0) NULL else tmp
 }
