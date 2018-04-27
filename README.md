@@ -3,8 +3,6 @@ vcr
 
 
 
-
-
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg)](https://travis-ci.org/ropensci/vcr)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
@@ -15,7 +13,7 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation
 
 ## Docs
 
-Check out the [vignettes](vignettes)
+Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
 
 ## Usage
 
@@ -33,7 +31,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.249   0.023   0.936
+#>   0.169   0.015   0.565
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -46,7 +44,7 @@ system.time(
   }, preserve_exact_body_bytes = FALSE)
 )
 #>    user  system elapsed 
-#>   0.078   0.005   0.083
+#>   0.068   0.004   0.072
 ```
 
 

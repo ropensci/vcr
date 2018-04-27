@@ -10,8 +10,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg)](https://travis-ci.org/ropensci/vcr)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
@@ -22,7 +20,7 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation
 
 ## Docs
 
-Check out the [vignettes](vignettes)
+Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
 
 ## Usage
 
