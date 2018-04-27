@@ -50,7 +50,8 @@ vcr_log_env <- new.env()
 #' @export
 #' @rdname vcr_logging
 vcr_log_file <- function(file, overwrite = TRUE) {
-  stopifnot(inherits(file, 'character'))
+  assert(file, 'character')
+  assert(overwrite, 'logical')
   if (file != "console") {
     if (!file.exists(file)) {
       file.create(file)
@@ -76,7 +77,7 @@ vcr_log_info <- function(message, include_date = TRUE) {
 
 make_prefix <- function() {
   sprintf("[%s: '%s']", vcr_c$log_opts$log_prefix,
-    vcr__env$current_cassette)
+    vcr__env$current_cassette %||% "<none>")
 }
 
 vcr_log_write <- function(message) {
