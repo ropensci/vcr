@@ -31,7 +31,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.169   0.015   0.565
+#>   0.140   0.016   3.781
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -44,7 +44,7 @@ system.time(
   }, preserve_exact_body_bytes = FALSE)
 )
 #>    user  system elapsed 
-#>   0.068   0.004   0.072
+#>   0.098   0.006   0.111
 ```
 
 
