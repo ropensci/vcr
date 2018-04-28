@@ -19,11 +19,19 @@
 #' turned_on()
 #' turn_off()
 #'
+#' # turn off for duration of a block
 #' library(crul)
 #' turned_off({
 #'  res <- HttpClient$new(url = "https://httpbin.org/get")$get()
 #' })
 #' res
+#'
+#' # turn completely off
+#' turn_off()
+#' library(webmockr)
+#' crul::mock()
+#' HttpClient$new(url = "https://httpbin.org/get")$get(verbose = TRUE)
+#' turn_on()
 #' }
 turned_off <- function(..., ignore_cassettes = FALSE) {
   turn_off(ignore_cassettes = ignore_cassettes)
