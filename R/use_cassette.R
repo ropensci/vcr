@@ -12,34 +12,12 @@
 #' to use to determine what recorded HTTP interaction to replay. Defaults to
 #' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
 #' "path", "headers" and "body"
-#' @param re_record_interval (integer) When given, the
-#' cassette will be re-recorded at the given interval, in seconds.
-#' IGNORED FOR NOW.
-#' @param tag (character) Used to apply tagged `before_record`
-#' and `before_playback` hooks to the cassette. IGNORED FOR NOW.
-#' @param tags Used to apply multiple tags to
-#' a cassette so that tagged `before_record` and `before_playback` hooks
-#' will apply to the cassette. IGNORED FOR NOW.
 #' @param update_content_length_header (logical) Whether or
 #' not to overwrite the `Content-Length` header of the responses to
 #' match the length of the response body. Default: `FALSE`
-#' @param decode_compressed_response (logical) Whether or
-#' not to decode compressed responses before recording the cassette.
-#' This makes the cassette more human readable. Default: `FALSE`.
-#' IGNORED FOR NOW.
 #' @param allow_playback_repeats (logical) Whether or not to
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
-#' @param allow_unused_http_interactions (logical) If set to
-#' false, an error will be raised if a cassette is ejected before all
-#' previously recorded HTTP interactions have been used.
-#' Default: `TRUE`. Note that when an error has already occurred
-#' (as indicated by the `$!` variable) unused interactions will be
-#' allowed so that we don't silence the original error (which is almost
-#' certainly more interesting/important). IGNORED FOR NOW.
-#' @param exclusive (logical) Whether or not to use only this
-#'  cassette and to completely ignore any cassettes in the cassettes stack.
-#'  Default: `FALSE`. IGNORED FOR NOW.
 #' @param serialize_with (character) Which serializer to use.
 #'  Valid values are "yaml" (default), the only one supported for now.
 #' @param persist_with (character) Which cassette persister to
@@ -116,21 +94,15 @@
 
 use_cassette <- function(name, ..., record = "once",
   match_requests_on = c("method", "uri"),
-  re_record_interval = NULL, tag = NULL, tags = NULL,
-  update_content_length_header = FALSE, decode_compressed_response = FALSE,
-  allow_playback_repeats = FALSE, allow_unused_http_interactions = TRUE,
-  exclusive = FALSE, serialize_with = "yaml", persist_with = "FileSystem",
+  update_content_length_header = FALSE, 
+  allow_playback_repeats = FALSE, 
+  serialize_with = "yaml", persist_with = "FileSystem",
   preserve_exact_body_bytes = FALSE) {
 
   cassette <- insert_cassette(
     name, record = record, match_requests_on = match_requests_on,
-    re_record_interval = re_record_interval,
-    tag = tag, tags = tags,
     update_content_length_header = update_content_length_header,
-    decode_compressed_response = decode_compressed_response,
     allow_playback_repeats = allow_playback_repeats,
-    allow_unused_http_interactions = allow_unused_http_interactions,
-    exclusive = exclusive,
     serialize_with = serialize_with, persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes)
   on.exit(cassette$eject())

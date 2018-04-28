@@ -23,49 +23,18 @@ to use to determine what recorded HTTP interaction to replay. Defaults to
 \code{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
 "path", "headers" and "body"}
 
-\item{re_record_interval}{(integer) When given, the
-cassette will be re-recorded at the given interval, in seconds.
-IGNORED FOR NOW.}
-
-\item{tag}{(character) Used to apply tagged \code{before_record}
-and \code{before_playback} hooks to the cassette. IGNORED FOR NOW.}
-
-\item{tags}{Used to apply multiple tags to
-a cassette so that tagged \code{before_record} and \code{before_playback} hooks
-will apply to the cassette. IGNORED FOR NOW.}
-
 \item{update_content_length_header}{(logical) Whether or
 not to overwrite the \code{Content-Length} header of the responses to
 match the length of the response body. Default: \code{FALSE}}
-
-\item{decode_compressed_response}{(logical) Whether or
-not to decode compressed responses before recording the cassette.
-This makes the cassette more human readable. Default: \code{FALSE}.
-IGNORED FOR NOW.}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
-\item{allow_unused_http_interactions}{(logical) If set to
-false, an error will be raised if a cassette is ejected before all
-previously recorded HTTP interactions have been used.
-Default: \code{TRUE}. Note that when an error has already occurred
-(as indicated by the \code{$!} variable) unused interactions will be
-allowed so that we don't silence the original error (which is almost
-certainly more interesting/important). IGNORED FOR NOW.}
-
-\item{exclusive}{(logical) Whether or not to use only this
-cassette and to completely ignore any cassettes in the cassettes stack.
-Default: \code{FALSE}. IGNORED FOR NOW.}
-
 \item{preserve_exact_body_bytes}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
-
-\item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file. Default: \code{FALSE}. IGNORED FOR NOW.}
 }
 \value{
 an object of class \code{Cassette}

@@ -24,10 +24,9 @@ vcr__env <- new.env()
 #' }
 insert_cassette <- function(name, record="once",
   match_requests_on = c('method', 'uri'),
-  re_record_interval=NULL, tag=NULL, tags=NULL,
-  update_content_length_header=FALSE, decode_compressed_response=FALSE,
-  allow_playback_repeats=FALSE, allow_unused_http_interactions=TRUE,
-  exclusive=FALSE, serialize_with="yaml", persist_with="FileSystem",
+  update_content_length_header=FALSE,
+  allow_playback_repeats=FALSE, serialize_with="yaml", 
+  persist_with="FileSystem",
   preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE) {
 
   if (turned_on()) {
@@ -45,12 +44,12 @@ insert_cassette <- function(name, record="once",
     # make cassette
     tmp <- Cassette$new(
       name = name, record = record, match_requests_on = match_requests_on,
-      re_record_interval = re_record_interval, tag = tag, tags = tags,
+      re_record_interval = NULL, tag = NULL, tags = NULL,
       update_content_length_header = update_content_length_header,
-      decode_compressed_response = decode_compressed_response,
+      decode_compressed_response = NULL,
       allow_playback_repeats = allow_playback_repeats,
-      allow_unused_http_interactions = allow_unused_http_interactions,
-      exclusive = exclusive,
+      allow_unused_http_interactions = NULL,
+      exclusive = NULL,
       serialize_with = serialize_with, persist_with = persist_with,
       preserve_exact_body_bytes = preserve_exact_body_bytes)
     # webmockr::webmockr_allow_net_connect()
