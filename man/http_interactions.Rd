@@ -17,7 +17,7 @@ Get the http interactions of the current cassette
 \dontrun{
 insert_cassette("foo_bar")
 library(crul)
-cli <- crul::HttpClient$new("https://httpbin.org/get")
+cli <- crul::HttpClient$new("https://eu.httpbin.org/get")
 one <- cli$get(query = list(a = 5))
 z <- http_interactions()
 z

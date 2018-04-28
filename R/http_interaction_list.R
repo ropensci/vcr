@@ -79,7 +79,7 @@ NullList <- R6::R6Class(
 #' ## make the request
 #' ### turn off mocking
 #' crul::mock(FALSE)
-#' url <- "https://httpbin.org/post"
+#' url <- "https://eu.httpbin.org/post"
 #' cli <- crul::HttpClient$new(url = url)
 #' res <- cli$post(body = list(a = 5))
 #'

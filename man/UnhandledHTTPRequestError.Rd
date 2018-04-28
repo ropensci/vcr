@@ -47,7 +47,7 @@ dir <- tempdir()
 vcr_configure(dir = dir)
 cassettes()
 insert_cassette("turtle")
-request <- Request$new("post", 'https://httpbin.org/post?a=5',
+request <- Request$new("post", 'https://eu.httpbin.org/post?a=5',
   "", list(foo = "bar"))
 
 err <- UnhandledHTTPRequestError$new(request)

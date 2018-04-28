@@ -3,8 +3,17 @@
 #' @export
 #' @param on_disk (logical) Check for cassettes on disk + cassettes in session
 #' (`TRUE`), or check for only cassettes in session (`FALSE`). Default: `TRUE`
-#' @param def (character) base directory for cassettes
 #' @param verb (logical) verbose messages
+#' @details
+#'
+#' - `cassettes()`: returns cassettes found in your R session, you can toggle
+#' whether we pull from those on disk or not
+#' - `current_cassette()`: returns an empty list when no cassettes are in use,
+#' while it returns the current cassette (a `Cassette` object) when one is
+#' in use
+#' - `cassette_path()`: just gives you the current directory path where
+#' cassettes will be stored
+#'
 #' @examples
 #' vcr_configure("~/fixtures/vcr_cassettes")
 #'
@@ -38,19 +47,14 @@ cassettes <- function(on_disk = TRUE, verb = FALSE){
 #' @rdname cassettes
 current_cassette <- function() {
   tmp <- last(cassettes(FALSE))
-  if (length(tmp) == 0) {
-    stop("there is no current cassette; insert_cassette() or use_cassette()")
-  }
+  if (length(tmp) == 0) return(list())
   tmp <- if (length(tmp) == 1) tmp[[1]] else tmp
   return(tmp)
 }
 
 #' @export
 #' @rdname cassettes
-cassette_path <- function(def = '~/vcr/vcr_cassettes') {
-  dr <- tryCatch(vcr_configuration()$dir)
-  if (inherits(dr, "error")) def else dr
-}
+cassette_path <- function() vcr_c$dir
 
 cassette_exists <- function(x) x %in% get_cassette_names()
 

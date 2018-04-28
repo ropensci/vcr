@@ -4,12 +4,13 @@ dir <- tempdir()
 invisible(vcr_configure(dir = dir))
 
 request <- Request$new(
-  "post", 'https://httpbin.org/post?a=5', "", list(foo = "bar"))
+  "post", 'https://eu.httpbin.org/post?a=5', "", list(foo = "bar"))
 
 test_that("UnhandledHTTPRequestError fails well", {
+  z <- UnhandledHTTPRequestError$new(request)
   expect_error(
-    UnhandledHTTPRequestError$new(request),
-    "there is no current cassette"
+    z$construct_message(),
+    "There is currently no cassette in use"
   )
 
   # insert  a cassette

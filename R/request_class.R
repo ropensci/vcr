@@ -19,7 +19,7 @@
 #'   }
 #' @examples \dontrun{
 #' library("crul")
-#' url <- "https://httpbin.org/post"
+#' url <- "https://eu.httpbin.org/post"
 #' body <- list(foo = "bar")
 #' cli <- crul::HttpClient$new(url = url)
 #' res <- cli$post(body = body)
