@@ -15,7 +15,7 @@
 #'
 #' vcr_configure(dir = "~/fixtures/vcr_cassettes")
 #' insert_cassette("hello")
-#' (x <- cassette_current())
+#' (x <- current_cassette())
 #' res <- crul::HttpClient$new(url = "https://httpbin.org")
 #' bb <- res$get("get")
 #' # by default does current cassette
@@ -29,7 +29,7 @@ eject_cassette <- function(cassette = NULL, options = list(),
                            skip_no_unused_interactions_assertion = NULL) {
   if (is.null(cassette)) {
     # current cassette
-    cas <- cassette_current()
+    cas <- current_cassette()
     if (length(cas) == 0) stop("no cassette in use currently", call. = FALSE)
   } else {
     if (!cassette_exists(cassette)) {

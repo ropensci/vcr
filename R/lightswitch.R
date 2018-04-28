@@ -59,7 +59,7 @@ turned_on <- function() {
 #' @export
 #' @rdname lightswitch
 turn_off <- function(ignore_cassettes = FALSE) {
-  cassette <- tryCatch(cassette_current(), error = function(e) e)
+  cassette <- tryCatch(current_cassette(), error = function(e) e)
   if (!inherits(cassette, "error")) {
     if (length(cassette) != 0) {
       stop(

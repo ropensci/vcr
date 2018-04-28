@@ -14,7 +14,7 @@
 #'
 #' # list the currently active cassette
 #' insert_cassette("stuffthings")
-#' cassette_current()
+#' current_cassette()
 #' eject_cassette()
 #'
 #' # list the path to cassettes
@@ -36,7 +36,7 @@ cassettes <- function(on_disk = TRUE, verb = FALSE){
 
 #' @export
 #' @rdname cassettes
-cassette_current <- function() {
+current_cassette <- function() {
   tmp <- last(cassettes(FALSE))
   if (length(tmp) == 0) {
     stop("there is no current cassette; insert_cassette() or use_cassette()")

@@ -2,13 +2,13 @@
 % Please edit documentation in R/cassettes.R
 \name{cassettes}
 \alias{cassettes}
-\alias{cassette_current}
+\alias{current_cassette}
 \alias{cassette_path}
 \title{List cassettes, get current cassette, etc.}
 \usage{
 cassettes(on_disk = TRUE, verb = FALSE)
 
-cassette_current()
+current_cassette()
 
 cassette_path(def = "~/vcr/vcr_cassettes")
 }
@@ -32,7 +32,7 @@ cassettes(on_disk = FALSE)
 
 # list the currently active cassette
 insert_cassette("stuffthings")
-cassette_current()
+current_cassette()
 eject_cassette()
 
 # list the path to cassettes

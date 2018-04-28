@@ -30,7 +30,7 @@ library(crul)
 
 vcr_configure(dir = "~/fixtures/vcr_cassettes")
 insert_cassette("hello")
-(x <- cassette_current())
+(x <- current_cassette())
 res <- crul::HttpClient$new(url = "https://httpbin.org")
 bb <- res$get("get")
 # by default does current cassette

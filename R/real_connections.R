@@ -5,7 +5,7 @@
 #' @examples
 #' real_http_connections_allowed()
 real_http_connections_allowed <- function() {
-  trycurr <- tryCatch(cassette_current(), error = function(e) e)
-  if (!inherits(trycurr, "error")) return(cassette_current()$recording())
+  trycurr <- tryCatch(current_cassette(), error = function(e) e)
+  if (!inherits(trycurr, "error")) return(current_cassette()$recording())
   !(vcr_c$allow_http_connections_when_no_cassette || !turned_on())
 }

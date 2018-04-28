@@ -71,7 +71,7 @@ RequestHandler <- R6::R6Class(
         Request$new(request$method, request$url$url,
           request$body, request$headers)
       }
-      self$cassette <- tryCatch(cassette_current(), error = function(e) e)
+      self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
 
     handle = function() {

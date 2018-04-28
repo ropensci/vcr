@@ -2,7 +2,7 @@ Package: vcr
 Title: Record 'HTTP' Calls to Disk
 Description: Record test suite 'HTTP' requests and replay them during
     future runs.
-Version: 0.0.8.9316
+Version: 0.0.8.9521
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "myrmecocystus+r@gmail.com"))
 URL: https://github.com/ropensci/vcr/ (devel)
@@ -14,7 +14,7 @@ VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.5.2),
-    webmockr (>= 0.2.2.9113),
+    webmockr (>= 0.2.2.9119),
     urltools,
     yaml,
     R6,

@@ -14,7 +14,7 @@ vcr__env <- new.env()
 #' vcr_configure(dir = "~/fixtures/vcr_cassettes")
 #'
 #' (x <- insert_cassette(name = "leo5"))
-#' cassette_current()
+#' current_cassette()
 #' x$new_recorded_interactions
 #' cli <- crul::HttpClient$new(url = "https://httpbin.org")
 #' cli$get("get")

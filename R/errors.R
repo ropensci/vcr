@@ -70,7 +70,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         assert(cassette, "character")
         self$cassette <- cassette
       } else {
-        self$cassette <- cassette_current()
+        self$cassette <- current_cassette()
       }
     },
 
@@ -113,7 +113,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
     current_matchers = function() {
       if (length(cassettes_session()) > 0) {
-        cassette_current()$match_requests_on
+        current_cassette()$match_requests_on
       } else {
         vcr_configuration()$match_requests_on
       }

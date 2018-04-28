@@ -15,7 +15,7 @@
 #' eject_cassette("foo_bar")
 #' }
 http_interactions <- function() {
-  trycurr <- tryCatch(cassette_current(), error = function(e) e)
+  trycurr <- tryCatch(current_cassette(), error = function(e) e)
   if (!inherits(trycurr, "error")) return(trycurr$http_interactions_)
   NullList$new()
 }
