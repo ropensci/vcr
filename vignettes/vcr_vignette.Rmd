@@ -65,7 +65,7 @@ unlink(file.path(cassette_path(), "helloworld.yml"))
 library(vcr)
 library(crul)
 
-cli <- crul::HttpClient$new(url = "https://httpbin.org")
+cli <- crul::HttpClient$new(url = "https://eu.httpbin.org")
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
@@ -97,7 +97,7 @@ The cached response looks something like (condensed for brevity):
 http_interactions:
 - request:
     method: get
-    uri: https://httpbin.org/get
+    uri: https://eu.httpbin.org/get
     body:
       encoding: ''
       string: ''
