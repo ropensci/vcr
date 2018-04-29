@@ -24,14 +24,14 @@ Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/)
 library(vcr)
 library(crul)
 
-cli <- crul::HttpClient$new(url = "https://httpbin.org")
+cli <- crul::HttpClient$new(url = "https://eu.httpbin.org")
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
   })
 )
 #>    user  system elapsed 
-#>   0.140   0.016   3.781
+#>   0.140   0.013   5.290
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -41,10 +41,10 @@ The request gets recorded, and all subsequent requests of the same form used the
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
-  }, preserve_exact_body_bytes = FALSE)
+  })
 )
 #>    user  system elapsed 
-#>   0.098   0.006   0.111
+#>   0.069   0.003   0.072
 ```
 
 

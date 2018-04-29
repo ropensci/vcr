@@ -33,7 +33,7 @@ unlink(file.path(cassette_path(), "helloworld.yml"))
 library(vcr)
 library(crul)
 
-cli <- crul::HttpClient$new(url = "https://httpbin.org")
+cli <- crul::HttpClient$new(url = "https://eu.httpbin.org")
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
@@ -47,7 +47,7 @@ The request gets recorded, and all subsequent requests of the same form used the
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
-  }, preserve_exact_body_bytes = FALSE)
+  })
 )
 ```
 
