@@ -34,8 +34,15 @@ dedup_keys <- function(x) {
   return(x)
 }
 
+# param x: a list with "request" and "response" slots
+# param file: a file path
+# param bytes: logical, whether to preserve exact bytes or not
 # NOTE: changed fxn to write body separately to avoid yaml crashes
 write_interactions <- function(x, file, bytes) {
+  # check types
+  assert(x, c("list", "HTTPInteraction"))
+  assert(file, "character")
+
   body <- if (bytes) {
     base64enc::base64encode(charToRaw(get_body(x$response$body)))
   } else {
@@ -61,11 +68,12 @@ write_interactions <- function(x, file, bytes) {
           body = list(
             encoding = encoding_guess(x$response$body, bytes),
             # handle large bodies
-            string = if (body_nchar < 1000000L) {
-              body
-            } else {
-              "vcr_replace_me"
-            }
+            string = body
+            # string = if (body_nchar < 1000000L) {
+            #   body
+            # } else {
+            #   "vcr_replace_me"
+            # }
           )
         ),
         recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
@@ -75,7 +83,8 @@ write_interactions <- function(x, file, bytes) {
   )
 
   # handle large bodies
-  if (body_nchar >= 1000000L) tmp <- sub('vcr_replace_me', body, tmp)
+  # if (body_nchar >= 1000000L) tmp <- sub("vcr_replace_me", body, tmp)
+  # if (body_nchar >= 1000000L) tmp <- sub("vcr_replace_me", yaml::as.yaml(body), tmp)
 
   # filter_sensitive_data replacement
   # FIXME: eventually move to higher level so that this happens
