@@ -48,7 +48,16 @@ write_interactions <- function(x, file, bytes) {
   } else {
     get_body(x$response$body)
   }
-  body_nchar <- nchar(body)
+
+  # count characters (the count not used anymore,
+  # not used as a shorthand to see if it will fail with yaml which malloc fails)
+  body_nchar <- tryCatch(nchar(body), error = function(e) e)
+  # if errors, may be an encoding issue, coerce to utf-8 first
+  # then shouldn't fail with yaml pkg
+  body <- enc2utf8(body)
+  # if (inherits(body_nchar, "error")) {
+  #   body_nchar <- nchar(body)
+  # }
 
   tmp <- yaml::as.yaml(
     list(
