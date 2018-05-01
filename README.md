@@ -317,6 +317,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [wikitaxa][]
 * [worrms][]
 * [microdemic][]
+* [zbank][]
 
 ## TODO
 
@@ -340,3 +341,4 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [wikitaxa]: https://github.com/ropensci/wikitaxa/tree/with-vcr
 [worrms]: https://github.com/ropensci/worrms/tree/with-vcr
 [microdemic]: https://github.com/ropensci/worrms/tree/with-vcr
+[zbank]: https://github.com/ropenscilabs/zbank
