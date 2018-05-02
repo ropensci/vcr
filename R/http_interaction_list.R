@@ -157,7 +157,7 @@ HTTPInteractionList <- R6::R6Class(
          self$interactions <- delete_at(self$interactions, index)
          # put `interaction` at front of list with `unshift`
          self$used_interactions <- unshift(self$used_interactions, list(interaction))
-         vcr_log_info(sprintf("Found matching interaction for %s at index %s: %s",
+         vcr_log_info(sprintf("  Found matching interaction for %s at index %s: %s",
              request_summary(Request$new()$from_hash(request)),
              index,
              response_summary(VcrResponse$new()$from_hash(interaction$response))),
@@ -247,7 +247,7 @@ HTTPInteractionList <- R6::R6Class(
         interaction$request$body,
         interaction$request$headers
        )
-       vcr_log_info(sprintf("Checking if {%s} matches {%s} using matchers: [%s]",
+       vcr_log_info(sprintf("  Checking if {%s} matches {%s} using matchers: [%s]",
            request_summary(req),
            request_summary(intreq),
            paste0(self$request_matchers, collapse = ", ")), 
@@ -257,7 +257,7 @@ HTTPInteractionList <- R6::R6Class(
          matcher <- RequestMatcherRegistry$new()$registry[[y]]
          res <- matcher$matches(req, intreq)
          msg <- if (res) "matched" else "did not match"
-         vcr_log_info(sprintf("  %s %s: current request [%s] vs [%s]",
+         vcr_log_info(sprintf("    %s %s: current request [%s] vs [%s]",
              y, msg, request_summary(req), request_summary(intreq)), 
              vcr_c$log_opts$date)
          return(res)
