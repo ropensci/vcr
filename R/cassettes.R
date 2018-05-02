@@ -15,8 +15,6 @@
 #' cassettes will be stored
 #'
 #' @examples
-#' vcr_configure("~/fixtures/vcr_cassettes")
-#'
 #' # list all cassettes
 #' cassettes()
 #' cassettes(on_disk = FALSE)
@@ -26,10 +24,15 @@
 #' current_cassette()
 #' eject_cassette()
 #'
+#' cassettes()
+#' cassettes(on_disk = FALSE)
+#'
 #' # list the path to cassettes
 #' cassette_path()
 #' vcr_configure("foo")
 #' cassette_path()
+#'
+#' vcr_configure_reset()
 cassettes <- function(on_disk = TRUE, verb = FALSE){
   # combine cassettes on disk with cassettes in session
   if (on_disk) {
