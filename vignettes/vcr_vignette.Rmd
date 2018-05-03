@@ -80,7 +80,7 @@ used the cached HTTP response, and so are much faster
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
-  }, preserve_exact_body_bytes = FALSE)
+  })
 )
 ```
 
