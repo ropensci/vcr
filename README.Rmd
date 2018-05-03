@@ -308,6 +308,8 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [worrms][]
 * [microdemic][]
 * [zbank][]
+* [rplos][]
+* [ritis][]
 
 ## TODO
 
@@ -332,3 +334,5 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [worrms]: https://github.com/ropensci/worrms/tree/with-vcr
 [microdemic]: https://github.com/ropensci/worrms/tree/with-vcr
 [zbank]: https://github.com/ropenscilabs/zbank
+[rplos]: https://github.com/ropensci/rplos/tree/with-vcr
+[ritis]: https://github.com/ropensci/ritis/tree/with-vcr

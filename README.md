@@ -31,7 +31,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.140   0.013   5.290
+#>   0.170   0.014   1.249
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -44,7 +44,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.069   0.003   0.072
+#>   0.073   0.003   0.077
 ```
 
 
@@ -318,6 +318,8 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [worrms][]
 * [microdemic][]
 * [zbank][]
+* [rplos][]
+* [ritis][]
 
 ## TODO
 
@@ -342,3 +344,5 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [worrms]: https://github.com/ropensci/worrms/tree/with-vcr
 [microdemic]: https://github.com/ropensci/worrms/tree/with-vcr
 [zbank]: https://github.com/ropenscilabs/zbank
+[rplos]: https://github.com/ropensci/rplos/tree/with-vcr
+[ritis]: https://github.com/ropensci/ritis/tree/with-vcr
