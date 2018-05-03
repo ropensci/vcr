@@ -401,7 +401,7 @@ Cassette <- R6::R6Class(
       if (nchar(self$raw_cassette_bytes()) > 0) {
         tmp <- compact(lapply(self$deserialized_hash()[['http_interactions']], function(z) {
           response <- VcrResponse$new(
-            z$response$status$code,
+            z$response$status$status_code,
             z$response$headers,
             z$response$body$string,
             self$cassette_opts

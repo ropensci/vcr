@@ -62,6 +62,14 @@ request_summary <- function(request, request_matchers = "") {
 #' @rdname request_response
 response_summary <- function(response) {
   stopifnot(inherits(response, "VcrResponse"))
-  sprintf("%s %s", response$status$status_code %||% '???',
+  if (inherits(response$status, c("list", "http_code"))) {
+    ss <- response$status$status_code
+  } else if (inherits(response$status, c("character", "integer", "numeric"))) {
+    ss <- response$status
+  } else {
+    ss <- NULL
+  }
+  sprintf("%s %s", ss %||% '???',
+  # sprintf("%s %s", response$status$status_code %||% '???',
     substring(gsub("\n", " ", response$body), 1, 80))
 }
