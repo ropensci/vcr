@@ -214,7 +214,7 @@ HTTPInteractionList <- R6::R6Class(
        matchez <- vapply(self$interactions, function(w) {
          private$interaction_matches_request(request, w)
        }, logical(1))
-       if (!all(matchez)) return(FALSE)
+       if (!any(matchez)) return(FALSE)
        any(matchez)
      },
 
@@ -222,7 +222,8 @@ HTTPInteractionList <- R6::R6Class(
        matchez <- vapply(self$interactions, function(w) {
          private$interaction_matches_request(request, w)
        }, logical(1))
-       if (!all(matchez)) return(numeric(0))
+       # if (!all(matchez)) return(numeric(0))
+       if (!any(matchez)) return(numeric(0))
        which(matchez)
      },
 
@@ -250,7 +251,7 @@ HTTPInteractionList <- R6::R6Class(
        vcr_log_info(sprintf("  Checking if {%s} matches {%s} using matchers: [%s]",
            request_summary(req),
            request_summary(intreq),
-           paste0(self$request_matchers, collapse = ", ")), 
+           paste0(self$request_matchers, collapse = ", ")),
            vcr_c$log_opts$date)
 
        all(unlist(lapply(self$request_matchers, function(y) {
@@ -258,7 +259,7 @@ HTTPInteractionList <- R6::R6Class(
          res <- matcher$matches(req, intreq)
          msg <- if (res) "matched" else "did not match"
          vcr_log_info(sprintf("    %s %s: current request [%s] vs [%s]",
-             y, msg, request_summary(req), request_summary(intreq)), 
+             y, msg, request_summary(req), request_summary(intreq)),
              vcr_c$log_opts$date)
          return(res)
        })))
