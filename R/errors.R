@@ -76,8 +76,12 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
     run = function() {
       any_errors <- FALSE
-      if (self$cassette$record == "once") {
-        any_errors <- TRUE
+      if (!is.null(self$cassette) && !identical(self$cassette, list())) {
+        if (self$cassette$record == "once") {
+          any_errors <- TRUE
+        }
+      } else {
+        if (identical(self$cassette, list())) any_errors <- TRUE
       }
       if (any_errors) self$construct_message()
       return(invisible())

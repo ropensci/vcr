@@ -3,11 +3,15 @@ context("request_summary")
 library("crul")
 url <- "https://eu.httpbin.org"
 cli <- crul::HttpClient$new(url = url)
+crul::mock(FALSE)
+webmockr::webmockr_allow_net_connect()
 
 test_that("request_summary works", {
+  skip_on_cran()
+
   body <- list(foo = "bar")
   res <- cli$post("post", body = body)
-  
+
   x <- Request$new("POST", url, body, res$request_headers)
 
   aa <- request_summary(request = x, c('method', 'uri'))
@@ -53,10 +57,12 @@ test_that("request_summary fails well", {
 context("response_summary")
 
 test_that("response_summary works", {
+  skip_on_cran()
+
   res <- cli$get("get", query = list(q = "stuff"))
   x <- VcrResponse$new(res$status_http(), res$response_headers,
      res$parse("UTF-8"), res$response_headers$status)
-  
+
   aa <- response_summary(x)
 
   expect_is(aa, "character")

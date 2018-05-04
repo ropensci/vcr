@@ -92,7 +92,7 @@ RequestHandler <- R6::R6Class(
 
   private = list(
     request_summary = function(request) {
-      request_matchers <- if (!inherits(self$cassette, "error")) {
+      request_matchers <- if (!inherits(self$cassette, c("error", "list")) && !is.null(self$cassette)) {
         self$cassette$match_requests_on
       } else {
         vcr_c$match_requests_on
