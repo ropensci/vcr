@@ -156,12 +156,18 @@ Cassette <- R6::R6Class(
                               self$name)
       if (!file.exists(self$manfile)) cat("\n", file = self$manfile)
       if (!missing(match_requests_on)) {
-        mro <- c("method", "uri", "host", "path", "headers", "body")
+        mro <- c("method", "uri", "headers", "host", "path", "body")
         if (!any(match_requests_on %in% mro)) {
           stop("1 or more 'match_requests_on' values (",
                paste0(match_requests_on, collapse = ", "),
                ") is not in the allowed set: ",
                paste0(mro, collapse = ", "), call. = FALSE)
+        }
+        # we don't yet support the following matchers: host, path, body
+        if (any(match_requests_on %in% c("host", "path", "body"))) {
+          stop("we do not yet support host, path, or body matchers",
+            "\n see https://github.com/ropensci/vcr/issues/70", 
+            call. = FALSE)
         }
         self$match_requests_on <- match_requests_on
       }

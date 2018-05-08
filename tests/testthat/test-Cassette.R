@@ -21,7 +21,13 @@ test_that("Cassette fails well with invalid record mode", {
   )
 })
 
+test_that("Cassette fails well with unsupported matcher", {
+  expect_error(Cassette$new("foobar", match_requests_on = "host"), 
+    "we do not yet support host, path, or body matchers")
+})
+
 
 
 # cleanup
 unlink(file.path(vcr_configuration()$dir, "stuff.yml"))
+unlink(file.path(vcr_configuration()$dir, "foobar.yml"))

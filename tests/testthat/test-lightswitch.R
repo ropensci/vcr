@@ -26,7 +26,6 @@ test_that("turned_off", {
 
   # if a cassette is in use
   mycas <- insert_cassette("adfadfdfadfadsf")
-  cat(mycas$name, "\n")
   expect_error(turned_off(5 + 5), "You must eject it")
   mycas$eject()
 
