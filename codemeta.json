@@ -1,46 +1,53 @@
 {
-  "@context": ["http://purl.org/codemeta/2.0", "http://schema.org"],
+  "@context": [
+    "http://purl.org/codemeta/2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "vcr",
-  "description": "Record test suite 'HTTP' requests and replay them during\n    future runs.",
+  "description": "Record test suite 'HTTP' requests and replays them during\n    future runs. A port of the Ruby gem of the same name \n    (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr'\n    R package for matching HTTP requests by various rules ('HTTP' method, \n    'URL', query parameters, headers, body, etc.), and then caching\n    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests \n    matching any previous requests in the same cassette use a cached \n    'HTTP' response. ",
   "name": "vcr: Record 'HTTP' Calls to Disk",
-  "codeRepository": "https://github.com/ropensci/vcr",
+  "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.0.7.9314",
+  "version": "0.1.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.4.4",
+    "version": "3.5.0",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.4.4 beta (2018-03-05 r74359)",
+  "runtimePlatform": "R version 3.5.0 (2018-04-23)",
   "author": [
     {
       "@type": "Person",
       "givenName": "Scott",
       "familyName": "Chamberlain",
-      "email": "myrmecocystus+r@gmail.com"
+      "email": "sckott@protonmail.com",
+      "@id": "https://orcid.org/0000-0003-1444-9135"
     }
   ],
-  "maintainer": {
-    "@type": "Person",
-    "givenName": "Scott",
-    "familyName": "Chamberlain",
-    "email": "myrmecocystus+r@gmail.com"
-  },
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Scott",
+      "familyName": "Chamberlain",
+      "email": "sckott@protonmail.com",
+      "@id": "https://orcid.org/0000-0003-1444-9135"
+    }
+  ],
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
-      "identifier": "roxygen2",
-      "name": "roxygen2",
-      "version": "6.0.1",
+      "identifier": "jsonlite",
+      "name": "jsonlite",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
     {
       "@type": "SoftwareApplication",
@@ -49,9 +56,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
     },
     {
       "@type": "SoftwareApplication",
@@ -60,9 +68,22 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     }
   ],
   "softwareRequirements": [
@@ -70,37 +91,27 @@
       "@type": "SoftwareApplication",
       "identifier": "crul",
       "name": "crul",
-      "version": "0.3.6",
+      "version": ">= 0.5.2",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "curl",
-      "name": "curl",
-      "version": "0.9.7",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=crul"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
-      "version": "0.2.1.9222",
+      "version": ">= 0.2.4",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=webmockr"
     },
     {
       "@type": "SoftwareApplication",
@@ -109,9 +120,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=urltools"
     },
     {
       "@type": "SoftwareApplication",
@@ -120,20 +132,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "digest",
-      "name": "digest",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=yaml"
     },
     {
       "@type": "SoftwareApplication",
@@ -142,9 +144,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=R6"
     },
     {
       "@type": "SoftwareApplication",
@@ -153,9 +156,10 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lazyeval"
     },
     {
       "@type": "SoftwareApplication",
@@ -164,26 +168,19 @@
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
+        "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
-      }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "magrittr",
-      "name": "magrittr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Central R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      }
+      },
+      "sameAs": "https://CRAN.R-project.org/package=base64enc"
     }
   ],
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd"],
+  "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr"],
   "contIntegration": "https://travis-ci.org/ropenscilabs/vcr",
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "52.574KB"
+  "fileSize": "72.003KB",
+  "relatedLink": "https://ropensci.github.io/http-testing-book/",
+  "releaseNotes": "https://github.com/ropensci/vcr/blob/master/NEWS.md",
+  "developmentStatus": "http://www.repostatus.org/#wip"
 }

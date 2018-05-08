@@ -1,8 +1,14 @@
 Package: vcr
 Title: Record 'HTTP' Calls to Disk
-Description: Record test suite 'HTTP' requests and replay them during
-    future runs.
-Version: 0.0.9.9910
+Description: Record test suite 'HTTP' requests and replays them during
+    future runs. A port of the Ruby gem of the same name 
+    (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr'
+    R package for matching HTTP requests by various rules ('HTTP' method, 
+    'URL', query parameters, headers, body, etc.), and then caching
+    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests 
+    matching any previous requests in the same cassette use a cached 
+    'HTTP' response. 
+Version: 0.1.0
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", comment = c(ORCID="0000-0003-1444-9135")))
 URL: https://github.com/ropensci/vcr/ (devel)
@@ -25,7 +31,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-Remotes: ropensci/webmockr
 RoxygenNote: 6.0.1
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
