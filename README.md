@@ -57,7 +57,7 @@ The cached response looks something like (condensed for brevity):
 http_interactions:
 - request:
     method: get
-    uri: https://httpbin.org/get
+    uri: https://eu.httpbin.org/get
     body:
       encoding: ''
       string: ''
@@ -76,10 +76,10 @@ http_interactions:
       string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"application/json,
         text/xml, application/xml, */*\", \n    \"Accept-Encoding\": \"gzip, deflate\",
         \n    \"Connection\": \"close\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\":
-        \"libcurl/7.54.0 r-curl/3.2 crul/0.5.2\"\n  }, \n  \"origin\": \"136.152.208.176\",
-        \n  \"url\": \"https://httpbin.org/get\"\n}\n"
+        \"libcurl/7.54.0 r-curl/3.2 crul/0.5.2\"\n  }, \n  \"origin\": \"111.222.333.444\",
+        \n  \"url\": \"https://eu.httpbin.org/get\"\n}\n"
   recorded_at: 2018-04-03 22:55:02 GMT
-  recorded_with: vcr/0.0.7.9324
+  recorded_with: vcr/0.1.0, webmockr/0.2.4, crul/0.5.2
 ```
 
 All components of both the request and response are preserved, so that the HTTP client (in this case `crul`) can reconstruct its own response just as it would if it wasn't using `vcr`.
