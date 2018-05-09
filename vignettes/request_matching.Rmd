@@ -63,7 +63,7 @@ library(vcr)
 ```
 
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=FALSE}
 unlink(file.path(cassette_path(), "foo_bar.yml"))
 ```
 
@@ -75,7 +75,7 @@ use_cassette(name = "foo_bar", {
 )
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=FALSE}
 unlink(file.path(cassette_path(), "foo_bar.yml"))
 ```
 
@@ -83,7 +83,7 @@ unlink(file.path(cassette_path(), "foo_bar.yml"))
 
 ### headers
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=FALSE}
 unlink(file.path(cassette_path(), "nothing_new.yml"))
 ```
 
@@ -107,7 +107,7 @@ one$request_headers
 two$request_headers
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=FALSE}
 unlink(file.path(cassette_path(), "nothing_new.yml"))
 ```
 
