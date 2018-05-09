@@ -43,8 +43,7 @@ error with UnhandledHTTPRequestError
 }
 
 \examples{
-dir <- tempdir()
-vcr_configure(dir = dir)
+vcr_configure(dir = tempdir())
 cassettes()
 insert_cassette("turtle")
 request <- Request$new("post", 'https://eu.httpbin.org/post?a=5',
@@ -68,9 +67,9 @@ err$record_mode_suggestion()
 err$has_used_interaction_matching()
 err$match_requests_on_suggestion()
 
-\dontrun{err$construct_message()}
+# err$construct_message()
 
 # cleanup
-unlink(dir)
+unlink(tempdir())
 }
 \keyword{datasets}

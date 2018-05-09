@@ -7,8 +7,7 @@
 #' [read_cassette_meta()
 #' @return a casette of class `Cassette`
 #' @examples \dontrun{
-#' dir <- tempfile()
-#' vcr_configure(dir = dir)
+#' vcr_configure(dir = tempfile())
 #' insert_cassette("foobar")
 #' cassettes(on_disk = FALSE)
 #' cassettes(on_disk = TRUE)
@@ -16,7 +15,7 @@
 #' eject_cassette() # eject the current cassette
 #'
 #' # cleanup
-#' unlink(dir)
+#' unlink(file.path(tempfile(), "foobar.yml"))
 #' }
 as.cassette <- function(x, ...) UseMethod("as.cassette")
 

@@ -71,7 +71,7 @@ NullList <- R6::R6Class(
 #' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(
-#'  dir = "fixtures/vcr_cassettes",
+#'  dir = tempdir(),
 #'  record = "once"
 #' )
 #'

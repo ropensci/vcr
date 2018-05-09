@@ -54,15 +54,4 @@ on unhandled request, run UnhandledHTTPRequestError
 }
 }
 }
-\examples{
-\dontrun{
-vcr_configure(
- dir = "fixtures/vcr_cassettes",
- record = "once"
-)
-request <- x
-x <- RequestHandler$new(request)
-x$handle()
-}
-}
 \keyword{datasets}

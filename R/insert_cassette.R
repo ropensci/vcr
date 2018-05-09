@@ -11,7 +11,8 @@ vcr__env <- new.env()
 #' @examples \dontrun{
 #' library(vcr)
 #' library(crul)
-#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' vcr_configure(dir = tempdir())
+#' webmockr::webmockr_allow_net_connect()
 #'
 #' (x <- insert_cassette(name = "leo5"))
 #' current_cassette()
@@ -21,11 +22,14 @@ vcr__env <- new.env()
 #' x$new_recorded_interactions
 #' # very important when using inject_cassette: eject when done
 #' x$eject() # same as eject_cassette("leo5")
+#'
+#' # cleanup
+#' unlink(file.path(tempdir(), "leo5.yml"))
 #' }
 insert_cassette <- function(name, record="once",
   match_requests_on = c('method', 'uri'),
   update_content_length_header=FALSE,
-  allow_playback_repeats=FALSE, serialize_with="yaml", 
+  allow_playback_repeats=FALSE, serialize_with="yaml",
   persist_with="FileSystem",
   preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE) {
 
@@ -52,7 +56,6 @@ insert_cassette <- function(name, record="once",
       exclusive = NULL,
       serialize_with = serialize_with, persist_with = persist_with,
       preserve_exact_body_bytes = preserve_exact_body_bytes)
-    # webmockr::webmockr_allow_net_connect()
     return(tmp)
   } else if (ignore_cassettes) {
     message <- "vcr is turned off.  You must turn it on before you can insert a cassette.

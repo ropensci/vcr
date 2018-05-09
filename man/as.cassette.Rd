@@ -26,8 +26,7 @@ Coerce to a cassette path
 }
 \examples{
 \dontrun{
-dir <- tempfile()
-vcr_configure(dir = dir)
+vcr_configure(dir = tempfile())
 insert_cassette("foobar")
 cassettes(on_disk = FALSE)
 cassettes(on_disk = TRUE)
@@ -35,6 +34,6 @@ as.cassette("foobar", on_disk = FALSE)
 eject_cassette() # eject the current cassette
 
 # cleanup
-unlink(dir)
+unlink(file.path(tempfile(), "foobar.yml"))
 }
 }

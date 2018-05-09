@@ -49,12 +49,15 @@
 #' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(
-#'  dir = "fixtures/vcr_cassettes",
+#'  dir = "tempdir(),
 #'  record = "once"
 #' )
-#' request <- x
-#' x <- RequestHandler$new(request)
-#' x$handle()
+#'
+#' data(crul_request)
+#' crul_request$url$handle <- curl::new_handle()
+#' crul_request
+#' x <- RequestHandler$new(crul_request)
+#' # x$handle()
 #' }
 RequestHandler <- R6::R6Class(
   'RequestHandler',

@@ -33,17 +33,19 @@
 #' @format NULL
 #' @usage NULL
 #' @examples \dontrun{
-#' nn <- list.files(cassette_path())
-#'
-#' (yy <- FileSystem$new())
-#' yy$get_cassette(file_name = "file4014931b21b.yml")
-#'
-#' (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
-#' yy$get_cassette()
+#' vcr_configure(dir = tempdir())
 #'
 #' (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
 #' yy$set_cassette(content = "hello world!")
+#'
+#' # is empty?
 #' yy$is_empty()
+#'
+#' # get cassette
+#' yy$get_cassette(file_name = "file4014931b21b.yml")
+#'
+#' # clenaup
+#' unlink(file.path(tempdir(), "file4014931b21b.yml"))
 #' }
 FileSystem <- R6::R6Class("FileSystem",
   public = list(

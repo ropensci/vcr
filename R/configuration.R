@@ -51,17 +51,11 @@
 #' happens in internal function `YAML$deserialize_path()`
 #'
 #' @examples
-#' vcr_configure()
-#' vcr_configure(
-#'  dir = "fixtures/vcr_cassettes",
-#'  record = "all"
-#' )
+#' vcr_configure(dir = tempdir())
+#' vcr_configure(dir = tempdir(), record = "all")
 #' vcr_configuration()
 #' vcr_config_defaults()
-#'
-#' vcr_configure(
-#'  ignore_localhost = TRUE
-#' )
+#' vcr_configure(ignore_localhost = TRUE)
 #'
 #' # logging
 #' vcr_configure(log = TRUE, log_opts = list(file = "vcr.log"))

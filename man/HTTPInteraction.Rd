@@ -28,6 +28,7 @@ Create a HTTPInteraction object from a hash
 \examples{
 \dontrun{
 # make the request
+library(vcr)
 url <- "https://eu.httpbin.org/post"
 body <- list(foo = "bar")
 cli <- crul::HttpClient$new(url = url)

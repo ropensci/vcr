@@ -91,7 +91,7 @@ Serialize interaction on disk/casette to a \code{crul} response
 }
 \examples{
 library(vcr)
-vcr_configure(dir = "~/fixtures/vcr_cassettes")
+vcr_configure(dir = tempdir())
 
 res <- Cassette$new(name = "bob")
 res$file()
@@ -103,16 +103,12 @@ res$should_remove_matching_existing_interactions()
 res$storage_key()
 res$match_requests_on
 
-\dontrun{
-library(crul)
-new <- res$call_block({
-  cli <- HttpClient$new(url = "https://httpbin.org")
-  resp <- cli$get("get")
-})
-}
-
 # record all requests
 res <- Cassette$new("foobar", record = "all")
+res$eject()
+
+# cleanup
+unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
 }
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}

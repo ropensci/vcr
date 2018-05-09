@@ -33,6 +33,8 @@ cassettes will be stored
 }
 }
 \examples{
+vcr_configure(dir = tempdir())
+
 # list all cassettes
 cassettes()
 cassettes(on_disk = FALSE)

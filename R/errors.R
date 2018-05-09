@@ -28,8 +28,7 @@
 #' - others?
 #'
 #' @examples
-#' dir <- tempdir()
-#' vcr_configure(dir = dir)
+#' vcr_configure(dir = tempdir())
 #' cassettes()
 #' insert_cassette("turtle")
 #' request <- Request$new("post", 'https://eu.httpbin.org/post?a=5',
@@ -53,10 +52,10 @@
 #' err$has_used_interaction_matching()
 #' err$match_requests_on_suggestion()
 #'
-#' \dontrun{err$construct_message()}
+#' # err$construct_message()
 #'
 #' # cleanup
-#' unlink(dir)
+#' unlink(tempdir())
 UnhandledHTTPRequestError <- R6::R6Class(
   "UnhandledHTTPRequestError",
   public = list(

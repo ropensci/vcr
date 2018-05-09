@@ -89,35 +89,24 @@ on disk with those interactions.
 \dontrun{
 library(vcr)
 library(crul)
-vcr_configure(dir = "~/fixtures/vcr_cassettes")
+vcr_configure(dir = tempdir())
 
 use_cassette(name = "apple7", {
   cli <- HttpClient$new(url = "https://httpbin.org")
   resp <- cli$get("get")
 })
-
-use_cassette(name = "stuff2", {
-  cli$post("post")
-})
-
-library(rcrossref)
-vcr_configure(dir = "~/fixtures/vcr_cassettes")
-vcr_configuration()
-use_cassette("crossref2", {
-  res <- cr_works(limit = 10)
-})
-
+readLines(file.path(tempdir(), "apple7.yml"))
 
 # preserve exact body bytes - records in base64 encoding
-vcr_configure(
-  dir = "~/fixtures/vcr_cassettes",
-  preserve_exact_body_bytes = TRUE
-)
-# x <- insert_cassette("things4")
 use_cassette("things4", {
   cli <- crul::HttpClient$new(url = "https://httpbin.org")
   bbb <- cli$get("get")
-})
+}, preserve_exact_body_bytes = TRUE)
+## see the body string value in the output here
+readLines(file.path(tempdir(), "things4.yml"))
+
+# cleanup
+unlink(file.path(tempdir(), c("things4.yml", "apple7.yml")))
 }
 }
 \seealso{

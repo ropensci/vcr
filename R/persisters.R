@@ -14,13 +14,12 @@
 #'   }
 #' @format NULL
 #' @usage NULL
-#' @examples \dontrun{
+#' @examples
 #' (aa <- Persisters$new())
 #' aa$name
 #' aa$persisters
 #' yaml_serializer <- aa$persisters$new()
 #' yaml_serializer
-#' }
 Persisters <- R6::R6Class(
   "Persisters",
    public = list(

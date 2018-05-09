@@ -27,12 +27,10 @@ Gets and sets a named persister
 }
 }
 \examples{
-\dontrun{
 (aa <- Persisters$new())
 aa$name
 aa$persisters
 yaml_serializer <- aa$persisters$new()
 yaml_serializer
-}
 }
 \keyword{internal}

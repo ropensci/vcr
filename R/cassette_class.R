@@ -79,7 +79,7 @@
 #' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
 #' @examples
 #' library(vcr)
-#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' vcr_configure(dir = tempdir())
 #'
 #' res <- Cassette$new(name = "bob")
 #' res$file()
@@ -91,16 +91,12 @@
 #' res$storage_key()
 #' res$match_requests_on
 #'
-#' \dontrun{
-#' library(crul)
-#' new <- res$call_block({
-#'   cli <- HttpClient$new(url = "https://httpbin.org")
-#'   resp <- cli$get("get")
-#' })
-#' }
-#'
 #' # record all requests
 #' res <- Cassette$new("foobar", record = "all")
+#' res$eject()
+#'
+#' # cleanup
+#' unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
@@ -166,7 +162,7 @@ Cassette <- R6::R6Class(
         # we don't yet support the following matchers: host, path, body
         if (any(match_requests_on %in% c("host", "path", "body"))) {
           stop("we do not yet support host, path, or body matchers",
-            "\n see https://github.com/ropensci/vcr/issues/70", 
+            "\n see https://github.com/ropensci/vcr/issues/70",
             call. = FALSE)
         }
         self$match_requests_on <- match_requests_on

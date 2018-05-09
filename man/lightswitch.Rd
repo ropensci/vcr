@@ -37,6 +37,8 @@ HTTP request
 }
 \examples{
 \dontrun{
+vcr_configure(dir = tempdir())
+
 turn_on()
 turned_on()
 turn_off()
@@ -52,7 +54,7 @@ res
 turn_off()
 library(webmockr)
 crul::mock()
-HttpClient$new(url = "https://eu.httpbin.org/get")$get(verbose = TRUE)
+# HttpClient$new(url = "https://eu.httpbin.org/get")$get(verbose = TRUE)
 turn_on()
 }
 }

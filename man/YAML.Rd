@@ -29,19 +29,12 @@ Deserializes the given string using yaml::yaml.load_file
 }
 }
 \examples{
-\dontrun{
-crul::mock(FALSE)
-(yy <- YAML$new())
-library("crul")
-cli <- crul::HttpClient$new(url = "https://httpbin.org")
-x <- cli$get("get")
-file <- tempfile()
+(yy <- YAML$new(path = "stuff2"))
 fun <- yy$serialize()
-fun(x, file)
+fun(list(http_interactions = list(response = list(body = "bar"))),
+  path = yy$path, bytes = FALSE)
 yy$deserialize_path()
-# yy$deserialize_string() # if passed on instantiation
 yy$deserialize_string(string = "- hey\\n- hi\\n- hello")
 yy$deserialize_string(string = "- foo\\n- bar\\n- 3.14")
-}
 }
 \keyword{internal}

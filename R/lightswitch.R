@@ -15,6 +15,8 @@
 #' - `turned_on()` - Asks if vcr is turned on, gives a boolean
 #'
 #' @examples \dontrun{
+#' vcr_configure(dir = tempdir())
+#'
 #' turn_on()
 #' turned_on()
 #' turn_off()
@@ -30,7 +32,7 @@
 #' turn_off()
 #' library(webmockr)
 #' crul::mock()
-#' HttpClient$new(url = "https://eu.httpbin.org/get")$get(verbose = TRUE)
+#' # HttpClient$new(url = "https://eu.httpbin.org/get")$get(verbose = TRUE)
 #' turn_on()
 #' }
 turned_off <- function(..., ignore_cassettes = FALSE) {

@@ -55,7 +55,8 @@ Insert a cassette to record HTTP requests
 \dontrun{
 library(vcr)
 library(crul)
-vcr_configure(dir = "~/fixtures/vcr_cassettes")
+vcr_configure(dir = tempdir())
+webmockr::webmockr_allow_net_connect()
 
 (x <- insert_cassette(name = "leo5"))
 current_cassette()
@@ -65,6 +66,9 @@ cli$get("get")
 x$new_recorded_interactions
 # very important when using inject_cassette: eject when done
 x$eject() # same as eject_cassette("leo5")
+
+# cleanup
+unlink(file.path(tempdir(), "leo5.yml"))
 }
 }
 \seealso{

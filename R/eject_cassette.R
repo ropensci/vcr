@@ -10,21 +10,16 @@
 #' already handled it - IGNORED FOR NOW
 #' @return The ejected cassette if there was one
 #' @seealso [use_cassette()], [insert_cassette()]
-#' @examples \dontrun{
-#' library(crul)
-#'
-#' vcr_configure(dir = "~/fixtures/vcr_cassettes")
+#' @examples
+#' vcr_configure(dir = tempdir())
 #' insert_cassette("hello")
 #' (x <- current_cassette())
-#' res <- crul::HttpClient$new(url = "https://httpbin.org")
-#' bb <- res$get("get")
+#'
 #' # by default does current cassette
 #' x <- eject_cassette()
 #' x
-#' x$deserialized_hash()
 #' # can also select by cassette name
 #' # eject_cassette(cassette = "hello")
-#' }
 eject_cassette <- function(cassette = NULL, options = list(),
                            skip_no_unused_interactions_assertion = NULL) {
   if (is.null(cassette)) {

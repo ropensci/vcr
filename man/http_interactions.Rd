@@ -15,7 +15,9 @@ Get the http interactions of the current cassette
 }
 \examples{
 \dontrun{
+vcr_configure(dir = tempdir())
 insert_cassette("foo_bar")
+webmockr::webmockr_allow_net_connect()
 library(crul)
 cli <- crul::HttpClient$new("https://eu.httpbin.org/get")
 one <- cli$get(query = list(a = 5))
@@ -24,5 +26,7 @@ z
 z$interactions
 z$used_interactions
 eject_cassette("foo_bar")
+# cleanup
+unlink(file.path(tempdir(), "foo_bar.yml"))
 }
 }

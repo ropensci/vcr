@@ -44,6 +44,9 @@
 #' @format NULL
 #' @usage NULL
 #' @examples \dontrun{
+#' vcr_configure(dir = tempdir())
+#'
+#'
 #' url <- "https://google.com"
 #' (cli <- crul::HttpClient$new(url = url))
 #' (res <- cli$get("get", query = list(q = "stuff")))

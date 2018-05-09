@@ -27,21 +27,21 @@ vcr log file setup
 \examples{
 # user workflow
 vcr_configuration()
-vcr_configure(log = TRUE)
-vcr_configuration()
+logfile <- file.path(tempdir(), "vcr.log")
+vcr_configure(log = TRUE, log_opts = list(file = logfile))
 
-readLines("vcr.log") # empty
+readLines(logfile) # empty
 
 # log messages
 vcr_log_info("hello world!")
-readLines("vcr.log")
+readLines(logfile)
 vcr_log_info("foo bar")
-readLines("vcr.log")
+readLines(logfile)
 ## many messages
 vcr_log_info(c("brown cow", "blue horse"))
-readLines("vcr.log")
+readLines(logfile)
 vcr_log_info(c("brown cow", "blue horse", "green goat"))
-readLines("vcr.log")
+readLines(logfile)
 
 # standalone workflow
 # set a file to log to
@@ -50,11 +50,12 @@ readLines(f) # empty
 
 # log messages
 vcr_log_info("hello world!")
-readLines("vcr.log")
+readLines(logfile)
 vcr_log_info("foo bar")
-readLines("vcr.log")
+readLines(logfile)
 
 # cleanup
-# unlink(f)
+unlink(f)
+unlink(logfile)
 }
 \keyword{internal}

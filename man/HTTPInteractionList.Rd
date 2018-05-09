@@ -72,7 +72,7 @@ Get a response summary (character)
 \examples{
 \dontrun{
 vcr_configure(
- dir = "fixtures/vcr_cassettes",
+ dir = tempdir(),
  record = "once"
 )
 

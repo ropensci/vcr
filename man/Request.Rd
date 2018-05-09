@@ -33,14 +33,15 @@ Create a \code{Request} class object from a hash
 }
 }
 \examples{
-\dontrun{
-library("crul")
 url <- "https://eu.httpbin.org/post"
 body <- list(foo = "bar")
-cli <- crul::HttpClient$new(url = url)
-res <- cli$post(body = body)
+headers <- list(
+  `User-Agent` = "libcurl/7.54.0 r-curl/3.2 crul/0.5.2",
+  `Accept-Encoding` = "gzip, deflate",
+  Accept = "application/json, text/xml, application/xml, */*"
+)
 
-(x <- Request$new("POST", url, body, res$request_headers))
+(x <- Request$new("POST", url, body, headers))
 x$body
 x$method
 x$uri
@@ -49,6 +50,5 @@ x$path
 x$headers
 h <- x$to_hash()
 x$from_hash(h)
-}
 }
 \keyword{internal}

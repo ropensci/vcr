@@ -55,6 +55,9 @@ Checks if the type of encoding is one of "gzip" or "deflate"
 }
 \examples{
 \dontrun{
+vcr_configure(dir = tempdir())
+
+
 url <- "https://google.com"
 (cli <- crul::HttpClient$new(url = url))
 (res <- cli$get("get", query = list(q = "stuff")))
