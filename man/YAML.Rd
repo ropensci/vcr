@@ -29,6 +29,7 @@ Deserializes the given string using yaml::yaml.load_file
 }
 }
 \examples{
+\dontrun{
 (yy <- YAML$new(path = "stuff2"))
 fun <- yy$serialize()
 fun(list(http_interactions = list(response = list(body = "bar"))),
@@ -36,5 +37,6 @@ fun(list(http_interactions = list(response = list(body = "bar"))),
 yy$deserialize_path()
 yy$deserialize_string(string = "- hey\\n- hi\\n- hello")
 yy$deserialize_string(string = "- foo\\n- bar\\n- 3.14")
+}
 }
 \keyword{internal}

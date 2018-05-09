@@ -54,4 +54,18 @@ on unhandled request, run UnhandledHTTPRequestError
 }
 }
 }
+\examples{
+\dontrun{
+vcr_configure(
+ dir = tempdir(),
+ record = "once"
+)
+
+data(crul_request)
+crul_request$url$handle <- curl::new_handle()
+crul_request
+x <- RequestHandler$new(crul_request)
+# x$handle()
+}
+}
 \keyword{datasets}

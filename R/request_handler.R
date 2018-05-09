@@ -49,7 +49,7 @@
 #' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(
-#'  dir = "tempdir(),
+#'  dir = tempdir(),
 #'  record = "once"
 #' )
 #'
