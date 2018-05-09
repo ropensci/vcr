@@ -31,7 +31,7 @@
 #'
 #' # list the path to cassettes
 #' cassette_path()
-#' vcr_configure("foo")
+#' vcr_configure(file.path(tempdir(), "foo"))
 #' cassette_path()
 #'
 #' vcr_configure_reset()

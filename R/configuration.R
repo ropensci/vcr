@@ -55,20 +55,24 @@
 #' vcr_configure(dir = tempdir(), record = "all")
 #' vcr_configuration()
 #' vcr_config_defaults()
-#' vcr_configure(ignore_localhost = TRUE)
+#' vcr_configure(tempdir(), ignore_localhost = TRUE)
 #'
 #' # logging
-#' vcr_configure(log = TRUE, log_opts = list(file = "vcr.log"))
-#' vcr_configure(log = TRUE, log_opts = list(file = "console"))
-#' vcr_configure(log = TRUE,
-#'  log_opts = list(file = "vcr.log", log_prefix = "foobar"))
-#' vcr_configure(log = FALSE)
+#' vcr_configure(tempdir(), log = TRUE, 
+#'   log_opts = list(file = file.path(tempdir(), "vcr.log")))
+#' vcr_configure(tempdir(), log = TRUE, log_opts = list(file = "console"))
+#' vcr_configure(tempdir(), log = TRUE,
+#'  log_opts = list(
+#'    file = file.path(tempdir(), "vcr.log"), 
+#'    log_prefix = "foobar"
+#' ))
+#' vcr_configure(tempdir(), log = FALSE)
 #'
 #' # filter sensitive data
-#' vcr_configure(
+#' vcr_configure(tempdir(), 
 #'   filter_sensitive_data = list(foo = "<bar>")
 #' )
-#' vcr_configure(
+#' vcr_configure(tempdir(), 
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
 vcr_configure <- function(
