@@ -3,7 +3,6 @@
 ^\.travis\.yml$
 ^CODE_OF_CONDUCT\.md$
 man-roxygen
-NEWS\.md
 ^cran-comments\.md$
 ^README\.Rmd$
 ^.*\.yml
