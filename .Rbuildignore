@@ -11,3 +11,4 @@ Makefile
 scott_notes.md
 .github
 ^codemeta\.json$
+inst/ignore

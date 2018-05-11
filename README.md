@@ -31,7 +31,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.143   0.010   0.842
+#>   0.207   0.029   1.089
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -44,7 +44,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.036   0.003   0.201
+#>   0.108   0.006   0.116
 ```
 
 
@@ -102,8 +102,8 @@ The main use case is for unit tests for R packages.
 
 `vcr` currently only works with the `crul` package, but we plan to make it work with `httr`.
 
-<!-- `vcr` is tightly integrated with [webmockr][]. [webmockr][] does the actual work of matching requests, 
-and creating "stubs". "stubs" are an R6 class ith details of an HTTP interaction (request + response). 
+<!-- `vcr` is tightly integrated with [webmockr][]. [webmockr][] does the actual work of matching requests,
+and creating "stubs". "stubs" are an R6 class ith details of an HTTP interaction (request + response).
 `vcr`  -->
 
 ### How it works in lots of detail
@@ -112,10 +112,10 @@ and creating "stubs". "stubs" are an R6 class ith details of an HTTP interaction
 
 1. Use either `vcr::use_cassette` or `vcr::insert_cassette`
   a. If you use `vcr::insert_cassette`, make sure to run `vcr::eject_cassette` when you're done to stop recording
-2. When you first run a request with `vcr` there's no cached data to use, so we allow HTTP requests until you're request is done. 
+2. When you first run a request with `vcr` there's no cached data to use, so we allow HTTP requests until you're request is done.
 3. Before we run the real HTTP request, we "stub" the request with `webmockr` so that future requests will match the stub.
 This stub is an R6 class with details of the interaction (request + response), but is not on disk.
-4. After the stub is made, we run the real HTTP request. 
+4. After the stub is made, we run the real HTTP request.
 5. We then disallow HTTP requests so that if the request is done again we use the cached response
 6. The last thing we do is write the HTTP interaction to disk in a mostly human readable form.
 
@@ -123,12 +123,12 @@ When you run that request again using `vcr::use_cassette` or `vcr::insert_casset
 
 * We use `webmockr` to match the request to cached requests, and since we stubbed the request the first time we used the cached response.
 
-Of course if you do a different request, even slightly (but depending on which matching format you decided to use), then 
+Of course if you do a different request, even slightly (but depending on which matching format you decided to use), then
 the request will have no matching stub and no cached response, and then a real HTTP request is done - we then cache it, then subsequent requests will pull from that cached response.
 
 `webmockr` has adapters for each R client (again, right now only [crul][]) - so that we actually intercept HTTP requests when `webmockr` is loaded and the user turns it on. So, `webmockr` doesn't actually require an internet or localhost connection at all, but can do its thing just fine by matching on whatever the user requests to match on. In fact, `webmockr` doesn't allow real HTTP requests by default, but can be toggled off of course.
 
-The main use case we are going for in `vcr` is to deal with real HTTP requests and responses, so we allow real HTTP requests when we need to, and turn it off when we don't. 
+The main use case we are going for in `vcr` is to deal with real HTTP requests and responses, so we allow real HTTP requests when we need to, and turn it off when we don't.
 
 This gives us a very flexible and powerful framework where we can support `webmockr` and `vcr` integration for any number of R clients for HTTP requests and support many different formats serialized to disk.
 
@@ -149,7 +149,7 @@ You're looking for [webmockr][]. `webmockr` only matches requests based on crite
 
 ```r
 library("vcr")
-invisible(vcr::vcr_configure(dir = "../fixtures/vcr_cassettes"))
+invisible(vcr::vcr_configure())
 ```
 
 * In your tests, for whichever tests you want to use `vcr`, wrap them in a `vcr::use_cassette()` call like:
@@ -169,10 +169,10 @@ test_that("my test", {
 
 ### vcr in your R project
 
-You can use `vcr` in an R project as well. 
+You can use `vcr` in an R project as well.
 
 * Load `vcr` in your project
-* Similar to the above example, use `use_cassette` to run code that does HTTP requests. 
+* Similar to the above example, use `use_cassette` to run code that does HTTP requests.
 * The first time a real request is done, and after that the cached response will be used.
 
 
@@ -223,8 +223,7 @@ We set the following defaults:
 * `vcr_logging_opts` = `list()`
 
 
-You can get the defaults programatically with 
-
+You can get the defaults programatically with
 
 ```r
 vcr_config_defaults()
@@ -232,49 +231,28 @@ vcr_config_defaults()
 
 You can change all the above defaults with `vcr_configure()`:
 
-
 ```r
-vcr_configure(
-  dir = "fixtures/vcr_cassettes",
-  record = "once"
-)
-#> <vcr configuration>
-#>   Cassette Dir: fixtures/vcr_cassettes
-#>   Record: once
-#>   URI Parser: crul::url_parse
-#>   Match Requests on: method, uri
-#>   Preserve Bytes?: FALSE
-#>   Logging?: FALSE
+vcr_configure()
 ```
 
 Calling `vcr_configuration()` gives you some of the more important defaults in a nice tidy print out
 
-
 ```r
 vcr_configuration()
-#> <vcr configuration>
-#>   Cassette Dir: fixtures/vcr_cassettes
-#>   Record: once
-#>   URI Parser: crul::url_parse
-#>   Match Requests on: method, uri
-#>   Preserve Bytes?: FALSE
-#>   Logging?: FALSE
 ```
 
 
+<!-- `use_cassette()` is an easier approach. An alternative is to use
+`insert_cassett()` + `eject_cassette()`.
 
-
-<!-- `use_cassette()` is an easier approach. An alternative is to use 
-`insert_cassett()` + `eject_cassette()`. 
-
-`use_cassette()` does both insert and eject operations for you, but 
+`use_cassette()` does both insert and eject operations for you, but
 you can instead do them manually by using the above functions. You do have
 to eject the cassette after using insert. -->
 
 ## Matching/Matchers
 
-`vcr` looks for similarity in your HTTP requests to cached requests. You 
-can set what is examined about the request with one or more of the 
+`vcr` looks for similarity in your HTTP requests to cached requests. You
+can set what is examined about the request with one or more of the
 following options:
 
 * `body`
@@ -285,7 +263,7 @@ following options:
 * `query`
 * `uri`
 
-By default, we use `method` (HTTP method, e.g., `GET`) and `uri` (test for exact match against URI, e.g., `http://foo.com`). 
+By default, we use `method` (HTTP method, e.g., `GET`) and `uri` (test for exact match against URI, e.g., `http://foo.com`).
 
 You can set your own options by tweaking the `match_requests_on` parameter:
 
@@ -295,7 +273,7 @@ You can set your own options by tweaking the `match_requests_on` parameter:
 ```r
 use_cassette(name = "one", {
     cli$post("post", body = list(a = 5))
-  }, 
+  },
   match_requests_on = c('method', 'headers', 'body')
 )
 ```
