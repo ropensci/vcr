@@ -79,6 +79,18 @@
 #'
 #' # cleanup
 #' unlink(file.path(tempdir(), c("things4.yml", "apple7.yml")))
+#' 
+#' 
+#' # with httr
+#' library(vcr)
+#' library(httr)
+#' vcr_configure(dir = tempdir())
+#'
+#' use_cassette(name = "foobar", {
+#'   res <- GET("https://httpbin.org/get")
+#' })
+#' readLines(file.path(tempdir(), "foobar.yml"))
+#'
 #' }
 
 use_cassette <- function(name, ..., record = "once",
