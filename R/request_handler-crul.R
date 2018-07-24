@@ -12,6 +12,15 @@
 #' crul_request
 #' x <- RequestHandlerCrul$new(crul_request)
 #' # x$handle()
+#' 
+#' data(crul_request_post_json)
+#' crul_request_post_json$request$url$handle <- curl::new_handle()
+#' crul_request_post_json
+#' crul_request_post_json$request
+#' x <- RequestHandlerCrul$new(crul_request_post_json$request)
+#' # x$handle()
+#' 
+#' 
 #' }
 RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
@@ -52,7 +61,6 @@ RequestHandlerCrul <- R6::R6Class(
       # - this may need to be called from webmockr cruladapter?
 
       # real request
-      # tmp <- crul::HttpClient$new(url = request$url$url)
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)
 
@@ -61,7 +69,6 @@ RequestHandlerCrul <- R6::R6Class(
       cas <- tryCatch(current_cassette(), error = function(e) e)
       if (inherits(cas, "error")) stop("no cassette in use")
       cas$record_http_interaction(response)
-      # cas$record_http_interaction(self$vcr_response)
 
       # return real response
       return(response)
