@@ -84,12 +84,12 @@
 #' # with httr
 #' library(vcr)
 #' library(httr)
-#' vcr_configure(dir = tempdir())
+#' vcr_configure(dir = tempdir(), log = TRUE)
 #'
-#' use_cassette(name = "foobar", {
-#'   res <- GET("https://httpbin.org/get")
+#' use_cassette(name = "stuff345", {
+#'   res <- GET("https://httpbin.org")
 #' })
-#' readLines(file.path(tempdir(), "foobar.yml"))
+#' readLines(file.path(tempdir(), "stuff345.yml"))
 #'
 #' }
 

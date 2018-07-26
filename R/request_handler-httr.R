@@ -12,7 +12,6 @@
 #' req
 #' x <- RequestHandlerHttr$new(req)
 #' # x$handle()
-#' x$
 #' }
 RequestHandlerHttr <- R6::R6Class(
   'RequestHandlerHttr',
@@ -32,8 +31,13 @@ RequestHandlerHttr <- R6::R6Class(
   private = list(
     # make a `vcr` response
     response_for = function(x) {
-      VcrResponse$new(x$status_http(), x$response_headers,
-        x$parse("UTF-8"), x$response_headers$status, super$cassette$cassette_opts)
+      VcrResponse$new(
+        httr::http_status(x), 
+        x$headers,
+        httr::content(x, encoding = "UTF-8"), 
+        x$all_headers[[1]]$version, 
+        super$cassette$cassette_opts
+      )
     },
 
     # these will replace those in
@@ -63,6 +67,7 @@ RequestHandlerHttr <- R6::R6Class(
       # - this may need to be called from webmockr httradapter?
 
       # real request
+      webmockr::httr_mock(FALSE)
       tmp2 <- eval(parse(text = paste0("httr::", self$request_original$method)))(self$request_original$url)
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 

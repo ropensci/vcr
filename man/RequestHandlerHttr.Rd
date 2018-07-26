@@ -62,10 +62,10 @@ vcr_configure(
  record = "once"
 )
 
-data(crul_request)
-crul_request$url$handle <- curl::new_handle()
-crul_request
-x <- RequestHandlerHttr$new(crul_request)
+library(httr)
+load("~/httr_req.rda")
+req
+x <- RequestHandlerHttr$new(req)
 # x$handle()
 }
 }

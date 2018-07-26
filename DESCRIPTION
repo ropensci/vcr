@@ -20,7 +20,7 @@ VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.5.2),
-    webmockr (>= 0.2.4),
+    webmockr (>= 0.2.6.9323),
     urltools,
     yaml,
     R6,
