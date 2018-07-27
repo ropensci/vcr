@@ -114,10 +114,14 @@ library(vcr)
 library(httr)
 vcr_configure(dir = tempdir(), log = TRUE)
 
-use_cassette(name = "stuff345", {
-  res <- GET("https://httpbin.org")
+use_cassette(name = "stuff350", {
+  res <- GET("https://httpbin.org/get")
 })
-readLines(file.path(tempdir(), "stuff345.yml"))
+readLines(file.path(tempdir(), "stuff350.yml"))
+
+use_cassette(name = "catfact456", {
+  res <- GET("https://catfact.ninja/fact")
+})
 
 }
 }
