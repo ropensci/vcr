@@ -4,10 +4,11 @@
 \alias{use_cassette}
 \title{Use a cassette}
 \usage{
-use_cassette(name, ..., record = "once", match_requests_on = c("method",
-  "uri"), update_content_length_header = FALSE,
-  allow_playback_repeats = FALSE, serialize_with = "yaml",
-  persist_with = "FileSystem", preserve_exact_body_bytes = FALSE)
+use_cassette(name, ..., record = "once",
+  match_requests_on = c("method", "uri"),
+  update_content_length_header = FALSE, allow_playback_repeats = FALSE,
+  serialize_with = "yaml", persist_with = "FileSystem",
+  preserve_exact_body_bytes = FALSE)
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it

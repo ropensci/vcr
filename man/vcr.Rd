@@ -4,7 +4,6 @@
 \name{vcr}
 \alias{vcr}
 \alias{vcr-package}
-\alias{vcr-package}
 \title{vcr: Record HTTP Calls to Disk}
 \description{
 \pkg{vcr} records test suite 'HTTP' requests and replay them during

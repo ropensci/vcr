@@ -491,7 +491,7 @@ Cassette <- R6::R6Class(
       response <- VcrResponse$new(
         x$status_http(),
         headers = x$response_headers,
-        body = rawToChar(x$content),
+        body = if (is.raw(x$content)) rawToChar(x$content) else x$content,
         http_version = x$response_headers$status,
         self$cassette_opts
       )
