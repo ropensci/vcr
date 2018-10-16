@@ -7,16 +7,18 @@
 \alias{vcr_config_defaults}
 \title{Configuration}
 \usage{
-vcr_configure(dir = ".", record = "once", match_requests_on = c("method",
-  "uri"), allow_unused_http_interactions = TRUE, serialize_with = "yaml",
+vcr_configure(dir = ".", record = "once",
+  match_requests_on = c("method", "uri"),
+  allow_unused_http_interactions = TRUE, serialize_with = "yaml",
   persist_with = "FileSystem", ignore_hosts = NULL,
   ignore_localhost = FALSE, ignore_request = NULL,
   uri_parser = "crul::url_parse", preserve_exact_body_bytes = FALSE,
-  turned_off = FALSE, ignore_cassettes = FALSE, re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
+  turned_off = FALSE, ignore_cassettes = FALSE,
+  re_record_interval = NULL, clean_outdated_http_interactions = NULL,
   allow_http_connections_when_no_cassette = FALSE, cassettes = list(),
-  linked_context = NULL, log = FALSE, log_opts = list(file = "vcr.log",
-  log_prefix = "Cassette", date = TRUE), filter_sensitive_data = NULL)
+  linked_context = NULL, log = FALSE, log_opts = list(file =
+  "vcr.log", log_prefix = "Cassette", date = TRUE),
+  filter_sensitive_data = NULL)
 
 vcr_configure_reset()
 
