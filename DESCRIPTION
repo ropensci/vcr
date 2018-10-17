@@ -20,7 +20,7 @@ VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.5.2),
-    webmockr (>= 0.2.6.9326),
+    webmockr (>= 0.2.8),
     urltools,
     yaml,
     R6,
@@ -31,7 +31,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-Remotes: ropensci/webmockr@adapter-httr
+Remotes: ropensci/webmockr
 RoxygenNote: 6.1.0
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
