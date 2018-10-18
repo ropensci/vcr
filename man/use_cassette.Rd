@@ -108,6 +108,22 @@ readLines(file.path(tempdir(), "things4.yml"))
 
 # cleanup
 unlink(file.path(tempdir(), c("things4.yml", "apple7.yml")))
+
+
+# with httr
+library(vcr)
+library(httr)
+vcr_configure(dir = tempdir(), log = TRUE)
+
+use_cassette(name = "stuff350", {
+  res <- GET("https://httpbin.org/get")
+})
+readLines(file.path(tempdir(), "stuff350.yml"))
+
+use_cassette(name = "catfact456", {
+  res <- GET("https://catfact.ninja/fact")
+})
+
 }
 }
 \seealso{

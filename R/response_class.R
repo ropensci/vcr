@@ -209,3 +209,47 @@ extract_http_version <- function(x) {
     return(x)
   }
 }
+
+
+# vcr_request_httr <- function(x) {
+#   Request$new(  
+#     x$request$method,
+#     x$url,
+#     x$body, # FIXME: body not a field, probably index to x$request$fields
+#     as.list(x$request$headers),
+#     self$cassette_opts
+#   )
+# }
+
+# vcr_request_crul <- function(x) {
+#   Request$new(
+#     x$request$method,
+#     x$url,
+#     x$body,
+#     x$request_headers,
+#     self$cassette_opts
+#   )
+# }
+
+
+
+# vcr_response_httr <- function(x) {
+#   VcrResponse$new(
+#     httr::http_status(x), 
+#     x$headers,
+#     httr::content(x, encoding = "UTF-8"), 
+#     x$all_headers[[1]]$version, 
+#     super$cassette$cassette_opts
+#   )
+# }
+
+# vcr_response_crul <- function(x) {
+#   VcrResponse$new(
+#     x$status_http(),
+#     headers = x$response_headers,
+#     body = rawToChar(x$content),
+#     http_version = x$response_headers$status,
+#     self$cassette_opts
+#   )
+# }
+
