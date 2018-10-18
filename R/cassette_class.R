@@ -278,6 +278,10 @@ Cassette <- R6::R6Class(
       }
       # allow http interactions - disallow at end of call_block() below
       webmockr::webmockr_allow_net_connect()
+      
+      # FIXME: temporary attempt to make it work: turn on mocking for httr
+      webmockr::httr_mock()
+      
       # evaluate request
       resp <- lazyeval::lazy_eval(tmp)
       # disallow http interactions - allow at start of call_block() above
@@ -484,15 +488,20 @@ Cassette <- R6::R6Class(
       request <- Request$new(
         x$request$method,
         x$url,
-        x$body,
-        x$request_headers,
+        if (inherits(x, "response")) {
+          bd <- x$request$options$postfields
+          if (inherits(bd, "raw")) rawToChar(bd) else bd
+        } else {
+          x$request$fields
+        },
+        if (inherits(x, "response")) as.list(x$request$headers) else x$request_headers,
         self$cassette_opts
       )
       response <- VcrResponse$new(
-        x$status_http(),
-        headers = x$response_headers,
-        body = rawToChar(x$content),
-        http_version = x$response_headers$status,
+        if (inherits(x, "response")) httr::http_status(x) else unclass(x$status_http()),
+        if (inherits(x, "response")) x$headers else x$response_headers,
+        rawToChar(x$content),
+        if (inherits(x, "response")) x$all_headers[[1]]$version else x$response_headers$status,
         self$cassette_opts
       )
       if (self$update_content_length_header) response$update_content_length_header()

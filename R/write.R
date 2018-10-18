@@ -108,7 +108,7 @@ pkg_versions <- function() {
   paste(
     paste0("vcr/", utils::packageVersion("vcr")),
     paste0("webmockr/", utils::packageVersion("webmockr")),
-    paste0("crul/", utils::packageVersion("crul")),
+    # paste0("crul/", utils::packageVersion("crul")),
     sep = ", "
   )
 }

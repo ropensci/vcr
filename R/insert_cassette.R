@@ -41,6 +41,8 @@ insert_cassette <- function(name, record="once",
 
     # enable webmockr
     webmockr::enable()
+    # FIXME: temporary attempt to make it work: turn on mocking for httr
+    # webmockr::httr_mock()
 
     # record cassete name for use in logging, etc.
     vcr__env$current_cassette <- name
