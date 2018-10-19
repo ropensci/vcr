@@ -32,8 +32,7 @@ vcr introduction
 
 The main use case is for unit tests, but you can use it outside of the unit test use case.
 
-`vcr` currently only works with the `crul` package, but we plan to make it work with other 
-http R packages.
+`vcr` works with the `crul` and `httr` HTTP request packages; we're working on support for `curl`.
 
 Check out the [http testing book](https://ropensci.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
 
