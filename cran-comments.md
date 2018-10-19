@@ -23,5 +23,10 @@ File 'LICENSE':
 
 This version adds support/integration with httr.
 
-Thanks!
+Note that binary builds are not yet available for one of vcr's 
+dependencies: webmockr. I am submitting before the builds are 
+available because the recent webmockr submission I made does
+break tests in this package. 
+
+Thanks very much,
 Scott Chamberlain
