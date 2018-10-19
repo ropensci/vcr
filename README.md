@@ -2,6 +2,7 @@ vcr
 ===
 
 
+
 [![cran checks](https://cranchecks.info/badges/worst/vcr)](https://cranchecks.info/pkgs/vcr)
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg)](https://travis-ci.org/ropensci/vcr)
@@ -14,6 +15,11 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation
 ## Docs
 
 Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
+
+## Supported HTTP libraries
+
+* [crul](https://github.com/ropensci/crul)
+* [httr](https://github.com/r-lib/httr)
 
 ## Usage
 
@@ -31,7 +37,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.207   0.029   1.089
+#>   0.217   0.021   1.362
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -44,7 +50,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.108   0.006   0.116
+#>   0.086   0.003   0.091
 ```
 
 
@@ -100,11 +106,7 @@ The short version is: `vcr` helps you stub HTTP requests so you don't have to re
 
 The main use case is for unit tests for R packages.
 
-`vcr` currently only works with the `crul` package, but we plan to make it work with `httr`.
-
-<!-- `vcr` is tightly integrated with [webmockr][]. [webmockr][] does the actual work of matching requests,
-and creating "stubs". "stubs" are an R6 class ith details of an HTTP interaction (request + response).
-`vcr`  -->
+`vcr` currently works with the `crul` and `httr` packages; support for `curl` is in the works.
 
 ### How it works in lots of detail
 

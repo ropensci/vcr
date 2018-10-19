@@ -23,6 +23,11 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation
 
 Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
 
+## Supported HTTP libraries
+
+* [crul](https://github.com/ropensci/crul)
+* [httr](https://github.com/r-lib/httr)
+
 ## Usage
 
 ```{r echo=FALSE, results='hide'}
@@ -108,11 +113,7 @@ The short version is: `vcr` helps you stub HTTP requests so you don't have to re
 
 The main use case is for unit tests for R packages.
 
-`vcr` currently only works with the `crul` package, but we plan to make it work with `httr`.
-
-<!-- `vcr` is tightly integrated with [webmockr][]. [webmockr][] does the actual work of matching requests,
-and creating "stubs". "stubs" are an R6 class ith details of an HTTP interaction (request + response).
-`vcr`  -->
+`vcr` currently works with the `crul` and `httr` packages; support for `curl` is in the works.
 
 ### How it works in lots of detail
 
