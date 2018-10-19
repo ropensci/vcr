@@ -318,11 +318,11 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
-[rredlist]: https://github.com/ropensci/rredlist/tree/vcr-integration
-[bold]: https://github.com/ropensci/bold/tree/with-vcr
-[wikitaxa]: https://github.com/ropensci/wikitaxa/tree/with-vcr
-[worrms]: https://github.com/ropensci/worrms/tree/with-vcr
-[microdemic]: https://github.com/ropensci/worrms/tree/with-vcr
+[rredlist]: https://github.com/ropensci/rredlist
+[bold]: https://github.com/ropensci/bold
+[wikitaxa]: https://github.com/ropensci/wikitaxa
+[worrms]: https://github.com/ropensci/worrms
+[microdemic]: https://github.com/ropensci/microdemic
 [zbank]: https://github.com/ropenscilabs/zbank
-[rplos]: https://github.com/ropensci/rplos/tree/with-vcr
-[ritis]: https://github.com/ropensci/ritis/tree/with-vcr
+[rplos]: https://github.com/ropensci/rplos
+[ritis]: https://github.com/ropensci/ritis
