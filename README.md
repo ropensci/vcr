@@ -10,7 +10,7 @@ vcr
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
-An R port of the Ruby gem [vcr](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
+An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Docs
 
@@ -37,7 +37,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.217   0.021   1.362
+#>   0.208   0.029   1.140
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -50,7 +50,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.086   0.003   0.091
+#>   0.071   0.003   0.075
 ```
 
 
@@ -146,7 +146,7 @@ You're looking for [webmockr][]. `webmockr` only matches requests based on crite
 
 ### vcr for tests
 
-* Add `webmockr` and `vcr` to `Suggests` in your package
+* Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add `webmockr`, but it's not explicitly needed as `vcr` will pull it in) 
 * Make a file in your `tests/testthat/` directory called `helper-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
 
 ```r
@@ -292,6 +292,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 ## Example packages using vcr
 
+* [rgbif][]
 * [rredlist][]
 * [bold][]
 * [wikitaxa][]
@@ -300,6 +301,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [zbank][]
 * [rplos][]
 * [ritis][]
+* [nasapower][]
 
 ## TODO
 
@@ -318,6 +320,8 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
+[rgbif]: https://github.com/ropensci/rgbif
+[rdatacite]: https://github.com/ropensci/rdatacite  
 [rredlist]: https://github.com/ropensci/rredlist
 [bold]: https://github.com/ropensci/bold
 [wikitaxa]: https://github.com/ropensci/wikitaxa
@@ -326,3 +330,4 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [zbank]: https://github.com/ropenscilabs/zbank
 [rplos]: https://github.com/ropensci/rplos
 [ritis]: https://github.com/ropensci/ritis
+[nasapower]: https://github.com/ropensci/nasapower
