@@ -1,2 +1,3 @@
 tmpdir <- tempdir()
-vcr::vcr_configure(dir = tmpdir)
+library(vcr)
+vcr_configure(dir = tmpdir)
