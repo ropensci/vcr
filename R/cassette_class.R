@@ -497,12 +497,25 @@ Cassette <- R6::R6Class(
         if (inherits(x, "response")) as.list(x$request$headers) else x$request_headers,
         self$cassette_opts
       )
+      # content must be raw or character
+      assert(x$content, c('raw', 'character'))
       response <- VcrResponse$new(
-        if (inherits(x, "response")) httr::http_status(x) else unclass(x$status_http()),
-        if (inherits(x, "response")) x$headers else x$response_headers,
-        rawToChar(x$content),
-        if (inherits(x, "response")) x$all_headers[[1]]$version else x$response_headers$status,
-        self$cassette_opts
+        status = if (inherits(x, "response")) httr::http_status(x) else unclass(x$status_http()),
+        headers = if (inherits(x, "response")) x$headers else x$response_headers,
+        body = if (is.raw(x$content)) {
+          ff <- tryCatch(rawToChar(x$content), error = function(e) e)
+          if (inherits(ff, "error")) x$content else ff
+        } else {
+          stopifnot(inherits(x$content, "character"))
+          if (file.exists(x$content)) {
+            # calculate new file path in fixtures/
+            # move file into fixtures/file_cache/
+          } else {
+            x$content
+          }
+        },
+        http_version = if (inherits(x, "response")) x$all_headers[[1]]$version else x$response_headers$status,
+        opts = self$cassette_opts
       )
       if (self$update_content_length_header) response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)

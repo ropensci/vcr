@@ -43,8 +43,12 @@ write_interactions <- function(x, file, bytes) {
   assert(x, c("list", "HTTPInteraction"))
   assert(file, "character")
 
-  body <- if (bytes) {
-    base64enc::base64encode(charToRaw(get_body(x$response$body)))
+  if (is.raw(x$response$body)) bytes <- TRUE
+
+  body <- if (bytes || is.raw(x$response$body)) {
+    bd <- get_body(x$response$body)
+    if (!is.raw(bd)) bd <- charToRaw(bd)
+    base64enc::base64encode(bd)
   } else {
     get_body(x$response$body)
   }

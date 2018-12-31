@@ -69,7 +69,11 @@ response_summary <- function(response) {
   } else {
     ss <- NULL
   }
+
+  # if body is raw, state that it's raw
+  resp <- if (is.raw(response$body)) "<raw>" else response$body
+
+  # construct summary
   sprintf("%s %s", ss %||% '???',
-  # sprintf("%s %s", response$status$status_code %||% '???',
-    substring(gsub("\n", " ", response$body), 1, 80))
+    substring(gsub("\n", " ", resp), 1, 80))
 }

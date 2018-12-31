@@ -130,16 +130,30 @@ body_from <- function(x) {
   # return hash_or_string unless hash_or_string.is_a?(Hash)
   # hash = hash_or_string
   if (is.null(x)) x <- ""
-  if (is.null(attr(x, "base64"))) return(try_encode_string(x, Encoding(x)))
-  if (attr(x, "base64") || is_base64(x)) {
-    rawToChar(base64enc::base64decode(x))
+  # if (is.null(attr(x, "base64"))) return(try_encode_string(x, Encoding_safe(x)))
+  if ((!is.null(attr(x, "base64")) && attr(x, "base64")) || is_base64(x)) {
+    b64dec <- base64enc::base64decode(x)
+    b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
+    if (inherits(b64dec_r2c, "error")) {
+      # probably is binary (e.g., pdf), so can't be converted to char.
+      b64dec
+    } else {
+      # probably was originally character data, so
+      #  can convert to character from binary
+      b64dec_r2c
+    }
   } else {
-    try_encode_string(x, Encoding(x))
+    try_encode_string(x, Encoding_safe(x))
   }
 }
 
 is_base64 <- function(x) {
   grepl(b64_pattern, x)
+}
+
+Encoding_safe <- function(x) {
+  tryenc <- tryCatch(Encoding(x), error = function(e) e)
+  if (inherits(tryenc, "error")) "unknown" else tryenc
 }
 
 b64_pattern <- "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"
