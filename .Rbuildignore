@@ -13,3 +13,4 @@ scott_notes.md
 ^codemeta\.json$
 inst/ignore
 ^revdep$
+notes.R
