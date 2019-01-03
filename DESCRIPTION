@@ -34,7 +34,7 @@ Suggests:
     knitr,
     rmarkdown
 RoxygenNote: 6.1.1
-Remotes: ropensci/crul@intermediate-headers, ropensci/webmockr@crul-adapter-response-headers
+Remotes: ropensci/crul, ropensci/webmockr@crul-adapter-response-headers
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
