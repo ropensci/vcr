@@ -20,9 +20,9 @@ LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
-    crul (>= 0.6.2.9334),
+    crul (>= 0.7.0),
     httr,
-    webmockr (>= 0.2.9.9313),
+    webmockr (>= 0.3.0),
     urltools,
     yaml,
     R6,
@@ -34,7 +34,7 @@ Suggests:
     knitr,
     rmarkdown
 RoxygenNote: 6.1.1
-Remotes: ropensci/crul, ropensci/webmockr@crul-adapter-response-headers
+Remotes: ropensci/crul, ropensci/webmockr
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
