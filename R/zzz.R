@@ -19,7 +19,7 @@ errmssg <- "use_cassette requires a block.\nIf you cannot wrap your code in a bl
 compact <- function(x) Filter(Negate(is.null), x)
 
 `%||%` <- function(x, y) {
-  if (is.null(x) || nchar(x) == 0 || length(x) == 0) y else x
+  if (is.null(x) || all(nchar(x) == 0) || length(x) == 0) y else x
 }
 
 stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
