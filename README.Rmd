@@ -62,7 +62,7 @@ system.time(
 unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
-Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP resonse - thus, your tests run faster.
+Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP response - thus, your tests run faster.
 
 The cached response looks something like (condensed for brevity):
 
@@ -229,7 +229,7 @@ We set the following defaults:
 * `vcr_logging_opts` = `list()`
 
 
-You can get the defaults programatically with
+You can get the defaults programmatically with
 
 ```r
 vcr_config_defaults()

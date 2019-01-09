@@ -89,7 +89,7 @@ unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
 Importantly, your unit test deals with the same inputs and the same outputs - 
-but behind the scenes you use a cached HTTP resonse - thus, your tests run faster.
+but behind the scenes you use a cached HTTP response - thus, your tests run faster.
 
 The cached response looks something like (condensed for brevity):
 

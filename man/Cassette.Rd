@@ -85,7 +85,7 @@ Write metadata to disk.
 Coming soon.
 }
 \item{\code{serialize_to_crul}}{
-Serialize interaction on disk/casette to a \code{crul} response
+Serialize interaction on disk/cassette to a \code{crul} response
 }
 }
 }
