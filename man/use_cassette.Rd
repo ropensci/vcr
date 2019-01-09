@@ -81,7 +81,7 @@ but you don't get an object back
 
 \section{Cassettes on disk}{
 
-Note that \emph{"eject"} only means that the R sesion cassette is no longer
+Note that \emph{"eject"} only means that the R session cassette is no longer
 in use. If any interactions were recorded to disk, then there is a file
 on disk with those interactions.
 }

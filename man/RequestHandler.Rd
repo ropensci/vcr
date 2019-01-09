@@ -28,7 +28,7 @@ just returns FALSE
 }
 \item{\code{should_ignore()}}{
 should we ignore the request, depends on request ignorer
-infrastructure that's not workking yet
+infrastructure that's not working yet
 }
 \item{\code{has_response_stub()}}{
 Check if there is a matching response stub in the

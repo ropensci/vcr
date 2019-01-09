@@ -47,7 +47,7 @@ returns boolean
 \strong{Private Methods}
 \describe{
 \item{\code{has_unused_interactions()}}{
-Are there areny unused interactions? returns boolean
+Are there any unused interactions? returns boolean
 }
 \item{\code{matching_interaction_index_for()}}{
 asdfadf

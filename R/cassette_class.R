@@ -71,7 +71,7 @@
 #'       Coming soon.
 #'     }
 #'     \item{\code{serialize_to_crul}}{
-#'       Serialize interaction on disk/casette to a \code{crul} response
+#'       Serialize interaction on disk/cassette to a \code{crul} response
 #'     }
 #'   }
 #' @format NULL
@@ -278,10 +278,10 @@ Cassette <- R6::R6Class(
       }
       # allow http interactions - disallow at end of call_block() below
       webmockr::webmockr_allow_net_connect()
-      
+
       # FIXME: temporary attempt to make it work: turn on mocking for httr
       webmockr::httr_mock()
-      
+
       # evaluate request
       resp <- lazyeval::lazy_eval(tmp)
       # disallow http interactions - allow at start of call_block() above

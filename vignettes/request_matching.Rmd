@@ -26,7 +26,7 @@ Request matching
 ================
 
 To match previously recorded requests, `vcr` has to try to match new 
-HTTP reqeusts to a previously recorded one. By default, we match on 
+HTTP requests to a previously recorded one. By default, we match on 
 HTTP method (e.g., `GET`) and URI (e.g., `http://foo.com`), following 
 Ruby's VCR gem.
 
