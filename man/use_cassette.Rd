@@ -86,6 +86,17 @@ in use. If any interactions were recorded to disk, then there is a file
 on disk with those interactions.
 }
 
+\section{Using with tests (specifically \pkg{testthat})}{
+
+If you wrap your \code{test_that()} block inside your \code{use_cassette()}
+block you'll get the correct line numbers from \code{testthat} when there
+are errors/warnings/etc. However, if you wrap the \code{use_cassette()}
+block inside your  \code{test_that()} block, on errors/etc. you'll only
+get the line number that that \code{use_cassette()} block starts on,
+which is only identifies the code block but not the offending
+line itself.
+}
+
 \examples{
 \dontrun{
 library(vcr)

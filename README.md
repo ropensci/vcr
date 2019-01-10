@@ -37,7 +37,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.212   0.024   1.213
+#>   0.168   0.023   1.175
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -50,7 +50,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.074   0.003   0.090
+#>   0.080   0.004   0.085
 ```
 
 
@@ -158,8 +158,8 @@ invisible(vcr::vcr_configure())
 
 ```r
 library(testthat)
-test_that("my test", {
-  vcr::use_cassette("rl_citation", {
+vcr::use_cassette("rl_citation", {
+  test_that("my test", {
     aa <- rl_citation()
 
     expect_is(aa, "character")
@@ -168,6 +168,10 @@ test_that("my test", {
   })
 })
 ```
+
+**Important**: If you wrap your `test_that()` block inside your `use_cassette()` block you'll get the correct
+line numbers from `testthat` when there are errors/warnings/etc. However, if you wrap the `use_cassette()` block inside your  `test_that()` block, on errors/etc. you'll only get the line number that that `use_cassette()` block starts on, 
+which is only identifies the code block but not the offending line itself.
 
 * When running tests or checks of your whole package, note that some users have found different results with 
 `devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know 
