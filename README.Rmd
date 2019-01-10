@@ -176,6 +176,10 @@ test_that("my test", {
 })
 ```
 
+* When running tests or checks of your whole package, note that some users have found different results with 
+`devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know 
+if you run into this problem.
+
 ### vcr in your R project
 
 You can use `vcr` in an R project as well.

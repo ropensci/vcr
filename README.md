@@ -37,7 +37,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.208   0.029   1.140
+#>   0.212   0.024   1.213
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -50,12 +50,12 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.071   0.003   0.075
+#>   0.074   0.003   0.090
 ```
 
 
 
-Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP resonse - thus, your tests run faster.
+Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP response - thus, your tests run faster.
 
 The cached response looks something like (condensed for brevity):
 
@@ -169,6 +169,10 @@ test_that("my test", {
 })
 ```
 
+* When running tests or checks of your whole package, note that some users have found different results with 
+`devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know 
+if you run into this problem.
+
 ### vcr in your R project
 
 You can use `vcr` in an R project as well.
@@ -225,7 +229,7 @@ We set the following defaults:
 * `vcr_logging_opts` = `list()`
 
 
-You can get the defaults programatically with
+You can get the defaults programmatically with
 
 ```r
 vcr_config_defaults()
