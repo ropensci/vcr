@@ -1,3 +1,19 @@
+vcr 0.2.2
+=========
+
+### NEW FEATURES
+
+* xxx (#xx)
+* xxx (#xx)
+* xxx (#xx)
+
+### BUG FIXES
+
+* xxx (#xx)
+* xxx (#xx)
+* xxx (#xx)
+
+
 vcr 0.2.0
 =========
 
