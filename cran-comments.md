@@ -21,7 +21,7 @@ File 'LICENSE':
 
 --------
 
-This version ...
+This version makes a number of small improvements to documentation and fixes a problem in an internal function raised by _R_CHECK_LENGTH_1_LOGIC2_ in dev R.
 
 Thanks very much,
 Scott Chamberlain

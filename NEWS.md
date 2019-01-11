@@ -1,17 +1,15 @@
 vcr 0.2.2
 =========
 
-### NEW FEATURES
+### MINOR IMPROVEMENTS
 
-* xxx (#xx)
-* xxx (#xx)
-* xxx (#xx)
+* typo fixes (#85) thanks @Rekyt
+* added to docs: at least one person has reported different results using `vcr` with `devtools::check` vs. `devtools::test` (#83)
+* changed suggested usage of `vcr` in test suites from `use_cassette` block wrapped in `test_that` to the other way around; leads to `testthat` pointing to the actual test line that failed rather than pointing to the start of the `use_cassette` block (#86)
 
 ### BUG FIXES
 
-* xxx (#xx)
-* xxx (#xx)
-* xxx (#xx)
+* Fix for `%||%` internal function. Was incorrectly doing logical comparison; when headers list was passed one or more of the tests in the if statement had length > 1. Dev R is testing for this (#87)
 
 
 vcr 0.2.0
