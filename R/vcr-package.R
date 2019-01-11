@@ -35,6 +35,8 @@
 #' @importFrom lazyeval lazy_dots lazy_eval
 #' @importFrom base64enc base64decode base64encode
 #' @importFrom urltools url_parse url_compose
+#' @importFrom crul HttpClient mock
+#' @importFrom httr http_status content
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
 #' @docType package
 #' @aliases vcr-package
