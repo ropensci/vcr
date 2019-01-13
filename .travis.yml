@@ -20,6 +20,8 @@ matrix:
 r_binary_packages:
   - covr
 
+warnings_are_errors: false
+
 after_success:
   - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
 
