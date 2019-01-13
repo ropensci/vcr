@@ -5,19 +5,19 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "vcr",
-  "description": "Record test suite 'HTTP' requests and replays them during\n    future runs. A port of the Ruby gem of the same name \n    (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr'\n    R package for matching HTTP requests by various rules ('HTTP' method, \n    'URL', query parameters, headers, body, etc.), and then caching\n    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests \n    matching any previous requests in the same cassette use a cached \n    'HTTP' response. ",
+  "description": "Record test suite 'HTTP' requests and replays them during\n    future runs. A port of the Ruby gem of the same name \n    (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr'\n    R package for matching 'HTTP' requests by various rules ('HTTP' method, \n    'URL', query parameters, headers, body, etc.), and then caching\n    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests \n    matching any previous requests in the same 'cassette' use a cached \n    'HTTP' response. ",
   "name": "vcr: Record 'HTTP' Calls to Disk",
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.0",
+    "version": "3.5.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.0 (2018-04-23)",
+  "runtimePlatform": "R version 3.5.2 Patched (2018-12-31 r75943)",
   "author": [
     {
       "@type": "Person",
@@ -91,7 +91,7 @@
       "@type": "SoftwareApplication",
       "identifier": "crul",
       "name": "crul",
-      "version": ">= 0.5.2",
+      "version": ">= 0.7.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -102,9 +102,21 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "httr",
+      "name": "httr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httr"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
-      "version": ">= 0.2.4",
+      "version": ">= 0.3.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -176,11 +188,17 @@
   ],
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr"],
+  "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
   "contIntegration": "https://travis-ci.org/ropenscilabs/vcr",
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "72.003KB",
+  "fileSize": "63.057KB",
   "relatedLink": "https://ropensci.github.io/http-testing-book/",
   "releaseNotes": "https://github.com/ropensci/vcr/blob/master/NEWS.md",
-  "developmentStatus": "http://www.repostatus.org/#wip"
+  "developmentStatus": "http://www.repostatus.org/#wip",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  }
 }
