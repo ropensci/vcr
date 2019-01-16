@@ -56,13 +56,18 @@
 #' on disk with those interactions.
 #' 
 #' @section Using with tests (specifically \pkg{testthat}): 
-#' If you wrap your `test_that()` block inside your `use_cassette()` 
-#' block you'll get the correct line numbers from `testthat` when there 
-#' are errors/warnings/etc. However, if you wrap the `use_cassette()` 
-#' block inside your  `test_that()` block, on errors/etc. you'll only 
-#' get the line number that that `use_cassette()` block starts on, 
-#' which is only identifies the code block but not the offending 
-#' line itself.
+#' There's a few ways to get correct line numbers for failed tests and 
+#' one way to not get correct line numbers:
+#' 
+#' *Correct*: Either wrap your `test_that()` block inside your `use_cassette()`
+#' block, OR if you put your `use_cassette()` block inside your `test_that()` 
+#' block put your `testthat` expectations outside of the `use_cassette()` 
+#' block. 
+#' 
+#' *Incorrect*: By wrapping the `use_cassette()` block inside your 
+#' `test_that()` block with your \pkg{testthat} expectations inside the 
+#' `use_cassette()` block, you'll only get the line number that the 
+#' `use_cassette()` block starts on.
 #'
 #' @return an object of class `Cassette`
 #'
