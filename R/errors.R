@@ -103,10 +103,17 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
     request_description = function() {
       lines <- c()
-      lines <- c(lines, paste(toupper(self$request$method), self$request$uri,
-        sep = " "))
+      lines <- c(lines, 
+        paste(
+          toupper(self$request$method), 
+          sensitive_remove(self$request$uri), # remove sensitive data
+          sep = " "))
       if (self$match_request_on_headers()) {
-        lines <- c(lines, sprintf("  Headers:\n%s", self$formatted_headers()))
+        lines <- c(lines, 
+          sprintf("  Headers:\n%s",
+            sensitive_remove(self$formatted_headers())
+          )
+        )
       }
       if (self$match_request_on_body()) {
         lines <- c(lines, paste0("  Body: %s", self$request$body))
