@@ -33,7 +33,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-Remotes: ropensci/webmockr@fix-httr-date
+Remotes: ropensci/webmockr
 RoxygenNote: 6.1.1
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
