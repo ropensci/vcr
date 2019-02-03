@@ -43,3 +43,11 @@ merge_list <- function(x, y, ...) {
   }
   x
 }
+
+check_for_a_pkg <- function(x) {
+  if (!requireNamespace(x, quietly = TRUE)) {
+    stop("Please install ", x, call. = FALSE)
+  } else {
+    invisible(TRUE)
+  }
+}
