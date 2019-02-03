@@ -1,4 +1,4 @@
-vcr_c <- NULL
+vcr_c <- NULL # nocov start
 VCRHooks <- NULL
 request_matchers <- NULL
 request_ignorer <- NULL
@@ -31,4 +31,4 @@ initialize_ivars <- function() {
   vcr_cassettes <<- new.env()
   # lots of things
   initialize_ivars()
-}
+} # nocov end
