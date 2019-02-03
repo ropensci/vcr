@@ -220,10 +220,10 @@ Cassette <- R6::R6Class(
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = req$headers))
           } else if (
-            all(m %in% c("method", "uri", "headers", "query")) && 
+            all(m %in% c("method", "uri", "headers", "query")) &&
             length(m) == 4) {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, 
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
               headers = req$headers))
           }
         }))
@@ -502,17 +502,26 @@ Cassette <- R6::R6Class(
         } else {
           x$request$fields
         },
-        if (inherits(x, "response")) as.list(x$request$headers) else x$request_headers,
+        if (inherits(x, "response")) {
+          as.list(x$request$headers)
+        } else {
+          x$request_headers
+        },
         self$cassette_opts
       )
       response <- VcrResponse$new(
-        if (inherits(x, "response")) httr::http_status(x) else unclass(x$status_http()),
+        if (inherits(x, "response")) {
+          c(list(status_code = x$status_code), httr::http_status(x))
+        } else unclass(x$status_http()),
         if (inherits(x, "response")) x$headers else x$response_headers,
         rawToChar(x$content),
-        if (inherits(x, "response")) x$all_headers[[1]]$version else x$response_headers$status,
+        if (inherits(x, "response")) {
+          x$all_headers[[1]]$version
+        } else x$response_headers$status,
         self$cassette_opts
       )
-      if (self$update_content_length_header) response$update_content_length_header()
+      if (self$update_content_length_header)
+        response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)
     },
 

@@ -32,7 +32,7 @@ RequestHandlerHttr <- R6::R6Class(
     # make a `vcr` response
     response_for = function(x) {
       VcrResponse$new(
-        httr::http_status(x),
+        c(list(status_code = x$status_code), httr::http_status(x)),
         x$headers,
         httr::content(x, encoding = "UTF-8"),
         x$all_headers[[1]]$version,
