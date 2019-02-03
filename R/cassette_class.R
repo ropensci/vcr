@@ -140,7 +140,7 @@ Cassette <- R6::R6Class(
       self$serialize_with <- serialize_with
       self$persist_with <- persist_with
       if (!missing(record)) {
-        recmodes <- c('none', 'once', 'new_episodes', 'all')
+        recmodes <- c("none", "once", "new_episodes", "all")
         if (!record %in% recmodes) {
           stop("'record' value of '", record, "' is not in the allowed set: ",
                paste0(recmodes, collapse = ", "), call. = FALSE)
@@ -211,15 +211,20 @@ Cassette <- R6::R6Class(
           m <- self$match_requests_on
           if (all(m %in% c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
-          } else if (all(m %in% c("method", "uri", "query")) && length(m) == 3) {
+          } else if (
+            all(m %in% c("method", "uri", "query")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
-          } else if (all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
+          } else if (
+            all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = req$headers))
-          } else if (all(m %in% c("method", "uri", "headers", "query")) && length(m) == 4) {
+          } else if (
+            all(m %in% c("method", "uri", "headers", "query")) && 
+            length(m) == 4) {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, headers = req$headers))
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, 
+              headers = req$headers))
           }
         }))
       }
@@ -234,12 +239,15 @@ Cassette <- R6::R6Class(
         self$allow_playback_repeats,
         self$preserve_exact_body_bytes
       )
-      init_opts <- compact(stats::setNames(tmp, c("name", "record", "serialize_with",
+      init_opts <- compact(
+        stats::setNames(tmp, c("name", "record", "serialize_with",
         "persist_with", "match_requests_on", "update_content_length_header",
         "allow_playback_repeats", "preserve_exact_body_bytes")))
       self$cassette_opts <- init_opts
-      init_opts <- paste(names(init_opts), unname(init_opts), sep=": ", collapse=", ")
-      vcr_log_info(sprintf("Initialized with options: {%s}", init_opts), vcr_c$log_opts$date)
+      init_opts <- paste(names(init_opts), unname(init_opts), sep = ": ",
+        collapse = ", ")
+      vcr_log_info(sprintf("Initialized with options: {%s}", init_opts),
+        vcr_c$log_opts$date)
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
@@ -405,7 +413,7 @@ Cassette <- R6::R6Class(
 
     previously_recorded_interactions = function() {
       if (nchar(self$raw_cassette_bytes()) > 0) {
-        tmp <- compact(lapply(self$deserialized_hash()[['http_interactions']], function(z) {
+        tmp <- compact(lapply(self$deserialized_hash()[["http_interactions"]], function(z) {
           response <- VcrResponse$new(
             z$response$status$status_code,
             z$response$headers,
