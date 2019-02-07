@@ -119,7 +119,7 @@ vcr_configure <- function(
   log_opts <- merge_list(log_opts,
     list(file = "vcr.log", log_prefix = "Cassette", date = TRUE))
 
-  calls <- as.list(environment(), all = TRUE)
+  calls <- as.list(environment(), all.names = TRUE)
   for (i in seq_along(calls)) {
     vcr_c[[names(calls)[i]]] <- calls[[i]]
   }
