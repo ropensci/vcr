@@ -43,7 +43,7 @@
 #' - Never replay previously recorded interactions.
 #'
 #'
-#' This can be temporarily used to force VCR to re-record
+#' This can be temporarily used to force \pkg{vcr} to re-record
 #' a cassette (i.e. to ensure the responses are not out of date)
 #' or can be used when you simply want to log all HTTP requests.
 #'

@@ -20,7 +20,8 @@ RequestHandlerCrul <- R6::R6Class(
     # make a `vcr` response
     response_for = function(x) {
       VcrResponse$new(x$status_http(), x$response_headers,
-        x$parse("UTF-8"), x$response_headers$status, super$cassette$cassette_opts)
+        x$parse("UTF-8"), x$response_headers$status,
+        super$cassette$cassette_opts)
     },
 
     # these will replace those in

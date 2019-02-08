@@ -48,6 +48,7 @@
 #' @format NULL
 #' @usage NULL
 #' @examples \dontrun{
+#' # record mode: once
 #' vcr_configure(
 #'  dir = tempdir(),
 #'  record = "once"
@@ -58,6 +59,24 @@
 #' crul_request
 #' x <- RequestHandler$new(crul_request)
 #' # x$handle()
+#'
+#' # record mode: none
+#' vcr_configure(
+#'  dir = tempdir(),
+#'  record = "none"
+#' )
+#' data(crul_request)
+#' crul_request$url$handle <- curl::new_handle()
+#' crul_request
+#' insert_cassette("testing_record_mode_none", record = "none")
+#' file.path(vcr_c$dir, "testing_record_mode_none.yml")
+#' x <- RequestHandlerCrul$new(crul_request)
+#' # x$handle()
+#' crul_request$url$url <- "https://api.crossref.org/works/10.1039/c8sm90002g/"
+#' crul_request$url$handle <- curl::new_handle()
+#' z <- RequestHandlerCrul$new(crul_request)
+#' # z$handle()
+#' eject_cassette("testing_record_mode_none")
 #' }
 RequestHandler <- R6::R6Class(
   'RequestHandler',
@@ -95,7 +114,10 @@ RequestHandler <- R6::R6Class(
 
   private = list(
     request_summary = function(request) {
-      request_matchers <- if (!inherits(self$cassette, c("error", "list")) && !is.null(self$cassette)) {
+      request_matchers <- if (
+        !inherits(self$cassette, c("error", "list")) &&
+        !is.null(self$cassette)
+      ) {
         self$cassette$match_requests_on
       } else {
         vcr_c$match_requests_on
