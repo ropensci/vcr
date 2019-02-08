@@ -1,4 +1,4 @@
-context("use_cassette works")
+context("use_cassette: works as expected")
 test_that("use_cassette works as expected", {
   skip_on_cran()
 

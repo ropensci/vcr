@@ -69,6 +69,7 @@ RequestHandlerHttr <- R6::R6Class(
 
       # real request
       webmockr::httr_mock(FALSE)
+      on.exit(webmockr::httr_mock(TRUE), add = TRUE)
       tmp2 <- eval(parse(text = paste0("httr::",
         self$request_original$method)))(self$request_original$url)
       response <- webmockr::build_httr_response(self$request_original, tmp2)

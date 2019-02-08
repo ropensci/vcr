@@ -286,10 +286,6 @@ Cassette <- R6::R6Class(
       }
       # allow http interactions - disallow at end of call_block() below
       webmockr::webmockr_allow_net_connect()
-
-      # FIXME: temporary attempt to make it work: turn on mocking for httr
-      webmockr::httr_mock()
-
       # evaluate request
       resp <- lazyeval::lazy_eval(tmp)
       # disallow http interactions - allow at start of call_block() above
@@ -366,9 +362,11 @@ Cassette <- R6::R6Class(
                                   self$match_requests_on)
         old_interactions <-
           Filter(function(x) {
-            req <- Request$new()$from_hash(x$request)
-            new_interaction_list$response_for(req)
-          }, old_interactions)
+              req <- Request$new()$from_hash(x$request)
+              !unlist(new_interaction_list$has_interaction_matching(req))
+            },
+            old_interactions
+          )
       }
 
       # FIXME: add up_to_date_interactions usage here
@@ -377,7 +375,8 @@ Cassette <- R6::R6Class(
 
     # FIXME: not used yet, from newer version of vcr
     up_to_date_interactions = function(interactions) {
-      if (self$clean_outdated_http_interactions &&
+      if (
+        self$clean_outdated_http_interactions &&
         !is.null(re_record_interval)
       ) {
         return(interactions)
@@ -387,7 +386,13 @@ Cassette <- R6::R6Class(
       }, interactions)
     },
 
-    should_remove_matching_existing_interactions = function() self$record == "all",
+    should_stub_requests = function() {
+      self$record != "all"
+    },
+
+    should_remove_matching_existing_interactions = function() {
+      self$record == "all"
+    },
     storage_key = function() self$serializer$path,
 
     raw_cassette_bytes = function() {
@@ -413,14 +418,17 @@ Cassette <- R6::R6Class(
 
     previously_recorded_interactions = function() {
       if (nchar(self$raw_cassette_bytes()) > 0) {
-        tmp <- compact(lapply(self$deserialized_hash()[["http_interactions"]], function(z) {
+        tmp <- compact(
+          lapply(self$deserialized_hash()[["http_interactions"]], function(z) {
           response <- VcrResponse$new(
-            z$response$status$status_code,
+            # z$response$status$status_code,
+            z$response$status,
             z$response$headers,
             z$response$body$string,
             self$cassette_opts
           )
-          if (self$update_content_length_header) response$update_content_length_header()
+          if (self$update_content_length_header) 
+            response$update_content_length_header()
           zz <- HTTPInteraction$new(
             request = Request$new(z$request$method,
                                   z$request$uri,
@@ -487,7 +495,13 @@ Cassette <- R6::R6Class(
 
     http_interactions = function() {
       self$http_interactions_ <- HTTPInteractionList$new(
-        interactions = self$previously_recorded_interactions(),
+        interactions = {
+          if (self$should_stub_requests()) {
+            self$previously_recorded_interactions()
+          } else {
+            list()
+          }
+        },
         request_matchers = vcr_configuration()$match_requests_on
       )
     },
