@@ -4,41 +4,17 @@
 \alias{use_vcr}
 \title{Setup vcr for a package}
 \usage{
-use_vcr(dir = ".")
+use_vcr(dir = ".", verbose = TRUE)
 }
 \arguments{
 \item{dir}{(character) path to package root. default's to
 current directory}
+
+\item{verbose}{(logical) print progress messages. default: \code{TRUE}}
 }
 \value{
 only messages about progress, returns invisible()
 }
 \description{
 Setup vcr for a package
-}
-\examples{
-\dontrun{
-dir <- file.path(tempdir(), "foobar")
-dir.create(dir, recursive = TRUE)
-foo <- function() {
-  cli <- crul::HttpClient$new("https://httpbin.org")
-  cli$get("get")
-}
-package.skeleton(name = "mypkg", list = "foo", path = dir)
-pkgpath <- file.path(dir, "mypkg")
-list.files(pkgpath)
-pkgpath
-
-# install pkg
-devtools::install(pkgpath)
-
-# setup vcr
-use_vcr(dir = pkgpath)
-
-# run test
-testthat::test_file(file.path(pkgpath, "tests/testthat/test-vcr_example.R"))
-
-# cleanup
-remove.packages("mypkg")
-}
 }
