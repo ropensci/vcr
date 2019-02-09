@@ -5,17 +5,21 @@ test_check(\"%s\")\n",
 invisible(vcr::vcr_configure(
   dir = \"../fixtures\"
 ))\n",
-  example_test = "# Run and delete me
+  example_test = "# RUN AND DELETE ME
 content(\"vcr text example\")
 
-test_that(\"\", {
+foo <- function() crul::ok('https://httpbin.org/get')
+
+test_that(\"foo works\", {
   vcr::use_cassette(\"testing\", {
     x <- foo()
   })
-
-  expect_is(x, \"HttpResponse\")
-  expect_is(x$status_code, 200)
-})\n"
+  expect_true(x)
+})\n",
+  learn_more = paste0(
+    "To learn more about `vcr`, check out the HTTP testing book:\n   ",
+    "https://ropensci.github.io/http-testing-book/"
+  )
 )
 
 vcr_cat_line <- function(txt) {
@@ -28,7 +32,7 @@ pkg_name <- function(dir) {
     stringsAsFactors = FALSE)[["Package"]]
 }
 
-use_vcr <- function(dir) {
+suggest_vcr <- function(dir) {
   vcr_cat_line(sprintf("Adding %s to %s field in DESCRIPTION",
     crayon::blue("vcr"),
     crayon::red("Suggests")))
@@ -39,7 +43,8 @@ use_vcr <- function(dir) {
 #' Setup vcr for a package
 #'
 #' @export
-#' @param dir (character) path to package root
+#' @param dir (character) path to package root. default's to
+#' current directory
 #' @return only messages about progress, returns invisible()
 #' @examples \dontrun{
 #' dir <- file.path(tempdir(), "foobar")
@@ -52,39 +57,39 @@ use_vcr <- function(dir) {
 #' pkgpath <- file.path(dir, "mypkg")
 #' list.files(pkgpath)
 #' pkgpath
-#' 
+#'
 #' # install pkg
 #' devtools::install(pkgpath)
 #'
 #' # setup vcr
-#' vcr_setup(dir = pkgpath)
-#' 
+#' use_vcr(dir = pkgpath)
+#'
 #' # run test
 #' testthat::test_file(file.path(pkgpath, "tests/testthat/test-vcr_example.R"))
-#' 
+#'
 #' # cleanup
 #' remove.packages("mypkg")
 #' }
-vcr_setup <- function(dir) {
+use_vcr <- function(dir = ".") {
   invisible(lapply(c("desc", "cli", "crayon"), check_for_a_pkg))
 
   pkg <- pkg_name(dir)
   vcr_cat_line(paste0("Using package: ", crayon::blue(pkg)))
 
   # add vcr to Suggests in DESCRIPTION file
-  use_vcr(dir)
+  suggest_vcr(dir)
 
-  # add tests/test-all.R if not present
-  tall <- file.path(dir, sprintf("tests/test-all.R", pkg))
+  # add tests/testthat.R if not present
+  tall <- file.path(dir, sprintf("tests/testthat.R", pkg))
   if (!dir.exists(file.path(dir, "tests/testthat"))) {
     dir.create(file.path(dir, "tests/testthat"), recursive = TRUE)
   }
   if (!file.exists(tall)) {
-    vcr_cat_line(paste0(crayon::blue("tests/test-all.R:" ), " added"))
+    vcr_cat_line(paste0(crayon::blue("tests/testthat.R:" ), " added"))
     file.create(tall, showWarnings = FALSE)
     cat(sprintf(vcr_text$test_all, pkg), file = tall, append = TRUE)
   } else {
-    vcr_cat_line(paste0(crayon::blue("tests/test-all.R:" ), " exists"))
+    vcr_cat_line(paste0(crayon::blue("tests/testthat.R:" ), " exists"))
   }
 
   # add helper-pkgname.R to tests/testthat/
@@ -108,6 +113,6 @@ vcr_setup <- function(dir) {
   cat(vcr_text$example_test, file = dummyfile)
 
   # done
-  vcr_cat_line("Done!")
+  vcr_cat_line(vcr_text$learn_more)
   invisible()
 }
