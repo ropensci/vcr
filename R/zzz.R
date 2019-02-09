@@ -26,7 +26,7 @@ stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
 
 assert <- function(x, y) {
   if (!is.null(x)) {
-    if (!class(x)[1L] %in% y) {
+    if (!inherits(x, y)) {
       stop(deparse(substitute(x)), " must be of class ",
            paste0(y, collapse = ", "), call. = FALSE)
     }
@@ -42,4 +42,12 @@ merge_list <- function(x, y, ...) {
     x[names(y)[which(z)]] = y[which(z)]
   }
   x
+}
+
+check_for_a_pkg <- function(x) {
+  if (!requireNamespace(x, quietly = TRUE)) {
+    stop("Please install ", x, call. = FALSE)
+  } else {
+    invisible(TRUE)
+  }
 }
