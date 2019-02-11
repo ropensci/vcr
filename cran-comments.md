@@ -16,12 +16,13 @@ File 'LICENSE':
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 15 reverse dependencies.
-  (Summary at <https://github.com/ropensci/vcr/blob/master/revdep/README.md>). A problem was found in one package (`rnoaa`), but is unrelated to this package, and a fix for `rnoaa` will be pushed to CRAN very soon.
+* I have run R CMD check on the 18 reverse dependencies.
+(Summary at <https://github.com/ropensci/vcr/blob/master/revdep/README.md>).
+No problems were found.
 
 --------
 
-This version makes a number of small improvements to documentation and fixes a problem in an internal function raised by _R_CHECK_LENGTH_1_LOGIC2_ in dev R.
+This version fixes many, many bugs and add a new function.
 
 Thanks very much,
 Scott Chamberlain
