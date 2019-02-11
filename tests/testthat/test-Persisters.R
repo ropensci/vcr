@@ -12,6 +12,6 @@ test_that("Persisters", {
 
 test_that("Persisters fails well", {
   expect_error(Persisters$new(a = 5), "unused argument")
-  expect_error(Persisters$new(name = "foobar"),
-          "The requested VCR cassette persister \\(foobar\\) is not registered")
+  expect_error(Persisters$new(name = "bears"),
+          "The requested VCR cassette persister \\(bears\\) is not registered")
 })

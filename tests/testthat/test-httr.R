@@ -4,6 +4,8 @@ vcr_configure(dir = tempdir())
 
 context("adapter-httr: status code works")
 test_that("httr status code works", {
+  skip_if_not_installed("xml2")
+
   load("httr_obj.rda")
 
   expect_is(httr_obj, "request")
@@ -15,32 +17,34 @@ test_that("httr status code works", {
   expect_error(x$handle())
 
   # do request
-  insert_cassette("foobar")
+  insert_cassette("greencow")
   response <- x$handle()
 
   expect_is(response, "response")
   # status code is correct
   expect_equal(response$status_code, 404)
 
-  eject_cassette("foobar")
+  eject_cassette("greencow")
 
   # call again
-  insert_cassette("foobar")
+  insert_cassette("greencow")
   response2 <- x$handle()
 
   expect_is(response2, "response")
   # status code is correct
   expect_equal(response2$status_code, 404)
 
-  eject_cassette("foobar")
+  eject_cassette("greencow")
 
   # cleanup
-  unlink(file.path(vcr_configuration()$dir, "foobar.yml"))
+  unlink(file.path(vcr_configuration()$dir, "greencow.yml"))
 })
 
 
 context("adapter-httr: use_cassette works")
 test_that("httr use_cassette works", {
+  skip_if_not_installed("xml2")
+
   out <- use_cassette("httr_test1", {
     x <- GET("https://httpbin.org/404")
   })
@@ -69,6 +73,8 @@ test_that("httr use_cassette works", {
 
 context("adapter-httr: use_cassette w/ preserve_exact_body_bytes")
 test_that("httr use_cassette works", {
+  skip_if_not_installed("xml2")
+
   out <- use_cassette("httr_test2", {
     x <- GET("https://httpbin.org/404")
   }, preserve_exact_body_bytes = TRUE)
@@ -99,11 +105,13 @@ test_that("httr use_cassette works", {
 
 context("adapter-httr: use_cassette w/ >1 request per cassette")
 test_that("httr w/ >1 request per cassette", {
+  skip_if_not_installed("xml2")
+
   out <- use_cassette("multiple_queries_httr_record_once", {
     x404 <- GET("https://httpbin.org/status/404")
     x500 <- GET("https://httpbin.org/status/500")
     x418 <- GET("https://httpbin.org/status/418")
-    
+
     expect_equal(status_code(x404), 404)
     expect_equal(status_code(x500), 500)
     expect_equal(status_code(x418), 418)
@@ -131,5 +139,6 @@ test_that("httr w/ >1 request per cassette", {
   expect_match(str[[3]]$response$body$string, "teapot")
 
   # cleanup
-  unlink(file.path(vcr_configuration()$dir, "multiple_queries_httr_record_once.yml"))
+  unlink(file.path(vcr_configuration()$dir,
+    "multiple_queries_httr_record_once.yml"))
 })

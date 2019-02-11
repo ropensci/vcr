@@ -140,6 +140,20 @@ use_cassette(name = "catfact456", {
   res <- GET("https://catfact.ninja/fact")
 })
 
+# record mode: none
+library(crul)
+vcr_configure(dir = tempdir())
+
+## make a connection first
+conn <- crul::HttpClient$new("https://eu.httpbin.org")
+## this errors because 'none' disallows any new requests
+# use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
+## first use record mode 'once' to record to a cassette
+one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
+one; res
+## then use record mode 'none' to see it's behavior
+two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
+two; res2
 }
 }
 \seealso{

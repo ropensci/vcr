@@ -55,10 +55,8 @@ test_that("use_cassette record mode: none", {
 
   unlink(file.path(vcr_c$dir, "none.yml"))
 
-  # make an interaction manually, as no new interactions are allowed
-  if (!dir.exists(vcr_c$dir)) dir.create(vcr_c$dir)
-  file.copy(system.file("examples/record.yml", package = "vcr"),
-    file.path(vcr_c$dir, "none.yml"))
+  # record first with another record mode to make the cassette
+  invisible(use_cassette("none", (res <- conn$get("get"))))
 
   # previously recorded interaction should replay
   one <- use_cassette("none", (res <- conn$get("get")), record = "none")
