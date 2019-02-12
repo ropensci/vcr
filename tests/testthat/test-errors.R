@@ -54,12 +54,18 @@ context("UnhandledHTTPRequestError: secret handling")
 
 ## API key in query param
 Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
+Sys.setenv(HELLO_WORLD = "asdfadfasfsfs239823n23")
 dir <- tempdir()
 invisible(
   vcr_configure(dir = dir, filter_sensitive_data = 
-    list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")))
+    list(
+      "<<foo_bar_key>>" = Sys.getenv("FOO_BAR"),
+      "<<hello_world_key>>" = Sys.getenv("HELLO_WORLD")
+    )
+  )
 )
-url <- paste0("https://eu.httpbin.org/get?api_key=", Sys.getenv("FOO_BAR"))
+url <- paste0("https://eu.httpbin.org/get?api_key=", 
+  Sys.getenv("FOO_BAR"), "&other_secret=", Sys.getenv("HELLO_WORLD"))
 request <- Request$new("get", url, "")
 unlink(file.path(vcr_c$dir, "bunny"))
 cas <- suppressMessages(insert_cassette("bunny"))
@@ -79,6 +85,10 @@ test_that("UnhandledHTTPRequestError works as expected", {
   expect_error(
     a$construct_message(),
     "<<foo_bar_key>>"
+  )
+  expect_error(
+    a$construct_message(),
+    "<<hello_world_key>>"
   )
 })
 # cleanup
