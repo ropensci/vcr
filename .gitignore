@@ -4,4 +4,8 @@
 .DS_Store
 vcr.log
 scott_notes.md
+revdep/checks.noindex
+revdep/data.sqlite
+revdep/library.noindex
+notes.R
 

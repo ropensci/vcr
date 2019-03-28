@@ -76,7 +76,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     run = function() {
       any_errors <- FALSE
       if (!is.null(self$cassette) && !identical(self$cassette, list())) {
-        if (self$cassette$record == "once") {
+        if (self$cassette$record %in% c("once", "none")) {
           any_errors <- TRUE
         }
       } else {
@@ -103,10 +103,17 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
     request_description = function() {
       lines <- c()
-      lines <- c(lines, paste(toupper(self$request$method), self$request$uri,
-        sep = " "))
+      lines <- c(lines,
+        paste(
+          toupper(self$request$method),
+          sensitive_remove(self$request$uri), # remove sensitive data
+          sep = " "))
       if (self$match_request_on_headers()) {
-        lines <- c(lines, sprintf("  Headers:\n%s", self$formatted_headers()))
+        lines <- c(lines,
+          sprintf("  Headers:\n%s",
+            sensitive_remove(self$formatted_headers())
+          )
+        )
       }
       if (self$match_request_on_body()) {
         lines <- c(lines, paste0("  Body: %s", self$request$body))
@@ -177,7 +184,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         fn <- self$format_foot_note(bp$url, index)
         list(fp = fp, fn = fn)
       }, sugs, seq_along(sugs) - 1)
-      paste0(c(vapply(xx, '[[', "", 1), vapply(xx, '[[', "", 2)),
+      paste0(c(vapply(xx, "[[", "", 1), vapply(xx, "[[", "", 2)),
              collapse = "\n", sep = "\n")
     },
 
@@ -203,7 +210,8 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
       tmp <- c("try_debug_logger", "use_new_episodes", "ignore_request")
       tmp <- c(tmp, self$record_mode_suggestion())
-      if (self$has_used_interaction_matching()) tmp <- c(tmp, "allow_playback_repeats")
+      if (self$has_used_interaction_matching())
+        tmp <- c(tmp, "allow_playback_repeats")
       tmp <- lapply(tmp, self$suggestion_for)
       compact(c(tmp, list(self$match_requests_on_suggestion())))
     },

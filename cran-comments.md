@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.5.0
-* ubuntu 12.04 (on travis-ci), R 3.5.0
+* local OS X install, R 3.5.2 Patched
+* ubuntu 14.04 (on travis-ci), R 3.5.2
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -11,18 +11,18 @@
 License components with restrictions and base license permitting such:
   MIT + file LICENSE
 File 'LICENSE':
-  YEAR: 2018
+  YEAR: 2019
   COPYRIGHT HOLDER: Scott Chamberlain
 
 ## Reverse dependencies
 
-This is a new submission, so there are no reverse dependencies.
+* I have run R CMD check on the 18 reverse dependencies.
+(Summary at <https://github.com/ropensci/vcr/blob/master/revdep/README.md>).
+No problems were found.
 
 --------
 
-This is a new release. I have read and agree to the the CRAN policies at https://cran.r-project.org/web/packages/policies.html
+This version fixes many, many bugs and add a new function.
 
-This is a re-submission of the first version, fixing examples.
-
-Thanks!
+Thanks very much,
 Scott Chamberlain

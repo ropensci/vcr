@@ -5,7 +5,7 @@
 #' can be coerced to a cassette
 #' @param ... further arguments passed on to [cassettes()] or
 #' [read_cassette_meta()
-#' @return a casette of class `Cassette`
+#' @return a cassette of class `Cassette`
 #' @examples \dontrun{
 #' vcr_configure(dir = tempfile())
 #' insert_cassette("foobar")

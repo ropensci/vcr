@@ -1,0 +1,35 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://eu.httpbin.org/get
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/7.54.0 r-curl/3.3 crul/0.7.0.9100
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+      server: gunicorn/19.9.0
+      date: Fri, 08 Feb 2019 18:38:58 GMT
+      content-type: application/json
+      content-length: '336'
+      access-control-allow-origin: '*'
+      access-control-allow-credentials: 'true'
+      via: 1.1 vegur
+    body:
+      encoding: UTF-8
+      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"application/json,
+        text/xml, application/xml, */*\", \n    \"Accept-Encoding\": \"gzip, deflate\",
+        \n    \"Connection\": \"close\", \n    \"Host\": \"eu.httpbin.org\", \n    \"User-Agent\":
+        \"libcurl/7.54.0 r-curl/3.3 crul/0.7.0.9100\"\n  }, \n  \"origin\": \"24.21.229.59\",
+        \n  \"url\": \"https://eu.httpbin.org/get\"\n}\n"
+  recorded_at: 2019-02-08 18:38:58 GMT
+  recorded_with: vcr/0.2.2.9312, webmockr/0.3.1.9311
