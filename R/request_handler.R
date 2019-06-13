@@ -78,6 +78,7 @@
 #' # z$handle()
 #' eject_cassette("testing_record_mode_none")
 #' }
+scotts_env <- new.env()
 RequestHandler <- R6::R6Class(
   'RequestHandler',
   public = list(
@@ -94,6 +95,7 @@ RequestHandler <- R6::R6Class(
           request$body, request$headers)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
+      scotts_env$request <- request
     },
 
     handle = function() {

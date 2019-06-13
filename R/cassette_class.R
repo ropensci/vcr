@@ -13,8 +13,9 @@
 #'  custom persister.
 #' @param match_requests_on List of request matchers
 #' to use to determine what recorded HTTP interaction to replay. Defaults to
-#' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
-#' "path", "headers" and "body"
+#' `["method", "uri"]`. The built-in matchers are "method", "uri",
+#' "headers" and "body" ("host" and "path" not supported yet, but should 
+#' be in a future version)
 #' @param update_content_length_header (logical) Whether or
 #' not to overwrite the `Content-Length` header of the responses to
 #' match the length of the response body. Default: `FALSE`
@@ -159,9 +160,9 @@ Cassette <- R6::R6Class(
                ") is not in the allowed set: ",
                paste0(mro, collapse = ", "), call. = FALSE)
         }
-        # we don't yet support the following matchers: host, path, body
-        if (any(match_requests_on %in% c("host", "path", "body"))) {
-          stop("we do not yet support host, path, or body matchers",
+        # we don't yet support the following matchers: host, path
+        if (any(match_requests_on %in% c("host", "path"))) {
+          stop("we do not yet support host and path matchers",
             "\n see https://github.com/ropensci/vcr/issues/70",
             call. = FALSE)
         }
@@ -212,20 +213,47 @@ Cassette <- R6::R6Class(
           if (all(m %in% c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
           } else if (
-            all(m %in% c("method", "uri", "query")) && length(m) == 3) {
+            all(m %in% c("method", "uri", "query")) && length(m) == 3
+          ) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
           } else if (
-            all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
+            all(m %in% c("method", "uri", "headers")) && length(m) == 3
+          ) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = req$headers))
           } else if (
+            all(m %in% c("method", "uri", "body")) && length(m) == 3
+          ) {
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(body = req$body))
+          } else if (
             all(m %in% c("method", "uri", "headers", "query")) &&
-            length(m) == 4) {
+            length(m) == 4
+          ) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
               headers = req$headers))
+          } else if (
+            all(m %in% c("method", "uri", "headers", "body")) &&
+            length(m) == 4
+          ) {
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(body = req$body,
+              headers = req$headers))
+          } else if (
+            all(m %in% c("method", "uri", "query", "body")) &&
+            length(m) == 4
+          ) {
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, 
+              body = req$body))
+          } else {
+            tmp <- webmockr::stub_request(req$method, req$uri)
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, 
+              body = req$body, headers = req$headers))
           }
+          
         }))
       }
 
@@ -502,7 +530,8 @@ Cassette <- R6::R6Class(
             list()
           }
         },
-        request_matchers = vcr_configuration()$match_requests_on
+        request_matchers = self$match_requests_on
+        # request_matchers = vcr_configuration()$match_requests_on
       )
     },
 
