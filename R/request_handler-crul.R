@@ -31,6 +31,7 @@
 #' use_cassette(name = "apple7", {
 #'   resp <- cli$post("post", body = list(foo = "bar"))
 #' }, match_requests_on = c("method", "uri", "body"))
+#' ## should error, b/c record="once"
 #' use_cassette(name = "apple7", {
 #'   resp <- cli$post("post", body = list(foo = "bar"))
 #'   resp2 <- cli$post("post", body = list(hello = "world"))
@@ -38,7 +39,7 @@
 #' cas <- insert_cassette(name = "apple7", 
 #'   match_requests_on = c("method", "uri", "body"))
 #' resp2 <- cli$post("post", body = list(hello = "world"))
-#' 
+#' eject_cassette("apple7")
 #' 
 #' ## testing, same body, changed method in 2nd block
 #' use_cassette(name = "apple8", {
@@ -54,6 +55,7 @@
 #'   w <- cli$post("get", body = list(hello = "world"))
 #' }, match_requests_on = c("method", "body"))
 #' use_cassette(name = "apple9", {
+#'   NOTHING HERE
 #' }, match_requests_on = c("method", "body"))
 #' unlink(file.path(vcr_configuration()$dir, "apple9.yml"))
 #' 

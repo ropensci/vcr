@@ -262,8 +262,8 @@ HTTPInteractionList <- R6::R6Class(
          matcher <- RequestMatcherRegistry$new()$registry[[y]]
          res <- matcher$matches(req, intreq)
          msg <- if (res) "matched" else "did not match"
-         cat(paste0("method: ", req$method), sep = "\n ")
-         cat(paste0("body: ", req$body), sep = "\n ")
+         # cat(paste0("method: ", req$method), sep = "\n ")
+         # cat(paste0("body: ", req$body), sep = "\n ")
          vcr_log_info(sprintf("    %s %s: current request [%s] vs [%s]",
              y, msg,
              request_summary(req, self$request_matchers), 

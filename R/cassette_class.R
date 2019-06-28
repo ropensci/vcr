@@ -210,8 +210,28 @@ Cassette <- R6::R6Class(
           res <- z$response
           uripp <- crul::url_parse(req$uri)
           m <- self$match_requests_on
-          if (all(m %in% c("method", "uri")) && length(m) == 2) {
+          if (length(m) == 1) {
+            if (m == "method") webmockr::stub_request(req$method, uri_regex = ".")
+            if (m == "uri") webmockr::stub_request("any", req$uri)
+            if (m == "query") {
+              tmp <- webmockr::stub_request("any", uri_regex = ".")
+              webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
+            }
+            if (m == "headers") {
+              tmp <- webmockr::stub_request("any", uri_regex = ".")
+              webmockr::wi_th(tmp, .list = list(headers = req$headers))
+            }
+            if (m == "body") {
+              tmp <- webmockr::stub_request("any", uri_regex = ".+")
+              webmockr::wi_th(tmp, .list = list(body = req$body))
+            }
+          } else if (all(m %in% c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
+          } else if (
+            all(m %in% c("method", "body")) && length(m) == 2
+          ) {
+            tmp <- webmockr::stub_request(req$method, uri_regex = ".")
+            webmockr::wi_th(tmp, .list = list(body = req$body))
           } else if (
             all(m %in% c("method", "uri", "query")) && length(m) == 3
           ) {
@@ -540,7 +560,8 @@ Cassette <- R6::R6Class(
         x$request$method,
         x$url,
         if (inherits(x, "response")) {
-          bd <- x$request$options$postfields
+          # bd <- x$request$options$postfields
+          bd <- get_httr_body(x$request)
           if (inherits(bd, "raw")) rawToChar(bd) else bd
         } else {
           x$request$fields

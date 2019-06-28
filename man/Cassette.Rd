@@ -20,8 +20,9 @@ custom persister.}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
-\code{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
-"path", "headers" and "body"}
+\code{["method", "uri"]}. The built-in matchers are "method", "uri",
+"headers" and "body" ("host" and "path" not supported yet, but should
+be in a future version)}
 
 \item{update_content_length_header}{(logical) Whether or
 not to overwrite the \code{Content-Length} header of the responses to
