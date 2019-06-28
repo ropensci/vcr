@@ -15,7 +15,7 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Docs
 
-Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
+Check out the [HTTP testing book](https://ropenscilabs.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
 
 ## Supported HTTP libraries
 

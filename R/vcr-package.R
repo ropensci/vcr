@@ -3,7 +3,7 @@
 #' \pkg{vcr} records test suite 'HTTP' requests and replay them during
 #' future runs.
 #'
-#' Check out the [http testing book](https://ropensci.github.io/http-testing-book/)
+#' Check out the [http testing book](https://ropenscilabs.github.io/http-testing-book/)
 #' for a lot more documentation on `vcr`, `webmockr`, and `crul`
 #'
 #' @section Backstory:
