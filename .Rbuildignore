@@ -15,3 +15,5 @@ scott_notes.md
 inst/ignore
 ^revdep$
 notes.R
+notes_matchers.md
+
