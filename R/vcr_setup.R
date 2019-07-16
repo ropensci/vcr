@@ -18,7 +18,7 @@ test_that(\"foo works\", {
 })\n",
   learn_more = paste0(
     "To learn more about `vcr`, check out the HTTP testing book:\n   ",
-    "https://ropensci.github.io/http-testing-book/"
+    "https://ropenscilabs.github.io/http-testing-book/"
   )
 )
 

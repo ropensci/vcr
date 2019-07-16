@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.6",
+  "version": "0.2.6.9100",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
+    "version": "3.6.0",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 Patched (2018-12-31 r75943)",
+  "runtimePlatform": "R version 3.6.0 Patched (2019-04-30 r76446)",
   "author": [
     {
       "@type": "Person",
@@ -227,8 +227,8 @@
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
   "contIntegration": "https://travis-ci.org/ropenscilabs/vcr",
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "70.078KB",
-  "relatedLink": "https://ropensci.github.io/http-testing-book/",
+  "fileSize": "72.031KB",
+  "relatedLink": "https://ropenscilabs.github.io/http-testing-book/",
   "releaseNotes": "https://github.com/ropensci/vcr/blob/master/NEWS.md",
   "developmentStatus": "http://www.repostatus.org/#wip",
   "provider": {
@@ -236,5 +236,8 @@
     "@type": "Organization",
     "name": "Comprehensive R Archive Network (CRAN)",
     "url": "https://cran.r-project.org"
-  }
+  },
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {}
 }
