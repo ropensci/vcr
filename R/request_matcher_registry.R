@@ -60,7 +60,7 @@ RequestMatcherRegistry <- R6::R6Class(
     },
 
     try_to_register_body_as_json = function(r1, r2) {
-      if (!requireNamespace("jsonlite")) {
+      if (!requireNamespace("jsonlite", quietly = TRUE)) {
         stop("please install jsonlite", call. = FALSE)
       }
 
