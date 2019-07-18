@@ -1,3 +1,5 @@
+cassette_runner <- new.env()
+
 #' Cassette handler
 #'
 #' @export
@@ -251,6 +253,9 @@ Cassette <- R6::R6Class(
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
+
+      # report cassette details out to the external env for testthat reporter
+      cassette_runner$running <- self
 
       # put cassette in vcr_cassettes environment
       include_cassette(self)
