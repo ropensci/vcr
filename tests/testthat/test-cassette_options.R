@@ -7,7 +7,7 @@ test_that("Cassette options", {
   expect_is(cl$re_record_interval, "integer")
   expect_equal(cl$re_record_interval, 1000L)
   expect_is(cl$clean_outdated_http_interactions, "logical")
-  expect_false(cl$clean_outdated_http_interactions)
+  expect_true(cl$clean_outdated_http_interactions)
 
   # eject cassette
   cl$eject()
