@@ -14,7 +14,7 @@
 #' # x$handle()
 #' }
 RequestHandlerHttr <- R6::R6Class(
-  'RequestHandlerHttr',
+  "RequestHandlerHttr",
   inherit = RequestHandler,
 
   public = list(
@@ -32,10 +32,10 @@ RequestHandlerHttr <- R6::R6Class(
     # make a `vcr` response
     response_for = function(x) {
       VcrResponse$new(
-        httr::http_status(x), 
+        c(list(status_code = x$status_code), httr::http_status(x)),
         x$headers,
-        httr::content(x, encoding = "UTF-8"), 
-        x$all_headers[[1]]$version, 
+        httr::content(x, encoding = "UTF-8"),
+        x$all_headers[[1]]$version,
         super$cassette$cassette_opts
       )
     },
@@ -48,7 +48,8 @@ RequestHandlerHttr <- R6::R6Class(
       # * give back real response
 
       # real request
-      response <- eval(parse(text = paste0("httr::", request$method)))(request$url)
+      response <- eval(parse(text =
+        paste0("httr::", request$method)))(request$url)
 
       # run through response_for()
       self$vcr_response <- private$response_for(response)
@@ -68,7 +69,9 @@ RequestHandlerHttr <- R6::R6Class(
 
       # real request
       webmockr::httr_mock(FALSE)
-      tmp2 <- eval(parse(text = paste0("httr::", self$request_original$method)))(self$request_original$url)
+      on.exit(webmockr::httr_mock(TRUE), add = TRUE)
+      tmp2 <- eval(parse(text = paste0("httr::",
+        self$request_original$method)))(self$request_original$url)
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 
       # make vcr response | then record interaction

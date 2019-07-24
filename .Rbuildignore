@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
+^appveyor\.yml$
 ^CODE_OF_CONDUCT\.md$
 man-roxygen
 ^cran-comments\.md$
@@ -13,3 +14,4 @@ scott_notes.md
 ^codemeta\.json$
 inst/ignore
 ^revdep$
+notes.R

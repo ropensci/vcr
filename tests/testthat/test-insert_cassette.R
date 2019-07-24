@@ -2,7 +2,7 @@ context("insert_cassette")
 
 context("insert_cassette fails well")
 test_that("insert_cassette fails well", {
-  unlink(file.path(vcr_c$dir, "foobar.yml"))
+  unlink(file.path(vcr_c$dir, "foobar55.yml"))
 
   # must pass a cassette name
   expect_error(insert_cassette(), "argument \"name\" is missing")
@@ -33,8 +33,8 @@ test_that("insert_cassette fails well", {
 
   # persist_with valid value
   expect_error(
-    suppressMessages(insert_cassette("newbar5", persist_with = "foobar")),
-    "The requested VCR cassette persister \\(foobar\\) is not registered"
+    suppressMessages(insert_cassette("newbar5", persist_with = "foobar55")),
+    "The requested VCR cassette persister \\(foobar55\\) is not registered"
   )
 
   # persist_with valid value
@@ -62,5 +62,5 @@ test_that("insert_cassette works as expected", {
 # cleanup
 unlink(file.path(vcr_configuration()$dir, "foobar3.yml"))
 unlink(list.files(pattern = "newbar", full.names = TRUE))
-unlink("foobar.yml")
+unlink("foobar55.yml")
 unlink("testing1.yml")

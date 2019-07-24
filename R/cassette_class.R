@@ -71,7 +71,7 @@
 #'       Coming soon.
 #'     }
 #'     \item{\code{serialize_to_crul}}{
-#'       Serialize interaction on disk/casette to a \code{crul} response
+#'       Serialize interaction on disk/cassette to a \code{crul} response
 #'     }
 #'   }
 #' @format NULL
@@ -140,7 +140,7 @@ Cassette <- R6::R6Class(
       self$serialize_with <- serialize_with
       self$persist_with <- persist_with
       if (!missing(record)) {
-        recmodes <- c('none', 'once', 'new_episodes', 'all')
+        recmodes <- c("none", "once", "new_episodes", "all")
         if (!record %in% recmodes) {
           stop("'record' value of '", record, "' is not in the allowed set: ",
                paste0(recmodes, collapse = ", "), call. = FALSE)
@@ -197,6 +197,9 @@ Cassette <- R6::R6Class(
       self$serializer = serializer_fetch(self$serialize_with, self$name)
       self$persister = persister_fetch(self$persist_with, self$serializer$path)
 
+      # check for re-record
+      if (self$should_re_record()) self$record <- "all"
+
       # get previously recorded interactions
       ## if none pass, if some found, make webmockr stubs
       #### first, get previously recorded interactions into `http_interactions_` var
@@ -211,15 +214,20 @@ Cassette <- R6::R6Class(
           m <- self$match_requests_on
           if (all(m %in% c("method", "uri")) && length(m) == 2) {
             webmockr::stub_request(req$method, req$uri)
-          } else if (all(m %in% c("method", "uri", "query")) && length(m) == 3) {
+          } else if (
+            all(m %in% c("method", "uri", "query")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
-          } else if (all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
+          } else if (
+            all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
             webmockr::wi_th(tmp, .list = list(query = req$headers))
-          } else if (all(m %in% c("method", "uri", "headers", "query")) && length(m) == 4) {
+          } else if (
+            all(m %in% c("method", "uri", "headers", "query")) &&
+            length(m) == 4) {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, headers = req$headers))
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
+              headers = req$headers))
           }
         }))
       }
@@ -234,12 +242,15 @@ Cassette <- R6::R6Class(
         self$allow_playback_repeats,
         self$preserve_exact_body_bytes
       )
-      init_opts <- compact(stats::setNames(tmp, c("name", "record", "serialize_with",
+      init_opts <- compact(
+        stats::setNames(tmp, c("name", "record", "serialize_with",
         "persist_with", "match_requests_on", "update_content_length_header",
         "allow_playback_repeats", "preserve_exact_body_bytes")))
       self$cassette_opts <- init_opts
-      init_opts <- paste(names(init_opts), unname(init_opts), sep=": ", collapse=", ")
-      vcr_log_info(sprintf("Initialized with options: {%s}", init_opts), vcr_c$log_opts$date)
+      init_opts <- paste(names(init_opts), unname(init_opts), sep = ": ",
+        collapse = ", ")
+      vcr_log_info(sprintf("Initialized with options: {%s}", init_opts),
+        vcr_c$log_opts$date)
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
@@ -253,6 +264,10 @@ Cassette <- R6::R6Class(
       cat(paste0("  Record method: ", self$record), sep = "\n")
       cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
       cat(paste0("  Persist with: ", self$persist_with), sep = "\n")
+      cat(paste0("  Re-record interval (s): ", self$re_record_interval),
+        sep = "\n")
+      cat(paste0("  Clean outdated interactions?: ",
+        self$clean_outdated_http_interactions), sep = "\n")
       cat(paste0("  update_content_length_header: ",
                  self$update_content_length_header), sep = "\n")
       cat(paste0("  decode_compressed_response: ",
@@ -278,10 +293,6 @@ Cassette <- R6::R6Class(
       }
       # allow http interactions - disallow at end of call_block() below
       webmockr::webmockr_allow_net_connect()
-      
-      # FIXME: temporary attempt to make it work: turn on mocking for httr
-      webmockr::httr_mock()
-      
       # evaluate request
       resp <- lazyeval::lazy_eval(tmp)
       # disallow http interactions - allow at start of call_block() above
@@ -314,12 +325,11 @@ Cassette <- R6::R6Class(
     },
 
     is_empty = function() {
-      # self$persister$is_empty()
       nchar(self$raw_cassette_bytes()) < 1
     },
 
     originally_recorded_at = function() {
-      self$recorded_at
+      as.POSIXct(self$recorded_at, tz = "GMT")
     },
 
     serializable_hash = function() {
@@ -358,28 +368,60 @@ Cassette <- R6::R6Class(
                                   self$match_requests_on)
         old_interactions <-
           Filter(function(x) {
-            req <- Request$new()$from_hash(x$request)
-            new_interaction_list$response_for(req)
-          }, old_interactions)
+              req <- Request$new()$from_hash(x$request)
+              !unlist(new_interaction_list$has_interaction_matching(req))
+            },
+            old_interactions
+          )
       }
 
-      # FIXME: add up_to_date_interactions usage here
-      return(c(old_interactions, self$new_recorded_interactions))
+      return(c(self$up_to_date_interactions(old_interactions), 
+        self$new_recorded_interactions))
     },
 
-    # FIXME: not used yet, from newer version of vcr
     up_to_date_interactions = function(interactions) {
-      if (self$clean_outdated_http_interactions &&
-        !is.null(re_record_interval)
+      if (
+        !self$clean_outdated_http_interactions && is.null(self$re_record_interval)
       ) {
         return(interactions)
       }
       Filter(function(z) {
-        as.POSIXct(z$recorded_at) > (Sys.time() - vcr_c$re_record_interval)
+        as.POSIXct(z$recorded_at, tz = "GMT") > (as.POSIXct(Sys.time(), tz = "GMT") - self$re_record_interval)
       }, interactions)
     },
 
-    should_remove_matching_existing_interactions = function() self$record == "all",
+    should_re_record = function() {
+      if (is.null(self$re_record_interval)) return(FALSE)
+      if (is.null(self$originally_recorded_at())) return(FALSE)
+      now <- as.POSIXct(Sys.time(), tz = "GMT")
+      time_comp <- (self$originally_recorded_at() + self$re_record_interval) < now
+      info <- sprintf(
+        "previously recorded at: '%s'; now: '%s'; interval: %s seconds",
+        self$originally_recorded_at(), now, self$re_record_interval)
+
+      if (!time_comp) {
+        vcr_log_info(
+          sprintf("Not re-recording since the interval has not elapsed (%s).", info),
+          vcr_c$log_opts$date)
+        return(FALSE)
+      } else if (has_internet()) {
+        vcr_log_info(sprintf("re-recording (%s).", info), vcr_c$log_opts$date)
+        return(TRUE)
+      } else {
+        vcr_log_info(
+          sprintf("Not re-recording because no internet connection is available (%s).", info),
+          vcr_c$log_opts$date)
+        return(FALSE)
+      }
+    },
+
+    should_stub_requests = function() {
+      self$record != "all"
+    },
+
+    should_remove_matching_existing_interactions = function() {
+      self$record == "all"
+    },
     storage_key = function() self$serializer$path,
 
     raw_cassette_bytes = function() {
@@ -405,14 +447,17 @@ Cassette <- R6::R6Class(
 
     previously_recorded_interactions = function() {
       if (nchar(self$raw_cassette_bytes()) > 0) {
-        tmp <- compact(lapply(self$deserialized_hash()[['http_interactions']], function(z) {
+        tmp <- compact(
+          lapply(self$deserialized_hash()[["http_interactions"]], function(z) {
           response <- VcrResponse$new(
-            z$response$status$status_code,
+            # z$response$status$status_code,
+            z$response$status,
             z$response$headers,
             z$response$body$string,
             self$cassette_opts
           )
-          if (self$update_content_length_header) response$update_content_length_header()
+          if (self$update_content_length_header) 
+            response$update_content_length_header()
           zz <- HTTPInteraction$new(
             request = Request$new(z$request$method,
                                   z$request$uri,
@@ -479,7 +524,13 @@ Cassette <- R6::R6Class(
 
     http_interactions = function() {
       self$http_interactions_ <- HTTPInteractionList$new(
-        interactions = self$previously_recorded_interactions(),
+        interactions = {
+          if (self$should_stub_requests()) {
+            self$previously_recorded_interactions()
+          } else {
+            list()
+          }
+        },
         request_matchers = vcr_configuration()$match_requests_on
       )
     },
@@ -494,13 +545,19 @@ Cassette <- R6::R6Class(
         } else {
           x$request$fields
         },
-        if (inherits(x, "response")) as.list(x$request$headers) else x$request_headers,
+        if (inherits(x, "response")) {
+          as.list(x$request$headers)
+        } else {
+          x$request_headers
+        },
         self$cassette_opts
       )
       # content must be raw or character
       assert(x$content, c('raw', 'character'))
       response <- VcrResponse$new(
-        status = if (inherits(x, "response")) httr::http_status(x) else unclass(x$status_http()),
+        status = if (inherits(x, "response")) {
+          c(list(status_code = x$status_code), httr::http_status(x))
+        } else unclass(x$status_http()),
         headers = if (inherits(x, "response")) x$headers else x$response_headers,
         body = if (is.raw(x$content)) {
           ff <- tryCatch(rawToChar(x$content), error = function(e) e)
@@ -517,7 +574,8 @@ Cassette <- R6::R6Class(
         http_version = if (inherits(x, "response")) x$all_headers[[1]]$version else x$response_headers$status,
         opts = self$cassette_opts
       )
-      if (self$update_content_length_header) response$update_content_length_header()
+      if (self$update_content_length_header)
+        response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)
     },
 

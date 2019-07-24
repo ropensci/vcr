@@ -17,7 +17,7 @@ can be coerced to a cassette}
 [read_cassette_meta()}
 }
 \value{
-a casette of class \code{Cassette}
+a cassette of class \code{Cassette}
 }
 \description{
 Coerce names, etc. to cassettes

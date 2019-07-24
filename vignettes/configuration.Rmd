@@ -173,7 +173,7 @@ vcr_configure(uri_parser = "urltools::url_parse")
 Some HTTP servers are not well-behaved and respond with invalid data. Set 
 `preserve_exact_body_bytes` to `TRUE` to base64 encode the result body in 
 order to preserve the bytes exactly as-is. `vcr` does not do this by
-default, since base64-encoding the string removes the human readibility 
+default, since base64-encoding the string removes the human readability 
 of the cassette.
 
 ```{r}
@@ -203,4 +203,4 @@ back in place.
 
 ## More documentation
 
-Check out the [http testing book](https://ropensci.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
+Check out the [http testing book](https://ropenscilabs.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`

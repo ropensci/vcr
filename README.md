@@ -4,8 +4,9 @@ vcr
 
 
 [![cran checks](https://cranchecks.info/badges/worst/vcr)](https://cranchecks.info/pkgs/vcr)
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg)](https://travis-ci.org/ropensci/vcr)
+[![Build status](https://ci.appveyor.com/api/projects/status/6sewc0t3bhdg5opo?svg=true)](https://ci.appveyor.com/project/sckott/vcr)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
@@ -14,7 +15,7 @@ An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Docs
 
-Check out the [HTTP testing book](https://ropensci.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
+Check out the [HTTP testing book](https://ropenscilabs.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
 
 ## Supported HTTP libraries
 
@@ -37,7 +38,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.208   0.029   1.140
+#>   0.182   0.026   1.302
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -50,12 +51,12 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.071   0.003   0.075
+#>   0.079   0.003   0.084
 ```
 
 
 
-Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP resonse - thus, your tests run faster.
+Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP response - thus, your tests run faster.
 
 The cached response looks something like (condensed for brevity):
 
@@ -158,8 +159,8 @@ invisible(vcr::vcr_configure())
 
 ```r
 library(testthat)
-test_that("my test", {
-  vcr::use_cassette("rl_citation", {
+vcr::use_cassette("rl_citation", {
+  test_that("my test", {
     aa <- rl_citation()
 
     expect_is(aa, "character")
@@ -168,6 +169,28 @@ test_that("my test", {
   })
 })
 ```
+
+OR put the `vcr::use_cassette()` block on the inside, but put `testthat` expectations outside of 
+the `vcr::use_cassette()` block:
+
+```r
+library(testthat)
+test_that("my test", {
+  vcr::use_cassette("rl_citation", {
+    aa <- rl_citation()
+  })
+
+  expect_is(aa, "character")
+  expect_match(aa, "IUCN")
+  expect_match(aa, "www.iucnredlist.org")
+})
+```
+
+Don't wrap the `use_cassette()` block inside your  `test_that()` block with `testthat` expectations inside the `use_cassette()` block, as you'll only get the line number that the `use_cassette()` block starts on on failures.
+
+* When running tests or checks of your whole package, note that some users have found different results with 
+`devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know 
+if you run into this problem.
 
 ### vcr in your R project
 
@@ -225,7 +248,7 @@ We set the following defaults:
 * `vcr_logging_opts` = `list()`
 
 
-You can get the defaults programatically with
+You can get the defaults programmatically with
 
 ```r
 vcr_config_defaults()

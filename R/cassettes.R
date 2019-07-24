@@ -74,8 +74,10 @@ read_cassette_meta <- function(x, verbose = TRUE, ...){
 }
 
 get_cassette_meta_paths <- function(){
-  metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""), value = TRUE))
-  as.list(stats::setNames(metafiles, unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))))
+  metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""),
+    value = TRUE))
+  as.list(stats::setNames(metafiles, unname(sapply(metafiles, function(x)
+    yaml::yaml.load_file(x)$name))))
 }
 
 cassette_files <- function(){
@@ -84,14 +86,12 @@ cassette_files <- function(){
   list.files(path, full.names = TRUE)
 }
 
-# get_cassette_path("foobar")
 get_cassette_path <- function(x){
   if ( x %in% get_cassette_names() ) get_cassette_data_paths()[[x]]
 }
 
 is_path <- function(x) file.exists(path.expand(x))
 
-# get_cassette_names()
 get_cassette_names <- function(){
   tmp <- vcr_files()
   if (length(tmp) == 0) return("")
@@ -100,12 +100,14 @@ get_cassette_names <- function(){
 
 vcr_files <- function() {
   # remove some file types
-  files <- names(grep("metadata|rs-graphics", vapply(cassette_files(), basename, ""),
-                      invert = TRUE, value = TRUE))
+  files <- names(grep("metadata|rs-graphics",
+    vapply(cassette_files(), basename, ""),
+    invert = TRUE, value = TRUE))
   # include only certain file types
   # only yaml supported right now
-  tokeep <- switch(vcr_c$serialize_with, yaml = 'yml|yaml')
-  names(grep(tokeep, vapply(cassette_files(), basename, ""), value = TRUE))
+  tokeep <- switch(vcr_c$serialize_with, yaml = "yml|yaml")
+  names(grep(tokeep, vapply(cassette_files(), basename, ""),
+    value = TRUE))
 }
 
 get_cassette_data_paths <- function() {

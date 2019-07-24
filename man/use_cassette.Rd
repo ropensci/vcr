@@ -8,7 +8,8 @@ use_cassette(name, ..., record = "once",
   match_requests_on = c("method", "uri"),
   update_content_length_header = FALSE, allow_playback_repeats = FALSE,
   serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE)
+  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE)
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
@@ -45,6 +46,12 @@ custom persister.}
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
+
+\item{re_record_interval}{(integer) How frequently (in seconds) the
+cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+
+\item{clean_outdated_http_interactions}{(logical) Should outdated
+interactions be recorded back to file? default: \code{FALSE}}
 }
 \value{
 an object of class \code{Cassette}
@@ -81,9 +88,25 @@ but you don't get an object back
 
 \section{Cassettes on disk}{
 
-Note that \emph{"eject"} only means that the R sesion cassette is no longer
+Note that \emph{"eject"} only means that the R session cassette is no longer
 in use. If any interactions were recorded to disk, then there is a file
 on disk with those interactions.
+}
+
+\section{Using with tests (specifically \pkg{testthat})}{
+
+There's a few ways to get correct line numbers for failed tests and
+one way to not get correct line numbers:
+
+\emph{Correct}: Either wrap your \code{test_that()} block inside your \code{use_cassette()}
+block, OR if you put your \code{use_cassette()} block inside your \code{test_that()}
+block put your \code{testthat} expectations outside of the \code{use_cassette()}
+block.
+
+\emph{Incorrect}: By wrapping the \code{use_cassette()} block inside your
+\code{test_that()} block with your \pkg{testthat} expectations inside the
+\code{use_cassette()} block, you'll only get the line number that the
+\code{use_cassette()} block starts on.
 }
 
 \examples{
@@ -124,6 +147,20 @@ use_cassette(name = "catfact456", {
   res <- GET("https://catfact.ninja/fact")
 })
 
+# record mode: none
+library(crul)
+vcr_configure(dir = tempdir())
+
+## make a connection first
+conn <- crul::HttpClient$new("https://eu.httpbin.org")
+## this errors because 'none' disallows any new requests
+# use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
+## first use record mode 'once' to record to a cassette
+one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
+one; res
+## then use record mode 'none' to see it's behavior
+two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
+two; res2
 }
 }
 \seealso{

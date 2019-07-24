@@ -3,7 +3,7 @@
 #' \pkg{vcr} records test suite 'HTTP' requests and replay them during
 #' future runs.
 #'
-#' Check out the [http testing book](https://ropensci.github.io/http-testing-book/)
+#' Check out the [http testing book](https://ropenscilabs.github.io/http-testing-book/)
 #' for a lot more documentation on `vcr`, `webmockr`, and `crul`
 #'
 #' @section Backstory:
@@ -12,7 +12,7 @@
 #' have been done. Check out that GitHub repo for all the details on
 #' how the canonical version works.
 #'
-#' @section Main funcitons:
+#' @section Main functions:
 #' The [use_cassette] function is most likely what you'll want to use. It
 #' sets the cassette you want to record to, inserts the cassette, and then
 #' ejects the cassette, recording the interactions to the cassette.
@@ -35,6 +35,8 @@
 #' @importFrom lazyeval lazy_dots lazy_eval
 #' @importFrom base64enc base64decode base64encode
 #' @importFrom urltools url_parse url_compose
+#' @importFrom crul HttpClient mock
+#' @importFrom httr http_status content
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
 #' @docType package
 #' @aliases vcr-package

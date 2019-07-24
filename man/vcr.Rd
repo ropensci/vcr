@@ -10,7 +10,7 @@
 future runs.
 }
 \details{
-Check out the \href{https://ropensci.github.io/http-testing-book/}{http testing book}
+Check out the \href{https://ropenscilabs.github.io/http-testing-book/}{http testing book}
 for a lot more documentation on \code{vcr}, \code{webmockr}, and \code{crul}
 }
 \section{Backstory}{
@@ -21,7 +21,7 @@ have been done. Check out that GitHub repo for all the details on
 how the canonical version works.
 }
 
-\section{Main funcitons}{
+\section{Main functions}{
 
 The \link{use_cassette} function is most likely what you'll want to use. It
 sets the cassette you want to record to, inserts the cassette, and then

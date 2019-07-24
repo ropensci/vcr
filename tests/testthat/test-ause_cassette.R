@@ -1,4 +1,4 @@
-context("use_cassette works")
+context("use_cassette: works as expected")
 test_that("use_cassette works as expected", {
   skip_on_cran()
 
@@ -33,9 +33,9 @@ context("use_cassette fails well")
 test_that("use_cassette fails well", {
 
   # requires a code block
-  unlink(file.path(vcr_c$dir, "foobar.yml"))
+  unlink(file.path(vcr_c$dir, "foobar333.yml"))
   expect_error(
-    suppressMessages(use_cassette("foobar")),
+    suppressMessages(use_cassette("foobar333")),
     "`vcr::use_cassette` requires a code block"
   )
 
@@ -68,8 +68,8 @@ test_that("use_cassette fails well", {
 
   # persist_with valid value
   expect_error(
-    suppressMessages(use_cassette("newbar5", {}, persist_with = "foobar")),
-    "The requested VCR cassette persister \\(foobar\\) is not registered"
+    suppressMessages(use_cassette("newbar5", {}, persist_with = "jello")),
+    "The requested VCR cassette persister \\(jello\\) is not registered"
   )
 
   # persist_with valid value
@@ -81,7 +81,7 @@ test_that("use_cassette fails well", {
 
 # cleanup
 unlink(list.files(pattern = "newbar", full.names = TRUE))
-unlink("foobar.yml")
+unlink("foobar333.yml")
 unlink("testing1.yml")
 
 # reset configuration

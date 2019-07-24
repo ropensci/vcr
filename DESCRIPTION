@@ -1,18 +1,19 @@
 Package: vcr
 Title: Record 'HTTP' Calls to Disk
 Description: Record test suite 'HTTP' requests and replays them during
-    future runs. A port of the Ruby gem of the same name 
+    future runs. A port of the Ruby gem of the same name
     (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr'
-    R package for matching 'HTTP' requests by various rules ('HTTP' method, 
+    R package for matching 'HTTP' requests by various rules ('HTTP' method,
     'URL', query parameters, headers, body, etc.), and then caching
-    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests 
-    matching any previous requests in the same 'cassette' use a cached 
-    'HTTP' response. 
-Version: 0.2.0.9101
+    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
+    matching any previous requests in the same 'cassette' use a cached
+    'HTTP' response.
+Version: 0.2.6.9320
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
-    email = "sckott@protonmail.com", comment = c(ORCID="0000-0003-1444-9135")))
+    email = "sckott@protonmail.com", 
+    comment = c(ORCID="0000-0003-1444-9135")))
 URL: https://github.com/ropensci/vcr/ (devel)
-    https://ropensci.github.io/http-testing-book/ (user manual)
+    https://ropenscilabs.github.io/http-testing-book/ (user manual)
 BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -20,9 +21,9 @@ LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
-    crul (>= 0.5.2),
+    crul (>= 0.7.0),
     httr,
-    webmockr (>= 0.2.8),
+    webmockr (>= 0.3.4),
     urltools,
     yaml,
     R6,
@@ -32,7 +33,10 @@ Suggests:
     jsonlite,
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    desc,
+    crayon,
+    cli
 RoxygenNote: 6.1.1
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd

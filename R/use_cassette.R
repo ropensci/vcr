@@ -27,6 +27,10 @@
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
 #' in [vcr_configure()]. Default: `FALSE`
+#' @param re_record_interval (integer) How frequently (in seconds) the
+#' cassette should be re-recorded. default: `NULL` (not re-recorded)
+#' @param clean_outdated_http_interactions (logical) Should outdated
+#' interactions be recorded back to file? default: `FALSE`
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
@@ -51,9 +55,23 @@
 #' but you don't get an object back
 #'
 #' @section Cassettes on disk:
-#' Note that _"eject"_ only means that the R sesion cassette is no longer
+#' Note that _"eject"_ only means that the R session cassette is no longer
 #' in use. If any interactions were recorded to disk, then there is a file
 #' on disk with those interactions.
+#' 
+#' @section Using with tests (specifically \pkg{testthat}): 
+#' There's a few ways to get correct line numbers for failed tests and 
+#' one way to not get correct line numbers:
+#' 
+#' *Correct*: Either wrap your `test_that()` block inside your `use_cassette()`
+#' block, OR if you put your `use_cassette()` block inside your `test_that()` 
+#' block put your `testthat` expectations outside of the `use_cassette()` 
+#' block. 
+#' 
+#' *Incorrect*: By wrapping the `use_cassette()` block inside your 
+#' `test_that()` block with your \pkg{testthat} expectations inside the 
+#' `use_cassette()` block, you'll only get the line number that the 
+#' `use_cassette()` block starts on.
 #'
 #' @return an object of class `Cassette`
 #'
@@ -95,6 +113,20 @@
 #'   res <- GET("https://catfact.ninja/fact")
 #' })
 #'
+#' # record mode: none
+#' library(crul)
+#' vcr_configure(dir = tempdir())
+#' 
+#' ## make a connection first
+#' conn <- crul::HttpClient$new("https://eu.httpbin.org")
+#' ## this errors because 'none' disallows any new requests
+#' # use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
+#' ## first use record mode 'once' to record to a cassette
+#' one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
+#' one; res
+#' ## then use record mode 'none' to see it's behavior
+#' two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
+#' two; res2
 #' }
 
 use_cassette <- function(name, ..., record = "once",
@@ -102,14 +134,17 @@ use_cassette <- function(name, ..., record = "once",
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE) {
+  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE) {
 
   cassette <- insert_cassette(
     name, record = record, match_requests_on = match_requests_on,
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with, persist_with = persist_with,
-    preserve_exact_body_bytes = preserve_exact_body_bytes)
+    preserve_exact_body_bytes = preserve_exact_body_bytes, 
+    re_record_interval = re_record_interval, 
+    clean_outdated_http_interactions = clean_outdated_http_interactions)
   on.exit(cassette$eject())
   cassette$call_block(...)
   return(cassette)

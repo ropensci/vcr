@@ -94,7 +94,7 @@
 #' x$is_compressed()
 #' }
 VcrResponse <- R6::R6Class(
-  'VcrResponse',
+  "VcrResponse",
   public = list(
     status = NULL,
     headers = NULL,
@@ -104,7 +104,8 @@ VcrResponse <- R6::R6Class(
     adapter_metadata = NULL,
     hash = NULL,
 
-    initialize = function(status, headers, body, http_version, opts, adapter_metadata = NULL) {
+    initialize = function(status, headers, body, http_version, opts,
+      adapter_metadata = NULL) {
       if (!missing(status)) self$status <- status
       if (!missing(headers)) self$headers <- headers
       if (!missing(body)) {
@@ -124,7 +125,9 @@ VcrResponse <- R6::R6Class(
       self$hash <- list(
         status       = self$status,
         headers      = self$headers,
-        body         = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
+        body         =
+          serializable_body(self$body,
+            self$opts$preserve_exact_body_bytes %||% FALSE),
         http_version = self$http_version
       )
       return(self$hash)
@@ -132,21 +135,21 @@ VcrResponse <- R6::R6Class(
 
     from_hash = function(hash) {
       VcrResponse$new(
-        hash[['status']],
-        hash[['headers']],
-        body_from(hash[['body']]),
-        hash[['http_version']],
-        hash[['adapater_metadata']]
+        hash[["status"]],
+        hash[["headers"]],
+        body_from(hash[["body"]]),
+        hash[["http_version"]],
+        hash[["adapater_metadata"]]
       )
     },
 
     update_content_length_header = function() {
-      if (!is.null(self$get_header('content-length'))) {
+      if (!is.null(self$get_header("content-length"))) {
         len <- 0
         if (length(self$body) > 0 && nchar(self$body) > 0) {
           len <- as.character(nchar(self$body))
         }
-        self$edit_header('content-length', len)
+        self$edit_header("content-length", len)
       }
     },
 
@@ -163,7 +166,7 @@ VcrResponse <- R6::R6Class(
     },
 
     content_encoding = function() {
-       self$get_header('content-encoding')[1]
+       self$get_header("content-encoding")[1]
     },
 
     is_compressed = function() {
@@ -212,7 +215,7 @@ extract_http_version <- function(x) {
 
 
 # vcr_request_httr <- function(x) {
-#   Request$new(  
+#   Request$new(
 #     x$request$method,
 #     x$url,
 #     x$body, # FIXME: body not a field, probably index to x$request$fields
@@ -235,10 +238,10 @@ extract_http_version <- function(x) {
 
 # vcr_response_httr <- function(x) {
 #   VcrResponse$new(
-#     httr::http_status(x), 
+#     httr::http_status(x),
 #     x$headers,
-#     httr::content(x, encoding = "UTF-8"), 
-#     x$all_headers[[1]]$version, 
+#     httr::content(x, encoding = "UTF-8"),
+#     x$all_headers[[1]]$version,
 #     super$cassette$cassette_opts
 #   )
 # }
