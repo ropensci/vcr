@@ -51,3 +51,9 @@ check_for_a_pkg <- function(x) {
     invisible(TRUE)
   }
 }
+
+has_internet <- function() {
+  z <- try(suppressWarnings(readLines('https://www.google.com', n = 1)),
+    silent = TRUE)
+  !inherits(z, "try-error")
+}
