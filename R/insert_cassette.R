@@ -31,7 +31,8 @@ insert_cassette <- function(name, record="once",
   update_content_length_header=FALSE,
   allow_playback_repeats=FALSE, serialize_with="yaml",
   persist_with="FileSystem",
-  preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE) {
+  preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE, 
+  re_record_interval = NULL, clean_outdated_http_interactions = FALSE) {
 
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
@@ -50,7 +51,9 @@ insert_cassette <- function(name, record="once",
     # make cassette
     tmp <- Cassette$new(
       name = name, record = record, match_requests_on = match_requests_on,
-      re_record_interval = NULL, tag = NULL, tags = NULL,
+      re_record_interval = re_record_interval, 
+      clean_outdated_http_interactions = clean_outdated_http_interactions,
+      tag = NULL, tags = NULL,
       update_content_length_header = update_content_length_header,
       decode_compressed_response = NULL,
       allow_playback_repeats = allow_playback_repeats,

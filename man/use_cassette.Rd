@@ -8,7 +8,8 @@ use_cassette(name, ..., record = "once",
   match_requests_on = c("method", "uri"),
   update_content_length_header = FALSE, allow_playback_repeats = FALSE,
   serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE)
+  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE)
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
@@ -45,6 +46,12 @@ custom persister.}
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
+
+\item{re_record_interval}{(integer) How frequently (in seconds) the
+cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+
+\item{clean_outdated_http_interactions}{(logical) Should outdated
+interactions be recorded back to file? default: \code{FALSE}}
 }
 \value{
 an object of class \code{Cassette}

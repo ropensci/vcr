@@ -27,6 +27,10 @@
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
 #' in [vcr_configure()]. Default: `FALSE`
+#' @param re_record_interval (integer) How frequently (in seconds) the
+#' cassette should be re-recorded. default: `NULL` (not re-recorded)
+#' @param clean_outdated_http_interactions (logical) Should outdated
+#' interactions be recorded back to file? default: `FALSE`
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
@@ -130,14 +134,17 @@ use_cassette <- function(name, ..., record = "once",
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE) {
+  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE) {
 
   cassette <- insert_cassette(
     name, record = record, match_requests_on = match_requests_on,
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with, persist_with = persist_with,
-    preserve_exact_body_bytes = preserve_exact_body_bytes)
+    preserve_exact_body_bytes = preserve_exact_body_bytes, 
+    re_record_interval = re_record_interval, 
+    clean_outdated_http_interactions = clean_outdated_http_interactions)
   on.exit(cassette$eject())
   cassette$call_block(...)
   return(cassette)
