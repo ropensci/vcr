@@ -14,6 +14,10 @@
 \item{http_version}{the HTTP version}
 
 \item{adapter_metadata}{Additional metadata used by a specific VCR adapter}
+
+\item{opts}{various options}
+
+\item{disk}{boolean, is body a file on disk}
 }
 \description{
 The response of an HTTPInteraction
@@ -103,6 +107,14 @@ res$response_headers
    res$parse("UTF-8"), res$response_headers$status))
 x$content_encoding()
 x$is_compressed()
+
+# with disk
+url <- "https://google.com"
+(cli <- crul::HttpClient$new(url = url))
+f <- tempfile()
+(res <- cli$get("get", query = list(q = "stuff"), disk = f))
+(x <- VcrResponse$new(res$status_http(), res$response_headers,
+   f, res$response_headers$status, disk = TRUE))
 }
 }
 \keyword{internal}

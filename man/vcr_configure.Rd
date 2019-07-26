@@ -18,7 +18,7 @@ vcr_configure(dir = ".", record = "once",
   allow_http_connections_when_no_cassette = FALSE, cassettes = list(),
   linked_context = NULL, log = FALSE, log_opts = list(file =
   "vcr.log", log_prefix = "Cassette", date = TRUE),
-  filter_sensitive_data = NULL)
+  filter_sensitive_data = NULL, write_disk_path = NULL)
 
 vcr_configure_reset()
 
@@ -95,6 +95,13 @@ reading from the cassette we do the reverse replacement to get back
 to the real data. Before record replacement happens in internal
 function \code{write_interactions()}, while before playback replacement
 happens in internal function \code{YAML$deserialize_path()}}
+
+\item{write_disk_path}{(character) path to write files to
+for any requests that write responses to disk. by default this parameter
+is \code{NULL}. For testing a package, you'll probably want this path to
+be in your \code{tests/} directory, perhaps next to your cassettes
+directory, e.g., where your cassettes are in \code{tests/fixtures}, your
+files from requests that write to disk are in \code{tests/files}}
 }
 \description{
 Configuration

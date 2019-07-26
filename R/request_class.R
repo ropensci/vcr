@@ -7,6 +7,8 @@
 #' @param uri the request URI
 #' @param body the request body
 #' @param headers the request headers
+#' @param opts various options
+#' @param disk boolean, is body a file on disk
 #' @details
 #' \strong{Methods}
 #'   \describe{
@@ -49,8 +51,9 @@ Request <- R6::R6Class(
      skip_port_stripping = FALSE,
      hash = NULL,
      opts = NULL,
+     disk = NULL,
 
-     initialize = function(method, uri, body, headers, opts) {
+     initialize = function(method, uri, body, headers, opts, disk) {
        if (!missing(method)) self$method <- tolower(method)
        if (!missing(body)) {
          if (inherits(body, "list")) {
@@ -73,6 +76,7 @@ Request <- R6::R6Class(
          self$query <- tmp$parameter
        }
        if (!missing(opts)) self$opts <- opts
+       if (!missing(disk)) self$disk <- disk
      },
 
      to_hash = function() {
@@ -80,7 +84,8 @@ Request <- R6::R6Class(
          method  = self$method,
          uri     = self$uri,
          body    = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
-         headers = self$headers
+         headers = self$headers,
+         disk = self$disk
        )
        return(self$hash)
      },
@@ -90,7 +95,8 @@ Request <- R6::R6Class(
          method  = hash[['method']],
          uri     = hash[['uri']],
          body    = body_from(hash[['body']]),
-         headers = hash[['headers']]
+         headers = hash[['headers']],
+         disk = hash[['disk']]
        )
      }
    ),

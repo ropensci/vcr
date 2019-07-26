@@ -1,6 +1,6 @@
 tmpdir <- tempdir()
 library(vcr)
-vcr_configure(dir = tmpdir)
+vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 
 
 desc_text <- "Package: %s

@@ -17,6 +17,10 @@ Request
 \item{body}{the request body}
 
 \item{headers}{the request headers}
+
+\item{opts}{various options}
+
+\item{disk}{boolean, is body a file on disk}
 }
 \description{
 The request of an HTTPInteraction
