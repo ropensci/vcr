@@ -221,7 +221,7 @@ Cassette <- R6::R6Class(
           } else if (
             all(m %in% c("method", "uri", "headers")) && length(m) == 3) {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = req$headers))
+            webmockr::wi_th(tmp, .list = list(headers = req$headers))
           } else if (
             all(m %in% c("method", "uri", "headers", "query")) &&
             length(m) == 4) {
