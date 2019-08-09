@@ -14,4 +14,6 @@ scott_notes.md
 ^codemeta\.json$
 inst/ignore
 ^revdep$
-notes.R
+^notes.R$
+^notes_matchers.md$
+^use_vcr_notes.txt$
