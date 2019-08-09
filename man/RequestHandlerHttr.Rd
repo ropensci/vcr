@@ -15,7 +15,7 @@ RequestHandlerHttr - methods for httr package
 \strong{Public Methods}
 \describe{
 \item{\code{handle(request)}}{
-Top level function to interaction with. Handle the request
+Top level function to interact with. Handles the request
 }
 }
 
@@ -62,11 +62,30 @@ vcr_configure(
  record = "once"
 )
 
+# GET request
 library(httr)
 load("~/httr_req.rda")
 req
 x <- RequestHandlerHttr$new(req)
 # x$handle()
+
+# POST request
+library(httr)
+webmockr::httr_mock()
+mydir <- file.path(tempdir(), "testing_httr")
+invisible(vcr_configure(dir = mydir))
+use_cassette(name = "testing2", {
+  res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+}, match_requests_on = c("method", "uri", "body"))
+
+load("~/httr_req_post.rda")
+insert_cassette("testing3")
+httr_req_post
+x <- RequestHandlerHttr$new(httr_req_post)
+x
+# x$handle()
+self=x
+
 }
 }
 \keyword{datasets}

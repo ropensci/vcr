@@ -6,7 +6,7 @@
 #' \strong{Public Methods}
 #'   \describe{
 #'     \item{\code{handle(request)}}{
-#'       Top level function to interaction with. Handle the request
+#'       Top level function to interact with. Handles the request
 #'     }
 #'   }
 #'
@@ -91,7 +91,7 @@ RequestHandler <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url$url %||% request$url,
-          request$body, request$headers)
+          pluck_body(request), request$headers)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
@@ -192,3 +192,28 @@ RequestHandler <- R6::R6Class(
     }
   )
 )
+
+# try to figure out where the body is located
+# either:
+# - $fields as string or list
+# - $fields as an upload
+# - $options$postfields as raw
+#
+# return: character string
+pluck_body <- function(x) {
+  if (is.null(x$fields) && is.null(x$options$postfields)) return(NULL)
+  if (!is.null(x$fields)) {
+    form_file_comp <- vapply(x$fields, inherits, logical(1), "form_file")
+    if (any(form_file_comp)) {
+      ff <- x$fields[form_file_comp][[1]]
+      return(sprintf("type=%s; path=%s", ff$type, ff$path))
+    } else {
+      return(x$fields)
+    }
+  }
+  if (!is.null(x$options$postfields)) {
+    if (is.raw(x$options$postfields)) return(rawToChar(x$options$postfields))
+  }
+  stop("couldn't fetch body; file an issue at \n",
+    "  https://github.com/ropensci/vcr/issues/")
+}

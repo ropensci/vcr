@@ -242,10 +242,14 @@ HTTPInteractionList <- R6::R6Class(
 
      # return: interactions list
      interaction_matches_request = function(req, interaction) {
+       bod <- interaction$request$body
+       if (length(names(bod)) > 0) {
+        if ("string" %in% names(bod)) bod <- bod$string
+       }
        intreq <- Request$new(
         interaction$request$method,
         interaction$request$uri,
-        interaction$request$body,
+        bod,
         interaction$request$headers
        )
        vcr_log_info(sprintf("  Checking if {%s} matches {%s} using matchers: [%s]",
@@ -258,8 +262,12 @@ HTTPInteractionList <- R6::R6Class(
          matcher <- RequestMatcherRegistry$new()$registry[[y]]
          res <- matcher$matches(req, intreq)
          msg <- if (res) "matched" else "did not match"
+         # cat(paste0("method: ", req$method), sep = "\n ")
+         # cat(paste0("body: ", req$body), sep = "\n ")
          vcr_log_info(sprintf("    %s %s: current request [%s] vs [%s]",
-             y, msg, request_summary(req), request_summary(intreq)),
+             y, msg,
+             request_summary(req, self$request_matchers), 
+             request_summary(intreq, self$request_matchers)),
              vcr_c$log_opts$date)
          return(res)
        })))

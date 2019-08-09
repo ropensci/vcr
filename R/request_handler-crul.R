@@ -12,6 +12,54 @@
 #' crul_request
 #' x <- RequestHandlerCrul$new(crul_request)
 #' # x$handle()
+#' 
+#' library(crul)
+#' data(crul_request_post_json)
+#' crul_request_post_json$request$url$handle <- curl::new_handle()
+#' crul_request_post_json
+#' crul_request_post_json$request
+#' x <- RequestHandlerCrul$new(crul_request_post_json$request)
+#' # x$handle()
+#' 
+#' # body matching
+#' library(vcr)
+#' library(crul)
+#' vcr_configure(dir = tempdir(), log = TRUE)
+#' cli <- HttpClient$new(url = "https://httpbin.org")
+#' 
+#' ## testing, same uri and method, changed body in 2nd block
+#' use_cassette(name = "apple7", {
+#'   resp <- cli$post("post", body = list(foo = "bar"))
+#' }, match_requests_on = c("method", "uri", "body"))
+#' ## should error, b/c record="once"
+#' use_cassette(name = "apple7", {
+#'   resp <- cli$post("post", body = list(foo = "bar"))
+#'   resp2 <- cli$post("post", body = list(hello = "world"))
+#' }, match_requests_on = c("method", "uri", "body"))
+#' cas <- insert_cassette(name = "apple7", 
+#'   match_requests_on = c("method", "uri", "body"))
+#' resp2 <- cli$post("post", body = list(hello = "world"))
+#' eject_cassette("apple7")
+#' 
+#' ## testing, same body, changed method in 2nd block
+#' use_cassette(name = "apple8", {
+#'   x <- cli$post("post", body = list(hello = "world"))
+#' }, match_requests_on = c("method", "body"))
+#' use_cassette(name = "apple8", {
+#'   x <- cli$get("post", body = list(hello = "world"))
+#' }, match_requests_on = c("method", "body"))
+#' 
+#' ## testing, same body, changed uri in 2nd block
+#' use_cassette(name = "apple9", {
+#'   x <- cli$post("post", body = list(hello = "world"))
+#'   w <- cli$post("get", body = list(hello = "world"))
+#' }, match_requests_on = c("method", "body"))
+#' use_cassette(name = "apple9", {
+#'   NOTHING HERE
+#' }, match_requests_on = c("method", "body"))
+#' unlink(file.path(vcr_configuration()$dir, "apple9.yml"))
+#' 
+#' jsonlite::fromJSON(resp$parse())
 #' }
 RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
@@ -53,7 +101,6 @@ RequestHandlerCrul <- R6::R6Class(
       # - this may need to be called from webmockr cruladapter?
 
       # real request
-      # tmp <- crul::HttpClient$new(url = request$url$url)
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)
 
@@ -62,7 +109,6 @@ RequestHandlerCrul <- R6::R6Class(
       cas <- tryCatch(current_cassette(), error = function(e) e)
       if (inherits(cas, "error")) stop("no cassette in use")
       cas$record_http_interaction(response)
-      # cas$record_http_interaction(self$vcr_response)
 
       # return real response
       return(response)
