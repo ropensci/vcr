@@ -17,3 +17,4 @@ inst/ignore
 ^notes.R$
 ^notes_matchers.md$
 ^use_vcr_notes.txt$
+^docs$
