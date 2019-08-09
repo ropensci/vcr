@@ -38,7 +38,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.182   0.026   1.302
+#>   0.149   0.019   0.572
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -51,7 +51,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.079   0.003   0.084
+#>   0.079   0.004   0.087
 ```
 
 
@@ -337,7 +337,8 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * Please [report any issues or bugs](https://github.com/ropensci/vcr/issues)
 * License: MIT
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
-* Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+* Please note that this project is released with a [Contributor Code of Conduct][coc].
+By participating in this project you agree to abide by its terms.
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
 
@@ -354,3 +355,4 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [rplos]: https://github.com/ropensci/rplos
 [ritis]: https://github.com/ropensci/ritis
 [nasapower]: https://github.com/ropensci/nasapower
+[coc]: https://github.com/ropensci/vcr/blob/master/CODE_OF_CONDUCT.md

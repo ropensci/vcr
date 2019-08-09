@@ -198,6 +198,9 @@ Cassette <- R6::R6Class(
       self$serializer = serializer_fetch(self$serialize_with, self$name)
       self$persister = persister_fetch(self$persist_with, self$serializer$path)
 
+      # check for re-record
+      if (self$should_re_record()) self$record <- "all"
+
       # get previously recorded interactions
       ## if none pass, if some found, make webmockr stubs
       #### first, get previously recorded interactions into `http_interactions_` var
@@ -241,7 +244,7 @@ Cassette <- R6::R6Class(
             all(m %in% c("method", "uri", "headers")) && length(m) == 3
           ) {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = req$headers))
+            webmockr::wi_th(tmp, .list = list(headers = req$headers))
           } else if (
             all(m %in% c("method", "uri", "body")) && length(m) == 3
           ) {
@@ -309,6 +312,10 @@ Cassette <- R6::R6Class(
       cat(paste0("  Record method: ", self$record), sep = "\n")
       cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
       cat(paste0("  Persist with: ", self$persist_with), sep = "\n")
+      cat(paste0("  Re-record interval (s): ", self$re_record_interval),
+        sep = "\n")
+      cat(paste0("  Clean outdated interactions?: ",
+        self$clean_outdated_http_interactions), sep = "\n")
       cat(paste0("  update_content_length_header: ",
                  self$update_content_length_header), sep = "\n")
       cat(paste0("  decode_compressed_response: ",
@@ -366,12 +373,11 @@ Cassette <- R6::R6Class(
     },
 
     is_empty = function() {
-      # self$persister$is_empty()
       nchar(self$raw_cassette_bytes()) < 1
     },
 
     originally_recorded_at = function() {
-      self$recorded_at
+      as.POSIXct(self$recorded_at, tz = "GMT")
     },
 
     serializable_hash = function() {
@@ -417,21 +423,44 @@ Cassette <- R6::R6Class(
           )
       }
 
-      # FIXME: add up_to_date_interactions usage here
-      return(c(old_interactions, self$new_recorded_interactions))
+      return(c(self$up_to_date_interactions(old_interactions), 
+        self$new_recorded_interactions))
     },
 
-    # FIXME: not used yet, from newer version of vcr
     up_to_date_interactions = function(interactions) {
       if (
-        self$clean_outdated_http_interactions &&
-        !is.null(re_record_interval)
+        !self$clean_outdated_http_interactions && is.null(self$re_record_interval)
       ) {
         return(interactions)
       }
       Filter(function(z) {
-        as.POSIXct(z$recorded_at) > (Sys.time() - vcr_c$re_record_interval)
+        as.POSIXct(z$recorded_at, tz = "GMT") > (as.POSIXct(Sys.time(), tz = "GMT") - self$re_record_interval)
       }, interactions)
+    },
+
+    should_re_record = function() {
+      if (is.null(self$re_record_interval)) return(FALSE)
+      if (is.null(self$originally_recorded_at())) return(FALSE)
+      now <- as.POSIXct(Sys.time(), tz = "GMT")
+      time_comp <- (self$originally_recorded_at() + self$re_record_interval) < now
+      info <- sprintf(
+        "previously recorded at: '%s'; now: '%s'; interval: %s seconds",
+        self$originally_recorded_at(), now, self$re_record_interval)
+
+      if (!time_comp) {
+        vcr_log_info(
+          sprintf("Not re-recording since the interval has not elapsed (%s).", info),
+          vcr_c$log_opts$date)
+        return(FALSE)
+      } else if (has_internet()) {
+        vcr_log_info(sprintf("re-recording (%s).", info), vcr_c$log_opts$date)
+        return(TRUE)
+      } else {
+        vcr_log_info(
+          sprintf("Not re-recording because no internet connection is available (%s).", info),
+          vcr_c$log_opts$date)
+        return(FALSE)
+      }
     },
 
     should_stub_requests = function() {
