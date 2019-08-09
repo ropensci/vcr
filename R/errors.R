@@ -116,7 +116,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         )
       }
       if (self$match_request_on_body()) {
-        lines <- c(lines, paste0("  Body: %s", self$request$body))
+        lines <- c(lines, sprintf("  Body: %s", self$request$body))
       }
       paste0(lines, collapse = "\n")
     },
@@ -260,7 +260,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
       link <- tmp$url
       description_lines[1] <- sprintf(description_lines[1],
         interaction_description)
-      list(text = paste0(description_lines, collapse = "\n"), url = link)
+      list(text = paste0(description_lines, collapse = "\n    "), url = link)
     }
   )
 )

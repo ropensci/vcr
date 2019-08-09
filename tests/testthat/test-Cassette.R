@@ -23,7 +23,7 @@ test_that("Cassette fails well with invalid record mode", {
 
 test_that("Cassette fails well with unsupported matcher", {
   expect_error(Cassette$new("foobar89", match_requests_on = "host"), 
-    "we do not yet support host, path, or body matchers")
+    "we do not yet support host and path matchers")
 })
 
 

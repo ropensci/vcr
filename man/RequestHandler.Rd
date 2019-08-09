@@ -14,7 +14,7 @@ RequestHandler
 \strong{Public Methods}
 \describe{
 \item{\code{handle(request)}}{
-Top level function to interaction with. Handle the request
+Top level function to interact with. Handles the request
 }
 }
 
