@@ -166,56 +166,56 @@ Default: <code>FALSE</code></p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># user workflow</span>
 <span class='fu'><a href='vcr_configure.html'>vcr_configuration</a></span>()</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
 #&gt;   Preserve Bytes?: FALSE
 #&gt;   Logging?: FALSE</div><div class='input'><span class='no'>logfile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"vcr.log"</span>)
 <span class='fu'><a href='vcr_configure.html'>vcr_configure</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>log_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='no'>logfile</span>))</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
 #&gt;   Preserve Bytes?: FALSE
-#&gt;   Logging?: TRUE (/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis/vcr.log)</div><div class='input'>
+#&gt;   Logging?: TRUE (/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6/vcr.log)</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>) <span class='co'># empty</span></div><div class='output co'>#&gt; character(0)</div><div class='input'>
 <span class='co'># log messages</span>
 <span class='fu'>vcr_log_info</span>(<span class='st'>"hello world!"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - hello world!"</div><div class='input'><span class='fu'>vcr_log_info</span>(<span class='st'>"foo bar"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - hello world!"
-#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - foo bar"     </div><div class='input'><span class='co'>## many messages</span>
+<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - hello world!"</div><div class='input'><span class='fu'>vcr_log_info</span>(<span class='st'>"foo bar"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - hello world!"
+#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - foo bar"     </div><div class='input'><span class='co'>## many messages</span>
 <span class='fu'>vcr_log_info</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"brown cow"</span>, <span class='st'>"blue horse"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - hello world!"
-#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - foo bar"     
-#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  </div><div class='input'><span class='fu'>vcr_log_info</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"brown cow"</span>, <span class='st'>"blue horse"</span>, <span class='st'>"green goat"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - hello world!"
-#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - foo bar"     
-#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  
-#&gt; [5] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [6] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  
-#&gt; [7] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - green goat"  </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - hello world!"
+#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - foo bar"     
+#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  </div><div class='input'><span class='fu'>vcr_log_info</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"brown cow"</span>, <span class='st'>"blue horse"</span>, <span class='st'>"green goat"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - hello world!"
+#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - foo bar"     
+#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  
+#&gt; [5] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [6] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  
+#&gt; [7] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - green goat"  </div><div class='input'>
 <span class='co'># standalone workflow</span>
 <span class='co'># set a file to log to</span>
 <span class='fu'>vcr_log_file</span>((<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>f</span>) <span class='co'># empty</span></div><div class='output co'>#&gt; character(0)</div><div class='input'>
 <span class='co'># log messages</span>
 <span class='fu'>vcr_log_info</span>(<span class='st'>"hello world!"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - hello world!"
-#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - foo bar"     
-#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  
-#&gt; [5] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [6] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  
-#&gt; [7] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - green goat"  </div><div class='input'><span class='fu'>vcr_log_info</span>(<span class='st'>"foo bar"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - hello world!"
-#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - foo bar"     
-#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  
-#&gt; [5] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - brown cow"   
-#&gt; [6] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - blue horse"  
-#&gt; [7] "[Cassette: '&lt;none&gt;'] - 2019-08-19 17:19:51 - green goat"  </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - hello world!"
+#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - foo bar"     
+#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  
+#&gt; [5] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [6] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  
+#&gt; [7] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - green goat"  </div><div class='input'><span class='fu'>vcr_log_info</span>(<span class='st'>"foo bar"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='no'>logfile</span>)</div><div class='output co'>#&gt; [1] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - hello world!"
+#&gt; [2] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - foo bar"     
+#&gt; [3] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [4] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  
+#&gt; [5] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - brown cow"   
+#&gt; [6] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - blue horse"  
+#&gt; [7] "[Cassette: '&lt;none&gt;'] - 2019-08-20 11:58:59 - green goat"  </div><div class='input'>
 <span class='co'># cleanup</span>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>f</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>logfile</span>)</div></pre>

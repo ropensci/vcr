@@ -272,19 +272,19 @@ happens in internal function <code>YAML$deserialize_path()</code></p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>vcr_configure</span>(<span class='kw'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
 #&gt;   Preserve Bytes?: FALSE
 #&gt;   Logging?: FALSE</div><div class='input'><span class='fu'>vcr_configure</span>(<span class='kw'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>record</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: all
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
 #&gt;   Preserve Bytes?: FALSE
 #&gt;   Logging?: FALSE</div><div class='input'><span class='fu'>vcr_configuration</span>()</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: all
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
@@ -357,7 +357,7 @@ happens in internal function <code>YAML$deserialize_path()</code></p></td>
 #&gt; $filter_sensitive_data
 #&gt; NULL
 #&gt; </div><div class='input'><span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>ignore_localhost</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
@@ -366,13 +366,13 @@ happens in internal function <code>YAML$deserialize_path()</code></p></td>
 <span class='co'># logging</span>
 <span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>log_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"vcr.log"</span>)))</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
 #&gt;   Preserve Bytes?: FALSE
-#&gt;   Logging?: TRUE (/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis/vcr.log)</div><div class='input'><span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>log_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"console"</span>))</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Logging?: TRUE (/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6/vcr.log)</div><div class='input'><span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>log_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"console"</span>))</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
@@ -382,13 +382,13 @@ happens in internal function <code>YAML$deserialize_path()</code></p></td>
    <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"vcr.log"</span>),
    <span class='kw'>log_prefix</span> <span class='kw'>=</span> <span class='st'>"foobar"</span>
 ))</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
 #&gt;   Preserve Bytes?: FALSE
-#&gt;   Logging?: TRUE (/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis/vcr.log)</div><div class='input'><span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Logging?: TRUE (/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6/vcr.log)</div><div class='input'><span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
@@ -398,7 +398,7 @@ happens in internal function <code>YAML$deserialize_path()</code></p></td>
 <span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(),
   <span class='kw'>filter_sensitive_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"&lt;bar&gt;"</span>)
 )</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
@@ -406,7 +406,7 @@ happens in internal function <code>YAML$deserialize_path()</code></p></td>
 #&gt;   Logging?: FALSE</div><div class='input'><span class='fu'>vcr_configure</span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(),
   <span class='kw'>filter_sensitive_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>foo</span> <span class='kw'>=</span> <span class='st'>"&lt;bar&gt;"</span>, <span class='kw'>hello</span> <span class='kw'>=</span> <span class='st'>"&lt;world&gt;"</span>)
 )</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//Rtmp3gxCi6
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
