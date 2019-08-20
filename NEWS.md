@@ -3,18 +3,18 @@ vcr 0.3.0
 
 ### NEW FEATURES
 
-* xxx (#xx)
-* xxx (#xx)
+* new internal method `up_to_date_interactions` in `cassette_class` now allows filtering cassettes by user specified date (#96) (#104)
+* re-recording now works - see new `use_casette()` parameters `re_record_interval` and `clean_outdated_http_interactions`; you can now set a re-record interval (in seconds) so that you can for example always re-record cassettes if you don't want cassettes to be more than X days old; depends on new internal method `up_to_date_interactions` (#104) (#105)
 
 ### MINOR IMPROVEMENTS
 
-* xxx (#xx)
-* xxx (#xx)
+* fix link to HTTP Testing Book: ropensci -> ropenscilabs (#100)
+* add new section to HTTP Testing Book on "vcr enabled testing" with sub-sections on check vs. test, your package on CRAN, and your package on continuous integration sites (#102)
 
 ### BUG FIXES
 
-* xxx (#xx)
-* xxx (#xx)
+* fix request body matching - partly through fixes to `webmockr` package (requires v0.4 or greater); more generally, makes single type request matching (e.g., just HTTP method, or just URL) possible, it was not working before, but is now working; added examples of doing single type matching (#70) (#76) (#108)
+* fixed type in `cassette_class` where typo lead to not setting headers correctly in the `webmockr::wi_th()` call (#107)
 
 
 vcr 0.2.6
