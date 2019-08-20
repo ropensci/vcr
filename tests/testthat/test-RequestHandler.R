@@ -9,6 +9,8 @@ test_that("RequestHandlerHttr", {
 })
 
 test_that("RequestHandlerHttr: httr", {
+  skip_if_not_installed("xml2")
+
   load("httr_obj.rda")
   x <- RequestHandlerHttr$new(httr_obj)
 

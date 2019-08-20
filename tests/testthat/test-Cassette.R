@@ -30,4 +30,5 @@ test_that("Cassette fails well with unsupported matcher", {
 
 # cleanup
 unlink(file.path(vcr_configuration()$dir, "stuff.yml"))
+unlink(file.path(vcr_configuration()$dir, "stuff2.yml"))
 unlink(file.path(vcr_configuration()$dir, "foobar89.yml"))
