@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">vcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.9.9110</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -129,7 +129,7 @@
 <a class="sourceLine" id="cb1-8" data-line-number="8">  })</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9">)</a>
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   0.155   0.019   0.571</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   0.112   0.010   0.501</span></a></code></pre></div>
 <p>The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="kw"><a href="reference/use_cassette.html">use_cassette</a></span>(<span class="dt">name =</span> <span class="st">"helloworld"</span>, {</a>
@@ -137,7 +137,7 @@
 <a class="sourceLine" id="cb2-4" data-line-number="4">  })</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5">)</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   0.085   0.007   0.093</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   0.070   0.005   0.076</span></a></code></pre></div>
 <p>Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP response - thus, your tests run faster.</p>
 <p>The cached response looks something like (condensed for brevity):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="fu">http_interactions:</span></a>

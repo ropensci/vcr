@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">vcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.9.9110</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -180,7 +180,7 @@ error with UnhandledHTTPRequestError</p><ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='vcr_configure.html'>vcr_configure</a></span>(<span class='kw'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; &lt;vcr configuration&gt;
-#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpIoF2H9
+#&gt;   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis
 #&gt;   Record: once
 #&gt;   URI Parser: crul::url_parse
 #&gt;   Match Requests on: method, uri
@@ -201,7 +201,7 @@ error with UnhandledHTTPRequestError</p><ul>
 
 <span class='no'>err</span> <span class='kw'>&lt;-</span> <span class='no'>UnhandledHTTPRequestError</span>$<span class='fu'>new</span>(<span class='no'>request</span>)
 <span class='no'>err</span>$<span class='fu'>request_description</span>()</div><div class='output co'>#&gt; [1] "POST https://eu.httpbin.org/post?a=5"</div><div class='input'><span class='no'>err</span>$<span class='fu'>current_matchers</span>()</div><div class='output co'>#&gt; [1] "method" "uri"   </div><div class='input'><span class='no'>err</span>$<span class='fu'>match_request_on_headers</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>err</span>$<span class='fu'>match_request_on_body</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>err</span>$<span class='fu'>formatted_headers</span>()</div><div class='output co'>#&gt; [1] "    foo: bar"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>err</span>$<span class='fu'>formatted_headers</span>(), <span class='st'>"\n"</span>)</div><div class='output co'>#&gt;     foo: bar </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>err</span>$<span class='fu'>cassettes_description</span>(), <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; vcr is currently using the following cassette:
-#&gt;   - /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpIoF2H9/turtle.yml
+#&gt;   - /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis/turtle.yml
 #&gt;     - record_mode: once
 #&gt;     - match_requests_on: method, uri 
 #&gt; 
@@ -209,7 +209,7 @@ error with UnhandledHTTPRequestError</p><ul>
 #&gt; to replay and is prevented from recording new requests. There are a few ways
 #&gt; you can deal with this:
 #&gt;  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>err</span>$<span class='fu'>cassettes_list</span>(), <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; vcr is currently using the following cassette:
-#&gt;   - /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpIoF2H9/turtle.yml
+#&gt;   - /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpYxsTis/turtle.yml
 #&gt;     - record_mode: once
 #&gt;     - match_requests_on: method, uri </div><div class='input'><span class='no'>err</span>$<span class='fu'>formatted_suggestions</span>()</div><div class='output co'>#&gt; [1] "  * If you're surprised vcr is raising this error\n    and want insight about how vcr attempted to handle the request,\n    you can use 'logging' to see more details [1].\n\n  * You can use the :new_episodes record mode to allow vcr to\n    record this new request to the existing cassette [2].\n\n  * If you want vcr to ignore this request (and others like it), you can\n    set an `ignore_request` function [3].\n\n  * The current record mode ('once') does not allow new requests to be recorded\n    to a previously recorded cassette. You can delete the cassette file and re-run\n    your tests to allow the cassette to be recorded with this request [4].\n\n[1] https://ropenscilabs.github.io/http-testing-book/logging\n\n[2] https://ropenscilabs.github.io/http-testing-book/record-modes.html#new_episodes\n\n[3] https://ropenscilabs.github.io/http-testing-book/vcr-configuration#config-ignore-requests\n\n[4] https://ropenscilabs.github.io/http-testing-book/record-modes.html#once\n"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>err</span>$<span class='fu'>format_bullet_point</span>(<span class='st'>'foo bar'</span>, <span class='fl'>1</span>), <span class='st'>"\n"</span>)</div><div class='output co'>#&gt;   * foo bar [2]. </div><div class='input'><span class='no'>err</span>$<span class='fu'>suggestion_for</span>(<span class='st'>"use_new_episodes"</span>)</div><div class='output co'>#&gt; $text
 #&gt; [1] "You can use the :new_episodes record mode to allow vcr to"

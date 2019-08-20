@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">vcr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.9.9110</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -133,24 +133,24 @@
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h3>
 <ul>
-<li>xxx (#xx)</li>
-<li>xxx (#xx)</li>
+<li>new internal method <code>up_to_date_interactions</code> in <code>cassette_class</code> now allows filtering cassettes by user specified date (<a href='https://github.com/ropensci/vcr/issues/96'>#96</a>) (<a href='https://github.com/ropensci/vcr/issues/104'>#104</a>)</li>
+<li>re-recording now works - see new <code>use_casette()</code> parameters <code>re_record_interval</code> and <code>clean_outdated_http_interactions</code>; you can now set a re-record interval (in seconds) so that you can for example always re-record cassettes if you don’t want cassettes to be more than X days old; depends on new internal method <code>up_to_date_interactions</code> (<a href='https://github.com/ropensci/vcr/issues/104'>#104</a>) (<a href='https://github.com/ropensci/vcr/issues/105'>#105</a>)</li>
 </ul>
 </div>
 <div id="minor-improvements" class="section level3">
 <h3 class="hasAnchor">
 <a href="#minor-improvements" class="anchor"></a>MINOR IMPROVEMENTS</h3>
 <ul>
-<li>xxx (#xx)</li>
-<li>xxx (#xx)</li>
+<li>fix link to HTTP Testing Book: ropensci -&gt; ropenscilabs (<a href='https://github.com/ropensci/vcr/issues/100'>#100</a>)</li>
+<li>add new section to HTTP Testing Book on “vcr enabled testing” with sub-sections on check vs. test, your package on CRAN, and your package on continuous integration sites (<a href='https://github.com/ropensci/vcr/issues/102'>#102</a>)</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h3>
 <ul>
-<li>xxx (#xx)</li>
-<li>xxx (#xx)</li>
+<li>fix request body matching - partly through fixes to <code>webmockr</code> package (requires v0.4 or greater); more generally, makes single type request matching (e.g., just HTTP method, or just URL) possible, it was not working before, but is now working; added examples of doing single type matching (<a href='https://github.com/ropensci/vcr/issues/70'>#70</a>) (<a href='https://github.com/ropensci/vcr/issues/76'>#76</a>) (<a href='https://github.com/ropensci/vcr/issues/108'>#108</a>)</li>
+<li>fixed type in <code>cassette_class</code> where typo lead to not setting headers correctly in the <code><a href="https://rdrr.io/pkg/webmockr/man/wi_th.html">webmockr::wi_th()</a></code> call (<a href='https://github.com/ropensci/vcr/issues/107'>#107</a>)</li>
 </ul>
 </div>
 </div>
