@@ -43,10 +43,15 @@ write_interactions <- function(x, file, bytes) {
   assert(x, c("list", "HTTPInteraction"))
   assert(file, "character")
 
-  body <- if (bytes) {
-    base64enc::base64encode(charToRaw(get_body(x$response$body)))
+  resp_body <- get_body(x$response$body)
+  body <- if (bytes || is.raw(resp_body)) {
+    if (is.raw(resp_body)) {
+      base64enc::base64encode(resp_body)
+    } else {
+      base64enc::base64encode(charToRaw(resp_body))
+    }
   } else {
-    get_body(x$response$body)
+    get_body(resp_body)
   }
 
   # count characters (the count not used anymore,
@@ -133,7 +138,7 @@ strex <- function(string, pattern) {
 
 encoding_guess <- function(x, bytes = FALSE, force_guess = FALSE) {
   if (bytes && !force_guess) return("ASCII-8BIT")
-  enc <- Encoding(x)
+  enc <- try_encoding(x)
   if (enc == "unknown") {
     message("encoding couldn't be detected; assuming UTF-8")
   }

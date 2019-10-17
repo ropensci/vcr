@@ -607,7 +607,8 @@ Cassette <- R6::R6Class(
           c(list(status_code = x$status_code), httr::http_status(x))
         } else unclass(x$status_http()),
         if (inherits(x, "response")) x$headers else x$response_headers,
-        rawToChar(x$content),
+        # rawToChar(x$content),
+        if (can_rawToChar(x$content)) rawToChar(x$content) else x$content,
         if (inherits(x, "response")) {
           x$all_headers[[1]]$version
         } else x$response_headers$status,
