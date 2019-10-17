@@ -109,13 +109,13 @@ VcrResponse <- R6::R6Class(
       if (!missing(status)) self$status <- status
       if (!missing(headers)) self$headers <- headers
       if (!missing(body)) {
-       if (inherits(body, "list")) {
-         body <- paste(names(body), body, sep = "=", collapse = ",")
-       }
-       self$body <- body
+        if (inherits(body, "list")) {
+          body <- paste(names(body), body, sep = "=", collapse = ",")
+        }
+        self$body <- body
       }
       if (!missing(http_version)) {
-       self$http_version <- extract_http_version(http_version)
+        self$http_version <- extract_http_version(http_version)
       }
       if (!missing(opts)) self$opts <- opts
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata

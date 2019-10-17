@@ -84,8 +84,8 @@ YAML <- R6::R6Class("YAML",
         # check for base64 encoding
         tmp$http_interactions <- lapply(tmp$http_interactions, function(z) {
           if (is_base64(z$response$body$string)) {
-            z$response$body$string <-
-              rawToChar(base64enc::base64decode(z$response$body$string))
+            resp_bod <- base64enc::base64decode(z$response$body$string)
+            z$response$body$string <- if (is.raw(resp_bod)) resp_bod else rawToChar(resp_bod)
             z$response$body$encoding <-
               suppressMessages(encoding_guess(z$response$body$string, TRUE))
           }

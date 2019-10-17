@@ -130,12 +130,17 @@ body_from <- function(x) {
   # return hash_or_string unless hash_or_string.is_a?(Hash)
   # hash = hash_or_string
   if (is.null(x)) x <- ""
-  if (is.null(attr(x, "base64"))) return(try_encode_string(x, Encoding(x)))
+  if (is.null(attr(x, "base64"))) return(try_encode_string(x, try_encoding(x)))
   if (attr(x, "base64") || is_base64(x)) {
     rawToChar(base64enc::base64decode(x))
   } else {
-    try_encode_string(x, Encoding(x))
+    try_encode_string(x, try_encoding(x))
   }
+}
+
+try_encoding <- function(x) {
+  z <- tryCatch(Encoding(x), error = function(e) e)
+  if (inherits(z, "error")) "ASCII-8BIT" else z
 }
 
 is_base64 <- function(x) {

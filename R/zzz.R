@@ -57,3 +57,8 @@ has_internet <- function() {
     silent = TRUE)
   !inherits(z, "try-error")
 }
+
+can_rawToChar <- function(x) {
+  z <- tryCatch(rawToChar(x), error = function(e) e)
+  return(!inherits(z, "error"))
+}
