@@ -34,7 +34,7 @@ The main use case is for unit tests, but you can use it outside of the unit test
 
 `vcr` works with the `crul` and `httr` HTTP request packages; we're working on support for `curl`.
 
-Check out the [http testing book](https://ropenscilabs.github.io/http-testing-book/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
+Check out the [http testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
 
 ## Installation
 
