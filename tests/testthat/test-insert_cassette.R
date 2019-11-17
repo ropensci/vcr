@@ -1,5 +1,3 @@
-context("insert_cassette")
-
 context("insert_cassette fails well")
 test_that("insert_cassette fails well", {
   unlink(file.path(vcr_c$dir, "foobar55.yml"))

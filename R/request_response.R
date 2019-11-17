@@ -41,10 +41,17 @@
 #'   connection = "keep-alive",
 #'   date = "Tue, 24 Apr 2018 04:46:56 GMT"
 #' )
-#' response_body <- "{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"application/json\"}}\n"
+#' response_body <- 
+#' "{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"text/html\"}}\n"
 #' (x <- VcrResponse$new(status, headers,
 #'    response_body, "HTTP/1.1 200 OK"))
 #' response_summary(x)
+#' 
+#' ## with binary body
+#' # path <- "tests/testthat/png_eg.rda"
+#' # load(path)
+#' # (x <- VcrResponse$new(status, headers, png_eg, "HTTP/1.1 200 OK"))
+#' # response_summary(x)
 request_summary <- function(request, request_matchers = "") {
   stopifnot(inherits(request, "Request"))
   stopifnot(inherits(request_matchers, "character"))
@@ -70,7 +77,5 @@ response_summary <- function(response) {
     ss <- NULL
   }
   body_print <- if (is.raw(response$body)) "<raw>" else response$body
-  sprintf("%s %s", ss %||% '???',
-  # sprintf("%s %s", response$status$status_code %||% '???',
-    substring(gsub("\n", " ", body_print), 1, 80))
+  sprintf("%s %s", ss %||% '???', substring(gsub("\n", " ", body_print), 1, 80))
 }

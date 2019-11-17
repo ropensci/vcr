@@ -4,7 +4,7 @@
 \name{RequestHandlerCrul}
 \alias{RequestHandlerCrul}
 \title{RequestHandlerCrul - methods for crul package}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 RequestHandlerCrul
 }

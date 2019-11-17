@@ -118,7 +118,6 @@ Request <- R6::R6Class(
 
 serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
   if (is.null(x)) return(x)
-  # if (vcr_configuration()$preserve_exact_body_bytes) {
   if (preserve_exact_body_bytes) {
     structure(base64enc::base64encode(charToRaw(x)), base64 = TRUE)
   } else {
@@ -127,8 +126,6 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
 }
 
 body_from <- function(x) {
-  # return hash_or_string unless hash_or_string.is_a?(Hash)
-  # hash = hash_or_string
   if (is.null(x)) x <- ""
   if (is.null(attr(x, "base64"))) return(try_encode_string(x, try_encoding(x)))
   if (attr(x, "base64") || is_base64(x)) {
@@ -139,6 +136,7 @@ body_from <- function(x) {
 }
 
 try_encoding <- function(x) {
+  if (missing(x)) stop("'x' is missing")
   z <- tryCatch(Encoding(x), error = function(e) e)
   if (inherits(z, "error")) "ASCII-8BIT" else z
 }
@@ -150,6 +148,8 @@ is_base64 <- function(x) {
 b64_pattern <- "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"
 
 try_encode_string <- function(string, encoding) {
+  ## FIXME, this function doesn't do anything
+
   #return string if encoding.nil? || string.encoding.name == encoding
   # if (is.null(encoding) || ) return(string)
 
