@@ -49,30 +49,3 @@ test_that("request_summary fails well", {
   expect_error(request_summary(), "\"request\" is missing")
   expect_error(request_summary(5), "is not TRUE")
 })
-
-
-
-
-
-context("response_summary")
-
-test_that("response_summary works", {
-  skip_on_cran()
-
-  res <- cli$get("get", query = list(q = "stuff"))
-  x <- VcrResponse$new(res$status_http(), res$response_headers,
-     res$parse("UTF-8"), res$response_headers$status)
-
-  aa <- response_summary(x)
-
-  expect_is(aa, "character")
-  expect_match(aa, "200")
-  expect_match(aa, "args")
-  expect_match(aa, "headers")
-  expect_match(aa, "Accept")
-})
-
-test_that("response_summary fails well", {
-  expect_error(response_summary(), "\"response\" is missing")
-  expect_error(response_summary(5), "is not TRUE")
-})

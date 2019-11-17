@@ -27,8 +27,48 @@ test_that("Cassette fails well with unsupported matcher", {
 })
 
 
+test_that("make_http_interaction works as expected", {
+  #### Prepare http responses
+  # crul_resp1 <- crul::HttpClient$new("https://httpbin.org/get?foo=bar")$get()
+  # save(crul_resp1, file = "tests/testthat/crul_resp1.rda", version = 2)
+
+  # crul_resp2 <- crul::HttpClient$new("https://httpbin.org/image/png")$get()
+  # save(crul_resp2, file = "tests/testthat/crul_resp2.rda", version = 2)
+
+  # httr_resp1 <- httr::GET("https://httpbin.org/get?foo=bar")
+  # save(httr_resp1, file = "tests/testthat/httr_resp1.rda", version = 2)
+
+  # httr_resp2 <- httr::GET("https://httpbin.org/image/png")
+  # save(httr_resp2, file = "tests/testthat/httr_resp2.rda", version = 2)
+  
+  # make a cassettes
+  zz <- Cassette$new(name = "bluecheese")
+
+  # crul, with non-image response body
+  # $response$body should be class `character`
+  load("crul_resp1.rda")
+  aa <- zz$make_http_interaction(crul_resp1)
+  expect_is(aa, "HTTPInteraction")
+  expect_is(aa$request, "Request")
+  expect_is(aa$response, "VcrResponse")
+  expect_is(aa$response$body, "character")
+
+  # crul, with image response body
+  # $response$body should be class `raw`
+  load("crul_resp2.rda")
+  bb <- zz$make_http_interaction(crul_resp2)
+  expect_is(bb, "HTTPInteraction")
+  expect_is(bb$request, "Request")
+  expect_is(bb$response, "VcrResponse")
+  expect_is(bb$response$body, "raw")
+
+  # eject cassette
+  zz$eject()
+})
+
 
 # cleanup
 unlink(file.path(vcr_configuration()$dir, "stuff.yml"))
 unlink(file.path(vcr_configuration()$dir, "stuff2.yml"))
 unlink(file.path(vcr_configuration()$dir, "foobar89.yml"))
+unlink(file.path(vcr_configuration()$dir, "bluecheese.yml"))
