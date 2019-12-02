@@ -23,7 +23,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.7.0),
     httr,
-    webmockr (>= 0.4.1.9100),
+    webmockr (>= 0.4.2.9100),
     urltools,
     yaml,
     R6,
