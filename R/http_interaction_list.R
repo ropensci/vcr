@@ -1,4 +1,4 @@
-#' Null list, an empty HTTPInteractionList object
+# Null list, an empty HTTPInteractionList object
 NullList <- R6::R6Class(
   'NullList',
   public = list(
@@ -10,39 +10,11 @@ NullList <- R6::R6Class(
 )
 
 
-#' HTTPInteractionList class
-#'
+#' @title HTTPInteractionList class
+#' @description keeps track of all [HTTPInteraction] objects
 #' @export
-#' @param interactions (list) list of interaction class objects
-#' @param request_matchers (character) vector of request matchers
-#' @param allow_playback_repeats whether to allow playback repeats or not
-#' @param parent_list A list for empty objects, see [NullList]
-#' @param used_interactions (list) Interactions that have been used. That is,
-#' interactions that are on disk in the current cassette, and a
-#' request has been made that matches that interaction
-#' @param request The request from an object of class `HttpInteraction`
+#' @param request The request from an object of class `HTTPInteraction`
 #' @details
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{response_for(request)}}{
-#'       Check if there's a matching interaction, returns a response
-#'       object
-#'     }
-#'     \item{\code{has_interaction_matching(request)}}{
-#'       Check if has a matching interaction. returns boolean
-#'     }
-#'     \item{\code{has_used_interaction_matching(request)}}{
-#'       check if has used interactions matching a given request.
-#'       returns boolean
-#'     }
-#'     \item{\code{remaining_unused_interaction_count()}}{
-#'       Number of unused interactions. returns numeric
-#'     }
-#'     \item{\code{assert_no_unused_interactions()}}{
-#'       Checks if there are no unused interactions left.
-#'       returns boolean
-#'     }
-#'   }
 #' \strong{Private Methods}
 #'  \describe{
 #'     \item{\code{has_unused_interactions()}}{
@@ -67,8 +39,6 @@ NullList <- R6::R6Class(
 #'       Get a response summary (character)
 #'     }
 #'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(
 #'  dir = tempdir(),
@@ -113,14 +83,28 @@ NullList <- R6::R6Class(
 #' }
 HTTPInteractionList <- R6::R6Class(
   'HTTPInteractionList',
-   public = list(
-     interactions           = NULL,
-     request_matchers       = NULL,
-     allow_playback_repeats = FALSE,
-     parent_list            = NullList$new(),
-     used_interactions      = list(),
+  public = list(
+    #' @field interactions (list) list of interaction class objects
+    interactions           = NULL,
+    #' @field request_matchers (character) vector of request matchers
+    request_matchers       = NULL,
+    #' @field allow_playback_repeats whether to allow playback repeats
+    allow_playback_repeats = FALSE,
+    #' @field parent_list A list for empty objects, see `NullList`
+    parent_list            = NullList$new(),
+    #' @field used_interactions (list) Interactions that have been used
+    used_interactions      = list(),
 
-     initialize = function(interactions,
+    #' @description Create a new `HTTPInteractionList` object
+    #' @param interactions (list) list of interaction class objects
+    #' @param request_matchers (character) vector of request matchers
+    #' @param allow_playback_repeats whether to allow playback repeats or not
+    #' @param parent_list A list for empty objects, see `NullList`
+    #' @param used_interactions (list) Interactions that have been used. That is,
+    #' interactions that are on disk in the current cassette, and a
+    #' request has been made that matches that interaction
+    #' @return A new `HTTPInteractionList` object
+    initialize = function(interactions,
                            request_matchers,
                            allow_playback_repeats = FALSE,
                            parent_list = NullList$new(),
@@ -145,6 +129,8 @@ HTTPInteractionList <- R6::R6Class(
        ), vcr_c$log_opts$date)
      },
 
+     #' @description Check if there's a matching interaction, returns a
+     #' response object
      response_for = function(request) {
        index <- private$matching_interaction_index(request)
        if (length(index) > 0) {
@@ -173,23 +159,30 @@ HTTPInteractionList <- R6::R6Class(
        }
      },
 
+     #' @description Check if has a matching interaction
+     #' @return logical
      has_interaction_matching = function(request) {
        private$matching_interaction_bool(request) ||
          private$matching_used_interaction_for(request) ||
          self$parent_list$has_interaction_matching()
      },
 
+     #' @description check if has used interactions matching a given request
+     #' @return logical
      has_used_interaction_matching = function(request) {
        lapply(self$used_interactions, function(i) {
          private$interaction_matches_request(request, i)
        })
      },
 
+     #' @description Number of unused interactions
+     #' @return integer
      remaining_unused_interaction_count = function() {
        length(self$interactions)
      },
 
-     # Checks if there are no unused interactions left.
+     #' @description Checks if there are no unused interactions left.
+     #' @return various
      assert_no_unused_interactions = function() {
         if (!private$has_unused_interactions()) return(NULL)
         descriptions <- lapply(self$interactions, function(x) {
@@ -299,8 +292,8 @@ delete_at <- function(x, y) {
 }
 
 # makes a copy - does not modify in place
-# x: a list with objects of class HttpInteraction
-# y: a list with an object of class HttpInteraction
+# x: a list with objects of class `HTTPInteraction`
+# y: a list with an object of class `HTTPInteraction`
 unshift <- function(x, y) {
   stopifnot(inherits(x, "list"))
   stopifnot(inherits(y, "list"))

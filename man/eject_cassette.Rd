@@ -4,8 +4,11 @@
 \alias{eject_cassette}
 \title{Eject a cassette}
 \usage{
-eject_cassette(cassette = NULL, options = list(),
-  skip_no_unused_interactions_assertion = NULL)
+eject_cassette(
+  cassette = NULL,
+  options = list(),
+  skip_no_unused_interactions_assertion = NULL
+)
 }
 \arguments{
 \item{cassette}{(character) a single cassette names to eject}

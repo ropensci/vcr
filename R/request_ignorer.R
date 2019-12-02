@@ -1,42 +1,6 @@
-#' Request ignorer
-#'
+#' @title Request ignorer
+#' @description request ignorer methods
 #' @keywords internal
-#' @param LOCALHOST_ALIASES A constant with values: 'localhost', '127.0.0.1',
-#' and '0.0.0.0'
-#' @param ignored_hosts Vector of ignored hosts
-#' @param fun A function, of the form: coming...
-#' @param value A localhost value to ignore, e.g, 'localhost'
-#' @param hosts Character vector of hosts to ignore
-#' @param request A request
-#' @details Hook to handle request ignorers, including:
-#'
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{ignore_request(fun)}}{
-#'       Will ignore any request for which the given function
-#'       returns `TRUE`
-#'     }
-#'     \item{\code{ignore_localhost()}}{
-#'       ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
-#'     }
-#'     \item{\code{ignore_localhost_value(value)}}{
-#'       ignore a specific named localhost
-#'     }
-#'     \item{\code{ignore_hosts(hosts)}}{
-#'       ignore any named host
-#'     }
-#'     \item{\code{should_be_ignored(request)}}{
-#'       method to determine whether to ignore a request
-#'     }
-#'   }
-#' \strong{Private Methods}
-#'  \describe{
-#'     \item{\code{ignored_hosts_init()}}{
-#'       Initialize an empty ignored hosts object on package load
-#'     }
-#'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' (x <- RequestIgnorer$new())
 #' x$LOCALHOST_ALIASES
@@ -52,14 +16,22 @@
 RequestIgnorer <- R6::R6Class(
   "RequestIgnorer",
   public = list(
+    #' @field LOCALHOST_ALIASES A constant with values: 'localhost', '127.0.0.1',
+    #' and '0.0.0.0'
     LOCALHOST_ALIASES = c('localhost', '127.0.0.1', '0.0.0.0'),
+    #' @field ignored_hosts vector of ignored host URI's
     ignored_hosts = list(),
 
+    #' @description Create a new `RequestIgnorer` object
+    #' @return A new `RequestIgnorer` object
     initialize = function() {
       private$ignored_hosts_init()
       self$ignore_request()
     },
 
+    #' @description Will ignore any request for which the given function
+    #' returns `TRUE`
+    #' @return no return; defines request ignorer hook
     ignore_request = function() {
       fun <- function(x) {
         if (is.null(self$ignored_hosts$bucket)) return(FALSE)
@@ -70,30 +42,43 @@ RequestIgnorer <- R6::R6Class(
       VCRHooks$define_hook(hook_type = "ignore_request", fun = fun)
     },
 
+    #' @description ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
+    #' @return no return; sets to ignore all localhost aliases
     ignore_localhost = function() {
       self$ignored_hosts$merge(self$LOCALHOST_ALIASES)
     },
 
+    #' @description ignore a specific named localhost
+    #' @param value (character) A localhost value to ignore, e.g, 'localhost'
+    #' @return no return; defines request ignorer hook
     ignore_localhost_value = function(value) {
       self$ignore_hosts(value)
     },
 
+    #' @description ignore any named host
+    #' @param hosts (character) vector of hosts to ignore
+    #' @return no return; defines request ignorer hook
     ignore_hosts = function(hosts) {
       self$ignored_hosts$merge(hosts)
     },
 
+    #' @description method to determine whether to ignore a request
+    #' @param request request to ignore
+    #' @return no return; defines request ignorer hook
     should_be_ignored = function(request) {
       VCRHooks$invoke_hook(hook_type = "ignore_request", args = request)
     }
   ),
 
   private = list(
+    # Initialize an empty ignored hosts object on package load
     ignored_hosts_init = function() {
       self$ignored_hosts <- EnvHash$new()
     }
   )
 )
 
+# @param fun A function, of the form: coming...
 EnvHash <- R6::R6Class(
   "EnvHash",
   public = list(

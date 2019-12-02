@@ -60,7 +60,7 @@ headers <- list(
   date = "Tue, 24 Apr 2018 04:46:56 GMT"
 )
 response_body <- 
-"{\\"args\\": {\\"q\\": \\"stuff\\"}, \\"headers\\": {\\"Accept\\": \\"text/html\\"}}\\n"
+"{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"text/html\"}}\n"
 (x <- VcrResponse$new(status, headers,
    response_body, "HTTP/1.1 200 OK"))
 response_summary(x)

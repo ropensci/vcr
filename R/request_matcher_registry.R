@@ -1,25 +1,6 @@
-#' RequestMatcherRegistry class
-#'
+#' @title RequestMatcherRegistry
+#' @description handles request matchers
 #' @export
-#' @param name matcher name
-#' @param func function that describes a matcher, should return
-#' a single boolean
-#' @param r1,r2 two [Request] class objects
-#' @details
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{register(name, func)}}{
-#'       Register a custom matcher.
-#'     }
-#'     \item{\code{register_built_ins()}}{
-#'       Register all built in matchers.
-#'     }
-#'     \item{\code{try_to_register_body_as_json(r1, r2)}}{
-#'       Try to register body as JSON.
-#'     }
-#'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' (x <- RequestMatcherRegistry$new())
 #' x$default_matchers
@@ -28,9 +9,15 @@
 RequestMatcherRegistry <- R6::R6Class(
   'RequestMatcherRegistry',
   public = list(
+    #' @field registry initialze registry list with a request, or leave empty
     registry = NULL,
+    #' @field default_matchers request matchers to use. default: method, uri
     default_matchers = NULL,
 
+    #' @description Create a new RequestMatcherRegistry object
+    #' @param registry initialze registry list with a request, or leave empty
+    #' @param default_matchers request matchers to use. default: method, uri
+    #' @return A new `RequestMatcherRegistry` object
     initialize = function(registry = list(),
                           default_matchers = list('method', 'uri')) {
       self$registry <- registry
@@ -38,6 +25,11 @@ RequestMatcherRegistry <- R6::R6Class(
       self$register_built_ins()
     },
 
+    #' @description Register a custom matcher
+    #' @param name matcher name
+    #' @param func function that describes a matcher, should return
+    #' a single boolean
+    #' @return no return; registers the matcher
     register = function(name, func) {
       if (name %in% self$registry) {
         warning(
@@ -48,6 +40,8 @@ RequestMatcherRegistry <- R6::R6Class(
       self$registry[[name]] <- Matcher$new(func = func)
     },
 
+    #' @description Register all built in matchers
+    #' @return no return; registers all built in matchers
     register_built_ins = function() {
       self$register("method", function(r1, r2) r1$method == r2$method)
       self$register("uri", function(r1, r2) r1$uri == r2$uri)
@@ -59,6 +53,9 @@ RequestMatcherRegistry <- R6::R6Class(
       self$try_to_register_body_as_json()
     },
 
+    #' @description Try to register body as JSON
+    #' @param r1,r2 [Request] class objects
+    #' @return no return; registers the matcher
     try_to_register_body_as_json = function(r1, r2) {
       if (!requireNamespace("jsonlite", quietly = TRUE)) {
         stop("please install jsonlite", call. = FALSE)

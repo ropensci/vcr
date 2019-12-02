@@ -4,12 +4,19 @@
 \alias{use_cassette}
 \title{Use a cassette}
 \usage{
-use_cassette(name, ..., record = "once",
+use_cassette(
+  name,
+  ...,
+  record = "once",
   match_requests_on = c("method", "uri"),
-  update_content_length_header = FALSE, allow_playback_repeats = FALSE,
-  serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
-  clean_outdated_http_interactions = FALSE)
+  update_content_length_header = FALSE,
+  allow_playback_repeats = FALSE,
+  serialize_with = "yaml",
+  persist_with = "FileSystem",
+  preserve_exact_body_bytes = FALSE,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE
+)
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
@@ -24,7 +31,7 @@ a code block use instead \code{\link[=insert_cassette]{insert_cassette()}}}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
-\code{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
+\verb{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
 "path", "headers" and "body"}
 
 \item{update_content_length_header}{(logical) Whether or

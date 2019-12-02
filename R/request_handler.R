@@ -1,15 +1,8 @@
-#' RequestHandler
-#'
+#' @title RequestHandler
+#' @description Base handler for http requests, deciding whether a
+#' request is stubbed, to be ignored, recordable, or unhandled
 #' @export
-#' @param request The request from an object of class `HttpInteraction`
 #' @details
-#' \strong{Public Methods}
-#'   \describe{
-#'     \item{\code{handle(request)}}{
-#'       Top level function to interact with. Handles the request
-#'     }
-#'   }
-#'
 #' \strong{Private Methods}
 #'   \describe{
 #'     \item{\code{request_type(request)}}{
@@ -45,8 +38,6 @@
 #'       on unhandled request, run UnhandledHTTPRequestError
 #'     }
 #'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' # record mode: once
 #' vcr_configure(
@@ -81,12 +72,20 @@
 RequestHandler <- R6::R6Class(
   'RequestHandler',
   public = list(
+    #' @field request_original original, before any modification
     request_original = NULL,
+    #' @field request the request, after any modification
     request = NULL,
+    #' @field vcr_response holds [VcrResponse] object
     vcr_response = NULL,
+    #' @field stubbed_response the stubbed response
     stubbed_response = NULL,
+    #' @field cassette the cassette holder
     cassette = NULL,
 
+    #' @description Create a new `RequestHandler` object
+    #' @param request The request from an object of class `HttpInteraction`
+    #' @return A new `RequestHandler` object
     initialize = function(request) {
       self$request_original <- request
       self$request <- {
@@ -96,6 +95,8 @@ RequestHandler <- R6::R6Class(
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
 
+    #' @description Handle the request (`request` given in `$initialize()`)
+    #' @return handles a request, outcomes vary
     handle = function() {
       vcr_log_info(sprintf("Handling request: %s (disabled: %s)",
         private$request_summary(self$request),

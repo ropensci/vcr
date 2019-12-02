@@ -1,82 +1,9 @@
-#' Cassette handler
-#'
+#' @title Cassette handler
+#' @description Main R6 class that is called from the main user facing 
+#' function [use_cassette()]
 #' @export
 #' @keywords internal
-#' @param name The name of the cassette. vcr will sanitize this to ensure it
-#' is a valid file name.
-#' @param record The record mode. Default: "once". In the future we'll support
-#' "once", "all", "none", "new_episodes". See [recording] for more information
-#' @param serialize_with (character) Which serializer to use.
-#'  Valid values are "yaml" (default), the only one supported for now.
-#' @param persist_with (character) Which cassette persister to
-#'  use. Default: "file_system". You can also register and use a
-#'  custom persister.
-#' @param match_requests_on List of request matchers
-#' to use to determine what recorded HTTP interaction to replay. Defaults to
-#' `["method", "uri"]`. The built-in matchers are "method", "uri",
-#' "headers" and "body" ("host" and "path" not supported yet, but should 
-#' be in a future version)
-#' @param update_content_length_header (logical) Whether or
-#' not to overwrite the `Content-Length` header of the responses to
-#' match the length of the response body. Default: `FALSE`
-#' @param allow_playback_repeats (logical) Whether or not to
-#' allow a single HTTP interaction to be played back multiple times.
-#' Default: `FALSE`.
-#' @param preserve_exact_body_bytes (logical) Whether or not
-#' to base64 encode the bytes of the requests and responses for
-#' this cassette when serializing it. See also `preserve_exact_body_bytes`
-#' in [vcr_configure()]. Default: `FALSE`
-#'
 #' @return an object of class `Cassette`
-#'
-#' @details
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{eject()}}{
-#'       Coming soon.
-#'     }
-#'     \item{\code{file()}}{
-#'       Get path to the man file for the cassette.
-#'     }
-#'     \item{\code{recording()}}{
-#'       Find out whether recording is happening or not.
-#'     }
-#'     \item{\code{originally_recorded_at()}}{
-#'       Time interaction was originally recorded at.
-#'     }
-#'     \item{\code{serializable_hash()}}{
-#'       A hash with stuff.
-#'     }
-#'     \item{\code{should_remove_matching_existing_interactions()}}{
-#'       Set record mode to "all".
-#'     }
-#'     \item{\code{storage_key()}}{
-#'       Generate file name = cassette name plus file extension.
-#'     }
-#'     \item{\code{make_dir()}}{
-#'       Make cassette directory.
-#'     }
-#'     \item{\code{raw_string()}}{
-#'       Get raw string of the cassette (cached interaction).
-#'     }
-#'     \item{\code{deserialized_hash()}}{
-#'       Get a deserialized hash.
-#'     }
-#'     \item{\code{make_args()}}{
-#'       Initialize default args.
-#'     }
-#'     \item{\code{write_metadata()}}{
-#'       Write metadata to disk.
-#'     }
-#'     \item{\code{previously_recorded_interactions()}}{
-#'       Coming soon.
-#'     }
-#'     \item{\code{serialize_to_crul}}{
-#'       Serialize interaction on disk/cassette to a \code{crul} response
-#'     }
-#'   }
-#' @format NULL
-#' @usage NULL
 #' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
 #' @examples
 #' library(vcr)
@@ -101,32 +28,96 @@
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
+    #' @field name (character) cassette name
     name = NA,
+    #' @field record (character) record mode
     record = "all",
+    #' @field manfile (character) cassette file path
     manfile = NA,
+    #' @field recorded_at (character) date/time recorded at
     recorded_at = NA,
+    #' @field serialize_with (character) serializer to use (yaml only)
     serialize_with = "yaml",
+    #' @field serializer (character) serializer to use (yaml only)
     serializer = NA,
+    #' @field persist_with (character) persister to use (FileSystem only)
     persist_with = "FileSystem",
+    #' @field persister (character) persister to use (FileSystem only)
     persister = NA,
+    #' @field match_requests_on (character) matchers to use
+    #' default: method & uri
     match_requests_on = c("method", "uri"),
+    #' @field re_record_interval (numeric) the re-record interval
     re_record_interval = NULL,
+    #' @field tag ignored, not used right now
     tag = NA,
+    #' @field tags ignored, not used right now
     tags = NA,
+    #' @field root_dir root dir, gathered from [vcr_configuration()]
     root_dir = NA,
+    #' @field update_content_length_header (logical) Whether to overwrite the
+    #' `Content-Length` header
     update_content_length_header = FALSE,
+    #' @field decode_compressed_response (logical) ignored, not used right now
     decode_compressed_response = FALSE,
+    #' @field allow_playback_repeats (logical) Whether to allow a single HTTP
+    #' interaction to be played back multiple times
     allow_playback_repeats = FALSE,
+    #' @field allow_unused_http_interactions (logical) ignored, not used right now
     allow_unused_http_interactions = TRUE,
+    #' @field exclusive (logical) ignored, not used right now
     exclusive = FALSE,
+    #' @field preserve_exact_body_bytes (logical) Whether to base64 encode the
+    #' bytes of the requests and responses
     preserve_exact_body_bytes = FALSE,
+    #' @field args (list) internal use
     args = list(),
+    #' @field http_interactions_ (list) internal use
     http_interactions_ = NULL,
+    #' @field new_recorded_interactions (list) internal use
     new_recorded_interactions = NULL,
+    #' @field clean_outdated_http_interactions (logical) Should outdated interactions
+    #' be recorded back to file
     clean_outdated_http_interactions = FALSE,
+    #' @field to_return (logical) internal use
     to_return = NULL,
+    #' @field cassette_opts (list) various cassette options
     cassette_opts = NULL,
 
+    #' @description Create a new `Cassette` object
+    #' @param name The name of the cassette. vcr will sanitize this to ensure it
+    #' is a valid file name.
+    #' @param record The record mode. Default: "once". In the future we'll support
+    #' "once", "all", "none", "new_episodes". See [recording] for more information
+    #' @param serialize_with (character) Which serializer to use.
+    #'  Valid values are "yaml" (default), the only one supported for now.
+    #' @param persist_with (character) Which cassette persister to
+    #'  use. Default: "file_system". You can also register and use a
+    #'  custom persister.
+    #' @param match_requests_on List of request matchers
+    #' to use to determine what recorded HTTP interaction to replay. Defaults to
+    #' `["method", "uri"]`. The built-in matchers are "method", "uri",
+    #' "headers" and "body" ("host" and "path" not supported yet, but should
+    #' be in a future version)
+    #' @param re_record_interval (numeric) When given, the cassette will be
+    #' re-recorded at the given interval, in seconds.
+    #' @param tag,tags tags ignored, not used right now
+    #' @param update_content_length_header (logical) Whether or
+    #' not to overwrite the `Content-Length` header of the responses to
+    #' match the length of the response body. Default: `FALSE`
+    #' @param decode_compressed_response (logical) ignored, not used right now
+    #' @param allow_playback_repeats (logical) Whether or not to
+    #' allow a single HTTP interaction to be played back multiple times.
+    #' Default: `FALSE`.
+    #' @param allow_unused_http_interactions (logical) ignored, not used right now
+    #' @param exclusive (logical) ignored, not used right now
+    #' @param preserve_exact_body_bytes (logical) Whether or not
+    #' to base64 encode the bytes of the requests and responses for
+    #' this cassette when serializing it. See also `preserve_exact_body_bytes`
+    #' in [vcr_configure()]. Default: `FALSE`
+    #' @param clean_outdated_http_interactions (logical) Should outdated interactions
+    #' be recorded back to file. Default: `FALSE`
+    #' @return A new `Cassette` object
     initialize = function(
       name, record, serialize_with = "yaml",
       persist_with = "FileSystem",
@@ -269,14 +260,14 @@ Cassette <- R6::R6Class(
             length(m) == 4
           ) {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, 
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
               body = req$body))
           } else {
             tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter, 
+            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
               body = req$body, headers = req$headers))
           }
-          
+
         }))
       }
 
@@ -307,7 +298,10 @@ Cassette <- R6::R6Class(
       include_cassette(self)
     },
 
-    print = function() {
+    #' @description print method for `Cassette` objects
+    #' @param x self
+    #' @param ... ignored
+    print = function(x, ...) {
       cat(paste0("<vcr - Cassette> ", self$name), sep = "\n")
       cat(paste0("  Record method: ", self$record), sep = "\n")
       cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
@@ -330,6 +324,9 @@ Cassette <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description run code
+    #' @param ... pass in things to be lazy eval'ed
+    #' @return various
     call_block = function(...) {
       # capture block
       tmp <- lazyeval::lazy_dots(...)
@@ -347,6 +344,8 @@ Cassette <- R6::R6Class(
       webmockr::webmockr_disable_net_connect()
     },
 
+    #' @description ejects the current cassette
+    #' @return self
     eject = function() {
       self$write_recorded_interactions_to_disk()
       # remove cassette from list of current cassettes
@@ -360,8 +359,12 @@ Cassette <- R6::R6Class(
       return(self)
     },
 
+    #' @description get the file path for the cassette
+    #' @return character
     file = function() self$manfile,
 
+    #' @description is the cassette in recording mode?
+    #' @return logical
     recording = function() {
       if (self$record == "none") {
         return(FALSE)
@@ -372,14 +375,20 @@ Cassette <- R6::R6Class(
       }
     },
 
+    #' @description is the cassette on disk empty
+    #' @return logical
     is_empty = function() {
       nchar(self$raw_cassette_bytes()) < 1
     },
 
+    #' @description timestamp the cassette was originally recorded at
+    #' @return POSIXct date
     originally_recorded_at = function() {
       as.POSIXct(self$recorded_at, tz = "GMT")
     },
 
+    #' @description Get a list of the http interactions to record + recorded_with
+    #' @return list
     serializable_hash = function() {
       list(
         http_interactions = self$interactions_to_record(),
@@ -387,6 +396,8 @@ Cassette <- R6::R6Class(
       )
     },
 
+    #' @description Get the list of http interactions to record
+    #' @return list
     interactions_to_record = function() {
       ## FIXME - gotta sort out defining and using hooks better
       ## just returning exact same input
@@ -401,6 +412,8 @@ Cassette <- R6::R6Class(
       # })
     },
 
+    #' @description Get interactions to record
+    #' @return list
     merged_interactions = function() {
       old_interactions <- self$previously_recorded_interactions()
       old_interactions <- lapply(old_interactions, function(x) {
@@ -423,10 +436,14 @@ Cassette <- R6::R6Class(
           )
       }
 
-      return(c(self$up_to_date_interactions(old_interactions), 
+      return(c(self$up_to_date_interactions(old_interactions),
         self$new_recorded_interactions))
     },
 
+    #' @description Cleans out any old interactions based on the
+    #' re_record_interval and clean_outdated_http_interactions settings
+    #' @param interactions list of http interactions, of class [HTTPInteraction]
+    #' @return list of interactions to record
     up_to_date_interactions = function(interactions) {
       if (
         !self$clean_outdated_http_interactions && is.null(self$re_record_interval)
@@ -438,6 +455,8 @@ Cassette <- R6::R6Class(
       }, interactions)
     },
 
+    #' @description Should re-record interactions?
+    #' @return logical
     should_re_record = function() {
       if (is.null(self$re_record_interval)) return(FALSE)
       if (is.null(self$originally_recorded_at())) return(FALSE)
@@ -463,15 +482,22 @@ Cassette <- R6::R6Class(
       }
     },
 
+    #' @description Is record mode NOT "all"?
+    #' @return logical
     should_stub_requests = function() {
       self$record != "all"
     },
 
+    #' @description Is record mode "all"?
+    #' @return logical
     should_remove_matching_existing_interactions = function() {
       self$record == "all"
     },
+    #' @description Get the serializer path
+    #' @return character
     storage_key = function() self$serializer$path,
-
+    #' @description Get character string of entire cassette; bytes is a misnomer
+    #' @return character
     raw_cassette_bytes = function() {
       file <- self$file()
       if (is.null(file)) return("")
@@ -479,11 +505,15 @@ Cassette <- R6::R6Class(
       paste0(tmp, collapse = "")
     },
 
+    #' @description Create the directory that holds the cassettes, if not present
+    #' @return no return; creates a directory recursively, if missing
     make_dir = function() {
       dir.create(path.expand(self$root_dir), showWarnings = FALSE,
                  recursive = TRUE)
     },
 
+    #' @description get http interactions from the cassette via the serializer
+    #' @return list
     deserialized_hash = function() {
       tmp <- self$serializer$deserialize_path()
       if (inherits(tmp, "list")) {
@@ -493,6 +523,8 @@ Cassette <- R6::R6Class(
       }
     },
 
+    #' @description get all previously recorded interactions
+    #' @return list
     previously_recorded_interactions = function() {
       if (nchar(self$raw_cassette_bytes()) > 0) {
         tmp <- compact(
@@ -504,7 +536,7 @@ Cassette <- R6::R6Class(
             z$response$body$string,
             self$cassette_opts
           )
-          if (self$update_content_length_header) 
+          if (self$update_content_length_header)
             response$update_content_length_header()
           zz <- HTTPInteraction$new(
             request = Request$new(z$request$method,
@@ -523,6 +555,8 @@ Cassette <- R6::R6Class(
       }
     },
 
+    #' @description write recorded interactions to disk
+    #' @return nothing returned
     write_recorded_interactions_to_disk = function() {
       if (!self$any_new_recorded_interactions()) return(NULL)
       hash <- self$serializable_hash()
@@ -531,6 +565,9 @@ Cassette <- R6::R6Class(
       fun(hash[[1]], self$persister$file_name, self$preserve_exact_body_bytes)
     },
 
+    #' @description record an http interaction (doesn't write to disk)
+    #' @param x an crul or httr response object, with the request at `$request`
+    #' @return nothing returned
     record_http_interaction = function(x) {
       int <- self$make_http_interaction(x)
       self$http_interactions_$response_for(int$request)
@@ -540,10 +577,14 @@ Cassette <- R6::R6Class(
       self$new_recorded_interactions <- c(self$new_recorded_interactions, int)
     },
 
+    #' @description Are there any new recorded interactions?
+    #' @return logical
     any_new_recorded_interactions = function() {
       length(self$new_recorded_interactions) != 0
     },
 
+    #' @description make list of all options
+    #' @return nothing returned
     make_args = function() {
       self$args <- list(
         record = self$record,
@@ -560,6 +601,8 @@ Cassette <- R6::R6Class(
       )
     },
 
+    #' @description write metadata to the cassette
+    #' @return nothing returned
     write_metadata = function() {
       aa <- c(name = self$name, self$args)
       for (i in seq_along(aa)) {
@@ -570,6 +613,8 @@ Cassette <- R6::R6Class(
       }
     },
 
+    #' @description make [HTTPInteractionList] object, assign to http_interactions_ var
+    #' @return nothing returned
     http_interactions = function() {
       self$http_interactions_ <- HTTPInteractionList$new(
         interactions = {
@@ -584,6 +629,9 @@ Cassette <- R6::R6Class(
       )
     },
 
+    #' @description Make an `HTTPInteraction` object
+    #' @param x an crul or httr response object, with the request at `$request`
+    #' @return an object of class [HTTPInteraction]
     make_http_interaction = function(x) {
       request <- Request$new(
         x$request$method,
@@ -618,6 +666,8 @@ Cassette <- R6::R6Class(
       HTTPInteraction$new(request = request, response = response)
     },
 
+    #' @description Make a crul response object
+    #' @return a crul response
     serialize_to_crul = function() {
       if (length(self$deserialized_hash()) != 0) {
         intr <- self$deserialized_hash()[[1]][[1]]

@@ -1,48 +1,7 @@
-#' The response of an HTTPInteraction
-#'
+#' @title The response of an HTTPInteraction
+#' @description Custom vcr http response object
 #' @export
 #' @keywords internal
-#' @param status the status of the response
-#' @param headers the response headers
-#' @param body the response body
-#' @param http_version the HTTP version
-#' @param adapter_metadata Additional metadata used by a specific VCR adapter
-#' @details
-#' **Methods**
-#'
-#'   \describe{
-#'     \item{`to_hash()`}{
-#'       Create a hash.
-#'     }
-#'     \item{`from_hash(hash)`}{
-#'       Get a hash back to an R list.
-#'     }
-#'     \item{`update_content_length_header()`}{
-#'       Updates the Content-Length response header so that it is accurate
-#'       for the response body
-#'     }
-#'     \item{`get_header(key)`}{
-#'       get a header by key (i.e., name)
-#'       - key: header name to get
-#'     }
-#'     \item{`edit_header(key, value = NULL)`}{
-#'       edit header
-#'       - key: header name to edit
-#'       - value: new value to assign
-#'     }
-#'     \item{`delete_header(key)`}{
-#'       delete a header
-#'       - key: header name to delete
-#'     }
-#'     \item{`content_encoding()`}{
-#'       get content encoding
-#'     }
-#'     \item{`is_compressed()`}{
-#'       Checks if the type of encoding is one of "gzip" or "deflate"
-#'     }
-#'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(dir = tempdir())
 #'
@@ -96,14 +55,29 @@
 VcrResponse <- R6::R6Class(
   "VcrResponse",
   public = list(
+    #' @field status the status of the response
     status = NULL,
+    #' @field headers the response headers
     headers = NULL,
+    #' @field body the response body
     body = NULL,
+    #' @field http_version the HTTP version
     http_version = NULL,
+    #' @field opts a list
     opts = NULL,
+    #' @field adapter_metadata Additional metadata used by a specific VCR adapter
     adapter_metadata = NULL,
+    #' @field hash a list
     hash = NULL,
 
+    #' @description Create a new VcrResponse object
+    #' @param status the status of the response
+    #' @param headers the response headers
+    #' @param body the response body
+    #' @param http_version the HTTP version
+    #' @param opts a list
+    #' @param adapter_metadata Additional metadata used by a specific VCR adapter
+    #' @return A new `VcrResponse` object
     initialize = function(status, headers, body, http_version, opts,
       adapter_metadata = NULL) {
       if (!missing(status)) self$status <- status
@@ -121,6 +95,8 @@ VcrResponse <- R6::R6Class(
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
     },
 
+    #' @description Create a hash
+    #' @return a list
     to_hash = function() {
       self$hash <- list(
         status       = self$status,
@@ -133,6 +109,9 @@ VcrResponse <- R6::R6Class(
       return(self$hash)
     },
 
+    #' @description Get a hash back to an R list
+    #' @param hash a list
+    #' @return an `VcrResponse` object
     from_hash = function(hash) {
       VcrResponse$new(
         hash[["status"]],
@@ -143,6 +122,9 @@ VcrResponse <- R6::R6Class(
       )
     },
 
+    #' @description Updates the Content-Length response header so that
+    #' it is accurate for the response body
+    #' @return no return; modifies the content length header
     update_content_length_header = function() {
       if (!is.null(self$get_header("content-length"))) {
         len <- 0
@@ -153,22 +135,36 @@ VcrResponse <- R6::R6Class(
       }
     },
 
+    #' @description Get a header by name
+    #' @param key (character) header name to get
+    #' @return the header value (if it exists)
     get_header = function(key) {
        self$headers[[key]]
     },
 
+    #' @description Edit a header
+    #' @param key (character) header name to edit
+    #' @param value (character) new value to assign
+    #' @return no return; modifies the header in place
     edit_header = function(key, value = NULL) {
        self$headers[[key]] <- value
     },
 
+    #' @description Delete a header
+    #' @param key (character) header name to delete
+    #' @return no return; the header is deleted if it exists
     delete_header = function(key) {
        self$headers[key] <- NULL
     },
 
+    #' @description Get the content-encoding header value
+    #' @return (character) the content-encoding value
     content_encoding = function() {
        self$get_header("content-encoding")[1]
     },
 
+    #' @description Checks if the encoding is one of "gzip" or "deflate"
+    #' @return logical
     is_compressed = function() {
        self$content_encoding() %in% c("gzip", "deflate")
     }
