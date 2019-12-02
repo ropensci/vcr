@@ -67,11 +67,17 @@ RequestHandlerHttr <- R6::R6Class(
       # * give back real response
 
       # real request
-      response <- eval(parse(text =
-        paste0("httr::", request$method)))(request$url)
+      webmockr::httr_mock(FALSE)
+      on.exit(webmockr::httr_mock(TRUE), add = TRUE)
+      tmp2 <- eval(parse(text = paste0("httr::", request$method))) (
+        request$url,
+        body = get_httr_body(request),
+        do.call(httr::config, request$options),
+        httr::add_headers(request$headers)
+      )
 
       # run through response_for()
-      self$vcr_response <- private$response_for(response)
+      self$vcr_response <- private$response_for(tmp2)
 
       # return real response
       return(response)
@@ -89,10 +95,11 @@ RequestHandlerHttr <- R6::R6Class(
       # real request
       webmockr::httr_mock(FALSE)
       on.exit(webmockr::httr_mock(TRUE), add = TRUE)
-      tmp2 <- eval(parse(text = paste0("httr::",
-        self$request_original$method)))(
+      tmp2 <- eval(parse(text = paste0("httr::", self$request_original$method))) (
         self$request_original$url,
-        body = get_httr_body(self$request_original)
+        body = get_httr_body(self$request_original),
+        do.call(httr::config, self$request_original$options),
+        httr::add_headers(self$request_original$headers)
       )
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 
@@ -109,7 +116,14 @@ RequestHandlerHttr <- R6::R6Class(
 )
 
 get_httr_body <- function(x) {
-  if (is.null(x$fields) && is.null(x$options$postfields)) return(NULL)
+  if (
+    is.null(x$fields) && {
+      if (is.null(x$options$postfieldsize)) return(FALSE)
+      x$options$postfieldsize == 0
+    }
+  ) {
+    return(NULL)
+  }
   if (!is.null(x$fields)) {
     form_file_comp <- vapply(x$fields, inherits, logical(1), "form_file")
     if (any(form_file_comp)) {

@@ -193,6 +193,10 @@ RequestHandler <- R6::R6Class(
   )
 )
 
+test_if_not_null <- function(x) {
+  if (!is.null(x)) x$options$postfieldsize == 0
+}
+
 # try to figure out where the body is located
 # either:
 # - $fields as string or list
@@ -201,7 +205,14 @@ RequestHandler <- R6::R6Class(
 #
 # return: character string
 pluck_body <- function(x) {
-  if (is.null(x$fields) && is.null(x$options$postfields)) return(NULL)
+  if (
+    is.null(x$fields) && {
+      if (is.null(x$options$postfieldsize)) return(FALSE)
+      x$options$postfieldsize == 0
+    }
+  ) {
+    return(NULL)
+  }
   if (!is.null(x$fields)) {
     form_file_comp <- vapply(x$fields, inherits, logical(1), "form_file")
     if (any(form_file_comp)) {

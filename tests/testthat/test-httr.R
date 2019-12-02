@@ -1,5 +1,6 @@
-library("httr")
+skip_on_cran()
 
+library("httr")
 vcr_configure(dir = tempdir())
 
 context("adapter-httr: status code works")
@@ -141,4 +142,94 @@ test_that("httr w/ >1 request per cassette", {
   # cleanup
   unlink(file.path(vcr_configuration()$dir,
     "multiple_queries_httr_record_once.yml"))
+})
+
+context("adapter-httr: use_cassette w/ simple auth")
+test_that("httr works with simple auth and hides auth details", {
+
+  use_cassette("httr_test_simple_auth", {
+    x <- GET("https://httpbin.org/basic-auth/foo/bar",
+      authenticate("foo", "bar"))
+  })
+
+  # successful request
+  expect_equal(x$status_code, 200)
+
+  # no auth details in the cassette
+  path <- file.path(vcr_configuration()$dir, "httr_test_simple_auth.yml")
+  chars <- paste0(readLines(path), collapse = "")
+  yml <- yaml::yaml.load_file(path)
+
+  expect_false(grepl("Authorization", chars))
+  expect_false("Authorization" %in% names(yml$http_interactions[[1]]$request$headers))
+
+  # cleanup
+  unlink(file.path(vcr_configuration()$dir, "httr_test_simple_auth.yml"))
+})
+
+context("adapter-httr: POST requests works")
+test_that("httr POST requests works", {
+  # body type: named list
+  out <- use_cassette("httr_post_named_list", {
+    x <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+  })
+  expect_false(out$is_empty())
+  expect_is(x, "response")
+  expect_equal(x$status_code, 200)
+  str <- yaml::yaml.load_file(out$manfile)$http_interactions
+  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  expect_equal(strj$form, list(foo = "bar"))
+
+  # body type: character
+  out2 <- use_cassette("httr_post_string", {
+    z <- POST("https://httpbin.org/post", body = "some string")
+  })
+  expect_false(out2$is_empty())
+  expect_is(z, "response")
+  expect_equal(z$status_code, 200)
+  str <- yaml::yaml.load_file(out2$manfile)$http_interactions
+  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  expect_equal(strj$data, "some string")
+
+  # body type: raw
+  out3 <- use_cassette("httr_post_raw", {
+    z <- POST("https://httpbin.org/post", body = charToRaw("some string"))
+  })
+  expect_false(out3$is_empty())
+  expect_is(z, "response")
+  expect_equal(z$status_code, 200)
+  str <- yaml::yaml.load_file(out3$manfile)$http_interactions
+  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  expect_equal(strj$data, "some string")
+
+  # body type: upload_file
+  out4 <- use_cassette("httr_post_upload_file", {
+    b <- POST("https://httpbin.org/post",
+      body = list(y = httr::upload_file(system.file("CITATION"))))
+  })
+  expect_false(out4$is_empty())
+  expect_is(b, "response")
+  expect_equal(b$status_code, 200)
+  str <- yaml::yaml.load_file(out4$manfile)$http_interactions
+  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  expect_match(strj$data, "bibentry\\(")
+
+  # body type: NULL
+  out5 <- use_cassette("httr_post_null", {
+    m <- POST("https://httpbin.org/post", body = NULL)
+  })
+  expect_false(out5$is_empty())
+  expect_is(z, "response")
+  expect_equal(z$status_code, 200)
+  str <- yaml::yaml.load_file(out5$manfile)$http_interactions
+  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  expect_equal(strj$data, "")
+  expect_equal(strj$headers$`Content-Length`, "0")
+
+  # cleanup
+  unlink(file.path(vcr_configuration()$dir, "httr_post_named_list.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr_post_string.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr_post_raw.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr_post_upload_file.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr_post_null.yml"))
 })
