@@ -20,7 +20,6 @@ vcr_configure(
   uri_parser = "crul::url_parse",
   preserve_exact_body_bytes = FALSE,
   turned_off = FALSE,
-  ignore_cassettes = FALSE,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
   allow_http_connections_when_no_cassette = FALSE,
@@ -66,11 +65,6 @@ through}
 
 \item{turned_off}{(logical) VCR is turned on by default. Default:
 \code{FALSE}}
-
-\item{ignore_cassettes}{(logical) Ignore cassettes. You can set this to
-\code{TRUE} when you don't have a cassette in use but still want to make
-HTTP requests. Otherwise, you can't make requests unless a cassette is in
-use. Default: \code{FALSE}}
 
 \item{re_record_interval}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}

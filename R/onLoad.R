@@ -10,7 +10,7 @@ vcr_cassettes <- NULL
 initialize_ivars <- function() {
   light_switch <<- new.env()
   light_switch$turned_off <<- FALSE
-  vcr_c$ignore_cassettes <<- FALSE
+  light_switch$ignore_cassettes <<- FALSE
   vcr_c$cassettes <<- list()
   vcr_c$linked_context <<- NULL
 

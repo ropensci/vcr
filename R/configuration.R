@@ -18,10 +18,6 @@
 #' @param preserve_exact_body_bytes (logical) preserve exact body bytes for
 #' @param turned_off (logical) VCR is turned on by default. Default:
 #' `FALSE`
-#' @param ignore_cassettes (logical) Ignore cassettes. You can set this to
-#' `TRUE` when you don't have a cassette in use but still want to make
-#' HTTP requests. Otherwise, you can't make requests unless a cassette is in
-#' use. Default: `FALSE`
 #' @param re_record_interval (numeric) When given, the cassette will be
 #' re-recorded at the given interval, in seconds.
 #' @param clean_outdated_http_interactions (logical) Should outdated interactions
@@ -88,7 +84,6 @@ vcr_configure <- function(
   uri_parser = "crul::url_parse",
   preserve_exact_body_bytes = FALSE,
   turned_off = FALSE,
-  ignore_cassettes = FALSE,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
   allow_http_connections_when_no_cassette = FALSE,
@@ -153,7 +148,6 @@ VCRConfig <- R6::R6Class(
     uri_parser = NULL,
     preserve_exact_body_bytes = NULL,
     turned_off = NULL,
-    ignore_cassettes = NULL,
     re_record_interval = NULL,
     clean_outdated_http_interactions = NULL,
     allow_http_connections_when_no_cassette = NULL,
@@ -195,7 +189,6 @@ vcr_default_config_vars <- list(
   uri_parser = "crul::url_parse",
   preserve_exact_body_bytes = FALSE,
   turned_off = FALSE,
-  ignore_cassettes = FALSE,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
   allow_http_connections_when_no_cassette = FALSE,
