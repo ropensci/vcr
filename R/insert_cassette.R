@@ -32,6 +32,7 @@ insert_cassette <- function(name, record="once",
   preserve_exact_body_bytes=FALSE, re_record_interval = NULL,
   clean_outdated_http_interactions = FALSE) {
 
+  check_cassette_name(name)
   vcr_env_handle()
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
