@@ -1,24 +1,7 @@
-#' The request of an HTTPInteraction
-#'
+#' @title The request of an HTTPInteraction
+#' @description object that handled all aspects of a request
 #' @export
 #' @keywords internal
-#' @param method the HTTP method (i.e. :head, :options, :get, :post, :put,
-#' :patch or :delete)
-#' @param uri the request URI
-#' @param body the request body
-#' @param headers the request headers
-#' @param opts various options
-#' @param disk boolean, is body a file on disk
-#' @details
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{to_hash()}}{
-#'       Get a hash from the class itself
-#'     }
-#'     \item{\code{from_hash()}}{
-#'       Create a `Request` class object from a hash
-#'     }
-#'   }
 #' @examples
 #' url <- "https://eu.httpbin.org/post"
 #' body <- list(foo = "bar")
@@ -39,47 +22,70 @@
 #' x$from_hash(h)
 Request <- R6::R6Class(
   'Request',
-   public = list(
-     method = NULL,
-     uri = NULL,
-     scheme = NULL,
-     host = NULL,
-     path = NULL,
-     query = NULL,
-     body = NULL,
-     headers = NULL,
-     skip_port_stripping = FALSE,
-     hash = NULL,
-     opts = NULL,
-     disk = NULL,
+  public = list(
+    #' @field method (character) http method
+    method = NULL,
+    #' @field uri (character) a uri
+    uri = NULL,
+    #' @field scheme (character) scheme (http or https)
+    scheme = NULL,
+    #' @field host (character) host (e.g., stuff.org)
+    host = NULL,
+    #' @field path (character) path (e.g., foo/bar)
+    path = NULL,
+    #' @field query (character) query params, named list
+    query = NULL,
+    #' @field body (character) named list
+    body = NULL,
+    #' @field headers (character) named list
+    headers = NULL,
+    #' @field skip_port_stripping (logical) whether to strip thhe port
+    skip_port_stripping = FALSE,
+    #' @field hash (character) a named list - internal use
+    hash = NULL,
+    #' @field opts (character) options - internal use
+    opts = NULL,
+    #' @field disk (logical) xx
+    disk = NULL,
 
-     initialize = function(method, uri, body, headers, opts, disk) {
-       if (!missing(method)) self$method <- tolower(method)
-       if (!missing(body)) {
-         if (inherits(body, "list")) {
-           body <- paste(names(body), body, sep = "=", collapse = ",")
-         }
-         self$body <- body
-       }
-       if (!missing(headers)) self$headers <- headers
-       if (!missing(uri)) {
-         if (!self$skip_port_stripping) {
-           self$uri <- private$without_standard_port(uri)
-         } else {
-           self$uri <- uri
-         }
-         # parse URI to get host and path
-         tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
-         self$scheme <- tmp$scheme
-         self$host <- tmp$domain
-         self$path <- tmp$path
-         self$query <- tmp$parameter
+    #' @description Create a new `Request` object
+    #' @param method (character) the HTTP method (i.e. head, options, get,
+    #' post, put, patch or delete)
+    #' @param uri (character) request URI
+    #' @param body (character) request body
+    #' @param headers (named list) request headers
+    #' @param opts (named list) options internal use
+    #' @param disk boolean, is body a file on disk
+    #' @return A new `Request` object
+    initialize = function(method, uri, body, headers, opts, disk) {
+      if (!missing(method)) self$method <- tolower(method)
+      if (!missing(body)) {
+        if (inherits(body, "list")) {
+          body <- paste(names(body), body, sep = "=", collapse = ",")
+        }
+        self$body <- body
+      }
+      if (!missing(headers)) self$headers <- headers
+      if (!missing(uri)) {
+        if (!self$skip_port_stripping) {
+          self$uri <- private$without_standard_port(uri)
+        } else {
+          self$uri <- uri
+        }
+        # parse URI to get host and path
+        tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
+        self$scheme <- tmp$scheme
+        self$host <- tmp$domain
+        self$path <- tmp$path
+        self$query <- tmp$parameter
        }
        if (!missing(opts)) self$opts <- opts
        if (!missing(disk)) self$disk <- disk
      },
 
-     to_hash = function() {
+    #' @description Convert the request to a list
+    #' @return list
+    to_hash = function() {
        self$hash <- list(
          method  = self$method,
          uri     = self$uri,
@@ -90,41 +96,38 @@ Request <- R6::R6Class(
        return(self$hash)
      },
 
-     from_hash = function(hash) {
-       Request$new(
-         method  = hash[['method']],
-         uri     = hash[['uri']],
-         body    = body_from(hash[['body']]),
-         headers = hash[['headers']],
-         disk = hash[['disk']]
-       )
-     }
-   ),
-   private = list(
-     without_standard_port = function(uri) {
-       if (is.null(uri)) return(uri)
-       u <- private$parsed_uri(uri)
-       if (paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in% c('http', 'https/443')) {
-         return(uri)
-       }
-       u$port <- NA
-       return(urltools::url_compose(u))
-     },
+    #' @description Convert the request to a list
+    #' @param hash a list
+    #' @return a new `Request` object
+    from_hash = function(hash) {
+      Request$new(
+        method  = hash[['method']],
+        uri     = hash[['uri']],
+        body    = body_from(hash[['body']]),
+        headers = hash[['headers']],
+        disk = hash[['disk']]
+      )
+    }
+  ),
+  private = list(
+    without_standard_port = function(uri) {
+      if (is.null(uri)) return(uri)
+      u <- private$parsed_uri(uri)
+      if (paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in% c('http', 'https/443')) {
+        return(uri)
+      }
+      u$port <- NA
+      return(urltools::url_compose(u))
+    },
 
-     parsed_uri = function(uri) {
-       #eval(parse(text = vcr_configuration()$uri_parser))(uri)
-       urltools::url_parse(uri)
-     }
-
-     # make_uri = function(x) {
-     #   paste0("%s://%s", x$scheme, file.path(x$domain, x$path), )
-     # }
-   )
+    parsed_uri = function(uri) {
+      urltools::url_parse(uri)
+    }
+  )
 )
 
 serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
   if (is.null(x)) return(x)
-  # if (vcr_configuration()$preserve_exact_body_bytes) {
   if (preserve_exact_body_bytes) {
     structure(base64enc::base64encode(charToRaw(x)), base64 = TRUE)
   } else {
@@ -133,10 +136,7 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
 }
 
 body_from <- function(x) {
-  # return hash_or_string unless hash_or_string.is_a?(Hash)
-  # hash = hash_or_string
   if (is.null(x)) x <- ""
-  # if (is.null(attr(x, "base64"))) return(try_encode_string(x, Encoding_safe(x)))
   if ((!is.null(attr(x, "base64")) && attr(x, "base64")) || is_base64(x)) {
     b64dec <- base64enc::base64decode(x)
     b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
@@ -153,6 +153,12 @@ body_from <- function(x) {
   }
 }
 
+try_encoding <- function(x) {
+  if (missing(x)) stop("'x' is missing")
+  z <- tryCatch(Encoding(x), error = function(e) e)
+  if (inherits(z, "error")) "ASCII-8BIT" else z
+}
+
 is_base64 <- function(x) {
   grepl(b64_pattern, x)
 }
@@ -165,6 +171,8 @@ Encoding_safe <- function(x) {
 b64_pattern <- "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"
 
 try_encode_string <- function(string, encoding) {
+  ## FIXME, this function doesn't do anything
+
   #return string if encoding.nil? || string.encoding.name == encoding
   # if (is.null(encoding) || ) return(string)
 

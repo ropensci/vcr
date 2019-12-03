@@ -57,3 +57,16 @@ has_internet <- function() {
     silent = TRUE)
   !inherits(z, "try-error")
 }
+
+can_rawToChar <- function(x) {
+  z <- tryCatch(rawToChar(x), error = function(e) e)
+  return(!inherits(z, "error"))
+}
+
+stp <- function(x) stop(x, call. = FALSE)
+check_cassette_name <- function(x) {
+  if (grepl("\\s", x))
+    stp("no spaces allowed in cassette names")
+  if (grepl("\\.yml$|\\.yaml$", x))
+    stp("don't include a cassette path extension")
+}

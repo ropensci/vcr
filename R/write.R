@@ -144,7 +144,7 @@ strex <- function(string, pattern) {
 
 encoding_guess <- function(x, bytes = FALSE, force_guess = FALSE) {
   if (bytes && !force_guess) return("ASCII-8BIT")
-  enc <- Encoding(x)
+  enc <- try_encoding(x)
   if (enc == "unknown") {
     message("encoding couldn't be detected; assuming UTF-8")
   }

@@ -8,28 +8,30 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 0.3.0.9100
+Version: 0.3.2.9531
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")))
 URL: https://github.com/ropensci/vcr/ (devel)
-    https://ropenscilabs.github.io/http-testing-book/ (user manual)
+    https://books.ropensci.org/http-testing/ (user manual)
 BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.8.4),
     httr,
-    webmockr (>= 0.4.0),
+    webmockr (>= 0.4.2.9100),
     urltools,
     yaml,
     R6,
     lazyeval,
     base64enc
 Suggests:
+    roxygen2 (>= 7.0.2),
     jsonlite,
     testthat,
     knitr,
@@ -38,7 +40,7 @@ Suggests:
     crayon,
     cli
 Remotes: ropensci/webmockr@mock-write-disk
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org

@@ -18,14 +18,14 @@ now: \pkg{crul}
 \itemize{
 \item In addition to \pkg{testthat}, add \pkg{vcr} and \pkg{webmockr}
 to your Suggests in your DESCRIPTION file
-\item Add a file (named e.g., \code{vcr-config.R}) to your \code{tests/testthat/}
+\item Add a file (named e.g., \code{vcr-config.R}) to your \verb{tests/testthat/}
 directory. In that file add your \pkg{vcr} configuration settings.
 See \link{vcr_configure} for help on configuration settings.
-\item For any given test use the following:\preformatted{use_cassette("foobar", {
+\item For any given test use the following:\preformatted{use_cassette("foobar", \{
   aa <- hello::world()
   expect_is(aa, "SomeClass")
   expect_equal(length(aa), 3)
-})
+\})
 }
 
 And the tests will behave as normally.

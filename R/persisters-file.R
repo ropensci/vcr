@@ -1,26 +1,8 @@
-#' File system persister
-#'
-#' @keywords internal
-#' @param file_name (character) Just the file name, not whole path
-#' @param content (character) content to record to a cassette
-#' @param path (character) Storage directory for cassettes
-#' @param write2disk (logical) write to disk or just make a new FileSystem
-#' object. Default: `FALSE`
-#' @details The only built-in cassette persister. Persists cassettes
+#' @title File system persister
+#' @description The only built-in cassette persister. Persists cassettes
 #' to the file system.
-#'
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{get_cassette(file_name = NULL, content = NULL, path = NULL)}}{
-#'       Gets the cassette for the given storage key (file name).
-#'     }
-#'     \item{\code{set_cassette(file_name = NULL, content)}}{
-#'       Sets the cassette for the given storage key (file name).
-#'     }
-#'     \item{\code{is_empty()}}{
-#'       Checks if a cassette is empty or not. Returns boolean
-#'     }
-#'   }
+#' @keywords internal
+#' @details
 #' \strong{Private Methods}
 #'  \describe{
 #'     \item{\code{storage_location()}}{
@@ -30,8 +12,6 @@
 #'       Get absolute path to the `storage_location`
 #'     }
 #'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' vcr_configure(dir = tempdir())
 #'
@@ -49,12 +29,25 @@
 #' }
 FileSystem <- R6::R6Class("FileSystem",
   public = list(
+    #' @field file_name (character) the file name, not whole path
     file_name = NULL,
+    #' @field write_fxn (character) fxn to use for writing to disk
     write_fxn = NULL,
+    #' @field content (character) content to record to a cassette
     content = NULL,
+    #' @field path (character) storage directory for cassettes
     path = NULL,
+    #' @field write2disk (character) write to disk or make a new FileSystem
     write2disk = FALSE,
 
+    #' @description Create a new `FileSystem` object
+    #' @param file_name (character) the file name, not whole path
+    #' @param write_fxn (character) fxn to use for writing to disk
+    #' @param content (character) content to record to a cassette
+    #' @param path (character) storage directory for cassettes
+    #' @param write2disk (logical) write to disk or just make a new FileSystem
+    #' object. Default: `FALSE`
+    #' @return A new `FileSystem` object
     initialize = function(file_name = NULL, write_fxn = NULL,
                           content = NULL, path = NULL,
                           write2disk = FALSE) {
@@ -68,7 +61,9 @@ FileSystem <- R6::R6Class("FileSystem",
       if (self$write2disk) self$write_fxn(self$content, self$path)
     },
 
-    # Gets the cassette for the given storage key (file name).
+    #' @description Gets the cassette for the given storage key (file name)
+    #' @param file_name (character) the file name, not whole path
+    #' @return named list, from `yaml::yaml.load_file`
     get_cassette = function(file_name = NULL) {
       # @param [String] file_name the file name
       # @return [String] the cassette content
@@ -79,6 +74,8 @@ FileSystem <- R6::R6Class("FileSystem",
       yaml::yaml.load_file(path)
     },
 
+    #' @description Checks if a cassette is empty or not
+    #' @return logical
     is_empty = function() {
       if (is.null(self$file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, self$file_name)
@@ -90,7 +87,10 @@ FileSystem <- R6::R6Class("FileSystem",
       }
     },
 
-    # Sets the cassette for the given storage key (file name).
+    #' @description Sets the cassette for the given storage key (file name)
+    #' @param file_name (character) the file name, not whole path
+    #' @param content (character) content to record to a cassette
+    #' @return no return; writes to disk
     set_cassette = function(file_name = NULL, content) {
       # @param [String] file_name the file name
       # @param [String] content the content to store

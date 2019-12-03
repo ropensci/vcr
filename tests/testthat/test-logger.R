@@ -1,5 +1,3 @@
-context("logger")
-
 vcr_configure(log = TRUE, log_opts = list(file = "vcr.log", log_prefix = "Cassette"))
 
 context("logger: vcr_log_file fails well")

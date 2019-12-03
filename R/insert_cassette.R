@@ -4,8 +4,6 @@ vcr__env <- new.env()
 #'
 #' @export
 #' @inheritParams use_cassette
-#' @param ignore_cassettes (logical) turn \pkg{vcr} off and ignore cassette
-#' insertions (so that no error is raised). Default: `FALSE`
 #' @seealso [use_cassette()], [eject_cassette()]
 #' @return an object of class `Cassette`
 #' @examples \dontrun{
@@ -31,9 +29,11 @@ insert_cassette <- function(name, record="once",
   update_content_length_header=FALSE,
   allow_playback_repeats=FALSE, serialize_with="yaml",
   persist_with="FileSystem",
-  preserve_exact_body_bytes=FALSE, ignore_cassettes = FALSE, 
-  re_record_interval = NULL, clean_outdated_http_interactions = FALSE) {
+  preserve_exact_body_bytes=FALSE, re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE) {
 
+  check_cassette_name(name)
+  vcr_env_handle()
   if (turned_on()) {
     if ( any( name %in% names(cassettes_session()) ) ) {
       stop(sprintf("There is already a cassette with the same name: %s", name),
@@ -62,7 +62,7 @@ insert_cassette <- function(name, record="once",
       serialize_with = serialize_with, persist_with = persist_with,
       preserve_exact_body_bytes = preserve_exact_body_bytes)
     return(tmp)
-  } else if (ignore_cassettes) {
+  } else if (!light_switch$ignore_cassettes) {
     message <- "vcr is turned off.  You must turn it on before you can insert a cassette.
       Or you can set ignore_cassettes=TRUE option to completely ignore cassette insertions."
     stop(message)

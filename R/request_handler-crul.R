@@ -1,6 +1,6 @@
-#' RequestHandlerCrul - methods for crul package
+#' @title RequestHandlerCrul
+#' @description Methods for the crul package, building on [RequestHandler]
 #' @export
-#' @inherit RequestHandler
 #' @examples \dontrun{
 #' vcr_configure(
 #'  dir = tempdir(),

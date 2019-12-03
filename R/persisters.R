@@ -1,19 +1,14 @@
-#' Keeps track of the cassette persisters in a hash-like object
-#'
+#' @title Cassette persisters
+#' @description Keeps track of the cassette persisters in a hash-like object
 #' @export
 #' @keywords internal
-#' @param persisters A list
-#' @param name (character) Persister name, only option right now is "FileSystem"
 #' @details There's only one option: `FileSystem`
-#'
 #' \strong{Private Methods}
 #'  \describe{
 #'     \item{\code{persister_get()}}{
 #'       Gets and sets a named persister
 #'     }
 #'   }
-#' @format NULL
-#' @usage NULL
 #' @examples
 #' (aa <- Persisters$new())
 #' aa$name
@@ -22,29 +17,34 @@
 #' yaml_serializer
 Persisters <- R6::R6Class(
   "Persisters",
-   public = list(
-     persisters = list(),
-     name = "FileSystem",
+  public = list(
+    #' @field persisters (list) internal use, holds persister object
+    persisters = list(),
+    #' @field name (character)
+    name = "FileSystem",
 
-     initialize = function(persisters = list(), name = "FileSystem") {
-       self$persisters <- persisters
-       self$name <- name
-       private$persister_get()
-     }
-   ),
+    #' @description Create a new `Persisters` object
+    #' @param persisters (list) a list
+    #' @param name (character) Persister name, only option right now
+    #' is "FileSystem"
+    #' @return A new `Persisters` object
+    initialize = function(persisters = list(), name = "FileSystem") {
+      self$persisters <- persisters
+      self$name <- name
+      private$persister_get()
+    }
+  ),
 
-   private = list(
-     # Gets and sets a named persister
-     persister_get = function() {
-       if (!self$name %in% 'FileSystem') {
-         stop(sprintf("The requested VCR cassette persister (%s) is not registered.", self$name),
-              call. = FALSE)
-       }
-       self$persisters <- switch(self$name,
-                                 FileSystem = FileSystem
-       )
-     }
-   )
+  private = list(
+    # Gets and sets a named persister
+    persister_get = function() {
+      if (!self$name %in% 'FileSystem') {
+        stop(sprintf("The requested VCR cassette persister (%s) is not registered.", self$name),
+             call. = FALSE)
+      }
+      self$persisters <- switch(self$name, FileSystem = FileSystem)
+    }
+  )
 )
 
 #' @rdname Persisters

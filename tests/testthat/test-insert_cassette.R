@@ -1,5 +1,3 @@
-context("insert_cassette")
-
 context("insert_cassette fails well")
 test_that("insert_cassette fails well", {
   unlink(file.path(vcr_c$dir, "foobar55.yml"))
@@ -64,3 +62,11 @@ unlink(file.path(vcr_configuration()$dir, "foobar3.yml"))
 unlink(list.files(pattern = "newbar", full.names = TRUE))
 unlink("foobar55.yml")
 unlink("testing1.yml")
+
+test_that("insert_cassette fails well on name checking", {
+  # no spaces
+  expect_error(insert_cassette("foo bar"), "no spaces")
+  # no file ext included - just checking yml/yaml for now
+  expect_error(insert_cassette("foo.yml"), "extension")
+  expect_error(insert_cassette("foo.yaml"), "extension")
+})

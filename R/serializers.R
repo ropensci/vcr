@@ -1,9 +1,7 @@
-#' Keeps track of the cassette serializers in a hash-like object
-#'
+#' @title Cassette serializers
+#' @description Keeps track of the cassette serializers in a hash-like object
 #' @export
 #' @keywords internal
-#' @param serializers List of serializers
-#' @param name Name of a serializer. Only option is "yaml" for now
 #' @details
 #' \strong{Private Methods}
 #'   \describe{
@@ -11,8 +9,6 @@
 #'       Gets a named serializer. This is also run on initialize of this function
 #'     }
 #'   }
-#' @format NULL
-#' @usage NULL
 #' @examples \dontrun{
 #' (aa <- Serializers$new())
 #' aa$name
@@ -23,9 +19,15 @@
 Serializers <- R6::R6Class(
   "Serializers",
   public = list(
+    #' @field serializers (list) list of serializer names
     serializers = list(),
+    #' @field name (character) Name of a serializer. Only option is "yaml"
     name = "yaml",
 
+    #' @description Create a new Serializers object
+    #' @param serializers (list) list of serializer names
+    #' @param name (character) Name of a serializer. Only option is "yaml"
+    #' @return A new `Serializers` object
     initialize = function(serializers = list(), name = "yaml") {
       self$serializers <- serializers
       self$name <- name
@@ -34,7 +36,6 @@ Serializers <- R6::R6Class(
   ),
 
   private = list(
-    # Gets and sets a named serializer
     serialize_get = function() {
       if (!self$name %in% 'yaml') {
         stop(sprintf("The requested VCR cassette serializer (%s) is not registered.", self$name),

@@ -10,7 +10,7 @@
 future runs.
 }
 \details{
-Check out the \href{https://ropenscilabs.github.io/http-testing-book/}{http testing book}
+Check out the \href{https://books.ropensci.org/http-testing/}{http testing book}
 for a lot more documentation on \code{vcr}, \code{webmockr}, and \code{crul}
 }
 \section{Backstory}{

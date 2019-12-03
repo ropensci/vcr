@@ -4,12 +4,18 @@
 \alias{insert_cassette}
 \title{Insert a cassette to record HTTP requests}
 \usage{
-insert_cassette(name, record = "once", match_requests_on = c("method",
-  "uri"), update_content_length_header = FALSE,
-  allow_playback_repeats = FALSE, serialize_with = "yaml",
-  persist_with = "FileSystem", preserve_exact_body_bytes = FALSE,
-  ignore_cassettes = FALSE, re_record_interval = NULL,
-  clean_outdated_http_interactions = FALSE)
+insert_cassette(
+  name,
+  record = "once",
+  match_requests_on = c("method", "uri"),
+  update_content_length_header = FALSE,
+  allow_playback_repeats = FALSE,
+  serialize_with = "yaml",
+  persist_with = "FileSystem",
+  preserve_exact_body_bytes = FALSE,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = FALSE
+)
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
@@ -20,7 +26,7 @@ is a valid file name.}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
-\code{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
+\verb{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
 "path", "headers" and "body"}
 
 \item{update_content_length_header}{(logical) Whether or
@@ -42,9 +48,6 @@ custom persister.}
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
-
-\item{ignore_cassettes}{(logical) turn \pkg{vcr} off and ignore cassette
-insertions (so that no error is raised). Default: \code{FALSE}}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
 cassette should be re-recorded. default: \code{NULL} (not re-recorded)}

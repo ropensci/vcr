@@ -8,14 +8,14 @@ vcr
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg)](https://travis-ci.org/ropensci/vcr)
 [![Build status](https://ci.appveyor.com/api/projects/status/6sewc0t3bhdg5opo?svg=true)](https://ci.appveyor.com/project/sckott/vcr)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/cranlogs.app)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
 An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Docs
 
-Check out the [HTTP testing book](https://ropenscilabs.github.io/http-testing-book/) and the [vcr vignettes](vignettes).
+Check out the [HTTP testing book](https://books.ropensci.org/http-testing-book/) and the [vcr vignettes](vignettes).
 
 ## Supported HTTP libraries
 
@@ -38,7 +38,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.147   0.020   0.544
+#>   0.140   0.021   0.646
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -51,7 +51,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.076   0.003   0.080
+#>   0.079   0.003   0.085
 ```
 
 
@@ -324,7 +324,6 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [zbank][]
 * [rplos][]
 * [ritis][]
-* [nasapower][]
 
 ## TODO
 
@@ -354,5 +353,4 @@ By participating in this project you agree to abide by its terms.
 [zbank]: https://github.com/ropenscilabs/zbank
 [rplos]: https://github.com/ropensci/rplos
 [ritis]: https://github.com/ropensci/ritis
-[nasapower]: https://github.com/ropensci/nasapower
 [coc]: https://github.com/ropensci/vcr/blob/master/CODE_OF_CONDUCT.md

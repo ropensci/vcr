@@ -59,9 +59,16 @@ headers <- list(
   connection = "keep-alive",
   date = "Tue, 24 Apr 2018 04:46:56 GMT"
 )
-response_body <- "{\\"args\\": {\\"q\\": \\"stuff\\"}, \\"headers\\": {\\"Accept\\": \\"application/json\\"}}\\n"
+response_body <- 
+"{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"text/html\"}}\n"
 (x <- VcrResponse$new(status, headers,
    response_body, "HTTP/1.1 200 OK"))
 response_summary(x)
+
+## with binary body
+# path <- "tests/testthat/png_eg.rda"
+# load(path)
+# (x <- VcrResponse$new(status, headers, png_eg, "HTTP/1.1 200 OK"))
+# response_summary(x)
 }
 \keyword{internal}
