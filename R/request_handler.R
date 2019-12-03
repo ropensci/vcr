@@ -163,6 +163,7 @@ RequestHandler <- R6::R6Class(
     # get stubbed response
     get_stubbed_response = function(request) {
       self$stubbed_response <- http_interactions()$response_for(request)
+      scotts_env$stubbed_response_from_request_handler <- self$stubbed_response
       self$stubbed_response
     },
 

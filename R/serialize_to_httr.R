@@ -19,13 +19,12 @@ serialize_to_httr <- function(request, response) {
   resp <- webmockr::Response$new()
   resp$set_url(request$uri)
   bod <- response$body
-  disk <- "disk" %in% names(response)
   response_body <- if ("file" %in% names(bod)) {
     structure(bod$file, class = "path")
   } else {
     if ("string" %in% names(bod)) bod$string else bod
   }
-  resp$set_body(response_body, disk %||% FALSE)
+  resp$set_body(response_body, response$disk %||% FALSE)
   # resp$set_body(if ("string" %in% names(bod)) bod$string else bod)
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)

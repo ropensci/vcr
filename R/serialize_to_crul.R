@@ -16,15 +16,6 @@ serialize_to_crul <- function(request, response) {
   # response
   resp <- webmockr::Response$new()
   resp$set_url(request$uri)
-  # disk <- "disk" %in% names(response)
-  # response_body <- if (response$disk) {
-  #   response$disk
-  # } else {
-  #   if ("string" %in% names(response$body))
-  #     response$body$string
-  #   else
-  #     response$body
-  # }
   bod <- response$body
   resp$set_body(if ("string" %in% names(bod)) bod$string else bod,
     response$disk %||% FALSE)
