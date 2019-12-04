@@ -639,7 +639,7 @@ Cassette <- R6::R6Class(
     #' @return an object of class [HTTPInteraction]
     make_http_interaction = function(x) {
       # content must be raw or character
-      assert(x$content, c('raw', 'character'))
+      assert(unclass(x$content), c('raw', 'character'))
       new_file_path <- ""
       is_disk <- FALSE
       if (is.character(x$content)) {
@@ -678,7 +678,7 @@ Cassette <- R6::R6Class(
         body = if (is.raw(x$content)) {
           if (can_rawToChar(x$content)) rawToChar(x$content) else x$content
         } else {
-          stopifnot(inherits(x$content, "character"))
+          stopifnot(inherits(unclass(x$content), "character"))
           if (file.exists(x$content)) {
             # calculate new file path in fixtures/
             # copy file into fixtures/file_cache/

@@ -33,17 +33,35 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   expect_equal(out$parse(), out2$parse())
 })
 
+test_that("use_cassette w/ request that writes to disk: httr", {
+  skip_on_cran()
+
+  library(httr)
+  ## make a temp file
+  f <- tempfile(fileext = ".json")
+  ## make a request
+  use_cassette("test_write_to_disk_httr", {
+    out <- GET("https://httpbin.org/get", write_disk(f, TRUE))
+  })
+
+  expect_is(out, "response")
+  expect_is(out$content, "path")
+  expect_match(out$content, "\\.json")
+
+  # works on 2nd request
+  use_cassette("test_write_to_disk_httr", {
+    out2 <- GET("https://httpbin.org/get", write_disk(f, TRUE))
+  })
+  expect_is(out2, "response")
+  expect_is(out2$content, "path")
+  expect_match(out2$content, "\\.json")
+
+  expect_equal(httr::content(out), httr::content(out2))
+})
+
 # cleanup
-unlink(file.path(vcr_configuration()$dir, "test_write_to_disk.yml"))
+files <- c("test_write_to_disk.yml", "test_write_to_disk_httr.yml")
+unlink(file.path(vcr_configuration()$dir, files))
 
 # reset configuration
 vcr_configure_reset()
-
-
-# scotts_env$x$request
-# scotts_env$x$request$disk
-# scotts_env$body
-
-# self <- insert_cassette("test_write_to_disk")
-# out2 <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
-# eject_cassette()

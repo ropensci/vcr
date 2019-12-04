@@ -137,7 +137,9 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
 
 body_from <- function(x) {
   if (is.null(x)) x <- ""
-  if ((!is.null(attr(x, "base64")) && attr(x, "base64")) || is_base64(x)) {
+  if (
+    (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
+  ) {
     b64dec <- base64enc::base64decode(x)
     b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
     if (inherits(b64dec_r2c, "error")) {

@@ -90,7 +90,8 @@ RequestHandler <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url$url %||% request$url,
-          pluck_body(request), request$headers)
+          pluck_body(request), request$headers,
+          disk = !is.null(request$output$path))
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
@@ -98,6 +99,7 @@ RequestHandler <- R6::R6Class(
     #' @description Handle the request (`request` given in `$initialize()`)
     #' @return handles a request, outcomes vary
     handle = function() {
+      scotts_env$request_from_Request <- self$request
       vcr_log_info(sprintf("Handling request: %s (disabled: %s)",
         private$request_summary(self$request),
         private$is_disabled()), vcr_c$log_opts$date)
