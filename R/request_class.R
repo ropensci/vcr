@@ -162,7 +162,9 @@ try_encoding <- function(x) {
 }
 
 is_base64 <- function(x) {
-  grepl(b64_pattern, x)
+  as_num <- tryCatch(as.numeric(x), warning = function(w) w)
+  if (!inherits(as_num, "warning")) return(FALSE)
+  all(grepl(b64_pattern, x))
 }
 
 Encoding_safe <- function(x) {
