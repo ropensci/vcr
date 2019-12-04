@@ -24,7 +24,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.8.4),
     httr,
-    webmockr (>= 0.4.2.9100),
+    webmockr (>= 0.4.6.9100),
     urltools,
     yaml,
     R6,
@@ -39,7 +39,7 @@ Suggests:
     desc,
     crayon,
     cli
-Remotes: ropensci/webmockr@mock-write-disk
+Remotes: ropensci/webmockr
 RoxygenNote: 7.0.2
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
