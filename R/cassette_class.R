@@ -537,7 +537,7 @@ Cassette <- R6::R6Class(
             z$response$status,
             z$response$headers,
             z$response$body$string,
-            self$cassette_opts,
+            opts = self$cassette_opts,
             disk = z$response$body$file
           )
           if (self$update_content_length_header)
