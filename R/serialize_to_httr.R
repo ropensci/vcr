@@ -19,7 +19,7 @@ serialize_to_httr <- function(request, response) {
   # in vcr >= v0.4, "disk" is in the response, but in older versions
   # its missing - use response$body if disk is not present
   response_body <- response$body
-  if ("disk" %in% names(response)) {
+  if ("disk" %in% names(response) && !is.null(response$disk)) {
     response_body <- if (response$disk) {
       structure(response$body, class = "path")
     } else {
