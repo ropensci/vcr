@@ -170,6 +170,7 @@ VCRConfig <- R6::R6Class(
       cat("<vcr configuration>", sep = "\n")
       cat(paste0("  Cassette Dir: ", self$dir), sep = "\n")
       cat(paste0("  Record: ", self$record), sep = "\n")
+      cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
       cat(paste0("  URI Parser: ", self$uri_parser), sep = "\n")
       cat(paste0("  Match Requests on: ",
                  paste0(self$match_requests_on, collapse = ", ")), sep = "\n")

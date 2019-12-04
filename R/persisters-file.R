@@ -65,8 +65,6 @@ FileSystem <- R6::R6Class("FileSystem",
     #' @param file_name (character) the file name, not whole path
     #' @return named list, from `yaml::yaml.load_file`
     get_cassette = function(file_name = NULL) {
-      # @param [String] file_name the file name
-      # @return [String] the cassette content
       file_name <- if (is.null(file_name)) self$file_name else file_name
       if (is.null(file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, file_name)
@@ -92,8 +90,6 @@ FileSystem <- R6::R6Class("FileSystem",
     #' @param content (character) content to record to a cassette
     #' @return no return; writes to disk
     set_cassette = function(file_name = NULL, content) {
-      # @param [String] file_name the file name
-      # @param [String] content the content to store
       file_name <- if (is.null(file_name)) self$file_name else file_name
       if (is.null(file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, file_name)

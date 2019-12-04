@@ -25,9 +25,9 @@ vcr__env <- new.env()
 #' unlink(file.path(tempdir(), "leo5.yml"))
 #' }
 insert_cassette <- function(name, record="once",
-  match_requests_on = c('method', 'uri'),
+  match_requests_on = NULL,
   update_content_length_header=FALSE,
-  allow_playback_repeats=FALSE, serialize_with="yaml",
+  allow_playback_repeats=FALSE, serialize_with=NULL,
   persist_with="FileSystem",
   preserve_exact_body_bytes=FALSE, re_record_interval = NULL,
   clean_outdated_http_interactions = FALSE) {

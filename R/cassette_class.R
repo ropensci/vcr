@@ -36,9 +36,9 @@ Cassette <- R6::R6Class(
     manfile = NA,
     #' @field recorded_at (character) date/time recorded at
     recorded_at = NA,
-    #' @field serialize_with (character) serializer to use (yaml only)
+    #' @field serialize_with (character) serializer to use (yaml|json)
     serialize_with = "yaml",
-    #' @field serializer (character) serializer to use (yaml only)
+    #' @field serializer (character) serializer to use (yaml|json)
     serializer = NA,
     #' @field persist_with (character) persister to use (FileSystem only)
     persist_with = "FileSystem",
@@ -119,18 +119,16 @@ Cassette <- R6::R6Class(
     #' be recorded back to file. Default: `FALSE`
     #' @return A new `Cassette` object
     initialize = function(
-      name, record, serialize_with = "yaml",
-      persist_with = "FileSystem",
-      match_requests_on = c("method", "uri"),
+      name, record, serialize_with, persist_with, match_requests_on,
       re_record_interval, tag, tags, update_content_length_header,
       decode_compressed_response, allow_playback_repeats,
       allow_unused_http_interactions, exclusive, preserve_exact_body_bytes,
       clean_outdated_http_interactions) {
 
       self$name <- name
-      self$root_dir <- vcr_configuration()$dir
-      self$serialize_with <- serialize_with
-      self$persist_with <- persist_with
+      self$root_dir <- vcr_c$dir
+      self$serialize_with <- serialize_with %||% vcr_c$serialize_with
+      self$persist_with <- persist_with %||% vcr_c$persist_with
       if (!missing(record)) {
         recmodes <- c("none", "once", "new_episodes", "all")
         if (!record %in% recmodes) {
@@ -140,24 +138,23 @@ Cassette <- R6::R6Class(
         self$record <- record
       }
       self$make_dir()
-      self$manfile <- sprintf("%s/%s.yml", path.expand(cassette_path()),
-                              self$name)
+      ext <- switch(self$serialize_with, yaml = "yml", json = "json")
+      self$manfile <- sprintf("%s/%s.%s", path.expand(cassette_path()),
+                              self$name, ext)
       if (!file.exists(self$manfile)) cat("\n", file = self$manfile)
-      if (!missing(match_requests_on)) {
-        mro <- c("method", "uri", "headers", "host", "path", "body")
-        if (!any(match_requests_on %in% mro)) {
-          stop("1 or more 'match_requests_on' values (",
-               paste0(match_requests_on, collapse = ", "),
-               ") is not in the allowed set: ",
-               paste0(mro, collapse = ", "), call. = FALSE)
-        }
-        # we don't yet support the following matchers: host, path
-        if (any(match_requests_on %in% c("host", "path"))) {
-          stop("we do not yet support host and path matchers",
-            "\n see https://github.com/ropensci/vcr/issues/70",
-            call. = FALSE)
-        }
-        self$match_requests_on <- match_requests_on
+      self$match_requests_on <- match_requests_on %||% vcr_c$match_requests_on
+      mro <- c("method", "uri", "headers", "host", "path", "body")
+      if (!any(self$match_requests_on %in% mro)) {
+        stop("1 or more 'match_requests_on' values (",
+             paste0(self$match_requests_on, collapse = ", "),
+             ") is not in the allowed set: ",
+             paste0(mro, collapse = ", "), call. = FALSE)
+      }
+      # we don't yet support the following matchers: host, path
+      if (any(self$match_requests_on %in% c("host", "path"))) {
+        stop("we do not yet support host and path matchers",
+          "\n see https://github.com/ropensci/vcr/issues/70",
+          call. = FALSE)
       }
       if (!missing(re_record_interval))
         self$re_record_interval <- re_record_interval

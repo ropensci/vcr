@@ -130,11 +130,10 @@
 #' }
 
 use_cassette <- function(name, ..., record = "once",
-  match_requests_on = c("method", "uri"),
-  update_content_length_header = FALSE,
-  allow_playback_repeats = FALSE,
-  serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
+  match_requests_on = NULL, update_content_length_header = FALSE,
+  allow_playback_repeats = FALSE, serialize_with = NULL,
+  persist_with = "FileSystem", preserve_exact_body_bytes = FALSE,
+  re_record_interval = NULL,
   clean_outdated_http_interactions = FALSE) {
 
   cassette <- insert_cassette(

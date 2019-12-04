@@ -95,7 +95,7 @@ is_path <- function(x) file.exists(path.expand(x))
 get_cassette_names <- function(){
   tmp <- vcr_files()
   if (length(tmp) == 0) return("")
-  sub("\\.yml", "", basename(tmp))
+  sub("\\.yml|\\.yaml|\\.json", "", basename(tmp))
 }
 
 vcr_files <- function() {
@@ -104,8 +104,7 @@ vcr_files <- function() {
     vapply(cassette_files(), basename, ""),
     invert = TRUE, value = TRUE))
   # include only certain file types
-  # only yaml supported right now
-  tokeep <- switch(vcr_c$serialize_with, yaml = "yml|yaml")
+  tokeep <- switch(vcr_c$serialize_with, yaml = "yml|yaml", json = "json")
   names(grep(tokeep, vapply(cassette_files(), basename, ""),
     value = TRUE))
 }
