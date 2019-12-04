@@ -103,7 +103,9 @@ RequestHandlerHttr <- R6::R6Class(
         self$request_original$url,
         body = get_httr_body(self$request_original),
         do.call(httr::config, self$request_original$options),
-        httr::add_headers(self$request_original$headers)
+        httr::add_headers(self$request_original$headers),
+        if (!is.null(self$request_original$output$path))
+          httr::write_disk(self$request_original$output$path, TRUE)
       )
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 

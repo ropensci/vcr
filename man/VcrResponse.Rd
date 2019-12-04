@@ -56,6 +56,14 @@ res$response_headers
    res$parse("UTF-8"), res$response_headers$status))
 x$content_encoding()
 x$is_compressed()
+
+# with disk
+url <- "https://google.com"
+(cli <- crul::HttpClient$new(url = url))
+f <- tempfile()
+(res <- cli$get("get", query = list(q = "stuff"), disk = f))
+(x <- VcrResponse$new(res$status_http(), res$response_headers,
+   f, res$response_headers$status, disk = TRUE))
 }
 }
 \keyword{internal}
@@ -75,6 +83,8 @@ x$is_compressed()
 \item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
 
 \item{\code{hash}}{a list}
+
+\item{\code{disk}}{a boolean}
 }
 \if{html}{\out{</div>}}
 }
@@ -104,7 +114,8 @@ Create a new VcrResponse object
   body,
   http_version,
   opts,
-  adapter_metadata = NULL
+  adapter_metadata = NULL,
+  disk
 )}\if{html}{\out{</div>}}
 }
 
@@ -122,6 +133,8 @@ Create a new VcrResponse object
 \item{\code{opts}}{a list}
 
 \item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
+
+\item{\code{disk}}{boolean, is body a file on disk}
 }
 \if{html}{\out{</div>}}
 }

@@ -50,6 +50,8 @@ x$from_hash(h)
 \item{\code{hash}}{(character) a named list - internal use}
 
 \item{\code{opts}}{(character) options - internal use}
+
+\item{\code{disk}}{(logical) xx}
 }
 \if{html}{\out{</div>}}
 }
@@ -67,7 +69,7 @@ x$from_hash(h)
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -83,6 +85,8 @@ post, put, patch or delete)}
 \item{\code{headers}}{(named list) request headers}
 
 \item{\code{opts}}{(named list) options internal use}
+
+\item{\code{disk}}{boolean, is body a file on disk}
 }
 \if{html}{\out{</div>}}
 }

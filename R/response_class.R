@@ -51,6 +51,14 @@
 #'    res$parse("UTF-8"), res$response_headers$status))
 #' x$content_encoding()
 #' x$is_compressed()
+#'
+#' # with disk
+#' url <- "https://google.com"
+#' (cli <- crul::HttpClient$new(url = url))
+#' f <- tempfile()
+#' (res <- cli$get("get", query = list(q = "stuff"), disk = f))
+#' (x <- VcrResponse$new(res$status_http(), res$response_headers,
+#'    f, res$response_headers$status, disk = TRUE))
 #' }
 VcrResponse <- R6::R6Class(
   "VcrResponse",
@@ -69,6 +77,8 @@ VcrResponse <- R6::R6Class(
     adapter_metadata = NULL,
     #' @field hash a list
     hash = NULL,
+    #' @field disk a boolean
+    disk = NULL,
 
     #' @description Create a new VcrResponse object
     #' @param status the status of the response
@@ -77,9 +87,10 @@ VcrResponse <- R6::R6Class(
     #' @param http_version the HTTP version
     #' @param opts a list
     #' @param adapter_metadata Additional metadata used by a specific VCR adapter
+    #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
     initialize = function(status, headers, body, http_version, opts,
-      adapter_metadata = NULL) {
+      adapter_metadata = NULL, disk) {
       if (!missing(status)) self$status <- status
       if (!missing(headers)) self$headers <- headers
       if (!missing(body)) {
@@ -93,6 +104,7 @@ VcrResponse <- R6::R6Class(
       }
       if (!missing(opts)) self$opts <- opts
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
+      if (!missing(disk)) self$disk <- disk
     },
 
     #' @description Create a hash
@@ -104,7 +116,8 @@ VcrResponse <- R6::R6Class(
         body         =
           serializable_body(self$body,
             self$opts$preserve_exact_body_bytes %||% FALSE),
-        http_version = self$http_version
+        http_version = self$http_version,
+        disk = self$disk
       )
       return(self$hash)
     },
@@ -118,7 +131,8 @@ VcrResponse <- R6::R6Class(
         hash[["headers"]],
         body_from(hash[["body"]]),
         hash[["http_version"]],
-        hash[["adapater_metadata"]]
+        hash[["adapater_metadata"]],
+        hash[["disk"]]
       )
     },
 

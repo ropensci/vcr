@@ -60,6 +60,8 @@ test_that("httr use_cassette works", {
   expect_is(x, "response")
   expect_equal(x$status_code, 404)
   expect_equal(x$url, "https://httpbin.org/404")
+  expect_output(print(x), "Not Found")
+  expect_output(print(x), "HTML PUBLIC")
 
   # response body
   str <- yaml::yaml.load_file(out$manfile)$http_interactions

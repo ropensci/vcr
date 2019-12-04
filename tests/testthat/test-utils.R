@@ -59,7 +59,8 @@ test_that("body_from", {
 
   cc <- body_from(base64enc::base64encode(charToRaw("foo")))
   expect_is(cc, "character")
-  expect_true(is_base64(cc))
+  expect_true(is_base64(base64enc::base64encode(charToRaw("foo"))))
+  expect_false(is_base64(cc))
 
   dd <- body_from(charToRaw("foo"))
   expect_is(dd, "raw")

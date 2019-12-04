@@ -90,7 +90,8 @@ RequestHandler <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url$url %||% request$url,
-          pluck_body(request), request$headers)
+          pluck_body(request), request$headers,
+          disk = !is.null(request$output$path))
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },

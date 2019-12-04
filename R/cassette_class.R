@@ -294,6 +294,10 @@ Cassette <- R6::R6Class(
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
 
+      # check on write to disk path
+      if (!is.null(vcr_c$write_disk_path))
+        dir.create(vcr_c$write_disk_path, showWarnings = FALSE, recursive = TRUE)
+
       # put cassette in vcr_cassettes environment
       include_cassette(self)
     },
@@ -530,11 +534,11 @@ Cassette <- R6::R6Class(
         tmp <- compact(
           lapply(self$deserialized_hash()[["http_interactions"]], function(z) {
           response <- VcrResponse$new(
-            # z$response$status$status_code,
             z$response$status,
             z$response$headers,
             z$response$body$string,
-            self$cassette_opts
+            self$cassette_opts,
+            disk = z$response$body$file
           )
           if (self$update_content_length_header)
             response$update_content_length_header()
@@ -542,7 +546,8 @@ Cassette <- R6::R6Class(
             request = Request$new(z$request$method,
                                   z$request$uri,
                                   z$request$body$string,
-                                  z$request$headers),
+                                  z$request$headers,
+                                  disk = z$response$body$file),
             response = response
           )
           hash <- zz$to_hash()
@@ -633,33 +638,66 @@ Cassette <- R6::R6Class(
     #' @param x an crul or httr response object, with the request at `$request`
     #' @return an object of class [HTTPInteraction]
     make_http_interaction = function(x) {
+      # content must be raw or character
+      assert(unclass(x$content), c('raw', 'character'))
+      new_file_path <- ""
+      is_disk <- FALSE
+      if (is.character(x$content)) {
+        if (file.exists(x$content)) {
+          is_disk <- TRUE
+          write_disk_path <- vcr_c$write_disk_path
+          write_disk_path <- normalizePath(write_disk_path, mustWork=TRUE)
+          new_file_path <- file.path(write_disk_path, basename(x$content))
+        }
+      }
+
       request <- Request$new(
-        x$request$method,
-        x$url,
-        if (inherits(x, "response")) {
-          # bd <- x$request$options$postfields
+        method = x$request$method,
+        uri = x$url,
+        body = if (inherits(x, "response")) { # httr
           bd <- get_httr_body(x$request)
           if (inherits(bd, "raw")) rawToChar(bd) else bd
-        } else {
+        } else { # crul
           x$request$fields
         },
-        if (inherits(x, "response")) {
+        headers = if (inherits(x, "response")) {
           as.list(x$request$headers)
         } else {
           x$request_headers
         },
-        self$cassette_opts
+        opts = self$cassette_opts,
+        disk = is_disk
       )
+      
       response <- VcrResponse$new(
-        if (inherits(x, "response")) {
+        status = if (inherits(x, "response")) {
           c(list(status_code = x$status_code), httr::http_status(x))
         } else unclass(x$status_http()),
-        if (inherits(x, "response")) x$headers else x$response_headers,
-        if (can_rawToChar(x$content)) rawToChar(x$content) else x$content,
-        if (inherits(x, "response")) {
+        headers = if (inherits(x, "response")) x$headers else x$response_headers,
+        body = if (is.raw(x$content)) {
+          if (can_rawToChar(x$content)) rawToChar(x$content) else x$content
+        } else {
+          stopifnot(inherits(unclass(x$content), "character"))
+          if (file.exists(x$content)) {
+            # calculate new file path in fixtures/
+            # copy file into fixtures/file_cache/
+            # don't move b/c don't want to screw up first use before using 
+            # cached request
+            file.copy(x$content, write_disk_path,
+              overwrite = TRUE, recursive = TRUE) # copy the file
+            new_file_path
+            # raw(0)
+          } else {
+            x$content
+          }
+        },
+        http_version = if (inherits(x, "response")) {
           x$all_headers[[1]]$version
-        } else x$response_headers$status,
-        self$cassette_opts
+        } else {
+          x$response_headers$status
+        },
+        opts = self$cassette_opts,
+        disk = is_disk
       )
       if (self$update_content_length_header)
         response$update_content_length_header()

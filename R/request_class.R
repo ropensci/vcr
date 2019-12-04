@@ -45,6 +45,8 @@ Request <- R6::R6Class(
     hash = NULL,
     #' @field opts (character) options - internal use
     opts = NULL,
+    #' @field disk (logical) xx
+    disk = NULL,
 
     #' @description Create a new `Request` object
     #' @param method (character) the HTTP method (i.e. head, options, get,
@@ -53,8 +55,9 @@ Request <- R6::R6Class(
     #' @param body (character) request body
     #' @param headers (named list) request headers
     #' @param opts (named list) options internal use
+    #' @param disk boolean, is body a file on disk
     #' @return A new `Request` object
-    initialize = function(method, uri, body, headers, opts) {
+    initialize = function(method, uri, body, headers, opts, disk) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
         if (inherits(body, "list")) {
@@ -65,9 +68,9 @@ Request <- R6::R6Class(
       if (!missing(headers)) self$headers <- headers
       if (!missing(uri)) {
         if (!self$skip_port_stripping) {
-           self$uri <- private$without_standard_port(uri)
+          self$uri <- private$without_standard_port(uri)
         } else {
-           self$uri <- uri
+          self$uri <- uri
         }
         # parse URI to get host and path
         tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
@@ -75,21 +78,23 @@ Request <- R6::R6Class(
         self$host <- tmp$domain
         self$path <- tmp$path
         self$query <- tmp$parameter
-      }
-      if (!missing(opts)) self$opts <- opts
-    },
+       }
+       if (!missing(opts)) self$opts <- opts
+       if (!missing(disk)) self$disk <- disk
+     },
 
     #' @description Convert the request to a list
     #' @return list
     to_hash = function() {
-      self$hash <- list(
-        method  = self$method,
-        uri     = self$uri,
-        body    = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
-        headers = self$headers
-      )
-      return(self$hash)
-    },
+       self$hash <- list(
+         method  = self$method,
+         uri     = self$uri,
+         body    = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
+         headers = self$headers,
+         disk = self$disk
+       )
+       return(self$hash)
+     },
 
     #' @description Convert the request to a list
     #' @param hash a list
@@ -99,7 +104,8 @@ Request <- R6::R6Class(
         method  = hash[['method']],
         uri     = hash[['uri']],
         body    = body_from(hash[['body']]),
-        headers = hash[['headers']]
+        headers = hash[['headers']],
+        disk = hash[['disk']]
       )
     }
   ),
@@ -131,11 +137,21 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
 
 body_from <- function(x) {
   if (is.null(x)) x <- ""
-  if (is.null(attr(x, "base64"))) return(try_encode_string(x, try_encoding(x)))
-  if (attr(x, "base64") || is_base64(x)) {
-    rawToChar(base64enc::base64decode(x))
+  if (
+    (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
+  ) {
+    b64dec <- base64enc::base64decode(x)
+    b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
+    if (inherits(b64dec_r2c, "error")) {
+      # probably is binary (e.g., pdf), so can't be converted to char.
+      b64dec
+    } else {
+      # probably was originally character data, so
+      #  can convert to character from binary
+      b64dec_r2c
+    }
   } else {
-    try_encode_string(x, try_encoding(x))
+    try_encode_string(x, Encoding_safe(x))
   }
 }
 
@@ -147,6 +163,11 @@ try_encoding <- function(x) {
 
 is_base64 <- function(x) {
   grepl(b64_pattern, x)
+}
+
+Encoding_safe <- function(x) {
+  tryenc <- tryCatch(Encoding(x), error = function(e) e)
+  if (inherits(tryenc, "error")) "unknown" else tryenc
 }
 
 b64_pattern <- "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"

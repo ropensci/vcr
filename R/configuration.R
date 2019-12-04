@@ -45,6 +45,13 @@
 #' to the real data. Before record replacement happens in internal
 #' function `write_interactions()`, while before playback replacement
 #' happens in internal function `YAML$deserialize_path()`
+#' 
+#' @param write_disk_path (character) path to write files to 
+#' for any requests that write responses to disk. by default this parameter
+#' is `NULL`. For testing a package, you'll probably want this path to 
+#' be in your `tests/` directory, perhaps next to your cassettes
+#' directory, e.g., where your cassettes are in `tests/fixtures`, your
+#' files from requests that write to disk are in `tests/files`
 #'
 #' @examples
 #' vcr_configure(dir = tempdir())
@@ -91,7 +98,8 @@ vcr_configure <- function(
   linked_context = NULL,
   log = FALSE,
   log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
-  filter_sensitive_data = NULL
+  filter_sensitive_data = NULL,
+  write_disk_path = NULL
   ) {
 
   assert(log, "logical")
@@ -156,6 +164,7 @@ VCRConfig <- R6::R6Class(
     log = NULL,
     log_opts = NULL,
     filter_sensitive_data = NULL,
+    write_disk_path = NULL,
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
@@ -167,6 +176,7 @@ VCRConfig <- R6::R6Class(
       cat(paste0("  Preserve Bytes?: ", self$preserve_exact_body_bytes), sep = "\n")
       logloc <- if (self$log) sprintf(" (%s)", self$log_opts$file) else ""
       cat(paste0("  Logging?: ", self$log, logloc), sep = "\n")
+      cat(paste0("  Write disk path: ", self$write_disk_path), sep = "\n")
       invisible(self)
     },
 
@@ -196,5 +206,6 @@ vcr_default_config_vars <- list(
   linked_context = NULL,
   log = FALSE,
   log_opts = list(file = "vcr.log", log_prefix = "Cassette"),
-  filter_sensitive_data = NULL
+  filter_sensitive_data = NULL,
+  write_disk_path = NULL
 )
