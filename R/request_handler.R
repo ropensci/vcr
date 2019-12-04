@@ -99,7 +99,6 @@ RequestHandler <- R6::R6Class(
     #' @description Handle the request (`request` given in `$initialize()`)
     #' @return handles a request, outcomes vary
     handle = function() {
-      scotts_env$request_from_Request <- self$request
       vcr_log_info(sprintf("Handling request: %s (disabled: %s)",
         private$request_summary(self$request),
         private$is_disabled()), vcr_c$log_opts$date)
@@ -165,7 +164,6 @@ RequestHandler <- R6::R6Class(
     # get stubbed response
     get_stubbed_response = function(request) {
       self$stubbed_response <- http_interactions()$response_for(request)
-      scotts_env$stubbed_response_from_request_handler <- self$stubbed_response
       self$stubbed_response
     },
 

@@ -116,7 +116,6 @@ HTTPInteractionList <- R6::R6Class(
        self$parent_list <- parent_list
        self$used_interactions <- used_interactions
 
-       scotts_env$in_httpinteractionlist <- interactions
        interaction_summaries <- vapply(interactions, function(x) {
          sprintf("%s => %s",
                  request_summary(Request$new()$from_hash(x$request)),

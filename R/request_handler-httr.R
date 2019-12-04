@@ -89,12 +89,10 @@ RequestHandlerHttr <- R6::R6Class(
 
     on_stubbed_by_vcr_request = function(request) {
       # return stubbed vcr response - no real response to do
-      # scotts_env$get_stubbed_response_goes_to_serialize_to_httr <- super$get_stubbed_response(request)
       serialize_to_httr(request, super$get_stubbed_response(request))
     },
 
     on_recordable_request = function(request) {
-      scotts_env$self <- self
       # do real request - then stub response - then return stubbed vcr response
       # - this may need to be called from webmockr httradapter?
 
@@ -110,9 +108,6 @@ RequestHandlerHttr <- R6::R6Class(
           httr::write_disk(self$request_original$output$path, TRUE)
       )
       response <- webmockr::build_httr_response(self$request_original, tmp2)
-      scotts_env$within_request_handler_httr_request_original <- self$request_original
-      scotts_env$within_request_handler_httr_tmp2 <- tmp2
-      scotts_env$within_request_handler_httr_response <- response
 
       # make vcr response | then record interaction
       self$vcr_response <- private$response_for(response)

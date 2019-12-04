@@ -650,7 +650,6 @@ Cassette <- R6::R6Class(
           new_file_path <- file.path(write_disk_path, basename(x$content))
         }
       }
-      scotts_env$new_file_path <- new_file_path
 
       request <- Request$new(
         method = x$request$method,

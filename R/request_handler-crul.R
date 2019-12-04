@@ -67,7 +67,6 @@ RequestHandlerCrul <- R6::R6Class(
   private = list(
     # make a `vcr` response
     response_for = function(x) {
-      scotts_env$input_to_vcr_response <- x
       VcrResponse$new(x$status_http(), x$response_headers,
         x$parse("UTF-8"), x$response_headers$status,
         super$cassette$cassette_opts)
@@ -107,7 +106,6 @@ RequestHandlerCrul <- R6::R6Class(
 
       # make vcr response | then record interaction
       self$vcr_response <- private$response_for(response)
-      scotts_env$response_before_recording <- response
       cas <- tryCatch(current_cassette(), error = function(e) e)
       if (inherits(cas, "error")) stop("no cassette in use")
       cas$record_http_interaction(response)

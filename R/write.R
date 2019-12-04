@@ -1,5 +1,3 @@
-scotts_env <- new.env()
-
 write_cassette <- function(cassette, result){
   file <- get_cassette_data_paths()[cassette$name][[1]]
   write_yaml(result, file)
@@ -41,7 +39,6 @@ dedup_keys <- function(x) {
 # param bytes: logical, whether to preserve exact bytes or not
 # NOTE: changed fxn to write body separately to avoid yaml crashes
 write_interactions <- function(x, file, bytes) {
-  scotts_env$x <- x
   # check types
   assert(x, c("list", "HTTPInteraction"))
   assert(file, "character")
@@ -66,7 +63,6 @@ write_interactions <- function(x, file, bytes) {
   #   body_nchar <- nchar(body)
   # }
   if (length(body) == 0 || !nzchar(body)) body <- ""
-  scotts_env$body <- body
 
   # cat(sprintf("x$response$body: %s, %s", class(x$response$body), length(x$response$body)), sep = "\n")
   tmp <- yaml::as.yaml(
