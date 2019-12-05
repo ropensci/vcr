@@ -21,8 +21,9 @@ YAML <- R6::R6Class("YAML",
 
     #' @description Create a new YAML object
     #' @param file_extension (character) A file extension
-    #' @param path (character) full path to the yaml file
-    #' @param string (character) path string
+    #' @param path (character) path to the cassette, excluding the cassette
+    #' directory and the file extension. only use if not passing a string
+    #' @param string (character) path string. only use if not passing a path
     #' @return A new `YAML` object
     initialize = function(file_extension = ".yml", path = NULL, string = NULL) {
       self$file_extension <- file_extension
@@ -50,7 +51,7 @@ YAML <- R6::R6Class("YAML",
     #' @param string (character) the YAML string
     #' @return (list) the deserialized object, an R list
     deserialize_string = function(string = NULL) {
-      if (is.null(self$string)) str <- string else self$string
+      str <- if (is.null(self$string)) string else self$string
       if (is.null(str)) stop("Must pass a string", call. = FALSE)
       yaml::yaml.load(str)
     },

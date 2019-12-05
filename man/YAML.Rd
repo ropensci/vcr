@@ -52,9 +52,10 @@ Create a new YAML object
 \describe{
 \item{\code{file_extension}}{(character) A file extension}
 
-\item{\code{path}}{(character) full path to the yaml file}
+\item{\code{path}}{(character) path to the cassette, excluding the cassette
+directory and the file extension. only use if not passing a string}
 
-\item{\code{string}}{(character) path string}
+\item{\code{string}}{(character) path string. only use if not passing a path}
 }
 \if{html}{\out{</div>}}
 }
