@@ -10,6 +10,13 @@ test_that("use_cassette works as expected", {
     res <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
   })
 
+  # test `print.cassette` method
+  expect_output(print(aa), "<vcr - Cassette>")
+  expect_output(print(aa), "Record method: once")
+  expect_output(print(aa), "Serialize with: yaml")
+  expect_output(print(aa), "Persist with: FileSystem")
+  expect_output(print(aa), "preserve_exact_body_bytes")
+
   expect_is(aa, "Cassette")
   expect_is(aa$name, "character")
   expect_equal(aa$name, "testing1")
