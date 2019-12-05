@@ -16,6 +16,10 @@
 #' HTTP status code and response body are included in the
 #' response summary. The response body is truncated to a
 #' max of 80 characters
+#' 
+#' In `response_summary()` we use [gsub] with `useBytes=TRUE` to avoid
+#' problems soemtimes seen with multibyte strings - this shouldn't affect
+#' your data/etc. as this is only for printing a summary of the response
 #' @examples
 #' # request
 #' url <- "https://httpbin.org"
@@ -81,6 +85,8 @@ response_summary <- function(response) {
   resp <- if (is.raw(response$body)) "<raw>" else response$body
 
   # construct summary
+  # note: gsub changes a string to UTF-8, useBytes seems to avoid doing this
+  #  & avoids multibyte string errors
   sprintf("%s %s", ss %||% '???',
-    substring(gsub("\n", " ", resp), 1, 80))
+    substring(gsub("\n", " ", resp, useBytes = TRUE), 1, 80))
 }
