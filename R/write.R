@@ -1,8 +1,3 @@
-write_cassette <- function(cassette, result){
-  file <- get_cassette_data_paths()[cassette$name][[1]]
-  write_yaml(result, file)
-}
-
 write_yaml <- function(x, file, bytes) {
   write_header(file)
   lapply(x, write_interactions, file = file, bytes = bytes)
@@ -119,23 +114,8 @@ pkg_versions <- function() {
   )
 }
 
-forwrite <- function(name, x, file){
-  cf(name, file)
-  for (i in seq_along(x)) {
-    cf(sprintf("  %s: '%s'", names(x[i]), x[[i]]), file)
-  }
-}
-
-cf <- function(x, f){
-  cat(paste0("   ", x), sep = "\n", file = f, append = TRUE)
-}
-
 get_body <- function(x) {
   if (is.null(x)) '' else x
-}
-
-strex <- function(string, pattern) {
-  regmatches(string, regexpr(pattern, string))
 }
 
 encoding_guess <- function(x, bytes = FALSE, force_guess = FALSE) {
