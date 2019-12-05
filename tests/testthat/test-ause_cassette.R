@@ -1,3 +1,6 @@
+tmpdir <- tempdir()
+vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
+
 context("use_cassette: works as expected")
 test_that("use_cassette works as expected", {
   skip_on_cran()
@@ -87,7 +90,8 @@ test_that("use_cassette fails well", {
 })
 
 # cleanup
-unlink(list.files(pattern = "newbar", full.names = TRUE))
+unlink(list.files(vcr_c$dir, pattern = "newbar", full.names = TRUE))
+unlink(file.path(vcr_c$dir, "foobar333.yml"))
 unlink("foobar333.yml")
 unlink("testing1.yml")
 

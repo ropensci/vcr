@@ -58,7 +58,7 @@ through}
 
 \item{ignore_localhost}{(logical) Default: \code{FALSE}}
 
-\item{ignore_request}{List of requests to ignore}
+\item{ignore_request}{List of requests to ignore. NOT USED RIGHT NOW, sorry}
 
 \item{uri_parser}{the uri parser, default: \code{\link[crul:url_parse]{crul::url_parse()}}}
 
@@ -117,6 +117,7 @@ vcr_configure(dir = tempdir())
 vcr_configure(dir = tempdir(), record = "all")
 vcr_configuration()
 vcr_config_defaults()
+vcr_configure(tempdir(), ignore_hosts = "google.com")
 vcr_configure(tempdir(), ignore_localhost = TRUE)
 
 # logging

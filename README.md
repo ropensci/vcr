@@ -38,7 +38,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.140   0.021   0.646
+#>   0.160   0.023   0.640
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -51,7 +51,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.079   0.003   0.085
+#>   0.076   0.005   0.083
 ```
 
 
@@ -235,7 +235,6 @@ We set the following defaults:
 * `persist_with` = `"FileSystem"`
 * `ignore_hosts` = `NULL`
 * `ignore_localhost` = `FALSE`
-* `ignore_request` = `NULL`
 * `uri_parser` = `crul::url_parse`
 * `preserve_exact_body_bytes` = `FALSE`
 * `turned_off` = `FALSE`
@@ -324,12 +323,6 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [zbank][]
 * [rplos][]
 * [ritis][]
-
-## TODO
-
-* Logging
-* Provide toggling a re-record interval so you can say e.g., after 6 hrs, re-record a real response, updating the cached response
-* ...
 
 ## Meta
 

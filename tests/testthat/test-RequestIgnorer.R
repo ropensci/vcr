@@ -59,7 +59,7 @@ test_that("RequestIgnorer usage: w/ real requests", {
   x$ignore_localhost()
   expect_error(z$handle(), "Failed to connect")
 
-  # ignore by callback - FIXME: don't think we're supporting a user defined fxn
+  # ignore by callback - FIXME: we're not yet supporting a user defined fxn
   # req <- list(url = list(url = "http://127.0.0.1"),
   #   method = "get", options = list(httpget = TRUE, useragent = "crul/0.5.4"))
   # req$url$handle <- curl::new_handle()
@@ -72,24 +72,53 @@ test_that("RequestIgnorer usage: w/ real requests", {
 
 test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   skip_on_cran()
+  
   library(crul)
 
-  # ignore by host
+  # IGNORE BY HOST
   tmpdir <- tempdir()
   vcr_configure(dir = tmpdir)
   # vcr_configuration()
-  use_cassette("test_ignore_host", {
+  cas_not_ignored <- use_cassette("test_ignore_host", {
     HttpClient$new("https://google.com")$get()
     HttpClient$new("https://scottchamberlain.info")$get()
   })
 
   vcr_configure(dir = tmpdir, ignore_hosts = "google.com")
   # vcr_configuration()
-  use_cassette("test_ignore_host_ignored", {
+  cas_ignored <- use_cassette("test_ignore_host_ignored", {
     HttpClient$new("https://google.com")$get()
     HttpClient$new("https://scottchamberlain.info")$get()
   })
+
+  read_cas <- function(x) yaml::yaml.load_file(x)$http_interactions
+  expect_equal(length(read_cas(cas_not_ignored$file())), 2)
+  expect_equal(length(read_cas(cas_ignored$file())), 1)
+
+
+  # IGNORE LOCALHOST
+  # Start python simple server on cli: python3 -m http.server
+  skip_if_localhost_8000_gone()
+  tmpdir <- tempdir()
+  vcr_configure(dir = tmpdir)
+  cas_local_not_ignored <- use_cassette("test_ignore_localhost", {
+    HttpClient$new("https://scottchamberlain.info")$get()
+    HttpClient$new("http://127.0.0.1:8000")$get()
+  })
+
+  vcr_configure(dir = tmpdir, ignore_localhost = TRUE)
+  # vcr_configuration()
+  cas_local_ignored <- use_cassette("test_ignore_localhost_ignored", {
+    HttpClient$new("https://scottchamberlain.info")$get()
+    HttpClient$new("http://127.0.0.1:8000")$get()
+  })
+
+  expect_equal(length(read_cas(cas_local_not_ignored$file())), 2)
+  expect_equal(length(read_cas(cas_local_ignored$file())), 1)
 })
+
+# reset
+vcr_configure(dir = tmpdir)
 
 test_that("RequestIgnorer fails well", {
   expect_error(RequestIgnorer$new(a = 5), "unused argument")

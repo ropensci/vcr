@@ -114,7 +114,7 @@ ignore any named host
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-no return; defines request ignorer hook
+no return; adds host to ignore
 }
 }
 \if{html}{\out{<hr>}}

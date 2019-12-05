@@ -13,7 +13,7 @@
 #' google.com. These hosts are ignored and real HTTP requests allowed to go
 #' through
 #' @param ignore_localhost (logical) Default: `FALSE`
-#' @param ignore_request List of requests to ignore
+#' @param ignore_request List of requests to ignore. NOT USED RIGHT NOW, sorry
 #' @param uri_parser the uri parser, default: [crul::url_parse()]
 #' @param preserve_exact_body_bytes (logical) preserve exact body bytes for
 #' @param turned_off (logical) VCR is turned on by default. Default:
@@ -58,6 +58,7 @@
 #' vcr_configure(dir = tempdir(), record = "all")
 #' vcr_configuration()
 #' vcr_config_defaults()
+#' vcr_configure(tempdir(), ignore_hosts = "google.com")
 #' vcr_configure(tempdir(), ignore_localhost = TRUE)
 #'
 #' # logging
@@ -118,11 +119,20 @@ vcr_configure <- function(
     }
   }
 
+  assert(ignore_hosts, "character")
+  assert(ignore_localhost, "logical")
+  if (!is.null(ignore_hosts) || ignore_localhost) {
+    x <- RequestIgnorer$new()
+    if (!is.null(ignore_hosts)) x$ignore_hosts(hosts = ignore_hosts)
+    if (ignore_localhost) x$ignore_localhost()
+  }
+
   # add missing log options
   log_opts <- merge_list(log_opts,
     list(file = "vcr.log", log_prefix = "Cassette", date = TRUE))
 
   calls <- as.list(environment(), all.names = TRUE)
+  calls$x <- NULL
   for (i in seq_along(calls)) {
     vcr_c[[names(calls)[i]]] <- calls[[i]]
   }
@@ -172,10 +182,13 @@ VCRConfig <- R6::R6Class(
       cat(paste0("  Record: ", self$record), sep = "\n")
       cat(paste0("  URI Parser: ", self$uri_parser), sep = "\n")
       cat(paste0("  Match Requests on: ",
-                 paste0(self$match_requests_on, collapse = ", ")), sep = "\n")
-      cat(paste0("  Preserve Bytes?: ", self$preserve_exact_body_bytes), sep = "\n")
+        pastec(self$match_requests_on)), sep = "\n")
+      cat(paste0("  Preserve Bytes?: ",
+        self$preserve_exact_body_bytes), sep = "\n")
       logloc <- if (self$log) sprintf(" (%s)", self$log_opts$file) else ""
       cat(paste0("  Logging?: ", self$log, logloc), sep = "\n")
+      cat(paste0("  ignored hosts: ", pastec(self$ignore_hosts)), sep = "\n")
+      cat(paste0("  ignore localhost?: ", self$ignore_localhost), sep = "\n")
       cat(paste0("  Write disk path: ", self$write_disk_path), sep = "\n")
       invisible(self)
     },
@@ -185,6 +198,8 @@ VCRConfig <- R6::R6Class(
     }
   )
 )
+
+pastec <- function(x) paste0(x, collapse = ", ")
 
 vcr_default_config_vars <- list(
   dir = ".",

@@ -131,7 +131,7 @@ RequestHandler <- R6::R6Class(
       if (private$externally_stubbed()) {
         # FIXME: not quite sure what externally_stubbed is meant for
         #   perhaps we can get rid of it here if only applicable in Ruby
-        # cat("request_type: is ignored", "\n")
+        # cat("request_type: is externally stubbed", "\n")
         "externally_stubbed"
       } else if (private$should_ignore(self$request)) {
         # cat("request_type: is ignored", "\n")

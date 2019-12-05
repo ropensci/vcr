@@ -1,4 +1,4 @@
-context("YAML")
+context("serializers: YAML")
 
 test_that("YAML basic stuff", {
   expect_is(YAML, "R6ClassGenerator")

@@ -23,3 +23,10 @@ make_pkg <- function(dir) {
   dir.create(file.path(dir, "R"), recursive = TRUE)
   cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
 }
+
+has_port <- function(port) crul::ok(paste0('http://localhost:', port))
+
+skip_if_localhost_8000_gone <- function() {
+  if (has_port(8000)) return()
+  testthat::skip("port 8000 not available")
+}
