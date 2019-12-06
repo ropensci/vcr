@@ -60,7 +60,13 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   # errors on print.R6
   expect_error(print(x), "multibyte")
   # errors if using the old code in response_summary w/o useBytes=TRUE
-  expect_error(substring(gsub("\n", " ", google_response), 1, 80))
+  rv <- as.numeric(sub("\\.", "", paste0(R.version$major, R.version$minor)))
+  if (rv <= 353) {
+    expect_is(substring(gsub("\n", " ", google_response), 1, 80), 
+      "character")
+  } else {
+    expect_error(substring(gsub("\n", " ", google_response), 1, 80))
+  }
 
   # response_summary doesn't error now with useBytes=TRUE
   aa <- response_summary(x)
