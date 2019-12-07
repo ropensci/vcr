@@ -645,6 +645,9 @@ Cassette <- R6::R6Class(
         if (file.exists(x$content)) {
           is_disk <- TRUE
           write_disk_path <- vcr_c$write_disk_path
+          if (is.null(write_disk_path))
+            stop("if writing to disk, write_disk_path must be given; ",
+              "see ?vcr_configure")
           write_disk_path <- normalizePath(write_disk_path, mustWork=TRUE)
           new_file_path <- file.path(write_disk_path, basename(x$content))
         }
