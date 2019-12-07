@@ -1,3 +1,26 @@
+vcr 0.4.0
+=========
+
+### NEW FEATURES
+
+* vcr now can handle requests from both `crul` and `httr` that write to disk; `crul` supports this with the `disk` parameter and `httr` through the `write_disk()` function; see the section on mocking writing to disk in the http testing book https://books.ropensci.org/http-testing/vcr-usage.html#vcr-disk; also see `?mocking-disk-writing` within `webmockr` for mocking writing to disk without using `vcr`, and the section in the http testing book https://books.ropensci.org/http-testing/webmockr-stubs.html#webmockr-disk  (#81) (#125)
+* vcr gains ability to completely turn off vcr for your test suite even if you're using `vcr::use_cassette`/`vcr::insert_cassette`; this is helpful if you want to run tests both with and without vcr; workflows are supported both for setting env vars on the command line as well as working interactively within R; see `?lightswitch` for details (#37)
+* ignoring requests now works, with some caveats: it only works for now with `crul` (not `httr`), and works for ignoring specifc hosts, and localhosts, but not for custom callbacks. See the vcr configuration vignette https://docs.ropensci.org/vcr/articles/configuration.html#ignoring-some-requests for discussion and examples (#127)
+
+### MINOR IMPROVEMENTS
+
+* documentation for R6 classes should be much better now; roxygen2 now officially supports R6 classes (#123)
+* added minimal cassette name checking; no spaces allowed and no file extensions allowed; more checks may be added later (#106)
+
+### BUG FIXES
+
+* fix handling of http response bodies that are images; we were converting raw class bodies into character, which was causing images to error, which can't be converted to character; we now check if a body can be converted to character or not and if not, leave it as is (#112) (#119) thanks @Rekyt for the report
+* simple auth with package `httr` wasn't working (`htrr::authenticate()`); we were not capturing use of `authenticate`; it's been solved now (#113)
+* we were not properly capturing request bodies with package `httr` requests; that's been fixed (#122)
+* httr adapter was failing on second run, reading a cached response. fixed now (#124)
+* `response_summary()` fixed; this function prints a summary of the http response body; sometimes this function would fail with multibyte string error because the `gsub` call would change the encoding, then would fail on the `substring` call; we now set `useBytes = TRUE` in the `gsub` call to avoid this problem (#126)
+
+
 vcr 0.3.0
 =========
 

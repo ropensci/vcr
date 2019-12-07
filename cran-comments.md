@@ -10,13 +10,12 @@
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 21 reverse dependencies.
+* I have run R CMD check on the 25 reverse dependencies.
 (Summary at <https://github.com/ropensci/vcr/blob/master/revdep/README.md>).
-One problem was found in package rromeo, but is unrelated to changes in this package.
 
 --------
 
-This version contains some new funtionality for re-recording cassettes, fixes some http links, and other fixes.
+This version adds some major features including supporting http requests that write to disk, ignoring certain requests, and turning vcr completely off during a test suite run.
 
 Thanks very much,
 Scott Chamberlain
