@@ -94,7 +94,7 @@ that prefix, then the rest of the message
 }}
 
 \item{filter_sensitive_data}{(list) named list of values to replace. format
-is: \code{list(thing_to_replace = thing_to_replace_it_with)}. We replace all
+is: \code{list(thing_to_replace_it_with = thing_to_replace)}. We replace all
 instances of \code{thing_to_replace} with \code{thing_to_replace_it_with}. Before
 recording (writing to a cassette) we do the replacement and then when
 reading from the cassette we do the reverse replacement to get back
