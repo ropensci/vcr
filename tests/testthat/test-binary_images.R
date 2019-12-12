@@ -16,7 +16,6 @@ test_that("use_cassette w/ with images: httr", {
 
   expect_is(out, "response")
   expect_is(out$content, "raw")
-  expect_is(httr::content(out), "array")
 
   # works on 2nd request - using cassette
   use_cassette("test_write_httr_binary_img", {
@@ -24,9 +23,12 @@ test_that("use_cassette w/ with images: httr", {
   })
   expect_is(out2, "response")
   expect_is(out2$content, "raw")
-  expect_is(httr::content(out2), "array")
 
   expect_identical(httr::content(out), httr::content(out2))
+  
+  skip_if_not_installed("jpeg")
+  expect_is(httr::content(out), "array")
+  expect_is(httr::content(out2), "array")
 })
 
 context("handling images: crul")
