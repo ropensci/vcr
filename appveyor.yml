@@ -9,6 +9,7 @@ install:
 
 build_script:
   - travis-tool.sh install_deps
+  - travis-tool.sh r_install jpeg
 
 test_script:
   - travis-tool.sh run_tests

@@ -17,6 +17,7 @@ matrix:
 
 r_binary_packages:
   - covr
+  - jpeg
 
 warnings_are_errors: false
 

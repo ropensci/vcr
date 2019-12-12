@@ -5,6 +5,8 @@ vcr_configure(dir = tmpdir)
 
 test_that("use_cassette w/ with images: httr", {
   skip_on_cran()
+  skip_if_not_installed("jpeg")
+  
   library(httr)
 
   url <- "https://httpbin.org/image/jpeg"
@@ -26,7 +28,6 @@ test_that("use_cassette w/ with images: httr", {
 
   expect_identical(httr::content(out), httr::content(out2))
   
-  skip_if_not_installed("jpeg")
   expect_is(httr::content(out), "array")
   expect_is(httr::content(out2), "array")
 })
