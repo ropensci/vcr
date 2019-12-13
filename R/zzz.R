@@ -62,6 +62,10 @@ can_rawToChar <- function(x) {
   z <- tryCatch(rawToChar(x), error = function(e) e)
   return(!inherits(z, "error"))
 }
+can_charToRaw <- function(x) {
+  z <- tryCatch(charToRaw(x), error = function(e) e)
+  return(!inherits(z, "error"))
+}
 
 stp <- function(x) stop(x, call. = FALSE)
 check_cassette_name <- function(x) {
