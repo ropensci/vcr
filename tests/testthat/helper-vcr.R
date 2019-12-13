@@ -30,3 +30,8 @@ skip_if_localhost_8000_gone <- function() {
   if (has_port(8000)) return()
   testthat::skip("port 8000 not available")
 }
+
+recorded_at <- function(x) {
+  yaml::yaml.load_file(x$manfile)$http_interactions[[1]]$recorded_at
+}
+

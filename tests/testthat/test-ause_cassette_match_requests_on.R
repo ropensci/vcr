@@ -1,7 +1,3 @@
-recorded_at <- function(x) {
-  yaml::yaml.load_file(x$manfile)$http_interactions[[1]]$recorded_at
-}
-
 test_that("use_cassette: match_requests_on - body works w/ crul", {
   skip_on_cran()
 
