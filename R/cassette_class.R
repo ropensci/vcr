@@ -1,5 +1,5 @@
 #' @title Cassette handler
-#' @description Main R6 class that is called from the main user facing 
+#' @description Main R6 class that is called from the main user facing
 #' function [use_cassette()]
 #' @export
 #' @keywords internal
@@ -657,7 +657,7 @@ Cassette <- R6::R6Class(
         method = x$request$method,
         uri = x$url,
         body = if (inherits(x, "response")) { # httr
-          bd <- get_httr_body(x$request)
+          bd <- webmockr::pluck_body(x$request)
           if (inherits(bd, "raw")) rawToChar(bd) else bd
         } else { # crul
           webmockr::pluck_body(x$request)
@@ -670,7 +670,7 @@ Cassette <- R6::R6Class(
         opts = self$cassette_opts,
         disk = is_disk
       )
-      
+
       response <- VcrResponse$new(
         status = if (inherits(x, "response")) {
           c(list(status_code = x$status_code), httr::http_status(x))
@@ -683,7 +683,7 @@ Cassette <- R6::R6Class(
           if (file.exists(x$content)) {
             # calculate new file path in fixtures/
             # copy file into fixtures/file_cache/
-            # don't move b/c don't want to screw up first use before using 
+            # don't move b/c don't want to screw up first use before using
             # cached request
             file.copy(x$content, write_disk_path,
               overwrite = TRUE, recursive = TRUE) # copy the file
