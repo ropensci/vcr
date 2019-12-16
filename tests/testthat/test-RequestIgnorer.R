@@ -50,8 +50,12 @@ test_that("RequestIgnorer usage: w/ real requests", {
   z$handle()
 
   # ignore localhost
-  req <- list(url = list(url = "http://127.0.0.1"),
-    method = "get", options = list(httpget = TRUE, useragent = "crul/0.5.4"))
+  req <- list(
+    url = list(url = "http://127.0.0.1"),
+    headers = NULL,
+    method = "get", 
+    options = list(httpget = TRUE, useragent = "crul/0.5.4")
+  )
   req$url$handle <- curl::new_handle()
   z <- RequestHandlerCrul$new(req)
   expect_error(z$handle(), "vcr does not know how to handle")
