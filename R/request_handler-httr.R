@@ -45,7 +45,7 @@ RequestHandlerHttr <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url,
-          pluck_body(request), request$headers)
+          webmockr::pluck_body(request), request$headers)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     }
