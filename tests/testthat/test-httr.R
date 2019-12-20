@@ -221,8 +221,8 @@ test_that("httr POST requests works", {
     m <- POST("https://httpbin.org/post", body = NULL)
   })
   expect_false(out5$is_empty())
-  expect_is(z, "response")
-  expect_equal(z$status_code, 200)
+  expect_is(m, "response")
+  expect_equal(m$status_code, 200)
   str <- yaml::yaml.load_file(out5$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
