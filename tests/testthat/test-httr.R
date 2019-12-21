@@ -214,7 +214,21 @@ test_that("httr POST requests works", {
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_match(strj$data, "bibentry\\(")
+  expect_match(strj$files$y, "bibentry\\(") # files not empty
+  expect_false(nzchar(strj$data)) # data empty
+  
+  ## upload_file not in a list
+  # out6 <- use_cassette("httr_post_upload_file_no_list", {
+  #   d <- POST("https://httpbin.org/post",
+  #     body = httr::upload_file(system.file("CITATION")))
+  # })
+  # expect_false(out6$is_empty())
+  # expect_is(d, "response")
+  # expect_equal(d$status_code, 200)
+  # str <- yaml::yaml.load_file(out6$manfile)$http_interactions
+  # strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  # expect_equal(length(strj$files), 0) # files empty
+  # expect_match(strj$data, "bibentry\\(") # data not empty
 
   # body type: NULL
   out5 <- use_cassette("httr_post_null", {
