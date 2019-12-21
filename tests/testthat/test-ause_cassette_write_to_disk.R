@@ -14,7 +14,7 @@ test_that("fails well if write_disk_path not set", {
     use_cassette("write_disk_path_not_set_crul", {
       out <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
     }),
-    "invalid 'path' argument"
+    "write_disk_path must be given"
   )
 
   library(httr)
