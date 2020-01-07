@@ -329,6 +329,11 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [rplos][]
 * [ritis][]
 
+## Contributors
+
+* [Scott Chamberlain](https://github.com/sckott)
+* [Aaron Wolen](https://github.com/aaronwolen)
+
 ## Meta
 
 * Please [report any issues or bugs](https://github.com/ropensci/vcr/issues)
