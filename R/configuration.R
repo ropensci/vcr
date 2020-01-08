@@ -103,6 +103,9 @@ vcr_configure <- function(
   write_disk_path = NULL
   ) {
 
+  record <- check_record_mode(record)
+  match_requests_on <- check_request_matchers(match_requests_on)
+
   assert(log, "logical")
   assert(log_opts, "list")
   assert(filter_sensitive_data, "list")
