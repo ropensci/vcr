@@ -74,3 +74,30 @@ check_cassette_name <- function(x) {
   if (grepl("\\.yml$|\\.yaml$", x))
     stp("don't include a cassette path extension")
 }
+
+check_request_matchers <- function(x) {
+  mro <- c("method", "uri", "headers", "host", "path", "body")
+  if (!any(x %in% mro)) {
+    stop("1 or more 'match_requests_on' values (",
+         paste0(x, collapse = ", "),
+         ") is not in the allowed set: ",
+         paste0(mro, collapse = ", "), call. = FALSE)
+  }
+  # we don't yet support the following matchers: host, path
+  if (any(x %in% c("host", "path"))) {
+    stop("we do not yet support host and path matchers",
+      "\n see https://github.com/ropensci/vcr/issues/70",
+      call. = FALSE)
+  }
+  x
+}
+
+check_record_mode <- function(x) {
+  stopifnot(length(x) == 1, is.character(x))
+  recmodes <- c("none", "once", "new_episodes", "all")
+  if (!x %in% recmodes) {
+    stop("'record' value of '", x, "' is not in the allowed set: ",
+         paste0(recmodes, collapse = ", "), call. = FALSE)
+  }
+  x
+}
