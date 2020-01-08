@@ -21,8 +21,15 @@ test_that("Cassette fails well with invalid record mode", {
   )
 })
 
+test_that("Cassette fails well with invalid request matchers", {
+  expect_error(
+    Cassette$new(name = "stuff2", match_requests_on = "x"),
+    "1 or more 'match_requests_on' values \\(x\\) is not in the allowed set"
+  )
+})
+
 test_that("Cassette fails well with unsupported matcher", {
-  expect_error(Cassette$new("foobar89", match_requests_on = "host"), 
+  expect_error(Cassette$new("foobar89", match_requests_on = "host"),
     "we do not yet support host and path matchers")
 })
 
