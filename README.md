@@ -38,7 +38,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.160   0.023   0.640
+#>   0.132   0.017   0.617
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -51,7 +51,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.076   0.005   0.083
+#>   0.073   0.004   0.076
 ```
 
 
@@ -323,6 +323,11 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * [zbank][]
 * [rplos][]
 * [ritis][]
+
+## Contributors
+
+* [Scott Chamberlain](https://github.com/sckott)
+* [Aaron Wolen](https://github.com/aaronwolen)
 
 ## Meta
 
