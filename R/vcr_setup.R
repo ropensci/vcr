@@ -4,7 +4,7 @@ test_check(\"%s\")\n",
   config = "library(\"vcr\")
 invisible(vcr::vcr_configure(
   dir = \"../fixtures\"
-))\n",
+))\nvcr::check_cassette_names()\n",
   example_test = "# EXAMPLE VCR USAGE: RUN AND DELETE ME
 content(\"vcr text example\")
 

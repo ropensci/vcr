@@ -19,6 +19,19 @@ by default)}
 Check cassette names
 }
 \details{
-This function is meant to be run in a \code{helper-pkgname.R} file
-inside the \code{tests/testthat} directory.
+This function is meant to be run during your tests, from a
+\code{helper-pkgname.R} file inside the \code{tests/testthat} directory.
 }
+\section{Cassette names}{
+
+\itemize{
+\item Should be meaningful so that it's obvious to you what test/function
+they relate to.
+\item Should not be duplicated. Duplicated cassette names would lead to
+a test using the wrong cassette.
+\item Should not have spaces. Spaces can lead to problems in using file paths.
+\item Should not include a file extension. vcr handles file extensions for
+the user.
+}
+}
+
