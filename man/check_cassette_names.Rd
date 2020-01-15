@@ -26,7 +26,9 @@ This function is meant to be run during your tests, from a
 
 \itemize{
 \item Should be meaningful so that it's obvious to you what test/function
-they relate to.
+they relate to. Meaningful names are important so that you can quickly
+determine to what test file or test block a cassette belongs. Note that
+vcr cannot check that your cassette names are meaningful.
 \item Should not be duplicated. Duplicated cassette names would lead to
 a test using the wrong cassette.
 \item Should not have spaces. Spaces can lead to problems in using file paths.
