@@ -38,7 +38,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.132   0.017   0.617
+#>   0.137   0.019   0.597
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -51,7 +51,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.073   0.004   0.076
+#>   0.069   0.003   0.072
 ```
 
 
@@ -94,7 +94,8 @@ All components of both the request and response are preserved, so that the HTTP 
 ## Terminology
 
 * _vcr_: the name comes from the idea that we want to record something and play it back later, like a vcr
-* _cassette_: A _thing_ to record HTTP interactions to. Right now the only option is file system, but in the future could be other things, e.g. a key-value store like Redis
+* _cassette_: A _thing_ to record HTTP interactions to. Right now the only option is the file system (writing to files), but in the future could be other things, e.g. a key-value store like Redis
+* _fixture_: A fixture is something used to consistently test a piece of software. In this case, a casette (just defined above) is a fixture - it is by the R package unit tests. If you use our setup function `vcr_setup()` the default directory to hold cassettes is called `fixtures/` as a sort of signal as to what the folder contains
 * Persisters: defines how to save requests - currently only option is the file system
 * Serializers: defines how to serialize the HTTP response - currently only option is YAML; other options in the future could include e.g. JSON
 * _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
