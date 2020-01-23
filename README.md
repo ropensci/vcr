@@ -37,8 +37,8 @@ system.time(
     cli$get("get")
   })
 )
-#>    user  system elapsed 
-#>   0.137   0.019   0.597
+#>    user  system elapsed
+#>   0.155   0.035   0.979
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -50,8 +50,8 @@ system.time(
     cli$get("get")
   })
 )
-#>    user  system elapsed 
-#>   0.069   0.003   0.072
+#>    user  system elapsed
+#>   0.082   0.005   0.094
 ```
 
 
@@ -95,9 +95,10 @@ All components of both the request and response are preserved, so that the HTTP 
 
 * _vcr_: the name comes from the idea that we want to record something and play it back later, like a vcr
 * _cassette_: A _thing_ to record HTTP interactions to. Right now the only option is the file system (writing to files), but in the future could be other things, e.g. a key-value store like Redis
-* _fixture_: A fixture is something used to consistently test a piece of software. In this case, a casette (just defined above) is a fixture - it is by the R package unit tests. If you use our setup function `vcr_setup()` the default directory to hold cassettes is called `fixtures/` as a sort of signal as to what the folder contains
-* Persisters: defines how to save requests - currently only option is the file system
-* Serializers: defines how to serialize the HTTP response - currently only option is YAML; other options in the future could include e.g. JSON
+* _fixture_: A fixture is something used to consistently test a piece of software. In this case, a cassette (just defined above) is a fixture - used in unit tests. If you use our setup function `vcr_setup()` the default directory created to hold cassettes is called `fixtures/` as a signal as to what the folder contains.
+* Persisters: how to save requests - currently only option is the file system
+* _serialize_: translating data into a format that can be stored; here, translate HTTP request and response data into a representation on disk to read back later
+* Serializers: how to serialize the HTTP response - currently only option is YAML; other options in the future could include e.g. JSON
 * _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
 * _eject cassette_: eject the cassette (no longer recording to that cassette)
 * _replay_: refers to using a cached result of an http request that was recorded earlier
@@ -148,7 +149,7 @@ You're looking for [webmockr][]. `webmockr` only matches requests based on crite
 
 ### vcr for tests
 
-* Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add `webmockr`, but it's not explicitly needed as `vcr` will pull it in) 
+* Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add `webmockr`, but it's not explicitly needed as `vcr` will pull it in)
 * Make a file in your `tests/testthat/` directory called `helper-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
 
 ```r
@@ -171,7 +172,7 @@ vcr::use_cassette("rl_citation", {
 })
 ```
 
-OR put the `vcr::use_cassette()` block on the inside, but put `testthat` expectations outside of 
+OR put the `vcr::use_cassette()` block on the inside, but put `testthat` expectations outside of
 the `vcr::use_cassette()` block:
 
 ```r
@@ -189,8 +190,8 @@ test_that("my test", {
 
 Don't wrap the `use_cassette()` block inside your  `test_that()` block with `testthat` expectations inside the `use_cassette()` block, as you'll only get the line number that the `use_cassette()` block starts on on failures.
 
-* When running tests or checks of your whole package, note that some users have found different results with 
-`devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know 
+* When running tests or checks of your whole package, note that some users have found different results with
+`devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know
 if you run into this problem.
 
 ### vcr in your R project
@@ -343,7 +344,7 @@ By participating in this project you agree to abide by its terms.
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
 [rgbif]: https://github.com/ropensci/rgbif
-[rdatacite]: https://github.com/ropensci/rdatacite  
+[rdatacite]: https://github.com/ropensci/rdatacite
 [rredlist]: https://github.com/ropensci/rredlist
 [bold]: https://github.com/ropensci/bold
 [wikitaxa]: https://github.com/ropensci/wikitaxa
