@@ -3,6 +3,8 @@ vcr
 
 
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 [![cran checks](https://cranchecks.info/badges/worst/vcr)](https://cranchecks.info/pkgs/vcr)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Build Status](https://travis-ci.org/ropensci/vcr.svg)](https://travis-ci.org/ropensci/vcr)
@@ -11,7 +13,8 @@ vcr
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
-An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
+
+`vcr` helps you stub and replay your HTTP requests. The main use case is for unit tests for R packages. An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Docs
 
@@ -38,7 +41,7 @@ system.time(
   })
 )
 #>    user  system elapsed
-#>   0.155   0.035   0.979
+#>   0.163   0.022   0.639
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -51,7 +54,7 @@ system.time(
   })
 )
 #>    user  system elapsed
-#>   0.082   0.005   0.094
+#>   0.115   0.006   0.136
 ```
 
 
@@ -102,14 +105,6 @@ All components of both the request and response are preserved, so that the HTTP 
 * _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
 * _eject cassette_: eject the cassette (no longer recording to that cassette)
 * _replay_: refers to using a cached result of an http request that was recorded earlier
-
-## What does vcr do?
-
-The short version is: `vcr` helps you stub HTTP requests so you don't have to repeat HTTP requests.
-
-The main use case is for unit tests for R packages.
-
-`vcr` currently works with the `crul` and `httr` packages; support for `curl` is in the works.
 
 ### How it works in lots of detail
 
