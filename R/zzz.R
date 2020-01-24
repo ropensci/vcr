@@ -31,6 +31,7 @@ assert <- function(x, y) {
            paste0(y, collapse = ", "), call. = FALSE)
     }
   }
+  invisible(x)
 }
 
 merge_list <- function(x, y, ...) {
