@@ -32,3 +32,18 @@ test_that("config fails well with unsupported matcher", {
     "we do not yet support host and path matchers"
   )
 })
+
+test_that("vcr_configure() only affects settings passed as arguments", {
+  vcr_configure_reset()
+  vcr_configure(dir = "olddir", record = "none")
+  config1 <- vcr_c$clone()
+
+  vcr_configure(dir = "newdir")
+  config2 <- vcr_c$clone()
+
+  expect_equal(config1$dir, "olddir")
+  expect_equal(config2$dir, "newdir")
+
+  expect_equal(config1$record, "none")
+  expect_equal(config2$record, "none")
+})
