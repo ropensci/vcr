@@ -45,10 +45,10 @@
 #' to the real data. Before record replacement happens in internal
 #' function `write_interactions()`, while before playback replacement
 #' happens in internal function `YAML$deserialize_path()`
-#' 
-#' @param write_disk_path (character) path to write files to 
+#'
+#' @param write_disk_path (character) path to write files to
 #' for any requests that write responses to disk. by default this parameter
-#' is `NULL`. For testing a package, you'll probably want this path to 
+#' is `NULL`. For testing a package, you'll probably want this path to
 #' be in your `tests/` directory, perhaps next to your cassettes
 #' directory, e.g., where your cassettes are in `tests/fixtures`, your
 #' files from requests that write to disk are in `tests/files`
@@ -62,21 +62,21 @@
 #' vcr_configure(tempdir(), ignore_localhost = TRUE)
 #'
 #' # logging
-#' vcr_configure(tempdir(), log = TRUE, 
+#' vcr_configure(tempdir(), log = TRUE,
 #'   log_opts = list(file = file.path(tempdir(), "vcr.log")))
 #' vcr_configure(tempdir(), log = TRUE, log_opts = list(file = "console"))
 #' vcr_configure(tempdir(), log = TRUE,
 #'  log_opts = list(
-#'    file = file.path(tempdir(), "vcr.log"), 
+#'    file = file.path(tempdir(), "vcr.log"),
 #'    log_prefix = "foobar"
 #' ))
 #' vcr_configure(tempdir(), log = FALSE)
 #'
 #' # filter sensitive data
-#' vcr_configure(tempdir(), 
+#' vcr_configure(tempdir(),
 #'   filter_sensitive_data = list(foo = "<bar>")
 #' )
-#' vcr_configure(tempdir(), 
+#' vcr_configure(tempdir(),
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
 vcr_configure <- function(...) {
@@ -325,27 +325,3 @@ VCRConfig <- R6::R6Class(
 )
 
 pastec <- function(x) paste0(x, collapse = ", ")
-
-vcr_default_config_vars <- list(
-  dir = ".",
-  record = "once",
-  match_requests_on = c("method", "uri"),
-  allow_unused_http_interactions = TRUE,
-  serialize_with = "yaml",
-  persist_with = "FileSystem",
-  ignore_hosts = NULL,
-  ignore_localhost = FALSE,
-  ignore_request = NULL,
-  uri_parser = "crul::url_parse",
-  preserve_exact_body_bytes = FALSE,
-  turned_off = FALSE,
-  re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
-  allow_http_connections_when_no_cassette = FALSE,
-  cassettes = list(),
-  linked_context = NULL,
-  log = FALSE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette"),
-  filter_sensitive_data = NULL,
-  write_disk_path = NULL
-)
