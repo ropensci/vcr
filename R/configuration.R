@@ -84,11 +84,12 @@ vcr_configure <- function(...) {
 
   invalid <- !names(configs) %in% vcr_c$fields()
   if (any(invalid)) {
-    configs <- configs[!invalid]
     warning(
-      sprintf("Detected %i invalid configuration name(s):", sum(invalid)),
+      "The following configuration parameters are not valid:",
+      sprintf("\n  * %s", configs[invalid]),
       call. = FALSE
     )
+    configs <- configs[!invalid]
   }
 
   if (length(configs) == 0) return(vcr_c)
