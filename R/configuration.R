@@ -79,72 +79,38 @@
 #' vcr_configure(tempdir(), 
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
-vcr_configure <- function(
-  dir = ".",
-  record = "once",
-  match_requests_on = c("method", "uri"),
-  allow_unused_http_interactions = TRUE,
-  serialize_with = "yaml",
-  persist_with = "FileSystem",
-  ignore_hosts = NULL,
-  ignore_localhost = FALSE,
-  ignore_request = NULL,
-  uri_parser = "crul::url_parse",
-  preserve_exact_body_bytes = FALSE,
-  turned_off = FALSE,
-  re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
-  allow_http_connections_when_no_cassette = FALSE,
-  cassettes = list(),
-  linked_context = NULL,
-  log = FALSE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
-  filter_sensitive_data = NULL,
-  write_disk_path = NULL
-  ) {
+vcr_configure <- function(...) {
+  configs <- list(...)
 
-  record <- check_record_mode(record)
-  match_requests_on <- check_request_matchers(match_requests_on)
-
-  assert(log, "logical")
-  assert(log_opts, "list")
-  assert(filter_sensitive_data, "list")
-  if (length(log_opts) > 0) {
-    if ("file" %in% names(log_opts)) {
-      assert(log_opts$file, "character")
-      if (log) vcr_log_file(log_opts$file)
-    }
-    if ("log_prefix" %in% names(log_opts)) {
-      assert(log_opts$log_prefix, "character")
-    }
-    if ("date" %in% names(log_opts)) {
-      assert(log_opts$date, "logical")
-    }
+  invalid <- !names(configs) %in% vcr_c$fields()
+  if (any(invalid)) {
+    configs <- configs[!invalid]
+    warning(
+      sprintf("Detected %i invalid configuration name(s):", sum(invalid)),
+      call. = FALSE
+    )
   }
 
-  assert(ignore_hosts, "character")
-  assert(ignore_localhost, "logical")
+  if (length(configs) == 0) return(vcr_c)
+
+  # TODO: Is this still the right place to change these settings?
+  ignore_hosts <- configs$ignore_hosts
+  ignore_localhost <- configs$ignore_localhost %||% FALSE
   if (!is.null(ignore_hosts) || ignore_localhost) {
     x <- RequestIgnorer$new()
     if (!is.null(ignore_hosts)) x$ignore_hosts(hosts = ignore_hosts)
     if (ignore_localhost) x$ignore_localhost()
   }
 
-  # add missing log options
-  log_opts <- merge_list(log_opts,
-    list(file = "vcr.log", log_prefix = "Cassette", date = TRUE))
-
-  calls <- as.list(environment(), all.names = TRUE)
-  calls$x <- NULL
-  for (i in seq_along(calls)) {
-    vcr_c[[names(calls)[i]]] <- calls[[i]]
+  for (i in seq_along(configs)) {
+    vcr_c[[names(configs)[i]]] <- configs[[i]]
   }
   return(vcr_c)
 }
 
 #' @export
 #' @rdname vcr_configure
-vcr_configure_reset <- function() vcr_configure()
+vcr_configure_reset <- function() vcr_c$reset()
 
 #' @export
 #' @rdname vcr_configure
@@ -155,49 +121,205 @@ vcr_configuration <- function() vcr_c
 vcr_config_defaults <- function() vcr_c$defaults()
 
 VCRConfig <- R6::R6Class(
-  'VCRConfig',
+  "VCRConfig",
+
+  private = list(
+    .dir = NULL,
+    .record = NULL,
+    .match_requests_on = NULL,
+    .allow_unused_http_interactions = NULL,
+    .serialize_with = NULL,
+    .persist_with = NULL,
+    .ignore_hosts = NULL,
+    .ignore_localhost = NULL,
+    .ignore_request = NULL,
+    .uri_parser = NULL,
+    .preserve_exact_body_bytes = NULL,
+    .turned_off = NULL,
+    .re_record_interval = NULL,
+    .clean_outdated_http_interactions = NULL,
+    .allow_http_connections_when_no_cassette = NULL,
+    .cassettes = NULL,
+    .linked_context = NULL,
+    .log = NULL,
+    .log_opts = NULL,
+    .filter_sensitive_data = NULL,
+    .write_disk_path = NULL
+  ),
+
+  active = list(
+    dir = function(value) {
+      if (missing(value)) return(private$.dir)
+      private$.dir <- value
+    },
+    record = function(value) {
+      if (missing(value)) return(private$.record)
+      private$.record <- check_record_mode(value)
+    },
+    match_requests_on = function(value) {
+      if (missing(value)) return(private$.match_requests_on)
+      private$.match_requests_on <- check_request_matchers(value)
+    },
+    allow_unused_http_interactions = function(value) {
+      if (missing(value)) return(private$.allow_unused_http_interactions)
+      private$.allow_unused_http_interactions <- value
+    },
+    serialize_with = function(value) {
+      if (missing(value)) return(private$.serialize_with)
+      private$.serialize_with <- value
+    },
+    persist_with = function(value) {
+      if (missing(value)) return(private$.persist_with)
+      private$.persist_with <- value
+    },
+    ignore_hosts = function(value) {
+      if (missing(value)) return(private$.ignore_hosts)
+      private$.ignore_hosts <- assert(value, "character")
+    },
+    ignore_localhost = function(value) {
+      if (missing(value)) return(private$.ignore_localhost)
+      private$.ignore_localhost <- assert(value, "logical")
+    },
+    ignore_request = function(value) {
+      if (missing(value)) return(private$.ignore_request)
+      private$.ignore_request <- value
+    },
+    uri_parser = function(value) {
+      if (missing(value)) return(private$.uri_parser)
+      private$.uri_parser <- value
+    },
+    preserve_exact_body_bytes = function(value) {
+      if (missing(value)) return(private$.preserve_exact_body_bytes)
+      private$.preserve_exact_body_bytes <- value
+    },
+    turned_off = function(value) {
+      if (missing(value)) return(private$.turned_off)
+      private$.turned_off <- value
+    },
+    re_record_interval = function(value) {
+      if (missing(value)) return(private$.re_record_interval)
+      private$.re_record_interval <- value
+    },
+    clean_outdated_http_interactions = function(value) {
+      if (missing(value)) return(private$.clean_outdated_http_interactions)
+      private$.clean_outdated_http_interactions <- value
+    },
+    allow_http_connections_when_no_cassette = function(value) {
+      if (missing(value)) return(private$.allow_http_connections_when_no_cassette)
+      private$.allow_http_connections_when_no_cassette <- value
+    },
+    cassettes = function(value) {
+      if (missing(value)) return(private$.cassettes)
+      private$.cassettes <- value
+    },
+    linked_context = function(value) {
+      if (missing(value)) return(private$.linked_context)
+      private$.linked_context <- value
+    },
+    log = function(value) {
+      if (missing(value)) return(private$.log)
+      private$.log <- assert(value, "logical")
+    },
+    log_opts = function(value) {
+      if (missing(value)) return(private$.log_opts)
+      log_opts <- assert(value, "list")
+      if (length(log_opts) > 0) {
+        if ("file" %in% names(log_opts)) {
+          assert(log_opts$file, "character")
+          if (private$.log) vcr_log_file(log_opts$file)
+        }
+        if ("log_prefix" %in% names(log_opts)) {
+          assert(log_opts$log_prefix, "character")
+        }
+        if ("date" %in% names(log_opts)) {
+          assert(log_opts$date, "logical")
+        }
+      }
+      # add missing log options
+      log_opts <- merge_list(
+        log_opts,
+        list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
+      )
+      private$.log_opts <- log_opts
+    },
+    filter_sensitive_data = function(value) {
+      if (missing(value)) return(private$.filter_sensitive_data)
+      private$.filter_sensitive_data <- assert(value, "list")
+    },
+    write_disk_path = function(value) {
+      if (missing(value)) return(private$.write_disk_path)
+      private$.write_disk_path <- value
+    }
+  ),
+
   public = list(
-    dir = NULL,
-    record = NULL,
-    match_requests_on = NULL,
-    allow_unused_http_interactions = NULL,
-    serialize_with = NULL,
-    persist_with = NULL,
-    ignore_hosts = NULL,
-    ignore_localhost = NULL,
-    ignore_request = NULL,
-    uri_parser = NULL,
-    preserve_exact_body_bytes = NULL,
-    turned_off = NULL,
-    re_record_interval = NULL,
-    clean_outdated_http_interactions = NULL,
-    allow_http_connections_when_no_cassette = NULL,
-    cassettes = NULL,
-    linked_context = NULL,
-    log = NULL,
-    log_opts = NULL,
-    filter_sensitive_data = NULL,
-    write_disk_path = NULL,
+    initialize = function(
+      dir = ".",
+      record = "once",
+      match_requests_on = c("method", "uri"),
+      allow_unused_http_interactions = TRUE,
+      serialize_with = "yaml",
+      persist_with = "FileSystem",
+      ignore_hosts = NULL,
+      ignore_localhost = FALSE,
+      ignore_request = NULL,
+      uri_parser = "crul::url_parse",
+      preserve_exact_body_bytes = FALSE,
+      turned_off = FALSE,
+      re_record_interval = NULL,
+      clean_outdated_http_interactions = NULL,
+      allow_http_connections_when_no_cassette = FALSE,
+      cassettes = list(),
+      linked_context = NULL,
+      log = FALSE,
+      log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
+      filter_sensitive_data = NULL,
+      write_disk_path = NULL
+    ) {
+      private$.dir <- dir
+      private$.record <- record
+      private$.match_requests_on <- match_requests_on
+      private$.allow_unused_http_interactions <- allow_unused_http_interactions
+      private$.serialize_with <- serialize_with
+      private$.persist_with <- persist_with
+      private$.ignore_hosts <- ignore_hosts
+      private$.ignore_localhost <- ignore_localhost
+      private$.ignore_request <- ignore_request
+      private$.uri_parser <- uri_parser
+      private$.preserve_exact_body_bytes <- preserve_exact_body_bytes
+      private$.turned_off <- turned_off
+      private$.re_record_interval <- re_record_interval
+      private$.clean_outdated_http_interactions <- clean_outdated_http_interactions
+      private$.allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
+      private$.cassettes <- cassettes
+      private$.linked_context <- linked_context
+      private$.log <- log
+      private$.log_opts <- log_opts
+      private$.filter_sensitive_data <- filter_sensitive_data
+      private$.write_disk_path <- write_disk_path
+    },
+
+    # reset all settings to defaults
+    reset = function() self$initialize(),
+
+    # print out names of configurable settings
+    fields = function() sub("^\\.", "", names(private)),
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
-      cat(paste0("  Cassette Dir: ", self$dir), sep = "\n")
-      cat(paste0("  Record: ", self$record), sep = "\n")
-      cat(paste0("  URI Parser: ", self$uri_parser), sep = "\n")
+      cat(paste0("  Cassette Dir: ", private$.dir), sep = "\n")
+      cat(paste0("  Record: ", private$.record), sep = "\n")
+      cat(paste0("  URI Parser: ", private$.uri_parser), sep = "\n")
       cat(paste0("  Match Requests on: ",
-        pastec(self$match_requests_on)), sep = "\n")
+        pastec(private$.match_requests_on)), sep = "\n")
       cat(paste0("  Preserve Bytes?: ",
-        self$preserve_exact_body_bytes), sep = "\n")
-      logloc <- if (self$log) sprintf(" (%s)", self$log_opts$file) else ""
-      cat(paste0("  Logging?: ", self$log, logloc), sep = "\n")
-      cat(paste0("  ignored hosts: ", pastec(self$ignore_hosts)), sep = "\n")
-      cat(paste0("  ignore localhost?: ", self$ignore_localhost), sep = "\n")
-      cat(paste0("  Write disk path: ", self$write_disk_path), sep = "\n")
+        private$.preserve_exact_body_bytes), sep = "\n")
+      logloc <- if (private$.log) sprintf(" (%s)", private$.log_opts$file) else ""
+      cat(paste0("  Logging?: ", private$.log, logloc), sep = "\n")
+      cat(paste0("  ignored hosts: ", pastec(private$.ignore_hosts)), sep = "\n")
+      cat(paste0("  ignore localhost?: ", private$.ignore_localhost), sep = "\n")
+      cat(paste0("  Write disk path: ", private$.write_disk_path), sep = "\n")
       invisible(self)
-    },
-
-    defaults = function() {
-      vcr_default_config_vars
     }
   )
 )
