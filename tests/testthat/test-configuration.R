@@ -47,3 +47,11 @@ test_that("vcr_configure() only affects settings passed as arguments", {
   expect_equal(config1$record, "none")
   expect_equal(config2$record, "none")
 })
+
+test_that("warnings are thrown for invalid parameters", {
+  expect_warning(
+    vcr_configure(foo = "bar"),
+    "The following configuration parameters are not valid"
+  )
+})
+
