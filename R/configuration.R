@@ -80,31 +80,31 @@
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
 vcr_configure <- function(...) {
-  configs <- list(...)
+  params <- list(...)
 
-  invalid <- !names(configs) %in% vcr_c$fields()
+  invalid <- !names(params) %in% vcr_c$fields()
   if (any(invalid)) {
     warning(
       "The following configuration parameters are not valid:",
-      sprintf("\n  * %s", configs[invalid]),
+      sprintf("\n  * %s", params[invalid]),
       call. = FALSE
     )
-    configs <- configs[!invalid]
+    params <- params[!invalid]
   }
 
-  if (length(configs) == 0) return(vcr_c)
+  if (length(params) == 0) return(vcr_c)
 
   # TODO: Is this still the right place to change these settings?
-  ignore_hosts <- configs$ignore_hosts
-  ignore_localhost <- configs$ignore_localhost %||% FALSE
+  ignore_hosts <- params$ignore_hosts
+  ignore_localhost <- params$ignore_localhost %||% FALSE
   if (!is.null(ignore_hosts) || ignore_localhost) {
     x <- RequestIgnorer$new()
     if (!is.null(ignore_hosts)) x$ignore_hosts(hosts = ignore_hosts)
     if (ignore_localhost) x$ignore_localhost()
   }
 
-  for (i in seq_along(configs)) {
-    vcr_c[[names(configs)[i]]] <- configs[[i]]
+  for (i in seq_along(params)) {
+    vcr_c[[names(params)[i]]] <- params[[i]]
   }
   return(vcr_c)
 }
