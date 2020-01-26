@@ -118,7 +118,7 @@ vcr_configuration <- function() vcr_c
 
 #' @export
 #' @rdname vcr_configure
-vcr_config_defaults <- function() vcr_c$defaults()
+vcr_config_defaults <- function() VCRConfig$new()$as_list()
 
 VCRConfig <- R6::R6Class(
   "VCRConfig",
@@ -304,6 +304,11 @@ VCRConfig <- R6::R6Class(
 
     # print out names of configurable settings
     fields = function() sub("^\\.", "", names(private)),
+
+    # return current configuration as a list
+    as_list = function() {
+      setNames(mget(names(private), private), self$fields())
+    },
 
     print = function(...) {
       cat("<vcr configuration>", sep = "\n")
