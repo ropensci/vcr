@@ -6,7 +6,7 @@ teardown({
 })
 
 test_that("VCRConfig", {
-  expect_is(vcr::VCRConfig, "R6ClassGenerator")
+  expect_is(VCRConfig, "R6ClassGenerator")
   cl <- vcr_configuration()
   expect_is(cl,  "R6")
   expect_is(cl,  "VCRConfig")
