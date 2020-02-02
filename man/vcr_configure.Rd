@@ -7,29 +7,7 @@
 \alias{vcr_config_defaults}
 \title{Configuration}
 \usage{
-vcr_configure(
-  dir = ".",
-  record = "once",
-  match_requests_on = c("method", "uri"),
-  allow_unused_http_interactions = TRUE,
-  serialize_with = "yaml",
-  persist_with = "FileSystem",
-  ignore_hosts = NULL,
-  ignore_localhost = FALSE,
-  ignore_request = NULL,
-  uri_parser = "crul::url_parse",
-  preserve_exact_body_bytes = FALSE,
-  turned_off = FALSE,
-  re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
-  allow_http_connections_when_no_cassette = FALSE,
-  cassettes = list(),
-  linked_context = NULL,
-  log = FALSE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
-  filter_sensitive_data = NULL,
-  write_disk_path = NULL
-)
+vcr_configure(...)
 
 vcr_configure_reset()
 
@@ -38,104 +16,110 @@ vcr_configuration()
 vcr_config_defaults()
 }
 \arguments{
-\item{dir}{Cassette directory}
+\item{...}{configuration settings used to override defaults. See below for a
+complete list of valid arguments.
+\subsection{Casstte options}{
+\itemize{
+\item \code{dir} Cassette directory
+\item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
+See \link{recording}
+\item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
+See \link{request-matching} for details.
+\item \code{cassettes} (list) don't use
+\item \code{linked_context} (logical) linked context
+}
+}
 
-\item{record}{(character) One of 'all', 'none', 'new_episodes', or 'once'.
-See \link{recording}}
+\subsection{Recording details}{
+\itemize{
+\item \code{serialize_with}: (character) only option is "yaml"
+\item \code{persist_with} (character) only option is "FileSystem"
+\item \code{uri_parser} the uri parser, default: \code{\link[crul:url_parse]{crul::url_parse()}}
+\item \code{preserve_exact_body_bytes} (logical) preserve exact body bytes for
+\item \code{turned_off} (logical) VCR is turned on by default. Default:
+\code{FALSE}
+\item \code{re_record_interval} (numeric) When given, the cassette will be
+re-recorded at the given interval, in seconds.
+\item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
+be recorded back to file. Default: \code{FALSE}
+\item \code{write_disk_path} (character) path to write files to
+for any requests that write responses to disk. by default this parameter
+is \code{NULL}. For testing a package, you'll probably want this path to
+be in your \verb{tests/} directory, perhaps next to your cassettes
+directory, e.g., where your cassettes are in \code{tests/fixtures}, your
+files from requests that write to disk are in \code{tests/files}
+}
+}
 
-\item{match_requests_on}{vector of matchers. Default: (\code{method}, \code{uri})
-See \link{request-matching} for details.}
-
-\item{allow_unused_http_interactions}{(logical) Default: \code{TRUE}}
-
-\item{serialize_with}{(character) only option is "yaml"}
-
-\item{persist_with}{(character) only option is "FileSystem"}
-
-\item{ignore_hosts}{(character) Vector of hosts to ignore. e.g., localhost, or
-google.com. These hosts are ignored and real HTTP requests allowed to go
-through}
-
-\item{ignore_localhost}{(logical) Default: \code{FALSE}}
-
-\item{ignore_request}{List of requests to ignore. NOT USED RIGHT NOW, sorry}
-
-\item{uri_parser}{the uri parser, default: \code{\link[crul:url_parse]{crul::url_parse()}}}
-
-\item{preserve_exact_body_bytes}{(logical) preserve exact body bytes for}
-
-\item{turned_off}{(logical) VCR is turned on by default. Default:
-\code{FALSE}}
-
-\item{re_record_interval}{(numeric) When given, the cassette will be
-re-recorded at the given interval, in seconds.}
-
-\item{clean_outdated_http_interactions}{(logical) Should outdated interactions
-be recorded back to file. Default: \code{FALSE}}
-
-\item{allow_http_connections_when_no_cassette}{(logical) Determines how vcr
+\subsection{Connectivity}{
+\itemize{
+\item \code{allow_unused_http_interactions} (logical) Default: \code{TRUE}
+\item \code{allow_http_connections_when_no_cassette} (logical) Determines how vcr
 treats HTTP requests that are made when no vcr cassette is in use. When
 \code{TRUE}, requests made when there is no vcr cassette in use will be allowed.
 When \code{FALSE} (default), an \link{UnhandledHTTPRequestError} error will be raised
-for any HTTP request made when there is no cassette in use}
+for any HTTP request made when there is no cassette in use
+}
+}
 
-\item{cassettes}{(list) don't use}
-
-\item{linked_context}{(logical) linked context}
-
-\item{log}{(logical) should we log important vcr things? Default: \code{FALSE}}
-
-\item{log_opts}{(list) Additional logging options. Options include:
+\subsection{Logging}{
+\itemize{
+\item \code{log} (logical) should we log important vcr things? Default: \code{FALSE}
+\item \code{log_opts} (list) Additional logging options. Options include:
 \itemize{
 \item file: one of a file path to log to or "console"
 \item log_prefix: default: "Cassette". We insert the cassette name after
 that prefix, then the rest of the message
-\item more to come
-}}
+\item More to come...
+}
+}
+}
 
-\item{filter_sensitive_data}{(list) named list of values to replace. format
+\subsection{Filtering}{
+\itemize{
+\item \code{ignore_hosts} (character) Vector of hosts to ignore. e.g., localhost, or
+google.com. These hosts are ignored and real HTTP requests allowed to go
+through
+\item \code{ignore_localhost} (logical) Default: \code{FALSE}
+\item \code{ignore_request} List of requests to ignore. NOT USED RIGHT NOW, sorry
+\item \code{filter_sensitive_data} (list) named list of values to replace. format
 is: \code{list(thing_to_replace_it_with = thing_to_replace)}. We replace all
 instances of \code{thing_to_replace} with \code{thing_to_replace_it_with}. Before
 recording (writing to a cassette) we do the replacement and then when
 reading from the cassette we do the reverse replacement to get back
 to the real data. Before record replacement happens in internal
 function \code{write_interactions()}, while before playback replacement
-happens in internal function \code{YAML$deserialize_path()}}
-
-\item{write_disk_path}{(character) path to write files to
-for any requests that write responses to disk. by default this parameter
-is \code{NULL}. For testing a package, you'll probably want this path to
-be in your \verb{tests/} directory, perhaps next to your cassettes
-directory, e.g., where your cassettes are in \code{tests/fixtures}, your
-files from requests that write to disk are in \code{tests/files}}
+happens in internal function \code{YAML$deserialize_path()}
+}
+}}
 }
 \description{
-Configuration
+Optional settings to customize vcr's default behavior.
 }
 \examples{
 vcr_configure(dir = tempdir())
 vcr_configure(dir = tempdir(), record = "all")
 vcr_configuration()
 vcr_config_defaults()
-vcr_configure(tempdir(), ignore_hosts = "google.com")
-vcr_configure(tempdir(), ignore_localhost = TRUE)
+vcr_configure(dir = tempdir(), ignore_hosts = "google.com")
+vcr_configure(dir = tempdir(), ignore_localhost = TRUE)
 
 # logging
-vcr_configure(tempdir(), log = TRUE, 
+vcr_configure(dir = tempdir(), log = TRUE,
   log_opts = list(file = file.path(tempdir(), "vcr.log")))
-vcr_configure(tempdir(), log = TRUE, log_opts = list(file = "console"))
-vcr_configure(tempdir(), log = TRUE,
+vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = "console"))
+vcr_configure(dir = tempdir(), log = TRUE,
  log_opts = list(
-   file = file.path(tempdir(), "vcr.log"), 
+   file = file.path(tempdir(), "vcr.log"),
    log_prefix = "foobar"
 ))
-vcr_configure(tempdir(), log = FALSE)
+vcr_configure(dir = tempdir(), log = FALSE)
 
 # filter sensitive data
-vcr_configure(tempdir(), 
+vcr_configure(dir = tempdir(),
   filter_sensitive_data = list(foo = "<bar>")
 )
-vcr_configure(tempdir(), 
+vcr_configure(dir = tempdir(),
   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 )
 }

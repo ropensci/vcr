@@ -28,7 +28,7 @@ vcr log file setup
 # user workflow
 vcr_configuration()
 logfile <- file.path(tempdir(), "vcr.log")
-vcr_configure(tempdir(), log = TRUE, log_opts = list(file = logfile))
+vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = logfile))
 
 readLines(logfile) # empty
 
