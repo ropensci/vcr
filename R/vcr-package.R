@@ -31,6 +31,7 @@
 #' See [request-matching] for help on the many request matching options.
 #'
 #' @importFrom R6 R6Class
+#' @importFrom utils getParseData
 #' @importFrom yaml yaml.load yaml.load_file as.yaml
 #' @importFrom lazyeval lazy_dots lazy_eval
 #' @importFrom base64enc base64decode base64encode
