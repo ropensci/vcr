@@ -74,27 +74,29 @@
 #' vcr_configure(dir = tempdir(), record = "all")
 #' vcr_configuration()
 #' vcr_config_defaults()
-#' vcr_configure(tempdir(), ignore_hosts = "google.com")
-#' vcr_configure(tempdir(), ignore_localhost = TRUE)
+#' vcr_configure(dir = tempdir(), ignore_hosts = "google.com")
+#' vcr_configure(dir = tempdir(), ignore_localhost = TRUE)
 #'
 #' # logging
-#' vcr_configure(tempdir(), log = TRUE,
+#' vcr_configure(dir = tempdir(), log = TRUE,
 #'   log_opts = list(file = file.path(tempdir(), "vcr.log")))
-#' vcr_configure(tempdir(), log = TRUE, log_opts = list(file = "console"))
-#' vcr_configure(tempdir(), log = TRUE,
+#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = "console"))
+#' vcr_configure(dir = tempdir(), log = TRUE,
 #'  log_opts = list(
 #'    file = file.path(tempdir(), "vcr.log"),
 #'    log_prefix = "foobar"
 #' ))
-#' vcr_configure(tempdir(), log = FALSE)
+#' vcr_configure(dir = tempdir(), log = FALSE)
 #'
 #' # filter sensitive data
-#' vcr_configure(tempdir(),
+#' vcr_configure(dir = tempdir(),
 #'   filter_sensitive_data = list(foo = "<bar>")
 #' )
-#' vcr_configure(tempdir(),
+#' vcr_configure(dir = tempdir(),
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
+#' @export
+
 vcr_configure <- function(...) {
   params <- list(...)
 
