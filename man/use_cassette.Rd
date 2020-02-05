@@ -32,7 +32,7 @@ a code block use instead \code{\link[=insert_cassette]{insert_cassette()}}}
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
 \verb{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
-"path", "headers" and "body"}
+"path", "headers", "body" and "query"}
 
 \item{update_content_length_header}{(logical) Whether or
 not to overwrite the \code{Content-Length} header of the responses to
