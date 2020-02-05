@@ -5,6 +5,8 @@
 #' @param ... configuration settings used to override defaults. See below for a
 #'   complete list of valid arguments.
 #'
+#' @section Configurable settings:
+#'
 #' ## Casstte options
 #'
 #' - `dir` Cassette directory
@@ -15,7 +17,7 @@
 #' - `cassettes` (list) don't use
 #' - `linked_context` (logical) linked context
 #'
-#' ## Recording details
+#' ## Recordings
 #'
 #' - `serialize_with`: (character) only option is "yaml"
 #' - `persist_with` (character) only option is "FileSystem"

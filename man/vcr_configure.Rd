@@ -17,7 +17,13 @@ vcr_config_defaults()
 }
 \arguments{
 \item{...}{configuration settings used to override defaults. See below for a
-complete list of valid arguments.
+complete list of valid arguments.}
+}
+\description{
+Optional settings to customize vcr's default behavior.
+}
+\section{Configurable settings}{
+
 \subsection{Casstte options}{
 \itemize{
 \item \code{dir} Cassette directory
@@ -30,7 +36,7 @@ See \link{request-matching} for details.
 }
 }
 
-\subsection{Recording details}{
+\subsection{Recordings}{
 \itemize{
 \item \code{serialize_with}: (character) only option is "yaml"
 \item \code{persist_with} (character) only option is "FileSystem"
@@ -91,11 +97,9 @@ to the real data. Before record replacement happens in internal
 function \code{write_interactions()}, while before playback replacement
 happens in internal function \code{YAML$deserialize_path()}
 }
-}}
 }
-\description{
-Optional settings to customize vcr's default behavior.
 }
+
 \examples{
 vcr_configure(dir = tempdir())
 vcr_configure(dir = tempdir(), record = "all")
