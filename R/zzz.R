@@ -77,7 +77,7 @@ check_cassette_name <- function(x) {
 }
 
 check_request_matchers <- function(x) {
-  mro <- c("method", "uri", "headers", "host", "path", "body")
+  mro <- c("method", "uri", "headers", "host", "path", "body", "query")
   if (!all(x %in% mro)) {
     stop("1 or more 'match_requests_on' values (",
          paste0(x, collapse = ", "),

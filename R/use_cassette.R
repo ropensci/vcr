@@ -11,7 +11,7 @@
 #' @param match_requests_on List of request matchers
 #' to use to determine what recorded HTTP interaction to replay. Defaults to
 #' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
-#' "path", "headers" and "body"
+#' "path", "headers", "body" and "query"
 #' @param update_content_length_header (logical) Whether or
 #' not to overwrite the `Content-Length` header of the responses to
 #' match the length of the response body. Default: `FALSE`
