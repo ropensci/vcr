@@ -53,7 +53,7 @@ test_that("RequestIgnorer usage: w/ real requests", {
   req <- list(
     url = list(url = "http://127.0.0.1"),
     headers = NULL,
-    method = "get", 
+    method = "get",
     options = list(httpget = TRUE, useragent = "crul/0.5.4")
   )
   req$url$handle <- curl::new_handle()
@@ -76,7 +76,16 @@ test_that("RequestIgnorer usage: w/ real requests", {
 
 test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   skip_on_cran()
-  
+
+  on.exit({
+    files <- c(
+      "test_ignore_host.yml",
+      "test_ignore_host_ignored.yml",
+      "test_ignore_localhost_ignored.yml",
+      "test_ignore_localhost.yml")
+    unlink(file.path(vcr_configuration()$dir, files))
+  })
+
   library(crul)
 
   # IGNORE BY HOST
