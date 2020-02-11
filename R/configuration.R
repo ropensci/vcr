@@ -288,7 +288,7 @@ VCRConfig <- R6::R6Class(
       preserve_exact_body_bytes = FALSE,
       turned_off = FALSE,
       re_record_interval = NULL,
-      clean_outdated_http_interactions = NULL,
+      clean_outdated_http_interactions = FALSE,
       allow_http_connections_when_no_cassette = FALSE,
       cassettes = list(),
       linked_context = NULL,
