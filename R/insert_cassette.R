@@ -24,12 +24,15 @@ vcr__env <- new.env()
 #' # cleanup
 #' unlink(file.path(tempdir(), "leo5.yml"))
 #' }
-insert_cassette <- function(name, record="once",
+insert_cassette <- function(name,
+  record = "once",
   match_requests_on = c('method', 'uri'),
-  update_content_length_header=FALSE,
-  allow_playback_repeats=FALSE, serialize_with="yaml",
-  persist_with="FileSystem",
-  preserve_exact_body_bytes=FALSE, re_record_interval = NULL,
+  update_content_length_header = FALSE,
+  allow_playback_repeats = FALSE,
+  serialize_with = "yaml",
+  persist_with = "FileSystem",
+  preserve_exact_body_bytes = FALSE,
+  re_record_interval = NULL,
   clean_outdated_http_interactions = FALSE) {
 
   check_cassette_name(name)
@@ -49,18 +52,22 @@ insert_cassette <- function(name, record="once",
     vcr__env$current_cassette <- name
 
     # make cassette
-    tmp <- Cassette$new(
-      name = name, record = record, match_requests_on = match_requests_on,
-      re_record_interval = re_record_interval, 
+    tmp <- Cassette$new(name,
+      record = record,
+      match_requests_on = match_requests_on,
+      re_record_interval = re_record_interval,
       clean_outdated_http_interactions = clean_outdated_http_interactions,
-      tag = NULL, tags = NULL,
+      tag = NULL,
+      tags = NULL,
       update_content_length_header = update_content_length_header,
       decode_compressed_response = NULL,
       allow_playback_repeats = allow_playback_repeats,
       allow_unused_http_interactions = NULL,
       exclusive = NULL,
-      serialize_with = serialize_with, persist_with = persist_with,
-      preserve_exact_body_bytes = preserve_exact_body_bytes)
+      serialize_with = serialize_with,
+      persist_with = persist_with,
+      preserve_exact_body_bytes = preserve_exact_body_bytes
+    )
     return(tmp)
   } else if (!light_switch$ignore_cassettes) {
     message <- "vcr is turned off.  You must turn it on before you can insert a cassette.

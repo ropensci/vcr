@@ -129,22 +129,28 @@
 #' two; res2
 #' }
 
-use_cassette <- function(name, ..., record = "once",
+use_cassette <- function(name, ...,
+  record = "once",
   match_requests_on = c("method", "uri"),
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
-  serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
+  serialize_with = "yaml",
+  persist_with = "FileSystem",
+  preserve_exact_body_bytes = FALSE,
+  re_record_interval = NULL,
   clean_outdated_http_interactions = FALSE) {
 
-  cassette <- insert_cassette(
-    name, record = record, match_requests_on = match_requests_on,
+  cassette <- insert_cassette(name,
+    record = record,
+    match_requests_on = match_requests_on,
+    re_record_interval = re_record_interval,
+    clean_outdated_http_interactions = clean_outdated_http_interactions
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
-    serialize_with = serialize_with, persist_with = persist_with,
+    serialize_with = serialize_with,
+    persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
-    re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions)
+  )
   if (is.null(cassette)) {
     force(...)
     return(NULL)
