@@ -25,15 +25,15 @@ vcr__env <- new.env()
 #' unlink(file.path(tempdir(), "leo5.yml"))
 #' }
 insert_cassette <- function(name,
-  record = "once",
-  match_requests_on = c('method', 'uri'),
+  record = NULL,
+  match_requests_on = NULL,
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
-  serialize_with = "yaml",
-  persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE,
+  serialize_with = NULL,
+  persist_with = NULL,
+  preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = FALSE) {
+  clean_outdated_http_interactions = NULL) {
 
   check_cassette_name(name)
   vcr_env_handle()
@@ -53,10 +53,10 @@ insert_cassette <- function(name,
 
     # make cassette
     tmp <- Cassette$new(name,
-      record = record,
-      match_requests_on = match_requests_on,
-      re_record_interval = re_record_interval,
-      clean_outdated_http_interactions = clean_outdated_http_interactions,
+      record = record %||% vcr_c$record,
+      match_requests_on = match_requests_on %||% vcr_c$match_requests_on,
+      re_record_interval = re_record_interval %||% vcr_c$re_record_interval,
+      clean_outdated_http_interactions = clean_outdated_http_interactions %||% vcr_c$clean_outdated_http_interactions,
       tag = NULL,
       tags = NULL,
       update_content_length_header = update_content_length_header,
@@ -64,9 +64,9 @@ insert_cassette <- function(name,
       allow_playback_repeats = allow_playback_repeats,
       allow_unused_http_interactions = NULL,
       exclusive = NULL,
-      serialize_with = serialize_with,
-      persist_with = persist_with,
-      preserve_exact_body_bytes = preserve_exact_body_bytes
+      serialize_with = serialize_with %||% vcr_c$serialize_with,
+      persist_with = persist_with %||% vcr_c$persist_with,
+      preserve_exact_body_bytes = preserve_exact_body_bytes %||% vcr_c$preserve_exact_body_bytes
     )
     return(tmp)
   } else if (!light_switch$ignore_cassettes) {
