@@ -1,7 +1,16 @@
 tmpdir <- tempdir()
 library(vcr)
-vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 
+# define and restore consistent configuration options for tests
+vcr_test_configuration <- function(
+  dir = tmpdir,
+  write_disk_path = file.path(tmpdir, "files"),
+  ...) {
+  vcr_configure_reset()
+  vcr_configure(dir = dir, write_disk_path = write_disk_path, ...)
+}
+
+vcr_test_configuration()
 
 desc_text <- "Package: %s
 Title: Does A Thing
