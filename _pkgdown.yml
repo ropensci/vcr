@@ -1,0 +1,58 @@
+reference:
+  - title: "vcr"
+    desc: >
+      High level overview of package
+    contents:
+      - vcr
+      - vcr-package
+  - title: "Configuration"
+    desc: >
+      Use use_vcr to get started
+    contents:
+      - use_vcr
+      - starts_with("vcr_config")
+  - title: "Main functions"
+    desc: >
+      Probably the only functions you'll need
+    contents:
+      - use_cassette
+      - insert_cassette
+      - eject_cassette
+  - title: "Logging"
+    contents:
+      - starts_with("vcr_log_")
+  - title: "Check current recording state"
+      - real_http_connections_allowed
+  - title: "Enable/Disable vcr"
+      - turn_off
+      - turn_on
+      - turned_off
+      - turned_on
+  - title: "Managing cassettes"
+    contents:
+      - as.cassette
+      - as.cassettepath
+      - cassette_path
+      - cassettes
+      - current_cassette
+      - check_cassette_names
+      - http_interactions
+  - title: "Internals"
+    desc: >
+      You shouldn't need to use these directly
+    contents:
+      - Cassette
+      - HTTPInteraction
+      - HTTPInteractionList
+      - Persisters
+      - Request
+      - RequestHandler
+      - RequestHandlerCrul
+      - RequestHandlerHttr
+      - RequestMatcherRegistry
+      - Serializers
+      - serializer_fetch
+      - UnhandledHTTPRequestError
+      - VcrResponse
+      - request_summary
+      - response_summary
