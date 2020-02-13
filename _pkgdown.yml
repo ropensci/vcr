@@ -22,8 +22,10 @@ reference:
     contents:
       - starts_with("vcr_log_")
   - title: "Check current recording state"
+    contents:
       - real_http_connections_allowed
   - title: "Enable/Disable vcr"
+    contents:
       - turn_off
       - turn_on
       - turned_off
