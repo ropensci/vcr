@@ -69,6 +69,12 @@
 #' to the real data. Before record replacement happens in internal
 #' function `write_interactions()`, while before playback replacement
 #' happens in internal function `YAML$deserialize_path()`
+#' 
+#' ## Errors
+#' 
+#' - `verbose_errors` Do you want more verbose errors or less verbose
+#' errors when cassette recording/usage fails? Default is `FALSE`, that is,
+#' less verbose errors.
 #'
 #'
 #' @examples
@@ -165,7 +171,8 @@ VCRConfig <- R6::R6Class(
     .log = NULL,
     .log_opts = NULL,
     .filter_sensitive_data = NULL,
-    .write_disk_path = NULL
+    .write_disk_path = NULL,
+    .verbose_errors = NULL
   ),
 
   active = list(
@@ -270,6 +277,10 @@ VCRConfig <- R6::R6Class(
     write_disk_path = function(value) {
       if (missing(value)) return(private$.write_disk_path)
       private$.write_disk_path <- value
+    },
+    verbose_errors = function(value) {
+      if (missing(value)) return(private$.verbose_errors)
+      private$.verbose_errors <- value
     }
   ),
 
@@ -295,7 +306,8 @@ VCRConfig <- R6::R6Class(
       log = FALSE,
       log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
       filter_sensitive_data = NULL,
-      write_disk_path = NULL
+      write_disk_path = NULL,
+      verbose_errors = FALSE
     ) {
       private$.dir <- dir
       private$.record <- record
@@ -318,6 +330,7 @@ VCRConfig <- R6::R6Class(
       private$.log_opts <- log_opts
       private$.filter_sensitive_data <- filter_sensitive_data
       private$.write_disk_path <- write_disk_path
+      private$.verbose_errors <- verbose_errors
     },
 
     # reset all settings to defaults

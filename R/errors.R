@@ -93,12 +93,16 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description Construct and execute stop message for why request failed
     #' @return a stop message
     construct_message = function() {
+      # create formatted_suggestions for later use
+      vcr__env$request_description <- self$request_description()
+      vcr__env$cassettes_description <- self$cassettes_description()
+      vcr__env$formatted_suggestion <- self$formatted_suggestions()
       mssg <- paste0(
         c("", "", paste0(rep("=", 80), collapse = ""),
           "An HTTP request has been made that vcr does not know how to handle:",
           self$request_description(),
-          self$cassettes_description(),
-          self$formatted_suggestions(),
+          if (vcr_c$verbose_errors) self$cassettes_description() else self$cassettes_list(),
+          if (vcr_c$verbose_errors) vcr__env$formatted_suggestion else self$get_help(),
           paste0(rep("=", 80), collapse = ""), "", ""),
         collapse = "\n")
       orig_warn_len <- getOption("warning.length")
@@ -179,21 +183,33 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description cassette details
     #' @return character
     cassettes_list = function() {
-      lines <- c()
-      xx <- if (length(cassettes_session()) == 1) {
-        "vcr is currently using the following cassette:"
+      if (length(cassettes_session()) > 0) {
+        lines <- c()
+        xx <- if (length(cassettes_session()) == 1) {
+          "vcr is currently using the following cassette:"
+        } else {
+          "vcr are currently using the following cassettes:"
+        }
+        lines <- c(lines, xx)
+        # FIXME: should fix this to generalize to many cassettes, see ruby code
+        zz <- c(
+          paste0("  - ", self$cassette$file() %try% ""),
+          paste0("    - record_mode: ", self$cassette$record),
+          paste0("    - match_requests_on: ",
+          paste0(self$cassette$match_requests_on, collapse = ", "))
+        )
+        paste0(c(lines, zz), collapse = "\n")
       } else {
-        "vcr are currently using the following cassettes:"
+        paste0(c("There is currently no cassette in use. There are a few ways",
+         "you can configure vcr to handle this request:\n"), collapse = "\n")
       }
-      lines <- c(lines, xx)
-      # FIXME: should fix this to generalize to many cassettes, see ruby code
-      zz <- c(
-        paste0("  - ", self$cassette$file()),
-        paste0("    - record_mode: ", self$cassette$record),
-        paste0("    - match_requests_on: ",
-        paste0(self$cassette$match_requests_on, collapse = ", "))
-      )
-      paste0(c(lines, zz), collapse = "\n")
+    },
+
+    #' @description get help message for non-verbose error
+    #' @return character
+    get_help = function() {
+      c("If you're not sure what to do, open an issue at https://github.com/ropensci/vcr/issues",
+        "or take a look at https://books.ropensci.org/http-testing")
     },
 
     #' @description make suggestions for what to do
@@ -307,3 +323,22 @@ UnhandledHTTPRequestError <- R6::R6Class(
     }
   )
 )
+
+#' Get full suggestion messages for the last vcr cassette failure
+#' 
+#' @export
+#' @rdname UnhandledHTTPRequestError
+#' @examples \dontrun{
+#' # vcr_last_error()
+#' }
+vcr_last_error <- function() {
+  message(
+    paste0(
+      c("", "", paste0(rep("=", 80), collapse = ""),
+        vcr__env$request_description,
+        vcr__env$cassettes_description,
+        vcr__env$formatted_suggestion,
+        paste0(rep("=", 80), collapse = ""), "", ""),
+      collapse = "\n")
+  )
+}

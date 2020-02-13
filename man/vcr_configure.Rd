@@ -98,6 +98,14 @@ function \code{write_interactions()}, while before playback replacement
 happens in internal function \code{YAML$deserialize_path()}
 }
 }
+
+\subsection{Errors}{
+\itemize{
+\item \code{verbose_errors} Do you want more verbose errors or less verbose
+errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
+less verbose errors.
+}
+}
 }
 
 \examples{

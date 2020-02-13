@@ -2,7 +2,11 @@
 % Please edit documentation in R/errors.R
 \name{UnhandledHTTPRequestError}
 \alias{UnhandledHTTPRequestError}
+\alias{vcr_last_error}
 \title{UnhandledHTTPRequestError}
+\usage{
+vcr_last_error()
+}
 \description{
 Handle http request errors
 }
@@ -65,6 +69,9 @@ err$match_requests_on_suggestion()
 
 # cleanup
 unlink(tempdir())
+\dontrun{
+# vcr_last_error()
+}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -88,6 +95,7 @@ unlink(tempdir())
 \item \href{#method-formatted_headers}{\code{UnhandledHTTPRequestError$formatted_headers()}}
 \item \href{#method-cassettes_description}{\code{UnhandledHTTPRequestError$cassettes_description()}}
 \item \href{#method-cassettes_list}{\code{UnhandledHTTPRequestError$cassettes_list()}}
+\item \href{#method-get_help}{\code{UnhandledHTTPRequestError$get_help()}}
 \item \href{#method-formatted_suggestions}{\code{UnhandledHTTPRequestError$formatted_suggestions()}}
 \item \href{#method-format_bullet_point}{\code{UnhandledHTTPRequestError$format_bullet_point()}}
 \item \href{#method-format_foot_note}{\code{UnhandledHTTPRequestError$format_foot_note()}}
@@ -223,6 +231,18 @@ character
 cassette details
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{UnhandledHTTPRequestError$cassettes_list()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+character
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_help"></a>}}
+\subsection{Method \code{get_help()}}{
+get help message for non-verbose error
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{UnhandledHTTPRequestError$get_help()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
