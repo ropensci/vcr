@@ -1,4 +1,4 @@
-#' Use a cassette
+#' Use a cassette to record HTTP requests
 #'
 #' @export
 #' @param name The name of the cassette. vcr will sanitize this to ensure it
@@ -40,6 +40,15 @@
 #' - `eject_cassette` ejects the current cassette. The cassette
 #'  will no longer be used. In addition, any newly recorded HTTP interactions
 #'  will be written to disk.
+#'
+#' @section Cassette options:
+#'
+#' Note the default values for arguments controlling cassette behavior are
+#' inherited from vcr's global configuration. See [`vcr_configure()`] for a
+#' complete list of options and their default values. You can override these
+#' options for a specific cassette by changing an argument's value to something
+#' other than `NULL` when calling either `insert_cassette()` or
+#' `use_cassette()`.
 #'
 #' @section Behavior:
 #' This function handles a few different scenarios:

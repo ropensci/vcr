@@ -4,6 +4,7 @@ vcr__env <- new.env()
 #'
 #' @export
 #' @inheritParams use_cassette
+#' @inheritSection use_cassette Cassette options
 #' @seealso [use_cassette()], [eject_cassette()]
 #' @return an object of class `Cassette`
 #' @examples \dontrun{
