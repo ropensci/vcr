@@ -50,8 +50,9 @@ suggest_vcr <- function(dir, verbose = TRUE) {
 }
 
 test_r_file_exists <- function(dir) {
-  ff <- list.files(file.path(dir, "tests"), pattern = ".R|.r",
-    full.names = TRUE)
+  ff <- setdiff(
+    list.files(file.path(dir, "tests"), full.names=TRUE, pattern = ".R|.r"),
+    list.dirs(file.path(dir, "tests"), recursive=FALSE))
   if (length(ff) == 0) return(FALSE)
   any(
     vapply(ff, function(z) {
@@ -98,7 +99,8 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
     cat(sprintf(vcr_text$test_all, pkg), file = tall, append = TRUE)
   } else {
     if (verbose) 
-      vcr_cat_info(paste0(crayon::blue("tests/testthat.R:" ), " exists"))
+      vcr_cat_info(paste0(crayon::blue("tests/testthat.R (or similar):" ),
+        " exists"))
   }
 
   # add helper-pkgname.R to tests/testthat/
