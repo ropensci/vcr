@@ -6,7 +6,6 @@ invisible(vcr::vcr_configure(
   dir = \"../fixtures\"
 ))\nvcr::check_cassette_names()\n",
   example_test = "# EXAMPLE VCR USAGE: RUN AND DELETE ME
-content(\"vcr text example\")
 
 foo <- function() crul::ok('https://httpbin.org/get')
 
