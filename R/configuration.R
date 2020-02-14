@@ -35,6 +35,10 @@
 #' be in your `tests/` directory, perhaps next to your cassettes
 #' directory, e.g., where your cassettes are in `tests/fixtures`, your
 #' files from requests that write to disk are in `tests/files`
+#' - `timing`: (list) one of two options:
+#'   - fixed: (numeric/integer) time in milliseconds (ms) to delay playback;
+#'     default is no timing change in playback (fixed=0)
+#'   - relative: NOT WORKING YET
 #'
 #' ## Connectivity
 #'
@@ -97,6 +101,7 @@
 #' vcr_configure(dir = tempdir(),
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
+#' vcr_configure(timing = list(fixed = 300))
 #' @export
 
 vcr_configure <- function(...) {
@@ -165,7 +170,8 @@ VCRConfig <- R6::R6Class(
     .log = NULL,
     .log_opts = NULL,
     .filter_sensitive_data = NULL,
-    .write_disk_path = NULL
+    .write_disk_path = NULL,
+    .timing = NULL
   ),
 
   active = list(
@@ -270,6 +276,26 @@ VCRConfig <- R6::R6Class(
     write_disk_path = function(value) {
       if (missing(value)) return(private$.write_disk_path)
       private$.write_disk_path <- value
+    },
+    timing = function(value) {
+      if (missing(value)) return(private$.timing)
+      z <- assert(value, "list")
+      if (length(z) > 0) {
+        if ("relative" %in% names(z)) {
+          stop("timing option 'relative' is not working yet", call.=FALSE)
+        }
+        if ("fixed" %in% names(z)) {
+          assert(z$fixed, c('numeric', 'integer'))
+        }
+        # only relative or fixed can be given
+        if (!is.null(z$relative) && z$fixed > 0) {
+          stop("can only specify relative or fixed for timing, not both",
+            call.=FALSE)
+        }
+      }
+      # add missing timing options
+      z <- merge_list(z, list(fixed = 0, relative = NULL))
+      private$.timing <- z
     }
   ),
 
@@ -295,7 +321,8 @@ VCRConfig <- R6::R6Class(
       log = FALSE,
       log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
       filter_sensitive_data = NULL,
-      write_disk_path = NULL
+      write_disk_path = NULL,
+      timing = list(fixed = 0, relative = NULL)
     ) {
       private$.dir <- dir
       private$.record <- record
@@ -318,6 +345,7 @@ VCRConfig <- R6::R6Class(
       private$.log_opts <- log_opts
       private$.filter_sensitive_data <- filter_sensitive_data
       private$.write_disk_path <- write_disk_path
+      private$.timing <- timing
     },
 
     # reset all settings to defaults

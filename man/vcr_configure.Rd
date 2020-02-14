@@ -54,6 +54,12 @@ is \code{NULL}. For testing a package, you'll probably want this path to
 be in your \verb{tests/} directory, perhaps next to your cassettes
 directory, e.g., where your cassettes are in \code{tests/fixtures}, your
 files from requests that write to disk are in \code{tests/files}
+\item \code{timing}: (list) one of two options:
+\itemize{
+\item fixed: (numeric/integer) time in milliseconds (ms) to delay playback;
+default is no timing change in playback (fixed=0)
+\item relative: NOT WORKING YET
+}
 }
 }
 
@@ -126,4 +132,5 @@ vcr_configure(dir = tempdir(),
 vcr_configure(dir = tempdir(),
   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 )
+vcr_configure(timing = list(fixed = 300))
 }

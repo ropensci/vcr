@@ -78,6 +78,7 @@ RequestHandlerCrul <- R6::R6Class(
 
     on_stubbed_by_vcr_request = function(request) {
       # return stubbed vcr response - no real response to do
+      vcr_timing()
       serialize_to_crul(request, super$get_stubbed_response(request))
     },
 
