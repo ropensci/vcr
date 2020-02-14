@@ -65,6 +65,9 @@ is looked at together with \code{VCR_IGNORE_CASSETTES}
 setting; this is looked at together with \code{VCR_TURNED_OFF}
 }
 
+See the HTTP testing book for more details
+https://books.ropensci.org/http-testing/lightswitch.html
+
 See \code{?Startup} if you're not sure how to set environment variables
 }
 \examples{
