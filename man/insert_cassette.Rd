@@ -21,8 +21,8 @@ insert_cassette(
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
 is a valid file name.}
 
-\item{record}{The record mode. Default: "once". In the future we'll support
-"once", "all", "none", "new_episodes". See \link{recording} for more information}
+\item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
+complete list of the different recording modes.}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
@@ -61,6 +61,17 @@ an object of class \code{Cassette}
 \description{
 Insert a cassette to record HTTP requests
 }
+\section{Cassette options}{
+
+
+Default values for arguments controlling cassette behavior are
+inherited from vcr's global configuration. See \code{\link[=vcr_configure]{vcr_configure()}} for a
+complete list of options and their default settings. You can override these
+options for a specific cassette by changing an argument's value to something
+other than \code{NULL} when calling either \code{insert_cassette()} or
+\code{use_cassette()}.
+}
+
 \examples{
 \dontrun{
 library(vcr)
