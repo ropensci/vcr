@@ -152,13 +152,13 @@ use_cassette <- function(name, ...,
   cassette <- insert_cassette(name,
     record = record,
     match_requests_on = match_requests_on,
-    re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions,
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     persist_with = persist_with,
-    preserve_exact_body_bytes = preserve_exact_body_bytes
+    preserve_exact_body_bytes = preserve_exact_body_bytes,
+    re_record_interval = re_record_interval,
+    clean_outdated_http_interactions = clean_outdated_http_interactions
   )
   if (is.null(cassette)) {
     force(...)
