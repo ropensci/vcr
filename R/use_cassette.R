@@ -43,9 +43,9 @@
 #'
 #' @section Cassette options:
 #'
-#' Note the default values for arguments controlling cassette behavior are
+#' Default values for arguments controlling cassette behavior are
 #' inherited from vcr's global configuration. See [`vcr_configure()`] for a
-#' complete list of options and their default values. You can override these
+#' complete list of options and their default settings. You can override these
 #' options for a specific cassette by changing an argument's value to something
 #' other than `NULL` when calling either `insert_cassette()` or
 #' `use_cassette()`.
