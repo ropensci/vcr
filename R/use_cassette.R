@@ -3,11 +3,11 @@
 #' @export
 #' @param name The name of the cassette. vcr will sanitize this to ensure it
 #' is a valid file name.
-#' @param ... a block of code to evalulate, wrapped in curly braces. required.
-#' if you don't pass a code block you'll get a stop message. if you can't pass
-#' a code block use instead [insert_cassette()]
-#' @param record The record mode. Default: "once". In the future we'll support
-#' "once", "all", "none", "new_episodes". See [recording] for more information
+#' @param ... a block of code containing one or more requests (required). Use
+#' curly braces to encapsulate multi-line code blocks. If you can't pass a code
+#' block use [insert_cassette()] instead.
+#' @param record The record mode (default: `"once"`). See [recording] for a
+#' complete list of the different recording modes.
 #' @param match_requests_on List of request matchers
 #' to use to determine what recorded HTTP interaction to replay. Defaults to
 #' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
