@@ -2,7 +2,7 @@
 % Please edit documentation in R/use_cassette.R
 \name{use_cassette}
 \alias{use_cassette}
-\title{Use a cassette}
+\title{Use a cassette to record HTTP requests}
 \usage{
 use_cassette(
   name,
@@ -22,12 +22,12 @@ use_cassette(
 \item{name}{The name of the cassette. vcr will sanitize this to ensure it
 is a valid file name.}
 
-\item{...}{a block of code to evalulate, wrapped in curly braces. required.
-if you don't pass a code block you'll get a stop message. if you can't pass
-a code block use instead \code{\link[=insert_cassette]{insert_cassette()}}}
+\item{...}{a block of code containing one or more requests (required). Use
+curly braces to encapsulate multi-line code blocks. If you can't pass a code
+block use \code{\link[=insert_cassette]{insert_cassette()}} instead.}
 
-\item{record}{The record mode. Default: "once". In the future we'll support
-"once", "all", "none", "new_episodes". See \link{recording} for more information}
+\item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
+complete list of the different recording modes.}
 
 \item{match_requests_on}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
@@ -64,7 +64,7 @@ interactions be recorded back to file? default: \code{FALSE}}
 an object of class \code{Cassette}
 }
 \description{
-Use a cassette
+Use a cassette to record HTTP requests
 }
 \details{
 A run down of the family of top level \pkg{vcr} functions
@@ -77,6 +77,17 @@ will no longer be used. In addition, any newly recorded HTTP interactions
 will be written to disk.
 }
 }
+\section{Cassette options}{
+
+
+Default values for arguments controlling cassette behavior are
+inherited from vcr's global configuration. See \code{\link[=vcr_configure]{vcr_configure()}} for a
+complete list of options and their default settings. You can override these
+options for a specific cassette by changing an argument's value to something
+other than \code{NULL} when calling either \code{insert_cassette()} or
+\code{use_cassette()}.
+}
+
 \section{Behavior}{
 
 This function handles a few different scenarios:
