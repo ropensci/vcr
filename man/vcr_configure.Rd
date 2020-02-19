@@ -82,8 +82,8 @@ replacement happens in internal function \code{YAML$deserialize_path()}
 \item \code{log} (logical) should we log important vcr things? Default: \code{FALSE}
 \item \code{log_opts} (list) Additional logging options:
 \itemize{
-\item \code{file} either \code{"console"} or a file path to log to
-\item \code{log_prefix} default: "Cassette". We insert the cassette name after
+\item 'file' either \code{"console"} or a file path to log to
+\item 'log_prefix' default: "Cassette". We insert the cassette name after
 that prefix, then the rest of the message.
 \item More to come...
 }

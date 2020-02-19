@@ -58,8 +58,8 @@
 #'
 #' - `log` (logical) should we log important vcr things? Default: `FALSE`
 #' - `log_opts` (list) Additional logging options:
-#'   - `file` either `"console"` or a file path to log to
-#'   - `log_prefix` default: "Cassette". We insert the cassette name after
+#'   - 'file' either `"console"` or a file path to log to
+#'   - 'log_prefix' default: "Cassette". We insert the cassette name after
 #'     that prefix, then the rest of the message.
 #'   - More to come...
 #'
