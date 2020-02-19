@@ -310,27 +310,27 @@ VCRConfig <- R6::R6Class(
       filter_sensitive_data = NULL,
       write_disk_path = NULL
     ) {
-      private$.dir <- dir
-      private$.record <- record
-      private$.match_requests_on <- match_requests_on
-      private$.allow_unused_http_interactions <- allow_unused_http_interactions
-      private$.serialize_with <- serialize_with
-      private$.persist_with <- persist_with
-      private$.ignore_hosts <- ignore_hosts
-      private$.ignore_localhost <- ignore_localhost
-      private$.ignore_request <- ignore_request
-      private$.uri_parser <- uri_parser
-      private$.preserve_exact_body_bytes <- preserve_exact_body_bytes
-      private$.turned_off <- turned_off
-      private$.re_record_interval <- re_record_interval
-      private$.clean_outdated_http_interactions <- clean_outdated_http_interactions
-      private$.allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
-      private$.cassettes <- cassettes
-      private$.linked_context <- linked_context
-      private$.log <- log
-      private$.log_opts <- log_opts
-      private$.filter_sensitive_data <- filter_sensitive_data
-      private$.write_disk_path <- write_disk_path
+      self$dir <- dir
+      self$record <- record
+      self$match_requests_on <- match_requests_on
+      self$allow_unused_http_interactions <- allow_unused_http_interactions
+      self$serialize_with <- serialize_with
+      self$persist_with <- persist_with
+      self$ignore_hosts <- ignore_hosts
+      self$ignore_localhost <- ignore_localhost
+      self$ignore_request <- ignore_request
+      self$uri_parser <- uri_parser
+      self$preserve_exact_body_bytes <- preserve_exact_body_bytes
+      self$turned_off <- turned_off
+      self$re_record_interval <- re_record_interval
+      self$clean_outdated_http_interactions <- clean_outdated_http_interactions
+      self$allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
+      self$cassettes <- cassettes
+      self$linked_context <- linked_context
+      self$log <- log
+      self$log_opts <- log_opts
+      self$filter_sensitive_data <- filter_sensitive_data
+      self$write_disk_path <- write_disk_path
     },
 
     # reset all settings to defaults
