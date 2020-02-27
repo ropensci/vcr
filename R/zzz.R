@@ -74,6 +74,8 @@ check_cassette_name <- function(x) {
     stp("no spaces allowed in cassette names")
   if (grepl("\\.yml$|\\.yaml$", x))
     stp("don't include a cassette path extension")
+  if (grepl("/", x))
+    stp("no slashes allowed in cassette names")
 }
 
 check_request_matchers <- function(x) {
