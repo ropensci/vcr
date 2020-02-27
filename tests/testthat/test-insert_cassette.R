@@ -71,4 +71,6 @@ test_that("insert_cassette fails well on name checking", {
   # no file ext included - just checking yml/yaml for now
   expect_error(insert_cassette("foo.yml"), "extension")
   expect_error(insert_cassette("foo.yaml"), "extension")
+  # no slashes
+  expect_error(insert_cassette("foo/bar"), "slashes")
 })
