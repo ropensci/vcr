@@ -135,6 +135,50 @@ unlink(file.path(vcr_configuration()$dir, "frog.yml"))
 vcr_configure_reset()
 
 
+## API key not found or empty (i.e., "")
+Sys.setenv(HELLO_MARS = "asdfadfasfsfs239823n23")
+dir <- tempdir()
+invisible(
+  vcr_configure(dir = dir, filter_sensitive_data = 
+    list(
+      "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
+      "<<hello_mars_key>>" = Sys.getenv("HELLO_MARS")
+    )
+  )
+)
+url <- paste0("https://eu.httpbin.org/get?api_key=", Sys.getenv("HELLO_MARS"))
+request <- Request$new("get", url, "")
+unlink(file.path(vcr_c$dir, "bunny2"))
+cas <- suppressMessages(insert_cassette("bunny2"))
+
+test_that("UnhandledHTTPRequestError works as expected", {
+  a <- UnhandledHTTPRequestError$new(request)
+
+  expect_is(a, "UnhandledHTTPRequestError")
+  expect_is(a$cassette, "Cassette")
+  expect_equal(a$cassette$name, "bunny2")
+  expect_is(a$construct_message, "function")
+
+  expect_error(
+    a$construct_message(),
+    "An HTTP request has been made that vcr does not know how to handle"
+  )
+  # we should see this string in the error message
+  expect_error(
+    a$construct_message(),
+    "<<hello_mars_key>>"
+  )
+  # we should not see this string in the error message b/c it's empty/missing
+  res <- tryCatch(a$construct_message(), error = function(e) e)
+  expect_false(grepl("<<bar_foo_key>>", res$message))
+})
+# cleanup
+eject_cassette()
+unlink(file.path(vcr_configuration()$dir, "bunny2.yml"))
+# reset configuration
+vcr_configure_reset()
+
+
 
 
 
