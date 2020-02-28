@@ -23,7 +23,13 @@
 #' - Should not have spaces. Spaces can lead to problems in using file paths.
 #' - Should not include a file extension. vcr handles file extensions for
 #' the user.
-#' - Should not have slashes. Slashes can lead to problems in using file paths.
+#' - Should not have illegal characters that can lead to problems in using
+#' file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
+#' - Should not have control characters, e.g., `\n`
+#' - Should not have just dots, e.g,. `.` or `..`
+#' - Should not have Windows reserved words, e.g, `com1`
+#' - Should not have trailing dots
+#' - Should not be longer than 255 characters
 check_cassette_names <- function(pattern = "test-", behavior = "stop") {
   files <- list.files(".", pattern = pattern, full.names = TRUE)
   if (length(files) == 0) return()

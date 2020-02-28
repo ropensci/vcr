@@ -38,7 +38,13 @@ a test using the wrong cassette.
 \item Should not have spaces. Spaces can lead to problems in using file paths.
 \item Should not include a file extension. vcr handles file extensions for
 the user.
-\item Should not have slashes. Slashes can lead to problems in using file paths.
+\item Should not have illegal characters that can lead to problems in using
+file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
+\item Should not have control characters, e.g., \verb{\\n}
+\item Should not have just dots, e.g,. \code{.} or \code{..}
+\item Should not have Windows reserved words, e.g, \code{com1}
+\item Should not have trailing dots
+\item Should not be longer than 255 characters
 }
 }
 

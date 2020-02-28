@@ -19,8 +19,12 @@ use_cassette(
 )
 }
 \arguments{
-\item{name}{The name of the cassette. vcr will sanitize this to ensure it
-is a valid file name.}
+\item{name}{The name of the cassette. vcr will check this to ensure it
+is a valid file name. Not allowed: spaces, file extensions, control
+characters (e.g., \verb{\\n}), illegal characters ('/', '?', '<', '>', '\\', ':',
+'*', '|', and '\"'), dots alone (e.g., '.', '..'), Windows reserved
+words (e.g., 'com1'), trailing dots (can cause problems on Windows),
+names longer than 255 characters. See section "Cassette names"}
 
 \item{...}{a block of code containing one or more requests (required). Use
 curly braces to encapsulate multi-line code blocks. If you can't pass a code
@@ -125,6 +129,28 @@ block.
 \code{test_that()} block with your \pkg{testthat} expectations inside the
 \code{use_cassette()} block, you'll only get the line number that the
 \code{use_cassette()} block starts on.
+}
+
+\section{Cassette names}{
+
+\itemize{
+\item Should be meaningful so that it's obvious to you what test/function
+they relate to. Meaningful names are important so that you can quickly
+determine to what test file or test block a cassette belongs. Note that
+vcr cannot check that your cassette names are meaningful.
+\item Should not be duplicated. Duplicated cassette names would lead to
+a test using the wrong cassette.
+\item Should not have spaces. Spaces can lead to problems in using file paths.
+\item Should not include a file extension. vcr handles file extensions for
+the user.
+\item Should not have illegal characters that can lead to problems in using
+file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
+\item Should not have control characters, e.g., \verb{\\n}
+\item Should not have just dots, e.g,. \code{.} or \code{..}
+\item Should not have Windows reserved words, e.g, \code{com1}
+\item Should not have trailing dots
+\item Should not be longer than 255 characters
+}
 }
 
 \examples{

@@ -1,8 +1,13 @@
 #' Use a cassette to record HTTP requests
 #'
 #' @export
-#' @param name The name of the cassette. vcr will sanitize this to ensure it
-#' is a valid file name.
+#' @inheritSection check_cassette_names Cassette names
+#' @param name The name of the cassette. vcr will check this to ensure it
+#' is a valid file name. Not allowed: spaces, file extensions, control
+#' characters (e.g., `\n`), illegal characters ('/', '?', '<', '>', '\\', ':',
+#' '*', '|', and '\"'), dots alone (e.g., '.', '..'), Windows reserved
+#' words (e.g., 'com1'), trailing dots (can cause problems on Windows),
+#' names longer than 255 characters. See section "Cassette names"
 #' @param ... a block of code containing one or more requests (required). Use
 #' curly braces to encapsulate multi-line code blocks. If you can't pass a code
 #' block use [insert_cassette()] instead.

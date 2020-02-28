@@ -11,7 +11,8 @@ eject_cassette(
 )
 }
 \arguments{
-\item{cassette}{(character) a single cassette names to eject}
+\item{cassette}{(character) a single cassette names to eject; see \code{name}
+parameter definition in \code{\link[=insert_cassette]{insert_cassette()}} for cassette name rules}
 
 \item{options}{(list) a list of options to apply to the eject process}
 
