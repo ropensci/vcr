@@ -8,7 +8,6 @@ vcr__env <- new.env()
 #' @inheritSection check_cassette_names Cassette names
 #' @seealso [use_cassette()], [eject_cassette()]
 #' @return an object of class `Cassette`
-#' @details 
 #' @examples \dontrun{
 #' library(vcr)
 #' library(crul)
