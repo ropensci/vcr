@@ -1,9 +1,8 @@
 language: r
-sudo: false
 cache: packages
-dist: trusty
+os: linux
 
-matrix:
+jobs:
   include:
     - os: linux
       r: release
