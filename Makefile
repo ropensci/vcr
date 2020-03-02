@@ -32,7 +32,8 @@ check: build
 	@rm -f `ls -1tr ${PACKAGE}*gz | tail -n1`
 	@rm -rf ${PACKAGE}.Rcheck
 
-README.md: README.Rmd
-	${RSCRIPT} -e "library(methods); knitr::knit('$<')"
-	sed -i.bak 's/[[:space:]]*$$//' README.md
-	rm -f $@.bak
+check_windows:
+	${RSCRIPT} -e "devtools::check_win_devel(); devtools::check_win_release()"
+
+readme:
+	${RSCRIPT} -e "knitr::knit('README.Rmd')"
