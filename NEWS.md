@@ -1,3 +1,34 @@
+vcr 0.5.0
+=========
+
+### NEW FEATURES
+
+* new function `check_cassette_names` to use in your `helper-pkgname.R` file in your test suite; it checks for duplicated cassette names only. Any use of `insert_cassette()` (thereby, any use of `use_cassette()`) uses a revamped version of an internal fxn that checks for an improved list of potential problems in cassette names (#116) (#159)
+* `use_vcr()` adds gitignore cassette diffs via the addition of a `gitattributes` file (#109)
+* `vcr_configure()` overhaul: function no longer has each setting as a parameter; rather, it has an ellipsis (`...`), and internally we check parameters passed in. The documentation (`?vcr_configure`) lists the details for each available parameter. Importantly, each call to `vcr_configure()` now only changes the vcr settings for parameters passed in to the function; to reset all vcr settings, run `vcr_configure_reset()`  (#136) (#141)
+* `insert_cassette()` and `use_cassette()` now inherit any vcr settings set by `vcr_configure()`; this wasn't happening consistently before. Most default parameter values in `insert_cassette/use_cassette` set to `NULL`, in which case they inherit from whatever values are set by `vcr_configure()`, but can be overriden (#151) (#153)
+
+### MINOR IMPROVEMENTS
+
+* define _serialize_, _cassette_, and _fixture_ in the README (#138) (#139)
+* fix `filter_sensitive_data` parameter description in `vcr_configure` docs  (#129)
+* move higher up in README a brief description of what this package does (#140)
+* import `utils::getParseData` so its in namespace (#142)
+* better cleanup of some stray test files left on disk (#148)
+* `use_vcr()` no longer uses `context()` in example test file (#144)
+* improved documentation of functions and environment variables for turning vcr on and off and when to use each of them - documentation mostly in the HTTP Testing book at https://books.ropensci.org/http-testing/lightswitch.html (#131)
+* fix a `use_cassette` test (#133)
+* Add assertions to `vcr_configure()` when parameters are set by the user to fail early (#156)
+
+### BUG FIXES
+
+* fix for handling of http requests that request image data AND do not write that data to disk; in addition, fix usage of `preserve_exact_body_bytes` when image data is in the response body (#128) thanks @Rekyt
+* vcr now should handle request bodies correctly on POST requests (#143)
+* Request matching was failing for empty bodies when "body" was one of the matchers (#157) (#161)
+* fix to `sensitive_remove()` internal function used when the user sets `filter_sensitive_data` in `vcr_configure()`; when an env var is missing in the `filter_sensitive_data` list, `sensitive_remove()` was causing C stack errors in some cases (#160) thanks @zachary-foster
+* fix for recording JSON-encoded bodies; vcr wasn't handling HTTP requests when the user set the body to be encoded as JSON (e.g., `encode="json"` with crul or httr) (#130)
+
+
 vcr 0.4.0
 =========
 
