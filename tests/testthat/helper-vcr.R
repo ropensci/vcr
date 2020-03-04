@@ -20,17 +20,18 @@ Author: Jane Doe
 Maintainer: Jane Doe <jane@doe.com>
 License: MIT + file LICENSE
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Suggests:
-    testthat\n"
+    %s\n"
 
-make_pkg <- function(dir) {
+make_pkg <- function(dir, test_pkg = "testthat") {
   if (length(list.files(dir)) > 1)
     stop("dir is not empty")
   dir.create(dir, recursive = TRUE)
   dir.create(file.path(dir, "man"), recursive = TRUE)
   dir.create(file.path(dir, "R"), recursive = TRUE)
-  cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
+  cat(sprintf(desc_text, basename(dir), test_pkg),
+    file = file.path(dir, "DESCRIPTION"))
 }
 
 has_port <- function(port) crul::ok(paste0('http://localhost:', port))
