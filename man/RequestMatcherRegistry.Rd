@@ -6,6 +6,9 @@
 \description{
 handles request matchers
 }
+\note{
+r1=from new request; r2=from recorded interaction
+}
 \examples{
 \dontrun{
 (x <- RequestMatcherRegistry$new())

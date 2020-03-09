@@ -8,7 +8,11 @@
 #' tests rather than you seeing it after tests have run (as would happen
 #' by default)
 #' @details This function is meant to be run during your tests, from a
-#' `helper-pkgname.R` file inside the `tests/testthat` directory.
+#' `helper-pkgname.R` file inside the `tests/testthat` directory. It only
+#' checks that cassette names are not duplicated. A helper function 
+#' `check_cassette_name()` runs inside [insert_cassette()] that checks
+#' that cassettes do not have: spaces, file extensions, unaccepted
+#' characters (slashes)
 #' @section Cassette names:
 #' - Should be meaningful so that it's obvious to you what test/function
 #' they relate to. Meaningful names are important so that you can quickly
@@ -19,6 +23,13 @@
 #' - Should not have spaces. Spaces can lead to problems in using file paths.
 #' - Should not include a file extension. vcr handles file extensions for
 #' the user.
+#' - Should not have illegal characters that can lead to problems in using
+#' file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
+#' - Should not have control characters, e.g., `\n`
+#' - Should not have just dots, e.g,. `.` or `..`
+#' - Should not have Windows reserved words, e.g, `com1`
+#' - Should not have trailing dots
+#' - Should not be longer than 255 characters
 check_cassette_names <- function(pattern = "test-", behavior = "stop") {
   files <- list.files(".", pattern = pattern, full.names = TRUE)
   if (length(files) == 0) return()

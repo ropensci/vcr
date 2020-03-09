@@ -18,6 +18,10 @@ test_that("use_vcr works", {
   expect_match(help, "vcr::check_cassette_names")
   expect_true(file.exists(file.path(dir, "tests/testthat/test-vcr_example.R")))
   expect_true(any(grepl("vcr", readLines(file.path(dir, "DESCRIPTION")))))
+  expect_true(file.exists(file.path(dir, ".gitattributes")))
+  gitatts <- readLines(file.path(dir, ".gitattributes"))
+  expect_true(any(grepl("text=auto", gitatts)))
+  expect_true(any(grepl("tests/fixtures", gitatts)))
 
   # cleanup
   unlink(dir, TRUE, TRUE)

@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.6.1 Patched
-* ubuntu 14.04 (on travis-ci), R 3.6.1
+* local OS X install, R 3.6.3 RC
+* ubuntu 14.04 (on travis-ci), R 3.6.2
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -10,12 +10,11 @@
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 25 reverse dependencies.
-(Summary at <https://github.com/ropensci/vcr/blob/master/revdep/README.md>).
+* I have run R CMD check on the 28 reverse dependencies. Summary at https://github.com/ropensci/vcr/blob/master/revdep/README.md
 
 --------
 
-This version adds some major features including supporting http requests that write to disk, ignoring certain requests, and turning vcr completely off during a test suite run.
+This version makes many improvements to configuration settings, improves documentation, and fixes many bugs.
 
 Thanks very much,
 Scott Chamberlain

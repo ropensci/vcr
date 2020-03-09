@@ -11,10 +11,12 @@ sensitive_put_back <- function(x) {
   return(x)
 }
 sensitive_remove <- function(x) {
-  if (!is.null(vcr_c$filter_sensitive_data)) {
-    fsd <- vcr_c$filter_sensitive_data
+  fsd <- vcr_c$filter_sensitive_data
+  if (!is.null(fsd)) {
     for (i in seq_along(fsd)) {
-      x <- gsub(fsd[[i]], names(fsd)[i], x)
+      if (nchar(fsd[[i]]) > 0) {
+        x <- gsub(fsd[[i]], names(fsd)[i], x)
+      }
     }
   }
   return(x)

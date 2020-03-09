@@ -1,13 +1,18 @@
-#' Use a cassette
+#' Use a cassette to record HTTP requests
 #'
 #' @export
-#' @param name The name of the cassette. vcr will sanitize this to ensure it
-#' is a valid file name.
-#' @param ... a block of code to evalulate, wrapped in curly braces. required.
-#' if you don't pass a code block you'll get a stop message. if you can't pass
-#' a code block use instead [insert_cassette()]
-#' @param record The record mode. Default: "once". In the future we'll support
-#' "once", "all", "none", "new_episodes". See [recording] for more information
+#' @inheritSection check_cassette_names Cassette names
+#' @param name The name of the cassette. vcr will check this to ensure it
+#' is a valid file name. Not allowed: spaces, file extensions, control
+#' characters (e.g., `\n`), illegal characters ('/', '?', '<', '>', '\\', ':',
+#' '*', '|', and '\"'), dots alone (e.g., '.', '..'), Windows reserved
+#' words (e.g., 'com1'), trailing dots (can cause problems on Windows),
+#' names longer than 255 characters. See section "Cassette names"
+#' @param ... a block of code containing one or more requests (required). Use
+#' curly braces to encapsulate multi-line code blocks. If you can't pass a code
+#' block use [insert_cassette()] instead.
+#' @param record The record mode (default: `"once"`). See [recording] for a
+#' complete list of the different recording modes.
 #' @param match_requests_on List of request matchers
 #' to use to determine what recorded HTTP interaction to replay. Defaults to
 #' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
@@ -40,6 +45,15 @@
 #' - `eject_cassette` ejects the current cassette. The cassette
 #'  will no longer be used. In addition, any newly recorded HTTP interactions
 #'  will be written to disk.
+#'
+#' @section Cassette options:
+#'
+#' Default values for arguments controlling cassette behavior are
+#' inherited from vcr's global configuration. See [`vcr_configure()`] for a
+#' complete list of options and their default settings. You can override these
+#' options for a specific cassette by changing an argument's value to something
+#' other than `NULL` when calling either `insert_cassette()` or
+#' `use_cassette()`.
 #'
 #' @section Behavior:
 #' This function handles a few different scenarios:
@@ -129,22 +143,28 @@
 #' two; res2
 #' }
 
-use_cassette <- function(name, ..., record = "once",
-  match_requests_on = c("method", "uri"),
+use_cassette <- function(name, ...,
+  record = NULL,
+  match_requests_on = NULL,
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
-  serialize_with = "yaml", persist_with = "FileSystem",
-  preserve_exact_body_bytes = FALSE, re_record_interval = NULL,
-  clean_outdated_http_interactions = FALSE) {
+  serialize_with = NULL,
+  persist_with = NULL,
+  preserve_exact_body_bytes = NULL,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL) {
 
-  cassette <- insert_cassette(
-    name, record = record, match_requests_on = match_requests_on,
+  cassette <- insert_cassette(name,
+    record = record,
+    match_requests_on = match_requests_on,
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
-    serialize_with = serialize_with, persist_with = persist_with,
+    serialize_with = serialize_with,
+    persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions)
+    clean_outdated_http_interactions = clean_outdated_http_interactions
+  )
   if (is.null(cassette)) {
     force(...)
     return(NULL)

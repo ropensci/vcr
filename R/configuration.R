@@ -1,34 +1,17 @@
-#' Configuration
+#' Global Configuration Options
 #'
-#' Optional settings to customize vcr's default behavior.
+#' Configurable options that define vcr's default behavior.
 #'
 #' @param ... configuration settings used to override defaults. See below for a
 #'   complete list of valid arguments.
 #'
 #' @section Configurable settings:
 #'
-#' ## Casstte options
+#' ## vcr options
+#'
+#' ### File locations
 #'
 #' - `dir` Cassette directory
-#' - `record` (character) One of 'all', 'none', 'new_episodes', or 'once'.
-#' See [recording]
-#' - `match_requests_on` vector of matchers. Default: (`method`, `uri`)
-#' See [request-matching] for details.
-#' - `cassettes` (list) don't use
-#' - `linked_context` (logical) linked context
-#'
-#' ## Recordings
-#'
-#' - `serialize_with`: (character) only option is "yaml"
-#' - `persist_with` (character) only option is "FileSystem"
-#' - `uri_parser` the uri parser, default: [crul::url_parse()]
-#' - `preserve_exact_body_bytes` (logical) preserve exact body bytes for
-#' - `turned_off` (logical) VCR is turned on by default. Default:
-#' `FALSE`
-#' - `re_record_interval` (numeric) When given, the cassette will be
-#' re-recorded at the given interval, in seconds.
-#' - `clean_outdated_http_interactions` (logical) Should outdated interactions
-#' be recorded back to file. Default: `FALSE`
 #' - `write_disk_path` (character) path to write files to
 #' for any requests that write responses to disk. by default this parameter
 #' is `NULL`. For testing a package, you'll probably want this path to
@@ -36,8 +19,10 @@
 #' directory, e.g., where your cassettes are in `tests/fixtures`, your
 #' files from requests that write to disk are in `tests/files`
 #'
-#' ## Connectivity
+#' ### Contexts
 #'
+#' - `turned_off` (logical) VCR is turned on by default. Default:
+#' `FALSE`
 #' - `allow_unused_http_interactions` (logical) Default: `TRUE`
 #' - `allow_http_connections_when_no_cassette` (logical) Determines how vcr
 #' treats HTTP requests that are made when no vcr cassette is in use. When
@@ -45,36 +30,64 @@
 #' When `FALSE` (default), an [UnhandledHTTPRequestError] error will be raised
 #' for any HTTP request made when there is no cassette in use
 #'
-#' ## Logging
-#'
-#' - `log` (logical) should we log important vcr things? Default: `FALSE`
-#' - `log_opts` (list) Additional logging options. Options include:
-#'   - file: one of a file path to log to or "console"
-#'   - log_prefix: default: "Cassette". We insert the cassette name after
-#'     that prefix, then the rest of the message
-#'   - More to come...
-#'
-#' ## Filtering
+#' ### Filtering
 #'
 #' - `ignore_hosts` (character) Vector of hosts to ignore. e.g., localhost, or
 #' google.com. These hosts are ignored and real HTTP requests allowed to go
 #' through
 #' - `ignore_localhost` (logical) Default: `FALSE`
 #' - `ignore_request` List of requests to ignore. NOT USED RIGHT NOW, sorry
-#' - `filter_sensitive_data` (list) named list of values to replace. format
-#' is: `list(thing_to_replace_it_with = thing_to_replace)`. We replace all
-#' instances of `thing_to_replace` with `thing_to_replace_it_with`. Before
-#' recording (writing to a cassette) we do the replacement and then when
-#' reading from the cassette we do the reverse replacement to get back
-#' to the real data. Before record replacement happens in internal
-#' function `write_interactions()`, while before playback replacement
-#' happens in internal function `YAML$deserialize_path()`
+#' - `filter_sensitive_data` named list of values to replace. Format is:
+#'   ```
+#'   list(thing_to_replace_it_with = thing_to_replace)
+#'   ```
+#'   We replace all instances of `thing_to_replace` with
+#' `thing_to_replace_it_with`. Before recording (writing to a cassette) we do
+#' the replacement and then when reading from the cassette we do the reverse
+#' replacement to get back to the real data. Before record replacement happens
+#' in internal function `write_interactions()`, while before playback
+#' replacement happens in internal function `YAML$deserialize_path()`
 #' 
 #' ## Errors
 #' 
 #' - `verbose_errors` Do you want more verbose errors or less verbose
 #' errors when cassette recording/usage fails? Default is `FALSE`, that is,
 #' less verbose errors.
+#'
+#' ### Internals
+#'
+#' - `cassettes` (list) don't use
+#' - `linked_context` (logical) linked context
+#' - `uri_parser` the uri parser, default: [crul::url_parse()]
+#'
+#' ### Logging
+#'
+#' - `log` (logical) should we log important vcr things? Default: `FALSE`
+#' - `log_opts` (list) Additional logging options:
+#'   - 'file' either `"console"` or a file path to log to
+#'   - 'log_prefix' default: "Cassette". We insert the cassette name after
+#'     that prefix, then the rest of the message.
+#'   - More to come...
+#'
+#' ## Cassette Options
+#'
+#' These settings can be configured globally, using `vcr_configure()`, or
+#' locally, using either `use_cassette()` or `insert_cassette()`. Global
+#' settings are applied to *all* cassettes but are overridden by settings
+#' defined locally for individuall cassettes.
+#'
+#' - `record` (character) One of 'all', 'none', 'new_episodes', or 'once'.
+#' See [recording]
+#' - `match_requests_on` vector of matchers. Default: (`method`, `uri`)
+#' See [request-matching] for details.
+#' - `serialize_with`: (character) only option is "yaml"
+#' - `persist_with` (character) only option is "FileSystem"
+#' - `preserve_exact_body_bytes` (logical) preserve exact body bytes for
+#' - `re_record_interval` (numeric) When given, the cassette will be
+#' re-recorded at the given interval, in seconds.
+#' - `clean_outdated_http_interactions` (logical) Should outdated interactions
+#' be recorded back to file. Default: `FALSE`
+>>>>>>> master
 #'
 #'
 #' @examples
@@ -84,6 +97,7 @@
 #' vcr_config_defaults()
 #' vcr_configure(dir = tempdir(), ignore_hosts = "google.com")
 #' vcr_configure(dir = tempdir(), ignore_localhost = TRUE)
+#'
 #'
 #' # logging
 #' vcr_configure(dir = tempdir(), log = TRUE,
@@ -299,7 +313,7 @@ VCRConfig <- R6::R6Class(
       preserve_exact_body_bytes = FALSE,
       turned_off = FALSE,
       re_record_interval = NULL,
-      clean_outdated_http_interactions = NULL,
+      clean_outdated_http_interactions = FALSE,
       allow_http_connections_when_no_cassette = FALSE,
       cassettes = list(),
       linked_context = NULL,
@@ -309,28 +323,28 @@ VCRConfig <- R6::R6Class(
       write_disk_path = NULL,
       verbose_errors = FALSE
     ) {
-      private$.dir <- dir
-      private$.record <- record
-      private$.match_requests_on <- match_requests_on
-      private$.allow_unused_http_interactions <- allow_unused_http_interactions
-      private$.serialize_with <- serialize_with
-      private$.persist_with <- persist_with
-      private$.ignore_hosts <- ignore_hosts
-      private$.ignore_localhost <- ignore_localhost
-      private$.ignore_request <- ignore_request
-      private$.uri_parser <- uri_parser
-      private$.preserve_exact_body_bytes <- preserve_exact_body_bytes
-      private$.turned_off <- turned_off
-      private$.re_record_interval <- re_record_interval
-      private$.clean_outdated_http_interactions <- clean_outdated_http_interactions
-      private$.allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
-      private$.cassettes <- cassettes
-      private$.linked_context <- linked_context
-      private$.log <- log
-      private$.log_opts <- log_opts
-      private$.filter_sensitive_data <- filter_sensitive_data
-      private$.write_disk_path <- write_disk_path
-      private$.verbose_errors <- verbose_errors
+      self$dir <- dir
+      self$record <- record
+      self$match_requests_on <- match_requests_on
+      self$allow_unused_http_interactions <- allow_unused_http_interactions
+      self$serialize_with <- serialize_with
+      self$persist_with <- persist_with
+      self$ignore_hosts <- ignore_hosts
+      self$ignore_localhost <- ignore_localhost
+      self$ignore_request <- ignore_request
+      self$uri_parser <- uri_parser
+      self$preserve_exact_body_bytes <- preserve_exact_body_bytes
+      self$turned_off <- turned_off
+      self$re_record_interval <- re_record_interval
+      self$clean_outdated_http_interactions <- clean_outdated_http_interactions
+      self$allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
+      self$cassettes <- cassettes
+      self$linked_context <- linked_context
+      self$log <- log
+      self$log_opts <- log_opts
+      self$filter_sensitive_data <- filter_sensitive_data
+      self$write_disk_path <- write_disk_path
+      self$verbose_errors <- verbose_errors
     },
 
     # reset all settings to defaults

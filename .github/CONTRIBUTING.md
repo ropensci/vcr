@@ -15,7 +15,3 @@
 * Submit a pull request to home base at `ropensci/vcr`
 
 ### Also, check out our [discussion forum](https://discuss.ropensci.org)
-
-### Prefer to Email? Get in touch: [scott@ropensci.org](mailto:scott@ropensci.org)
-
-### Thanks for contributing!

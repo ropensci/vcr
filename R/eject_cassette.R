@@ -1,7 +1,8 @@
 #' Eject a cassette
 #'
 #' @export
-#' @param cassette (character) a single cassette names to eject
+#' @param cassette (character) a single cassette names to eject; see `name`
+#' parameter definition in [insert_cassette()] for cassette name rules
 #' @param options (list) a list of options to apply to the eject process
 #' @param skip_no_unused_interactions_assertion (logical) If `TRUE`, this will
 #' skip the "no unused HTTP interactions" assertion enabled by the
@@ -25,13 +26,11 @@ eject_cassette <- function(cassette = NULL, options = list(),
   if (is.null(cassette)) {
     # current cassette
     cas <- current_cassette()
-    if (length(cas) == 0) stop("no cassette in use currently", call. = FALSE)
+    if (length(cas) == 0) stp("no cassette in use currently")
   } else {
-    if (!cassette_exists(cassette)) {
-      stop("cassette '", cassette, "' not found", call. = FALSE)
-    }
+    if (!cassette_exists(cassette)) stp("cassette '", cassette, "' not found")
     cas <- cassettes(FALSE)[[cassette]]
-    if (is.null(cas)) stop("cassette '", cassette, "' not found", call. = FALSE)
+    if (is.null(cas)) stp("cassette '", cassette, "' not found")
   }
   # eject it
   cas$eject()

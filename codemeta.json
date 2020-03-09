@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.1",
+    "version": "3.6.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.1 Patched (2019-07-17 r76848)",
+  "runtimePlatform": "R version 3.6.3 RC (2020-02-21 r77868)",
   "author": [
     {
       "@type": "Person",
@@ -37,6 +37,19 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "roxygen2",
+      "name": "roxygen2",
+      "version": ">= 7.0.2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=roxygen2"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "jsonlite",
@@ -120,6 +133,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=cli"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "curl",
+      "name": "curl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=curl"
     }
   ],
   "softwareRequirements": [
@@ -127,7 +152,7 @@
       "@type": "SoftwareApplication",
       "identifier": "crul",
       "name": "crul",
-      "version": ">= 0.7.0",
+      "version": ">= 0.8.4",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -152,7 +177,7 @@
       "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
-      "version": ">= 0.4.0",
+      "version": ">= 0.6.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -225,19 +250,29 @@
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
-  "contIntegration": "https://travis-ci.org/ropenscilabs/vcr",
+  "contIntegration": ["https://travis-ci.org/ropensci/vcr", "https://ci.appveyor.com/project/sckott/vcr", "https://codecov.io/gh/ropensci/vcr"],
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "73.897KB",
-  "relatedLink": "https://ropenscilabs.github.io/http-testing-book/",
+  "fileSize": "148.962KB",
+  "relatedLink": [
+    "https://ropenscilabs.github.io/http-testing-book/",
+    "https://books.ropensci.org/http-testing/"
+  ],
   "releaseNotes": "https://github.com/ropensci/vcr/blob/master/NEWS.md",
-  "developmentStatus": "http://www.repostatus.org/#wip",
+  "developmentStatus": "https://www.repostatus.org/#active",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
     "name": "Comprehensive R Archive Network (CRAN)",
     "url": "https://cran.r-project.org"
   },
-  "contributor": {},
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Aaron",
+      "familyName": "Wolen",
+      "@id": "https://orcid.org/0000-0003-2542-2202"
+    }
+  ],
   "copyrightHolder": {},
   "funder": {}
 }
