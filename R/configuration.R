@@ -87,8 +87,6 @@
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
->>>>>>> master
-#'
 #'
 #' @examples
 #' vcr_configure(dir = tempdir())
