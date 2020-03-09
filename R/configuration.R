@@ -52,7 +52,8 @@
 #' 
 #' - `verbose_errors` Do you want more verbose errors or less verbose
 #' errors when cassette recording/usage fails? Default is `FALSE`, that is,
-#' less verbose errors.
+#' less verbose errors. If `TRUE`, error messages will include more details
+#' about what went wrong and suggest possible solutions.
 #'
 #' ### Internals
 #'
@@ -292,7 +293,7 @@ VCRConfig <- R6::R6Class(
     },
     verbose_errors = function(value) {
       if (missing(value)) return(private$.verbose_errors)
-      private$.verbose_errors <- value
+      private$.verbose_errors <- assert(value, "logical")
     }
   ),
 

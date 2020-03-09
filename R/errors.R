@@ -188,7 +188,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         xx <- if (length(cassettes_session()) == 1) {
           "vcr is currently using the following cassette:"
         } else {
-          "vcr are currently using the following cassettes:"
+          "vcr is currently using the following cassettes:"
         }
         lines <- c(lines, xx)
         # FIXME: should fix this to generalize to many cassettes, see ruby code

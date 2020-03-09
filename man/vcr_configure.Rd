@@ -69,6 +69,15 @@ replacement happens in internal function \code{YAML$deserialize_path()}
 }
 }
 
+}
+
+\subsection{Errors}{
+\itemize{
+\item \code{verbose_errors} Do you want more verbose errors or less verbose
+errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
+less verbose errors. If \code{TRUE}, error messages will include more details
+about what went wrong and suggest possible solutions.
+}
 \subsection{Internals}{
 \itemize{
 \item \code{cassettes} (list) don't use
@@ -110,14 +119,6 @@ See \link{request-matching} for details.
 re-recorded at the given interval, in seconds.
 \item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}
-}
-}
-
-\subsection{Errors}{
-\itemize{
-\item \code{verbose_errors} Do you want more verbose errors or less verbose
-errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
-less verbose errors.
 }
 }
 }
