@@ -51,6 +51,7 @@
 #' # err$construct_message()
 #'
 #' # cleanup
+#' eject_cassette("turtle")
 #' unlink(tempdir())
 UnhandledHTTPRequestError <- R6::R6Class(
   "UnhandledHTTPRequestError",
@@ -94,15 +95,16 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @return a stop message
     construct_message = function() {
       # create formatted_suggestions for later use
-      vcr__env$request_description <- self$request_description()
-      vcr__env$cassettes_description <- self$cassettes_description()
-      vcr__env$formatted_suggestion <- self$formatted_suggestions()
+      vcr__env$last_error <- list()
+      vcr__env$last_error$request_description <- self$request_description()
+      vcr__env$last_error$cassettes_description <- self$cassettes_description()
+      vcr__env$last_error$formatted_suggestion <- self$formatted_suggestions()
       mssg <- paste0(
         c("", "", paste0(rep("=", 80), collapse = ""),
           "An HTTP request has been made that vcr does not know how to handle:",
           self$request_description(),
           if (vcr_c$verbose_errors) self$cassettes_description() else self$cassettes_list(),
-          if (vcr_c$verbose_errors) vcr__env$formatted_suggestion else self$get_help(),
+          if (vcr_c$verbose_errors) vcr__env$last_error$formatted_suggestion else self$get_help(),
           paste0(rep("=", 80), collapse = ""), "", ""),
         collapse = "\n")
       orig_warn_len <- getOption("warning.length")
@@ -208,8 +210,10 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get help message for non-verbose error
     #' @return character
     get_help = function() {
-      c("If you're not sure what to do, open an issue at https://github.com/ropensci/vcr/issues",
-        "or take a look at https://books.ropensci.org/http-testing")
+      vm <- if (interactive()) "Run `vcr::vcr_last_error()`" else "Set `VCR_VERBOSE_ERRORS=TRUE`"
+      c(paste0(vm, " for more verbose errors"),
+        "If you're not sure what to do, open an issue https://github.com/ropensci/vcr/issues",
+        "& see https://books.ropensci.org/http-testing")
     },
 
     #' @description make suggestions for what to do
@@ -222,8 +226,8 @@ UnhandledHTTPRequestError <- R6::R6Class(
         fn <- self$format_foot_note(bp$url, index)
         list(fp = fp, fn = fn)
       }, sugs, seq_along(sugs) - 1)
-      paste0(c(vapply(xx, "[[", "", 1), vapply(xx, "[[", "", 2)),
-             collapse = "\n", sep = "\n")
+      paste0(c(vapply(xx, "[[", "", 1), "\n", vapply(xx, "[[", "", 2)),
+             collapse = "", sep = "\n")
     },
 
     #' @description add bullet point to beginning of a line
@@ -332,12 +336,17 @@ UnhandledHTTPRequestError <- R6::R6Class(
 #' # vcr_last_error()
 #' }
 vcr_last_error <- function() {
+  if (is.null(vcr__env$last_error) || length(vcr__env$last_error) == 0) {
+    stop("no error to report; either no cassette in use \n",
+      "  or there's a problem with this package (i.e., open an issue)",
+      call. = FALSE)
+  }
   message(
     paste0(
       c("", "", paste0(rep("=", 80), collapse = ""),
-        vcr__env$request_description,
-        vcr__env$cassettes_description,
-        vcr__env$formatted_suggestion,
+        vcr__env$last_error$request_description,
+        vcr__env$last_error$cassettes_description,
+        vcr__env$last_error$formatted_suggestion,
         paste0(rep("=", 80), collapse = ""), "", ""),
       collapse = "\n")
   )

@@ -53,7 +53,13 @@
 #' - `verbose_errors` Do you want more verbose errors or less verbose
 #' errors when cassette recording/usage fails? Default is `FALSE`, that is,
 #' less verbose errors. If `TRUE`, error messages will include more details
-#' about what went wrong and suggest possible solutions.
+#' about what went wrong and suggest possible solutions. For testing
+#' in an interactive R session, if `verbose_errors=FALSE`, you can run
+#' `vcr_last_error()` to get the full error. If in non-interactive mode,
+#' which most users will be in when running the entire test suite for a
+#' package, you can set an environment variable (`VCR_VERBOSE_ERRORS`)
+#' to toggle this setting (e.g.,
+#' `Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()`)
 #'
 #' ### Internals
 #'
@@ -292,7 +298,9 @@ VCRConfig <- R6::R6Class(
       private$.write_disk_path <- value
     },
     verbose_errors = function(value) {
-      if (missing(value)) return(private$.verbose_errors)
+      env_ve <- vcr_env_verbose_errors()
+      if (missing(value) && is.null(env_ve)) return(private$.verbose_errors)
+      value <- env_ve %||% value
       private$.verbose_errors <- assert(value, "logical")
     }
   ),
@@ -377,3 +385,13 @@ VCRConfig <- R6::R6Class(
 )
 
 pastec <- function(x) paste0(x, collapse = ", ")
+
+vcr_env_verbose_errors <- function() {
+  var <- "VCR_VERBOSE_ERRORS"
+  x <- Sys.getenv(var, "")
+  if (x != "") {
+    x <- as.logical(x)
+    vcr_env_var_check(x, var)
+    x
+  }
+}
