@@ -42,7 +42,7 @@ Suggests:
     crayon,
     cli,
     curl
-Remotes: ropensci/webmockr
+Remotes: ropensci/webmockr@relative-paths
 RoxygenNote: 7.1.0
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
