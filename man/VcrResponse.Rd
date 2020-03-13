@@ -105,6 +105,7 @@ f <- tempfile()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new VcrResponse object
 \subsection{Usage}{
@@ -144,6 +145,7 @@ A new \code{VcrResponse} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Create a hash
 \subsection{Usage}{
@@ -156,6 +158,7 @@ a list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Get a hash back to an R list
 \subsection{Usage}{
@@ -175,6 +178,7 @@ an \code{VcrResponse} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_content_length_header"></a>}}
+\if{latex}{\out{\hypertarget{method-update_content_length_header}{}}}
 \subsection{Method \code{update_content_length_header()}}{
 Updates the Content-Length response header so that
 it is accurate for the response body
@@ -188,6 +192,7 @@ no return; modifies the content length header
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_header"></a>}}
+\if{latex}{\out{\hypertarget{method-get_header}{}}}
 \subsection{Method \code{get_header()}}{
 Get a header by name
 \subsection{Usage}{
@@ -207,6 +212,7 @@ the header value (if it exists)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-edit_header"></a>}}
+\if{latex}{\out{\hypertarget{method-edit_header}{}}}
 \subsection{Method \code{edit_header()}}{
 Edit a header
 \subsection{Usage}{
@@ -228,6 +234,7 @@ no return; modifies the header in place
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-delete_header"></a>}}
+\if{latex}{\out{\hypertarget{method-delete_header}{}}}
 \subsection{Method \code{delete_header()}}{
 Delete a header
 \subsection{Usage}{
@@ -247,6 +254,7 @@ no return; the header is deleted if it exists
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-content_encoding"></a>}}
+\if{latex}{\out{\hypertarget{method-content_encoding}{}}}
 \subsection{Method \code{content_encoding()}}{
 Get the content-encoding header value
 \subsection{Usage}{
@@ -259,6 +267,7 @@ Get the content-encoding header value
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_compressed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_compressed}{}}}
 \subsection{Method \code{is_compressed()}}{
 Checks if the encoding is one of "gzip" or "deflate"
 \subsection{Usage}{
@@ -271,6 +280,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

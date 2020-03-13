@@ -37,6 +37,7 @@ x$registry
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new RequestMatcherRegistry object
 \subsection{Usage}{
@@ -61,6 +62,7 @@ A new \code{RequestMatcherRegistry} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-register"></a>}}
+\if{latex}{\out{\hypertarget{method-register}{}}}
 \subsection{Method \code{register()}}{
 Register a custom matcher
 \subsection{Usage}{
@@ -83,6 +85,7 @@ no return; registers the matcher
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-register_built_ins"></a>}}
+\if{latex}{\out{\hypertarget{method-register_built_ins}{}}}
 \subsection{Method \code{register_built_ins()}}{
 Register all built in matchers
 \subsection{Usage}{
@@ -95,6 +98,7 @@ no return; registers all built in matchers
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-try_to_register_body_as_json"></a>}}
+\if{latex}{\out{\hypertarget{method-try_to_register_body_as_json}{}}}
 \subsection{Method \code{try_to_register_body_as_json()}}{
 Try to register body as JSON
 \subsection{Usage}{
@@ -114,6 +118,7 @@ no return; registers the matcher
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

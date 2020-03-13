@@ -47,6 +47,7 @@ x$hooks
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-invoke_hook"></a>}}
+\if{latex}{\out{\hypertarget{method-invoke_hook}{}}}
 \subsection{Method \code{invoke_hook()}}{
 invoke a hook
 \subsection{Usage}{
@@ -68,6 +69,7 @@ executes hook
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_hooks"></a>}}
+\if{latex}{\out{\hypertarget{method-clear_hooks}{}}}
 \subsection{Method \code{clear_hooks()}}{
 clear all hooks
 \subsection{Usage}{
@@ -80,6 +82,7 @@ no return
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-define_hook"></a>}}
+\if{latex}{\out{\hypertarget{method-define_hook}{}}}
 \subsection{Method \code{define_hook()}}{
 define a hook
 \subsection{Usage}{
@@ -104,6 +107,7 @@ no return; defines hook internally
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

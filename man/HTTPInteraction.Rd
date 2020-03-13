@@ -71,6 +71,7 @@ HTTPInteraction$new()$from_hash(my_hash)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{HTTPInteraction} object
 \subsection{Usage}{
@@ -94,6 +95,7 @@ A new \code{HTTPInteraction} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Create a hash from the HTTPInteraction object
 \subsection{Usage}{
@@ -106,6 +108,7 @@ a named list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Create a HTTPInteraction object from a hash
 \subsection{Usage}{
@@ -125,6 +128,7 @@ a new \code{HttpInteraction} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

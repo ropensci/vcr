@@ -41,6 +41,7 @@ yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new YAML object
 \subsection{Usage}{
@@ -65,6 +66,7 @@ A new \code{YAML} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-serialize"></a>}}
+\if{latex}{\out{\hypertarget{method-serialize}{}}}
 \subsection{Method \code{serialize()}}{
 Serializes the given hash using internal fxn write_yaml
 \subsection{Usage}{
@@ -88,6 +90,7 @@ Serializes the given hash using internal fxn write_yaml
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-deserialize_string"></a>}}
+\if{latex}{\out{\hypertarget{method-deserialize_string}{}}}
 \subsection{Method \code{deserialize_string()}}{
 Deserializes the given string using yaml::yaml.load
 \subsection{Usage}{
@@ -107,6 +110,7 @@ Deserializes the given string using yaml::yaml.load
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-deserialize_path"></a>}}
+\if{latex}{\out{\hypertarget{method-deserialize_path}{}}}
 \subsection{Method \code{deserialize_path()}}{
 Deserializes the given string using yaml::yaml.load_file
 \subsection{Usage}{
@@ -119,6 +123,7 @@ Deserializes the given string using yaml::yaml.load_file
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
