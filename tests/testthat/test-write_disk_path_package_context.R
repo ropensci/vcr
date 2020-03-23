@@ -80,7 +80,6 @@ vcr::check_cassette_names()'
   unlink(file.path(dir, "tests/testthat/test-vcr_example.R"))
   
   og <- getwd()
-  # setwd(file.path(dir, "tests/testthat"))
   setwd(dir)
   on.exit(setwd(og))
 
