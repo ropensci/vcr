@@ -17,7 +17,12 @@
 #' is `NULL`. For testing a package, you'll probably want this path to
 #' be in your `tests/` directory, perhaps next to your cassettes
 #' directory, e.g., where your cassettes are in `tests/fixtures`, your
-#' files from requests that write to disk are in `tests/files`
+#' files from requests that write to disk are in `tests/files`.
+#' If you want to ignore these files in your installed package, 
+#' add them to `.Rinstignore`. If you want these files ignored on build
+#' then add them to `.Rbuildignore` (though if you do, tests that depend
+#' on these files probably will not work because they won't be found; so
+#' you'll likely have to skip the associated tests as well).
 #'
 #' ### Contexts
 #'
