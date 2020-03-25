@@ -10,14 +10,14 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.5.0",
+  "version": "0.5.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "version": "3.6.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.3 RC (2020-02-21 r77868)",
+  "runtimePlatform": "R version 3.6.3 Patched (2020-02-29 r77909)",
   "author": [
     {
       "@type": "Person",
@@ -177,7 +177,7 @@
       "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
-      "version": ">= 0.6.0",
+      "version": ">= 0.6.2",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -252,7 +252,7 @@
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
   "contIntegration": ["https://travis-ci.org/ropensci/vcr", "https://ci.appveyor.com/project/sckott/vcr", "https://codecov.io/gh/ropensci/vcr"],
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "148.962KB",
+  "fileSize": "152.499KB",
   "relatedLink": [
     "https://ropenscilabs.github.io/http-testing-book/",
     "https://books.ropensci.org/http-testing/"

@@ -1,3 +1,16 @@
+vcr 0.5.4
+=========
+
+### NEW FEATURES
+
+* Error messages when tests using vcr fail are now simpler, primarily to reduce the space error messages take up. The user can toggle whether they get the new simplified error messages or the older format more verbose messages using the `verbose_errors` setting in the `vcr_configure()` function. In addition, `vcr_last_error()` gives the last full error, but that doesn't help in non-interactive mode; if in non-interactive mode, which most users will be in when running the entire test suite for a package, you can set an environment variable (`VCR_VERBOSE_ERRORS`) to toggle this setting (e.g.,
+`Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()`) (#121) (#154)
+
+### MINOR IMPROVEMENTS
+
+* changed `write_disk_path` handling internally to not run it through `normalizePath` before recording it to the cassette; passing the path through `normalizePath` was leading to the full path recorded in the cassette, which means in a package testing context that a test that uses a file on disk will (likely) only work on the machine the cassette was first created on. with relative paths in a package context, a test that has a file written on disk should now work in different testing contexts (locally, and various continuous integration platforms) (#135) (#166)
+* added a bit of documentation about large files created when using vcr, and how to ignore them if needed within `.Rinstignore` and/or `.Rbuildignore` (#164)
+
 vcr 0.5.0
 =========
 
