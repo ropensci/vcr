@@ -40,8 +40,8 @@ system.time(
     cli$get("get")
   })
 )
-#>    user  system elapsed
-#>   0.163   0.022   0.639
+#>    user  system elapsed 
+#>   0.123   0.023   0.557
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -53,8 +53,8 @@ system.time(
     cli$get("get")
   })
 )
-#>    user  system elapsed
-#>   0.115   0.006   0.136
+#>    user  system elapsed 
+#>   0.079   0.005   0.086
 ```
 
 
@@ -211,7 +211,7 @@ Development version:
 
 
 ```r
-devtools::install_github("ropensci/vcr")
+remotes::install_github("ropensci/vcr")
 ```
 
 
@@ -339,7 +339,6 @@ By participating in this project you agree to abide by its terms.
 [webmockr]: https://github.com/ropensci/webmockr
 [crul]: https://github.com/ropensci/crul
 [rgbif]: https://github.com/ropensci/rgbif
-[rdatacite]: https://github.com/ropensci/rdatacite
 [rredlist]: https://github.com/ropensci/rredlist
 [bold]: https://github.com/ropensci/bold
 [wikitaxa]: https://github.com/ropensci/wikitaxa
