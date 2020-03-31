@@ -252,7 +252,7 @@
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
   "contIntegration": ["https://travis-ci.org/ropensci/vcr", "https://ci.appveyor.com/project/sckott/vcr", "https://codecov.io/gh/ropensci/vcr"],
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "152.499KB",
+  "fileSize": "152.487KB",
   "relatedLink": [
     "https://ropenscilabs.github.io/http-testing-book/",
     "https://books.ropensci.org/http-testing/"
