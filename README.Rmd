@@ -40,7 +40,7 @@ To install from CRAN
 install.packages("vcr")
 ```
 
-You can then set up your package to use VCR with:
+You can then set up your package to use `vcr` with:
 
 ```r
 vcr::use_vcr()
@@ -61,7 +61,7 @@ This will:
 ◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
 ```
 
-If you need to use api keys for authentication, it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your api keys unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `helper-vrc` file that got made for us just now. By default it will look like this:
+If you need to use secrets (for example, api keys for authentication), it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `helper-vcr` file that got made for us just now. By default it will look like this:
 
 ```r
 library("vcr")
@@ -71,18 +71,18 @@ invisible(vcr::vcr_configure(
 vcr::check_cassette_names()
 ```
 
-Use the `filter_sensitive_data` argument in the `vcr_configure` function to show `vcr` how to keep you secret information secret. The best way to store secret information is to have it in a `.Renviron` file. Assuming that that is already in place, supply a named list to the `filter_sensitive_data` argument.
+Use the `filter_sensitive_data` argument in the `vcr_configure` function to show `vcr` how to keep you secret. The best way to store secret information is to have it in a `.Renviron` file. Assuming that that is already in place, supply a named list to the `filter_sensitive_data` argument.
 
 ```r
 library("vcr")
 invisible(vcr::vcr_configure(
-filter_sensitive_data = list("<<<my_api_key>>>" = Sys.getenv('APIKEY'),  # add this
+  filter_sensitive_data = list("<<<my_api_key>>>" = Sys.getenv('APIKEY'),  # add this
   dir = "../fixtures"
 ))
 vcr::check_cassette_names()
 ```
 
-The will get your secret information from the environment, and make sure that whenever `vcr` records a new cassette, it will replace the secret information with `"<<<my_api_key>>>"`. You can find out more about this in the [HTTP testing book](https://books.ropensci.org/http-testing/) chapter on security.
+The will get your secret information from the environment, and make sure that whenever `vcr` records a new cassette, it will replace the secret information with `<<<my_api_key>>>`. You can find out more about this in the [HTTP testing book](https://books.ropensci.org/http-testing/) chapter on security.
 
 ## Usage
 
