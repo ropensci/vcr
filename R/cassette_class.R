@@ -179,6 +179,7 @@ Cassette <- R6::R6Class(
       #### first, get previously recorded interactions into `http_interactions_` var
       self$http_interactions()
       # then do the rest
+      
       prev <- self$previously_recorded_interactions()
       if (length(prev) > 0) {
         invisible(lapply(prev, function(z) {
@@ -192,48 +193,49 @@ Cassette <- R6::R6Class(
               vmp <- c("method", "uri", "body", "headers", "query")
               mp[mp %in% vmp]
             }
-
+            
             mp <- .check_match_parameters(match_parameters)
 
             stub_method <- ifelse("method" %in% mp,
-              request$method,
+              req$method,
               "any"
             )
 
-            stub_uri <- ifelse(mp == c("body"),
+            stub_uri <- ifelse(identical(mp, c("body")),
               ".+",
               ifelse("uri" %in% mp,
-                request$uri,
+                req$uri,
                 "."
               )
             )
 
             if (stub_uri %in% c(".", ".+")) {
-              sr <- webmockr::stub_request(stub_method, uri_regex = stub_uri)
+              sr <- webmockr::stub_request(method = stub_method, uri_regex = stub_uri)
             } else {
-              sr <- webmockr::stub_request(stub_method, uri = stub_uri)
+              sr <- webmockr::stub_request(method = stub_method, uri = stub_uri)
             }
 
             with_list <- list()
 
             if ("query" %in% mp) {
-              with_list[["query"]] <- crul::url_parse(request$uri)["parameter"]
+              with_list[["query"]] <- uripp$parameter
             }
 
             if ("headers" %in% mp) {
-              with_list[["headers"]] <- request$headers
+              with_list[["headers"]] <- req$headers
             }
 
             if ("body" %in% mp) {
-              with_list[["body"]] <- request$headers
+              with_list[["body"]] <- req$body
             }
 
             # if list is empty, skip wi_th
             if (length(with_list) != 0) {
-              webmockr::wi_th(sr, .list = with_list)
+              return(webmockr::wi_th(sr, .list = with_list))
+            } else {
+              return(sr)
             }
-
-            return(sr)
+            
           }
 
       tmp <- stub_request_with(m, req)
