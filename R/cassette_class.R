@@ -179,21 +179,22 @@ Cassette <- R6::R6Class(
       #### first, get previously recorded interactions into `http_interactions_` var
       self$http_interactions()
       # then do the rest
-      
+
       prev <- self$previously_recorded_interactions()
       if (length(prev) > 0) {
-        invisible(lapply(prev, function(z) {
-          req <- z$request
-          res <- z$response
+
+        stub_previous_request <- function(previous_interaction) {
+          req <- previous_interaction$request
+          res <- previous_interaction$response
           uripp <- crul::url_parse(req$uri)
           m <- self$match_requests_on
 
-          stub_request_with <- function(match_parameters, request) {
+          .stub_request_with <- function(match_parameters, request) {
             .check_match_parameters <- function(mp) {
               vmp <- c("method", "uri", "body", "headers", "query")
               mp[mp %in% vmp]
             }
-            
+
             mp <- .check_match_parameters(match_parameters)
 
             stub_method <- ifelse("method" %in% mp,
@@ -210,9 +211,11 @@ Cassette <- R6::R6Class(
             )
 
             if (stub_uri %in% c(".", ".+")) {
-              sr <- webmockr::stub_request(method = stub_method, uri_regex = stub_uri)
+              sr <- webmockr::stub_request(method = stub_method,
+                                           uri_regex = stub_uri)
             } else {
-              sr <- webmockr::stub_request(method = stub_method, uri = stub_uri)
+              sr <- webmockr::stub_request(method = stub_method,
+                                           uri = stub_uri)
             }
 
             with_list <- list()
@@ -230,17 +233,13 @@ Cassette <- R6::R6Class(
             }
 
             # if list is empty, skip wi_th
-            if (length(with_list) != 0) {
-              return(webmockr::wi_th(sr, .list = with_list))
-            } else {
-              return(sr)
-            }
-            
+            if (length(with_list) != 0) webmockr::wi_th(sr, .list = with_list)
           }
 
-      tmp <- stub_request_with(m, req)
+         .stub_request_with(m, req)
+        }
 
-        }))
+        invisible(lapply(prev, stub_previous_request))
       }
 
       tmp <- list(
