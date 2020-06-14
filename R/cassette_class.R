@@ -186,69 +186,57 @@ Cassette <- R6::R6Class(
           res <- z$response
           uripp <- crul::url_parse(req$uri)
           m <- self$match_requests_on
-          if (length(m) == 1) {
-            if (m == "method") webmockr::stub_request(req$method, uri_regex = ".")
-            if (m == "uri") webmockr::stub_request("any", req$uri)
-            if (m == "query") {
-              tmp <- webmockr::stub_request("any", uri_regex = ".")
-              webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
+
+          stub_request_with <- function(match_parameters, request) {
+            .check_match_parameters <- function(mp) {
+              vmp <- c("method", "uri", "body", "headers", "query")
+              mp[mp %in% vmp]
             }
-            if (m == "headers") {
-              tmp <- webmockr::stub_request("any", uri_regex = ".")
-              webmockr::wi_th(tmp, .list = list(headers = req$headers))
+
+            mp <- .check_match_parameters(match_parameters)
+
+            stub_method <- ifelse("method" %in% mp,
+              request$method,
+              "any"
+            )
+
+            stub_uri <- ifelse(mp == c("body"),
+              ".+",
+              ifelse("uri" %in% mp,
+                request$uri,
+                "."
+              )
+            )
+
+            if (stub_uri %in% c(".", ".+")) {
+              sr <- webmockr::stub_request(stub_method, uri_regex = stub_uri)
+            } else {
+              sr <- webmockr::stub_request(stub_method, uri = stub_uri)
             }
-            if (m == "body") {
-              tmp <- webmockr::stub_request("any", uri_regex = ".+")
-              webmockr::wi_th(tmp, .list = list(body = req$body))
+
+            with_list <- list()
+
+            if ("query" %in% mp) {
+              with_list[["query"]] <- crul::url_parse(request$uri)["parameter"]
             }
-          } else if (all(m %in% c("method", "uri")) && length(m) == 2) {
-            webmockr::stub_request(req$method, req$uri)
-          } else if (
-            all(m %in% c("method", "body")) && length(m) == 2
-          ) {
-            tmp <- webmockr::stub_request(req$method, uri_regex = ".")
-            webmockr::wi_th(tmp, .list = list(body = req$body))
-          } else if (
-            all(m %in% c("method", "uri", "query")) && length(m) == 3
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
-          } else if (
-            all(m %in% c("method", "uri", "headers")) && length(m) == 3
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(headers = req$headers))
-          } else if (
-            all(m %in% c("method", "uri", "body")) && length(m) == 3
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(body = req$body))
-          } else if (
-            all(m %in% c("method", "uri", "headers", "query")) &&
-            length(m) == 4
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
-              headers = req$headers))
-          } else if (
-            all(m %in% c("method", "uri", "headers", "body")) &&
-            length(m) == 4
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(body = req$body,
-              headers = req$headers))
-          } else if (
-            all(m %in% c("method", "uri", "query", "body")) &&
-            length(m) == 4
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
-              body = req$body))
-          } else {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
-              body = req$body, headers = req$headers))
+
+            if ("headers" %in% mp) {
+              with_list[["headers"]] <- request$headers
+            }
+
+            if ("body" %in% mp) {
+              with_list[["body"]] <- request$headers
+            }
+
+            # if list is empty, skip wi_th
+            if (length(with_list) != 0) {
+              webmockr::wi_th(sr, .list = with_list)
+            }
+
+            return(sr)
           }
+
+      tmp <- stub_request_with(m, req)
 
         }))
       }
