@@ -53,7 +53,7 @@ test_that("crul POST requests works", {
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_match(strj$files$y, "bibentry\\(") # files not empty
+  expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
   unlink(ff)
   
