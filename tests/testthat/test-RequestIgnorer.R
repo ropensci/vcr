@@ -88,14 +88,18 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
 
   library(crul)
 
+  vcr_configure_reset()
+
   # IGNORE BY HOST
   tmpdir <- tempdir()
   vcr_configure(dir = tmpdir)
   # vcr_configuration()
   cas_not_ignored <- use_cassette("test_ignore_host", {
-    HttpClient$new("https://google.com")$get()
+    HttpClient$new("https://httpbin.org")$get()
     HttpClient$new("https://scottchamberlain.info")$get()
   })
+
+  vcr_configure_reset()
 
   vcr_configure(dir = tmpdir, ignore_hosts = "google.com")
   # vcr_configuration()
@@ -104,7 +108,7 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
     HttpClient$new("https://scottchamberlain.info")$get()
   })
 
-  read_cas <- function(x) yaml::yaml.load_file(x)$http_interactions
+  read_cas <- function(x) suppressWarnings(yaml::yaml.load_file(x))$http_interactions
   expect_equal(length(read_cas(cas_not_ignored$file())), 2)
   expect_equal(length(read_cas(cas_ignored$file())), 1)
 
