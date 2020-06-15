@@ -205,9 +205,11 @@ test_that("httr POST requests works", {
   expect_equal(strj$data, "some string")
 
   # body type: upload_file
+  ff <- tempfile(fileext = ".txt")
+  cat("hello world\n", file = ff)
   out4 <- use_cassette("httr_post_upload_file", {
     b <- POST("https://httpbin.org/post",
-      body = list(y = httr::upload_file(system.file("CITATION"))))
+      body = list(y = httr::upload_file(ff)))
   })
   expect_false(out4$is_empty())
   expect_is(b, "response")
@@ -216,6 +218,7 @@ test_that("httr POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_match(strj$files$y, "bibentry\\(") # files not empty
   expect_false(nzchar(strj$data)) # data empty
+  unlink(ff)
   
   ## upload_file not in a list
   # out6 <- use_cassette("httr_post_upload_file_no_list", {
