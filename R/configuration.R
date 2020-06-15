@@ -70,7 +70,7 @@
 #'
 #' - `cassettes` (list) don't use
 #' - `linked_context` (logical) linked context
-#' - `uri_parser` the uri parser, default: [crul::url_parse()]
+#' - `uri_parser` the uri parser, default: `crul::url_parse()`
 #'
 #' ### Logging
 #'

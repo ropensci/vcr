@@ -93,7 +93,7 @@ to toggle this setting (e.g.,
 \itemize{
 \item \code{cassettes} (list) don't use
 \item \code{linked_context} (logical) linked context
-\item \code{uri_parser} the uri parser, default: \code{\link[crul:url_parse]{crul::url_parse()}}
+\item \code{uri_parser} the uri parser, default: \code{crul::url_parse()}
 }
 }
 
