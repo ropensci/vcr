@@ -10,6 +10,15 @@ an object of class \code{Cassette}
 Main R6 class that is called from the main user facing
 function \code{\link[=use_cassette]{use_cassette()}}
 }
+\section{webmockr stubs}{
+
+webmockr is used in the \code{initialize()} method to create webmockr
+stubs. stubs are created on call to \code{Cassette$new()} within
+\code{insert_cassette()}, but then on exiting \code{use_cassette()}, or calling
+\code{eject()} on \code{Cassette} class from \code{insert_cassette()}, stubs are
+cleaned up.
+}
+
 \examples{
 library(vcr)
 vcr_configure(dir = tempdir())
@@ -30,6 +39,12 @@ res$eject()
 
 # cleanup
 unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
+
+library(vcr)
+vcr_configure(dir = tempdir())
+res <- Cassette$new(name = "jane")
+library(crul)
+HttpClient$new("https://httpbin.org")$get("get")
 }
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}

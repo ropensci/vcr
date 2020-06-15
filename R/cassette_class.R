@@ -25,6 +25,12 @@
 #'
 #' # cleanup
 #' unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
+#' 
+#' library(vcr)
+#' vcr_configure(dir = tempdir())
+#' res <- Cassette$new(name = "jane")
+#' library(crul)
+#' HttpClient$new("https://httpbin.org")$get("get")
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
@@ -118,6 +124,12 @@ Cassette <- R6::R6Class(
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
     #' @return A new `Cassette` object
+    #' @section webmockr stubs:
+    #' webmockr is used in the `initialize()` method to create webmockr
+    #' stubs. stubs are created on call to `Cassette$new()` within
+    #' `insert_cassette()`, but then on exiting `use_cassette()`, or calling
+    #' `eject()` on `Cassette` class from `insert_cassette()`, stubs are
+    #' cleaned up.
     initialize = function(
       name, record, serialize_with = "yaml",
       persist_with = "FileSystem",
