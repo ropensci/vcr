@@ -28,12 +28,6 @@ test_that("Cassette fails well with invalid request matchers", {
   )
 })
 
-test_that("Cassette fails well with unsupported matcher", {
-  expect_error(Cassette$new("foobar89", match_requests_on = "host"),
-    "we do not yet support host and path matchers")
-})
-
-
 test_that("make_http_interaction works as expected", {
   #### Prepare http responses
   # crul_resp1 <- crul::HttpClient$new("https://httpbin.org/get?foo=bar")$get()

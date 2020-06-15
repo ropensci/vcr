@@ -109,12 +109,6 @@ check_request_matchers <- function(x) {
          ") is not in the allowed set: ",
          paste0(mro, collapse = ", "), call. = FALSE)
   }
-  # we don't yet support the following matchers: host, path
-  if (any(x %in% c("host", "path"))) {
-    stop("we do not yet support host and path matchers",
-      "\n see https://github.com/ropensci/vcr/issues/70",
-      call. = FALSE)
-  }
   x
 }
 

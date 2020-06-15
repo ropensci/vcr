@@ -26,13 +26,6 @@ test_that("config fails well with invalid request matchers", {
   )
 })
 
-test_that("config fails well with unsupported matcher", {
-  expect_error(
-    vcr_configure(match_requests_on = "host"),
-    "we do not yet support host and path matchers"
-  )
-})
-
 test_that("vcr_configure() only affects settings passed as arguments", {
   vcr_configure_reset()
   vcr_configure(dir = "olddir", record = "none")
