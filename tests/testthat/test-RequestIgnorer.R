@@ -61,7 +61,9 @@ test_that("RequestIgnorer usage: w/ real requests", {
   expect_error(z$handle(), "vcr does not know how to handle")
   x <- RequestIgnorer$new()
   x$ignore_localhost()
-  expect_error(z$handle(), "Failed to connect")
+  if (Sys.info()[['sysname']] != "Windows") {
+    expect_error(z$handle(), "Failed to connect")
+  }
 
   # ignore by callback - FIXME: we're not yet supporting a user defined fxn
   # req <- list(url = list(url = "http://127.0.0.1"),
