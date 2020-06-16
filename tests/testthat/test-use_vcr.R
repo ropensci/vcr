@@ -37,6 +37,10 @@ test_that("use_vcr fails well", {
 
   # DESCRIPTION file does not exist
   dir2 <- file.path(tempdir(), "foobar3")
-  dir.create(dir, recursive = TRUE)
-  expect_error(use_vcr(dir), "'DESCRIPTION' not found")
+  dir.create(dir2, recursive = TRUE)
+  expect_error(use_vcr(dir2), "'DESCRIPTION' not found")
+
+  # cleanup
+  unlink(dir, TRUE, TRUE)
+  unlink(dir2, TRUE, TRUE)
 })

@@ -117,6 +117,7 @@ test_that("lightswitch env var handling fails well", {
 unlink(file.path(vcr_configuration()$dir, "defg.yml"))
 unlink(file.path(vcr_configuration()$dir, "asdffd.yml"))
 unlink(file.path(vcr_configuration()$dir, "asdffdddd.yml"))
+unlink(file.path(vcr_configuration()$dir, "abcd.yml"))
 
 # reset lightswitch env vars
 Sys.setenv(VCR_TURN_OFF="")
