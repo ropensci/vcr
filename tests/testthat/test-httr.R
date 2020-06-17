@@ -70,7 +70,7 @@ test_that("httr use_cassette works", {
   expect_match(str[[1]]$response$body$string, "DOCTYPE HTML")
 
   # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr_test2.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr_test1.yml"))
 })
 
 

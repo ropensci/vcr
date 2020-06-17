@@ -88,4 +88,5 @@ test_that("crul POST requests works", {
   unlink(file.path(vcr_configuration()$dir, "crul_post_raw.yml"))
   unlink(file.path(vcr_configuration()$dir, "crul_post_upload_file.yml"))
   unlink(file.path(vcr_configuration()$dir, "crul_post_null.yml"))
+  unlink(file.path(vcr_configuration()$dir, "crul_post_upload_file_no_list.yml"))
 })

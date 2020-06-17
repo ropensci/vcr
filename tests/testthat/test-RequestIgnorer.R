@@ -65,6 +65,9 @@ test_that("RequestIgnorer usage: w/ real requests", {
     expect_error(z$handle(), "Failed to connect")
   }
 
+  # cleanup
+  rm(crul_request)
+
   # ignore by callback - FIXME: we're not yet supporting a user defined fxn
   # req <- list(url = list(url = "http://127.0.0.1"),
   #   method = "get", options = list(httpget = TRUE, useragent = "crul/0.5.4"))
