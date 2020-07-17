@@ -4,6 +4,7 @@ teardown({
 
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   skip_on_cran()
+  skip_on_ci()
   
   on.exit(unlink(mydir, recursive = TRUE))
   mydir <- file.path(tempdir(), "crul_json_encoding")
@@ -58,6 +59,7 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
 
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   skip_on_cran()
+  skip_on_ci()
 
   library(httr)
   on.exit(unlink(mydir, recursive = TRUE))
