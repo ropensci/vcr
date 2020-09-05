@@ -75,7 +75,7 @@ Use the `filter_sensitive_data` argument in the `vcr_configure` function to show
 ```r
 library("vcr")
 invisible(vcr::vcr_configure(
-  filter_sensitive_data = list("<<<my_api_key>>>" = Sys.getenv('APIKEY'),  # add this
+  filter_sensitive_data = list("<<<my_api_key>>>" = Sys.getenv('APIKEY')),  # add this
   dir = "../fixtures"
 ))
 vcr::check_cassette_names()
