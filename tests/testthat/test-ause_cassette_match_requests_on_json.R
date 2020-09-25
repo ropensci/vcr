@@ -5,6 +5,8 @@ teardown({
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   skip_on_cran()
   skip_on_ci()
+
+  webmockr::webmockr_reset()
   
   on.exit(unlink(mydir, recursive = TRUE))
   mydir <- file.path(tempdir(), "crul_json_encoding")
