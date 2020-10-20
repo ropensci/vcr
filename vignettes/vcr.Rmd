@@ -73,11 +73,11 @@ This will:
 * setup a config file for `vcr`
 * add an example test file for `vcr`
 * make a `.gitattributes` file with settings for `vcr` 
-* make a `./tests/testthat/helper-vcr.R` file
+* make a `./tests/testthat/setup-vcr.R` file
 
 ### Protecting secrets
 
-Secrets often turn up in API work. A common example is an api-key. VCR _records_ the full response from the API, which will include things like api-keys if they are present. You need to be able to protect these pieces of information from things like version control, but still have them be accessible to the tests so that they can run as expected. The `vcr_configure` function has the `filter_sensitive_data` argument function for just this situation. The `filter_sensitive_data` argument takes a named list where the _name_ of the list is the string that will be used in the recorded cassettes _instead of_ the secret, which is the list _item_. `vcr` will manage the replacement of that for you, so all you need to do is to edit your `helper-vcr.R` file like this:
+Secrets often turn up in API work. A common example is an api-key. VCR _records_ the full response from the API, which will include things like api-keys if they are present. You need to be able to protect these pieces of information from things like version control, but still have them be accessible to the tests so that they can run as expected. The `vcr_configure` function has the `filter_sensitive_data` argument function for just this situation. The `filter_sensitive_data` argument takes a named list where the _name_ of the list is the string that will be used in the recorded cassettes _instead of_ the secret, which is the list _item_. `vcr` will manage the replacement of that for you, so all you need to do is to edit your `setup-vcr.R` file like this:
 
 ```r
 library("vcr")
