@@ -20,7 +20,7 @@ Check cassette names
 }
 \details{
 This function is meant to be run during your tests, from a
-\code{helper-pkgname.R} file inside the \code{tests/testthat} directory. It only
+\code{setup-pkgname.R} file inside the \code{tests/testthat} directory. It only
 checks that cassette names are not duplicated. A helper function
 \code{check_cassette_name()} runs inside \code{\link[=insert_cassette]{insert_cassette()}} that checks
 that cassettes do not have: spaces, file extensions, unaccepted
