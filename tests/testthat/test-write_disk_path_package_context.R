@@ -26,20 +26,20 @@ invisible(vcr::vcr_configure(
   write_disk_path = "../files"
 ))
 vcr::check_cassette_names()'
-  cat(z, file = file.path(dir, "tests/testthat/helper-rabbit.R"))
+  cat(z, file = file.path(dir, "tests/testthat/setup-rabbit.R"))
 
   file_string <- '{
   "args": {
     "apples": "56"
-  }, 
+  },
   "headers": {
-    "Accept": "application/json, text/xml, application/xml, */*", 
-    "Accept-Encoding": "gzip, deflate", 
-    "Host": "httpbin.org", 
-    "User-Agent": "libcurl/7.64.1 r-curl/4.3 crul/0.9.0", 
+    "Accept": "application/json, text/xml, application/xml, */*",
+    "Accept-Encoding": "gzip, deflate",
+    "Host": "httpbin.org",
+    "User-Agent": "libcurl/7.64.1 r-curl/4.3 crul/0.9.0",
     "X-Amzn-Trace-Id": "Root=1-5e78ddc3-6bdd2bd4ef4d3082831b10ea"
-  }, 
-  "origin": "24.21.229.59", 
+  },
+  "origin": "24.21.229.59",
   "url": "https://httpbin.org/get?apples=56"
 }'
   cat(file_string, file = file.path(dir, "tests/files/file3aa4401aca64.json"))
@@ -78,7 +78,7 @@ vcr::check_cassette_names()'
   cat(fixtures1, file = file.path(dir, "tests/fixtures/ffff_testing.yml"))
 
   unlink(file.path(dir, "tests/testthat/test-vcr_example.R"))
-  
+
   og <- getwd()
   setwd(dir)
   on.exit(setwd(og))

@@ -54,13 +54,13 @@ This will:
 ✓ Creating directory: ./tests/testthat  
 ◉ Looking for testthat.R file or similar  
 ✓ tests/testthat.R: added  
-✓ Adding vcr config to tests/testthat/helper-vcr.example.R  
+✓ Adding vcr config to tests/testthat/setup-vcr.example.R  
 ✓ Adding example test file tests/testthat/test-vcr_example.R  
 ✓ .gitattributes: added  
 ◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
 ```
 
-If you need to use secrets (for example, api keys for authentication), it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `helper-vcr` file that got made for us just now. By default it will look like this:
+If you need to use secrets (for example, api keys for authentication), it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `setup-vcr` file that got made for us just now. By default it will look like this:
 
 ```r
 library("vcr")
@@ -203,7 +203,7 @@ You're looking for [webmockr][]. `webmockr` only matches requests based on crite
 ### vcr for tests
 
 * Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add `webmockr`, but it's not explicitly needed as `vcr` will pull it in)
-* Make a file in your `tests/testthat/` directory called `helper-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
+* Make a file in your `tests/testthat/` directory called `setup-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
 
 ```r
 library("vcr")

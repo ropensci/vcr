@@ -10,13 +10,14 @@ vcr 0.5.4
 
 * changed `write_disk_path` handling internally to not run it through `normalizePath` before recording it to the cassette; passing the path through `normalizePath` was leading to the full path recorded in the cassette, which means in a package testing context that a test that uses a file on disk will (likely) only work on the machine the cassette was first created on. with relative paths in a package context, a test that has a file written on disk should now work in different testing contexts (locally, and various continuous integration platforms) (#135) (#166)
 * added a bit of documentation about large files created when using vcr, and how to ignore them if needed within `.Rinstignore` and/or `.Rbuildignore` (#164)
+* changed the name `helper-pkgname` to `setup-pkgname` to comply with `testthat`'s latest recommendations (#183, @maelle).
 
 vcr 0.5.0
 =========
 
 ### NEW FEATURES
 
-* new function `check_cassette_names` to use in your `helper-pkgname.R` file in your test suite; it checks for duplicated cassette names only. Any use of `insert_cassette()` (thereby, any use of `use_cassette()`) uses a revamped version of an internal fxn that checks for an improved list of potential problems in cassette names (#116) (#159)
+* new function `check_cassette_names` to use in your `setup-pkgname.R` file in your test suite; it checks for duplicated cassette names only. Any use of `insert_cassette()` (thereby, any use of `use_cassette()`) uses a revamped version of an internal fxn that checks for an improved list of potential problems in cassette names (#116) (#159)
 * `use_vcr()` adds gitignore cassette diffs via the addition of a `gitattributes` file (#109)
 * `vcr_configure()` overhaul: function no longer has each setting as a parameter; rather, it has an ellipsis (`...`), and internally we check parameters passed in. The documentation (`?vcr_configure`) lists the details for each available parameter. Importantly, each call to `vcr_configure()` now only changes the vcr settings for parameters passed in to the function; to reset all vcr settings, run `vcr_configure_reset()`  (#136) (#141)
 * `insert_cassette()` and `use_cassette()` now inherit any vcr settings set by `vcr_configure()`; this wasn't happening consistently before. Most default parameter values in `insert_cassette/use_cassette` set to `NULL`, in which case they inherit from whatever values are set by `vcr_configure()`, but can be overriden (#151) (#153)

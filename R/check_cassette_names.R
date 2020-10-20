@@ -8,8 +8,8 @@
 #' tests rather than you seeing it after tests have run (as would happen
 #' by default)
 #' @details This function is meant to be run during your tests, from a
-#' `helper-pkgname.R` file inside the `tests/testthat` directory. It only
-#' checks that cassette names are not duplicated. A helper function 
+#' `setup-pkgname.R` file inside the `tests/testthat` directory. It only
+#' checks that cassette names are not duplicated. A helper function
 #' `check_cassette_name()` runs inside [insert_cassette()] that checks
 #' that cassettes do not have: spaces, file extensions, unaccepted
 #' characters (slashes)
