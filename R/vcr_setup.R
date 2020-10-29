@@ -1,7 +1,7 @@
 vcr_text <- list(
   test_all = "library(\"testthat\")
 test_check(\"%s\")\n",
-  config = "library(\"vcr\")
+  config = "library(\"vcr\") # *Required* as vcr is set up on loading
 invisible(vcr::vcr_configure(
   dir = \"../fixtures\"
 ))\nvcr::check_cassette_names()\n",
