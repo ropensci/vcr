@@ -117,7 +117,7 @@ that prefix, then the rest of the message.
 These settings can be configured globally, using \code{vcr_configure()}, or
 locally, using either \code{use_cassette()} or \code{insert_cassette()}. Global
 settings are applied to \emph{all} cassettes but are overridden by settings
-defined locally for individuall cassettes.
+defined locally for individual cassettes.
 \itemize{
 \item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
 See \link{recording}

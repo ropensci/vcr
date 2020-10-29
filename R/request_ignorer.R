@@ -52,7 +52,7 @@ RequestIgnorer <- R6::R6Class(
     },
 
     #' @description ignore a specific named localhost
-    #' @param value (character) A localhost value to ignore, e.g, 'localhost'
+    #' @param value (character) A localhost value to ignore, e.g., 'localhost'
     #' @return no return; defines request ignorer hook
     ignore_localhost_value = function(value) {
       self$ignore_hosts(value)

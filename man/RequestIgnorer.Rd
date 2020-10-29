@@ -94,7 +94,7 @@ ignore a specific named localhost
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{value}}{(character) A localhost value to ignore, e.g, 'localhost'}
+\item{\code{value}}{(character) A localhost value to ignore, e.g., 'localhost'}
 }
 \if{html}{\out{</div>}}
 }
