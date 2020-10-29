@@ -56,7 +56,7 @@ This will:
 If you need to use secrets (for example, api keys for authentication), it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `helper-vcr` file that got made for us just now. By default it will look like this:
 
 ```r
-library("vcr")
+library("vcr")  # *Required* as vcr is set up on loading
 invisible(vcr::vcr_configure(
   dir = "../fixtures"
 ))
