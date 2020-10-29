@@ -35,7 +35,7 @@ response summary. The response body is truncated to a
 max of 80 characters
 
 In \code{response_summary()} we use \link{gsub} with \code{useBytes=TRUE} to avoid
-problems soemtimes seen with multibyte strings - this shouldn't affect
+problems sometimes seen with multibyte strings - this shouldn't affect
 your data/etc. as this is only for printing a summary of the response
 }
 \examples{

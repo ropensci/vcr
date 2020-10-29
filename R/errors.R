@@ -8,7 +8,7 @@
 #' and insert_cassette.
 #'
 #' For the former, all requests go through the call_block
-#' But for the latter, requests go through webmockr
+#' But for the latter, requests go through webmockr.
 #'
 #' Where is one place where we can put UnhandledHTTPRequestError
 #' that will handle both use_cassette and insert_cassette?

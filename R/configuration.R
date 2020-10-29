@@ -86,7 +86,7 @@
 #' These settings can be configured globally, using `vcr_configure()`, or
 #' locally, using either `use_cassette()` or `insert_cassette()`. Global
 #' settings are applied to *all* cassettes but are overridden by settings
-#' defined locally for individuall cassettes.
+#' defined locally for individual cassettes.
 #'
 #' - `record` (character) One of 'all', 'none', 'new_episodes', or 'once'.
 #' See [recording]
