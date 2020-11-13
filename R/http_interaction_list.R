@@ -1,3 +1,5 @@
+senv <- new.env()
+
 # Null list, an empty HTTPInteractionList object
 NullList <- R6::R6Class(
   'NullList',
@@ -202,27 +204,32 @@ HTTPInteractionList <- R6::R6Class(
        length(self$interactions) > 0
      },
 
-     # return: integer
+     gather_match_checks = function(request) {
+      out <- logical(0)
+      iter <- 0
+      while (!any(out) && iter < length(self$interactions)) {
+        iter <- iter + 1
+        bool <- private$interaction_matches_request(
+          request, self$interactions[[iter]])
+        out <- c(out, bool)
+      }
+      return(out)
+     },
+
+     # return: logical
      matching_interaction_bool = function(request) {
-       matchez <- vapply(self$interactions, function(w) {
-         private$interaction_matches_request(request, w)
-       }, logical(1))
-       if (!any(matchez)) return(FALSE)
-       any(matchez)
+       any(private$gather_match_checks(request))
      },
 
+     # return: integer
      matching_interaction_index = function(request) {
-       matchez <- vapply(self$interactions, function(w) {
-         private$interaction_matches_request(request, w)
-       }, logical(1))
-       # if (!all(matchez)) return(numeric(0))
-       if (!any(matchez)) return(numeric(0))
-       which(matchez)
+       which(private$gather_match_checks(request))
      },
 
-     # return: interactions list
+     # return: interactions list or `FALSE`
      matching_used_interaction_for = function(request) {
        if (!self$allow_playback_repeats) return(FALSE)
+       if (length(self$used_interactions) == 0) return(FALSE)
        tmp <- FALSE
        i <- 0
        while (!tmp) {
