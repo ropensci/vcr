@@ -5,6 +5,27 @@
 #' @keywords internal
 #' @return an object of class `Cassette`
 #' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
+#' @section Points of webmockr integration:
+#' - `initialize()`: webmockr is used in the `initialize()` method to
+#' create webmockr stubs. stubs are created on call to `Cassette$new()`
+#' within `insert_cassette()`, but then on exiting `use_cassette()`,
+#' or calling `eject()` on `Cassette` class from `insert_cassette()`,
+#' stubs are cleaned up.
+#' - `eject()` method: [webmockr::disable()] is called before exiting
+#' eject to disable webmock so that webmockr does not affect any HTTP
+#' requests that happen afterwards
+#' - `call_block()` method: call_block is used in the [use_cassette()]
+#' function to evaluate whatever code is passed to it; within call_block
+#' [webmockr::webmockr_allow_net_connect()] is run before we evaluate
+#' the code block to allow real HTTP requests, then
+#' [webmockr::webmockr_disable_net_connect()] is called after evalulating
+#' the code block to disallow real HTTP requests
+#' - `make_http_interaction()` method: [webmockr::pluck_body()] utility
+#' function is used to pull the request body out of the HTTP request
+#' - `serialize_to_crul()` method: method: [webmockr::RequestSignature] and
+#' [webmockr::Response] are used to build a request and response,
+#' respectively, then passed to [webmockr::build_crul_response()]
+#' to make a complete `crul` HTTP response object
 #' @examples
 #' library(vcr)
 #' vcr_configure(dir = tempdir())
@@ -124,12 +145,6 @@ Cassette <- R6::R6Class(
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
     #' @return A new `Cassette` object
-    #' @section webmockr stubs:
-    #' webmockr is used in the `initialize()` method to create webmockr
-    #' stubs. stubs are created on call to `Cassette$new()` within
-    #' `insert_cassette()`, but then on exiting `use_cassette()`, or calling
-    #' `eject()` on `Cassette` class from `insert_cassette()`, stubs are
-    #' cleaned up.
     initialize = function(
       name, record, serialize_with = "yaml",
       persist_with = "FileSystem",
