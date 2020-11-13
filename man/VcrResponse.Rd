@@ -10,7 +10,7 @@ Custom vcr http response object
 \dontrun{
 vcr_configure(dir = tempdir())
 
-
+# basic example of VcrResponse use
 url <- "https://google.com"
 (cli <- crul::HttpClient$new(url = url))
 (res <- cli$get("get", query = list(q = "stuff")))
@@ -22,7 +22,6 @@ x$headers
 x$http_version
 x$to_hash()
 x$from_hash(x$to_hash())
-
 
 # update content length header
 ## example 1
@@ -37,15 +36,28 @@ x$update_content_length_header()
 x$headers$`content-length`
 
 ## example 2
-### no content-length header
+### no content-length header b/c a transfer-encoding header is included
+### and no content-length header allowed if transfer-encoding header
+### used (via rfc7230)
 url <- "https://google.com"
 cli <- crul::HttpClient$new(url = url)
 res <- cli$get()
 x <- VcrResponse$new(res$status_http(), res$response_headers,
    rawToChar(res$content), res$response_headers$status)
-x$headers$`content-length`
+x$headers$`content-length` # = NULL
 x$update_content_length_header() # no change, b/c header doesn't exist
+x$headers$`content-length` # = NULL
 
+## example 3
+### content-length header present, and does change
+body <- " Hello World "
+x <- VcrResponse$new(200, list('content-length'=nchar(body)),
+  body, "HTTP/2")
+x$headers$`content-length` # = 13
+x$body <- gsub("^\\\\s|\\\\s$", "", x$body)
+x$headers$`content-length` # = 13
+x$update_content_length_header()
+x$headers$`content-length` # = 11
 
 # check if body is compressed
 url <- "https://fishbase.ropensci.org"
