@@ -172,6 +172,9 @@ is_base64 <- function(x) {
   if (inherits(x, "form_file")) return(FALSE)
   as_num <- tryCatch(as.numeric(x), warning = function(w) w)
   if (!inherits(as_num, "warning")) return(FALSE)
+  # split string by newlines b/c base64 w/ newlines won't be 
+  # recognized as valid base64
+  x <- strsplit(x, "\r|\n")[[1]]
   all(grepl(b64_pattern, x))
 }
 

@@ -73,6 +73,8 @@ YAML <- R6::R6Class("YAML",
         # check for base64 encoding
         tmp$http_interactions <- lapply(tmp$http_interactions, function(z) {
           if (is_base64(z$response$body$string)) {
+            # if character and newlines detected, remove newlines
+            z$response$body$string <- strip_newlines(z$response$body$string)
             b64dec <- base64enc::base64decode(z$response$body$string)
             b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
             z$response$body$string <- if (inherits(b64dec_r2c, "error")) {
@@ -93,3 +95,8 @@ YAML <- R6::R6Class("YAML",
     }
   )
 )
+
+strip_newlines <- function(x) {
+  if (!inherits(x, "character")) return(x)
+  gsub("[\r\n]", "", x)
+}

@@ -29,6 +29,11 @@ dedup_keys <- function(x) {
   return(x)
 }
 
+str_breaks <- function(x) {
+  z <- split_str(x, 80L) # from src/split_str.cpp
+  paste0(z, collapse = "\n")
+}
+
 # param x: a list with "request" and "response" slots
 # param file: a file path
 # param bytes: logical, whether to preserve exact bytes or not
@@ -43,7 +48,8 @@ write_interactions <- function(x, file, bytes) {
   body <- if (bytes || is.raw(x$response$body)) {
     bd <- get_body(x$response$body)
     if (!is.raw(bd)) bd <- charToRaw(bd)
-    base64enc::base64encode(bd)
+    tmp <- base64enc::base64encode(bd)
+    str_breaks(tmp)
   } else {
     get_body(x$response$body)
   }
