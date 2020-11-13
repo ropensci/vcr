@@ -22,12 +22,6 @@ test_that("UnhandledHTTPRequestError fails well", {
     UnhandledHTTPRequestError$new(5),
     "request must be of class Request"
   )
-
-  # types
-  expect_error(
-    UnhandledHTTPRequestError$new(request, 5),
-    "cassette must be of class character"
-  )
 })
 
 test_that("UnhandledHTTPRequestError works as expected", {

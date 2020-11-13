@@ -14,8 +14,8 @@ Handle http request errors
 How this error class is used:
 If \code{record="once"} we trigger this.
 
-Users can use vcr in the context of both use_cassette
-and insert_cassette.
+Users can use vcr in the context of both \code{\link[=use_cassette]{use_cassette()}}
+and \code{\link[=insert_cassette]{insert_cassette()}}
 
 For the former, all requests go through the call_block
 But for the latter, requests go through webmockr.
@@ -26,7 +26,7 @@ that will handle both use_cassette and insert_cassette?
 \section{Error situations where this is invoked}{
 
 \itemize{
-\item record=once AND there's a new request that doesn't match
+\item \code{record=once} AND there's a new request that doesn't match
 the one in the cassette on disk
 \itemize{
 \item in webmockr: if no stub found and there are recorded
@@ -115,15 +115,13 @@ unlink(tempdir())
 \subsection{Method \code{new()}}{
 Create a new \code{UnhandledHTTPRequestError} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UnhandledHTTPRequestError$new(request, cassette)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{UnhandledHTTPRequestError$new(request)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{request}}{(Request) a \link{Request} object}
-
-\item{\code{cassette}}{(character) a cassette name}
 }
 \if{html}{\out{</div>}}
 }
