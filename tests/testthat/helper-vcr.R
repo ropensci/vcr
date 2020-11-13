@@ -56,3 +56,7 @@ extract_vcr_config_args <- function(rdfile) {
     attr(rdhits, "capture.start") + attr(rdhits, "capture.length") - 1
   )
 }
+
+check_url <- function(x) {
+  suppressWarnings(suppressMessages(crul::ok(x)))
+}
