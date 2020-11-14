@@ -78,9 +78,9 @@ HttpClient$new("https://httpbin.org")$get("get")
 
 \item{\code{recorded_at}}{(character) date/time recorded at}
 
-\item{\code{serialize_with}}{(character) serializer to use (yaml only)}
+\item{\code{serialize_with}}{(character) serializer to use (yaml|json)}
 
-\item{\code{serializer}}{(character) serializer to use (yaml only)}
+\item{\code{serializer}}{(character) serializer to use (yaml|json)}
 
 \item{\code{persist_with}}{(character) persister to use (FileSystem only)}
 
@@ -170,9 +170,9 @@ Create a new \code{Cassette} object
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$new(
   name,
   record,
-  serialize_with = "yaml",
-  persist_with = "FileSystem",
-  match_requests_on = c("method", "uri"),
+  serialize_with,
+  persist_with,
+  match_requests_on,
   re_record_interval,
   tag,
   tags,

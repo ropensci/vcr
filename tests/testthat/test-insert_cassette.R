@@ -38,7 +38,7 @@ test_that("insert_cassette fails well", {
   # persist_with valid value
   expect_error(
     suppressMessages(insert_cassette("newbar6", serialize_with = "howdy")),
-    "The requested VCR cassette serializer \\(howdy\\) is not registered"
+    "The requested vcr cassette serializer \\(howdy\\) is not registered"
   )
 })
 

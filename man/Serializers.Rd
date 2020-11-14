@@ -14,7 +14,7 @@ Keeps track of the cassette serializers in a hash-like object
 \strong{Private Methods}
 \describe{
 \item{\code{serialize_get()}}{
-Gets a named serializer. This is also run on initialize of this function
+Gets a named serializer. This is also run on \code{Serializers$new()}
 }
 }
 }
@@ -25,6 +25,11 @@ aa$name
 aa$serializers
 yaml_serializer <- aa$serializers$new()
 yaml_serializer
+
+x <- Serializers$new(name = "json")
+x$serializers$new()
+json_serializer <- x$serializers$new()
+json_serializer
 }
 }
 \keyword{internal}
@@ -33,7 +38,7 @@ yaml_serializer
 \describe{
 \item{\code{serializers}}{(list) list of serializer names}
 
-\item{\code{name}}{(character) Name of a serializer. Only option is "yaml"}
+\item{\code{name}}{(character) Name of a serializer. "yaml" (default) or "json"}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +63,7 @@ Create a new Serializers object
 \describe{
 \item{\code{serializers}}{(list) list of serializer names}
 
-\item{\code{name}}{(character) Name of a serializer. Only option is "yaml"}
+\item{\code{name}}{(character) Name of a serializer. "yaml" (default) or "json"}
 }
 \if{html}{\out{</div>}}
 }

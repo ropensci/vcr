@@ -92,7 +92,9 @@
 #' See [recording]
 #' - `match_requests_on` vector of matchers. Default: (`method`, `uri`)
 #' See [request-matching] for details.
-#' - `serialize_with`: (character) only option is "yaml"
+#' - `serialize_with`: (character) "yaml" or "json"
+#' - `json_pretty`: (logical) want JSON to be newline separated to be easier
+#' to read? Or remove newlines to save disk space? default: FALSE
 #' - `persist_with` (character) only option is "FileSystem"
 #' - `preserve_exact_body_bytes` (logical) preserve exact body bytes for
 #' - `re_record_interval` (numeric) When given, the cassette will be
@@ -180,6 +182,7 @@ VCRConfig <- R6::R6Class(
     .match_requests_on = NULL,
     .allow_unused_http_interactions = NULL,
     .serialize_with = NULL,
+    .json_pretty = NULL,
     .persist_with = NULL,
     .ignore_hosts = NULL,
     .ignore_localhost = NULL,
@@ -219,6 +222,10 @@ VCRConfig <- R6::R6Class(
     serialize_with = function(value) {
       if (missing(value)) return(private$.serialize_with)
       private$.serialize_with <- value
+    },
+    json_pretty = function(value) {
+      if (missing(value)) return(private$.json_pretty)
+      private$.json_pretty <- value
     },
     persist_with = function(value) {
       if (missing(value)) return(private$.persist_with)
@@ -317,6 +324,7 @@ VCRConfig <- R6::R6Class(
       match_requests_on = c("method", "uri"),
       allow_unused_http_interactions = TRUE,
       serialize_with = "yaml",
+      json_pretty = FALSE,
       persist_with = "FileSystem",
       ignore_hosts = NULL,
       ignore_localhost = FALSE,
@@ -340,6 +348,7 @@ VCRConfig <- R6::R6Class(
       self$match_requests_on <- match_requests_on
       self$allow_unused_http_interactions <- allow_unused_http_interactions
       self$serialize_with <- serialize_with
+      self$json_pretty <- json_pretty
       self$persist_with <- persist_with
       self$ignore_hosts <- ignore_hosts
       self$ignore_localhost <- ignore_localhost

@@ -123,7 +123,9 @@ defined locally for individual cassettes.
 See \link{recording}
 \item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
 See \link{request-matching} for details.
-\item \code{serialize_with}: (character) only option is "yaml"
+\item \code{serialize_with}: (character) "yaml" or "json"
+\item \code{json_pretty}: (logical) want JSON to be newline separated to be easier
+to read? Or remove newlines to save disk space? default: FALSE
 \item \code{persist_with} (character) only option is "FileSystem"
 \item \code{preserve_exact_body_bytes} (logical) preserve exact body bytes for
 \item \code{re_record_interval} (numeric) When given, the cassette will be
