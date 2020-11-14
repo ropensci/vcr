@@ -66,6 +66,7 @@ x$from_hash(h)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
@@ -96,6 +97,7 @@ A new \code{Request} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Convert the request to a list
 \subsection{Usage}{
@@ -108,6 +110,7 @@ list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Convert the request to a list
 \subsection{Usage}{
@@ -127,6 +130,7 @@ a new \code{Request} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

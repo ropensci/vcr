@@ -21,10 +21,8 @@ initialize_ivars <- function() {
 }
 
 .onLoad <- function(libname, pkgname){
-  # vcr config object
+  # initialize vcr config object
   vcr_c <<- VCRConfig$new()
-  # initialize default configuration vars
-  vcr_configure()
   # initialize hooks
   VCRHooks <<- Hooks$new()
   # initialize bucket of cassettes in session

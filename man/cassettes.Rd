@@ -49,7 +49,7 @@ cassettes(on_disk = FALSE)
 
 # list the path to cassettes
 cassette_path()
-vcr_configure(file.path(tempdir(), "foo"))
+vcr_configure(dir = file.path(tempdir(), "foo"))
 cassette_path()
 
 vcr_configure_reset()

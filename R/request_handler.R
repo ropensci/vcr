@@ -90,7 +90,7 @@ RequestHandler <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url$url %||% request$url,
-          pluck_body(request), request$headers,
+          webmockr::pluck_body(request) %||% "", request$headers,
           disk = !is.null(request$output$path))
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
@@ -131,7 +131,7 @@ RequestHandler <- R6::R6Class(
       if (private$externally_stubbed()) {
         # FIXME: not quite sure what externally_stubbed is meant for
         #   perhaps we can get rid of it here if only applicable in Ruby
-        # cat("request_type: is ignored", "\n")
+        # cat("request_type: is externally stubbed", "\n")
         "externally_stubbed"
       } else if (private$should_ignore(self$request)) {
         # cat("request_type: is ignored", "\n")
@@ -194,39 +194,3 @@ RequestHandler <- R6::R6Class(
     }
   )
 )
-
-test_if_not_null <- function(x) {
-  if (!is.null(x)) x$options$postfieldsize == 0
-}
-
-# try to figure out where the body is located
-# either:
-# - $fields as string or list
-# - $fields as an upload
-# - $options$postfields as raw
-#
-# return: character string
-pluck_body <- function(x) {
-  if (
-    is.null(x$fields) && {
-      if (is.null(x$options$postfieldsize)) return(FALSE)
-      x$options$postfieldsize == 0
-    }
-  ) {
-    return(NULL)
-  }
-  if (!is.null(x$fields)) {
-    form_file_comp <- vapply(x$fields, inherits, logical(1), "form_file")
-    if (any(form_file_comp)) {
-      ff <- x$fields[form_file_comp][[1]]
-      return(sprintf("type=%s; path=%s", ff$type, ff$path))
-    } else {
-      return(x$fields)
-    }
-  }
-  if (!is.null(x$options$postfields)) {
-    if (is.raw(x$options$postfields)) return(rawToChar(x$options$postfields))
-  }
-  stop("couldn't fetch body; file an issue at \n",
-    "  https://github.com/ropensci/vcr/issues/")
-}

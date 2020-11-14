@@ -1,5 +1,36 @@
 context("use_cassette: write to disk")
 
+tmpdir_wdp <- file.path(tempdir(), "write_disk_path")
+vcr_configure(dir = tmpdir_wdp)
+
+test_that("fails well if write_disk_path not set", {
+  skip_on_cran()
+
+  expect_null(vcr_c$write_disk_path)
+
+  library(crul)
+  f <- tempfile(fileext = ".json")
+  expect_error(
+    use_cassette("write_disk_path_not_set_crul", {
+      out <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
+    }),
+    "write_disk_path must be given"
+  )
+
+  library(httr)
+  g <- tempfile(fileext = ".json")
+  expect_error(
+    use_cassette("write_disk_path_not_set_httr", {
+      out <- GET("https://httpbin.org/get", write_disk(g, TRUE))
+    }),
+    "write_disk_path must be given"
+  )
+})
+
+# cleanup
+files <- c("write_disk_path_not_set_crul.yml", "write_disk_path_not_set_httr.yml")
+unlink(file.path(vcr_configuration()$dir, files))
+
 tmpdir <- tempdir()
 vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 

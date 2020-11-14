@@ -1,7 +1,7 @@
 ## Test environments
 
-* local OS X install, R 3.6.1 Patched
-* ubuntu 14.04 (on travis-ci), R 3.6.1
+* local OS X install, R 3.6.3 Patched
+* ubuntu 16.04 (on travis-ci), R 3.6.3
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -10,13 +10,11 @@
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 21 reverse dependencies.
-(Summary at <https://github.com/ropensci/vcr/blob/master/revdep/README.md>).
-One problem was found in package rromeo, but is unrelated to changes in this package.
+* I have run R CMD check on the 30 reverse dependencies. Summary at https://github.com/ropensci/vcr/blob/master/revdep/README.md
 
 --------
 
-This version contains some new funtionality for re-recording cassettes, fixes some http links, and other fixes.
+This version makes error messages less verbose and fixes a file path issue.
 
 Thanks very much,
 Scott Chamberlain

@@ -2,21 +2,21 @@
 
 |field    |value                                       |
 |:--------|:-------------------------------------------|
-|version  |R version 3.6.1 Patched (2019-07-17 r76848) |
-|os       |macOS Mojave 10.14.6                        |
+|version  |R version 3.6.3 Patched (2020-02-29 r77909) |
+|os       |macOS Catalina 10.15.3                      |
 |system   |x86_64, darwin15.6.0                        |
 |ui       |X11                                         |
 |language |(EN)                                        |
 |collate  |en_US.UTF-8                                 |
 |ctype    |en_US.UTF-8                                 |
 |tz       |US/Pacific                                  |
-|date     |2019-08-19                                  |
+|date     |2020-03-25                                  |
 
 # Dependencies
 
-|package |old   |new        |Δ  |
-|:-------|:-----|:----------|:--|
-|vcr     |0.2.6 |0.2.9.9110 |*  |
+|package |old   |new   |Δ  |
+|:-------|:-----|:-----|:--|
+|vcr     |0.5.0 |0.5.4 |*  |
 
 # Revdeps
 

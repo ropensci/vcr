@@ -131,7 +131,9 @@ Which persister to use. Right now only option is "FileSystem"
 vcr_configure(persist_with = "FileSystem")
 ```
 
-### ignore_hosts
+### ignoring some requests
+
+**ignore_hosts**
 
 Specify particular hosts to ignore. By ignore, we mean that 
 real HTTP requests to the ignored host will be allowed to occur, while
@@ -141,7 +143,7 @@ all others will not.
 vcr_configure(ignore_hosts = "google.com")
 ```
 
-### ignore_localhost
+**ignore_localhost**
 
 Ignore all localhost requests
 
@@ -149,13 +151,25 @@ Ignore all localhost requests
 vcr_configure(ignore_localhost = TRUE)
 ```
 
-### ignore_request 
+**ignore_request**
 
-Ignore any request for which function `x` is true
+THIS DOESN'T WORK YET
 
-```{r}
-vcr_configure(ignore_request = function(x) x == 5)
+**How to ignore requests**
+
+For ignoring requests, you can for example, have real http requests go through (ignored by `vcr`) while other requests are handled by `vcr`. For example, let's say you want requests to `google.com` to be ignored:
+
+```{r eval=FALSE}
+vcr_configure(ignore_hosts = "google.com")
+use_cassette("foo_bar", {
+  crul::HttpClient$new("https://httpbin.org/get")$get()
+  crul::HttpClient$new("https://google.com")$get()
+})
 ```
+
+The request to httpbin.org will be handled by `vcr`, a cassette created for the request/response to that url, while the google.com request will be ignored and not cached at all.
+
+Note: ignoring requests only works for the `crul` package for now; it should work for `httr` in a later `vcr` version.
 
 ### uri_parse
 

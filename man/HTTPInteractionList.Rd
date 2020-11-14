@@ -105,6 +105,7 @@ x$response_for(request)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{HTTPInteractionList} object
 \subsection{Usage}{
@@ -140,6 +141,7 @@ A new \code{HTTPInteractionList} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-response_for"></a>}}
+\if{latex}{\out{\hypertarget{method-response_for}{}}}
 \subsection{Method \code{response_for()}}{
 Check if there's a matching interaction, returns a
 response object
@@ -157,6 +159,7 @@ response object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-has_interaction_matching"></a>}}
+\if{latex}{\out{\hypertarget{method-has_interaction_matching}{}}}
 \subsection{Method \code{has_interaction_matching()}}{
 Check if has a matching interaction
 \subsection{Usage}{
@@ -176,6 +179,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-has_used_interaction_matching"></a>}}
+\if{latex}{\out{\hypertarget{method-has_used_interaction_matching}{}}}
 \subsection{Method \code{has_used_interaction_matching()}}{
 check if has used interactions matching a given request
 \subsection{Usage}{
@@ -195,6 +199,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remaining_unused_interaction_count"></a>}}
+\if{latex}{\out{\hypertarget{method-remaining_unused_interaction_count}{}}}
 \subsection{Method \code{remaining_unused_interaction_count()}}{
 Number of unused interactions
 \subsection{Usage}{
@@ -207,6 +212,7 @@ integer
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-assert_no_unused_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-assert_no_unused_interactions}{}}}
 \subsection{Method \code{assert_no_unused_interactions()}}{
 Checks if there are no unused interactions left.
 \subsection{Usage}{
@@ -219,6 +225,7 @@ various
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

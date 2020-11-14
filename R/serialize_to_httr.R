@@ -1,3 +1,9 @@
+disk_true <- function(x) {
+  if (is.null(x)) return(FALSE)
+  assert(x, "logical")
+  return(x)
+}
+
 # generate actual httr response
 serialize_to_httr <- function(request, response) {
   # request
@@ -16,16 +22,19 @@ serialize_to_httr <- function(request, response) {
   # response
   resp <- webmockr::Response$new()
   resp$set_url(request$uri)
-  response_body <- if (response$disk) {
-    structure(response$body, class = "path")
-  } else {
-    response$body
+  # in vcr >= v0.4, "disk" is in the response, but in older versions
+  # its missing - use response$body if disk is not present
+  response_body <- response$body
+  if ("disk" %in% names(response) && disk_true(response$disk)) {
+    response_body <- if (response$disk) {
+      structure(response$body, class = "path")
+    } else {
+      response$body
+    }
   }
   resp$set_body(response_body, response$disk %||% FALSE)
-  # resp$set_body(if ("string" %in% names(bod)) bod$string else bod)
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)
-  # resp$set_status(status = response$status %||% 200)
   resp$set_status(status = response$status$status_code %||% 200)
 
   # generate httr response

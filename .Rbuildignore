@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^appveyor\.yml$
+^_pkgdown\.yml$
 ^CODE_OF_CONDUCT\.md$
 man-roxygen
 ^cran-comments\.md$

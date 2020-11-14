@@ -42,6 +42,9 @@
 #' - `VCR_IGNORE_CASSETTES`: set the `ignore_cassettes` internal package
 #' setting; this is looked at together with `VCR_TURNED_OFF`
 #' 
+#' See the HTTP testing book for more details 
+#' https://books.ropensci.org/http-testing/lightswitch.html
+#' 
 #' See `?Startup` if you're not sure how to set environment variables
 #'
 #' @examples \dontrun{
@@ -73,7 +76,7 @@ turned_off <- function(..., ignore_cassettes = FALSE) {
 
 off_block <- function(...) {
   tmp <- lazyeval::lazy_dots(...)
-  xxx <- lazyeval::lazy_eval(tmp)
+  lazyeval::lazy_eval(tmp)
 }
 
 #' @rdname lightswitch

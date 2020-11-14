@@ -63,6 +63,7 @@ unlink(file.path(tempdir(), "file4014931b21b.yml"))
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{FileSystem} object
 \subsection{Usage}{
@@ -97,6 +98,7 @@ A new \code{FileSystem} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_cassette"></a>}}
+\if{latex}{\out{\hypertarget{method-get_cassette}{}}}
 \subsection{Method \code{get_cassette()}}{
 Gets the cassette for the given storage key (file name)
 \subsection{Usage}{
@@ -116,6 +118,7 @@ named list, from \code{yaml::yaml.load_file}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_empty"></a>}}
+\if{latex}{\out{\hypertarget{method-is_empty}{}}}
 \subsection{Method \code{is_empty()}}{
 Checks if a cassette is empty or not
 \subsection{Usage}{
@@ -128,6 +131,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_cassette"></a>}}
+\if{latex}{\out{\hypertarget{method-set_cassette}{}}}
 \subsection{Method \code{set_cassette()}}{
 Sets the cassette for the given storage key (file name)
 \subsection{Usage}{
@@ -149,6 +153,7 @@ no return; writes to disk
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

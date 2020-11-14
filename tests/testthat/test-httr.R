@@ -70,7 +70,7 @@ test_that("httr use_cassette works", {
   expect_match(str[[1]]$response$body$string, "DOCTYPE HTML")
 
   # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr_test2.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr_test1.yml"))
 })
 
 
@@ -205,24 +205,41 @@ test_that("httr POST requests works", {
   expect_equal(strj$data, "some string")
 
   # body type: upload_file
+  ff <- tempfile(fileext = ".txt")
+  cat("hello world\n", file = ff)
   out4 <- use_cassette("httr_post_upload_file", {
     b <- POST("https://httpbin.org/post",
-      body = list(y = httr::upload_file(system.file("CITATION"))))
+      body = list(y = httr::upload_file(ff)))
   })
   expect_false(out4$is_empty())
   expect_is(b, "response")
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_match(strj$data, "bibentry\\(")
+  expect_match(strj$files$y, "hello world") # files not empty
+  expect_false(nzchar(strj$data)) # data empty
+  unlink(ff)
+  
+  ## upload_file not in a list
+  # out6 <- use_cassette("httr_post_upload_file_no_list", {
+  #   d <- POST("https://httpbin.org/post",
+  #     body = httr::upload_file(system.file("CITATION")))
+  # })
+  # expect_false(out6$is_empty())
+  # expect_is(d, "response")
+  # expect_equal(d$status_code, 200)
+  # str <- yaml::yaml.load_file(out6$manfile)$http_interactions
+  # strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  # expect_equal(length(strj$files), 0) # files empty
+  # expect_match(strj$data, "bibentry\\(") # data not empty
 
   # body type: NULL
   out5 <- use_cassette("httr_post_null", {
     m <- POST("https://httpbin.org/post", body = NULL)
   })
   expect_false(out5$is_empty())
-  expect_is(z, "response")
-  expect_equal(z$status_code, 200)
+  expect_is(m, "response")
+  expect_equal(m$status_code, 200)
   str <- yaml::yaml.load_file(out5$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")

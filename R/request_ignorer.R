@@ -37,6 +37,9 @@ RequestIgnorer <- R6::R6Class(
         if (is.null(self$ignored_hosts$bucket)) return(FALSE)
         host <- parseurl(x$uri)$domain %||% NULL
         if (is.null(host)) return(FALSE)
+        # update ignored hosts if any found in configuration
+        if (!is.null(vcr_c$ignore_hosts)) self$ignore_hosts(vcr_c$ignore_hosts)
+        if (vcr_c$ignore_localhost) self$ignore_localhost()
         self$ignored_hosts$includes(host)
       }
       VCRHooks$define_hook(hook_type = "ignore_request", fun = fun)
@@ -49,7 +52,7 @@ RequestIgnorer <- R6::R6Class(
     },
 
     #' @description ignore a specific named localhost
-    #' @param value (character) A localhost value to ignore, e.g, 'localhost'
+    #' @param value (character) A localhost value to ignore, e.g., 'localhost'
     #' @return no return; defines request ignorer hook
     ignore_localhost_value = function(value) {
       self$ignore_hosts(value)
@@ -57,8 +60,9 @@ RequestIgnorer <- R6::R6Class(
 
     #' @description ignore any named host
     #' @param hosts (character) vector of hosts to ignore
-    #' @return no return; defines request ignorer hook
+    #' @return no return; adds host to ignore
     ignore_hosts = function(hosts) {
+      # self$ignored_hosts <- c(self$ignored_hosts, hosts)
       self$ignored_hosts$merge(hosts)
     },
 
@@ -66,6 +70,7 @@ RequestIgnorer <- R6::R6Class(
     #' @param request request to ignore
     #' @return no return; defines request ignorer hook
     should_be_ignored = function(request) {
+      if (missing(request)) stop("'request' can not be missing")
       VCRHooks$invoke_hook(hook_type = "ignore_request", args = request)
     }
   ),

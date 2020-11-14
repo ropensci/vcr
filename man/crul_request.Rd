@@ -4,7 +4,9 @@
 \name{crul_request}
 \alias{crul_request}
 \title{An HTTP request as prepared by the \pkg{crul} package}
-\format{A list}
+\format{
+A list
+}
 \description{
 The object is a list, and is the object that is passed on to
 \pkg{webmockr} and \pkg{vcr} instead of routing through

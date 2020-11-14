@@ -36,14 +36,6 @@ get_query <- function(x) {
   }
 }
 
-get_body <- function(x) {
-  if ("body" %in% names(x)) {
-    x[["body"]]
-  } else {
-    NULL
-  }
-}
-
 parseurl <- function(x) {
   tmp <- urltools::url_parse(x)
   tmp <- as.list(tmp)

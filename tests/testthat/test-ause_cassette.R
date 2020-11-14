@@ -1,3 +1,6 @@
+tmpdir <- tempdir()
+vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
+
 context("use_cassette: works as expected")
 test_that("use_cassette works as expected", {
   skip_on_cran()
@@ -9,6 +12,13 @@ test_that("use_cassette works as expected", {
   aa <- use_cassette(name = "testing1", {
     res <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
   })
+
+  # test `print.cassette` method
+  expect_output(print(aa), "<vcr - Cassette>")
+  expect_output(print(aa), "Record method: once")
+  expect_output(print(aa), "Serialize with: yaml")
+  expect_output(print(aa), "Persist with: FileSystem")
+  expect_output(print(aa), "preserve_exact_body_bytes")
 
   expect_is(aa, "Cassette")
   expect_is(aa$name, "character")
@@ -80,7 +90,8 @@ test_that("use_cassette fails well", {
 })
 
 # cleanup
-unlink(list.files(pattern = "newbar", full.names = TRUE))
+unlink(list.files(vcr_c$dir, pattern = "newbar", full.names = TRUE))
+unlink(file.path(vcr_c$dir, "foobar333.yml"))
 unlink("foobar333.yml")
 unlink("testing1.yml")
 

@@ -1,10 +1,31 @@
 #' @title Cassette handler
-#' @description Main R6 class that is called from the main user facing 
+#' @description Main R6 class that is called from the main user facing
 #' function [use_cassette()]
 #' @export
 #' @keywords internal
 #' @return an object of class `Cassette`
 #' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
+#' @section Points of webmockr integration:
+#' - `initialize()`: webmockr is used in the `initialize()` method to
+#' create webmockr stubs. stubs are created on call to `Cassette$new()`
+#' within `insert_cassette()`, but then on exiting `use_cassette()`,
+#' or calling `eject()` on `Cassette` class from `insert_cassette()`,
+#' stubs are cleaned up.
+#' - `eject()` method: [webmockr::disable()] is called before exiting
+#' eject to disable webmock so that webmockr does not affect any HTTP
+#' requests that happen afterwards
+#' - `call_block()` method: call_block is used in the [use_cassette()]
+#' function to evaluate whatever code is passed to it; within call_block
+#' [webmockr::webmockr_allow_net_connect()] is run before we evaluate
+#' the code block to allow real HTTP requests, then
+#' [webmockr::webmockr_disable_net_connect()] is called after evalulating
+#' the code block to disallow real HTTP requests
+#' - `make_http_interaction()` method: [webmockr::pluck_body()] utility
+#' function is used to pull the request body out of the HTTP request
+#' - `serialize_to_crul()` method: method: [webmockr::RequestSignature] and
+#' [webmockr::Response] are used to build a request and response,
+#' respectively, then passed to [webmockr::build_crul_response()]
+#' to make a complete `crul` HTTP response object
 #' @examples
 #' library(vcr)
 #' vcr_configure(dir = tempdir())
@@ -25,6 +46,12 @@
 #'
 #' # cleanup
 #' unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
+#' 
+#' library(vcr)
+#' vcr_configure(dir = tempdir())
+#' res <- Cassette$new(name = "jane")
+#' library(crul)
+#' HttpClient$new("https://httpbin.org")$get("get")
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
@@ -126,35 +153,19 @@ Cassette <- R6::R6Class(
       clean_outdated_http_interactions) {
 
       self$name <- name
-      self$root_dir <- vcr_c$dir
+      self$root_dir <- vcr_configuration()$dir
       self$serialize_with <- serialize_with %||% vcr_c$serialize_with
       self$persist_with <- persist_with %||% vcr_c$persist_with
       if (!missing(record)) {
-        recmodes <- c("none", "once", "new_episodes", "all")
-        if (!record %in% recmodes) {
-          stop("'record' value of '", record, "' is not in the allowed set: ",
-               paste0(recmodes, collapse = ", "), call. = FALSE)
-        }
-        self$record <- record
+        self$record <- check_record_mode(record)
       }
       self$make_dir()
       ext <- switch(self$serialize_with, yaml = "yml", json = "json")
       self$manfile <- sprintf("%s/%s.%s", path.expand(cassette_path()),
                               self$name, ext)
       if (!file.exists(self$manfile)) cat("\n", file = self$manfile)
-      self$match_requests_on <- match_requests_on %||% vcr_c$match_requests_on
-      mro <- c("method", "uri", "headers", "host", "path", "body")
-      if (!any(self$match_requests_on %in% mro)) {
-        stop("1 or more 'match_requests_on' values (",
-             paste0(self$match_requests_on, collapse = ", "),
-             ") is not in the allowed set: ",
-             paste0(mro, collapse = ", "), call. = FALSE)
-      }
-      # we don't yet support the following matchers: host, path
-      if (any(self$match_requests_on %in% c("host", "path"))) {
-        stop("we do not yet support host and path matchers",
-          "\n see https://github.com/ropensci/vcr/issues/70",
-          call. = FALSE)
+      if (!missing(match_requests_on)) {
+        self$match_requests_on <- check_request_matchers(match_requests_on)
       }
       if (!missing(re_record_interval))
         self$re_record_interval <- re_record_interval
@@ -194,78 +205,67 @@ Cassette <- R6::R6Class(
       #### first, get previously recorded interactions into `http_interactions_` var
       self$http_interactions()
       # then do the rest
+
       prev <- self$previously_recorded_interactions()
       if (length(prev) > 0) {
-        invisible(lapply(prev, function(z) {
-          req <- z$request
-          res <- z$response
+
+        stub_previous_request <- function(previous_interaction) {
+          req <- previous_interaction$request
+          res <- previous_interaction$response
           uripp <- crul::url_parse(req$uri)
           m <- self$match_requests_on
-          if (length(m) == 1) {
-            if (m == "method") webmockr::stub_request(req$method, uri_regex = ".")
-            if (m == "uri") webmockr::stub_request("any", req$uri)
-            if (m == "query") {
-              tmp <- webmockr::stub_request("any", uri_regex = ".")
-              webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
+
+          .stub_request_with <- function(match_parameters, request) {
+            .check_match_parameters <- function(mp) {
+              vmp <- c("method", "uri", "body", "headers", "query")
+              mp[mp %in% vmp]
             }
-            if (m == "headers") {
-              tmp <- webmockr::stub_request("any", uri_regex = ".")
-              webmockr::wi_th(tmp, .list = list(headers = req$headers))
+
+            mp <- .check_match_parameters(match_parameters)
+
+            stub_method <- ifelse("method" %in% mp,
+              req$method,
+              "any"
+            )
+
+            stub_uri <- ifelse(identical(mp, c("body")),
+              ".+",
+              ifelse("uri" %in% mp,
+                req$uri,
+                "."
+              )
+            )
+
+            if (stub_uri %in% c(".", ".+")) {
+              sr <- webmockr::stub_request(method = stub_method,
+                                           uri_regex = stub_uri)
+            } else {
+              sr <- webmockr::stub_request(method = stub_method,
+                                           uri = stub_uri)
             }
-            if (m == "body") {
-              tmp <- webmockr::stub_request("any", uri_regex = ".+")
-              webmockr::wi_th(tmp, .list = list(body = req$body))
+
+            with_list <- list()
+
+            if ("query" %in% mp) {
+              with_list[["query"]] <- uripp$parameter
             }
-          } else if (all(m %in% c("method", "uri")) && length(m) == 2) {
-            webmockr::stub_request(req$method, req$uri)
-          } else if (
-            all(m %in% c("method", "body")) && length(m) == 2
-          ) {
-            tmp <- webmockr::stub_request(req$method, uri_regex = ".")
-            webmockr::wi_th(tmp, .list = list(body = req$body))
-          } else if (
-            all(m %in% c("method", "uri", "query")) && length(m) == 3
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter))
-          } else if (
-            all(m %in% c("method", "uri", "headers")) && length(m) == 3
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(headers = req$headers))
-          } else if (
-            all(m %in% c("method", "uri", "body")) && length(m) == 3
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(body = req$body))
-          } else if (
-            all(m %in% c("method", "uri", "headers", "query")) &&
-            length(m) == 4
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
-              headers = req$headers))
-          } else if (
-            all(m %in% c("method", "uri", "headers", "body")) &&
-            length(m) == 4
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(body = req$body,
-              headers = req$headers))
-          } else if (
-            all(m %in% c("method", "uri", "query", "body")) &&
-            length(m) == 4
-          ) {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
-              body = req$body))
-          } else {
-            tmp <- webmockr::stub_request(req$method, req$uri)
-            webmockr::wi_th(tmp, .list = list(query = uripp$parameter,
-              body = req$body, headers = req$headers))
+
+            if ("headers" %in% mp) {
+              with_list[["headers"]] <- req$headers
+            }
+
+            if ("body" %in% mp) {
+              with_list[["body"]] <- req$body
+            }
+
+            # if list is empty, skip wi_th
+            if (length(with_list) != 0) webmockr::wi_th(sr, .list = with_list)
           }
 
-        }))
+         .stub_request_with(m, req)
+        }
+
+        invisible(lapply(prev, stub_previous_request))
       }
 
       tmp <- list(
@@ -534,7 +534,7 @@ Cassette <- R6::R6Class(
             z$response$status,
             z$response$headers,
             z$response$body$string,
-            self$cassette_opts,
+            opts = self$cassette_opts,
             disk = z$response$body$file
           )
           if (self$update_content_length_header)
@@ -548,7 +548,6 @@ Cassette <- R6::R6Class(
             response = response
           )
           hash <- zz$to_hash()
-          # FIXME: not quite ready yet, request_ignorer not quite working
           if (request_ignorer$should_be_ignored(hash$request)) NULL else hash
         }))
         return(tmp)
@@ -643,7 +642,9 @@ Cassette <- R6::R6Class(
         if (file.exists(x$content)) {
           is_disk <- TRUE
           write_disk_path <- vcr_c$write_disk_path
-          write_disk_path <- normalizePath(write_disk_path, mustWork=TRUE)
+          if (is.null(write_disk_path))
+            stop("if writing to disk, write_disk_path must be given; ",
+              "see ?vcr_configure")
           new_file_path <- file.path(write_disk_path, basename(x$content))
         }
       }
@@ -652,10 +653,10 @@ Cassette <- R6::R6Class(
         method = x$request$method,
         uri = x$url,
         body = if (inherits(x, "response")) { # httr
-          bd <- get_httr_body(x$request)
+          bd <- webmockr::pluck_body(x$request)
           if (inherits(bd, "raw")) rawToChar(bd) else bd
         } else { # crul
-          x$request$fields
+          webmockr::pluck_body(x$request)
         },
         headers = if (inherits(x, "response")) {
           as.list(x$request$headers)
@@ -665,7 +666,7 @@ Cassette <- R6::R6Class(
         opts = self$cassette_opts,
         disk = is_disk
       )
-      
+
       response <- VcrResponse$new(
         status = if (inherits(x, "response")) {
           c(list(status_code = x$status_code), httr::http_status(x))
@@ -678,7 +679,7 @@ Cassette <- R6::R6Class(
           if (file.exists(x$content)) {
             # calculate new file path in fixtures/
             # copy file into fixtures/file_cache/
-            # don't move b/c don't want to screw up first use before using 
+            # don't move b/c don't want to screw up first use before using
             # cached request
             file.copy(x$content, write_disk_path,
               overwrite = TRUE, recursive = TRUE) # copy the file

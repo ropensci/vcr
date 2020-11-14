@@ -8,10 +8,12 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 0.3.3.9110
+Version: 0.5.5.91
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
-    comment = c(ORCID="0000-0003-1444-9135")))
+    comment = c(ORCID="0000-0003-1444-9135")),
+    person("Aaron", "Wolen", role = "ctb",
+    comment = c(ORCID="0000-0003-2542-2202")))
 URL: https://github.com/ropensci/vcr/ (devel)
     https://books.ropensci.org/http-testing/ (user manual)
 BugReports: https://github.com/ropensci/vcr/issues
@@ -24,7 +26,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.8.4),
     httr,
-    webmockr (>= 0.4.6.9100),
+    webmockr (>= 0.6.2),
     urltools,
     yaml,
     R6,
@@ -38,9 +40,12 @@ Suggests:
     rmarkdown,
     desc,
     crayon,
-    cli
-Remotes: ropensci/webmockr
-RoxygenNote: 7.0.2
+    cli,
+    curl
+RoxygenNote: 7.1.1
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
+LinkingTo: 
+    cpp11
+SystemRequirements: C++11

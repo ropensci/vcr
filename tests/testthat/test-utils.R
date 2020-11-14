@@ -25,8 +25,14 @@ test_that("try_encoding", {
 
 test_that("is_base64", {
   expect_error(is_base64(), "\"x\" is missing")
-  expect_false(is_base64("foo"))
+  # actual base64 strings are base64
   expect_true(is_base64(base64enc::base64encode(charToRaw("foo"))))
+  # regular character strings are not base64
+  expect_false(is_base64("foo"))
+  # numbers as strings are not base64
+  expect_false(is_base64("12345"))
+  # numbers as numbers are not base64
+  expect_false(is_base64(12345))
 })
 
 test_that("serializable_body", {

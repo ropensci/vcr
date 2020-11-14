@@ -14,7 +14,7 @@
 #' req
 #' x <- RequestHandlerHttr$new(req)
 #' # x$handle()
-#' 
+#'
 #' # POST request
 #' library(httr)
 #' webmockr::httr_mock()
@@ -23,7 +23,7 @@
 #' use_cassette(name = "testing2", {
 #'   res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
 #' }, match_requests_on = c("method", "uri", "body"))
-#' 
+#'
 #' load("~/httr_req_post.rda")
 #' insert_cassette("testing3")
 #' httr_req_post
@@ -31,7 +31,7 @@
 #' x
 #' # x$handle()
 #' self=x
-#' 
+#'
 #' }
 RequestHandlerHttr <- R6::R6Class(
   "RequestHandlerHttr",
@@ -45,7 +45,7 @@ RequestHandlerHttr <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url,
-          pluck_body(request), request$headers)
+          webmockr::pluck_body(request), request$headers)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     }
@@ -75,7 +75,7 @@ RequestHandlerHttr <- R6::R6Class(
       on.exit(webmockr::httr_mock(TRUE), add = TRUE)
       tmp2 <- eval(parse(text = paste0("httr::", request$method))) (
         request$url,
-        body = get_httr_body(request),
+        body = webmockr::pluck_body(request),
         do.call(httr::config, request$options),
         httr::add_headers(request$headers)
       )
@@ -101,7 +101,7 @@ RequestHandlerHttr <- R6::R6Class(
       on.exit(webmockr::httr_mock(TRUE), add = TRUE)
       tmp2 <- eval(parse(text = paste0("httr::", self$request_original$method))) (
         self$request_original$url,
-        body = get_httr_body(self$request_original),
+        body = webmockr::pluck_body(self$request_original),
         do.call(httr::config, self$request_original$options),
         httr::add_headers(self$request_original$headers),
         if (!is.null(self$request_original$output$path))
@@ -121,25 +121,3 @@ RequestHandlerHttr <- R6::R6Class(
   )
 )
 
-get_httr_body <- function(x) {
-  if (
-    is.null(x$fields) && {
-      if (is.null(x$options$postfieldsize)) return(FALSE)
-      x$options$postfieldsize == 0
-    }
-  ) {
-    return(NULL)
-  }
-  if (!is.null(x$fields)) {
-    form_file_comp <- vapply(x$fields, inherits, logical(1), "form_file")
-    if (any(form_file_comp)) {
-      ff <- x$fields[form_file_comp][[1]]
-      return(ff)
-    } else {
-      return(x$fields)
-    }
-  }
-  if (!is.null(x$options$postfields)) {
-    if (is.raw(x$options$postfields)) return(rawToChar(x$options$postfields))
-  }
-}

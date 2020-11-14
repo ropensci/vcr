@@ -102,6 +102,7 @@ eject_cassette("testing_record_mode_none")
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RequestHandler} object
 \subsection{Usage}{
@@ -121,6 +122,7 @@ A new \code{RequestHandler} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-handle"></a>}}
+\if{latex}{\out{\hypertarget{method-handle}{}}}
 \subsection{Method \code{handle()}}{
 Handle the request (\code{request} given in \verb{$initialize()})
 \subsection{Usage}{
@@ -133,6 +135,7 @@ handles a request, outcomes vary
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

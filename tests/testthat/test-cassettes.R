@@ -1,3 +1,6 @@
+tmpdir <- tempdir()
+vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
+
 context("cassettes")
 test_that("cassettes works", {
   aa <- cassettes()

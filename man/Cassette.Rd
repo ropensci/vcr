@@ -10,6 +10,32 @@ an object of class \code{Cassette}
 Main R6 class that is called from the main user facing
 function \code{\link[=use_cassette]{use_cassette()}}
 }
+\section{Points of webmockr integration}{
+
+\itemize{
+\item \code{initialize()}: webmockr is used in the \code{initialize()} method to
+create webmockr stubs. stubs are created on call to \code{Cassette$new()}
+within \code{insert_cassette()}, but then on exiting \code{use_cassette()},
+or calling \code{eject()} on \code{Cassette} class from \code{insert_cassette()},
+stubs are cleaned up.
+\item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
+eject to disable webmock so that webmockr does not affect any HTTP
+requests that happen afterwards
+\item \code{call_block()} method: call_block is used in the \code{\link[=use_cassette]{use_cassette()}}
+function to evaluate whatever code is passed to it; within call_block
+\code{\link[webmockr:webmockr_configure]{webmockr::webmockr_allow_net_connect()}} is run before we evaluate
+the code block to allow real HTTP requests, then
+\code{\link[webmockr:webmockr_configure]{webmockr::webmockr_disable_net_connect()}} is called after evalulating
+the code block to disallow real HTTP requests
+\item \code{make_http_interaction()} method: \code{\link[webmockr:pluck_body]{webmockr::pluck_body()}} utility
+function is used to pull the request body out of the HTTP request
+\item \code{serialize_to_crul()} method: method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
+\link[webmockr:Response]{webmockr::Response} are used to build a request and response,
+respectively, then passed to \code{\link[webmockr:build_crul_response]{webmockr::build_crul_response()}}
+to make a complete \code{crul} HTTP response object
+}
+}
+
 \examples{
 library(vcr)
 vcr_configure(dir = tempdir())
@@ -30,6 +56,12 @@ res$eject()
 
 # cleanup
 unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
+
+library(vcr)
+vcr_configure(dir = tempdir())
+res <- Cassette$new(name = "jane")
+library(crul)
+HttpClient$new("https://httpbin.org")$get("get")
 }
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
@@ -131,6 +163,7 @@ be recorded back to file}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Cassette} object
 \subsection{Usage}{
@@ -210,6 +243,7 @@ A new \code{Cassette} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 print method for \code{Cassette} objects
 \subsection{Usage}{
@@ -228,6 +262,7 @@ print method for \code{Cassette} objects
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-call_block"></a>}}
+\if{latex}{\out{\hypertarget{method-call_block}{}}}
 \subsection{Method \code{call_block()}}{
 run code
 \subsection{Usage}{
@@ -247,6 +282,7 @@ various
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-eject"></a>}}
+\if{latex}{\out{\hypertarget{method-eject}{}}}
 \subsection{Method \code{eject()}}{
 ejects the current cassette
 \subsection{Usage}{
@@ -259,6 +295,7 @@ self
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-file"></a>}}
+\if{latex}{\out{\hypertarget{method-file}{}}}
 \subsection{Method \code{file()}}{
 get the file path for the cassette
 \subsection{Usage}{
@@ -271,6 +308,7 @@ character
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recording"></a>}}
+\if{latex}{\out{\hypertarget{method-recording}{}}}
 \subsection{Method \code{recording()}}{
 is the cassette in recording mode?
 \subsection{Usage}{
@@ -283,6 +321,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_empty"></a>}}
+\if{latex}{\out{\hypertarget{method-is_empty}{}}}
 \subsection{Method \code{is_empty()}}{
 is the cassette on disk empty
 \subsection{Usage}{
@@ -295,6 +334,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-originally_recorded_at"></a>}}
+\if{latex}{\out{\hypertarget{method-originally_recorded_at}{}}}
 \subsection{Method \code{originally_recorded_at()}}{
 timestamp the cassette was originally recorded at
 \subsection{Usage}{
@@ -307,6 +347,7 @@ POSIXct date
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-serializable_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-serializable_hash}{}}}
 \subsection{Method \code{serializable_hash()}}{
 Get a list of the http interactions to record + recorded_with
 \subsection{Usage}{
@@ -319,6 +360,7 @@ list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-interactions_to_record"></a>}}
+\if{latex}{\out{\hypertarget{method-interactions_to_record}{}}}
 \subsection{Method \code{interactions_to_record()}}{
 Get the list of http interactions to record
 \subsection{Usage}{
@@ -331,6 +373,7 @@ list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-merged_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-merged_interactions}{}}}
 \subsection{Method \code{merged_interactions()}}{
 Get interactions to record
 \subsection{Usage}{
@@ -343,6 +386,7 @@ list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-up_to_date_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-up_to_date_interactions}{}}}
 \subsection{Method \code{up_to_date_interactions()}}{
 Cleans out any old interactions based on the
 re_record_interval and clean_outdated_http_interactions settings
@@ -363,6 +407,7 @@ list of interactions to record
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-should_re_record"></a>}}
+\if{latex}{\out{\hypertarget{method-should_re_record}{}}}
 \subsection{Method \code{should_re_record()}}{
 Should re-record interactions?
 \subsection{Usage}{
@@ -375,6 +420,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-should_stub_requests"></a>}}
+\if{latex}{\out{\hypertarget{method-should_stub_requests}{}}}
 \subsection{Method \code{should_stub_requests()}}{
 Is record mode NOT "all"?
 \subsection{Usage}{
@@ -387,6 +433,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-should_remove_matching_existing_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-should_remove_matching_existing_interactions}{}}}
 \subsection{Method \code{should_remove_matching_existing_interactions()}}{
 Is record mode "all"?
 \subsection{Usage}{
@@ -399,6 +446,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-storage_key"></a>}}
+\if{latex}{\out{\hypertarget{method-storage_key}{}}}
 \subsection{Method \code{storage_key()}}{
 Get the serializer path
 \subsection{Usage}{
@@ -411,6 +459,7 @@ character
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-raw_cassette_bytes"></a>}}
+\if{latex}{\out{\hypertarget{method-raw_cassette_bytes}{}}}
 \subsection{Method \code{raw_cassette_bytes()}}{
 Get character string of entire cassette; bytes is a misnomer
 \subsection{Usage}{
@@ -423,6 +472,7 @@ character
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-make_dir"></a>}}
+\if{latex}{\out{\hypertarget{method-make_dir}{}}}
 \subsection{Method \code{make_dir()}}{
 Create the directory that holds the cassettes, if not present
 \subsection{Usage}{
@@ -435,6 +485,7 @@ no return; creates a directory recursively, if missing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-deserialized_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-deserialized_hash}{}}}
 \subsection{Method \code{deserialized_hash()}}{
 get http interactions from the cassette via the serializer
 \subsection{Usage}{
@@ -447,6 +498,7 @@ list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-previously_recorded_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-previously_recorded_interactions}{}}}
 \subsection{Method \code{previously_recorded_interactions()}}{
 get all previously recorded interactions
 \subsection{Usage}{
@@ -459,6 +511,7 @@ list
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-write_recorded_interactions_to_disk"></a>}}
+\if{latex}{\out{\hypertarget{method-write_recorded_interactions_to_disk}{}}}
 \subsection{Method \code{write_recorded_interactions_to_disk()}}{
 write recorded interactions to disk
 \subsection{Usage}{
@@ -471,6 +524,7 @@ nothing returned
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-record_http_interaction"></a>}}
+\if{latex}{\out{\hypertarget{method-record_http_interaction}{}}}
 \subsection{Method \code{record_http_interaction()}}{
 record an http interaction (doesn't write to disk)
 \subsection{Usage}{
@@ -490,6 +544,7 @@ nothing returned
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-any_new_recorded_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-any_new_recorded_interactions}{}}}
 \subsection{Method \code{any_new_recorded_interactions()}}{
 Are there any new recorded interactions?
 \subsection{Usage}{
@@ -502,6 +557,7 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-make_args"></a>}}
+\if{latex}{\out{\hypertarget{method-make_args}{}}}
 \subsection{Method \code{make_args()}}{
 make list of all options
 \subsection{Usage}{
@@ -514,6 +570,7 @@ nothing returned
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-write_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-write_metadata}{}}}
 \subsection{Method \code{write_metadata()}}{
 write metadata to the cassette
 \subsection{Usage}{
@@ -526,6 +583,7 @@ nothing returned
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-http_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-http_interactions}{}}}
 \subsection{Method \code{http_interactions()}}{
 make \link{HTTPInteractionList} object, assign to http_interactions_ var
 \subsection{Usage}{
@@ -538,6 +596,7 @@ nothing returned
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-make_http_interaction"></a>}}
+\if{latex}{\out{\hypertarget{method-make_http_interaction}{}}}
 \subsection{Method \code{make_http_interaction()}}{
 Make an \code{HTTPInteraction} object
 \subsection{Usage}{
@@ -557,6 +616,7 @@ an object of class \link{HTTPInteraction}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-serialize_to_crul"></a>}}
+\if{latex}{\out{\hypertarget{method-serialize_to_crul}{}}}
 \subsection{Method \code{serialize_to_crul()}}{
 Make a crul response object
 \subsection{Usage}{
@@ -569,6 +629,7 @@ a crul response
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

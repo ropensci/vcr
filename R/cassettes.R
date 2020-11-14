@@ -31,7 +31,7 @@
 #'
 #' # list the path to cassettes
 #' cassette_path()
-#' vcr_configure(file.path(tempdir(), "foo"))
+#' vcr_configure(dir = file.path(tempdir(), "foo"))
 #' cassette_path()
 #'
 #' vcr_configure_reset()
@@ -100,7 +100,7 @@ get_cassette_names <- function(){
 
 vcr_files <- function() {
   # remove some file types
-  files <- names(grep("metadata|rs-graphics",
+  files <- names(grep("metadata|rs-graphics|_pkgdown|travis|appveyor",
     vapply(cassette_files(), basename, ""),
     invert = TRUE, value = TRUE))
   # include only certain file types

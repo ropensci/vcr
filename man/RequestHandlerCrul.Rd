@@ -30,7 +30,8 @@ x <- RequestHandlerCrul$new(crul_request_post_json$request)
 # body matching
 library(vcr)
 library(crul)
-vcr_configure(dir = tempdir(), log = TRUE)
+vcr_configure(dir = tempdir(), log = TRUE,
+ log_opts = list(file = file.path(tempdir(), "vcr.log")))
 cli <- HttpClient$new(url = "https://httpbin.org")
 
 ## testing, same uri and method, changed body in 2nd block
@@ -87,6 +88,7 @@ jsonlite::fromJSON(resp$parse())
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

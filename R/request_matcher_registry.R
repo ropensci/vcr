@@ -42,6 +42,7 @@ RequestMatcherRegistry <- R6::R6Class(
 
     #' @description Register all built in matchers
     #' @return no return; registers all built in matchers
+    #' @note r1=from new request; r2=from recorded interaction
     register_built_ins = function() {
       self$register("method", function(r1, r2) r1$method == r2$method)
       self$register("uri", function(r1, r2) r1$uri == r2$uri)
