@@ -15,8 +15,6 @@ Serializer class - base class for JSON/YAML serializers
 \item{\code{file_extension}}{(character) A file extension}
 
 \item{\code{path}}{(character) full path to the yaml file}
-
-\item{\code{string}}{(character) path string}
 }
 \if{html}{\out{</div>}}
 }
@@ -25,8 +23,7 @@ Serializer class - base class for JSON/YAML serializers
 \itemize{
 \item \href{#method-new}{\code{Serializer$new()}}
 \item \href{#method-serialize}{\code{Serializer$serialize()}}
-\item \href{#method-deserialize_string}{\code{Serializer$deserialize_string()}}
-\item \href{#method-deserialize_path}{\code{Serializer$deserialize_path()}}
+\item \href{#method-deserialize}{\code{Serializer$deserialize()}}
 \item \href{#method-clone}{\code{Serializer$clone()}}
 }
 }
@@ -36,7 +33,7 @@ Serializer class - base class for JSON/YAML serializers
 \subsection{Method \code{new()}}{
 Create a new YAML object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Serializer$new(file_extension = NULL, path = NULL, string = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Serializer$new(file_extension = NULL, path = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -45,9 +42,7 @@ Create a new YAML object
 \item{\code{file_extension}}{(character) A file extension}
 
 \item{\code{path}}{(character) path to the cassette, excluding the cassette
-directory and the file extension. only use if not passing a string}
-
-\item{\code{string}}{(character) path string. only use if not passing a path}
+directory and the file extension}
 }
 \if{html}{\out{</div>}}
 }
@@ -80,32 +75,12 @@ Serializes a hash - REPLACED BY YAML/JSON METHODS
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_string"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize_string}{}}}
-\subsection{Method \code{deserialize_string()}}{
-Deserializes a string - REPLACED BY YAML/JSON METHODS
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Serializer$deserialize_string(string = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{string}}{(character) the YAML or JSON string}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(list) the deserialized object, an R list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_path"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize_path}{}}}
-\subsection{Method \code{deserialize_path()}}{
+\if{html}{\out{<a id="method-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-deserialize}{}}}
+\subsection{Method \code{deserialize()}}{
 Serializes a file - REPLACED BY YAML/JSON METHODS
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Serializer$deserialize_path()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Serializer$deserialize()}\if{html}{\out{</div>}}
 }
 
 }

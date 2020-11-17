@@ -8,19 +8,16 @@
 #' fun <- ww$serialize()
 #' fun(list(http_interactions = list(response = list(body = "bar"))),
 #'   path = ww$path, bytes = FALSE)
-#' ww$deserialize_path()
-#' ww$deserialize_string(string = '["hey", "hi", "hello"]')
-#' ww$deserialize_string(string = '{"foo": "bar"}')
+#' ww$deserialize()
 #' }
 JSON <- R6::R6Class("JSON",
   inherit = Serializer,
   public = list(
     #' @description Create a new `JSON` object
     #' @param path (character) full path to the yaml file
-    #' @param string (character) path string
     #' @return A new `JSON` object
-    initialize = function(path = NULL, string = NULL) {
-      super$initialize(".json", path, string)
+    initialize = function(path = NULL) {
+      super$initialize(".json", path)
     },
 
     #' @description Serializes the given hash using internal fxn write_json
@@ -34,18 +31,10 @@ JSON <- R6::R6Class("JSON",
       }
     },
 
-    #' @description Deserializes the given string using jsonlite::fromJSON
-    #' @param string (character) the YAML string
+    #' @description Deserializes the content at the file path using
+    #' jsonlite::fromJSON
     #' @return (list) the deserialized object, an R list
-    deserialize_string = function(string = NULL) {
-      if (is.null(self$string)) str <- string else self$string
-      if (is.null(str)) stop("Must pass a string", call. = FALSE)
-      jsonlite::fromJSON(str)
-    },
-
-    #' @description Deserializes the given string using jsonlite::fromJSON
-    #' @return (list) the deserialized object, an R list
-    deserialize_path = function() {
+    deserialize = function() {
       str <- sensitive_put_back(readLines(self$path))
       tmp <- jsonlite::fromJSON(str, FALSE)
       private$process_body(tmp)

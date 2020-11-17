@@ -14,9 +14,7 @@ yy$file_extension
 fun <- yy$serialize()
 fun(list(http_interactions = list(response = list(body = "bar"))),
   path = yy$path, bytes = FALSE)
-yy$deserialize_path()
-yy$deserialize_string(string = "- hey\n- hi\n- hello")
-yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
+yy$deserialize()
 }
 }
 \keyword{internal}
@@ -28,8 +26,7 @@ yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
 \itemize{
 \item \href{#method-new}{\code{YAML$new()}}
 \item \href{#method-serialize}{\code{YAML$serialize()}}
-\item \href{#method-deserialize_string}{\code{YAML$deserialize_string()}}
-\item \href{#method-deserialize_path}{\code{YAML$deserialize_path()}}
+\item \href{#method-deserialize}{\code{YAML$deserialize()}}
 \item \href{#method-clone}{\code{YAML$clone()}}
 }
 }
@@ -45,16 +42,14 @@ yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
 \subsection{Method \code{new()}}{
 Create a new YAML object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$new(path = NULL, string = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YAML$new(path = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{path}}{(character) path to the cassette, excluding the cassette
-directory and the file extension. only use if not passing a string}
-
-\item{\code{string}}{(character) path string. only use if not passing a path}
+directory and the file extension}
 }
 \if{html}{\out{</div>}}
 }
@@ -87,32 +82,13 @@ Serializes the given hash using internal fxn write_yaml
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_string"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize_string}{}}}
-\subsection{Method \code{deserialize_string()}}{
-Deserializes the given string using yaml::yaml.load
+\if{html}{\out{<a id="method-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-deserialize}{}}}
+\subsection{Method \code{deserialize()}}{
+Deserializes the content at the path using
+yaml::yaml.load_file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize_string(string = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{string}}{(character) the YAML string}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(list) the deserialized object, an R list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_path"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize_path}{}}}
-\subsection{Method \code{deserialize_path()}}{
-Deserializes the given string using yaml::yaml.load_file
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize_path()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

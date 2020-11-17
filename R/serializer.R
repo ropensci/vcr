@@ -6,23 +6,19 @@ Serializer <- R6::R6Class("Serializer",
     file_extension = NULL,
     #' @field path (character) full path to the yaml file
     path = NULL,
-    #' @field string (character) path string
-    string = NULL,
 
     #' @description Create a new YAML object
     #' @param file_extension (character) A file extension
     #' @param path (character) path to the cassette, excluding the cassette
-    #' directory and the file extension. only use if not passing a string
-    #' @param string (character) path string. only use if not passing a path
+    #' directory and the file extension
     #' @return A new `YAML` object
-    initialize = function(file_extension = NULL, path = NULL, string = NULL) {
+    initialize = function(file_extension = NULL, path = NULL) {
       self$file_extension <- file_extension
       if (is.null(path)) {
         self$path <- paste0(cassette_path(), "/", basename(tempfile()), self$file_extension)
       } else {
         self$path <- paste0(cassette_path(), "/", path, self$file_extension)
       }
-      self$string <- string
     },
     #' @description Serializes a hash - REPLACED BY YAML/JSON METHODS
     #' @param x (list) the object to serialize
@@ -30,12 +26,8 @@ Serializer <- R6::R6Class("Serializer",
     #' @param bytes (logical) whether to preserve exact body bytes or not
     #' @return (character) the YAML or JSON string to write to disk
     serialize = function(x, path, bytes) {},
-    #' @description Deserializes a string - REPLACED BY YAML/JSON METHODS
-    #' @param string (character) the YAML or JSON string
-    #' @return (list) the deserialized object, an R list
-    deserialize_string = function(string = NULL) {},
     #' @description Serializes a file - REPLACED BY YAML/JSON METHODS
-    deserialize_path = function() {}
+    deserialize = function() {}
   ),
   private = list(
     strip_newlines = function(x) {

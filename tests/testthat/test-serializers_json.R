@@ -15,8 +15,7 @@ test_that("JSON basic stuff", {
 
   # methods
   expect_is(aa$serialize, "function")
-  expect_is(aa$deserialize_string, "function")
-  expect_is(aa$deserialize_path, "function")
+  expect_is(aa$deserialize, "function")
 })
 
 test_that("JSON usage", {
@@ -64,9 +63,7 @@ test_that("JSON fails well", {
   expect_error(JSON$new(a = 5), "unused argument")
 
   z <- JSON$new()
-  # if no string specified, fails with message
-  expect_error(z$deserialize_string(), "Must pass a string")
   # if no path specified, fails with useful message as is
-  expect_error(suppressWarnings(z$deserialize_path()),
+  expect_error(suppressWarnings(z$deserialize()),
     "cannot open the connection")
 })

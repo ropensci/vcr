@@ -14,9 +14,7 @@ ww$file_extension
 fun <- ww$serialize()
 fun(list(http_interactions = list(response = list(body = "bar"))),
   path = ww$path, bytes = FALSE)
-ww$deserialize_path()
-ww$deserialize_string(string = '["hey", "hi", "hello"]')
-ww$deserialize_string(string = '{"foo": "bar"}')
+ww$deserialize()
 }
 }
 \keyword{internal}
@@ -28,8 +26,7 @@ ww$deserialize_string(string = '{"foo": "bar"}')
 \itemize{
 \item \href{#method-new}{\code{JSON$new()}}
 \item \href{#method-serialize}{\code{JSON$serialize()}}
-\item \href{#method-deserialize_string}{\code{JSON$deserialize_string()}}
-\item \href{#method-deserialize_path}{\code{JSON$deserialize_path()}}
+\item \href{#method-deserialize}{\code{JSON$deserialize()}}
 \item \href{#method-clone}{\code{JSON$clone()}}
 }
 }
@@ -45,15 +42,13 @@ ww$deserialize_string(string = '{"foo": "bar"}')
 \subsection{Method \code{new()}}{
 Create a new \code{JSON} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{JSON$new(path = NULL, string = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{JSON$new(path = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{path}}{(character) full path to the yaml file}
-
-\item{\code{string}}{(character) path string}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,32 +81,13 @@ Serializes the given hash using internal fxn write_json
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_string"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize_string}{}}}
-\subsection{Method \code{deserialize_string()}}{
-Deserializes the given string using jsonlite::fromJSON
+\if{html}{\out{<a id="method-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-deserialize}{}}}
+\subsection{Method \code{deserialize()}}{
+Deserializes the content at the file path using
+jsonlite::fromJSON
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{JSON$deserialize_string(string = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{string}}{(character) the YAML string}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(list) the deserialized object, an R list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_path"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize_path}{}}}
-\subsection{Method \code{deserialize_path()}}{
-Deserializes the given string using jsonlite::fromJSON
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{JSON$deserialize_path()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{JSON$deserialize()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
