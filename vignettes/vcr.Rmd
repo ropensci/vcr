@@ -116,7 +116,7 @@ E.g. to have tests pass on continuous integration for external pull requests to 
 * you still need to fool your _package_ into believing there is an API key as it will construct requests with it. So add the following lines to a testthat setup file (e.g. `tests/testthat/setup-vcr.R`)
 
 ```r
-if(!nzchar(Sys.getenv("APIKEY"))) {
+if (!nzchar(Sys.getenv("APIKEY"))) {
   Sys.setenv("APIKEY" = "foobar")
 }
 ```
