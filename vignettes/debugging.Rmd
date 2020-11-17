@@ -1,0 +1,68 @@
+---
+title: "Debugging your tests that use vcr"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vcr)
+```
+
+Sometimes your tests using a vcr cassette will fail and you will want to debug them.
+Ideally you will want to run the code of the tests as if it were run inside tests, in particular, using the same vcr cassette.
+
+## Prepare your debugging environment
+
+You will first need to load either the vcr helper `tests/testthat/vcr-helper.R` (e.g. via `devtools::load_all()`) or source the vcr setup file `tests/testthat/setup-vcr.R` i.e. the file with these lines (and maybe others)
+
+```r
+library("vcr")
+invisible(vcr::vcr_configure(
+  dir = vcr::vcr_test_path("fixtures"),
+  filter_sensitive_data = list("<<github_api_token>>" = Sys.getenv('GITHUB_PAT'))
+))
+vcr::check_cassette_names()
+
+```
+
+If instead of `vcr::vcr_test_path("fixtures")` you see `"../fixtures"`, replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`,
+as `vcr::vcr_test_path()` is a function that is meant to help exactly what you will want: have the path to `tests/fixtures/` work from tests and from the root (which is where you will be running the code to debug it).
+
+So that is one step (loading the vcr helper or sourcing the vcr setup file), or maybe two (if you also had to replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`).
+
+## Debugging itself
+
+Now look at the test whose code you are trying to debug e.g.
+
+```r
+foo <- function() crul::ok('https://httpbin.org/get')
+
+test_that("foo works", {
+  vcr::use_cassette("testing", {
+    x <- foo()
+  })
+  expect_true(x)
+})
+```
+
+If you want to run the code as if you were in the test,
+
+```r
+foo <- function() crul::ok('https://httpbin.org/get')
+vcr::insert_cassette("testing") # it will be created if needed
+x <- foo()
+x
+# further interactive debugging and fixes
+vcr::eject_cassette("testing")
+```
+
+## Return to normal development
+
+Make sure you ejected the cassette you were using!
+
+Unless your vcr helper/setup file tweaked more things than you would like, you do not even need to re-start R, but you could, just to be on the safe side.

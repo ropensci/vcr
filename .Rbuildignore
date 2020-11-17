@@ -19,3 +19,4 @@ inst/ignore
 ^notes_matchers.md$
 ^use_vcr_notes.txt$
 ^docs$
+^vignettes/articles$

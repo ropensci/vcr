@@ -1,0 +1,29 @@
+#' Locate file in tests directory
+#'
+#' This function, similar to `testthat::test_path()`, is designed to work both
+#' interactively and during tests, locating files in the `tests/` directory.
+#'
+#' @param ...	Character vectors giving path component.
+#'
+#' @return A character vector giving the path
+#' @export
+#'
+#' @examples
+#' vcr_test_path("fixtures")
+vcr_test_path <- function(...) {
+  if (identical(Sys.getenv("TESTTHAT"), "true") && !isTRUE(getOption("testthat_interactive"))) {
+    if (missing(...)) {
+      "../."
+    }
+    else {
+      file.path("..", ...)
+    }
+  }
+  else {
+    base <- "tests"
+    if (!dir.exists(base)) {
+      stop("Can't find `tests` in current directory.")
+    }
+    file.path(base, ...)
+  }
+}
