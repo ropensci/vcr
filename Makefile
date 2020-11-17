@@ -37,3 +37,6 @@ check_windows:
 
 readme:
 	${RSCRIPT} -e "knitr::knit('README.Rmd')"
+
+clean:
+	rm -f src/*.o src/*.so
