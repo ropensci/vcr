@@ -13,7 +13,7 @@ vcr
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
 
-`vcr` helps you stub and replay your HTTP requests. The main use case is for unit tests for R packages. An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
+Record HTTP requests and responses on disk and replay them for the unit tests of your R package to make them independent from any connection, faster, and more complete. An R port of the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Docs
 
@@ -47,16 +47,16 @@ This will:
 ✓ Creating directory: ./tests/testthat  
 ◉ Looking for testthat.R file or similar  
 ✓ tests/testthat.R: added  
-✓ Adding vcr config to tests/testthat/helper-vcr.example.R  
+✓ Adding vcr config to tests/testthat/setup-vcr.example.R  
 ✓ Adding example test file tests/testthat/test-vcr_example.R  
 ✓ .gitattributes: added  
 ◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
 ```
 
-If you need to use secrets (for example, api keys for authentication), it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `helper-vcr` file that got made for us just now. By default it will look like this:
+If you need to use secrets (for example, api keys for authentication), it's important to protect them. `vcr` saves responses from API's as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them. This is one of the uses  of the `setup-vcr` file that got made for us just now. By default it will look like this:
 
 ```r
-library("vcr")  # *Required* as vcr is set up on loading
+library("vcr") # *Required* as vcr is set up on loading
 invisible(vcr::vcr_configure(
   dir = "../fixtures"
 ))
@@ -92,7 +92,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.100   0.023   0.534
+#>   0.109   0.022   0.555
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -105,7 +105,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.082   0.004   0.087
+#>   0.102   0.005   0.108
 ```
 
 
@@ -196,7 +196,7 @@ You're looking for [webmockr][]. `webmockr` only matches requests based on crite
 ### vcr for tests
 
 * Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add `webmockr`, but it's not explicitly needed as `vcr` will pull it in)
-* Make a file in your `tests/testthat/` directory called `helper-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
+* Make a file in your `tests/testthat/` directory called `setup-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
 
 ```r
 library("vcr")
@@ -376,14 +376,14 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 * [Scott Chamberlain](https://github.com/sckott)
 * [Aaron Wolen](https://github.com/aaronwolen)
+* [Maëlle Salmon](https://github.com/maelle)
 
 ## Meta
 
 * Please [report any issues or bugs](https://github.com/ropensci/vcr/issues)
 * License: MIT
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
-* Please note that this project is released with a [Contributor Code of Conduct][coc].
-By participating in this project you agree to abide by its terms.
+* Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
 [![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
 
@@ -398,4 +398,3 @@ By participating in this project you agree to abide by its terms.
 [zbank]: https://github.com/ropenscilabs/zbank
 [rplos]: https://github.com/ropensci/rplos
 [ritis]: https://github.com/ropensci/ritis
-[coc]: https://github.com/ropensci/vcr/blob/master/CODE_OF_CONDUCT.md
