@@ -4,7 +4,8 @@ test_that("serializer_fetch", {
   z <- Serializer$new()
   expect_is(z, "Serializer")
   # by default assigns a path in a temp dir
-  expect_match(z$path, tempdir())
+  expect_is(z$path, "character")
+  expect_false(file.exists(z$path))
   # by default file_extension is NULL
   expect_null(z$file_extension)
   # methods
