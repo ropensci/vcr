@@ -17,5 +17,7 @@ This function, similar to \code{testthat::test_path()}, is designed to work both
 interactively and during tests, locating files in the \verb{tests/} directory.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 vcr_test_path("fixtures")
+\dontshow{\}) # examplesIf}
 }
