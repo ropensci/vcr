@@ -10,6 +10,7 @@
 #'
 #' @examples
 #' vcr_test_path("fixtures")
+# Adapted from https://github.com/r-lib/testthat/blob/45a9c705402bd51af29b9d999e587ba789f6203f/R/test-path.R#L1
 vcr_test_path <- function(...) {
   if (identical(Sys.getenv("TESTTHAT"), "true") && !isTRUE(getOption("testthat_interactive"))) {
     if (missing(...)) {
