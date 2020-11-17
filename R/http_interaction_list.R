@@ -1,5 +1,3 @@
-senv <- new.env()
-
 # Null list, an empty HTTPInteractionList object
 NullList <- R6::R6Class(
   'NullList',

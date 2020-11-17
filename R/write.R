@@ -1,12 +1,9 @@
-wedgie <- new.env()
-
 write_yaml <- function(x, file, bytes) {
   write_header(file)
   lapply(x, write_interactions, file = file, bytes = bytes)
 }
 
 write_json <- function(x, file, bytes) {
-  wedgie$x <- x
   lapply(x, write_interactions_json, file = file, bytes = bytes)
 }
 
