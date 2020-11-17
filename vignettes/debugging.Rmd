@@ -18,7 +18,7 @@ Ideally you will want to run the code of the tests as if it were run inside test
 
 ## Prepare your debugging environment
 
-You will first need to load either the vcr helper `tests/testthat/vcr-helper.R` (e.g. via `devtools::load_all()`) or source the vcr setup file `tests/testthat/setup-vcr.R` i.e. the file with these lines (and maybe others)
+You will first need to load either the vcr helper `tests/testthat/helper-vcr.R` (e.g. via `devtools::load_all()`) or source the vcr setup file `tests/testthat/setup-vcr.R` i.e. the file with these lines (and maybe others)
 
 ```r
 library("vcr")
