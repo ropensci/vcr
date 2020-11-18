@@ -123,7 +123,10 @@ defined locally for individual cassettes.
 See \link{recording}
 \item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
 See \link{request-matching} for details.
-\item \code{serialize_with}: (character) "yaml" or "json"
+\item \code{serialize_with}: (character) "yaml" or "json". Note that you can have
+multiple cassettes with the same name as long as they use different
+serializers; so if you only want one cassette for a given cassette name,
+make sure to not switch serializers, or clean up files you no longer need.
 \item \code{json_pretty}: (logical) want JSON to be newline separated to be easier
 to read? Or remove newlines to save disk space? default: FALSE
 \item \code{persist_with} (character) only option is "FileSystem"

@@ -24,10 +24,13 @@
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
 #' @param serialize_with (character) Which serializer to use.
-#'  Valid values are "yaml" (default), the only one supported for now.
+#' Valid values are "yaml" (default) and "json". Note that you can have
+#' multiple cassettes with the same name as long as they use different
+#' serializers; so if you only want one cassette for a given cassette name,
+#' make sure to not switch serializers, or clean up files you no longer need.
 #' @param persist_with (character) Which cassette persister to
-#'  use. Default: "file_system". You can also register and use a
-#'  custom persister.
+#' use. Default: "file_system". You can also register and use a
+#' custom persister.
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
