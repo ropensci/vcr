@@ -14,7 +14,7 @@
 #' @return Nothing, skip test.
 #' @export
 #'
-#' @seealso lightswitch
+#' @seealso [turn_off()]
 skip_if_vcr_off <- function() {
 
   if (is(try(find.package("testthat"), silent = TRUE), "try-error")) {
