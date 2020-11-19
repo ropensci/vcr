@@ -1,6 +1,6 @@
 #' Skip tests if vcr is off
 #'
-#' Custom testthat skippers to skip tests if vcr is turned off via the
+#' Custom testthat skipper to skip tests if vcr is turned off via the
 #' environment variable `VCR_TURN_OFF`.
 #'
 #' @details This might be useful if your test will fail with real requests:
@@ -19,7 +19,7 @@ skip_if_vcr_off <- function() {
   if (!requireNamespace("testthat", quietly = TRUE)) {
     stop(
       paste0(
-        "This function is meant to be use within testthat tests.",
+        "This function is meant to be used within testthat tests.",
         "Please install testthat."
       )
       )

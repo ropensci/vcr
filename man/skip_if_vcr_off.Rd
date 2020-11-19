@@ -10,7 +10,7 @@ skip_if_vcr_off()
 Nothing, skip test.
 }
 \description{
-Custom testthat skippers to skip tests if vcr is turned off via the
+Custom testthat skipper to skip tests if vcr is turned off via the
 environment variable \code{VCR_TURN_OFF}.
 }
 \details{
