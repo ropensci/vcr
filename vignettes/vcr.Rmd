@@ -38,7 +38,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) for 
 
 ## Elevator pitch
 
-```{r child='../man/rmdhunks/elevator-pitch.Rmd'} 
+```{r child='../man/rmdhunks/elevator-pitch.Rmd', eval=TRUE} 
 ```
 
 ## Installation
@@ -61,38 +61,38 @@ library("vcr")
 
 ## Getting Started
 
-```{r child='../man/rmdhunks/setup.Rmd'} 
+```{r child='../man/rmdhunks/setup.Rmd', eval=TRUE} 
 ```
 
 ## Basic usage
 
-```{r child='../man/rmdhunks/basic-usage.Rmd'} 
+```{r child='../man/rmdhunks/basic-usage.Rmd', eval=TRUE} 
 ```
 
 
 ## Terminology
 
-```{r child='../man/rmdhunks/glossary.Rmd'} 
+```{r child='../man/rmdhunks/glossary.Rmd', eval=TRUE} 
 ```
 
 ## Workflows
 
-```{r child='../man/rmdhunks/workflows.Rmd'} 
+```{r child='../man/rmdhunks/workflows.Rmd', eval=TRUE} 
 ```
 
 ## Configuration
 
-```{r child='../man/rmdhunks/configuration.Rmd'} 
+```{r child='../man/rmdhunks/configuration.Rmd', eval=TRUE} 
 ```
 
 ## Matching/Matchers
 
-```{r child='../man/rmdhunks/matching.Rmd'} 
+```{r child='../man/rmdhunks/matching.Rmd', eval=TRUE} 
 ```
 
 ## Note about missing features
 
-```{r child='../man/rmdhunks/missing-features.Rmd'} 
+```{r child='../man/rmdhunks/missing-features.Rmd', eval=TRUE} 
 ```
 
 
