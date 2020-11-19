@@ -16,7 +16,7 @@
 #' @seealso [turn_off()]
 skip_if_vcr_off <- function() {
 
-  if (inherits(try(find.package("testthat"), silent = TRUE), "try-error")) {
+  if (!requireNamespace("testthat", quietly = TRUE)) {
     stop(
       paste0(
         "This function is meant to be use within testthat tests.",
