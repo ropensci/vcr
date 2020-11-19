@@ -10,3 +10,4 @@ revdep/library.noindex
 notes.R
 notes_matchers.md
 use_vcr_notes.txt
+inst/doc

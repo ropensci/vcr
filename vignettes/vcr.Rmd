@@ -28,13 +28,18 @@ vcr introduction
 
 `vcr` is an R port of the Ruby gem [VCR](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
 
-`vcr` helps you stub HTTP requests so you don't have to repeat HTTP requests.
+`vcr` helps you stub and record HTTP requests so you don't have to repeat HTTP requests.
 
 The main use case is for unit tests, but you can use it outside of the unit test use case.
 
 `vcr` works with the `crul` and `httr` HTTP request packages.
 
-Check out the [http testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`, and other packages.
+Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`, and other packages.
+
+## Elevator pitch
+
+```{r child='man/rmdhunks/elevator-pitch.Rmd'} 
+```
 
 ## Installation
 
@@ -61,72 +66,33 @@ library("vcr")
 
 ## Basic usage
 
-```{r echo=FALSE}
-suppressPackageStartupMessages(require(vcr, quietly = TRUE))
-unlink(file.path(cassette_path(), "helloworld.yml"))
+```{r child='../man/rmdhunks/basic-usage.Rmd'} 
 ```
 
-```{r}
-library(vcr)
-library(crul)
 
-cli <- crul::HttpClient$new(url = "https://eu.httpbin.org")
-system.time(
-  use_cassette(name = "helloworld", {
-    cli$get("get")
-  })
-)
+## Terminology
+
+```{r child='../man/rmdhunks/glossary.Rmd'} 
 ```
 
-The request gets recorded, and all subsequent requests of the same form 
-used the cached HTTP response, and so are much faster
+## Workflows
 
-```{r}
-system.time(
-  use_cassette(name = "helloworld", {
-    cli$get("get")
-  })
-)
+```{r child='../man/rmdhunks/workflows.Rmd'} 
 ```
 
-```{r echo=FALSE}
-unlink(file.path(cassette_path(), "helloworld.yml"))
+## Configuration
+
+```{r child='../man/rmdhunks/configuration.Rmd'} 
 ```
 
-Importantly, your unit test deals with the same inputs and the same outputs - 
-but behind the scenes you use a cached HTTP response - thus, your tests run faster.
+## Matching/Matchers
 
-The cached response looks something like (condensed for brevity):
-
-```yaml
-http_interactions:
-- request:
-    method: get
-    uri: https://eu.httpbin.org/get
-    body:
-      encoding: ''
-      string: ''
-    headers:
-      User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.2
-  response:
-    status:
-      status_code: '200'
-      message: OK
-      explanation: Request fulfilled, document follows
-    headers:
-      status: HTTP/1.1 200 OK
-      connection: keep-alive
-    body:
-      encoding: UTF-8
-      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"application/json,
-        text/xml, application/xml, */*\", \n    \"Accept-Encoding\": \"gzip, deflate\",
-        \n    \"Connection\": \"close\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\":
-        \"libcurl/7.54.0 r-curl/3.2 crul/0.5.2\"\n  }, \n  \"origin\": \"136.152.208.176\",
-        \n  \"url\": \"https://httpbin.org/get\"\n}\n"
-  recorded_at: 2018-04-03 22:55:02 GMT
-  recorded_with: vcr/0.0.7.9324
+```{r child='../man/rmdhunks/matching.Rmd'} 
 ```
 
-All components of both the request and response are preserved, so that the HTTP 
-client (in this case `crul`) can reconstruct its own response just as it would 
-if it wasn't using `vcr`.
+## Note about missing features
+
+```{r child='../man/rmdhunks/missing-features.Rmd'} 
+```
+
+
