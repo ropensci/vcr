@@ -15,10 +15,21 @@ downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/c
 [![cran
 version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
-Record HTTP requests and responses on disk and replay them for the unit
-tests of your R package to make them independent from any connection,
-faster, and more complete. An R port of the Ruby gem
-[vcr](https://github.com/vcr/vcr)
+Easier HTTP testing\! Record HTTP requests and responses on disk and
+replay them for the unit tests of your R package, to make them
+independent from any connection, faster, and more complete. An R port of
+the Ruby gem [vcr](https://github.com/vcr/vcr)
+
+## Elevator pitch
+
+  - **Setup vcr for your project with `vcr::use_vcr()`**
+  - Tweak the configuration to protect your secrets
+  - **Sprinkle your tests with `vcr::use_cassette()` to save HTTP
+    interactions to disk in “cassettes” files**
+  - If you want to test for package behavior when the API errors, edit
+    the cassettes, or use [webmockr](htts://docs.ropensci.org/webmockr)
+
+Now your tests can work without any internet connection\!
 
 ## Docs
 
@@ -28,8 +39,8 @@ vignettes](https://docs.ropensci.org/vcr/articles/).
 
 ## Supported HTTP libraries
 
-  - [crul](https://github.com/ropensci/crul)
-  - [httr](https://github.com/r-lib/httr)
+  - [crul](https://docs.ropensci.org/crul)
+  - [httr](https://httr.r-lib.org/)
 
 ## Getting Started
 
@@ -180,6 +191,58 @@ function to help edit the file.
 
 ## Usage
 
+### In tests
+
+In your tests, for whichever tests you want to use `vcr`, wrap them in a
+`vcr::use_cassette()` call like:
+
+``` r
+library(testthat)
+vcr::use_cassette("rl_citation", {
+  test_that("my test", {
+    aa <- rl_citation()
+
+    expect_is(aa, "character")
+    expect_match(aa, "IUCN")
+    expect_match(aa, "www.iucnredlist.org")
+  })
+})
+```
+
+OR put the `vcr::use_cassette()` block on the inside, but put `testthat`
+expectations outside of the `vcr::use_cassette()` block:
+
+``` r
+library(testthat)
+test_that("my test", {
+  vcr::use_cassette("rl_citation", {
+    aa <- rl_citation()
+  })
+
+  expect_is(aa, "character")
+  expect_match(aa, "IUCN")
+  expect_match(aa, "www.iucnredlist.org")
+})
+```
+
+Don’t wrap the `use_cassette()` block inside your `test_that()` block
+with `testthat` expectations inside the `use_cassette()` block, as
+you’ll only get the line number that the `use_cassette()` block starts
+on on failures.
+
+The first time you run the tests, a “cassette” i.e. a file with recorded
+HTTP interactions, is created at `tests/fixtures/rl_citation.yml`. The
+times after that, the cassette will be used. If you change your code and
+more HTTP interactions are needed in the code wrapped by
+`vcr::use_cassette("rl_citation"`, delete
+`tests/fixtures/rl_citation.yml` and run the tests again for
+re-recording the cassette.
+
+### Outside of tests
+
+If you want to get a feel for how vcr works, although you don’t need
+too.
+
 ``` r
 library(vcr)
 library(crul)
@@ -191,7 +254,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.038   0.004   0.606
+#>   0.024   0.001   0.513
 ```
 
 The request gets recorded, and all subsequent requests of the same form
@@ -204,7 +267,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.063   0.000   0.174
+#>   0.061   0.000   0.196
 ```
 
 Importantly, your unit test deals with the same inputs and the same
@@ -245,6 +308,15 @@ http_interactions:
 All components of both the request and response are preserved, so that
 the HTTP client (in this case `crul`) can reconstruct its own response
 just as it would if it wasn’t using `vcr`.
+
+### Less basic usage
+
+For tweaking things to your needs, make sure to read the docs about
+[configuration](https://docs.ropensci.org/vcr/articles/configuration.html)
+(e.g., where are the fixtures saved? can they be re-recorded
+automatically regulary?) and [request
+matching](https://docs.ropensci.org/vcr/articles/request_matching.html)
+(how does vcr match a request to a recorded interaction?)
 
 ## Terminology
 
@@ -351,45 +423,6 @@ library("vcr")
 invisible(vcr::vcr_configure())
 ```
 
-  - In your tests, for whichever tests you want to use `vcr`, wrap them
-    in a `vcr::use_cassette()` call like:
-
-<!-- end list -->
-
-``` r
-library(testthat)
-vcr::use_cassette("rl_citation", {
-  test_that("my test", {
-    aa <- rl_citation()
-
-    expect_is(aa, "character")
-    expect_match(aa, "IUCN")
-    expect_match(aa, "www.iucnredlist.org")
-  })
-})
-```
-
-OR put the `vcr::use_cassette()` block on the inside, but put `testthat`
-expectations outside of the `vcr::use_cassette()` block:
-
-``` r
-library(testthat)
-test_that("my test", {
-  vcr::use_cassette("rl_citation", {
-    aa <- rl_citation()
-  })
-
-  expect_is(aa, "character")
-  expect_match(aa, "IUCN")
-  expect_match(aa, "www.iucnredlist.org")
-})
-```
-
-Don’t wrap the `use_cassette()` block inside your `test_that()` block
-with `testthat` expectations inside the `use_cassette()` block, as
-you’ll only get the line number that the `use_cassette()` block starts
-on on failures.
-
   - When running tests or checks of your whole package, note that some
     users have found different results with `devtools::check()`
     vs. `devtools::test()`. It’s not clear why this would make a
@@ -428,24 +461,29 @@ library("crul")
 
 We set the following defaults:
 
-  - `dir` = “.”
-  - `record` = “once”
-  - `match_requests_on` = `c("method", "uri")`
-  - `allow_unused_http_interactions` = `TRUE`
-  - `serialize_with` = `"yaml"`
-  - `persist_with` = `"FileSystem"`
-  - `ignore_hosts` = `NULL`
-  - `ignore_localhost` = `FALSE`
-  - `uri_parser` = `crul::url_parse`
-  - `preserve_exact_body_bytes` = `FALSE`
-  - `turned_off` = `FALSE`
-  - `ignore_cassettes` = `FALSE`
-  - `re_record_interval` = `NULL`
-  - `clean_outdated_http_interactions` = `NULL`
-  - `cassettes` = `list()`
-  - `linked_context` = `NULL`
-  - `vcr_logging` = `"vcr.log"`
-  - `vcr_logging_opts` = `list()`
+  - dir = `"."`
+  - record = `"once"`
+  - match\_requests\_on = `"c("method", "uri")"`
+  - allow\_unused\_http\_interactions = `TRUE`
+  - serialize\_with = `"yaml"`
+  - persist\_with = `"FileSystem"`
+  - ignore\_hosts = `NULL`
+  - ignore\_localhost = `FALSE`
+  - ignore\_request = `NULL`
+  - uri\_parser = `"crul::url_parse"`
+  - preserve\_exact\_body\_bytes = `FALSE`
+  - turned\_off = `FALSE`
+  - re\_record\_interval = `NULL`
+  - clean\_outdated\_http\_interactions = `FALSE`
+  - allow\_http\_connections\_when\_no\_cassette = `FALSE`
+  - cassettes = `list()`
+  - linked\_context = `NULL`
+  - log = `FALSE`
+  - log\_opts = `list(file = "vcr.log", log_prefix = "Cassette", date =
+    TRUE)`
+  - filter\_sensitive\_data = `NULL`
+  - write\_disk\_path = `NULL`
+  - verbose\_errors = `FALSE`
 
 You can get the defaults programmatically with
 
