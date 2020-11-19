@@ -23,5 +23,5 @@ a date was correctly parsed, but making a real request would produce a different
 date).
 }
 \seealso{
-lightswitch
+\code{\link[=turn_off]{turn_off()}}
 }
