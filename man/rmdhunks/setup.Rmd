@@ -1,0 +1,114 @@
+The docs assume you are using testthat for your unit tests.
+
+To install from CRAN
+
+```r
+install.packages("vcr")
+```
+
+### `use_vcr`
+
+You can then set up your package to use `vcr` with:
+
+```r
+vcr::use_vcr()
+```
+
+This will:
+
+* put `vcr` into the `DESCRIPTION`
+* check that `testthat` is setup
+* setup `testthat` if not
+* set the recorded cassettes to be saved in and sourced from `tests/fixtures`
+* setup a config file for `vcr`
+* add an example test file for `vcr`
+* make a `.gitattributes` file with settings for `vcr` 
+* make a `./tests/testthat/setup-vcr.R` file
+
+What you will see in the R console:
+
+```
+◉ Using package: vcr.example  
+◉ assuming fixtures at: tests/fixtures  
+✓ Adding vcr to Suggests field in DESCRIPTION  
+✓ Creating directory: ./tests/testthat  
+◉ Looking for testthat.R file or similar  
+✓ tests/testthat.R: added  
+✓ Adding vcr config to tests/testthat/setup-vcr.example.R  
+✓ Adding example test file tests/testthat/test-vcr_example.R  
+✓ .gitattributes: added  
+◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
+```
+
+### Protecting secrets
+
+Secrets often turn up in API work. A common example is an API key. 
+`vcr` saves responses from APIs as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them.
+The `vcr_configure` function has the `filter_sensitive_data` argument function for just this situation. 
+The `filter_sensitive_data` argument takes a named list where the _name_ of the list is the string that will be used in the recorded cassettes _instead of_ the secret, which is the list _item_. 
+`vcr` will manage the replacement of that for you, so all you need to do is to edit your `setup-vcr.R` file like this:
+
+```r
+library("vcr") # *Required* as vcr is set up on loading
+invisible(vcr::vcr_configure(
+  dir = "../fixtures"
+))
+vcr::check_cassette_names()
+```
+
+Use the `filter_sensitive_data` argument in the `vcr_configure` function to show `vcr` how to keep your secret. The best way to store secret information is to have it in a `.Renviron` file. Assuming that that is already in place, supply a named list to the `filter_sensitive_data` argument.
+
+```r
+library("vcr")
+invisible(vcr::vcr_configure(
+  filter_sensitive_data = list("<<<my_api_key>>>" = Sys.getenv('APIKEY')),  # add this
+  dir = "../fixtures"
+))
+vcr::check_cassette_names()
+```
+
+Notice we wrote `Sys.getenv('APIKEY')` and not the API key directly, otherwise you'd have written your API key to a file that might end up in a public repo.
+
+The will get your secret information from the environment, and make sure that whenever `vcr` records a new cassette, it will replace the secret information with `<<<my_api_key>>>`. You can find out more about this in the [HTTP testing book](https://books.ropensci.org/http-testing/) chapter on security.
+
+The addition of the line above will instruct `vcr` to replace any string in cassettes it records that are equivalent to your string which is stored as the `APIKEY` environmental variable with the masking string `<<<my_api_key>>>`. In practice, you might get a `YAML` that looks a little like this:
+
+```yaml
+http_interactions:
+- request:
+    method: post
+    ...
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+      Content-Type: application/json
+      api-key: <<<my_api_key>>>
+    ...
+```
+Here, my `APIKEY` environmental variable would have been stored as the `api-key` value, but `vcr` has realised this and recorded the string `<<<my_api_key>>>` instead.
+
+Once the cassette is recorded, `vcr` no longer needs the API key as no real requests will be made.
+Furthermore, as by default requests matching does not include the API key, things will work.
+
+**Now, how to ensure tests work in the absence of a real API key?**
+
+E.g. to have tests pass on continuous integration for external pull requests to your code repository.
+
+* vcr does not need an actual API key for requests once the cassettes are created, as no real requests will be made.
+* you still need to fool your _package_ into believing there is an API key as it will construct requests with it. So add the following lines to a testthat setup file (e.g. `tests/testthat/setup-vcr.R`)
+
+```r
+if (!nzchar(Sys.getenv("APIKEY"))) {
+  Sys.setenv("APIKEY" = "foobar")
+}
+```
+
+#### Using an `.Renviron`
+
+A simple way to manage local environmental variables is to use an [`.Renviron` file](https://rstats.wtf/r-startup.html#renviron). 
+Your `.Renviron` file might look like this:
+
+```sh
+APIKEY="mytotallysecretkey"
+```
+
+You can have this set at a project or user level, and `usethis` has the [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html) function to help edit the file.
