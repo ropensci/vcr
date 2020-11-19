@@ -14,13 +14,12 @@ Custom testthat skippers to skip tests if vcr is turned off via the
 environment variable \code{VCR_TURN_OFF}.
 }
 \details{
-This might be useful if your test will fail with real requests: when
-the cassette was e.g. edited (a real request produced a 200 status code but
-you made it a 502 status code for testing the behavior of your code when the
-API errors)
-or if the tests are very specific (e.g. testing
-a date was correctly parsed, but making a real request would produce a different
-date).
+This might be useful if your test will fail with real requests:
+when the cassette was e.g. edited (a real request produced a 200 status code
+but you made it a 502 status code for testing the behavior of your code
+when the API errors)
+or if the tests are very specific (e.g. testing a date was correctly parsed,
+but making a real request would produce a different date).
 }
 \seealso{
 \code{\link[=turn_off]{turn_off()}}
