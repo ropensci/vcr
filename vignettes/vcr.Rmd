@@ -38,7 +38,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) for 
 
 ## Elevator pitch
 
-```{r child='man/rmdhunks/elevator-pitch.Rmd'} 
+```{r child='../man/rmdhunks/elevator-pitch.Rmd'} 
 ```
 
 ## Installation

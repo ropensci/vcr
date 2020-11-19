@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(vcr)
 ```
 
-**The step**
+**The steps**
 
 1. Use either `vcr::use_cassette()` or `vcr::insert_cassette()`
   a. If you use `vcr::insert_cassette()`, make sure to run `vcr::eject_cassette()` when you're done to stop recording
