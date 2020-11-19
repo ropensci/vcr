@@ -100,8 +100,6 @@ default: method & uri}
 \item{\code{update_content_length_header}}{(logical) Whether to overwrite the
 \code{Content-Length} header}
 
-\item{\code{decode_compressed_response}}{(logical) ignored, not used right now}
-
 \item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
 interaction to be played back multiple times}
 
@@ -177,7 +175,6 @@ Create a new \code{Cassette} object
   tag,
   tags,
   update_content_length_header,
-  decode_compressed_response,
   allow_playback_repeats,
   allow_unused_http_interactions,
   exclusive,
@@ -216,8 +213,6 @@ re-recorded at the given interval, in seconds.}
 \item{\code{update_content_length_header}}{(logical) Whether or
 not to overwrite the \code{Content-Length} header of the responses to
 match the length of the response body. Default: \code{FALSE}}
-
-\item{\code{decode_compressed_response}}{(logical) ignored, not used right now}
 
 \item{\code{allow_playback_repeats}}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.

@@ -85,8 +85,6 @@ Cassette <- R6::R6Class(
     #' @field update_content_length_header (logical) Whether to overwrite the
     #' `Content-Length` header
     update_content_length_header = FALSE,
-    #' @field decode_compressed_response (logical) ignored, not used right now
-    decode_compressed_response = FALSE,
     #' @field allow_playback_repeats (logical) Whether to allow a single HTTP
     #' interaction to be played back multiple times
     allow_playback_repeats = FALSE,
@@ -132,7 +130,6 @@ Cassette <- R6::R6Class(
     #' @param update_content_length_header (logical) Whether or
     #' not to overwrite the `Content-Length` header of the responses to
     #' match the length of the response body. Default: `FALSE`
-    #' @param decode_compressed_response (logical) ignored, not used right now
     #' @param allow_playback_repeats (logical) Whether or not to
     #' allow a single HTTP interaction to be played back multiple times.
     #' Default: `FALSE`.
@@ -148,8 +145,8 @@ Cassette <- R6::R6Class(
     initialize = function(
       name, record, serialize_with, persist_with, match_requests_on,
       re_record_interval, tag, tags, update_content_length_header,
-      decode_compressed_response, allow_playback_repeats,
-      allow_unused_http_interactions, exclusive, preserve_exact_body_bytes,
+      allow_playback_repeats, allow_unused_http_interactions,
+      exclusive, preserve_exact_body_bytes,
       clean_outdated_http_interactions) {
 
       self$name <- name
@@ -176,8 +173,6 @@ Cassette <- R6::R6Class(
         assert(update_content_length_header, "logical")
         self$update_content_length_header = update_content_length_header
       }
-      if (!missing(decode_compressed_response))
-        self$decode_compressed_response = decode_compressed_response
       if (!missing(allow_playback_repeats)) {
         assert(allow_playback_repeats, "logical")
         self$allow_playback_repeats = allow_playback_repeats
@@ -314,8 +309,6 @@ Cassette <- R6::R6Class(
         self$clean_outdated_http_interactions), sep = "\n")
       cat(paste0("  update_content_length_header: ",
                  self$update_content_length_header), sep = "\n")
-      cat(paste0("  decode_compressed_response: ",
-                 self$decode_compressed_response), sep = "\n")
       cat(paste0("  allow_playback_repeats: ",
                  self$allow_playback_repeats), sep = "\n")
       cat(paste0("  allow_unused_http_interactions: ",
@@ -594,7 +587,6 @@ Cassette <- R6::R6Class(
         re_record_interval = self$re_record_interval,
         tag = self$tag, tags = self$tags,
         update_content_length_header = self$update_content_length_header,
-        decode_compressed_response = self$decode_compressed_response,
         allow_playback_repeats = self$allow_playback_repeats,
         allow_unused_http_interactions = self$allow_unused_http_interactions,
         exclusive = self$exclusive, serialize_with = self$serialize_with,

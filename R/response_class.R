@@ -194,35 +194,6 @@ VcrResponse <- R6::R6Class(
     is_compressed = function() {
        self$content_encoding() %in% c("gzip", "deflate")
     }
-
-    # Decodes the compressed body and deletes evidence that it was ever compressed.
-    # raises an error if the content encoding is not a known encoding.
-    # decompress = function() {
-    #   new_body <- self$decompress_(self$body, self$content_encoding())
-    #   self$body <- new_body
-    #   self$update_content_length_header()
-    #   self$delete_header('content-encoding')
-    # },
-
-    # # used internally by `decompress()`
-    # decompress_ = function(body, type) {
-    #   unless HAVE_ZLIB
-    #     warning("VCR: cannot decompress response; Zlib not available")
-    #   end
-
-    #   switch(
-    #     type,
-    #     gzip = {
-    #       args = [StringIO.new(body)]
-    #       args << { :encoding => 'ASCII-8BIT' } if ''.respond_to?(:encoding)
-    #       yield Zlib::GzipReader.new(*args).read
-    #     },
-    #     deflate = yield Zlib::Inflate.inflate(body)
-    #     identity = NULL,
-    #     stop('UnknownContentEncodingError: unknown content encoding: ', type)
-    #   )
-    # }
-
   )
 )
 
@@ -234,47 +205,3 @@ extract_http_version <- function(x) {
     return(x)
   }
 }
-
-
-# vcr_request_httr <- function(x) {
-#   Request$new(
-#     x$request$method,
-#     x$url,
-#     x$body, # FIXME: body not a field, probably index to x$request$fields
-#     as.list(x$request$headers),
-#     self$cassette_opts
-#   )
-# }
-
-# vcr_request_crul <- function(x) {
-#   Request$new(
-#     x$request$method,
-#     x$url,
-#     x$body,
-#     x$request_headers,
-#     self$cassette_opts
-#   )
-# }
-
-
-
-# vcr_response_httr <- function(x) {
-#   VcrResponse$new(
-#     httr::http_status(x),
-#     x$headers,
-#     httr::content(x, encoding = "UTF-8"),
-#     x$all_headers[[1]]$version,
-#     super$cassette$cassette_opts
-#   )
-# }
-
-# vcr_response_crul <- function(x) {
-#   VcrResponse$new(
-#     x$status_http(),
-#     headers = x$response_headers,
-#     body = rawToChar(x$content),
-#     http_version = x$response_headers$status,
-#     self$cassette_opts
-#   )
-# }
-

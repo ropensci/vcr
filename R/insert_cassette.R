@@ -75,7 +75,6 @@ insert_cassette <- function(name,
       clean_outdated_http_interactions = clean_outdated_http_interactions %||% vcr_c$clean_outdated_http_interactions,
       tag = NULL,
       tags = NULL,
-      decode_compressed_response = NULL,
       allow_unused_http_interactions = NULL,
       exclusive = NULL
     )
