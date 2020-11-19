@@ -254,7 +254,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.024   0.001   0.513
+#>   0.051   0.000   0.781
 ```
 
 The request gets recorded, and all subsequent requests of the same form
@@ -267,7 +267,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.061   0.000   0.196
+#>   0.059   0.004   0.185
 ```
 
 Importantly, your unit test deals with the same inputs and the same
@@ -409,19 +409,7 @@ not cache HTTP interactions to disk as `vcr` does.
 
 ### vcr for tests
 
-  - Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add
-    `webmockr`, but it’s not explicitly needed as `vcr` will pull it in)
-  - Make a file in your `tests/testthat/` directory called
-    `setup-yourpackage.R` (or skip if as similar file already exists).
-    In that file use the following lines to setup your path for storing
-    cassettes (change path to whatever you want):
-
-<!-- end list -->
-
-``` r
-library("vcr")
-invisible(vcr::vcr_configure())
-```
+  - See [usage section](#usage)
 
   - When running tests or checks of your whole package, note that some
     users have found different results with `devtools::check()`
@@ -430,7 +418,7 @@ invisible(vcr::vcr_configure())
 
 ### vcr in your R project
 
-You can use `vcr` in an R project as well.
+You can use `vcr` in any R project as well.
 
   - Load `vcr` in your project
   - Similar to the above example, use `use_cassette` to run code that
@@ -458,6 +446,9 @@ library("crul")
 ```
 
 ## Configuration
+
+See also the [configuration
+vignette](https://docs.ropensci.org/vcr/articles/configuration.html).
 
 We set the following defaults:
 
@@ -498,10 +489,20 @@ vcr_configure()
 ```
 
 Calling `vcr_configuration()` gives you some of the more important
-defaults in a nice tidy print out
+configuration parameters in a nice tidy print out
 
 ``` r
 vcr_configuration()
+#> <vcr configuration>
+#>   Cassette Dir: /tmp/RtmpWv52NG
+#>   Record: once
+#>   URI Parser: crul::url_parse
+#>   Match Requests on: method, uri
+#>   Preserve Bytes?: FALSE
+#>   Logging?: FALSE
+#>   ignored hosts: 
+#>   ignore localhost?: FALSE
+#>   Write disk path:
 ```
 
 <!-- `use_cassette()` is an easier approach. An alternative is to use
@@ -510,6 +511,9 @@ vcr_configuration()
 `use_cassette()` does both insert and eject operations for you, but
 you can instead do them manually by using the above functions. You do have
 to eject the cassette after using insert. -->
+
+For more details refer to the [configuration
+vignette](https://docs.ropensci.org/vcr/articles/configuration.html)
 
 ## Matching/Matchers
 
@@ -538,6 +542,9 @@ use_cassette(name = "one", {
   match_requests_on = c('method', 'headers', 'body')
 )
 ```
+
+For more details refer to the [request matching
+vignette](https://docs.ropensci.org/vcr/articles/request_matching.html).
 
 ## vcr in other languages
 

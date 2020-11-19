@@ -57,15 +57,8 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and t
 
 ## Terminology
 
-* _vcr_: the name comes from the idea that we want to record something and play it back later, like a vcr
-* _cassette_: A _thing_ to record HTTP interactions to. Right now the only option is the file system (writing to files), but in the future could be other things, e.g. a key-value store like Redis
-* _fixture_: A fixture is something used to consistently test a piece of software. In this case, a cassette (just defined above) is a fixture - used in unit tests. If you use our setup function `vcr_setup()` the default directory created to hold cassettes is called `fixtures/` as a signal as to what the folder contains.
-* Persisters: how to save requests - currently only option is the file system
-* _serialize_: translating data into a format that can be stored; here, translate HTTP request and response data into a representation on disk to read back later
-* Serializers: how to serialize the HTTP response - currently only option is YAML; other options in the future could include e.g. JSON
-* _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
-* _eject cassette_: eject the cassette (no longer recording to that cassette)
-* _replay_: refers to using a cached result of an http request that was recorded earlier
+```{r child='man/rmdhunks/glossary.Rmd'} 
+```
 
 ### How it works in lots of detail
 
@@ -105,15 +98,7 @@ You're looking for [webmockr][]. `webmockr` only matches requests based on crite
 
 ### vcr for tests
 
-* Add `vcr` to `Suggests` in your DESCRIPTION file (optionally add `webmockr`, but it's not explicitly needed as `vcr` will pull it in)
-* Make a file in your `tests/testthat/` directory called `setup-yourpackage.R` (or skip if as similar file already exists). In that file use the following lines to setup your path for storing cassettes (change path to whatever you want):
-
-```r
-library("vcr")
-invisible(vcr::vcr_configure())
-```
-
-
+* See [usage section](#usage)
 
 * When running tests or checks of your whole package, note that some users have found different results with
 `devtools::check()` vs. `devtools::test()`. It's not clear why this would make a difference. Do let us know
@@ -121,12 +106,11 @@ if you run into this problem.
 
 ### vcr in your R project
 
-You can use `vcr` in an R project as well.
+You can use `vcr` in any R project as well.
 
 * Load `vcr` in your project
 * Similar to the above example, use `use_cassette` to run code that does HTTP requests.
 * The first time a real request is done, and after that the cached response will be used.
-
 
 ## Installation
 
@@ -149,6 +133,8 @@ library("crul")
 
 ## Configuration
 
+See also the [configuration vignette](https://docs.ropensci.org/vcr/articles/configuration.html).
+
 We set the following defaults:
 
 ```{r, echo = FALSE, results='asis', collapse=TRUE}
@@ -170,9 +156,9 @@ You can change all the above defaults with `vcr_configure()`:
 vcr_configure()
 ```
 
-Calling `vcr_configuration()` gives you some of the more important defaults in a nice tidy print out
+Calling `vcr_configuration()` gives you some of the more important configuration parameters in a nice tidy print out
 
-```r
+```{r}
 vcr_configuration()
 ```
 
@@ -183,6 +169,8 @@ vcr_configuration()
 `use_cassette()` does both insert and eject operations for you, but
 you can instead do them manually by using the above functions. You do have
 to eject the cassette after using insert. -->
+
+For more details refer to the [configuration vignette](https://docs.ropensci.org/vcr/articles/configuration.html)
 
 ## Matching/Matchers
 
@@ -213,6 +201,8 @@ use_cassette(name = "one", {
   match_requests_on = c('method', 'headers', 'body')
 )
 ```
+
+For more details refer to the [request matching vignette](https://docs.ropensci.org/vcr/articles/request_matching.html).
 
 ## vcr in other languages
 
