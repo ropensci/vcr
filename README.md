@@ -22,7 +22,7 @@ the Ruby gem [vcr](https://github.com/vcr/vcr)
 
 ## Elevator pitch
 
-  - **Setup vcr for your project with `vcr::use_vcr()`**
+  - **Setup vcr for your package with `vcr::use_vcr()`**
   - Tweak the configuration to protect your secrets
   - **Sprinkle your tests with `vcr::use_cassette()` to save HTTP
     interactions to disk in “cassettes” files**
@@ -30,6 +30,9 @@ the Ruby gem [vcr](https://github.com/vcr/vcr)
     the cassettes, or use [webmockr](htts://docs.ropensci.org/webmockr)
 
 Now your tests can work without any internet connection\!
+
+[Demo of adding vcr testing to an R
+package](https://github.com/maelle/exemplighratia/pull/2/files)
 
 ## Docs
 
@@ -254,7 +257,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.051   0.000   0.781
+#>   0.051   0.003   0.858
 ```
 
 The request gets recorded, and all subsequent requests of the same form
@@ -267,7 +270,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.059   0.004   0.185
+#>   0.054   0.008   0.231
 ```
 
 Importantly, your unit test deals with the same inputs and the same
@@ -344,68 +347,7 @@ matching](https://docs.ropensci.org/vcr/articles/request_matching.html)
   - *replay*: refers to using a cached result of an http request that
     was recorded earlier
 
-### How it works in lots of detail
-
-**The Steps**
-
-1.  Use either `vcr::use_cassette` or `vcr::insert_cassette`
-
-<!-- end list -->
-
-1.  If you use `vcr::insert_cassette`, make sure to run
-    `vcr::eject_cassette` when you’re done to stop recording
-
-<!-- end list -->
-
-2.  When you first run a request with `vcr` there’s no cached data to
-    use, so we allow HTTP requests until you’re request is done.
-3.  Before we run the real HTTP request, we “stub” the request with
-    `webmockr` so that future requests will match the stub. This stub is
-    an R6 class with details of the interaction (request + response),
-    but is not on disk.
-4.  After the stub is made, we run the real HTTP request.
-5.  We then disallow HTTP requests so that if the request is done again
-    we use the cached response
-6.  The last thing we do is write the HTTP interaction to disk in a
-    mostly human readable form.
-
-When you run that request again using `vcr::use_cassette` or
-`vcr::insert_cassette`:
-
-  - We use `webmockr` to match the request to cached requests, and since
-    we stubbed the request the first time we used the cached response.
-
-Of course if you do a different request, even slightly (but depending on
-which matching format you decided to use), then the request will have no
-matching stub and no cached response, and then a real HTTP request is
-done - we then cache it, then subsequent requests will pull from that
-cached response.
-
-`webmockr` has adapters for each R client (again, right now only
-[crul](https://github.com/ropensci/crul)) - so that we actually
-intercept HTTP requests when `webmockr` is loaded and the user turns it
-on. So, `webmockr` doesn’t actually require an internet or localhost
-connection at all, but can do its thing just fine by matching on
-whatever the user requests to match on. In fact, `webmockr` doesn’t
-allow real HTTP requests by default, but can be toggled off of course.
-
-The main use case we are going for in `vcr` is to deal with real HTTP
-requests and responses, so we allow real HTTP requests when we need to,
-and turn it off when we don’t.
-
-This gives us a very flexible and powerful framework where we can
-support `webmockr` and `vcr` integration for any number of R clients for
-HTTP requests and support many different formats serialized to disk.
-
-### Just want to mock and not store on disk?
-
-You’re looking for [webmockr](https://github.com/ropensci/webmockr).
-`webmockr` only matches requests based on criteria you choose, but does
-not cache HTTP interactions to disk as `vcr` does.
-
-<br>
-
-## Best practices
+## Workflows
 
 ### vcr for tests
 
@@ -425,6 +367,19 @@ You can use `vcr` in any R project as well.
     does HTTP requests.
   - The first time a real request is done, and after that the cached
     response will be used.
+
+### How it works in lots of detail
+
+See the [vignette about
+internals](https://docs.ropensci.org/vcr/articles/internals.html)
+
+### Just want to mock and not store on disk?
+
+You’re looking for [webmockr](https://docs.ropensci.org/webmockr)., that
+vcr itself uses. `webmockr` only matches requests based on criteria you
+choose, but does not cache HTTP interactions to disk as `vcr` does.
+
+<br>
 
 ## Installation
 
@@ -494,7 +449,7 @@ configuration parameters in a nice tidy print out
 ``` r
 vcr_configuration()
 #> <vcr configuration>
-#>   Cassette Dir: /tmp/RtmpWv52NG
+#>   Cassette Dir: /tmp/RtmpCPr4Jz
 #>   Record: once
 #>   URI Parser: crul::url_parse
 #>   Match Requests on: method, uri
@@ -551,7 +506,7 @@ vignette](https://docs.ropensci.org/vcr/articles/request_matching.html).
 The canonical `vcr` (in Ruby) lists ports in other languages at
 <https://github.com/vcr/vcr>
 
-## NOTE
+## Note about missing features
 
 There’s a number of features in this package that are not yet supported,
 but for which their parameters are found in the package. For example,
