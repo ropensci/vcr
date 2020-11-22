@@ -7,7 +7,9 @@
 vcr_test_path(...)
 }
 \arguments{
-\item{...}{Character vectors giving path component.}
+\item{...}{Character vectors giving path component. each character string
+gets added on to the path, e.g., \code{vcr_test_path("a", "b")} becomes
+\code{tests/a/b} when run from the root of the package.}
 }
 \value{
 A character vector giving the path
