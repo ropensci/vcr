@@ -26,13 +26,33 @@ the Ruby gem [vcr](https://github.com/vcr/vcr)
   - Tweak the configuration to protect your secrets
   - **Sprinkle your tests with `vcr::use_cassette()` to save HTTP
     interactions to disk in “cassettes” files**
-  - If you want to test for package behavior when the API errors, edit
-    the cassettes, or use [webmockr](htts://docs.ropensci.org/webmockr)
+  - If you want to test for package behavior when the API returns e.g. a
+    404 or 503 code, edit the cassettes, or use
+    [webmockr](htts://docs.ropensci.org/webmockr)
 
 Now your tests can work without any internet connection\!
 
 [Demo of adding vcr testing to an R
 package](https://github.com/maelle/exemplighratia/pull/2/files)
+
+## Installation
+
+CRAN version:
+
+``` r
+install.packages("vcr")
+```
+
+Development version:
+
+``` r
+remotes::install_github("ropensci/vcr")
+```
+
+``` r
+library("vcr")
+library("crul")
+```
 
 ## Docs
 
@@ -257,7 +277,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.051   0.003   0.858
+#>   0.136   0.012   0.995
 ```
 
 The request gets recorded, and all subsequent requests of the same form
@@ -270,7 +290,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.054   0.008   0.231
+#>   0.110   0.004   0.115
 ```
 
 Importantly, your unit test deals with the same inputs and the same
@@ -375,30 +395,9 @@ internals](https://docs.ropensci.org/vcr/articles/internals.html)
 
 ### Just want to mock and not store on disk?
 
-You’re looking for [webmockr](https://docs.ropensci.org/webmockr)., that
+You’re looking for [webmockr](https://docs.ropensci.org/webmockr), that
 vcr itself uses. `webmockr` only matches requests based on criteria you
 choose, but does not cache HTTP interactions to disk as `vcr` does.
-
-<br>
-
-## Installation
-
-CRAN version:
-
-``` r
-install.packages("vcr")
-```
-
-Development version:
-
-``` r
-remotes::install_github("ropensci/vcr")
-```
-
-``` r
-library("vcr")
-library("crul")
-```
 
 ## Configuration
 
@@ -449,7 +448,7 @@ configuration parameters in a nice tidy print out
 ``` r
 vcr_configuration()
 #> <vcr configuration>
-#>   Cassette Dir: /tmp/RtmpCPr4Jz
+#>   Cassette Dir: /tmp/RtmpaEpRMZ
 #>   Record: once
 #>   URI Parser: crul::url_parse
 #>   Match Requests on: method, uri
@@ -509,9 +508,7 @@ The canonical `vcr` (in Ruby) lists ports in other languages at
 ## Note about missing features
 
 There’s a number of features in this package that are not yet supported,
-but for which their parameters are found in the package. For example,
-`decode_compressed_response` is a parameter in `use_cassette()` but it
-is ignored right now.
+but for which their parameters are found in the package.
 
 We’ve tried to make sure the parameters that are ignored are marked as
 such. Keep an eye out for package updates for changes in these

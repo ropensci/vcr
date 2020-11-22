@@ -31,6 +31,26 @@ Easier HTTP testing! Record HTTP requests and responses on disk and replay them 
 ```{r child='man/rmdhunks/elevator-pitch.Rmd'} 
 ```
 
+## Installation
+
+CRAN version:
+
+```{r eval=FALSE}
+install.packages("vcr")
+```
+
+Development version:
+
+```{r eval=FALSE}
+remotes::install_github("ropensci/vcr")
+```
+
+```{r}
+library("vcr")
+library("crul")
+```
+
+
 ## Docs
 
 Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
@@ -67,29 +87,8 @@ See the [vignette about internals](https://docs.ropensci.org/vcr/articles/intern
 
 ### Just want to mock and not store on disk?
 
-You're looking for [webmockr][]., that vcr itself uses. 
+You're looking for [webmockr][], that vcr itself uses. 
 `webmockr` only matches requests based on criteria you choose, but does not cache HTTP interactions to disk as `vcr` does.
-
-<br>
-
-## Installation
-
-CRAN version:
-
-```{r eval=FALSE}
-install.packages("vcr")
-```
-
-Development version:
-
-```{r eval=FALSE}
-remotes::install_github("ropensci/vcr")
-```
-
-```{r}
-library("vcr")
-library("crul")
-```
 
 ## Configuration
 
