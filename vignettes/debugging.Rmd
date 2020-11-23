@@ -27,21 +27,28 @@ Sometimes your tests using a vcr cassette will fail and you will want to debug t
 
 ## An HTTP request has been made that vcr does not know how to handle
 
-If you get an error starting with "An HTTP request has been made that vcr does not know how to handle:" when running your tests, it means that the code in your test makes an HTTP request for which there is no matching information in the cassette you are using. You might have added a request, or changed one slightly.
+If you get an error starting with "An HTTP request has been made that vcr does not know how to handle:" when running your tests, 
+it means that the code in your test makes an HTTP request 
+for which there is no matching information in the cassette you are using. 
+You might have added a request, or changed one slightly.
 
-The easy fix is: delete the cassette and re-run the test to re-record the cassette. Run the test a second time to ensure all is well. If not, escalate to the next paragraph.
+The easy fix is: delete the cassette and re-run the test to re-record the cassette. 
+Run the test a second time to ensure all is well. 
+If not, escalate to the next paragraph.
 
 Maybe you didn't actually want to change the request you are making.
 Make sure the requests do not contain something random, or something related to e.g. what time it is now, in the URI (`http://foo.com?time=13`).
-To make sure things are not varying, you might want to use mocking (of e.g. a function returning the current time), setting a random seed, using `withr` (for e.g. setting an option to a certain value in your test).
+To make sure things are not varying, you might want to use mocking (of e.g. a function returning the current time), setting a random seed, using [`withr`](https://withr.r-lib.org/) (for e.g. setting an option to a certain value in your test).
 
 ### Actual debugging
 
-Ideally you will want to run the code of the tests as if it were run inside tests, in particular, using the same vcr cassette.
+Ideally you will want to run the code of the tests as if it were run inside tests, 
+in particular, using the same vcr cassette.
 
 ### Prepare your debugging environment
 
-You will first need to load either the vcr helper `tests/testthat/helper-vcr.R` (e.g. via `devtools::load_all()`) or source the vcr setup file `tests/testthat/setup-vcr.R` i.e. the file with these lines (and maybe others)
+You will first need to load either the vcr helper `tests/testthat/helper-vcr.R` (e.g. via `devtools::load_all()`) 
+or source the vcr setup file `tests/testthat/setup-vcr.R` i.e. the file with these lines (and maybe others)
 
 ```r
 library("vcr")
@@ -53,10 +60,13 @@ vcr::check_cassette_names()
 
 ```
 
-If instead of `vcr::vcr_test_path("fixtures")` you see `"../fixtures"`, replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`,
-as `vcr::vcr_test_path()` is a function that is meant to help exactly what you will want: have the path to `tests/fixtures/` work from tests and from the root (which is where you will be running the code to debug it).
+If instead of `vcr::vcr_test_path("fixtures")` you see `"../fixtures"`, 
+replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`,
+as `vcr::vcr_test_path()` is a function that is meant to help exactly what you will want: 
+have the path to `tests/fixtures/` work from tests and from the root (which is where you will be running the code to debug it).
 
-So that is one step (loading the vcr helper or sourcing the vcr setup file), or maybe two (if you also had to replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`).
+So that is one step (loading the vcr helper or sourcing the vcr setup file), 
+or maybe two (if you also had to replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`).
 
 ### Debugging itself
 
@@ -88,4 +98,5 @@ vcr::eject_cassette("testing")
 
 Make sure you ejected the cassette you were using!
 
-Unless your vcr helper/setup file tweaked more things than you would like, you do not even need to re-start R, but you could, just to be on the safe side.
+Unless your vcr helper/setup file tweaked more things than you would like, 
+you do not even need to re-start R, but you could, just to be on the safe side.
