@@ -33,7 +33,7 @@ In all these cases, you can edit your cassettes as long as you are aware of the 
 ## Risks related to cassette editing
 
 * If you use a vcr cassette where you replace a 200 code with a 503 code, and vcr is turned off, 
-the test will fail because the API will probably not return an error.
+the test will fail because the API will probably not return an error. Use `vcr::skip_if_vcr_off()`.
 * If you edit cassettes by hand you can't re-record them easily, you'd need to re-record them then re-apply your edits.
 
 Therefore you'll need to develop a good workflow.
