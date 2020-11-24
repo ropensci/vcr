@@ -68,12 +68,6 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and t
 
 The docs assume you are using testthat for your unit tests.
 
-To install from CRAN
-
-```r
-install.packages("vcr")
-```
-
 ### `use_vcr`
 
 You can then set up your package to use `vcr` with:
@@ -241,7 +235,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.104   0.017   0.500
+#>   0.110   0.023   0.588
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -254,7 +248,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.107   0.008   0.121
+#>   0.109   0.009   0.134
 ```
 
 
@@ -392,7 +386,7 @@ Calling `vcr_configuration()` gives you some of the more important configuration
 ```r
 vcr_configuration()
 #> <vcr configuration>
-#>   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpdwcxX9
+#>   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpsdW1WI
 #>   Record: once
 #>   Serialize with: yaml
 #>   URI Parser: crul::url_parse

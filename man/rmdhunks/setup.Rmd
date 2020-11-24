@@ -1,11 +1,5 @@
 The docs assume you are using testthat for your unit tests.
 
-To install from CRAN
-
-```r
-install.packages("vcr")
-```
-
 ### `use_vcr`
 
 You can then set up your package to use `vcr` with:
