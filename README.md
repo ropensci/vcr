@@ -1,7 +1,3 @@
----
-output: github_document
----
-
 vcr
 ===
 
@@ -235,7 +231,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.110   0.023   0.588
+#>   0.106   0.020   0.519
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -248,7 +244,7 @@ system.time(
   })
 )
 #>    user  system elapsed 
-#>   0.109   0.009   0.134
+#>   0.154   0.014   0.199
 ```
 
 
@@ -348,7 +344,6 @@ We set the following defaults:
  * match_requests_on = `"c("method", "uri")"`
  * allow_unused_http_interactions = `TRUE`
  * serialize_with = `"yaml"`
- * json_pretty = `FALSE`
  * persist_with = `"FileSystem"`
  * ignore_hosts = `NULL`
  * ignore_localhost = `FALSE`
@@ -386,9 +381,8 @@ Calling `vcr_configuration()` gives you some of the more important configuration
 ```r
 vcr_configuration()
 #> <vcr configuration>
-#>   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpsdW1WI
+#>   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpOojIaV
 #>   Record: once
-#>   Serialize with: yaml
 #>   URI Parser: crul::url_parse
 #>   Match Requests on: method, uri
 #>   Preserve Bytes?: FALSE

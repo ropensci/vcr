@@ -36,7 +36,7 @@ check_windows:
 	${RSCRIPT} -e "devtools::check_win_devel(); devtools::check_win_release()"
 
 readme:
-	${RSCRIPT} -e "knitr::knit('README.Rmd')"
+	${RSCRIPT} -e "source('make_readme.R')"
 
 clean:
 	rm -f src/*.o src/*.so
