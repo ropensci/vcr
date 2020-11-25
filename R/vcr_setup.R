@@ -3,7 +3,7 @@ vcr_text <- list(
 test_check(\"%s\")\n",
   config = "library(\"vcr\") # *Required* as vcr is set up on loading
 invisible(vcr::vcr_configure(
-  dir = \"../fixtures\"
+  dir = vcr::vcr_test_path(\"fixtures\")
 ))\nvcr::check_cassette_names()\n",
   example_test = "# EXAMPLE VCR USAGE: RUN AND DELETE ME
 
