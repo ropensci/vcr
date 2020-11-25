@@ -84,6 +84,7 @@ prep_interaction <- function(x, file, bytes) {
 # param bytes: logical, whether to preserve exact bytes or not
 write_interactions <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
+  z <- headers_remove(z)
   tmp <- yaml::as.yaml(z)
   tmp <- sensitive_remove(tmp)
   cat(tmp, file = file, append = TRUE)
@@ -91,6 +92,7 @@ write_interactions <- function(x, file, bytes) {
 
 write_interactions_json <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
+  z <- headers_remove(z)
   # combine with existing data on same file, if any
   on_disk <- invisible(tryCatch(jsonlite::fromJSON(file, FALSE),
     error = function(e) e))

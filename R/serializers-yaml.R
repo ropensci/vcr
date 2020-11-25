@@ -39,6 +39,7 @@ YAML <- R6::R6Class("YAML",
     deserialize = function() {
       str <- sensitive_put_back(readLines(self$path))
       tmp <- yaml::yaml.load(str)
+      tmp <- headers_put_back(tmp)
       private$process_body(tmp)
     }
   )

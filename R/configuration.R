@@ -53,6 +53,17 @@
 #' in internal function `write_interactions()`, while before playback
 #' replacement happens in internal function `YAML$deserialize()`
 #' 
+#' - `filter_request_headers` (character/list) **request** headers to filter.
+#' A character vector of request headers to remove - the headers will not be
+#' recorded to disk. Alternatively, a named list similar to
+#' `filter_sensitive_data` instructing vcr with what value to replace the
+#' real value of the request header.
+#' - `filter_response_headers` (named list) **response** headers to filter.
+#' A character vector of response headers to remove - the headers will not be
+#' recorded to disk. Alternatively, a named list similar to
+#' `filter_sensitive_data` instructing vcr with what value to replace the
+#' real value of the response header.
+#' 
 #' ## Errors
 #' 
 #' - `verbose_errors` Do you want more verbose errors or less verbose
