@@ -94,6 +94,53 @@ x
 vcr::eject_cassette("testing")
 ```
 
+### Logging
+
+You can use vcr's built in logging to help in your debugging process. To configure logging,
+use the `vcr_configure()` function, and set `log=TRUE` and set options for logging on the
+`log_opts` parameter as a named list. See `?vcr_configure` for details.
+
+Here, we are setting our log file to be a temporary file that will be cleaned up at the end
+of the R session. Here, the file extension is `.log`, but the file extension does not matter.
+
+```r
+vcr::vcr_configure(
+  dir = vcr::vcr_test_path("fixtures"),
+  log = TRUE,
+  log_opts = list(file = file.path(tempdir(), "vcr.log"))
+)
+```
+
+With `log=TRUE` you can continue with debugging. Open the log file you set in a text
+editor or other location; or examine in your shell/terminal.
+
+As an example, after running the block above
+
+```r
+foo <- function() crul::ok('https://httpbin.org/get')
+
+test_that("foo works", {
+  vcr::use_cassette("testing", {
+    x <- foo()
+  })
+  expect_true(x)
+})
+```
+
+If we open the log file we'll see the logs for each step vcr takes in handling an HTTP request.
+The logs have information on what cassette was used, what exact time it was recorded, what 
+matchers were in use, the cassette options, and how a request is handled.
+
+```
+[Cassette: 'testing'] - 2020-11-24 16:05:17 - Init. HTTPInteractionList w/ request matchers [method, uri] & 0 interaction(s): {  }
+[Cassette: 'testing'] - 2020-11-24 16:05:17 - Initialized with options: {name: testing, record: once, serialize_with: yaml, persist_with: FileSystem, match_requests_on: c("method", "uri"), update_content_length_header: FALSE, allow_playback_repeats: FALSE, preserve_exact_body_bytes: FALSE}
+[Cassette: 'testing'] - 2020-11-24 16:05:17 - Handling request: head https://httpbin.org/get (disabled: FALSE)
+[Cassette: 'testing'] - 2020-11-24 16:05:17 - Identified request type: (recordable) for head https://httpbin.org/get
+[Cassette: 'testing'] - 2020-11-24 16:05:17 -    Recorded HTTP interaction: head https://httpbin.org/get => 200 
+```
+
+Logging isn't meant to be turned on all the time - rather only for debugging/informational purposes.
+
 ### Return to normal development
 
 Make sure you ejected the cassette you were using!
