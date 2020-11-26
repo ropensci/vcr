@@ -1,5 +1,5 @@
 ---
-title: "vcr configuration"
+title: "Tweak vcr default configuration"
 author: "Scott Chamberlain"
 date: "`r Sys.Date()`"
 output:

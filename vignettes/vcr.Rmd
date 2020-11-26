@@ -1,5 +1,5 @@
 ---
-title: "vcr introduction"
+title: "Introduction to vcr"
 author: "Scott Chamberlain"
 date: "`r Sys.Date()`"
 output:
