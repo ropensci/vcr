@@ -48,5 +48,5 @@ test_that("YAML fails well", {
 test_that("Windows encoding", {
   file.copy(test_path("test-cassettes/ropenaq-encoding.yml"), vcr_configuration()$dir)
   yaml <- YAML$new(path = "ropenaq-encoding")
-  expect_s3_type(yaml$deserialize(), "list") # could fail on Windows
+  expect_is(yaml$deserialize(), "list") # could fail on Windows
 })
