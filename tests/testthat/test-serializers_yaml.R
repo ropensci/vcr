@@ -44,3 +44,9 @@ test_that("YAML fails well", {
   expect_error(suppressWarnings(z$deserialize()),
     "cannot open the connection")
 })
+
+test_that("Windows encoding", {
+  file.copy(test_path("test-cassettes/ropenaq-encoding.yml"), vcr_configuration()$dir)
+  yaml <- YAML$new(path = "ropenaq-encoding")
+  expect_s3_type(yaml$deserialize(), "list") # could fail on Windows
+})
