@@ -45,7 +45,6 @@ test_that("YAML fails well", {
     "cannot open the connection")
 })
 test_that("Windows encoding", {
-  file.copy(test_path("test-cassettes/ropenaq-encoding.yml"), cassette_path())
-  yaml <- YAML$new(path = "ropenaq-encoding")
-  expect_is(yaml$deserialize(), "list") # could fail on Windows
+  path <- test_path("test-cassettes/ropenaq-encoding.yml")
+  expect_is(yaml_load_desecret(path), "list") # could fail on Windows
 })
