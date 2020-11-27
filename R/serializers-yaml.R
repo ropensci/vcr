@@ -37,7 +37,7 @@ YAML <- R6::R6Class("YAML",
     #' yaml::yaml.load_file
     #' @return (list) the deserialized object, an R list
     deserialize = function() {
-      str <- sensitive_put_back(readLines(self$path))
+      str <- sensitive_put_back(readLines(self$path, encoding = "UTF-8"))
       tmp <- yaml::yaml.load(str)
       private$process_body(tmp)
     }
