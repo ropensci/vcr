@@ -52,6 +52,10 @@ x$from_hash(h)
 \item{\code{opts}}{(character) options - internal use}
 
 \item{\code{disk}}{(logical) xx}
+
+\item{\code{fields}}{(various) request body details}
+
+\item{\code{output}}{(various) request output details, disk, memory, etc}
 }
 \if{html}{\out{</div>}}
 }
@@ -70,7 +74,7 @@ x$from_hash(h)
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk, fields, output)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -87,7 +91,11 @@ post, put, patch or delete)}
 
 \item{\code{opts}}{(named list) options internal use}
 
-\item{\code{disk}}{boolean, is body a file on disk}
+\item{\code{disk}}{(boolean), is body a file on disk}
+
+\item{\code{fields}}{(various) post fields}
+
+\item{\code{output}}{(various) output details}
 }
 \if{html}{\out{</div>}}
 }

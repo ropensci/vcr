@@ -42,10 +42,12 @@ RequestHandlerHttr <- R6::R6Class(
     #' @param request The request from an object of class `HttpInteraction`
     #' @return A new `RequestHandlerHttr` object
     initialize = function(request) {
+      sss$request_from_httpint <- request
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url,
-          webmockr::pluck_body(request), request$headers)
+          webmockr::pluck_body(request), request$headers,
+          fields = request$fields, output = request$output)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     }

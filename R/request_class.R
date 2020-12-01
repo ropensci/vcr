@@ -47,6 +47,10 @@ Request <- R6::R6Class(
     opts = NULL,
     #' @field disk (logical) xx
     disk = NULL,
+    #' @field fields (various) request body details
+    fields = NULL,
+    #' @field output (various) request output details, disk, memory, etc
+    output = NULL,
 
     #' @description Create a new `Request` object
     #' @param method (character) the HTTP method (i.e. head, options, get,
@@ -55,9 +59,13 @@ Request <- R6::R6Class(
     #' @param body (character) request body
     #' @param headers (named list) request headers
     #' @param opts (named list) options internal use
-    #' @param disk boolean, is body a file on disk
+    #' @param disk (boolean), is body a file on disk
+    #' @param fields (various) post fields
+    #' @param output (various) output details
     #' @return A new `Request` object
-    initialize = function(method, uri, body, headers, opts, disk) {
+    initialize = function(method, uri, body, headers, opts, disk,
+      fields, output) {
+
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
         if (inherits(body, "list")) {
@@ -81,6 +89,8 @@ Request <- R6::R6Class(
        }
        if (!missing(opts)) self$opts <- opts
        if (!missing(disk)) self$disk <- disk
+       if (!missing(fields)) self$fields <- fields
+       if (!missing(output)) self$output <- output
      },
 
     #' @description Convert the request to a list
