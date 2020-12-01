@@ -1,5 +1,5 @@
 ---
-title: "Why and how edit your vcr cassettes?"
+title: "Why and how to edit your vcr cassettes?"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{5. cassette manual editing}

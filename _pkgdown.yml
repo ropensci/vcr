@@ -57,3 +57,14 @@ reference:
       - response_summary
       - vcr_log_file
       - vcr_log_info
+
+articles:
+- title: All vignettes
+  desc: ~
+  contents:
+  - '`vcr`'
+  - '`cassette-manual-editing`'
+  - '`configuration`'
+  - '`request_matching`'
+  - '`debugging`'
+  - '`internals`'
