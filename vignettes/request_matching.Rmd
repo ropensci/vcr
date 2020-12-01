@@ -1,5 +1,5 @@
 ---
-title: "Tweak vcr request matching"
+title: "Configure vcr request matching"
 author: "Scott Chamberlain"
 date: "`r Sys.Date()`"
 output:
