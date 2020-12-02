@@ -320,23 +320,16 @@ Cassette <- R6::R6Class(
     },
 
     #' @description run code
-    #' @param ... pass in things to be lazy eval'ed
+    #' @param ... pass in things to be evaluated
     #' @return various
     call_block = function(...) {
-      # capture block
-      tmp <- lazyeval::lazy_dots(...)
-      # check if block is empty
+      tmp <- list(...)
       if (length(tmp) == 0) {
         stop("`vcr::use_cassette` requires a code block. ",
              "If you cannot wrap your code in a block, use ",
              "`vcr::insert_cassette` / `vcr::eject_cassette` instead")
       }
-      # allow http interactions - disallow at end of call_block() below
-      webmockr::webmockr_allow_net_connect()
-      # evaluate request
-      resp <- lazyeval::lazy_eval(tmp)
-      # disallow http interactions - allow at start of call_block() above
-      webmockr::webmockr_disable_net_connect()
+      invisible(force(...))
     },
 
     #' @description ejects the current cassette
