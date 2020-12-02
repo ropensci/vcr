@@ -267,7 +267,7 @@ run code
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{pass in things to be lazy eval'ed}
+\item{\code{...}}{pass in things to be evaluated}
 }
 \if{html}{\out{</div>}}
 }

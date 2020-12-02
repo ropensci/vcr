@@ -174,5 +174,6 @@ use_cassette <- function(name, ...,
   }
   on.exit(cassette$eject())
   cassette$call_block(...)
+  # force(...)
   return(cassette)
 }

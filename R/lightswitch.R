@@ -71,12 +71,7 @@
 turned_off <- function(..., ignore_cassettes = FALSE) {
   turn_off(ignore_cassettes = ignore_cassettes)
   on.exit(turn_on())
-  off_block(...)
-}
-
-off_block <- function(...) {
-  tmp <- lazyeval::lazy_dots(...)
-  lazyeval::lazy_eval(tmp)
+  force(...)
 }
 
 #' @rdname lightswitch

@@ -56,6 +56,7 @@ insert_cassette <- function(name,
 
     # enable webmockr
     webmockr::enable()
+    webmockr::webmockr_allow_net_connect()
     # FIXME: temporary attempt to make it work: turn on mocking for httr
     # webmockr::httr_mock()
 
