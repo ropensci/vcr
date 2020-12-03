@@ -41,13 +41,13 @@ If you change your code and more HTTP interactions are needed in the code wrappe
 
 If you want to get a feel for how vcr works, although you don't need too.
 
-```{r echo=FALSE, results='hide'}
+```{r echo=FALSE, results='hide', eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
 suppressPackageStartupMessages(require(vcr, quietly = TRUE))
 unlink(file.path(cassette_path(), "helloworld.yml"))
 vcr_configure(dir = tempdir())
 ```
 
-```{r}
+```{r, eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
 library(vcr)
 library(crul)
 
@@ -61,7 +61,7 @@ system.time(
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
 
-```{r}
+```{r, eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
@@ -69,7 +69,7 @@ system.time(
 )
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
 unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
