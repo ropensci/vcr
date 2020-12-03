@@ -1,3 +1,8 @@
+
+```{r, echo=FALSE, message=FALSE}
+library("vcr")
+```
+
 ### In tests
 
 In your tests, for whichever tests you want to use `vcr`, wrap them in a `vcr::use_cassette()` call like:
@@ -41,13 +46,13 @@ If you change your code and more HTTP interactions are needed in the code wrappe
 
 If you want to get a feel for how vcr works, although you don't need too.
 
-```{r echo=FALSE, results='hide', eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
+```{r echo=FALSE, results='hide', eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
 suppressPackageStartupMessages(require(vcr, quietly = TRUE))
 unlink(file.path(cassette_path(), "helloworld.yml"))
 vcr_configure(dir = tempdir())
 ```
 
-```{r, eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
+```{r, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
 library(vcr)
 library(crul)
 
@@ -61,7 +66,7 @@ system.time(
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
 
-```{r, eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
+```{r, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
@@ -69,7 +74,7 @@ system.time(
 )
 ```
 
-```{r echo=FALSE, eval=!nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_", ""))}
+```{r echo=FALSE, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
 unlink(file.path(cassette_path(), "helloworld.yml"))
 ```
 
