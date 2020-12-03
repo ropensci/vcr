@@ -1,4 +1,7 @@
 
+```{r}
+library("vcr")
+```
 
 You can also get the default configuration variables via `vcr_config_defaults()`
 
