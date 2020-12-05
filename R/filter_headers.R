@@ -1,5 +1,5 @@
-#' Put back headers
-#' @keywords internal
+#' Put back headers - DO WE EVEN NEED THIS?
+#' @noRd
 #' @details
 #' Applies to request headers only b/c we can not "put back"
 #' response headers; that is, we can only return what response
@@ -17,13 +17,15 @@ headers_put_back <- function(x) {
   stopifnot("x must be a list" = is.list(x))
   if (!is.null(vcr_c$filter_request_headers)) {
     freqh <- vcr_c$filter_request_headers
+    torep <- freqh[nzchar(names(freqh))]
     # if character, skip, only remove in that case
-    if (is.list(freqh)) {
-      for (i in seq_along(freqh)) {
-        lapply(x$http_interactions, function(w) {
-          if (tolower(names(freqh)[i]) %in% tolower(names(w$request$headers))) {
-            w$request$headers[[names(freqh)[i]]] <- freqh[[i]]
+    if (length(torep)) {
+      for (i in seq_along(torep)) {
+        x$http_interactions <- lapply(x$http_interactions, function(w) {
+          if (tolower(names(torep)[i]) %in% tolower(names(w$request$headers))) {
+            w$request$headers[[names(torep)[i]]] <- torep[[i]]
           }
+          return(w)
         })
       }
     }
@@ -32,19 +34,46 @@ headers_put_back <- function(x) {
 }
 
 #' Remove headers or replace header values
-#' @keywords internal
+#' @noRd
 #' @details
 #' Applies to request and response headers.
 #' @examples
-#' headers_remove("")
+#' # remove one header
+#' filter_request_headers <- "User-Agent"
+#' # remove multiple headers
+#' filter_request_headers <- c("User-Agent", "Authorization")
+#' # replace one header's value
+#' filter_request_headers <- list(Authorization = "foo-bar")
+#' # replace many header's values
+#' filter_request_headers <- list(Authorization = "foo-bar", Accept = "everything!")
+#' # mix: remove one header, replace another header's value
+#' filter_request_headers <- list("Accept", Authorization = "foo-bar")
 headers_remove <- function(x) {
-  fsd <- vcr_c$filter_headers
-  if (!is.null(fsd)) {
-    for (i in seq_along(fsd)) {
-      if (nchar(fsd[[i]]) > 0) {
-        x <- gsub(fsd[[i]], names(fsd)[i], x)
+  filter_req_or_res <- function(int, h, which) {
+    if (!is.null(h)) {
+      if (is.null(names(h))) toremove <- unlist(h)
+      if (!is.null(names(h))) toremove <- unname(unlist(h[!nzchar(names(h))]))
+      # remove zero length strings
+      toremove <- Filter(nzchar, toremove)
+      for (i in seq_along(toremove)) {
+        int <- lapply(int, function(b) {
+          b[[which]]$headers[[toremove[i]]] <- NULL
+          return(b)
+        })
+      }
+
+      toreplace <- h[nzchar(names(h))]
+      if (length(toreplace)) {
+        for (i in seq_along(toreplace)) {
+          int <- lapply(int, function(b) {
+            b[[which]]$headers[[names(toreplace)[i]]] <- toreplace[[i]]
+            return(b)
+          })
+        }
       }
     }
+    return(int)
   }
-  return(x)
+  x <- filter_req_or_res(x, vcr_c$filter_request_headers, "request")
+  filter_req_or_res(x, vcr_c$filter_response_headers, "response")
 }

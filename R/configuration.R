@@ -212,6 +212,8 @@ VCRConfig <- R6::R6Class(
     .log = NULL,
     .log_opts = NULL,
     .filter_sensitive_data = NULL,
+    .filter_request_headers  = NULL,
+    .filter_response_headers  = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL
   ),
@@ -319,6 +321,16 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.filter_sensitive_data)
       private$.filter_sensitive_data <- assert(value, "list")
     },
+    filter_request_headers = function(value) {
+      if (missing(value)) return(private$.filter_request_headers)
+      if (is.character(value)) value <- as.list(value)
+      private$.filter_request_headers <- assert(value, "list")
+    },
+    filter_response_headers = function(value) {
+      if (missing(value)) return(private$.filter_response_headers)
+      if (is.character(value)) value <- as.list(value)
+      private$.filter_response_headers <- assert(value, "list")
+    },
     write_disk_path = function(value) {
       if (missing(value)) return(private$.write_disk_path)
       private$.write_disk_path <- value
@@ -354,6 +366,8 @@ VCRConfig <- R6::R6Class(
       log = FALSE,
       log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
       filter_sensitive_data = NULL,
+      filter_request_headers  = NULL,
+      filter_response_headers  = NULL,
       write_disk_path = NULL,
       verbose_errors = FALSE
     ) {
@@ -378,6 +392,8 @@ VCRConfig <- R6::R6Class(
       self$log <- log
       self$log_opts <- log_opts
       self$filter_sensitive_data <- filter_sensitive_data
+      self$filter_request_headers  = filter_request_headers
+      self$filter_response_headers  = filter_response_headers
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
     },

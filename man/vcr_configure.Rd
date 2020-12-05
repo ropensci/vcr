@@ -71,6 +71,16 @@ the replacement and then when reading from the cassette we do the reverse
 replacement to get back to the real data. Before record replacement happens
 in internal function \code{write_interactions()}, while before playback
 replacement happens in internal function \code{YAML$deserialize()}
+\item \code{filter_request_headers} (character/list) \strong{request} headers to filter.
+A character vector of request headers to remove - the headers will not be
+recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the request header.
+\item \code{filter_response_headers} (named list) \strong{response} headers to filter.
+A character vector of response headers to remove - the headers will not be
+recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the response header.
 }
 }
 
