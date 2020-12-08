@@ -18,6 +18,12 @@ reference:
       - use_cassette
       - insert_cassette
       - eject_cassette
+  - title: "vcr in tests"
+    desc: >
+      Functions for more custom workflows
+    contents:
+      - skip_if_vcr_off
+      - vcr_test_path
   - title: "Check current recording state"
     contents:
       - real_http_connections_allowed
