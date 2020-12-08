@@ -167,7 +167,7 @@ Before recording (writing to a cassette) we do the replacement and then when
 reading from the cassette we do the reverse replacement to get back
 to the real data.
 
-```{r}
+```r
 vcr_configure(
   filter_sensitive_data = list("<some_api_key>" = Sys.getenv('MY_API_KEY'))
 )
@@ -176,4 +176,63 @@ vcr_configure(
 Before recording to disk, the env var `MY_API_KEY` is retrieved from your machine, 
 and we find instances of it, and replace with `<some_api_key>`. When replaying 
 to create the HTTP response object we put the real value of the env var 
-back in place. 
+back in place.
+
+To target specific request or response headers see `filter_request_headers`
+and `filter_response_headers`.
+
+### filter_request_headers
+
+Expects a character vector or a named list. If a character vector, or any
+unnamed element in a list, the request header is removed before being 
+written to the cassette.
+
+If a named list is passed, the name is the header and the value is the
+value with which to replace the real value.
+
+A request header you set to remove or replace is only removed/replaced
+from the cassette, and any requests using a cassette, but will still be in
+your crul or httr response objects on a real request that creates the
+cassette.
+
+Examples:
+
+```r
+vcr_configure(
+  filter_request_headers = "Authorization"
+)
+vcr_configure(
+  filter_request_headers = c("Authorization", "User-Agent")
+)
+vcr_configure(
+  filter_request_headers = list(Authorization = Sys.getenv('MY_API_KEY'))
+)
+```
+
+### filter_response_headers
+
+Expects a character vector or a named list. If a character vector, or any
+unnamed element in a list, the response header is removed before being
+written to the cassette.
+
+If a named list is passed, the name is the header and the value is the
+value with which to replace the real value.
+
+A response header you set to remove or replace is only removed/replaced
+from the cassette, and any requests using a cassette, but will still be in
+your crul or httr response objects on a real request that creates the
+cassette.
+
+Examples:
+
+```r
+vcr_configure(
+  filter_response_headers = "server"
+)
+vcr_configure(
+  filter_response_headers = c("server", "date")
+)
+vcr_configure(
+  filter_response_headers = list(server = "fake-server")
+)
+```
