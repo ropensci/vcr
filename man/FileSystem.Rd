@@ -18,23 +18,6 @@ Get absolute path to the \code{storage_location}
 }
 }
 }
-\examples{
-\dontrun{
-vcr_configure(dir = tempdir())
-
-(yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
-yy$set_cassette(content = "hello world!")
-
-# is empty?
-yy$is_empty()
-
-# get cassette
-yy$get_cassette(file_name = "file4014931b21b.yml")
-
-# clenaup
-unlink(file.path(tempdir(), "file4014931b21b.yml"))
-}
-}
 \keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

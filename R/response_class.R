@@ -109,7 +109,7 @@ VcrResponse <- R6::R6Class(
         if (inherits(body, "list")) {
           body <- paste(names(body), body, sep = "=", collapse = ",")
         }
-        self$body <- body
+        self$body <- enc2utf8(body)
       }
       if (!missing(http_version)) {
         self$http_version <- extract_http_version(http_version)

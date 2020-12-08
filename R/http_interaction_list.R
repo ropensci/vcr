@@ -54,7 +54,7 @@ NullList <- R6::R6Class(
 #' res <- cli$post(body = list(a = 5))
 #'
 #' ## request
-#' (request <- Request$new("POST", url, body, res$headers))
+#' (request <- Request$new("POST", url, list(a = 5), res$headers))
 #' ## response
 #' (response <- VcrResponse$new(
 #'    res$status_http(),

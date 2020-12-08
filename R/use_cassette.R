@@ -119,7 +119,7 @@
 #' # with httr
 #' library(vcr)
 #' library(httr)
-#' vcr_configure(dir = tempdir(), log = TRUE)
+#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = file.path(tempdir(), "vcr.log")))
 #'
 #' use_cassette(name = "stuff350", {
 #'   res <- GET("https://httpbin.org/get")

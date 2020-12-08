@@ -18,16 +18,6 @@ Make a hook.
 }
 }
 }
-\examples{
-\dontrun{
-(x <- Hooks$new())
-x$hooks
-x$define_hook(hook_type = "foo", fun = function(x) x ^ 2)
-x$hooks$foo(4)
-x$clear_hooks()
-x$hooks
-}
-}
 \keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

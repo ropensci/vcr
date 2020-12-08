@@ -1,15 +1,14 @@
+# ww <- JSON$new(path = "stuff3")
+# ww
+# ww$file_extension
+# fun <- ww$serialize()
+# fun(list(http_interactions = list(response = list(body = "bar"))),
+#   path = ww$path, bytes = FALSE)
+# ww$deserialize()
+
 #' @title The JSON serializer
 #' @description class with methods for serializing via \pkg{jsonlite}
 #' @keywords internal
-#' @examples \dontrun{
-#' ww <- JSON$new(path = "stuff3")
-#' ww
-#' ww$file_extension
-#' fun <- ww$serialize()
-#' fun(list(http_interactions = list(response = list(body = "bar"))),
-#'   path = ww$path, bytes = FALSE)
-#' ww$deserialize()
-#' }
 JSON <- R6::R6Class("JSON",
   inherit = Serializer,
   public = list(

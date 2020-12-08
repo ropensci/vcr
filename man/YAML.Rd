@@ -6,17 +6,6 @@
 \description{
 class with methods for serializing via the \pkg{yaml} package
 }
-\examples{
-\dontrun{
-yy <- YAML$new(path = "stuff2")
-yy
-yy$file_extension
-fun <- yy$serialize()
-fun(list(http_interactions = list(response = list(body = "bar"))),
-  path = yy$path, bytes = FALSE)
-yy$deserialize()
-}
-}
 \keyword{internal}
 \section{Super class}{
 \code{\link[vcr:Serializer]{vcr::Serializer}} -> \code{YAML}

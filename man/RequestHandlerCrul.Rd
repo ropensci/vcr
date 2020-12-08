@@ -19,14 +19,6 @@ crul_request
 x <- RequestHandlerCrul$new(crul_request)
 # x$handle()
 
-library(crul)
-data(crul_request_post_json)
-crul_request_post_json$request$url$handle <- curl::new_handle()
-crul_request_post_json
-crul_request_post_json$request
-x <- RequestHandlerCrul$new(crul_request_post_json$request)
-# x$handle()
-
 # body matching
 library(vcr)
 library(crul)
@@ -39,34 +31,36 @@ use_cassette(name = "apple7", {
   resp <- cli$post("post", body = list(foo = "bar"))
 }, match_requests_on = c("method", "uri", "body"))
 ## should error, b/c record="once"
-use_cassette(name = "apple7", {
-  resp <- cli$post("post", body = list(foo = "bar"))
-  resp2 <- cli$post("post", body = list(hello = "world"))
-}, match_requests_on = c("method", "uri", "body"))
+if (interactive()) {
+  use_cassette(name = "apple7", {
+    resp <- cli$post("post", body = list(foo = "bar"))
+    resp2 <- cli$post("post", body = list(hello = "world"))
+  }, match_requests_on = c("method", "uri", "body"))
+}
 cas <- insert_cassette(name = "apple7", 
   match_requests_on = c("method", "uri", "body"))
-resp2 <- cli$post("post", body = list(hello = "world"))
+resp2 <- cli$post("post", body = list(foo = "bar"))
 eject_cassette("apple7")
 
 ## testing, same body, changed method in 2nd block
+if (interactive()) {
 use_cassette(name = "apple8", {
   x <- cli$post("post", body = list(hello = "world"))
 }, match_requests_on = c("method", "body"))
 use_cassette(name = "apple8", {
   x <- cli$get("post", body = list(hello = "world"))
 }, match_requests_on = c("method", "body"))
+}
 
 ## testing, same body, changed uri in 2nd block
-use_cassette(name = "apple9", {
-  x <- cli$post("post", body = list(hello = "world"))
-  w <- cli$post("get", body = list(hello = "world"))
-}, match_requests_on = c("method", "body"))
-use_cassette(name = "apple9", {
-  NOTHING HERE
-}, match_requests_on = c("method", "body"))
-unlink(file.path(vcr_configuration()$dir, "apple9.yml"))
-
-jsonlite::fromJSON(resp$parse())
+# use_cassette(name = "apple9", {
+#   x <- cli$post("post", body = list(hello = "world"))
+#   w <- cli$post("get", body = list(hello = "world"))
+# }, match_requests_on = c("method", "body"))
+# use_cassette(name = "apple9", {
+#   NOTHING HERE
+# }, match_requests_on = c("method", "body"))
+# unlink(file.path(vcr_configuration()$dir, "apple9.yml"))
 }
 }
 \section{Super class}{

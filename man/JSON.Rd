@@ -6,17 +6,6 @@
 \description{
 class with methods for serializing via \pkg{jsonlite}
 }
-\examples{
-\dontrun{
-ww <- JSON$new(path = "stuff3")
-ww
-ww$file_extension
-fun <- ww$serialize()
-fun(list(http_interactions = list(response = list(body = "bar"))),
-  path = ww$path, bytes = FALSE)
-ww$deserialize()
-}
-}
 \keyword{internal}
 \section{Super class}{
 \code{\link[vcr:Serializer]{vcr::Serializer}} -> \code{JSON}

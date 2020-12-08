@@ -6,19 +6,6 @@
 \description{
 request ignorer methods
 }
-\examples{
-\dontrun{
-(x <- RequestIgnorer$new())
-x$LOCALHOST_ALIASES
-x$ignored_hosts
-x$ignore_hosts(hosts = "google.com")
-x$ignored_hosts
-x$ignore_localhost()
-x$ignored_hosts
-x$ignore_localhost_value('127.0.0.1')
-x$ignored_hosts
-}
-}
 \keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

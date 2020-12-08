@@ -1,15 +1,15 @@
+# yy <- YAML$new(path = "stuff2")
+# yy
+# yy$file_extension
+# fun <- yy$serialize()
+# fun(list(http_interactions = list(response = list(body = "bar"))),
+#   path = yy$path, bytes = FALSE)
+# yy$deserialize()
+# }
+
 #' @title The YAML serializer
 #' @description class with methods for serializing via the \pkg{yaml} package
 #' @keywords internal
-#' @examples \dontrun{
-#' yy <- YAML$new(path = "stuff2")
-#' yy
-#' yy$file_extension
-#' fun <- yy$serialize()
-#' fun(list(http_interactions = list(response = list(body = "bar"))),
-#'   path = yy$path, bytes = FALSE)
-#' yy$deserialize()
-#' }
 YAML <- R6::R6Class("YAML",
   inherit = Serializer,
   public = list(

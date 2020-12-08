@@ -1,3 +1,17 @@
+# vcr_configure(dir = tempdir())
+#
+# (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
+# yy$set_cassette(content = "hello world!")
+#
+# # is empty?
+# yy$is_empty()
+#
+# # get cassette
+# yy$get_cassette(file_name = "file4014931b21b.yml")
+#
+# # clenaup
+# unlink(file.path(tempdir(), "file4014931b21b.yml"))
+
 #' @title File system persister
 #' @description The only built-in cassette persister. Persists cassettes
 #' to the file system.
@@ -12,21 +26,6 @@
 #'       Get absolute path to the `storage_location`
 #'     }
 #'   }
-#' @examples \dontrun{
-#' vcr_configure(dir = tempdir())
-#'
-#' (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
-#' yy$set_cassette(content = "hello world!")
-#'
-#' # is empty?
-#' yy$is_empty()
-#'
-#' # get cassette
-#' yy$get_cassette(file_name = "file4014931b21b.yml")
-#'
-#' # clenaup
-#' unlink(file.path(tempdir(), "file4014931b21b.yml"))
-#' }
 FileSystem <- R6::R6Class("FileSystem",
   public = list(
     #' @field file_name (character) the file name, not whole path
