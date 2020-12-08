@@ -195,3 +195,62 @@ test_that("filter_headers/response/replace", {
 })
 
 vcr_configure_reset()
+
+#### JSON - just checking 1 of the above with json
+test_that("filter_headers/request/remove/json", {
+  skip_on_cran()
+
+  library(crul)
+  mydir <- file.path(tempdir(), "filter_headers_request_remove_json")
+
+  # request headers: remove only
+  # no header filtering to compare below stuff to
+  vcr_configure(dir = mydir, serialize_with = 'json')
+  con <- crul::HttpClient$new("https://eu.httpbin.org/get",
+    headers=list(Foo="bar"))
+  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
+  cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
+    res_nofilters <- con$get()
+  })
+  # Do filtering
+  vcr_configure_reset()
+  vcr_configure(dir = mydir, filter_request_headers = c("Foo", "Accept"),
+    serialize_with = 'json')
+  unlink(file.path(vcr_c$dir, "filterheaders_remove_json.yml"))
+  con <- crul::HttpClient$new("https://eu.httpbin.org/get", headers=list(Foo="bar"))
+  cas1 <- use_cassette(name = "filterheaders_remove_json", {
+    res1 <- con$get()
+  })
+  cas2 <- use_cassette(name = "filterheaders_remove_json", {
+    res2 <- con$get()
+  })
+  
+  # with no filtering, request headers have Foo
+  expect_true("Foo" %in% names(res_nofilters$request_headers))
+  # with filtering, request headers clearly have Foo on first request
+  expect_true("Foo" %in% names(res1$request_headers))
+  # with filtering, request headers have Foo on subsequent requests b/c
+  # header is being sent in request, so not filtered out of http
+  # response object
+  expect_true("Foo" %in% names(res2$request_headers))
+
+  # compare cassettes
+  json1 <- jsonlite::fromJSON(cas1$file(), FALSE)
+  json_no_filter <- jsonlite::fromJSON(cas_nofilters$file(), FALSE)
+  # Foo found in cassette w/o filtering
+  expect_true("Foo" %in% names(json_no_filter$http_interactions[[1]]$request$headers))
+  # User-Agent in cassette
+  expect_true("User-Agent" %in% names(json1$http_interactions[[1]]$request$headers))
+  # Accept in no filtered cassette
+  expect_false("Accept" %in% names(json1$http_interactions[[1]]$request$headers))
+  # Accept not in cassette w/o filters
+  expect_true("Accept" %in% names(json_no_filter$http_interactions[[1]]$request$headers))
+  # Accept-Encoding in both, not filtered in either
+  expect_true("Accept-Encoding" %in% names(json1$http_interactions[[1]]$request$headers))
+  expect_true("Accept-Encoding" %in% names(json_no_filter$http_interactions[[1]]$request$headers))
+  # casette objects from both requests identical
+  expect_identical(jsonlite::fromJSON(cas1$file(), FALSE),
+    jsonlite::fromJSON(cas2$file(), FALSE))
+})
+
+vcr_configure_reset()
