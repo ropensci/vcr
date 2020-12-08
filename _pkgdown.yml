@@ -67,4 +67,7 @@ articles:
   - '`configuration`'
   - '`request_matching`'
   - '`debugging`'
+  - '`write-to-disk`'
+  - '`record-modes`'
+  - '`lightswitch`'
   - '`internals`'

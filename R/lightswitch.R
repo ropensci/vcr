@@ -7,46 +7,7 @@
 #' inserted while vcr is turned off. If `TRUE` is passed, the cassette
 #' insertion will be ignored; otherwise an error will be raised.
 #' Default: `FALSE`
-#' @details
-#'
-#' - `turned_off()` - Turns vcr off for the duration of a block.
-#' - `turn_off()` - Turns vcr off, so that it no longer handles every
-#'  HTTP request
-#' - `turn_on()` - turns vcr on
-#' - `turned_on()` - Asks if vcr is turned on, gives a boolean
-#'
-#' To turn vcr off completely, for example, if you are using vcr in your
-#' package, but you want to run real HTTP requests in your tests, there are
-#' a few options:
-#'
-#' - Run `turn_off(ignore_cassettes = TRUE)` before running tests. You can
-#' do this on the command line e.g.,
-#' `Rscript -e 'vcr::turn_off(TRUE); devtools::test()'`, or within a running
-#' R session the same way.
-#' - Set an environment variable `VCR_TURN_OFF=TRUE`.
-#' You can do this on the command line by setting the env var at the beginning
-#' of the line like: `VCR_TURN_OFF=TRUE Rscript -e 'devtools::test()'`. Same
-#' can be done within an interactive R session. You can also use this approach
-#' to turn on or off vcr in CI builds like on Travis or Appveyor by setting
-#' this env var in your Travis/Appveyor configuration file or in the settings
-#' windows in the respective web apps
-#' 
-#' The full set of environment variables `vcr` uses, all of which accept only
-#' `TRUE` or `FALSE`:
-#' 
-#' - `VCR_TURN_OFF`: turn off vcr altogether; set to `TRUE` to skip any vcr
-#' usage; default: `FALSE`
-#' - `VCR_TURNED_OFF`: set the `turned_off` internal package setting; this
-#' does not turn off vcr completely as does `VCR_TURN_OFF` does, but rather
-#' is looked at together with `VCR_IGNORE_CASSETTES`
-#' - `VCR_IGNORE_CASSETTES`: set the `ignore_cassettes` internal package
-#' setting; this is looked at together with `VCR_TURNED_OFF`
-#' 
-#' See the HTTP testing book for more details 
-#' https://books.ropensci.org/http-testing/lightswitch.html
-#' 
-#' See `?Startup` if you're not sure how to set environment variables
-#'
+#' @includeRmd man/rmdhunks/lightswitch.Rmd
 #' @examples \dontrun{
 #' vcr_configure(dir = tempdir())
 #'
