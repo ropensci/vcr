@@ -1,0 +1,72 @@
+If you have http requests for which you write the response to disk, then
+use `vcr_configure()` to set the `write_disk_path` option. See more about 
+the write_disk_path configuration option in `vignette("configuration", package = "vcr")`.
+
+Here, we create a temporary directory, then set the fixtures
+
+```{r}
+tmpdir <- tempdir()
+vcr_configure(
+  dir = file.path(tmpdir, "fixtures"),
+  write_disk_path = file.path(tmpdir, "files")
+)
+```
+
+Then pass a file path (that doesn't exist yet) to crul's `disk` parameter.
+`vcr` will take care of handling writing the response to that file in
+addition to the cassette.
+
+```{r}
+library(crul)
+## make a temp file
+f <- tempfile(fileext = ".json")
+## make a request
+cas <- use_cassette("test_write_to_disk", {
+  out <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
+})
+file.exists(out$content)
+out$parse()
+```
+
+This also works with `httr`. The only difference is that you write to disk
+with a function `httr::write_disk(path)` rather than a parameter.
+
+Note that when you write to disk when using `vcr`, the cassette is slightly
+changed. Instead of holding the http response body itself, the cassette
+has the file path with the response body.
+
+```yaml
+http_interactions:
+- request:
+    method: get
+    uri: https://httpbin.org/get
+  response:
+    headers:
+      status: HTTP/1.1 200 OK
+      access-control-allow-credentials: 'true'
+    body:
+      encoding: UTF-8
+      file: yes
+      string: /private/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T/Rtmp5W4olr/files/file177e2e5d97ec.json
+```
+
+And the file has the response body that otherwise would have been in the `string`
+yaml field above:
+
+```json
+{
+  "args": {}, 
+  "headers": {
+    "Accept": "application/json, text/xml, application/xml, */*", 
+    "Accept-Encoding": "gzip, deflate", 
+    "Host": "httpbin.org", 
+    "User-Agent": "libcurl/7.54.0 r-curl/4.3 crul/0.9.0"
+  }, 
+  "origin": "24.21.229.59, 24.21.229.59", 
+  "url": "https://httpbin.org/get"
+}
+```
+
+```{r echo=FALSE}
+invisible(vcr_configure_reset())
+```
