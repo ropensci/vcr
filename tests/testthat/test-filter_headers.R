@@ -96,26 +96,96 @@ test_that("filter_headers/request/replace", {
     yaml::yaml.load_file(cas_rep2$file()))
 })
 
-# test_that("filter_headers/response/remove", {
-#   skip_on_cran()
+test_that("filter_headers/response/remove", {
+  skip_on_cran()
 
-#   # setup
-#   library(crul)
-#   mydir <- file.path(tempdir(), "asdfasdfsd")
-#   # mydir <- "terrible2"
-#   # response headers: remove only
-#   vcr_configure_reset()
-#   vcr_configure(dir = mydir, filter_response_headers = c('date', 'server'))
-#   invisible(use_cassette(name = "filterheaders_response_remove", {
-#     res <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
-#   }))
-#   invisible(use_cassette(name = "filterheaders_response_remove", {
-#     res2 <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
-#   }))
-#   expect_is(res$response_headers, "list")
-#   expect_is(res2$response_headers, "list")
-#   expect_true(all(c("date", "server") %in% names(res$response_headers)))
-#   expect_true(!all(c("date", "server") %in% names(res2$response_headers)))
-# })
+  library(crul)
+  mydir <- file.path(tempdir(), "filter_headers_response_remove")
+
+  # response headers: remove only
+  vcr_configure(dir = mydir)
+  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
+  cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
+    res_nofilters <- con$get()
+  })
+  # Do filtering
+  vcr_configure_reset()
+  vcr_configure(dir = mydir, filter_response_headers = c("date", "server"))
+  unlink(file.path(vcr_c$dir, "filterheaders_response_remove.yml"))
+  cas1 <- use_cassette(name = "filterheaders_response_remove", {
+    res1 <- con$get()
+  })
+  cas2 <- use_cassette(name = "filterheaders_response_remove", {
+    res2 <- con$get()
+  })
+  
+  # with no filtering, response headers have date and server
+  expect_true(all(c("date", "server") %in% names(res_nofilters$response_headers)))
+  # with filtering, 1st request, response headers have date and server
+  expect_true(all(c("date", "server") %in% names(res1$response_headers)))
+  # with filtering, subsequent requests, response headers DO NOT have date and server
+  expect_false(all(c("date", "server") %in% names(res2$response_headers)))
+
+  # compare cassettes
+  yaml1 <- yaml::yaml.load_file(cas1$file())
+  yaml_no_filter <- yaml::yaml.load_file(cas_nofilters$file())
+  # date and server found in cassette w/o filtering
+  expect_true(all(c("date", "server") %in%
+    names(yaml_no_filter$http_interactions[[1]]$response$headers)))
+  # date and server NOT found in cassette w/ filtering
+  expect_false(all(c("date", "server") %in%
+    names(yaml1$http_interactions[[1]]$response$headers)))
+  # casette objects from both requests identical
+  expect_identical(yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file()))
+})
+
+vcr_configure_reset()
+
+test_that("filter_headers/response/replace", {
+  skip_on_cran()
+
+  library(crul)
+  mydir <- file.path(tempdir(), "filter_headers_response_replace")
+
+  # response headers: replace only
+  vcr_configure(dir = mydir)
+  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
+  cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
+    res_nofilters <- con$get()
+  })
+  # Do filtering
+  vcr_configure_reset()
+  vcr_configure(dir = mydir, filter_response_headers = list(server = "who-dis!?"))
+  unlink(file.path(vcr_c$dir, "filterheaders_response_replace.yml"))
+  cas1 <- use_cassette(name = "filterheaders_response_replace", {
+    res1 <- con$get()
+  })
+  cas2 <- use_cassette(name = "filterheaders_response_replace", {
+    res2 <- con$get()
+  })
+  
+  # with no filtering, response headers have date and server
+  expect_false("who-dis!?" == res_nofilters$response_headers$server)
+  # with filtering, 1st request, response headers have date and server
+  expect_false("who-dis!?" == res1$response_headers$server)
+  # with filtering, subsequent requests, response headers DO NOT have date and server
+  expect_true("who-dis!?" == res2$response_headers$server)
+
+  # compare cassettes
+  yaml1 <- yaml::yaml.load_file(cas1$file())
+  yaml_no_filter <- yaml::yaml.load_file(cas_nofilters$file())
+  # date and server found in cassette w/o filtering
+  expect_false("who-dis!?" ==
+    yaml_no_filter$http_interactions[[1]]$response$headers$server)
+  # date and server NOT found in cassette w/ filtering
+  expect_true("who-dis!?" ==
+    yaml1$http_interactions[[1]]$response$headers$server)
+  # casette objects from both requests identical
+  expect_identical(yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file()))
+})
 
 vcr_configure_reset()
