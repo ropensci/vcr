@@ -7,6 +7,7 @@ output:
     toc_float: true
     theme: readable
 vignette: >
+  %\VignetteIndexEntry{Turning vcr on and off}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
