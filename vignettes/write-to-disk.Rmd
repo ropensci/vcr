@@ -8,6 +8,7 @@ output:
     toc_float: true
     theme: readable
 vignette: >
+  %\VignetteIndexEntry{Writing to disk}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
