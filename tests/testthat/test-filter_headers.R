@@ -1,3 +1,5 @@
+vcr_configure_reset()
+
 test_that("filter_headers/request/remove", {
   skip_on_cran()
 
@@ -53,6 +55,8 @@ test_that("filter_headers/request/remove", {
     yaml::yaml.load_file(cas2$file()))
 })
 
+vcr_configure_reset()
+
 test_that("filter_headers/request/replace", {
   skip_on_cran()
 
@@ -95,6 +99,8 @@ test_that("filter_headers/request/replace", {
   expect_identical(yaml::yaml.load_file(cas_rep1$file()),
     yaml::yaml.load_file(cas_rep2$file()))
 })
+
+vcr_configure_reset()
 
 test_that("filter_headers/response/remove", {
   skip_on_cran()
