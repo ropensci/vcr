@@ -25,6 +25,10 @@ knitr::opts_chunk$set(
 Request matching
 ================
 
+```{r setup}
+library("vcr")
+```
+
 ```{r child='../man/rmdhunks/write-to-disk.Rmd', eval=TRUE} 
 ```
 
