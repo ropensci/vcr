@@ -48,7 +48,6 @@ Suggests:
     cli,
     curl,
     withr
-Remotes: ropensci/webmockr
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
