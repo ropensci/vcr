@@ -57,7 +57,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and t
 
 ## Supported HTTP libraries
 
-* [crul](https://docs.ropensci.org/crul)
+* [crul](https://docs.ropensci.org/crul/)
 * [httr](https://httr.r-lib.org/)
 
 ## Getting Started
@@ -134,8 +134,8 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
-[webmockr]: https://docs.ropensci.org/webmockr
-[crul]: https://docs.ropensci.org/crul
+[webmockr]: https://docs.ropensci.org/webmockr/
+[crul]: https://docs.ropensci.org/crul/
 [rgbif]: https://github.com/ropensci/rgbif
 [rredlist]: https://github.com/ropensci/rredlist
 [bold]: https://github.com/ropensci/bold

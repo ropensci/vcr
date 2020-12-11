@@ -21,7 +21,7 @@ Easier HTTP testing! Record HTTP requests and responses on disk and replay them 
 * **Setup vcr for your package with `vcr::use_vcr()`**
 * Tweak the configuration to protect your secrets
 * **Sprinkle your tests with `vcr::use_cassette()` to save HTTP interactions to disk in "cassettes" files**
-* If you want to test for package behavior when the API returns e.g. a 404 or 503 code, edit the cassettes, or use [webmockr](htts://docs.ropensci.org/webmockr)
+* If you want to test for package behavior when the API returns e.g. a 404 or 503 code, edit the cassettes, or use [webmockr](htts://docs.ropensci.org/webmockr/)
 
 Now your tests can work without any internet connection!
 
