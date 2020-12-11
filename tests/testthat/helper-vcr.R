@@ -57,6 +57,6 @@ extract_vcr_config_args <- function(rdfile) {
   )
 }
 
-check_url <- function(x) {
-  suppressWarnings(suppressMessages(crul::ok(x)))
+check_url <- function(x, ...) {
+  suppressWarnings(suppressMessages(crul::ok(x, ...)))
 }
