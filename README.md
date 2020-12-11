@@ -9,7 +9,7 @@ vcr
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/metacran/cranlogs.app)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
 
@@ -174,6 +174,9 @@ You can have this set at a project or user level, and `usethis` has the [`usethi
 ## Usage
 
 
+
+
+
 ### In tests
 
 In your tests, for whichever tests you want to use `vcr`, wrap them in a `vcr::use_cassette()` call like:
@@ -230,8 +233,6 @@ system.time(
     cli$get("get")
   })
 )
-#>    user  system elapsed 
-#>   0.106   0.020   0.519
 ```
 
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
@@ -243,8 +244,6 @@ system.time(
     cli$get("get")
   })
 )
-#>    user  system elapsed 
-#>   0.154   0.014   0.199
 ```
 
 
@@ -344,6 +343,7 @@ We set the following defaults:
  * match_requests_on = `"c("method", "uri")"`
  * allow_unused_http_interactions = `TRUE`
  * serialize_with = `"yaml"`
+ * json_pretty = `FALSE`
  * persist_with = `"FileSystem"`
  * ignore_hosts = `NULL`
  * ignore_localhost = `FALSE`
@@ -359,6 +359,8 @@ We set the following defaults:
  * log = `FALSE`
  * log_opts = `list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)`
  * filter_sensitive_data = `NULL`
+ * filter_request_headers = `NULL`
+ * filter_response_headers = `NULL`
  * write_disk_path = `NULL`
  * verbose_errors = `FALSE`
 
@@ -381,8 +383,9 @@ Calling `vcr_configuration()` gives you some of the more important configuration
 ```r
 vcr_configuration()
 #> <vcr configuration>
-#>   Cassette Dir: /var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T//RtmpOojIaV
+#>   Cassette Dir: .
 #>   Record: once
+#>   Serialize with: yaml
 #>   URI Parser: crul::url_parse
 #>   Match Requests on: method, uri
 #>   Preserve Bytes?: FALSE
@@ -469,8 +472,6 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * License: MIT
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
-
-[![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
 
 [webmockr]: https://docs.ropensci.org/webmockr
 [crul]: https://docs.ropensci.org/crul

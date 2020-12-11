@@ -7,6 +7,7 @@
 man-roxygen
 ^cran-comments\.md$
 ^README\.Rmd$
+^README\.md$
 ^.*\.yml
 ^.*\.log
 Makefile
