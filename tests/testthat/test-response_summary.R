@@ -59,9 +59,12 @@ test_that("response_summary - handles bad multibyte characters by changing encod
 
   # errors on print.R6
   ## doesn't error on Windows
+  #### UPDATE 2020-12-11: THIS NO LONGER ERRORS
   if (Sys.info()[['sysname']] != "Windows") {
-    expect_error(print(x), "multibyte")
+    # expect_error(print(x), "multibyte")
+    expect_output(print(x), "VcrResponse")
   }
+
   # errors if using the old code in response_summary w/o useBytes=TRUE
   rv <- as.numeric(sub("\\.", "", paste0(R.version$major, R.version$minor)))
   if (rv <= 353) {
