@@ -3,7 +3,7 @@ vcr 0.6.0
 
 ### NEW FEATURES
 
-* We have a new vcr maintainer! @maelle (#198)
+* We have a new vcr contributor! @maelle (#198)
 * Gains a new serializer: JSON. You can use this serializer by setting globally `vcr_configure(serialize_with="json")` or per cassette `use_cassette(..., serialize_with="json")`. The JSON serializer uses `jsonlite` under the hood. Note that we by default do not write JSON to disk preserving newlines; that is the JSON is all on one line. You can use pretty printing by setting `json_pretty` in `vcr_configure()`. As part of this change, factored out new R6 class `Serializer` from which both JSON and YAML serializers inherit (#32)
 * Gains two new configuration options for managing secrets: `filter_request_headers` and `filter_response_headers`. These are implemented differently than `filter_sensitive_data`. The two new filters do simple value replacement or complete removal of request or response headers, whereas `filter_sensitive_data` uses regex to replace strings anywhere in the stored request/response. See the "Configure vcr" vignette for details (#182)
 * request matching: `host` and `path` now work (#177) (see also #70)
