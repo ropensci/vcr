@@ -1,5 +1,3 @@
-sss <- new.env()
-
 disk_true <- function(x) {
   if (is.null(x)) return(FALSE)
   assert(x, "logical")
@@ -22,8 +20,6 @@ serialize_to_httr <- function(request, response) {
       output = request$output %||% NULL
     )
   )
-  sss$req <- req
-  sss$request <- request
 
   # response
   resp <- webmockr::Response$new()

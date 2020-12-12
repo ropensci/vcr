@@ -42,7 +42,6 @@ RequestHandlerHttr <- R6::R6Class(
     #' @param request The request from an object of class `HttpInteraction`
     #' @return A new `RequestHandlerHttr` object
     initialize = function(request) {
-      sss$request_from_httpint <- request
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url,
