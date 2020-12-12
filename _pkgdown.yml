@@ -18,6 +18,12 @@ reference:
       - use_cassette
       - insert_cassette
       - eject_cassette
+  - title: "Recording and matching"
+    desc: >
+      Details on recording and request matching options
+    contents:
+      - recording
+      - request-matching
   - title: "vcr in tests"
     desc: >
       Functions for more custom workflows
@@ -63,6 +69,7 @@ reference:
       - response_summary
       - vcr_log_file
       - vcr_log_info
+      - crul_request
 
 articles:
 - title: All vignettes
