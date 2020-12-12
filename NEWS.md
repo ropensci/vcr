@@ -1,3 +1,45 @@
+vcr 0.6.0
+=========
+
+### NEW FEATURES
+
+* We have a new vcr maintainer! @maelle (#198)
+* Gains a new serializer: JSON. You can use this serializer by setting globally `vcr_configure(serialize_with="json")` or per cassette `use_cassette(..., serialize_with="json")`. The JSON serializer uses `jsonlite` under the hood. Note that we by default do not write JSON to disk preserving newlines; that is the JSON is all on one line. You can use pretty printing by setting `json_pretty` in `vcr_configure()`. As part of this change, factored out new R6 class `Serializer` from which both JSON and YAML serializers inherit (#32)
+* Gains two new configuration options for managing secrets: `filter_request_headers` and `filter_response_headers`. These are implemented differently than `filter_sensitive_data`. The two new filters do simple value replacement or complete removal of request or response headers, whereas `filter_sensitive_data` uses regex to replace strings anywhere in the stored request/response. See the "Configure vcr" vignette for details (#182)
+* request matching: `host` and `path` now work (#177) (see also #70)
+* In previous versions of vcr the `insert_cassette()`/`eject_cassette()` workflow did not work because the webmockr triggers required only worked when using `use_cassette()`. This has been fixed now so you can use `use_cassette()`, passing a code block to it, or run `insert_cassette()` then run any code, then when finished run `eject_cassette()`.  (#24) thanks @Robsteranium for the nudge, may not have fixed this without it
+* improve debugging experience: new vignette "Debugging your tests that use vcr", including new function `vcr_test_path()` - which is now used in `use_vcr()` so that the correct path to tests is used when running tests both interactively and non-interactively (#192) (#193)
+* Dependencies: dropped `lazyeval` from Imports; `withr` added to Suggests; minimum `webmockr` version now `v0.7.4`
+* In README, point to rOpenSci code of conduct rather than file in repo
+* Gains function `skip_if_vcr_off()` to use in tests to skip a test if vcr is turned off (#191) (#195)
+
+### MINOR IMPROVEMENTS
+
+* slight factor out of some code in YAML serializer to use elsewhere (#203) (#204)
+* serializers: drop `$deserialize_string()` method as was not used - rename `$deserialize_path()` method to just `$deserialize()` (#189)
+* serializers: with the new JSON serializer, documentation added to `?vcr_configure` and `?use_cassette` stating that you can have different cassettes with the same name as long as they use different serializers (and then have different file extensions). if you want to change serializers but do not want to keep the old cassette with the old serializer make sure to clean up the old file (#188)
+* now using GitHub Actions - remove Travis-CI and Appveyor (#175)
+* fixes for tests not being idempotent (#174) thanks @alex-gable
+* clean up `UnhandledHTTPRequestError` - remove unused variable `cassette` in `$initialize()` method (always use `current_cassette()` to get the cassette being used) (#163) tip from @aaronwolen
+* A change in latest webmockr release (`v0.7.4`) allowed for changes here to return an httr `response` object that more closely matches what httr returns in a real HTTP request. Before this the major problem was, assuming `x` is a httr `response` object, `x$request` was a `RequestSignature` object (from `webmockr`), whereas the class in a real httr response object is `request`  (#132)
+* Re-factor of `Cassette` class greatly simplifying webmockr HTTP request stubbing (#98) (#173) big thanks to @alex-gable !
+* `HTTPInteractionList` improvement: in checking for request matches against those on disk we were checking all requesets in a cassette - faster to check and stop when a match found. Using new factored out function to do this checking that stops when first match found. Many more tests added to check this behavior (#69)
+* base64 encoded output in cassettes when using YAML serializer are now wrapped to approximately 80 character width (triggered when `preserve_exact_body_bytes=TRUE`) - this makes cassettes longer however. Implementing this brought in use of `cpp11` (first use of C++ in vcr). This makes base64 encoded response body recording consistent with how vcr's in other programming languages do it  (#41)
+* `decode_compressed_response` option removed from `Cassette` class - wasn't being used and won't be used (#30)
+* add additional examples to `VcrResponse` docs showing what the `update_content_length_header()` does (#29)
+* `use_vcr()` changes: 1) now creates a test helper file called `setup-pkgname.R` instead of `helper-pkgname.R`; 2) now by default sets directory for fixtures using `dir = vcr_test_path("fixtures")` instead of `dir = "../fixtures"`. See other news item about `vcr_test_path`
+
+### DOCUMENTATION
+
+* better description of vcr at top of README (#198)
+* delete unused docs folder in repository (docs built elsewhere) (#210)
+* tell users that explicitly loading vcr is required in your test setup (#185) (#186) thanks @KevCaz
+* added explanation of where and how `webmockr` is integrated in `Cassette` class - see section "Points of webmockr integration" in `?Cassette` (#176) (see also #173)
+* improved getting started and protecting secrets sections in the introduction vignette (#170) (#172) thanks @DaveParr
+* add to introduction vignette a section titled "how to ensure tests work in the absence of a real API key" (#137) (#194)
+
+
+
 vcr 0.5.4
 =========
 

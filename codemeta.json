@@ -10,13 +10,13 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.5.6.91",
+  "version": "0.6.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.3 Patched (2020-11-22 r79464)",
+  "runtimePlatform": "R version 4.0.3 Patched (2020-12-04 r79565)",
   "author": [
     {
       "@type": "Person",
@@ -188,14 +188,14 @@
       "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
-      "version": ">= 0.7.1.91",
+      "version": ">= 0.7.4",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/ropensci/webmockr"
+      "sameAs": "https://CRAN.R-project.org/package=webmockr"
     },
     {
       "@type": "SoftwareApplication",
@@ -255,7 +255,7 @@
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
   "contIntegration": "https://codecov.io/gh/ropensci/vcr",
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "0KB",
+  "fileSize": "1354.543KB",
   "relatedLink": [
     "https://ropenscilabs.github.io/http-testing-book/",
     "https://books.ropensci.org/http-testing/"
@@ -282,5 +282,11 @@
     }
   ],
   "copyrightHolder": {},
-  "funder": {}
+  "funder": [
+    {
+      "@type": "Organization",
+      "name": "rOpenSci"
+    }
+  ],
+  "releaseNotes": "https://github.com/ropensci/vcr/blob/master/NEWS.md"
 }
