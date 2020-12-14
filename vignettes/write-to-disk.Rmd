@@ -27,7 +27,6 @@ Request matching
 
 ```{r setup}
 library("vcr")
-vcr::turn_on()
 ```
 
 ```{r child='../man/rmdhunks/write-to-disk.Rmd', eval=TRUE} 
