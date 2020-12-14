@@ -25,3 +25,8 @@ library(vcr)
 
 ```{r child='../man/rmdhunks/lightswitch.Rmd', eval=TRUE} 
 ```
+
+```{r, echo=FALSE}
+
+vcr::turn_on()
+```
