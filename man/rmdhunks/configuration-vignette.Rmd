@@ -205,7 +205,7 @@ vcr_configure(
   filter_request_headers = c("Authorization", "User-Agent")
 )
 vcr_configure(
-  filter_request_headers = list(Authorization = Sys.getenv('MY_API_KEY'))
+  filter_request_headers = list(Authorization = "<<<not-my-bearer-token>>>")
 )
 ```
 
