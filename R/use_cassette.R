@@ -1,7 +1,7 @@
 #' Use a cassette to record HTTP requests
 #'
 #' @export
-#' @inheritSection check_cassette_names Cassette names
+#' @inherit check_cassette_names details
 #' @param name The name of the cassette. vcr will check this to ensure it
 #' is a valid file name. Not allowed: spaces, file extensions, control
 #' characters (e.g., `\n`), illegal characters ('/', '?', '<', '>', '\\', ':',
