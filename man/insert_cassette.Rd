@@ -68,6 +68,36 @@ an object of class \code{Cassette}
 \description{
 Insert a cassette to record HTTP requests
 }
+\details{
+Cassette names:
+\itemize{
+\item Should be meaningful so that it’s obvious to you what test/function
+they relate to. Meaningful names are important so that you can
+quickly determine to what test file or test block a cassette
+belongs. Note that vcr cannot check that your cassette names are
+meaningful.
+\item Should not be duplicated. Duplicated cassette names would lead to a
+test using the wrong cassette.
+\item Should not have spaces. Spaces can lead to problems in using file
+paths.
+\item Should not include a file extension. vcr handles file extensions for
+the user.
+\item Should not have illegal characters that can lead to problems in
+using file paths: ‘/’, ‘?’, ‘<’, ‘>’, ‘\’, ‘:’, ’*‘,’|‘, and’"’
+\item Should not have control characters, e.g., \verb{\n}
+\item Should not have just dots, e.g., \code{.} or \code{..}
+\item Should not have Windows reserved words, e.g., \code{com1}
+\item Should not have trailing dots
+\item Should not be longer than 255 characters
+}
+
+\code{vcr::check_cassette_names()} is meant to be run during your tests, from
+a \code{setup-pkgname.R} file inside the \code{tests/testthat} directory. It only
+checks that cassette names are not duplicated. A helper function
+\code{check_cassette_name()} runs inside
+\code{\link[=insert_cassette]{insert_cassette()}} that checks that cassettes
+do not have: spaces, file extensions, unaccepted characters (slashes)
+}
 \section{Cassette options}{
 
 
@@ -77,28 +107,6 @@ complete list of options and their default settings. You can override these
 options for a specific cassette by changing an argument's value to something
 other than \code{NULL} when calling either \code{insert_cassette()} or
 \code{use_cassette()}.
-}
-
-\section{Cassette names}{
-
-\itemize{
-\item Should be meaningful so that it's obvious to you what test/function
-they relate to. Meaningful names are important so that you can quickly
-determine to what test file or test block a cassette belongs. Note that
-vcr cannot check that your cassette names are meaningful.
-\item Should not be duplicated. Duplicated cassette names would lead to
-a test using the wrong cassette.
-\item Should not have spaces. Spaces can lead to problems in using file paths.
-\item Should not include a file extension. vcr handles file extensions for
-the user.
-\item Should not have illegal characters that can lead to problems in using
-file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
-\item Should not have control characters, e.g., \verb{\\n}
-\item Should not have just dots, e.g., \code{.} or \code{..}
-\item Should not have Windows reserved words, e.g., \code{com1}
-\item Should not have trailing dots
-\item Should not be longer than 255 characters
-}
 }
 
 \examples{
@@ -122,7 +130,7 @@ x$eject() # same as eject_cassette("leo5")
 x$new_recorded_interactions # same, 1 interaction
 x$previously_recorded_interactions() # now not empty
 ## stub_registry now empty, eject() calls webmockr::disable(), which
-## calls the disable method for each of crul and httr adadapters, 
+## calls the disable method for each of crul and httr adadapters,
 ## which calls webmockr's remove_stubs() method for each adapter
 webmockr::stub_registry()
 
