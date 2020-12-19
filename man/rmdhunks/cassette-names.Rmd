@@ -1,6 +1,6 @@
 Cassette names:
 
-- Should be meaningful so that it's obvious to you what test/function
+- Should be meaningful so that it is obvious to you what test/function
 they relate to. Meaningful names are important so that you can quickly
 determine to what test file or test block a cassette belongs. Note that
 vcr cannot check that your cassette names are meaningful.
@@ -10,7 +10,7 @@ a test using the wrong cassette.
 - Should not include a file extension. vcr handles file extensions for
 the user.
 - Should not have illegal characters that can lead to problems in using
-file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
+file paths: `/`, `?`, `<`, `>`, `\\`, `:`, `*`, `|`, and `\"`
 - Should not have control characters, e.g., `\n`
 - Should not have just dots, e.g., `.` or `..`
 - Should not have Windows reserved words, e.g., `com1`
