@@ -49,7 +49,8 @@ RequestMatcherRegistry <- R6::R6Class(
       self$register("body", function(r1, r2) identical(r1$body, r2$body))
       self$register('headers', function(r1, r2) identical(r1$headers, r2$headers))
       self$register("host", function(r1, r2) identical(r1$host, r2$host))
-      self$register("path", function(r1, r2) identical(r1$path, r2$path))
+      self$register("path", function(r1, r2)
+        identical(sub("/$", "", r1$path), sub("/$", "", r2$path)))
       self$register("query", function(r1, r2) identical(r1$query, r2$query))
       self$try_to_register_body_as_json()
     },

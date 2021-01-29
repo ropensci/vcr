@@ -75,6 +75,9 @@ test_that("RequestMatcherRegistry basic functionality works", {
   expect_false(request_matchers$registry$path$matches(b, d))
   expect_true(request_matchers$registry$path$matches(c, d))
   expect_true(request_matchers$registry$path$matches(b, e))
+  ## trailing slash is removed
+  expect_true(request_matchers$registry$path$matches(
+    list(path="foo"), list(path="foo/")))
 
   # query
   expect_true(request_matchers$registry$body_as_json$matches(a, b))
