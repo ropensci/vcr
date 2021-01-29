@@ -7,7 +7,6 @@ scott_notes.md
 revdep/checks.noindex
 revdep/data.sqlite
 revdep/library.noindex
-notes.R
-notes_matchers.md
+notes*
 use_vcr_notes.txt
 inst/doc
