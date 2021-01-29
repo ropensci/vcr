@@ -44,6 +44,7 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   library(crul)
   ## url
   url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
+  # redirects to "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg" - breaking test
   skip_if(!check_url(url, timeout_ms=5000L), sprintf("url not up (%s)", url))
   ## make a temp file
   f <- file.path(tempdir(), basename(url))
