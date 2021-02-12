@@ -18,6 +18,7 @@ inst/ignore
 ^revdep$
 ^notes.R$
 ^notes_matchers.md$
+^notes-redirects.R$
 ^use_vcr_notes.txt$
 ^docs$
 ^make_readme.R$

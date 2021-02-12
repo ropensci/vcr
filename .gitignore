@@ -10,3 +10,4 @@ revdep/library.noindex
 notes*
 use_vcr_notes.txt
 inst/doc
+notes-redirects.R
