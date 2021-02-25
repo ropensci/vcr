@@ -183,9 +183,12 @@ use_cassette <- function(name, ...,
   if (record_separate_redirects) {
     while (redirects_remaining(cassette)) {
       rel_path <- last(cassette$merged_interactions())[[1]]$response$headers$location
-      cassette$request_original <- 
+      cassette$request_original <-
         update_relative(cassette$request_original, rel_path)
-      RequestHandlerCrul$new(cassette$request_original)$handle()
+      switch(http_client(cassette$request_original),
+        crul = RequestHandlerCrul$new(cassette$request_original)$handle(),
+        httr = RequestHandlerHttr$new(cassette$request_original)$handle()
+      )
     }
     # what we need to do:
     # 1. before any real requests, set followlocation=0L, then
@@ -196,9 +199,15 @@ use_cassette <- function(name, ...,
   return(cassette)
 }
 
+
+scode <- function(x) {
+  if ("status_code" %in% names(x)) return(x$status_code)
+  return(x$status$status_code)
+}
 last_http_status <- function(cas) {
   z <- last(cas$merged_interactions())
-  if (!length(z)) "" else z[[1]]$response$status$status_code
+  if (!length(z)) "" else scode(z[[1]]$response)
+  # $status$status_code
 }
 redirects_remaining <- function(cas) {
   stat <- as.character(last_http_status(cas))
@@ -206,10 +215,19 @@ redirects_remaining <- function(cas) {
   if (!nzchar(stat)) return(TRUE)
   stat %in% c("301", "302", "303", "307", "308")
 }
+http_client <- function(x) {
+  ifelse(is.list(x$url), "crul", "httr")
+}
 update_relative <- function(req, path) {
-  tmp <- urltools::url_parse(req$url$url)
+  pkg <- http_client(req)
+  tmp <- urltools::url_parse(switch(pkg, crul=req$url$url, httr=req$url))
   tmp$path <- sub("^/", "", path)
-  req$url$url <- urltools::url_compose(tmp)
-  curl::handle_setopt(req$url$handle, followlocation = 0L)
+  if (pkg == "crul") {
+    req$url$url <- urltools::url_compose(tmp)
+  } else {
+    req$url <- urltools::url_compose(tmp)
+  }
+  if (pkg == "crul")
+    curl::handle_setopt(req$url$handle, followlocation = 0L)
   return(req)
 }

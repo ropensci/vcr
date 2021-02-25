@@ -30,6 +30,7 @@ SystemRequirements: C++11
 LinkingTo: 
     cpp11
 Imports:
+    curl,
     crul (>= 0.8.4),
     httr,
     webmockr (>= 0.7.4.93),
@@ -46,7 +47,6 @@ Suggests:
     desc,
     crayon,
     cli,
-    curl,
     withr
 Remotes: ropensci/webmockr@httr-url-redirects
 X-schema.org-applicationCategory: Web

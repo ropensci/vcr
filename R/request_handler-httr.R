@@ -1,3 +1,5 @@
+sac <- new.env()
+
 #' @title RequestHandlerHttr
 #' @description Methods for the httr package, building on [RequestHandler]
 #' @export
@@ -48,7 +50,10 @@ RequestHandlerHttr <- R6::R6Class(
           webmockr::pluck_body(request), request$headers,
           fields = request$fields, output = request$output)
       }
-      self$cassette <- tryCatch(current_cassette(), error = function(e) e)
+      self$cassette <- current_cassette()
+      # place original http request into the cassette to enable
+      # the record_separate_redirects=TRUE option
+      if (length(self$cassette)) self$cassette$set_request(self$request_original)
     }
   ),
 
@@ -110,11 +115,17 @@ RequestHandlerHttr <- R6::R6Class(
       )
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 
+      sac$response <- response
+      sac$self <- self
+      sac$tmp2 <- tmp2
+
       # make vcr response | then record interaction
       self$vcr_response <- private$response_for(response)
       cas <- tryCatch(current_cassette(), error = function(e) e)
       if (inherits(cas, "error")) stop("no cassette in use")
       cas$record_http_interaction(response)
+      
+      sac$cas <- cas
 
       # return real response
       return(response)
