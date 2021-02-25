@@ -145,6 +145,10 @@ to read? Or remove newlines to save disk space? default: FALSE
 re-recorded at the given interval, in seconds.
 \item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}
+\item \code{record_separate_redirects} (logical) If http redirects are
+encountered in http requests, should we record the intermediate requests?
+If \code{FALSE}, only the final response with a non-3xx series status code
+is recorded. default: \code{FALSE}
 }
 }
 }

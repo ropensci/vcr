@@ -93,7 +93,10 @@ RequestHandler <- R6::R6Class(
           webmockr::pluck_body(request) %||% "", request$headers,
           disk = !is.null(request$output$path))
       }
-      self$cassette <- tryCatch(current_cassette(), error = function(e) e)
+      self$cassette <- current_cassette()
+      # place original http request into the cassette to enable
+      # the record_separate_redirects=TRUE option
+      if (length(self$cassette)) self$cassette$set_request(self$request_original)
     },
 
     #' @description Handle the request (`request` given in `$initialize()`)

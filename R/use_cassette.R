@@ -39,6 +39,10 @@
 #' cassette should be re-recorded. default: `NULL` (not re-recorded)
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file? default: `FALSE`
+#' @param record_separate_redirects (logical) If http redirects are
+#' encountered in http requests, should we record the intermediate requests?
+#' If `FALSE`, only the final response with a non-3xx series status code
+#' is recorded. default: `FALSE`
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
@@ -155,7 +159,8 @@ use_cassette <- function(name, ...,
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL) {
+  clean_outdated_http_interactions = NULL,
+  record_separate_redirects = FALSE) {
 
   cassette <- insert_cassette(name,
     record = record,
@@ -166,7 +171,8 @@ use_cassette <- function(name, ...,
     persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    record_separate_redirects = record_separate_redirects
   )
   if (is.null(cassette)) {
     force(...)
@@ -174,6 +180,36 @@ use_cassette <- function(name, ...,
   }
   on.exit(cassette$eject())
   cassette$call_block(...)
-  # force(...)
+  if (record_separate_redirects) {
+    while (redirects_remaining(cassette)) {
+      rel_path <- last(cassette$merged_interactions())[[1]]$response$headers$location
+      cassette$request_original <- 
+        update_relative(cassette$request_original, rel_path)
+      RequestHandlerCrul$new(cassette$request_original)$handle()
+    }
+    # what we need to do:
+    # 1. before any real requests, set followlocation=0L, then
+    # 2. one request at a time, capturing the link to follow each time, and
+    # 3. end when there are no more links to follow
+    # FIXME: WHY IS THE RESPONSE FROM THE FIRST REQUEST? NEED TO GIVE BACK THE RESPONSE FROM THE LAST REQUEST
+  }
   return(cassette)
+}
+
+last_http_status <- function(cas) {
+  z <- last(cas$merged_interactions())
+  if (!length(z)) "" else z[[1]]$response$status$status_code
+}
+redirects_remaining <- function(cas) {
+  stat <- as.character(last_http_status(cas))
+  sac$last_http_status_code <- stat
+  if (!nzchar(stat)) return(TRUE)
+  stat %in% c("301", "302", "303", "307", "308")
+}
+update_relative <- function(req, path) {
+  tmp <- urltools::url_parse(req$url$url)
+  tmp$path <- sub("^/", "", path)
+  req$url$url <- urltools::url_compose(tmp)
+  curl::handle_setopt(req$url$handle, followlocation = 0L)
+  return(req)
 }

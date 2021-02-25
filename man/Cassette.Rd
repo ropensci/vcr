@@ -119,9 +119,13 @@ bytes of the requests and responses}
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file}
 
+\item{\code{record_separate_redirects}}{(logical) record separate redirects?}
+
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{cassette_opts}}{(list) various cassette options}
+
+\item{\code{request_original}}{(list) original http request}
 }
 \if{html}{\out{</div>}}
 }
@@ -156,6 +160,7 @@ be recorded back to file}
 \item \href{#method-http_interactions}{\code{Cassette$http_interactions()}}
 \item \href{#method-make_http_interaction}{\code{Cassette$make_http_interaction()}}
 \item \href{#method-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
+\item \href{#method-set_request}{\code{Cassette$set_request()}}
 \item \href{#method-clone}{\code{Cassette$clone()}}
 }
 }
@@ -179,7 +184,8 @@ Create a new \code{Cassette} object
   allow_unused_http_interactions,
   exclusive,
   preserve_exact_body_bytes,
-  clean_outdated_http_interactions
+  clean_outdated_http_interactions,
+  record_separate_redirects
 )}\if{html}{\out{</div>}}
 }
 
@@ -229,6 +235,11 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
+
+\item{\code{record_separate_redirects}}{(logical) If http redirects are
+encountered in http requests, should we record the intermediate requests?
+If \code{FALSE}, only the final response with a non-3xx series status code
+is recorded. Default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }
@@ -620,6 +631,27 @@ Make a crul response object
 
 \subsection{Returns}{
 a crul response
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_request"></a>}}
+\if{latex}{\out{\hypertarget{method-set_request}{}}}
+\subsection{Method \code{set_request()}}{
+Set original HTTP request in the cassette in
+case needed for redirect handling
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$set_request(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{(list) a request}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

@@ -13,10 +13,10 @@ rmd2md:
 		mv configuration.md configuration.Rmd
 
 install: doc build
-	R CMD INSTALL . && rm *.tar.gz
+	R CMD INSTALL .  && rm *.tar.gz
 
 build:
-	R CMD build .
+	R CMD build --no-build-vignettes .
 
 doc:
 	${RSCRIPT} -e "devtools::document()"

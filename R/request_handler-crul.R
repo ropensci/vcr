@@ -1,3 +1,6 @@
+sac <- new.env()
+
+
 #' @title RequestHandlerCrul
 #' @description Methods for the crul package, building on [RequestHandler]
 #' @export
@@ -82,6 +85,10 @@ RequestHandlerCrul <- R6::R6Class(
       self$vcr_response <- private$response_for(response)
       cas <- tryCatch(current_cassette(), error = function(e) e)
       if (inherits(cas, "error")) stop("no cassette in use")
+      sac$cas <- cas
+      sac$response <- response
+      sac$self <- self
+      sac$tmp2 <- tmp2
       cas$record_http_interaction(response)
       return(response)
     }

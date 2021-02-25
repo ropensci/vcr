@@ -15,7 +15,8 @@ use_cassette(
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  record_separate_redirects = FALSE
 )
 }
 \arguments{
@@ -66,6 +67,11 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
+
+\item{record_separate_redirects}{(logical) If http redirects are
+encountered in http requests, should we record the intermediate requests?
+If \code{FALSE}, only the final response with a non-3xx series status code
+is recorded. default: \code{FALSE}}
 }
 \value{
 an object of class \code{Cassette}

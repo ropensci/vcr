@@ -115,6 +115,10 @@
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
+#' - `record_separate_redirects` (logical) If http redirects are
+#' encountered in http requests, should we record the intermediate requests?
+#' If `FALSE`, only the final response with a non-3xx series status code
+#' is recorded. default: `FALSE`
 #'
 #' @examples
 #' vcr_configure(dir = tempdir())
@@ -215,7 +219,8 @@ VCRConfig <- R6::R6Class(
     .filter_request_headers  = NULL,
     .filter_response_headers  = NULL,
     .write_disk_path = NULL,
-    .verbose_errors = NULL
+    .verbose_errors = NULL,
+    .record_separate_redirects = NULL
   ),
 
   active = list(
@@ -340,6 +345,10 @@ VCRConfig <- R6::R6Class(
       if (missing(value) && is.null(env_ve)) return(private$.verbose_errors)
       value <- env_ve %||% value
       private$.verbose_errors <- assert(value, "logical")
+    },
+    record_separate_redirects = function(value) {
+      if (missing(value)) return(private$.record_separate_redirects)
+      private$.record_separate_redirects <- value
     }
   ),
 
@@ -369,7 +378,8 @@ VCRConfig <- R6::R6Class(
       filter_request_headers  = NULL,
       filter_response_headers  = NULL,
       write_disk_path = NULL,
-      verbose_errors = FALSE
+      verbose_errors = FALSE,
+      record_separate_redirects = FALSE
     ) {
       self$dir <- dir
       self$record <- record
@@ -396,6 +406,7 @@ VCRConfig <- R6::R6Class(
       self$filter_response_headers  = filter_response_headers
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
+      self$record_separate_redirects <- record_separate_redirects
     },
 
     # reset all settings to defaults
@@ -424,6 +435,8 @@ VCRConfig <- R6::R6Class(
       cat(paste0("  ignored hosts: ", pastec(private$.ignore_hosts)), sep = "\n")
       cat(paste0("  ignore localhost?: ", private$.ignore_localhost), sep = "\n")
       cat(paste0("  Write disk path: ", private$.write_disk_path), sep = "\n")
+      cat(paste0("  Record separate redirects?: ",
+        private$.record_separate_redirects), sep = "\n")
       invisible(self)
     }
   )

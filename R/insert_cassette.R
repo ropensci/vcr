@@ -44,7 +44,8 @@ insert_cassette <- function(name,
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL) {
+  clean_outdated_http_interactions = NULL,
+  record_separate_redirects = FALSE) {
 
   check_cassette_name(name)
   vcr_env_handle()
@@ -77,7 +78,8 @@ insert_cassette <- function(name,
       tag = NULL,
       tags = NULL,
       allow_unused_http_interactions = NULL,
-      exclusive = NULL
+      exclusive = NULL,
+      record_separate_redirects = record_separate_redirects %||% vcr_c$clean_outdated_http_interactions
     )
     return(tmp)
   } else if (!light_switch$ignore_cassettes) {

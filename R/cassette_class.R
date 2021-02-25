@@ -104,10 +104,14 @@ Cassette <- R6::R6Class(
     #' @field clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file
     clean_outdated_http_interactions = FALSE,
+    #' @field record_separate_redirects (logical) record separate redirects?
+    record_separate_redirects = FALSE,
     #' @field to_return (logical) internal use
     to_return = NULL,
     #' @field cassette_opts (list) various cassette options
     cassette_opts = NULL,
+    #' @field request_original (list) original http request
+    request_original = NULL,
 
     #' @description Create a new `Cassette` object
     #' @param name The name of the cassette. vcr will sanitize this to ensure it
@@ -141,13 +145,17 @@ Cassette <- R6::R6Class(
     #' in [vcr_configure()]. Default: `FALSE`
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
+    #' @param record_separate_redirects (logical) If http redirects are
+    #' encountered in http requests, should we record the intermediate requests?
+    #' If `FALSE`, only the final response with a non-3xx series status code
+    #' is recorded. Default: `FALSE`
     #' @return A new `Cassette` object
     initialize = function(
       name, record, serialize_with, persist_with, match_requests_on,
       re_record_interval, tag, tags, update_content_length_header,
       allow_playback_repeats, allow_unused_http_interactions,
       exclusive, preserve_exact_body_bytes,
-      clean_outdated_http_interactions) {
+      clean_outdated_http_interactions, record_separate_redirects) {
 
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
@@ -186,6 +194,9 @@ Cassette <- R6::R6Class(
       }
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
+      }
+      if (!missing(record_separate_redirects)) {
+        self$record_separate_redirects <- record_separate_redirects
       }
       self$make_args()
       if (!file.exists(self$manfile)) self$write_metadata()
@@ -316,6 +327,8 @@ Cassette <- R6::R6Class(
       cat(paste0("  exclusive: ", self$exclusive), sep = "\n")
       cat(paste0("  preserve_exact_body_bytes: ",
                  self$preserve_exact_body_bytes), sep = "\n")
+      cat(paste0("  record separate redirects?: ",
+        self$record_separate_redirects), sep = "\n")
       invisible(self)
     },
 
@@ -732,7 +745,14 @@ Cassette <- R6::R6Class(
 
       # generate crul response
       webmockr::build_crul_response(req, resp)
-    }
+    },
 
+    #' @description Set original HTTP request in the cassette in 
+    #' case needed for redirect handling
+    #' @param x (list) a request
+    #' @return `NULL`
+    set_request = function(x) {
+      self$request_original <- x
+    }
   )
 )
