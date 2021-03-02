@@ -126,6 +126,10 @@ be recorded back to file}
 \item{\code{cassette_opts}}{(list) various cassette options}
 
 \item{\code{request_original}}{(list) original http request}
+
+\item{\code{request_handler}}{(list) request handler object}
+
+\item{\code{redirect_pool}}{(list) list of redirect http responses}
 }
 \if{html}{\out{</div>}}
 }
@@ -161,6 +165,8 @@ be recorded back to file}
 \item \href{#method-make_http_interaction}{\code{Cassette$make_http_interaction()}}
 \item \href{#method-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
 \item \href{#method-set_request}{\code{Cassette$set_request()}}
+\item \href{#method-set_handler}{\code{Cassette$set_handler()}}
+\item \href{#method-add_redirect}{\code{Cassette$add_redirect()}}
 \item \href{#method-clone}{\code{Cassette$clone()}}
 }
 }
@@ -647,6 +653,47 @@ case needed for redirect handling
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{x}}{(list) a request}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_handler"></a>}}
+\if{latex}{\out{\hypertarget{method-set_handler}{}}}
+\subsection{Method \code{set_handler()}}{
+Set RequestHandler in the cassette in
+case needed for redirect handling
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$set_handler(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{(list) a request}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{NULL}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_redirect"></a>}}
+\if{latex}{\out{\hypertarget{method-add_redirect}{}}}
+\subsection{Method \code{add_redirect()}}{
+Add an http request to a pool
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$add_redirect(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{(list) a response}
 }
 \if{html}{\out{</div>}}
 }

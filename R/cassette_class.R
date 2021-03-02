@@ -112,6 +112,10 @@ Cassette <- R6::R6Class(
     cassette_opts = NULL,
     #' @field request_original (list) original http request
     request_original = NULL,
+    #' @field request_handler (list) request handler object
+    request_handler = NULL,
+    #' @field redirect_pool (list) list of redirect http responses
+    redirect_pool = list(),
 
     #' @description Create a new `Cassette` object
     #' @param name The name of the cassette. vcr will sanitize this to ensure it
@@ -753,6 +757,17 @@ Cassette <- R6::R6Class(
     #' @return `NULL`
     set_request = function(x) {
       self$request_original <- x
-    }
+    },
+
+    #' @description Set RequestHandler in the cassette in 
+    #' case needed for redirect handling
+    #' @param x (list) a request
+    #' @return `NULL`
+    set_handler = function(x) self$request_handler <- x,
+
+    #' @description Add an http request to a pool
+    #' @param x (list) a response
+    #' @return `NULL`
+    add_redirect = function(x) self$redirect_pool <- append(self$redirect_pool, list(x))
   )
 )

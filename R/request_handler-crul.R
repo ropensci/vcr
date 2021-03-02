@@ -86,6 +86,7 @@ RequestHandlerCrul <- R6::R6Class(
       cas <- tryCatch(current_cassette(), error = function(e) e)
       if (inherits(cas, "error")) stop("no cassette in use")
       sac$cas <- cas
+      # sac$response <- list(sac$response, response)
       sac$response <- response
       sac$self <- self
       sac$tmp2 <- tmp2

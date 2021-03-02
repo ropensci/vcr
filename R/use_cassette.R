@@ -180,20 +180,20 @@ use_cassette <- function(name, ...,
   }
   on.exit(cassette$eject())
   cassette$call_block(...)
-  if (record_separate_redirects) {
+  if (cassette$record_separate_redirects) {
     while (redirects_remaining(cassette)) {
       rel_path <- last(cassette$merged_interactions())[[1]]$response$headers$location
-      cassette$request_original <-
+      # cassette$request_original <-
+      #   update_relative(cassette$request_original, rel_path)
+      cassette$request_handler$request_original <-
         update_relative(cassette$request_original, rel_path)
-      switch(http_client(cassette$request_original),
-        crul = RequestHandlerCrul$new(cassette$request_original)$handle(),
-        httr = RequestHandlerHttr$new(cassette$request_original)$handle()
-      )
+      cassette$add_redirect(cassette$request_handler$handle())
+      # switch(http_client(cassette$request_original),
+        # httr = cassette$request_handler$initialize(cassette$request_original)$handle()
+        # crul = RequestHandlerCrul$new(cassette$request_original)$handle(),
+        # httr = RequestHandlerHttr$new(cassette$request_original)$handle()
+      # )
     }
-    # what we need to do:
-    # 1. before any real requests, set followlocation=0L, then
-    # 2. one request at a time, capturing the link to follow each time, and
-    # 3. end when there are no more links to follow
     # FIXME: WHY IS THE RESPONSE FROM THE FIRST REQUEST? NEED TO GIVE BACK THE RESPONSE FROM THE LAST REQUEST
   }
   return(cassette)

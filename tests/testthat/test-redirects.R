@@ -11,6 +11,9 @@ test_that("redirects: w/ crul", {
   cas1 <- use_cassette("testing2", {
     x1 <- con$get("redirect/3")
   }, record_separate_redirects = TRUE)
+  # cas1false <- use_cassette("testing2false", {
+  #   x1false <- con$get("redirect/3")
+  # }, record_separate_redirects = FALSE)
 
   # cassette
   expect_is(cas1, "Cassette")

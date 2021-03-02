@@ -79,7 +79,7 @@ insert_cassette <- function(name,
       tags = NULL,
       allow_unused_http_interactions = NULL,
       exclusive = NULL,
-      record_separate_redirects = record_separate_redirects %||% vcr_c$clean_outdated_http_interactions
+      record_separate_redirects = record_separate_redirects %||% vcr_c$record_separate_redirects
     )
     return(tmp)
   } else if (!light_switch$ignore_cassettes) {
