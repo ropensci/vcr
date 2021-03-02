@@ -45,7 +45,7 @@ test_that("use_cassette fails well", {
   # requires a code block
   unlink(file.path(vcr_c$dir, "foobar333.yml"))
   expect_error(
-    suppressMessages(use_cassette("foobar333")),
+    sw(sm(use_cassette("foobar333"))),
     "`vcr::use_cassette` requires a code block"
   )
 

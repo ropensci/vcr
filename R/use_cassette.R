@@ -1,3 +1,8 @@
+empty_cassette_message <- c("Empty cassette detected; consider the following:\n",
+  " - If an error occurred resolve that first, then check:\n",
+  " - vcr only supports crul & httr; requests w/ curl, download.file, etc. are not supported\n",
+  " - If you are using crul/httr, are you sure you made an HTTP request?\n")
+
 #' Use a cassette to record HTTP requests
 #'
 #' @export
@@ -173,7 +178,15 @@ use_cassette <- function(name, ...,
     return(NULL)
   }
   on.exit(cassette$eject())
+  # warn on empty cassette
+  on.exit(check_empty_cassette(cassette), add = TRUE)
   cassette$call_block(...)
   # force(...)
   return(cassette)
+}
+
+check_empty_cassette <- function(cas) {
+  if (!any(nzchar(readLines(cas$file())))) {
+    warning(empty_cassette_message, call. = FALSE)
+  }
 }
