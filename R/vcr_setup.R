@@ -40,11 +40,11 @@ pkg_name <- function(dir) {
     stringsAsFactors = FALSE)[["Package"]]
 }
 
-suggest_vcr <- function(dir, verbose = TRUE) {
+suggest_vcr <- function(dir, verbose = TRUE, version = "*") {
   if (verbose) vcr_cat_line(sprintf("Adding %s to %s field in DESCRIPTION",
     crayon::blue("vcr"),
     crayon::red("Suggests")))
-  desc::desc_set_dep("vcr", "Suggests", file = dir)
+  desc::desc_set_dep("vcr", "Suggests", file = dir, version = version)
   invisible()
 }
 
@@ -67,6 +67,9 @@ test_r_file_exists <- function(dir) {
 #' current directory
 #' @param verbose (logical) print progress messages. default: `TRUE`
 #' @return only messages about progress, returns invisible()
+#' @details Sets a mimimum vcr version, which is usually the latest
+#' (stable) version on CRAN. You can of course easily remove or change
+#' the version requirement yourself after running this function.
 use_vcr <- function(dir = ".", verbose = TRUE) {
   assert(dir, "character")
   stopifnot(length(dir) == 1)
@@ -81,7 +84,7 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
     crayon::blue("tests/fixtures")))
 
   # add vcr to Suggests in DESCRIPTION file
-  suggest_vcr(dir, verbose)
+  suggest_vcr(dir, verbose, ">= 0.6.0")
 
   # add tests/testthat.R if not present
   if (!dir.exists(file.path(dir, "tests/testthat"))) {
