@@ -31,7 +31,9 @@ headers_remove <- function(x) {
       if (length(toreplace)) {
         for (i in seq_along(toreplace)) {
           int <- lapply(int, function(b) {
-            b[[which]]$headers[[names(toreplace)[i]]] <- toreplace[[i]]
+            if (names(toreplace)[i] %in% names(b[[which]]$headers)) {
+              b[[which]]$headers[[names(toreplace)[i]]] <- toreplace[[i]]
+            }
             return(b)
           })
         }
