@@ -47,11 +47,17 @@
 #'   list(thing_to_replace_it_with = thing_to_replace)
 #'   ```
 #'   We replace all instances of `thing_to_replace` with
-#' `thing_to_replace_it_with`. Before recording (writing to a cassette) we do
+#' `thing_to_replace_it_with`. Uses [gsub()] internally, with `fixed=TRUE`; 
+#' so does exact matches. Before recording (writing to a cassette) we do
 #' the replacement and then when reading from the cassette we do the reverse
 #' replacement to get back to the real data. Before record replacement happens
 #' in internal function `write_interactions()`, while before playback
 #' replacement happens in internal function `YAML$deserialize()`
+#' 
+#' - `filter_sensitive_data_regex` named list of values to replace. Follows
+#' `filter_sensitive_data` format, except uses `fixed=FALSE` in the [gsub()]
+#' function call; this means that the value in `thing_to_replace` is a regex
+#' pattern.
 #' 
 #' - `filter_request_headers` (character/list) **request** headers to filter.
 #' A character vector of request headers to remove - the headers will not be
@@ -218,6 +224,7 @@ VCRConfig <- R6::R6Class(
     .log = NULL,
     .log_opts = NULL,
     .filter_sensitive_data = NULL,
+    .filter_sensitive_data_regex = NULL,
     .filter_request_headers  = NULL,
     .filter_response_headers  = NULL,
     .write_disk_path = NULL,
@@ -329,6 +336,10 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.filter_sensitive_data)
       private$.filter_sensitive_data <- assert(value, "list")
     },
+    filter_sensitive_data_regex = function(value) {
+      if (missing(value)) return(private$.filter_sensitive_data_regex)
+      private$.filter_sensitive_data_regex <- assert(value, "list")
+    },
     filter_request_headers = function(value) {
       if (missing(value)) return(private$.filter_request_headers)
       if (is.character(value)) value <- as.list(value)
@@ -382,6 +393,7 @@ VCRConfig <- R6::R6Class(
       log = FALSE,
       log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
       filter_sensitive_data = NULL,
+      filter_sensitive_data_regex = NULL,
       filter_request_headers  = NULL,
       filter_response_headers  = NULL,
       write_disk_path = NULL,
@@ -410,6 +422,7 @@ VCRConfig <- R6::R6Class(
       self$log <- log
       self$log_opts <- log_opts
       self$filter_sensitive_data <- filter_sensitive_data
+      self$filter_sensitive_data_regex <- filter_sensitive_data_regex
       self$filter_request_headers  = filter_request_headers
       self$filter_response_headers  = filter_response_headers
       self$write_disk_path <- write_disk_path

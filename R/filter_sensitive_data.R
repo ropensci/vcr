@@ -19,5 +19,13 @@ sensitive_remove <- function(x) {
       }
     }
   }
+  fsdr <- vcr_c$filter_sensitive_data_regex
+  if (!is.null(fsdr)) {
+    for (i in seq_along(fsdr)) {
+      if (nchar(fsdr[[i]]) > 0) {
+        x <- gsub(fsdr[[i]], names(fsdr)[i], x, fixed = FALSE)
+      }
+    }
+  }
   return(x)
 }

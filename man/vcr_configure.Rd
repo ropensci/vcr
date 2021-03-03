@@ -66,11 +66,16 @@ through
 }
 
 We replace all instances of \code{thing_to_replace} with
-\code{thing_to_replace_it_with}. Before recording (writing to a cassette) we do
+\code{thing_to_replace_it_with}. Uses \code{\link[=gsub]{gsub()}} internally, with \code{fixed=TRUE};
+so does exact matches. Before recording (writing to a cassette) we do
 the replacement and then when reading from the cassette we do the reverse
 replacement to get back to the real data. Before record replacement happens
 in internal function \code{write_interactions()}, while before playback
 replacement happens in internal function \code{YAML$deserialize()}
+\item \code{filter_sensitive_data_regex} named list of values to replace. Follows
+\code{filter_sensitive_data} format, except uses \code{fixed=FALSE} in the \code{\link[=gsub]{gsub()}}
+function call; this means that the value in \code{thing_to_replace} is a regex
+pattern.
 \item \code{filter_request_headers} (character/list) \strong{request} headers to filter.
 A character vector of request headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to
