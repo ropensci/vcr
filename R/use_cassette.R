@@ -44,6 +44,8 @@ empty_cassette_message <- c("Empty cassette detected; consider the following:\n"
 #' cassette should be re-recorded. default: `NULL` (not re-recorded)
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file? default: `FALSE`
+#' @param quiet (logical) Suppress any messages from both vcr and webmockr.
+#' Default: `FALSE`
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
@@ -160,7 +162,8 @@ use_cassette <- function(name, ...,
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL) {
+  clean_outdated_http_interactions = NULL,
+  quiet = FALSE) {
 
   cassette <- insert_cassette(name,
     record = record,
@@ -171,7 +174,8 @@ use_cassette <- function(name, ...,
     persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    quiet = quiet
   )
   if (is.null(cassette)) {
     force(...)

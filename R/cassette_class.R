@@ -104,6 +104,8 @@ Cassette <- R6::R6Class(
     #' @field clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file
     clean_outdated_http_interactions = FALSE,
+    #' @field quiet (logical) Suppress any messages from both vcr and webmockr
+    quiet = FALSE,
     #' @field to_return (logical) internal use
     to_return = NULL,
     #' @field cassette_opts (list) various cassette options
@@ -141,13 +143,14 @@ Cassette <- R6::R6Class(
     #' in [vcr_configure()]. Default: `FALSE`
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
+    #' @param quiet (logical) Should messages be suppressed? Default: `FALSE`
     #' @return A new `Cassette` object
     initialize = function(
       name, record, serialize_with, persist_with, match_requests_on,
       re_record_interval, tag, tags, update_content_length_header,
       allow_playback_repeats, allow_unused_http_interactions,
       exclusive, preserve_exact_body_bytes,
-      clean_outdated_http_interactions) {
+      clean_outdated_http_interactions, quiet) {
 
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
@@ -186,6 +189,9 @@ Cassette <- R6::R6Class(
       }
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
+      }
+      if (!missing(quiet)) {
+        self$quiet <- quiet
       }
       self$make_args()
       if (!file.exists(self$manfile)) self$write_metadata()
@@ -338,9 +344,9 @@ Cassette <- R6::R6Class(
       self$write_recorded_interactions_to_disk()
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
-      message("ejecting cassette: ", self$name)
+      if (!self$quiet) message("ejecting cassette: ", self$name)
       # disable webmockr
-      webmockr::disable()
+      webmockr::disable(quiet=self$quiet)
       # set current casette name to NULL
       vcr__env$current_cassette <- NULL
       # return self

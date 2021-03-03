@@ -15,7 +15,8 @@ use_cassette(
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -66,6 +67,9 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
+
+\item{quiet}{(logical) Suppress any messages from both vcr and webmockr.
+Default: \code{FALSE}}
 }
 \value{
 an object of class \code{Cassette}

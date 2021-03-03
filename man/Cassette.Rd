@@ -119,6 +119,8 @@ bytes of the requests and responses}
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file}
 
+\item{\code{quiet}}{(logical) Suppress any messages from both vcr and webmockr}
+
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{cassette_opts}}{(list) various cassette options}
@@ -179,7 +181,8 @@ Create a new \code{Cassette} object
   allow_unused_http_interactions,
   exclusive,
   preserve_exact_body_bytes,
-  clean_outdated_http_interactions
+  clean_outdated_http_interactions,
+  quiet
 )}\if{html}{\out{</div>}}
 }
 
@@ -229,6 +232,8 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
+
+\item{\code{quiet}}{(logical) Should messages be suppressed? Default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }

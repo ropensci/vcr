@@ -115,6 +115,8 @@
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
+#' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
+#' Default: `FALSE`
 #'
 #' @examples
 #' vcr_configure(dir = tempdir())
@@ -215,7 +217,8 @@ VCRConfig <- R6::R6Class(
     .filter_request_headers  = NULL,
     .filter_response_headers  = NULL,
     .write_disk_path = NULL,
-    .verbose_errors = NULL
+    .verbose_errors = NULL,
+    .quiet = NULL
   ),
 
   active = list(
@@ -340,6 +343,10 @@ VCRConfig <- R6::R6Class(
       if (missing(value) && is.null(env_ve)) return(private$.verbose_errors)
       value <- env_ve %||% value
       private$.verbose_errors <- assert(value, "logical")
+    },
+    quiet = function(value) {
+      if (missing(value)) return(private$.quiet)
+      private$.quiet <- assert(value, "logical")
     }
   ),
 
@@ -369,7 +376,8 @@ VCRConfig <- R6::R6Class(
       filter_request_headers  = NULL,
       filter_response_headers  = NULL,
       write_disk_path = NULL,
-      verbose_errors = FALSE
+      verbose_errors = FALSE,
+      quiet = FALSE
     ) {
       self$dir <- dir
       self$record <- record
@@ -396,6 +404,7 @@ VCRConfig <- R6::R6Class(
       self$filter_response_headers  = filter_response_headers
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
+      self$quiet <- quiet
     },
 
     # reset all settings to defaults
