@@ -15,7 +15,8 @@ insert_cassette(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
-  quiet = FALSE
+  quiet = FALSE,
+  warn_on_empty_cassette = FALSE
 )
 }
 \arguments{
@@ -64,6 +65,11 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 interactions be recorded back to file? default: \code{FALSE}}
 
 \item{quiet}{(logical) Suppress any messages from both vcr and webmockr.
+Default: \code{FALSE}}
+
+\item{warn_on_empty_cassette}{(logical) Should a warning be thrown when an
+empty cassette is detected? Empty cassettes are claned up (deleted) either
+way. This option only determines whether a warning is thrown or not.
 Default: \code{FALSE}}
 }
 \value{

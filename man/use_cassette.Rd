@@ -16,7 +16,8 @@ use_cassette(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
-  quiet = FALSE
+  quiet = FALSE,
+  warn_on_empty_cassette = TRUE
 )
 }
 \arguments{
@@ -70,6 +71,11 @@ interactions be recorded back to file? default: \code{FALSE}}
 
 \item{quiet}{(logical) Suppress any messages from both vcr and webmockr.
 Default: \code{FALSE}}
+
+\item{warn_on_empty_cassette}{(logical) Should a warning be thrown when an
+empty cassette is detected? Empty cassettes are claned up (deleted) either
+way. This option only determines whether a warning is thrown or not.
+Default: \code{FALSE}}
 }
 \value{
 an object of class \code{Cassette}
@@ -112,6 +118,10 @@ cassette is ejected
 we return with a useful message, and since we use \code{on.exit()}
 the cassette is still ejected even though there was an error,
 but you don't get an object back
+\item whenever an empty cassette (a yml/json file) is found, we delete it
+before returning from the \code{use_cassette()} function call. we achieve
+this via use of \code{on.exit()} so an empty cassette is deleted even
+if there was an error in the code block you passed in
 }
 }
 

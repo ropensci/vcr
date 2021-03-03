@@ -106,6 +106,9 @@ Cassette <- R6::R6Class(
     clean_outdated_http_interactions = FALSE,
     #' @field quiet (logical) Suppress any messages from both vcr and webmockr
     quiet = FALSE,
+    #' @field warn_on_empty_cassette (logical) Should a warning be thrown when an
+    #' empty cassette is detected?
+    warn_on_empty_cassette = TRUE,
     #' @field to_return (logical) internal use
     to_return = NULL,
     #' @field cassette_opts (list) various cassette options
@@ -144,13 +147,17 @@ Cassette <- R6::R6Class(
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
     #' @param quiet (logical) Should messages be suppressed? Default: `FALSE`
+    #' @param warn_on_empty_cassette (logical) Should a warning be thrown when an 
+    #' empty cassette is detected? Empty cassettes are claned up (deleted) either
+    #' way. This option only determines whether a warning is thrown or not.
+    #' Default: `FALSE`
     #' @return A new `Cassette` object
     initialize = function(
       name, record, serialize_with, persist_with, match_requests_on,
       re_record_interval, tag, tags, update_content_length_header,
       allow_playback_repeats, allow_unused_http_interactions,
       exclusive, preserve_exact_body_bytes,
-      clean_outdated_http_interactions, quiet) {
+      clean_outdated_http_interactions, quiet, warn_on_empty_cassette) {
 
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
@@ -192,6 +199,9 @@ Cassette <- R6::R6Class(
       }
       if (!missing(quiet)) {
         self$quiet <- quiet
+      }
+      if (!missing(warn_on_empty_cassette)) {
+        self$warn_on_empty_cassette <- warn_on_empty_cassette
       }
       self$make_args()
       if (!file.exists(self$manfile)) self$write_metadata()
@@ -341,6 +351,7 @@ Cassette <- R6::R6Class(
     #' @description ejects the current cassette
     #' @return self
     eject = function() {
+      on.exit(private$remove_empty_cassette())
       self$write_recorded_interactions_to_disk()
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
@@ -740,5 +751,23 @@ Cassette <- R6::R6Class(
       webmockr::build_crul_response(req, resp)
     }
 
+  ),
+
+  private = list(
+    remove_empty_cassette = function() {
+      if (!any(nzchar(readLines(self$file())))) {
+        unlink(self$file(), force = TRUE)
+        if (self$warn_on_empty_cassette)
+          warning(empty_cassette_message(self$name), call. = FALSE)
+      }
+    }
   )
 )
+
+empty_cassette_message <- function(x) {
+  c(
+    sprintf("Empty cassette (%s) deleted; consider the following:\n", x),
+    " - If an error occurred resolve that first, then check:\n",
+    " - vcr only supports crul & httr; requests w/ curl, download.file, etc. are not supported\n",
+    " - If you are using crul/httr, are you sure you made an HTTP request?\n")
+}

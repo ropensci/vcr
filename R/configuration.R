@@ -117,6 +117,10 @@
 #' be recorded back to file. Default: `FALSE`
 #' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
 #' Default: `FALSE`
+#' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an 
+#' empty cassette is detected? Empty cassettes are claned up (deleted) either
+#' way. This option only determines whether a warning is thrown or not.
+#' Default: `FALSE`
 #'
 #' @examples
 #' vcr_configure(dir = tempdir())
@@ -218,7 +222,8 @@ VCRConfig <- R6::R6Class(
     .filter_response_headers  = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL,
-    .quiet = NULL
+    .quiet = NULL,
+    .warn_on_empty_cassette = NULL
   ),
 
   active = list(
@@ -347,6 +352,10 @@ VCRConfig <- R6::R6Class(
     quiet = function(value) {
       if (missing(value)) return(private$.quiet)
       private$.quiet <- assert(value, "logical")
+    },
+    warn_on_empty_cassette = function(value) {
+      if (missing(value)) return(private$.warn_on_empty_cassette)
+      private$.warn_on_empty_cassette <- assert(value, "logical")
     }
   ),
 
@@ -377,7 +386,8 @@ VCRConfig <- R6::R6Class(
       filter_response_headers  = NULL,
       write_disk_path = NULL,
       verbose_errors = FALSE,
-      quiet = FALSE
+      quiet = FALSE,
+      warn_on_empty_cassette = TRUE
     ) {
       self$dir <- dir
       self$record <- record
@@ -405,6 +415,7 @@ VCRConfig <- R6::R6Class(
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
       self$quiet <- quiet
+      self$warn_on_empty_cassette <- warn_on_empty_cassette
     },
 
     # reset all settings to defaults

@@ -121,6 +121,9 @@ be recorded back to file}
 
 \item{\code{quiet}}{(logical) Suppress any messages from both vcr and webmockr}
 
+\item{\code{warn_on_empty_cassette}}{(logical) Should a warning be thrown when an
+empty cassette is detected?}
+
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{cassette_opts}}{(list) various cassette options}
@@ -182,7 +185,8 @@ Create a new \code{Cassette} object
   exclusive,
   preserve_exact_body_bytes,
   clean_outdated_http_interactions,
-  quiet
+  quiet,
+  warn_on_empty_cassette
 )}\if{html}{\out{</div>}}
 }
 
@@ -234,6 +238,11 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 be recorded back to file. Default: \code{FALSE}}
 
 \item{\code{quiet}}{(logical) Should messages be suppressed? Default: \code{FALSE}}
+
+\item{\code{warn_on_empty_cassette}}{(logical) Should a warning be thrown when an
+empty cassette is detected? Empty cassettes are claned up (deleted) either
+way. This option only determines whether a warning is thrown or not.
+Default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }

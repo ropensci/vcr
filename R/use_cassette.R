@@ -1,8 +1,3 @@
-empty_cassette_message <- c("Empty cassette detected; consider the following:\n",
-  " - If an error occurred resolve that first, then check:\n",
-  " - vcr only supports crul & httr; requests w/ curl, download.file, etc. are not supported\n",
-  " - If you are using crul/httr, are you sure you made an HTTP request?\n")
-
 #' Use a cassette to record HTTP requests
 #'
 #' @export
@@ -46,6 +41,10 @@ empty_cassette_message <- c("Empty cassette detected; consider the following:\n"
 #' interactions be recorded back to file? default: `FALSE`
 #' @param quiet (logical) Suppress any messages from both vcr and webmockr.
 #' Default: `FALSE`
+#' @param warn_on_empty_cassette (logical) Should a warning be thrown when an 
+#' empty cassette is detected? Empty cassettes are claned up (deleted) either
+#' way. This option only determines whether a warning is thrown or not.
+#' Default: `FALSE`
 #'
 #' @details A run down of the family of top level \pkg{vcr} functions
 #'
@@ -77,6 +76,10 @@ empty_cassette_message <- c("Empty cassette detected; consider the following:\n"
 #' we return with a useful message, and since we use `on.exit()`
 #' the cassette is still ejected even though there was an error,
 #' but you don't get an object back
+#' - whenever an empty cassette (a yml/json file) is found, we delete it
+#' before returning from the `use_cassette()` function call. we achieve
+#' this via use of `on.exit()` so an empty cassette is deleted even
+#' if there was an error in the code block you passed in
 #'
 #' @section Cassettes on disk:
 #' Note that _"eject"_ only means that the R session cassette is no longer
@@ -163,7 +166,8 @@ use_cassette <- function(name, ...,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
-  quiet = FALSE) {
+  quiet = FALSE,
+  warn_on_empty_cassette = TRUE) {
 
   cassette <- insert_cassette(name,
     record = record,
@@ -175,17 +179,15 @@ use_cassette <- function(name, ...,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions,
-    quiet = quiet
+    quiet = quiet,
+    warn_on_empty_cassette = warn_on_empty_cassette
   )
   if (is.null(cassette)) {
     force(...)
     return(NULL)
   }
   on.exit(cassette$eject())
-  # warn on empty cassette
-  on.exit(check_empty_cassette(cassette), add = TRUE)
   cassette$call_block(...)
-  # force(...)
   return(cassette)
 }
 

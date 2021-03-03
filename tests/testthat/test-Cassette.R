@@ -7,7 +7,8 @@ test_that("Cassette", {
   expect_is(cl,  "Cassette")
 
   # eject cassette
-  cl$eject()
+  ## expect warning from empty cassette checker 
+  expect_warning(cl$eject())
 })
 
 test_that("Cassette fails well", {
@@ -64,7 +65,8 @@ test_that("make_http_interaction works as expected", {
   expect_is(bb$response$body, "raw")
 
   # eject cassette
-  zz$eject()
+  ## expect warning from empty cassette checker
+  expect_warning(zz$eject())
 })
 
 

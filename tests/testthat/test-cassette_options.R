@@ -10,7 +10,12 @@ test_that("Cassette options", {
   expect_true(cl$clean_outdated_http_interactions)
 
   # eject cassette
-  cl$eject()
+  ## expect warning from empty cassette checker
+  expect_warning(cl$eject())
+
+  cl <- Cassette$new(name = "stuff2", warn_on_empty_cassette = FALSE)
+  ## expect NO warning when warn_on_empty_cassette=FALSE
+  expect_warning(cl$eject(), NA)
 })
 
 # cleanup
