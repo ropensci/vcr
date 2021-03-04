@@ -1,3 +1,12 @@
+trimquotes <- function(x, y) {
+  pattern <- "^\"|\"$|^'|'$"
+  if (grepl(pattern, x)) {
+    msg <- "filter_sensitive_data: leading & trailing quotes trimmed from '"
+    warning(paste0(msg, y, "'"), call.=FALSE)
+  }
+  return(gsub(pattern, "", x))
+}
+
 # filter_sensitive_data replacement
 # FIXME: eventually move to higher level so that this happens
 #   regardless of serializer
@@ -15,7 +24,8 @@ sensitive_remove <- function(x) {
   if (!is.null(fsd)) {
     for (i in seq_along(fsd)) {
       if (nchar(fsd[[i]]) > 0) {
-        x <- gsub(fsd[[i]], names(fsd)[i], x, fixed = TRUE)
+        strg <- trimquotes(fsd[[i]], names(fsd)[i])
+        x <- gsub(strg, names(fsd)[i], x, fixed = TRUE)
       }
     }
   }
