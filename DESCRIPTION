@@ -8,7 +8,7 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 0.6.3.91
+Version: 0.6.3.92
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")),
@@ -36,7 +36,8 @@ Imports:
     urltools,
     yaml,
     R6,
-    base64enc
+    base64enc,
+    here
 Suggests:
     roxygen2 (>= 7.0.2),
     jsonlite,
