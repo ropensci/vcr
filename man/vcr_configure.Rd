@@ -86,6 +86,11 @@ A character vector of response headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to
 \code{filter_sensitive_data} instructing vcr with what value to replace the
 real value of the response header.
+\item \code{filter_query_parameters} (named list) query parameters to filter.
+A character vector of query parameters to remove - the query parameters
+will not be recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the query parameter.
 }
 }
 

@@ -69,6 +69,11 @@
 #' recorded to disk. Alternatively, a named list similar to
 #' `filter_sensitive_data` instructing vcr with what value to replace the
 #' real value of the response header.
+#' - `filter_query_parameters` (named list) query parameters to filter.
+#' A character vector of query parameters to remove - the query parameters
+#' will not be recorded to disk. Alternatively, a named list similar to
+#' `filter_sensitive_data` instructing vcr with what value to replace the
+#' real value of the query parameter.
 #' 
 #' ## Errors
 #' 
@@ -227,6 +232,7 @@ VCRConfig <- R6::R6Class(
     .filter_sensitive_data_regex = NULL,
     .filter_request_headers  = NULL,
     .filter_response_headers  = NULL,
+    .filter_query_parameters  = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL,
     .quiet = NULL,
@@ -350,6 +356,11 @@ VCRConfig <- R6::R6Class(
       if (is.character(value)) value <- as.list(value)
       private$.filter_response_headers <- assert(value, "list")
     },
+    filter_query_parameters = function(value) {
+      if (missing(value)) return(private$.filter_query_parameters)
+      if (is.character(value)) value <- as.list(value)
+      private$.filter_query_parameters <- assert(value, "list")
+    },
     write_disk_path = function(value) {
       if (missing(value)) return(private$.write_disk_path)
       private$.write_disk_path <- value
@@ -396,6 +407,7 @@ VCRConfig <- R6::R6Class(
       filter_sensitive_data_regex = NULL,
       filter_request_headers  = NULL,
       filter_response_headers  = NULL,
+      filter_query_parameters = NULL,
       write_disk_path = NULL,
       verbose_errors = FALSE,
       quiet = FALSE,
@@ -425,6 +437,7 @@ VCRConfig <- R6::R6Class(
       self$filter_sensitive_data_regex <- filter_sensitive_data_regex
       self$filter_request_headers  = filter_request_headers
       self$filter_response_headers  = filter_response_headers
+      self$filter_query_parameters = filter_query_parameters
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
       self$quiet <- quiet

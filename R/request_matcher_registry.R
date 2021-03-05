@@ -45,7 +45,7 @@ RequestMatcherRegistry <- R6::R6Class(
     #' @note r1=from new request; r2=from recorded interaction
     register_built_ins = function() {
       self$register("method", function(r1, r2) r1$method == r2$method)
-      self$register("uri", function(r1, r2) r1$uri == r2$uri)
+      self$register("uri", function(r1, r2) query_params_remove_str(r1$uri) == r2$uri)
       self$register("body", function(r1, r2) identical(r1$body, r2$body))
       self$register('headers', function(r1, r2) identical(r1$headers, r2$headers))
       self$register("host", function(r1, r2) identical(r1$host, r2$host))
