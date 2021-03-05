@@ -119,8 +119,6 @@ bytes of the requests and responses}
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file}
 
-\item{\code{quiet}}{(logical) Suppress any messages from both vcr and webmockr}
-
 \item{\code{warn_on_empty_cassette}}{(logical) Should a warning be thrown when an
 empty cassette is detected?}
 
@@ -185,7 +183,6 @@ Create a new \code{Cassette} object
   exclusive,
   preserve_exact_body_bytes,
   clean_outdated_http_interactions,
-  quiet,
   warn_on_empty_cassette
 )}\if{html}{\out{</div>}}
 }
@@ -236,8 +233,6 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
-
-\item{\code{quiet}}{(logical) Should messages be suppressed? Default: \code{FALSE}}
 
 \item{\code{warn_on_empty_cassette}}{(logical) Should a warning be thrown when an
 empty cassette is detected? Empty cassettes are claned up (deleted) either

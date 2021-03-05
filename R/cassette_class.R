@@ -104,8 +104,6 @@ Cassette <- R6::R6Class(
     #' @field clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file
     clean_outdated_http_interactions = FALSE,
-    #' @field quiet (logical) Suppress any messages from both vcr and webmockr
-    quiet = FALSE,
     #' @field warn_on_empty_cassette (logical) Should a warning be thrown when an
     #' empty cassette is detected?
     warn_on_empty_cassette = TRUE,
@@ -146,7 +144,6 @@ Cassette <- R6::R6Class(
     #' in [vcr_configure()]. Default: `FALSE`
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
-    #' @param quiet (logical) Should messages be suppressed? Default: `FALSE`
     #' @param warn_on_empty_cassette (logical) Should a warning be thrown when an 
     #' empty cassette is detected? Empty cassettes are claned up (deleted) either
     #' way. This option only determines whether a warning is thrown or not.
@@ -157,7 +154,7 @@ Cassette <- R6::R6Class(
       re_record_interval, tag, tags, update_content_length_header,
       allow_playback_repeats, allow_unused_http_interactions,
       exclusive, preserve_exact_body_bytes,
-      clean_outdated_http_interactions, quiet, warn_on_empty_cassette) {
+      clean_outdated_http_interactions, warn_on_empty_cassette) {
 
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
@@ -196,9 +193,6 @@ Cassette <- R6::R6Class(
       }
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
-      }
-      if (!missing(quiet)) {
-        self$quiet <- quiet
       }
       if (!missing(warn_on_empty_cassette)) {
         self$warn_on_empty_cassette <- warn_on_empty_cassette
@@ -355,9 +349,9 @@ Cassette <- R6::R6Class(
       self$write_recorded_interactions_to_disk()
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
-      if (!self$quiet) message("ejecting cassette: ", self$name)
+      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
       # disable webmockr
-      webmockr::disable(quiet=self$quiet)
+      webmockr::disable(quiet=vcr_c$quiet)
       # set current casette name to NULL
       vcr__env$current_cassette <- NULL
       # return self

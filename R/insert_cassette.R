@@ -45,7 +45,6 @@ insert_cassette <- function(name,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
-  quiet = FALSE,
   warn_on_empty_cassette = FALSE) {
 
   check_cassette_name(name)
@@ -57,10 +56,8 @@ insert_cassette <- function(name,
     }
 
     # enable webmockr
-    webmockr::enable(quiet=quiet)
-    if (!quiet) webmockr::webmockr_allow_net_connect()
-    # FIXME: temporary attempt to make it work: turn on mocking for httr
-    # webmockr::httr_mock()
+    webmockr::enable(quiet=vcr_c$quiet)
+    if (!vcr_c$quiet) webmockr::webmockr_allow_net_connect()
 
     # record cassete name for use in logging, etc.
     vcr__env$current_cassette <- name
@@ -76,7 +73,6 @@ insert_cassette <- function(name,
       preserve_exact_body_bytes = preserve_exact_body_bytes %||% vcr_c$preserve_exact_body_bytes,
       re_record_interval = re_record_interval %||% vcr_c$re_record_interval,
       clean_outdated_http_interactions = clean_outdated_http_interactions %||% vcr_c$clean_outdated_http_interactions,
-      quiet = quiet %||% vcr_c$quiet,
       warn_on_empty_cassette = warn_on_empty_cassette %||% vcr_c$warn_on_empty_cassette,
       tag = NULL,
       tags = NULL,
