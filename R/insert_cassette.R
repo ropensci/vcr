@@ -44,8 +44,7 @@ insert_cassette <- function(name,
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
-  warn_on_empty_cassette = FALSE) {
+  clean_outdated_http_interactions = NULL) {
 
   check_cassette_name(name)
   vcr_env_handle()
@@ -73,7 +72,6 @@ insert_cassette <- function(name,
       preserve_exact_body_bytes = preserve_exact_body_bytes %||% vcr_c$preserve_exact_body_bytes,
       re_record_interval = re_record_interval %||% vcr_c$re_record_interval,
       clean_outdated_http_interactions = clean_outdated_http_interactions %||% vcr_c$clean_outdated_http_interactions,
-      warn_on_empty_cassette = warn_on_empty_cassette %||% vcr_c$warn_on_empty_cassette,
       tag = NULL,
       tags = NULL,
       allow_unused_http_interactions = NULL,

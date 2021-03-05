@@ -15,8 +15,7 @@ use_cassette(
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
-  warn_on_empty_cassette = TRUE
+  clean_outdated_http_interactions = NULL
 )
 }
 \arguments{
@@ -67,11 +66,6 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
-
-\item{warn_on_empty_cassette}{(logical) Should a warning be thrown when an
-empty cassette is detected? Empty cassettes are claned up (deleted) either
-way. This option only determines whether a warning is thrown or not.
-Default: \code{FALSE}}
 }
 \value{
 an object of class \code{Cassette}

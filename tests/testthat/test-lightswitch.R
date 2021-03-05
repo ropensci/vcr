@@ -29,6 +29,8 @@ test_that("turn_off", {
 # turn back on
 turn_on()
 
+vcr_configure(warn_on_empty_cassette = FALSE)
+
 test_that("turn_off and ignore_cassettes works correctly", {
   # before turned off, insert_cassette works
   z <- insert_cassette("abcd")

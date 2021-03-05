@@ -13,10 +13,13 @@ test_that("Cassette options", {
   ## expect warning from empty cassette checker
   expect_warning(cl$eject())
 
-  cl <- Cassette$new(name = "stuff2", warn_on_empty_cassette = FALSE)
+  vcr_configure(warn_on_empty_cassette = FALSE)
+  cl <- Cassette$new(name = "stuff2")
   ## expect NO warning when warn_on_empty_cassette=FALSE
   expect_warning(cl$eject(), NA)
 })
 
 # cleanup
 unlink(file.path(vcr_configuration()$dir, "stuff.yml"))
+
+vcr_configure_reset()

@@ -104,9 +104,6 @@ Cassette <- R6::R6Class(
     #' @field clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file
     clean_outdated_http_interactions = FALSE,
-    #' @field warn_on_empty_cassette (logical) Should a warning be thrown when an
-    #' empty cassette is detected?
-    warn_on_empty_cassette = TRUE,
     #' @field to_return (logical) internal use
     to_return = NULL,
     #' @field cassette_opts (list) various cassette options
@@ -144,17 +141,13 @@ Cassette <- R6::R6Class(
     #' in [vcr_configure()]. Default: `FALSE`
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
-    #' @param warn_on_empty_cassette (logical) Should a warning be thrown when an 
-    #' empty cassette is detected? Empty cassettes are claned up (deleted) either
-    #' way. This option only determines whether a warning is thrown or not.
-    #' Default: `FALSE`
     #' @return A new `Cassette` object
     initialize = function(
       name, record, serialize_with, persist_with, match_requests_on,
       re_record_interval, tag, tags, update_content_length_header,
       allow_playback_repeats, allow_unused_http_interactions,
       exclusive, preserve_exact_body_bytes,
-      clean_outdated_http_interactions, warn_on_empty_cassette) {
+      clean_outdated_http_interactions) {
 
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
@@ -193,9 +186,6 @@ Cassette <- R6::R6Class(
       }
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
-      }
-      if (!missing(warn_on_empty_cassette)) {
-        self$warn_on_empty_cassette <- warn_on_empty_cassette
       }
       self$make_args()
       if (!file.exists(self$manfile)) self$write_metadata()
@@ -751,7 +741,7 @@ Cassette <- R6::R6Class(
     remove_empty_cassette = function() {
       if (!any(nzchar(readLines(self$file())))) {
         unlink(self$file(), force = TRUE)
-        if (self$warn_on_empty_cassette)
+        if (vcr_c$warn_on_empty_cassette)
           warning(empty_cassette_message(self$name), call. = FALSE)
       }
     }

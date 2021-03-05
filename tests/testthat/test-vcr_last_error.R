@@ -47,6 +47,6 @@ test_that("vcr_last_error works: casssette in use", {
 })
 
 # reset configuration
-eject_cassette()
+suppressWarnings(eject_cassette())
 unlink(file.path(vcr_configuration()$dir, "bunny.yml"))
 vcr_configure_reset()

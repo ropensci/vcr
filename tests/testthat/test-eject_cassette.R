@@ -1,5 +1,7 @@
 context("eject_cassette")
 
+vcr_configure(warn_on_empty_cassette = FALSE)
+
 test_that("eject_cassette", {
   # eject without giving name, ejects current cassette
   invisible(insert_cassette("foobar78"))

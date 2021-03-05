@@ -44,6 +44,8 @@ test_that("insert_cassette fails well", {
 
 unlink(list.files(vcr_c$dir, pattern = "newbar", full.names = TRUE))
 
+vcr_configure(warn_on_empty_cassette = FALSE)
+
 context("insert_cassette works")
 test_that("insert_cassette works as expected", {
   aa <- suppressMessages(insert_cassette("foobar3"))

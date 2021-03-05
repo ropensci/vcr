@@ -1,7 +1,7 @@
 context("UnhandledHTTPRequestError")
 
 dir <- tempdir()
-invisible(vcr_configure(dir = dir))
+invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 
 request <- Request$new(
   "post", "https://eu.httpbin.org/post?a=5", "", list(foo = "bar"))
@@ -55,7 +55,8 @@ invisible(
     list(
       "<<foo_bar_key>>" = Sys.getenv("FOO_BAR"),
       "<<hello_world_key>>" = Sys.getenv("HELLO_WORLD")
-    )
+    ),
+    warn_on_empty_cassette = FALSE
   )
 )
 url <- paste0("https://eu.httpbin.org/get?api_key=", 
@@ -97,7 +98,9 @@ Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
 dir <- tempdir()
 invisible(
   vcr_configure(dir = dir, filter_sensitive_data =
-    list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")))
+    list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
+    warn_on_empty_cassette = FALSE
+  )
 )
 url <- "https://eu.httpbin.org/get"
 request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
@@ -137,7 +140,8 @@ invisible(
     list(
       "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
       "<<hello_mars_key>>" = Sys.getenv("HELLO_MARS")
-    )
+    ),
+    warn_on_empty_cassette = FALSE
   )
 )
 url <- paste0("https://eu.httpbin.org/get?api_key=", Sys.getenv("HELLO_MARS"))

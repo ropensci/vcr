@@ -119,9 +119,6 @@ bytes of the requests and responses}
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file}
 
-\item{\code{warn_on_empty_cassette}}{(logical) Should a warning be thrown when an
-empty cassette is detected?}
-
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{cassette_opts}}{(list) various cassette options}
@@ -182,8 +179,7 @@ Create a new \code{Cassette} object
   allow_unused_http_interactions,
   exclusive,
   preserve_exact_body_bytes,
-  clean_outdated_http_interactions,
-  warn_on_empty_cassette
+  clean_outdated_http_interactions
 )}\if{html}{\out{</div>}}
 }
 
@@ -233,11 +229,6 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
-
-\item{\code{warn_on_empty_cassette}}{(logical) Should a warning be thrown when an
-empty cassette is detected? Empty cassettes are claned up (deleted) either
-way. This option only determines whether a warning is thrown or not.
-Default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }
