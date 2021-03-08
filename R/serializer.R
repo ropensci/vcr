@@ -54,7 +54,7 @@ Serializer <- R6::R6Class("Serializer",
               b64dec_r2c
             }
             z$response$body$encoding <-
-              suppressMessages(encoding_guess(z$response$body$string, TRUE))
+              sup_mssg(vcr_c$quiet, encoding_guess(z$response$body$string, TRUE))
           }
           return(z)
         })

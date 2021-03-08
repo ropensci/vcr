@@ -68,7 +68,7 @@ prep_interaction <- function(x, file, bytes) {
         status = x$response$status,
         headers = dedup_keys(x$response$headers),
         body = list(
-          encoding = encoding_guess(x$response$body, bytes),
+          encoding = sup_mssg(vcr_c$quiet, encoding_guess(x$response$body, bytes)),
           file = x$response$disk,
           string = body
         )

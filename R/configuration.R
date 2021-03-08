@@ -127,7 +127,7 @@
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
 #' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
-#' Default: `FALSE`
+#' Default: `TRUE`
 #' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an 
 #' empty cassette is detected? Empty cassettes are claned up (deleted) either
 #' way. This option only determines whether a warning is thrown or not.
@@ -415,7 +415,7 @@ VCRConfig <- R6::R6Class(
       filter_query_parameters = NULL,
       write_disk_path = NULL,
       verbose_errors = FALSE,
-      quiet = FALSE,
+      quiet = TRUE,
       warn_on_empty_cassette = TRUE
     ) {
       self$dir <- dir

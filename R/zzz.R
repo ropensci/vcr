@@ -121,3 +121,9 @@ check_record_mode <- function(x) {
   }
   x
 }
+
+sup_cond <- function(quiet, fun, cond = suppressMessages) {
+  if (quiet) cond(fun) else force(fun)
+}
+sup_mssg <- function(quiet, fun) sup_cond(quiet, fun)
+sup_warn <- function(quiet, fun) sup_cond(quiet, fun, suppressWarnings)

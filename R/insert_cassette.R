@@ -56,7 +56,7 @@ insert_cassette <- function(name,
 
     # enable webmockr
     webmockr::enable(quiet=vcr_c$quiet)
-    if (!vcr_c$quiet) webmockr::webmockr_allow_net_connect()
+    sup_mssg(vcr_c$quiet, webmockr::webmockr_allow_net_connect())
 
     # record cassete name for use in logging, etc.
     vcr__env$current_cassette <- name
