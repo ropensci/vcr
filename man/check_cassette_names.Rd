@@ -4,7 +4,11 @@
 \alias{check_cassette_names}
 \title{Check cassette names}
 \usage{
-check_cassette_names(pattern = "test-", behavior = "stop")
+check_cassette_names(
+  pattern = "test-",
+  behavior = "stop",
+  allowed_duplicates = NULL
+)
 }
 \arguments{
 \item{pattern}{(character) regex pattern for file paths to check.
@@ -14,6 +18,8 @@ this is done inside of \verb{tests/testthat/}. default: "test-"}
 we use \code{immediate.=TRUE} so the warning happens at the top of your
 tests rather than you seeing it after tests have run (as would happen
 by default)}
+
+\item{allowed_duplicates}{(character) cassette names that can be duplicated}
 }
 \description{
 Check cassette names
