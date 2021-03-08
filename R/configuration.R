@@ -359,6 +359,11 @@ VCRConfig <- R6::R6Class(
     filter_query_parameters = function(value) {
       if (missing(value)) return(private$.filter_query_parameters)
       if (is.character(value)) value <- as.list(value)
+      lapply(value, function(w) {
+        if (!length(w) %in% 0:2) 
+          stop("filter query values must be of length 1 or 2",
+            call. = FALSE)
+      })
       private$.filter_query_parameters <- assert(value, "list")
     },
     write_disk_path = function(value) {

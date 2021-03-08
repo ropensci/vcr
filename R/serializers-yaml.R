@@ -46,5 +46,6 @@ YAML <- R6::R6Class("YAML",
 yaml_load_desecret <- function(path) {
   str <- sensitive_put_back(readLines(path, encoding = "UTF-8"))
   tmp <- yaml::yaml.load(str)
+  tmp <- query_params_put_back(tmp)
   tmp
 }

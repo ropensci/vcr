@@ -1,5 +1,3 @@
-sac <- new.env()
-
 write_yaml <- function(x, file, bytes) {
   write_header(file)
   lapply(x, write_interactions, file = file, bytes = bytes)
@@ -86,7 +84,6 @@ prep_interaction <- function(x, file, bytes) {
 # param bytes: logical, whether to preserve exact bytes or not
 write_interactions <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
-  sac$z <- z
   z <- headers_remove(z)
   z <- query_params_remove(z)
   tmp <- yaml::as.yaml(z)
