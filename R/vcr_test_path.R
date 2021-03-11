@@ -15,7 +15,6 @@
 #' }
 # Adapted from https://github.com/r-lib/testthat/blob/45a9c705402bd51af29b9d999e587ba789f6203f/R/test-path.R#L1
 vcr_test_path <- function(...) {
-
   if (any(!nzchar(...))) {
     stop("Please use non empty path elements.")
   }
@@ -24,16 +23,12 @@ vcr_test_path <- function(...) {
       !isTRUE(getOption("testthat_interactive"))) {
     if (missing(...)) {
       "../."
+    } else {
+      here::here("..", ...)
     }
-    else {
-      file.path("..", ...)
-    }
-  }
-  else {
-    base <- "tests"
-    if (!dir.exists(base)) {
-      stop("Can't find `tests` in current directory.")
-    }
-    file.path(base, ...)
+  } else {
+    path <- here::here("tests", ...)
+    if (!dir.exists(path)) message("could not find ", path, "; creating it")
+    path
   }
 }

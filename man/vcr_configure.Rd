@@ -66,11 +66,16 @@ through
 }
 
 We replace all instances of \code{thing_to_replace} with
-\code{thing_to_replace_it_with}. Before recording (writing to a cassette) we do
+\code{thing_to_replace_it_with}. Uses \code{\link[=gsub]{gsub()}} internally, with \code{fixed=TRUE};
+so does exact matches. Before recording (writing to a cassette) we do
 the replacement and then when reading from the cassette we do the reverse
 replacement to get back to the real data. Before record replacement happens
 in internal function \code{write_interactions()}, while before playback
 replacement happens in internal function \code{YAML$deserialize()}
+\item \code{filter_sensitive_data_regex} named list of values to replace. Follows
+\code{filter_sensitive_data} format, except uses \code{fixed=FALSE} in the \code{\link[=gsub]{gsub()}}
+function call; this means that the value in \code{thing_to_replace} is a regex
+pattern.
 \item \code{filter_request_headers} (character/list) \strong{request} headers to filter.
 A character vector of request headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to
@@ -81,6 +86,11 @@ A character vector of response headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to
 \code{filter_sensitive_data} instructing vcr with what value to replace the
 real value of the response header.
+\item \code{filter_query_parameters} (named list) query parameters to filter.
+A character vector of query parameters to remove - the query parameters
+will not be recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the query parameter.
 }
 }
 
@@ -145,6 +155,12 @@ to read? Or remove newlines to save disk space? default: FALSE
 re-recorded at the given interval, in seconds.
 \item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}
+\item \code{quiet} (logical) Suppress any messages from both vcr and webmockr.
+Default: \code{TRUE}
+\item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
+empty cassette is detected? Empty cassettes are claned up (deleted) either
+way. This option only determines whether a warning is thrown or not.
+Default: \code{FALSE}
 \item \code{record_separate_redirects} (logical) If http redirects are
 encountered in http requests, should we record the intermediate requests?
 If \code{FALSE}, only the final response with a non-3xx series status code

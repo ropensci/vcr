@@ -236,3 +236,55 @@ vcr_configure(
   filter_response_headers = list(server = "fake-server")
 )
 ```
+
+### filter_query_parameters
+
+Expects a character vector or a named list. If a character vector, or any
+unnamed element in a list, the query parameter is removed (both parameter
+name and value) before being written to the cassette.
+
+If a named list is passed, the name is the query parameter name and the
+value is the value with which to replace the real value.
+
+A response header you set to remove or replace is only removed/replaced
+from the cassette, and any requests using a cassette, but will still be in
+your crul or httr response objects on a real request that creates the
+cassette.
+
+Beware of your `match_requests_on` option when using this filter. If you
+filter out a query parameter it's probably a bad idea to match on `query`
+given that there is no way for vcr to restore the exact http request
+from your cassette after one or more query parameters is removed or changed.
+One way you could filter a query parameter and still match on query or 
+at least on the complete uri is to use replacement behavior (a named list),
+but instead of `list(a="b")` use two values `list(a=c("b","c"))`, where
+"c" is the string to be stored in the cassette. You could of course replace
+those values with values from environment variables so that you obscure 
+the real values if your code is public.
+
+Examples:
+
+```r
+# completely drop parameter "user"
+vcr_configure(
+  filter_query_parameters = "user"
+)
+# completely drop parameters "user" and "api_key"
+vcr_configure(
+  filter_query_parameters = c("user", "api_key")
+)
+# replace the value of parameter "api_key" with "fake-api-key"
+# NOTE: in this case there's no way to put back any value on
+# subsequent requests, so we have to match by dropping this
+# parameter value before comparing URIs
+vcr_configure(
+  filter_query_parameters = list(api_key = "fake-api-key")
+)
+# replace the value found at Sys.getenv("MY_API_KEY") of parameter
+# "api_key" with the value "foo". When using a cassette on subsequent
+# requests, we can replace "foo" with the value at Sys.getenv("MY_API_KEY")
+# before doing the URI comparison
+vcr_configure(
+  filter_query_parameters = list(api_key = c(Sys.getenv("MY_API_KEY"), "foo"))
+)
+```

@@ -74,6 +74,10 @@
 #' we return with a useful message, and since we use `on.exit()`
 #' the cassette is still ejected even though there was an error,
 #' but you don't get an object back
+#' - whenever an empty cassette (a yml/json file) is found, we delete it
+#' before returning from the `use_cassette()` function call. we achieve
+#' this via use of `on.exit()` so an empty cassette is deleted even
+#' if there was an error in the code block you passed in
 #'
 #' @section Cassettes on disk:
 #' Note that _"eject"_ only means that the R session cassette is no longer
@@ -230,4 +234,10 @@ update_relative <- function(req, path) {
   if (pkg == "crul")
     curl::handle_setopt(req$url$handle, followlocation = 0L)
   return(req)
+}
+
+check_empty_cassette <- function(cas) {
+  if (!any(nzchar(readLines(cas$file())))) {
+    warning(empty_cassette_message, call. = FALSE)
+  }
 }

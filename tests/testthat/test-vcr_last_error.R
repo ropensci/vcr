@@ -1,7 +1,7 @@
 context("vcr_last_error")
 
 dir <- tempdir()
-invisible(vcr_configure(dir = dir))
+invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 vcr__env$last_error <- list()
 
 test_that("vcr_last_error fails well", {
@@ -47,6 +47,6 @@ test_that("vcr_last_error works: casssette in use", {
 })
 
 # reset configuration
-eject_cassette()
+suppressWarnings(eject_cassette())
 unlink(file.path(vcr_configuration()$dir, "bunny.yml"))
 vcr_configure_reset()

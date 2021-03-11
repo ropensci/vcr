@@ -352,12 +352,13 @@ Cassette <- R6::R6Class(
     #' @description ejects the current cassette
     #' @return self
     eject = function() {
+      on.exit(private$remove_empty_cassette())
       self$write_recorded_interactions_to_disk()
       # remove cassette from list of current cassettes
       rm(list = self$name, envir = vcr_cassettes)
-      message("ejecting cassette: ", self$name)
+      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
       # disable webmockr
-      webmockr::disable()
+      webmockr::disable(quiet=vcr_c$quiet)
       # set current casette name to NULL
       vcr__env$current_cassette <- NULL
       # return self
@@ -769,5 +770,23 @@ Cassette <- R6::R6Class(
     #' @param x (list) a response
     #' @return `NULL`
     add_redirect = function(x) self$redirect_pool <- append(self$redirect_pool, list(x))
+  ),
+
+  private = list(
+    remove_empty_cassette = function() {
+      if (!any(nzchar(readLines(self$file())))) {
+        unlink(self$file(), force = TRUE)
+        if (vcr_c$warn_on_empty_cassette)
+          warning(empty_cassette_message(self$name), call. = FALSE)
+      }
+    }
   )
 )
+
+empty_cassette_message <- function(x) {
+  c(
+    sprintf("Empty cassette (%s) deleted; consider the following:\n", x),
+    " - If an error occurred resolve that first, then check:\n",
+    " - vcr only supports crul & httr; requests w/ curl, download.file, etc. are not supported\n",
+    " - If you are using crul/httr, are you sure you made an HTTP request?\n")
+}

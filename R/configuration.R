@@ -47,11 +47,17 @@
 #'   list(thing_to_replace_it_with = thing_to_replace)
 #'   ```
 #'   We replace all instances of `thing_to_replace` with
-#' `thing_to_replace_it_with`. Before recording (writing to a cassette) we do
+#' `thing_to_replace_it_with`. Uses [gsub()] internally, with `fixed=TRUE`; 
+#' so does exact matches. Before recording (writing to a cassette) we do
 #' the replacement and then when reading from the cassette we do the reverse
 #' replacement to get back to the real data. Before record replacement happens
 #' in internal function `write_interactions()`, while before playback
 #' replacement happens in internal function `YAML$deserialize()`
+#' 
+#' - `filter_sensitive_data_regex` named list of values to replace. Follows
+#' `filter_sensitive_data` format, except uses `fixed=FALSE` in the [gsub()]
+#' function call; this means that the value in `thing_to_replace` is a regex
+#' pattern.
 #' 
 #' - `filter_request_headers` (character/list) **request** headers to filter.
 #' A character vector of request headers to remove - the headers will not be
@@ -63,6 +69,11 @@
 #' recorded to disk. Alternatively, a named list similar to
 #' `filter_sensitive_data` instructing vcr with what value to replace the
 #' real value of the response header.
+#' - `filter_query_parameters` (named list) query parameters to filter.
+#' A character vector of query parameters to remove - the query parameters
+#' will not be recorded to disk. Alternatively, a named list similar to
+#' `filter_sensitive_data` instructing vcr with what value to replace the
+#' real value of the query parameter.
 #' 
 #' ## Errors
 #' 
@@ -115,6 +126,12 @@
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
+#' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
+#' Default: `TRUE`
+#' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an 
+#' empty cassette is detected? Empty cassettes are claned up (deleted) either
+#' way. This option only determines whether a warning is thrown or not.
+#' Default: `FALSE`
 #' - `record_separate_redirects` (logical) If http redirects are
 #' encountered in http requests, should we record the intermediate requests?
 #' If `FALSE`, only the final response with a non-3xx series status code
@@ -216,10 +233,14 @@ VCRConfig <- R6::R6Class(
     .log = NULL,
     .log_opts = NULL,
     .filter_sensitive_data = NULL,
+    .filter_sensitive_data_regex = NULL,
     .filter_request_headers  = NULL,
     .filter_response_headers  = NULL,
+    .filter_query_parameters  = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL,
+    .quiet = NULL,
+    .warn_on_empty_cassette = NULL,
     .record_separate_redirects = NULL
   ),
 
@@ -326,6 +347,10 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.filter_sensitive_data)
       private$.filter_sensitive_data <- assert(value, "list")
     },
+    filter_sensitive_data_regex = function(value) {
+      if (missing(value)) return(private$.filter_sensitive_data_regex)
+      private$.filter_sensitive_data_regex <- assert(value, "list")
+    },
     filter_request_headers = function(value) {
       if (missing(value)) return(private$.filter_request_headers)
       if (is.character(value)) value <- as.list(value)
@@ -336,6 +361,16 @@ VCRConfig <- R6::R6Class(
       if (is.character(value)) value <- as.list(value)
       private$.filter_response_headers <- assert(value, "list")
     },
+    filter_query_parameters = function(value) {
+      if (missing(value)) return(private$.filter_query_parameters)
+      if (is.character(value)) value <- as.list(value)
+      lapply(value, function(w) {
+        if (!length(w) %in% 0:2) 
+          stop("filter query values must be of length 1 or 2",
+            call. = FALSE)
+      })
+      private$.filter_query_parameters <- assert(value, "list")
+    },
     write_disk_path = function(value) {
       if (missing(value)) return(private$.write_disk_path)
       private$.write_disk_path <- value
@@ -345,6 +380,14 @@ VCRConfig <- R6::R6Class(
       if (missing(value) && is.null(env_ve)) return(private$.verbose_errors)
       value <- env_ve %||% value
       private$.verbose_errors <- assert(value, "logical")
+    },
+    quiet = function(value) {
+      if (missing(value)) return(private$.quiet)
+      private$.quiet <- assert(value, "logical")
+    },
+    warn_on_empty_cassette = function(value) {
+      if (missing(value)) return(private$.warn_on_empty_cassette)
+      private$.warn_on_empty_cassette <- assert(value, "logical")
     },
     record_separate_redirects = function(value) {
       if (missing(value)) return(private$.record_separate_redirects)
@@ -375,10 +418,14 @@ VCRConfig <- R6::R6Class(
       log = FALSE,
       log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
       filter_sensitive_data = NULL,
+      filter_sensitive_data_regex = NULL,
       filter_request_headers  = NULL,
       filter_response_headers  = NULL,
+      filter_query_parameters = NULL,
       write_disk_path = NULL,
       verbose_errors = FALSE,
+      quiet = TRUE,
+      warn_on_empty_cassette = TRUE,
       record_separate_redirects = FALSE
     ) {
       self$dir <- dir
@@ -402,10 +449,14 @@ VCRConfig <- R6::R6Class(
       self$log <- log
       self$log_opts <- log_opts
       self$filter_sensitive_data <- filter_sensitive_data
+      self$filter_sensitive_data_regex <- filter_sensitive_data_regex
       self$filter_request_headers  = filter_request_headers
       self$filter_response_headers  = filter_response_headers
+      self$filter_query_parameters = filter_query_parameters
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
+      self$quiet <- quiet
+      self$warn_on_empty_cassette <- warn_on_empty_cassette
       self$record_separate_redirects <- record_separate_redirects
     },
 

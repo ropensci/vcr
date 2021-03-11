@@ -102,6 +102,38 @@ test_that("filter_headers/request/replace", {
 
 vcr_configure_reset()
 
+test_that("filter_headers doesn't add a header that doesn't exist", {
+  skip_on_cran()
+
+  library(crul)
+  mydir <- file.path(tempdir(), "filter_headers_doesnt_add_header")
+  vcr_configure_reset()
+  vcr_configure(dir = mydir, filter_request_headers = list("Authorization" = "XXXXXXX"))
+  con1 <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  unlink(file.path(vcr_c$dir, "filterheaders_no_header.yml"))
+  cas_nh1 <- use_cassette(name = "filterheaders_no_header", {
+    res <- con1$get()
+  })
+  cas_nh2 <- use_cassette(name = "filterheaders_no_header", {
+    res2 <- con1$get()
+  })
+
+  # request's don't have Authorization header
+  invisible(lapply(list(res, res2), function(z) {
+    expect_null(z$request_headers$Authorization)
+  }))
+
+  # compare cassettes
+  yaml1 <- yaml::yaml.load_file(cas_nh1$file())
+  yaml2 <- yaml::yaml.load_file(cas_nh2$file())
+  # no Authorization is added
+  expect_null(yaml1$http_interactions[[1]]$request$headers$Authorization)
+  # still no Authorization header in subsequent use_cassette runs
+  expect_null(yaml2$http_interactions[[1]]$request$headers$Authorization)
+})
+
+vcr_configure_reset()
+
 test_that("filter_headers/response/remove", {
   skip_on_cran()
 

@@ -36,6 +36,7 @@ JSON <- R6::R6Class("JSON",
     deserialize = function() {
       str <- sensitive_put_back(readLines(self$path))
       tmp <- jsonlite::fromJSON(str, FALSE)
+      tmp <- query_params_put_back(tmp)
       private$process_body(tmp)
     }
   )

@@ -114,6 +114,10 @@ cassette is ejected
 we return with a useful message, and since we use \code{on.exit()}
 the cassette is still ejected even though there was an error,
 but you don't get an object back
+\item whenever an empty cassette (a yml/json file) is found, we delete it
+before returning from the \code{use_cassette()} function call. we achieve
+this via use of \code{on.exit()} so an empty cassette is deleted even
+if there was an error in the code block you passed in
 }
 }
 
