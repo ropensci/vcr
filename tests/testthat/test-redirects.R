@@ -2,12 +2,18 @@ context("redirects")
 
 test_that("redirects: w/ crul", {
   library(crul)
-  mydir <- file.path(tempdir(), "bunnybear")
+  mydir <- file.path(tempdir(), "bunnybear2")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
   con <- HttpClient$new(url = "https://hb.opencpu.org")
 
   # first recording
+  # cas1 <- insert_cassette("testing2", record_separate_redirects = TRUE)
+  # x1 <- con$get("redirect/3")
+  # cassette <- cas1
+  # cassette$redirect_pool
+  # cassette$record_separate_redirects
+
   cas1 <- use_cassette("testing2", {
     x1 <- con$get("redirect/3")
   }, record_separate_redirects = TRUE)
@@ -43,6 +49,17 @@ test_that("redirects: w/ crul", {
   expect_is(x2, "HttpResponse")
   ## FIXME: this should be: expect_match(x1$url, "/get")
   expect_match(x2$url, "/redirect/3")
+
+
+  ## Works when Location header gives complete URL
+  # above with redirect/3 gives relative URLs in Location header
+  cas3 <- use_cassette("testing22", {
+    x2 <- HttpClient$new("http://bit.ly/2SfWO3K")$get()
+  }, record_separate_redirects = TRUE)
+  cas3_file <- yaml.load_file(cas3$file())
+  expect_length(cas3_file$http_interactions, 2)
+  locs <- unlist(lapply(cas3_file$http_interactions, function(w) w$response$headers$location))
+  expect_equal(locs, "https://www.aect.org/about_us.php")
 
   # cleanup
   unlink(mydir, recursive = TRUE)

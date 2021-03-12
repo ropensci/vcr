@@ -224,12 +224,19 @@ http_client <- function(x) {
 }
 update_relative <- function(req, path) {
   pkg <- http_client(req)
-  tmp <- urltools::url_parse(switch(pkg, crul=req$url$url, httr=req$url))
-  tmp$path <- sub("^/", "", path)
+  next_url <- path
+  if (!grepl('://', path, fixed = TRUE)) {
+    # server <- sub("^(.*://[^/]+).*", "\\1", url)
+    # nexturl <- paste0(server, nexturl)
+    tmp <- urltools::url_parse(switch(pkg, crul=req$url$url, httr=req$url))
+    tmp$path <- sub("^/", "", path)
+    next_url <- urltools::url_compose(tmp)
+  }
+
   if (pkg == "crul") {
-    req$url$url <- urltools::url_compose(tmp)
+    req$url$url <- next_url
   } else {
-    req$url <- urltools::url_compose(tmp)
+    req$url <- next_url
   }
   if (pkg == "crul")
     curl::handle_setopt(req$url$handle, followlocation = 0L)
