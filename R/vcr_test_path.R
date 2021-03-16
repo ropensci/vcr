@@ -5,7 +5,7 @@
 #'
 #' @param ...	Character vectors giving path component. each character string
 #' gets added on to the path, e.g., `vcr_test_path("a", "b")` becomes
-#' `tests/a/b` when run from the root of the package.
+#' `tests/a/b` relative to the root of the package.
 #'
 #' @return A character vector giving the path
 #' @export
@@ -13,22 +13,14 @@
 #' if (interactive()) {
 #' vcr_test_path("fixtures")
 #' }
-# Adapted from https://github.com/r-lib/testthat/blob/45a9c705402bd51af29b9d999e587ba789f6203f/R/test-path.R#L1
 vcr_test_path <- function(...) {
-  if (any(!nzchar(...))) {
-    stop("Please use non empty path elements.")
+  if (missing(...)) stop("Please provide a directory name.")
+  if (any(!nzchar(...))) stop("Please use non empty path elements.")
+  root <- rprojroot::is_r_package
+  path <- root$find_file("tests", ...)
+  if (!dir.exists(path)){
+    message("could not find ", path, "; creating it")
+    dir.create(path)
   }
-
-  if (identical(Sys.getenv("TESTTHAT"), "true") &&
-      !isTRUE(getOption("testthat_interactive"))) {
-    if (missing(...)) {
-      "../."
-    } else {
-      file.path("..", ...)
-    }
-  } else {
-    path <- here::here("tests", ...)
-    if (!dir.exists(path)) message("could not find ", path, "; creating it")
-    path
-  }
+  path
 }

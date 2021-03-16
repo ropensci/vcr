@@ -37,7 +37,7 @@ Imports:
     yaml,
     R6,
     base64enc,
-    here
+    rprojroot
 Suggests:
     roxygen2 (>= 7.0.2),
     jsonlite,
