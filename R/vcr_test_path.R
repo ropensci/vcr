@@ -24,7 +24,7 @@ vcr_test_path <- function(...) {
     if (missing(...)) {
       "../."
     } else {
-      here::here("..", ...)
+       file.path("..", ...)
     }
   } else {
     path <- here::here("tests", ...)
