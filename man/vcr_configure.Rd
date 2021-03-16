@@ -158,7 +158,7 @@ be recorded back to file. Default: \code{FALSE}
 \item \code{quiet} (logical) Suppress any messages from both vcr and webmockr.
 Default: \code{TRUE}
 \item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
-empty cassette is detected? Empty cassettes are claned up (deleted) either
+empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 way. This option only determines whether a warning is thrown or not.
 Default: \code{FALSE}
 }
