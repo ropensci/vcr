@@ -37,7 +37,7 @@ functions/classes and variables. So if you're wondering about why
 a function, class, or variable has a particular name, its derivation 
 can not be found out in this package, for the most part that is.
 
-### Hooks into http clients
+### Hooks into HTTP clients
 
 Perhaps the most fundamental thing about that this package work is
 how it knows what HTTP requests are being made. This stumped me for 
@@ -84,7 +84,7 @@ call `webmockr` is used to create webmockr stubs.
 
 ### How HTTP requests are handled
 
-Within `webmockr`, there's calls to the vcr class `RequestHandler`, which
+Within `webmockr`, there are calls to the vcr class `RequestHandler`, which
 has child classes `RequestHandlerCrul` and `RequestHandlerHttr` for 
 `crul` and `httr`, respectively. These classes determine what to do with
 each HTTP request. The options for each HTTP request include:
