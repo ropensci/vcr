@@ -16,19 +16,12 @@ but not required at all for `vcr` users.
 
 ## Principles
 
-### Mullet design: business up front, party in the back
+### An easy to use interface hides complexity
 
 As described above, `vcr` uses R6 internally, but users interact with
-normal R functions. 
-
-```r
-functions == business
-R6 == party
-```
-
-The business and party could be reversed, depending on your perspective.
-Anyway, the point is that there's two different major sets of code 
-used in `vcr`. 
+normal R functions. Internal functions that are quite complicated are
+largely R6 while exported, simpler functions users interact with are
+normal R functions.
 
 ### Class/function names are inherited from Ruby vcr
 
@@ -103,12 +96,13 @@ recorded to the cassette.
 to be thrown with a message trying to help the user figure out how to
 fix the problem.
 
-If you use vcr logging you'll see these categories in your logs.
+If you use [vcr logging][logging] you'll see these categories in your logs.
 
 ### Serializers
 
 Serializers handle in what format cassettes are written to files on disk.
-The current options are YAML (default) and JSON. 
+The current options are YAML (default) and JSON. YAML was implemented first
+in `vcr` because that's the default option in Ruby vcr.
 
 An R6 class `Serializer` is the parent class for all serializer types;
 `YAML` and `JSON` are both R6 classes that inherit from `Serializer`. Both
@@ -138,8 +132,6 @@ turning on and off `vcr`. See `?lightswitch`.
 
 
 
-## Footnotes
-
 [^1]: The first version of Ruby's vcr was released in February 2010
 https://rubygems.org/gems/vcr/versions/0.1.0. Ruby vcr source code:
 https://github.com/vcr/vcr/
@@ -150,3 +142,4 @@ https://github.com/vcr/vcr/
 [R6]: https://adv-r.hadley.nz/r6.html
 [mp]: https://en.wikipedia.org/wiki/Monkey_patch
 [mpblog]: https://culttt.com/2015/06/17/what-is-monkey-patching-in-ruby/
+[logging]: https://docs.ropensci.org/vcr/articles/debugging.html?q=logging#logging-1
