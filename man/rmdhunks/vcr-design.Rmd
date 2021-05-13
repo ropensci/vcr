@@ -1,8 +1,6 @@
-## Design
-
 This section explains `vcr`'s internal design and architecture.
 
-## Where vcr comes from and why R6
+### Where vcr comes from and why R6
 
 `vcr` was "ported" from the Ruby gem (aka, library) of the same name[^1]. 
 Because it was ported from Ruby, an object-oriented programming language
@@ -14,23 +12,23 @@ most of the internal code in the package uses R6. Thus, familiarity
 with R6 is important for people that may want to contribute to `vcr`,
 but not required at all for `vcr` users.
 
-## Principles
+### Principles
 
-### An easy to use interface hides complexity
+#### An easy to use interface hides complexity
 
 As described above, `vcr` uses R6 internally, but users interact with
 normal R functions. Internal functions that are quite complicated are
 largely R6 while exported, simpler functions users interact with are
 normal R functions.
 
-### Class/function names are inherited from Ruby vcr
+#### Class/function names are inherited from Ruby vcr
 
 Since R `vcr` was ported from Ruby, we kept most of the names of 
 functions/classes and variables. So if you're wondering about why 
 a function, class, or variable has a particular name, its derivation 
 can not be found out in this package, for the most part that is.
 
-### Hooks into HTTP clients
+#### Hooks into HTTP clients
 
 Perhaps the most fundamental thing about that this package work is
 how it knows what HTTP requests are being made. This stumped me for 
@@ -50,11 +48,11 @@ in the `httr` package.
 The actual hooks are not in `vcr`, but in `webmockr`. `vcr` depends on
 `webmockr` for hooking into HTTP clients `httr` and `crul`. 
 
-## Internal classes
+### Internal classes
 
 An overview of some of the more important aspects of vcr.
 
-### Configuration
+#### Configuration
 
 An internal object (`vcr_c`) is created when `vcr` is loaded with
 the default vcr configuration options inside of an R6 class `VCRConfig` -
@@ -64,7 +62,7 @@ You can access `vcr_c` using triple namespace `:::`, though it is not
 intended for general use. Whenever you make calls to `vcr_configure()`
 or other configuration functions, `vcr_c` is affected.
 
-### Cassette class
+#### Cassette class
 
 `Cassette` is an R6 class that handles internals/state for each cassette.
 Each time you run `use_cassette()` this class is used. The class has quite
@@ -75,7 +73,7 @@ of logic, but there's not an easy way to do that with R6.
 Of note in `Cassette` is that when called, within the `initialize()` 
 call `webmockr` is used to create webmockr stubs. 
 
-### How HTTP requests are handled
+#### How HTTP requests are handled
 
 Within `webmockr`, there are calls to the vcr class `RequestHandler`, which
 has child classes `RequestHandlerCrul` and `RequestHandlerHttr` for 
@@ -98,7 +96,7 @@ fix the problem.
 
 If you use [vcr logging][logging] you'll see these categories in your logs.
 
-### Serializers
+#### Serializers
 
 Serializers handle in what format cassettes are written to files on disk.
 The current options are YAML (default) and JSON. YAML was implemented first
@@ -111,21 +109,21 @@ for converting R structures to yaml or json, and converting yaml or json back
 to R structures, respectively.
 
 
-## Environments
+### Environments
 
-### Logging
+#### Logging
 
 An internal environment (`vcr_log_env`) is used when you use logging.
 At this point it only keeps track of one variable - `file` - to be able
 to refer to what file is used for logging across many classes/functions
 that need to write to the log file.
 
-### A bit of housekeeping
+#### A bit of housekeeping
 
 Another internal environment (`vcr__env`) is used to keep track of a
 few items, including the current cassette in use, and the last vcr error.
 
-### Lightswitch
+#### Lightswitch
 
 Another internal environment (`light_switch`) is used to keep track of users
 turning on and off `vcr`. See `?lightswitch`.
