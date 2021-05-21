@@ -8,7 +8,7 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 0.6.5.93
+Version: 0.7.0
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")),
@@ -32,7 +32,7 @@ LinkingTo:
 Imports:
     crul (>= 0.8.4),
     httr,
-    webmockr (>= 0.7.4.94),
+    webmockr (>= 0.8.0),
     urltools,
     yaml,
     R6,
@@ -49,7 +49,6 @@ Suggests:
     cli,
     curl,
     withr
-Remotes: ropensci/webmockr
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
