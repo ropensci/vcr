@@ -93,7 +93,7 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
     dir.create(file.path(dir, "tests/testthat"), recursive = TRUE)
   }
   if (verbose) vcr_cat_info("Looking for testthat.R file or similar")
-  tall <- file.path(dir, sprintf("tests/testthat.R", pkg))
+  tall <- file.path(dir, "tests/testthat.R")
   if (!test_r_file_exists(dir)) {
     if (verbose)
       vcr_cat_line(paste0(crayon::blue("tests/testthat.R:" ), " added"))
