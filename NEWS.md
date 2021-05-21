@@ -1,3 +1,33 @@
+vcr 0.7.0
+=========
+
+### NEW FEATURES
+
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+
+### MINOR IMPROVEMENTS
+
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+
+### BUG FIXES
+
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+* xxx (#xxx)
+
 vcr 0.6.0
 =========
 
