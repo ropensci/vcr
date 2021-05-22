@@ -3,30 +3,32 @@ vcr 0.7.0
 
 ### NEW FEATURES
 
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
+* `check_cassette_names()` gains `allowed_duplicates` parameter to allow duplicate cassette names; we typically advise users not to use duplicate cassette names, but there are cases where you may want to share cassettes across tests (#227)
+* `vcr_configure()` gains `filter_query_parameters` parameter for filtering out query parameters so they don't show up in the recorded request on disk (#212)
+* `use_vcr()`: now sets a mimimum vcr version, which is usually the latest (stable) version on CRAN. You can of course easily remove or change the version requirement yourself after running it (#214)
+* `vcr_configure()` gains `warn_on_empty_cassette` parameter: Should a warning be thrown when an empty cassette is detected? Empty cassettes are cleaned up (deleted) either way (#224) thanks @llrs and @dpprdan
+* `vcr_configure()` gains `quiet` parameter: suppress any messages from both vcr and webmockr (#226) (#25)
+* `vcr_configure()` gains new option `filter_sensitive_data_regex`; now `filter_sensitive_data` is for fixed string matching, while `filter_sensitive_data_regex` is for regex based matching (#222) thanks @tomsing1 for reporting
+* gains package import `rprojroot`
 
 ### MINOR IMPROVEMENTS
 
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
+* `filter_sensitive_data` option now strips leading and trailing single and double quotes from strings before being used IN CASE a user accidentally quotes a secret - logic being that even though a secret may have a single or double quote in it, its very unlikely that it would have both a leading and trailing quote (single or double) (#221)
+
+### Documentation
+
+* new vignette explaining the design of the vcr package (also can be found in the HTTP Testing book) (#232) (#233)
+* no user facing change - but vignettes moved into man/rmdhunks so that they can be pulled into the HTTP Testing book easily (#209) (#216)
+* fix in configuration vignette to clarify a `filter_request_headers` example  (#215) thanks @maelle
+* docs update (#33) (#217)
 
 ### BUG FIXES
 
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
-* xxx (#xxx)
+* `filter_request_headers` was unfortunately adding a request header to the request written to disk when the header did not exist; now fixed (#213)
+* bug in internal function `is_base64()`; `strsplit()` needed `useBytes=TRUE` (#219)
+* `filter_sensitive_data` was not working when strings contained regex characters; fixed, and see also above new config variable for regex specific filtering  (#222) thanks @tomsing1 for reporting
+* `vcr_test_path()` should now correctly set paths (#225) (#228) (#229) (#230)
+
 
 vcr 0.6.0
 =========

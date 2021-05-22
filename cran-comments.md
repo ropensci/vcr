@@ -10,11 +10,11 @@
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 43 reverse dependencies. Summary at https://github.com/ropensci/vcr/actions?query=workflow%3Arevdep Problems were found in checks, but were not related to vcr.
+* I have run R CMD check on the 45 reverse dependencies. Summary at https://github.com/ropensci/vcr/actions?query=workflow%3Arevdep Problems were found in checks, but were not related to vcr.
 
 --------
 
-This version xxxx
+This version fixes many bugs and adds some new features.
 
 Thanks very much,
 Scott Chamberlain
