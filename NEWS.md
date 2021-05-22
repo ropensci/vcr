@@ -1,4 +1,4 @@
-vcr 0.7.0
+vcr 1.0.0
 =========
 
 ### NEW FEATURES
