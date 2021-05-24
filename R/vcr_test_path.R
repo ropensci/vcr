@@ -16,7 +16,7 @@
 vcr_test_path <- function(...) {
   if (missing(...)) stop("Please provide a directory name.")
   if (any(!nzchar(...))) stop("Please use non empty path elements.")
-  root <- rprojroot::is_r_package
+  root <- rprojroot::has_dir("tests")
   path <- root$find_file("tests", ...)
   if (!dir.exists(path)){
     message("could not find ", path, "; creating it")
