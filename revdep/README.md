@@ -1,22 +1,22 @@
 # Platform
 
-|field    |value                                       |
-|:--------|:-------------------------------------------|
-|version  |R version 3.6.3 Patched (2020-02-29 r77909) |
-|os       |macOS Catalina 10.15.3                      |
-|system   |x86_64, darwin15.6.0                        |
-|ui       |X11                                         |
-|language |(EN)                                        |
-|collate  |en_US.UTF-8                                 |
-|ctype    |en_US.UTF-8                                 |
-|tz       |US/Pacific                                  |
-|date     |2020-03-25                                  |
+|field    |value                        |
+|:--------|:----------------------------|
+|version  |R version 4.1.0 (2021-05-18) |
+|os       |macOS Big Sur 10.16          |
+|system   |x86_64, darwin17.0           |
+|ui       |X11                          |
+|language |(EN)                         |
+|collate  |en_US.UTF-8                  |
+|ctype    |en_US.UTF-8                  |
+|tz       |US/Pacific                   |
+|date     |2021-05-31                   |
 
 # Dependencies
 
 |package |old   |new   |Δ  |
 |:-------|:-----|:-----|:--|
-|vcr     |0.5.0 |0.5.4 |*  |
+|vcr     |1.0.0 |1.0.2 |*  |
 
 # Revdeps
 
