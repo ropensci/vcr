@@ -10,7 +10,7 @@
 
 ## Reverse dependencies
 
-* I have run R CMD check on the 44 reverse dependencies. Summary at https://github.com/ropensci/vcr/actions?query=workflow%3Arevdep Problems were found in checks, but were not related to vcr.
+* I have run R CMD check on the 47 reverse dependencies. Summary at https://github.com/ropensci/vcr/actions?query=workflow%3Arevdep Problems were found in checks, but were not related to vcr.
 
 --------
 
