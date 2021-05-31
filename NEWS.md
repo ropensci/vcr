@@ -1,3 +1,10 @@
+vcr 1.0.2
+=========
+
+### BUG FIXES
+
+* fix to `vcr_test_path()` to find root package path correctly (#235) (#236)
+
 vcr 1.0.0
 =========
 

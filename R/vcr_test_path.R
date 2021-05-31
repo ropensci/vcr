@@ -6,6 +6,9 @@
 #' @param ...	Character vectors giving path component. each character string
 #' gets added on to the path, e.g., `vcr_test_path("a", "b")` becomes
 #' `tests/a/b` relative to the root of the package.
+#' 
+#' @note Beware if you have more than one `tests` directories in your package
+#' root. This may not work as intended if that is the case.
 #'
 #' @return A character vector giving the path
 #' @export
