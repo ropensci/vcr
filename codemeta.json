@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -267,7 +267,7 @@
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
   "contIntegration": "https://codecov.io/gh/ropensci/vcr",
   "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "1403.087KB",
+  "fileSize": "1403.487KB",
   "relatedLink": [
     "https://ropenscilabs.github.io/http-testing-book/",
     "https://books.ropensci.org/http-testing/"
