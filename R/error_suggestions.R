@@ -59,6 +59,6 @@ error_suggestions <- list(
     text = c("If you're surprised vcr is raising this error",
      "and want insight about how vcr attempted to handle the request,",
      "you can use 'logging' to see more details"),
-    url = "https://books.ropensci.org/http-testing/logging"
+    url = "https://books.ropensci.org/http-testing/debugging-your-tests-that-use-vcr.html#logging-1"
   )
 )
