@@ -32,7 +32,7 @@ test_that("vcr_last_error works: no casssette in use yet", {
   expect_error(err$construct_message())
   expect_message(vcr_last_error(), "There is currently no cassette in use")
   expect_message(vcr_last_error(), "If you want vcr to record this request")
-  expect_message(vcr_last_error(), "http-testing/logging")
+  expect_message(vcr_last_error(), "http-testing/debugging-")
 })
 
 test_that("vcr_last_error works: casssette in use", {
