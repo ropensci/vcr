@@ -13,11 +13,10 @@ jobs:
       matrix:
         config:
         - { os: windows-latest, r: 'release'}
-        # - { os: windows-latest, r: 'devel'}
         - { os: macOS-latest, r: 'release'}
         - { os: macOS-latest, r: 'devel'}
-        - { os: ubuntu-18.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        - { os: ubuntu-18.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        - { os: ubuntu-18.04, r: 'release'}
+        - { os: ubuntu-18.04, r: 'devel'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -26,11 +25,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - name: Cache R packages
         uses: actions/cache@v2
@@ -51,7 +50,7 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'writeLines(pak::local_system_requirements("ubuntu", "16.04"))')
+          done < <(Rscript -e 'writeLines(pak::local_system_requirements("ubuntu", "18.04"))')
       
       - name: Install dependencies
         run: |
@@ -66,11 +65,13 @@ jobs:
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
 
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
+      - uses: r-lib/actions/check-r-package@v2
+
+      # - name: Check
+      #   env:
+      #     _R_CHECK_CRAN_INCOMING_: false
+      #   run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+      #   shell: Rscript {0}
 
       - name: Show testthat output
         if: always()
