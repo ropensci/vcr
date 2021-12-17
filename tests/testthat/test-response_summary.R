@@ -70,12 +70,13 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   if (rv <= 353) {
     expect_is(substring(gsub("\n", " ", google_response), 1, 80), 
       "character")
-  } else {
-    ## doesn't error on Windows
-    if (Sys.info()[['sysname']] != "Windows") {
-      expect_error(substring(gsub("\n", " ", google_response), 1, 80))
-    }
   }
+   # else {
+    ## doesn't error on Windows
+    # if (Sys.info()[['sysname']] != "Windows") {
+    #   expect_error(substring(gsub("\n", " ", google_response), 1, 80))
+    # }
+  # }
 
   # response_summary doesn't error now with useBytes=TRUE
   aa <- response_summary(x)
