@@ -1,3 +1,10 @@
+vcr 1.0.3
+=========
+
+### BUG FIXES
+
+* fix to `vcr_test_path()` to find root package path correctly with R 4.2 on Windows (#242) (#243)
+
 vcr 1.0.2
 =========
 
