@@ -52,4 +52,4 @@ Suggests:
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
