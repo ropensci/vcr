@@ -3,6 +3,8 @@
 #' This function, similar to `testthat::test_path()`, is designed to work both
 #' interactively and during tests, locating files in the `tests/` directory.
 #'
+#' @note `vcr_test_path()` assumes you are using testthat for your unit tests.
+#'
 #' @param ...	Character vectors giving path component. each character string
 #' gets added on to the path, e.g., `vcr_test_path("a", "b")` becomes
 #' `tests/a/b` relative to the root of the package.
