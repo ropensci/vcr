@@ -18,6 +18,9 @@ A character vector giving the path
 This function, similar to \code{testthat::test_path()}, is designed to work both
 interactively and during tests, locating files in the \verb{tests/} directory.
 }
+\note{
+\code{vcr_test_path()} assumes you are using testthat for your unit tests.
+}
 \examples{
 if (interactive()) {
 vcr_test_path("fixtures")
