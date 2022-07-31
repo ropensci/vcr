@@ -50,10 +50,8 @@ prep_interaction <- function(x, file, bytes) {
   } else {
     get_body(x$response$body)
   }
-  body_nchar <- tryCatch(nchar(body), error = function(e) e)
-  body <- enc2utf8(body)
   if (length(body) == 0 || !nzchar(body)) body <- ""
-  list(
+  res = list(
     list(
       request = list(
         method = x$request$method,
@@ -68,7 +66,7 @@ prep_interaction <- function(x, file, bytes) {
         status = x$response$status,
         headers = dedup_keys(x$response$headers),
         body = list(
-          encoding = sup_mssg(vcr_c$quiet, encoding_guess(x$response$body, bytes)),
+          encoding = "",
           file = x$response$disk,
           string = body
         )
@@ -77,6 +75,11 @@ prep_interaction <- function(x, file, bytes) {
       recorded_with = pkg_versions()
     )
   )
+  if (bytes) {
+    str_index <- which(grepl("string", names(res[[1]]$response$body)))
+    names(res[[1]]$response$body)[str_index] <- "base64_string"
+  }
+  return(res)
 }
 
 # param x: a list with "request" and "response" slots

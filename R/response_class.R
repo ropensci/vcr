@@ -109,7 +109,8 @@ VcrResponse <- R6::R6Class(
         if (inherits(body, "list")) {
           body <- paste(names(body), body, sep = "=", collapse = ",")
         }
-        self$body <- if (is.character(body)) enc2utf8(body) else body
+        # self$body <- if (is.character(body)) enc2utf8(body) else body
+        self$body <- body
       }
       if (!missing(http_version)) {
         self$http_version <- extract_http_version(http_version)
@@ -118,6 +119,11 @@ VcrResponse <- R6::R6Class(
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
       if (!missing(disk)) self$disk <- disk
     },
+
+    #' @description print method for the `VcrResponse` class
+    #' @param x self
+    #' @param ... ignored
+    print = function(x, ...) cat("<VcrResponse> ", sep = "\n"),
 
     #' @description Create a hash
     #' @return a list
@@ -141,7 +147,8 @@ VcrResponse <- R6::R6Class(
       VcrResponse$new(
         hash[["status"]],
         hash[["headers"]],
-        body_from(hash[["body"]]),
+        hash[["body"]],
+        # body_from(hash[["body"]]),
         hash[["http_version"]],
         hash[["adapater_metadata"]],
         hash[["disk"]]

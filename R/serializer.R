@@ -40,12 +40,12 @@ Serializer <- R6::R6Class("Serializer",
       } else {
         # check for base64 encoding
         x$http_interactions <- lapply(x$http_interactions, function(z) {
-          if (is_base64(z$response$body$string)) {
+          if (is_base64(z$response$body)) {
             # if character and newlines detected, remove newlines
-            z$response$body$string <- private$strip_newlines(z$response$body$string)
-            b64dec <- base64enc::base64decode(z$response$body$string)
+            z$response$body$base64_string <- private$strip_newlines(z$response$body$base64_string)
+            b64dec <- base64enc::base64decode(z$response$body$base64_string)
             b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
-            z$response$body$string <- if (inherits(b64dec_r2c, "error")) {
+            z$response$body$base64_string <- if (inherits(b64dec_r2c, "error")) {
               # probably is binary (e.g., pdf), so can't be converted to char.
               b64dec
             } else {
@@ -53,8 +53,8 @@ Serializer <- R6::R6Class("Serializer",
               #  can convert to character from binary
               b64dec_r2c
             }
-            z$response$body$encoding <-
-              sup_mssg(vcr_c$quiet, encoding_guess(z$response$body$string, TRUE))
+            z$response$body$encoding <- ""
+              # sup_mssg(vcr_c$quiet, encoding_guess(z$response$body$base64_string, TRUE))
           }
           return(z)
         })

@@ -5,18 +5,19 @@ vcr_configure(dir = tmpdir)
 
 test_that("quiet works", {
   library(crul)
+  con <- HttpClient$new("https://eu.httpbin.org")
   # default: quiet=TRUE 
   expect_true(vcr_configuration()$quiet)
   expect_message(
-    use_cassette("foo3", crul::ok("https://eu.httpbin.org/get")),
+    use_cassette("foo3", con$get("get")),
     NA
   )
   expect_message(
-    use_cassette("foo1", crul::ok("https://eu.httpbin.org/get")),
+    use_cassette("foo1", con$get("get")),
     NA
   )
   expect_message(
-    use_cassette("foo2", crul::ok("https://eu.httpbin.org/get")),
+    use_cassette("foo2", con$get("get")),
     NA
   )
   
@@ -25,15 +26,15 @@ test_that("quiet works", {
   expect_false(vcr_configuration()$quiet)
   webmockr::webmockr_disable_net_connect()
   expect_message(
-    use_cassette("foo3", crul::ok("https://eu.httpbin.org/get")),
+    use_cassette("foo3", con$get("get")),
     "allowed"
   )
   expect_message(
-    use_cassette("foo1", crul::ok("https://eu.httpbin.org/get")),
+    use_cassette("foo1", con$get("get")),
     "enabled"
   )
   expect_message(
-    use_cassette("foo2", crul::ok("https://eu.httpbin.org/get")),
+    use_cassette("foo2", con$get("get")),
     "disabled"
   )
 })

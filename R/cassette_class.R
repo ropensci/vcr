@@ -521,7 +521,7 @@ Cassette <- R6::R6Class(
           response <- VcrResponse$new(
             z$response$status,
             z$response$headers,
-            z$response$body$string,
+            z$response$body$string %||% z$response$body$base64_string,
             opts = self$cassette_opts,
             disk = z$response$body$file
           )

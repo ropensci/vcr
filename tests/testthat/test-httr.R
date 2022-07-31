@@ -117,7 +117,7 @@ test_that("httr use_cassette works", {
   # response body
   str <- yaml::yaml.load_file(out$manfile)
   str <- rawToChar(base64enc::base64decode(
-    str$http_interactions[[1]]$response$body$string))
+    str$http_interactions[[1]]$response$body$base64_string))
   expect_is(str, "character")
   expect_match(str, "404")
   expect_match(str, "DOCTYPE HTML")

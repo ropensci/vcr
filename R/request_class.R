@@ -113,6 +113,7 @@ Request <- R6::R6Class(
       Request$new(
         method  = hash[['method']],
         uri     = hash[['uri']],
+        # body    = hash[['body']],
         body    = body_from(hash[['body']]),
         headers = hash[['headers']],
         disk = hash[['disk']]
@@ -155,7 +156,8 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
 body_from <- function(x) {
   if (is.null(x)) x <- ""
   if (
-    (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
+    (!is.null(attr(x, "base64")) && attr(x, "base64"))
+    # (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
   ) {
     b64dec <- base64enc::base64decode(x)
     b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
@@ -168,7 +170,8 @@ body_from <- function(x) {
       b64dec_r2c
     }
   } else {
-    try_encode_string(x, Encoding_safe(x))
+    x
+    # try_encode_string(x, Encoding_safe(x))
   }
 }
 
@@ -179,13 +182,19 @@ try_encoding <- function(x) {
 }
 
 is_base64 <- function(x) {
-  if (inherits(x, "form_file")) return(FALSE)
-  as_num <- tryCatch(as.numeric(x), warning = function(w) w)
-  if (!inherits(as_num, "warning")) return(FALSE)
-  # split string by newlines b/c base64 w/ newlines won't be 
-  # recognized as valid base64
-  x <- strsplit(x, "\r|\n", useBytes = TRUE)[[1]]
-  all(grepl(b64_pattern, x))
+  if (!is.list(x)) {
+    if ("base64" %in% names(attributes(x))) {
+      return(attr(x, 'base64'))
+    }
+    return(FALSE)
+  }
+  return("base64_string" %in% names(x))
+  # as_num <- tryCatch(as.numeric(x), warning = function(w) w)
+  # if (!inherits(as_num, "warning")) return(FALSE)
+  # # split string by newlines b/c base64 w/ newlines won't be 
+  # # recognized as valid base64
+  # x <- strsplit(x, "\r|\n", useBytes = TRUE)[[1]]
+  # all(grepl(b64_pattern, x))
 }
 
 Encoding_safe <- function(x) {
