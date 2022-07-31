@@ -53,6 +53,6 @@ checks that cassette names are not duplicated. Note that if you do need
 to have duplicated cassette names you can do so by using the
 \code{allowed_duplicates} parameter in \code{check_cassette_names()}. A helper
 function \code{check_cassette_names()} runs inside
-\code{\link[=insert_cassette]{insert_cassette()}} that checks that cassettes
-do not have: spaces, file extensions, unaccepted characters (slashes)
+\code{\link[=insert_cassette]{insert_cassette()}} that checks that cassettes do
+not have: spaces, file extensions, unaccepted characters (slashes)
 }

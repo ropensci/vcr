@@ -46,15 +46,21 @@ the request headers.
 }
 
 You can set your own options by tweaking the \code{match_requests_on}
-parameter in \code{use_cassette()}:\if{html}{\out{<div class="r">}}\preformatted{library(vcr)
-}\if{html}{\out{</div>}}\if{html}{\out{<div class="r">}}\preformatted{use_cassette(name = "foo_bar", \{
+parameter in \code{use_cassette()}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(vcr)
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{use_cassette(name = "foo_bar", \{
     cli$post("post", body = list(a = 5))
   \}, 
   match_requests_on = c('method', 'headers', 'body')
 )
 }\if{html}{\out{</div>}}
 \subsection{Matching}{
-\subsection{headers}{\if{html}{\out{<div class="r">}}\preformatted{library(crul)
+\subsection{headers}{
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(crul)
 library(vcr)
 cli <- crul::HttpClient$new("https://httpbin.org/get", 
   headers = list(foo = "bar"))

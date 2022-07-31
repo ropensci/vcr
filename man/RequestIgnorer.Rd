@@ -20,18 +20,18 @@ and '0.0.0.0'}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RequestIgnorer$new()}}
-\item \href{#method-ignore_request}{\code{RequestIgnorer$ignore_request()}}
-\item \href{#method-ignore_localhost}{\code{RequestIgnorer$ignore_localhost()}}
-\item \href{#method-ignore_localhost_value}{\code{RequestIgnorer$ignore_localhost_value()}}
-\item \href{#method-ignore_hosts}{\code{RequestIgnorer$ignore_hosts()}}
-\item \href{#method-should_be_ignored}{\code{RequestIgnorer$should_be_ignored()}}
-\item \href{#method-clone}{\code{RequestIgnorer$clone()}}
+\item \href{#method-RequestIgnorer-new}{\code{RequestIgnorer$new()}}
+\item \href{#method-RequestIgnorer-ignore_request}{\code{RequestIgnorer$ignore_request()}}
+\item \href{#method-RequestIgnorer-ignore_localhost}{\code{RequestIgnorer$ignore_localhost()}}
+\item \href{#method-RequestIgnorer-ignore_localhost_value}{\code{RequestIgnorer$ignore_localhost_value()}}
+\item \href{#method-RequestIgnorer-ignore_hosts}{\code{RequestIgnorer$ignore_hosts()}}
+\item \href{#method-RequestIgnorer-should_be_ignored}{\code{RequestIgnorer$should_be_ignored()}}
+\item \href{#method-RequestIgnorer-clone}{\code{RequestIgnorer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RequestIgnorer} object
 \subsection{Usage}{
@@ -43,8 +43,8 @@ A new \code{RequestIgnorer} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ignore_request"></a>}}
-\if{latex}{\out{\hypertarget{method-ignore_request}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-ignore_request"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-ignore_request}{}}}
 \subsection{Method \code{ignore_request()}}{
 Will ignore any request for which the given function
 returns \code{TRUE}
@@ -57,8 +57,8 @@ no return; defines request ignorer hook
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ignore_localhost"></a>}}
-\if{latex}{\out{\hypertarget{method-ignore_localhost}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-ignore_localhost"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-ignore_localhost}{}}}
 \subsection{Method \code{ignore_localhost()}}{
 ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
 \subsection{Usage}{
@@ -70,8 +70,8 @@ no return; sets to ignore all localhost aliases
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ignore_localhost_value"></a>}}
-\if{latex}{\out{\hypertarget{method-ignore_localhost_value}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-ignore_localhost_value"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-ignore_localhost_value}{}}}
 \subsection{Method \code{ignore_localhost_value()}}{
 ignore a specific named localhost
 \subsection{Usage}{
@@ -90,8 +90,8 @@ no return; defines request ignorer hook
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ignore_hosts"></a>}}
-\if{latex}{\out{\hypertarget{method-ignore_hosts}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-ignore_hosts"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-ignore_hosts}{}}}
 \subsection{Method \code{ignore_hosts()}}{
 ignore any named host
 \subsection{Usage}{
@@ -110,8 +110,8 @@ no return; adds host to ignore
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-should_be_ignored"></a>}}
-\if{latex}{\out{\hypertarget{method-should_be_ignored}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-should_be_ignored"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-should_be_ignored}{}}}
 \subsection{Method \code{should_be_ignored()}}{
 method to determine whether to ignore a request
 \subsection{Usage}{
@@ -130,8 +130,8 @@ no return; defines request ignorer hook
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RequestIgnorer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestIgnorer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

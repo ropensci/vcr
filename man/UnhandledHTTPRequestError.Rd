@@ -86,32 +86,32 @@ unlink(tempdir())
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{UnhandledHTTPRequestError$new()}}
-\item \href{#method-run}{\code{UnhandledHTTPRequestError$run()}}
-\item \href{#method-construct_message}{\code{UnhandledHTTPRequestError$construct_message()}}
-\item \href{#method-request_description}{\code{UnhandledHTTPRequestError$request_description()}}
-\item \href{#method-current_matchers}{\code{UnhandledHTTPRequestError$current_matchers()}}
-\item \href{#method-match_request_on_headers}{\code{UnhandledHTTPRequestError$match_request_on_headers()}}
-\item \href{#method-match_request_on_body}{\code{UnhandledHTTPRequestError$match_request_on_body()}}
-\item \href{#method-formatted_headers}{\code{UnhandledHTTPRequestError$formatted_headers()}}
-\item \href{#method-cassettes_description}{\code{UnhandledHTTPRequestError$cassettes_description()}}
-\item \href{#method-cassettes_list}{\code{UnhandledHTTPRequestError$cassettes_list()}}
-\item \href{#method-get_help}{\code{UnhandledHTTPRequestError$get_help()}}
-\item \href{#method-formatted_suggestions}{\code{UnhandledHTTPRequestError$formatted_suggestions()}}
-\item \href{#method-format_bullet_point}{\code{UnhandledHTTPRequestError$format_bullet_point()}}
-\item \href{#method-format_foot_note}{\code{UnhandledHTTPRequestError$format_foot_note()}}
-\item \href{#method-suggestion_for}{\code{UnhandledHTTPRequestError$suggestion_for()}}
-\item \href{#method-suggestions}{\code{UnhandledHTTPRequestError$suggestions()}}
-\item \href{#method-no_cassette_suggestions}{\code{UnhandledHTTPRequestError$no_cassette_suggestions()}}
-\item \href{#method-record_mode_suggestion}{\code{UnhandledHTTPRequestError$record_mode_suggestion()}}
-\item \href{#method-has_used_interaction_matching}{\code{UnhandledHTTPRequestError$has_used_interaction_matching()}}
-\item \href{#method-match_requests_on_suggestion}{\code{UnhandledHTTPRequestError$match_requests_on_suggestion()}}
-\item \href{#method-clone}{\code{UnhandledHTTPRequestError$clone()}}
+\item \href{#method-UnhandledHTTPRequestError-new}{\code{UnhandledHTTPRequestError$new()}}
+\item \href{#method-UnhandledHTTPRequestError-run}{\code{UnhandledHTTPRequestError$run()}}
+\item \href{#method-UnhandledHTTPRequestError-construct_message}{\code{UnhandledHTTPRequestError$construct_message()}}
+\item \href{#method-UnhandledHTTPRequestError-request_description}{\code{UnhandledHTTPRequestError$request_description()}}
+\item \href{#method-UnhandledHTTPRequestError-current_matchers}{\code{UnhandledHTTPRequestError$current_matchers()}}
+\item \href{#method-UnhandledHTTPRequestError-match_request_on_headers}{\code{UnhandledHTTPRequestError$match_request_on_headers()}}
+\item \href{#method-UnhandledHTTPRequestError-match_request_on_body}{\code{UnhandledHTTPRequestError$match_request_on_body()}}
+\item \href{#method-UnhandledHTTPRequestError-formatted_headers}{\code{UnhandledHTTPRequestError$formatted_headers()}}
+\item \href{#method-UnhandledHTTPRequestError-cassettes_description}{\code{UnhandledHTTPRequestError$cassettes_description()}}
+\item \href{#method-UnhandledHTTPRequestError-cassettes_list}{\code{UnhandledHTTPRequestError$cassettes_list()}}
+\item \href{#method-UnhandledHTTPRequestError-get_help}{\code{UnhandledHTTPRequestError$get_help()}}
+\item \href{#method-UnhandledHTTPRequestError-formatted_suggestions}{\code{UnhandledHTTPRequestError$formatted_suggestions()}}
+\item \href{#method-UnhandledHTTPRequestError-format_bullet_point}{\code{UnhandledHTTPRequestError$format_bullet_point()}}
+\item \href{#method-UnhandledHTTPRequestError-format_foot_note}{\code{UnhandledHTTPRequestError$format_foot_note()}}
+\item \href{#method-UnhandledHTTPRequestError-suggestion_for}{\code{UnhandledHTTPRequestError$suggestion_for()}}
+\item \href{#method-UnhandledHTTPRequestError-suggestions}{\code{UnhandledHTTPRequestError$suggestions()}}
+\item \href{#method-UnhandledHTTPRequestError-no_cassette_suggestions}{\code{UnhandledHTTPRequestError$no_cassette_suggestions()}}
+\item \href{#method-UnhandledHTTPRequestError-record_mode_suggestion}{\code{UnhandledHTTPRequestError$record_mode_suggestion()}}
+\item \href{#method-UnhandledHTTPRequestError-has_used_interaction_matching}{\code{UnhandledHTTPRequestError$has_used_interaction_matching()}}
+\item \href{#method-UnhandledHTTPRequestError-match_requests_on_suggestion}{\code{UnhandledHTTPRequestError$match_requests_on_suggestion()}}
+\item \href{#method-UnhandledHTTPRequestError-clone}{\code{UnhandledHTTPRequestError$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-new"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{UnhandledHTTPRequestError} object
 \subsection{Usage}{
@@ -130,8 +130,8 @@ A new \code{UnhandledHTTPRequestError} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-run"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-run}{}}}
 \subsection{Method \code{run()}}{
 Run unhandled request handling
 \subsection{Usage}{
@@ -143,8 +143,8 @@ various
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-construct_message"></a>}}
-\if{latex}{\out{\hypertarget{method-construct_message}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-construct_message"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-construct_message}{}}}
 \subsection{Method \code{construct_message()}}{
 Construct and execute stop message for why request failed
 \subsection{Usage}{
@@ -156,8 +156,8 @@ a stop message
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-request_description"></a>}}
-\if{latex}{\out{\hypertarget{method-request_description}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-request_description"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-request_description}{}}}
 \subsection{Method \code{request_description()}}{
 construct request description
 \subsection{Usage}{
@@ -169,8 +169,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-current_matchers"></a>}}
-\if{latex}{\out{\hypertarget{method-current_matchers}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-current_matchers"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-current_matchers}{}}}
 \subsection{Method \code{current_matchers()}}{
 get current request matchers
 \subsection{Usage}{
@@ -182,8 +182,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-match_request_on_headers"></a>}}
-\if{latex}{\out{\hypertarget{method-match_request_on_headers}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-match_request_on_headers"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-match_request_on_headers}{}}}
 \subsection{Method \code{match_request_on_headers()}}{
 are headers included in current matchers?
 \subsection{Usage}{
@@ -195,8 +195,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-match_request_on_body"></a>}}
-\if{latex}{\out{\hypertarget{method-match_request_on_body}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-match_request_on_body"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-match_request_on_body}{}}}
 \subsection{Method \code{match_request_on_body()}}{
 is body includled in current matchers?
 \subsection{Usage}{
@@ -208,8 +208,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-formatted_headers"></a>}}
-\if{latex}{\out{\hypertarget{method-formatted_headers}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-formatted_headers"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-formatted_headers}{}}}
 \subsection{Method \code{formatted_headers()}}{
 get request headers
 \subsection{Usage}{
@@ -221,8 +221,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cassettes_description"></a>}}
-\if{latex}{\out{\hypertarget{method-cassettes_description}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-cassettes_description"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-cassettes_description}{}}}
 \subsection{Method \code{cassettes_description()}}{
 construct description of current or lack thereof cassettes
 \subsection{Usage}{
@@ -234,8 +234,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cassettes_list"></a>}}
-\if{latex}{\out{\hypertarget{method-cassettes_list}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-cassettes_list"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-cassettes_list}{}}}
 \subsection{Method \code{cassettes_list()}}{
 cassette details
 \subsection{Usage}{
@@ -247,8 +247,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_help"></a>}}
-\if{latex}{\out{\hypertarget{method-get_help}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-get_help"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-get_help}{}}}
 \subsection{Method \code{get_help()}}{
 get help message for non-verbose error
 \subsection{Usage}{
@@ -260,8 +260,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-formatted_suggestions"></a>}}
-\if{latex}{\out{\hypertarget{method-formatted_suggestions}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-formatted_suggestions"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-formatted_suggestions}{}}}
 \subsection{Method \code{formatted_suggestions()}}{
 make suggestions for what to do
 \subsection{Usage}{
@@ -273,8 +273,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-format_bullet_point"></a>}}
-\if{latex}{\out{\hypertarget{method-format_bullet_point}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-format_bullet_point"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-format_bullet_point}{}}}
 \subsection{Method \code{format_bullet_point()}}{
 add bullet point to beginning of a line
 \subsection{Usage}{
@@ -295,8 +295,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-format_foot_note"></a>}}
-\if{latex}{\out{\hypertarget{method-format_foot_note}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-format_foot_note"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-format_foot_note}{}}}
 \subsection{Method \code{format_foot_note()}}{
 make a foot note
 \subsection{Usage}{
@@ -317,8 +317,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-suggestion_for"></a>}}
-\if{latex}{\out{\hypertarget{method-suggestion_for}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-suggestion_for"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-suggestion_for}{}}}
 \subsection{Method \code{suggestion_for()}}{
 get a suggestion by key
 \subsection{Usage}{
@@ -337,8 +337,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-suggestions"></a>}}
-\if{latex}{\out{\hypertarget{method-suggestions}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-suggestions"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-suggestions}{}}}
 \subsection{Method \code{suggestions()}}{
 get all suggestions
 \subsection{Usage}{
@@ -350,8 +350,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-no_cassette_suggestions"></a>}}
-\if{latex}{\out{\hypertarget{method-no_cassette_suggestions}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-no_cassette_suggestions"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-no_cassette_suggestions}{}}}
 \subsection{Method \code{no_cassette_suggestions()}}{
 get all no cassette suggestions
 \subsection{Usage}{
@@ -363,8 +363,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-record_mode_suggestion"></a>}}
-\if{latex}{\out{\hypertarget{method-record_mode_suggestion}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-record_mode_suggestion"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-record_mode_suggestion}{}}}
 \subsection{Method \code{record_mode_suggestion()}}{
 get the appropriate record mode suggestion
 \subsection{Usage}{
@@ -376,8 +376,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-has_used_interaction_matching"></a>}}
-\if{latex}{\out{\hypertarget{method-has_used_interaction_matching}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-has_used_interaction_matching"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-has_used_interaction_matching}{}}}
 \subsection{Method \code{has_used_interaction_matching()}}{
 are there any used interactions
 \subsection{Usage}{
@@ -389,8 +389,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-match_requests_on_suggestion"></a>}}
-\if{latex}{\out{\hypertarget{method-match_requests_on_suggestion}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-match_requests_on_suggestion"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-match_requests_on_suggestion}{}}}
 \subsection{Method \code{match_requests_on_suggestion()}}{
 match requests on suggestion
 \subsection{Usage}{
@@ -402,8 +402,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

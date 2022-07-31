@@ -45,20 +45,20 @@ self=x
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RequestHandlerHttr$new()}}
-\item \href{#method-clone}{\code{RequestHandlerHttr$clone()}}
+\item \href{#method-RequestHandlerHttr-new}{\code{RequestHandlerHttr$new()}}
+\item \href{#method-RequestHandlerHttr-clone}{\code{RequestHandlerHttr$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="handle">}\href{../../vcr/html/RequestHandler.html#method-handle}{\code{vcr::RequestHandler$handle()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="handle"><a href='../../vcr/html/RequestHandler.html#method-RequestHandler-handle'><code>vcr::RequestHandler$handle()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RequestHandlerHttr-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandlerHttr-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RequestHandlerHttr} object
 \subsection{Usage}{
@@ -77,8 +77,8 @@ A new \code{RequestHandlerHttr} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RequestHandlerHttr-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandlerHttr-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

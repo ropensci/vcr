@@ -13,21 +13,15 @@ class with methods for serializing via the \pkg{yaml} package
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{YAML$new()}}
-\item \href{#method-serialize}{\code{YAML$serialize()}}
-\item \href{#method-deserialize}{\code{YAML$deserialize()}}
-\item \href{#method-clone}{\code{YAML$clone()}}
+\item \href{#method-YAML-new}{\code{YAML$new()}}
+\item \href{#method-YAML-serialize}{\code{YAML$serialize()}}
+\item \href{#method-YAML-deserialize}{\code{YAML$deserialize()}}
+\item \href{#method-YAML-clone}{\code{YAML$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-YAML-new"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new YAML object
 \subsection{Usage}{
@@ -47,8 +41,8 @@ A new \code{YAML} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serialize"></a>}}
-\if{latex}{\out{\hypertarget{method-serialize}{}}}
+\if{html}{\out{<a id="method-YAML-serialize"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-serialize}{}}}
 \subsection{Method \code{serialize()}}{
 Serializes the given hash using internal fxn write_yaml
 \subsection{Usage}{
@@ -71,8 +65,8 @@ Serializes the given hash using internal fxn write_yaml
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize}{}}}
+\if{html}{\out{<a id="method-YAML-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-deserialize}{}}}
 \subsection{Method \code{deserialize()}}{
 Deserializes the content at the path using
 yaml::yaml.load_file
@@ -85,8 +79,8 @@ yaml::yaml.load_file
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-YAML-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

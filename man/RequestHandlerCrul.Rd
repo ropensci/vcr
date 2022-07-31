@@ -69,20 +69,20 @@ use_cassette(name = "apple8", {
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-clone}{\code{RequestHandlerCrul$clone()}}
+\item \href{#method-RequestHandlerCrul-clone}{\code{RequestHandlerCrul$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="handle">}\href{../../vcr/html/RequestHandler.html#method-handle}{\code{vcr::RequestHandler$handle()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="initialize">}\href{../../vcr/html/RequestHandler.html#method-initialize}{\code{vcr::RequestHandler$initialize()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="handle"><a href='../../vcr/html/RequestHandler.html#method-RequestHandler-handle'><code>vcr::RequestHandler$handle()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="initialize"><a href='../../vcr/html/RequestHandler.html#method-RequestHandler-initialize'><code>vcr::RequestHandler$initialize()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RequestHandlerCrul-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandlerCrul-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

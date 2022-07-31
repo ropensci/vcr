@@ -63,15 +63,15 @@ HTTPInteraction$new()$from_hash(my_hash)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{HTTPInteraction$new()}}
-\item \href{#method-to_hash}{\code{HTTPInteraction$to_hash()}}
-\item \href{#method-from_hash}{\code{HTTPInteraction$from_hash()}}
-\item \href{#method-clone}{\code{HTTPInteraction$clone()}}
+\item \href{#method-HTTPInteraction-new}{\code{HTTPInteraction$new()}}
+\item \href{#method-HTTPInteraction-to_hash}{\code{HTTPInteraction$to_hash()}}
+\item \href{#method-HTTPInteraction-from_hash}{\code{HTTPInteraction$from_hash()}}
+\item \href{#method-HTTPInteraction-clone}{\code{HTTPInteraction$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-HTTPInteraction-new"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteraction-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{HTTPInteraction} object
 \subsection{Usage}{
@@ -94,8 +94,8 @@ A new \code{HTTPInteraction} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-to_hash}{}}}
+\if{html}{\out{<a id="method-HTTPInteraction-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteraction-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Create a hash from the HTTPInteraction object
 \subsection{Usage}{
@@ -107,8 +107,8 @@ a named list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-from_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-from_hash}{}}}
+\if{html}{\out{<a id="method-HTTPInteraction-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteraction-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Create a HTTPInteraction object from a hash
 \subsection{Usage}{
@@ -127,8 +127,8 @@ a new \code{HttpInteraction} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-HTTPInteraction-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteraction-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

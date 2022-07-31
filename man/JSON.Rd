@@ -13,21 +13,15 @@ class with methods for serializing via \pkg{jsonlite}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{JSON$new()}}
-\item \href{#method-serialize}{\code{JSON$serialize()}}
-\item \href{#method-deserialize}{\code{JSON$deserialize()}}
-\item \href{#method-clone}{\code{JSON$clone()}}
+\item \href{#method-JSON-new}{\code{JSON$new()}}
+\item \href{#method-JSON-serialize}{\code{JSON$serialize()}}
+\item \href{#method-JSON-deserialize}{\code{JSON$deserialize()}}
+\item \href{#method-JSON-clone}{\code{JSON$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-JSON-new"></a>}}
+\if{latex}{\out{\hypertarget{method-JSON-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{JSON} object
 \subsection{Usage}{
@@ -46,8 +40,8 @@ A new \code{JSON} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serialize"></a>}}
-\if{latex}{\out{\hypertarget{method-serialize}{}}}
+\if{html}{\out{<a id="method-JSON-serialize"></a>}}
+\if{latex}{\out{\hypertarget{method-JSON-serialize}{}}}
 \subsection{Method \code{serialize()}}{
 Serializes the given hash using internal fxn write_json
 \subsection{Usage}{
@@ -70,8 +64,8 @@ Serializes the given hash using internal fxn write_json
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize}{}}}
+\if{html}{\out{<a id="method-JSON-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-JSON-deserialize}{}}}
 \subsection{Method \code{deserialize()}}{
 Deserializes the content at the file path using
 jsonlite::fromJSON
@@ -84,8 +78,8 @@ jsonlite::fromJSON
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-JSON-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-JSON-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

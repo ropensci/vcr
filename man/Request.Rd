@@ -62,15 +62,15 @@ x$from_hash(h)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Request$new()}}
-\item \href{#method-to_hash}{\code{Request$to_hash()}}
-\item \href{#method-from_hash}{\code{Request$from_hash()}}
-\item \href{#method-clone}{\code{Request$clone()}}
+\item \href{#method-Request-new}{\code{Request$new()}}
+\item \href{#method-Request-to_hash}{\code{Request$to_hash()}}
+\item \href{#method-Request-from_hash}{\code{Request$from_hash()}}
+\item \href{#method-Request-clone}{\code{Request$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Request-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
@@ -104,8 +104,8 @@ A new \code{Request} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-to_hash}{}}}
+\if{html}{\out{<a id="method-Request-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Convert the request to a list
 \subsection{Usage}{
@@ -117,8 +117,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-from_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-from_hash}{}}}
+\if{html}{\out{<a id="method-Request-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Convert the request to a list
 \subsection{Usage}{
@@ -137,8 +137,8 @@ a new \code{Request} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Request-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
