@@ -35,8 +35,8 @@ package. The following attempts to break down all the options.
 \code{vcr} has the following four exported functions:
 \itemize{
 \item \code{turned_off()} - Turns vcr off for the duration of a code block
-\item \code{turn_off()} - Turns vcr off completely, so that it no longer
-handles every HTTP request
+\item \code{turn_off()} - Turns vcr off completely, so that it no longer handles
+every HTTP request
 \item \code{turn_on()} - turns vcr on; the opposite of \code{turn_off()}
 \item \code{turned_on()} - Asks if vcr is turned on, returns a boolean
 }
@@ -48,11 +48,11 @@ Docker containers, or running R non-interactively from the command line.
 The full set of environment variables \code{vcr} uses, all of which accept
 only \code{TRUE} or \code{FALSE}:
 \itemize{
-\item \code{VCR_TURN_OFF}: turn off vcr altogether; set to \code{TRUE} to skip any
-vcr usage; default: \code{FALSE}
-\item \code{VCR_TURNED_OFF}: set the \code{turned_off} internal package setting;
-this does not turn off vcr completely as does \code{VCR_TURN_OFF} does,
-but rather is looked at together with \code{VCR_IGNORE_CASSETTES}
+\item \code{VCR_TURN_OFF}: turn off vcr altogether; set to \code{TRUE} to skip any vcr
+usage; default: \code{FALSE}
+\item \code{VCR_TURNED_OFF}: set the \code{turned_off} internal package setting; this
+does not turn off vcr completely as does \code{VCR_TURN_OFF} does, but
+rather is looked at together with \code{VCR_IGNORE_CASSETTES}
 \item \code{VCR_IGNORE_CASSETTES}: set the \code{ignore_cassettes} internal package
 setting; this is looked at together with \code{VCR_TURNED_OFF}
 }

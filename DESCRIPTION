@@ -39,7 +39,7 @@ Imports:
     base64enc,
     rprojroot
 Suggests:
-    roxygen2 (>= 7.1.1),
+    roxygen2 (>= 7.2.1),
     jsonlite,
     testthat,
     knitr,
