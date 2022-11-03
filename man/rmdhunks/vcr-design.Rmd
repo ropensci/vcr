@@ -34,8 +34,7 @@ Perhaps the most fundamental thing about that this package work is
 how it knows what HTTP requests are being made. This stumped me for 
 quite a long time. When looking at Ruby vcr, at first I thought it
 must be "listening" for HTTP requests somehow. Then I found out about
-[monkey patching][mp] (see also [this blog post as a good 
-summary][mpblog]); that's how it's achieved in Ruby. That is, the Ruby
+[monkey patching][mp]; that's how it's achieved in Ruby. That is, the Ruby
 vcr package literally overrides certain methods in Ruby HTTP clients, 
 hijacking internals of the HTTP clients. 
 
@@ -139,5 +138,4 @@ https://github.com/vcr/vcr/
 
 [R6]: https://adv-r.hadley.nz/r6.html
 [mp]: https://en.wikipedia.org/wiki/Monkey_patch
-[mpblog]: https://culttt.com/2015/06/17/what-is-monkey-patching-in-ruby/
 [logging]: https://docs.ropensci.org/vcr/articles/debugging.html?q=logging#logging-1
