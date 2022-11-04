@@ -1,3 +1,12 @@
+vcr 1.1.0
+=========
+
+### MINOR IMPROVEMENTS
+
+* request matching was sensitive to escaping special characters, that's been fixed (#240) (#247) thanks to @KevCaz
+* `vcr_test_path` fix so that it looks for the `testthat` dir instead of `tests` (#242) (#243) thanks to @dpprdan
+* fix broken link given in error suggestion (#239) thanks to @maelle
+
 vcr 1.0.3
 =========
 
