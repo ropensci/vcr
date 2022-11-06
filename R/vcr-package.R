@@ -38,7 +38,6 @@
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
 #' @importFrom webmockr pluck_body
-#' @useDynLib vcr, .registration = TRUE
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
 #' @docType package
 #' @aliases vcr-package

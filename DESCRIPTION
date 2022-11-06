@@ -8,7 +8,7 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 1.1.0
+Version: 1.1.0.93
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")),
@@ -26,9 +26,6 @@ Language: en-US
 LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-SystemRequirements: C++11
-LinkingTo: 
-    cpp11
 Imports:
     crul (>= 0.8.4),
     httr,

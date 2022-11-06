@@ -34,7 +34,7 @@ dedup_keys <- function(x) {
 }
 
 str_breaks <- function(x) {
-  z <- split_str(x, 80L) # from src/split_str.cpp
+  z <- str_splitter(x, 80L)
   paste0(z, collapse = "\n")
 }
 
