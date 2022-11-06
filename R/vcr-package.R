@@ -38,7 +38,7 @@
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
 #' @importFrom webmockr pluck_body
-#' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
+#' @author Scott Chamberlain
 #' @docType package
 #' @aliases vcr-package
 #' @name vcr

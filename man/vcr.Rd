@@ -48,5 +48,5 @@ See \link{request-matching} for help on the many request matching options.
 }
 
 \author{
-Scott Chamberlain \email{myrmecocystus@gmail.com}
+Scott Chamberlain
 }
