@@ -42,7 +42,7 @@
 #' x$headers$`content-length` # = NULL
 #' x$update_content_length_header() # no change, b/c header doesn't exist
 #' x$headers$`content-length` # = NULL
-#' 
+#'
 #' ## example 3
 #' ### content-length header present, and does change
 #' body <- " Hello World "
@@ -147,8 +147,8 @@ VcrResponse <- R6::R6Class(
       VcrResponse$new(
         hash[["status"]],
         hash[["headers"]],
-        hash[["body"]],
-        # body_from(hash[["body"]]),
+        # hash[["body"]],
+        body_from(hash[["body"]]),
         hash[["http_version"]],
         hash[["adapater_metadata"]],
         hash[["disk"]]
