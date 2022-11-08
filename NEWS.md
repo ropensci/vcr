@@ -4,15 +4,12 @@ vcr 1.1.0
 ### MINOR IMPROVEMENTS
 
 * request matching was sensitive to escaping special characters, that's been fixed (#240) (#247) thanks to @KevCaz
-* `vcr_test_path` fix so that it looks for the `testthat` dir instead of `tests` (#242) (#243) thanks to @dpprdan
 * fix broken link given in error suggestion (#239) thanks to @maelle
-
-vcr 1.0.3
-=========
+* using `preserve_exact_body_bytes = TRUE` now writes a base64 encoded string into a field in yaml or json on disk called `base64_string`. When `preserve_exact_body_bytes = FALSE` (the default) the response body goes into a field called `string`
 
 ### BUG FIXES
 
-* fix to `vcr_test_path()` to find root package path correctly with R 4.2 on Windows (#242) (#243)
+* `vcr_test_path` fix to find root package path correctly with R 4.2 on Windows (#242) (#243) thanks to @dpprdan
 
 vcr 1.0.2
 =========

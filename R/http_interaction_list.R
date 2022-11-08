@@ -1,5 +1,3 @@
-me <- new.env()
-
 # Null list, an empty HTTPInteractionList object
 NullList <- R6::R6Class(
   'NullList',
@@ -117,7 +115,6 @@ HTTPInteractionList <- R6::R6Class(
        self$allow_playback_repeats <- allow_playback_repeats
        self$parent_list <- parent_list
        self$used_interactions <- used_interactions
-       me$httpil <- self
        interaction_summaries <- vapply(interactions, function(x) {
          sprintf("%s => %s",
                  request_summary(Request$new()$from_hash(x$request)),
