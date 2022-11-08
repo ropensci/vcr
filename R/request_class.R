@@ -188,7 +188,19 @@ is_base64 <- function(x) {
     }
     return(FALSE)
   }
-  return("base64_string" %in% names(x))
+  hasb64str <- "base64_string" %in% names(x)
+  if (hasb64str) return(TRUE)
+  # return(FALSE)
+  # old base64 setup
+  if (
+    (vcr_c$preserve_exact_body_bytes || current_cassette()$preserve_exact_body_bytes) && 
+    "string" %in% names(x)
+  ) {
+    message("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
   # as_num <- tryCatch(as.numeric(x), warning = function(w) w)
   # if (!inherits(as_num, "warning")) return(FALSE)
   # # split string by newlines b/c base64 w/ newlines won't be 
