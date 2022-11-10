@@ -181,32 +181,28 @@ try_encoding <- function(x) {
   if (inherits(z, "error")) "ASCII-8BIT" else z
 }
 
-is_base64 <- function(x) {
+is_base64 <- function(x, cassette) {
   if (!is.list(x)) {
     if ("base64" %in% names(attributes(x))) {
       return(attr(x, 'base64'))
     }
     return(FALSE)
   }
+
+  # new base64 setup where it is stored in "base64_string"
   hasb64str <- "base64_string" %in% names(x)
   if (hasb64str) return(TRUE)
-  # return(FALSE)
-  # old base64 setup
+
   if (
-    (vcr_c$preserve_exact_body_bytes || current_cassette()$preserve_exact_body_bytes) && 
-    "string" %in% names(x)
+    cassette$preserve_exact_body_bytes && "string" %in% names(x)
   ) {
+    # old base64 setup where it was stored in "string"
     message("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
     return(TRUE)
   } else {
+    # not using base64
     return(FALSE)
   }
-  # as_num <- tryCatch(as.numeric(x), warning = function(w) w)
-  # if (!inherits(as_num, "warning")) return(FALSE)
-  # # split string by newlines b/c base64 w/ newlines won't be 
-  # # recognized as valid base64
-  # x <- strsplit(x, "\r|\n", useBytes = TRUE)[[1]]
-  # all(grepl(b64_pattern, x))
 }
 
 Encoding_safe <- function(x) {

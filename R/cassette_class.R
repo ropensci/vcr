@@ -504,7 +504,7 @@ Cassette <- R6::R6Class(
     #' @description get http interactions from the cassette via the serializer
     #' @return list
     deserialized_hash = function() {
-      tmp <- self$serializer$deserialize()
+      tmp <- self$serializer$deserialize(self)
       if (inherits(tmp, "list")) {
         return(tmp)
       } else {

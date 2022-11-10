@@ -71,9 +71,17 @@ Serializes the given hash using internal fxn write_yaml
 Deserializes the content at the path using
 yaml::yaml.load_file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize(cassette)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{cassette}}{the current cassette object so it's properties can
+be retrieved}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 (list) the deserialized object, an R list
 }

@@ -24,10 +24,18 @@ test_that("try_encoding", {
 })
 
 test_that("is_base64", {
+  not64 <- Cassette$new('notbase64')
+  is64 <- Cassette$new('isbase64', preserve_exact_body_bytes = TRUE)
+
   expect_error(is_base64(), "\"x\" is missing")
-  expect_false(is_base64(base64enc::base64encode(charToRaw("foo"))))
-  expect_true(is_base64(list(base64_string = "adfadsf")))
-  expect_false(is_base64(list(string = "adfadsf")))
+  expect_false(is_base64(base64enc::base64encode(charToRaw("foo")), not64))
+  
+  expect_true(is_base64(list(base64_string = "adfadsf"), is64))
+  z = expect_message(is_base64(list(string = "adfadsf"), is64))
+  expect_true(z)
+
+  expect_false(is_base64(list(string = "adfadsf"), not64))
+  expect_true(is_base64(list(base64_string = "adfadsf"), not64))
   # # actual base64 strings are base64
   # expect_true(is_base64(base64enc::base64encode(charToRaw("foo"))))
   # # regular character strings are not base64
@@ -36,6 +44,9 @@ test_that("is_base64", {
   # expect_false(is_base64("12345"))
   # # numbers as numbers are not base64
   # expect_false(is_base64(12345))
+
+  suppressWarnings(not64$eject())
+  suppressWarnings(is64$eject())
 })
 
 test_that("serializable_body", {

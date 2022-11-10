@@ -34,18 +34,22 @@ Serializer <- R6::R6Class("Serializer",
       if (!inherits(x, "character")) return(x)
       gsub("[\r\n]", "", x)
     },
-    process_body = function(x) {
+    process_body = function(x, cassette) {
       if (is.null(x)) {
         return(list())
       } else {
         # check for base64 encoding
         x$http_interactions <- lapply(x$http_interactions, function(z) {
-          if (is_base64(z$response$body)) {
+          if (is_base64(z$response$body, cassette)) {
+            # string or base64_string?
+            str_slots <- c('string', 'base64_string')
+            slot <- str_slots[str_slots %in% names(z$response$body)]
+
             # if character and newlines detected, remove newlines
-            z$response$body$base64_string <- private$strip_newlines(z$response$body$base64_string)
-            b64dec <- base64enc::base64decode(z$response$body$base64_string)
+            z$response$body[[slot]] <- private$strip_newlines(z$response$body[[slot]])
+            b64dec <- base64enc::base64decode(z$response$body[[slot]])
             b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
-            z$response$body$base64_string <- if (inherits(b64dec_r2c, "error")) {
+            z$response$body[[slot]] <- if (inherits(b64dec_r2c, "error")) {
               # probably is binary (e.g., pdf), so can't be converted to char.
               b64dec
             } else {
@@ -53,8 +57,9 @@ Serializer <- R6::R6Class("Serializer",
               #  can convert to character from binary
               b64dec_r2c
             }
+
+            # set encoding to empty string, we're ignoring it for now
             z$response$body$encoding <- ""
-              # sup_mssg(vcr_c$quiet, encoding_guess(z$response$body$base64_string, TRUE))
           }
           return(z)
         })

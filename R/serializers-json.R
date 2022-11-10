@@ -32,12 +32,14 @@ JSON <- R6::R6Class("JSON",
 
     #' @description Deserializes the content at the file path using
     #' jsonlite::fromJSON
+    #' @param cassette the current cassette object so it's properties can
+    #' be retrieved
     #' @return (list) the deserialized object, an R list
-    deserialize = function() {
+    deserialize = function(cassette) {
       str <- sensitive_put_back(readLines(self$path))
       tmp <- jsonlite::fromJSON(str, FALSE)
       tmp <- query_params_put_back(tmp)
-      private$process_body(tmp)
+      private$process_body(tmp, cassette)
     }
   )
 )
