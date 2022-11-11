@@ -21,10 +21,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::revdepcheck
-          needs: revdep_check
+      - name: Install dependencies
+        run: |
+          remotes::install_github(c("r-lib/revdepcheck"))
+        shell: Rscript {0}
 
       - name: Revdepcheck
         run: Rscript -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=8)"
