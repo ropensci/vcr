@@ -23,6 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          install.packages("remotes")
           remotes::install_github(c("r-lib/revdepcheck"))
         shell: Rscript {0}
 
