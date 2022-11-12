@@ -8,7 +8,7 @@ vcr
 [![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://cloud.r-project.org/web/checks/check_results_vcr.html)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
-[![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
+[![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
@@ -25,7 +25,7 @@ Easier HTTP testing! Record HTTP requests and responses on disk and replay them 
 
 Now your tests can work without any internet connection!
 
-[Demo of adding vcr testing to an R package](https://github.com/maelle/exemplighratia/pull/2/files)
+[Demo of adding vcr testing to an R package](https://github.com/maelle/exemplighratia/pull/2/files), [corresponding narrative](https://books.ropensci.org/http-testing/vcr.html).
 
 ## Installation
 
@@ -56,7 +56,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and t
 
 ## Supported HTTP libraries
 
-* [crul](https://docs.ropensci.org/crul)
+* [crul](https://docs.ropensci.org/crul/)
 * [httr](https://httr.r-lib.org/)
 
 ## Getting Started
@@ -359,10 +359,14 @@ We set the following defaults:
  * log = `FALSE`
  * log_opts = `list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)`
  * filter_sensitive_data = `NULL`
+ * filter_sensitive_data_regex = `NULL`
  * filter_request_headers = `NULL`
  * filter_response_headers = `NULL`
+ * filter_query_parameters = `NULL`
  * write_disk_path = `NULL`
  * verbose_errors = `FALSE`
+ * quiet = `TRUE`
+ * warn_on_empty_cassette = `TRUE`
 
 
 You can get the defaults programmatically with
@@ -473,8 +477,8 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
-[webmockr]: https://docs.ropensci.org/webmockr
-[crul]: https://docs.ropensci.org/crul
+[webmockr]: https://docs.ropensci.org/webmockr/
+[crul]: https://docs.ropensci.org/crul/
 [rgbif]: https://github.com/ropensci/rgbif
 [rredlist]: https://github.com/ropensci/rredlist
 [bold]: https://github.com/ropensci/bold

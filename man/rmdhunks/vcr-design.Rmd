@@ -55,7 +55,7 @@ An overview of some of the more important aspects of vcr.
 
 An internal object (`vcr_c`) is created when `vcr` is loaded with
 the default vcr configuration options inside of an R6 class `VCRConfig` -
-see <https://github.com/ropensci/vcr/blob/master/R/onLoad.R>. This
+see <https://github.com/ropensci/vcr/blob/main/R/onLoad.R>. This
 class is keeps track of default and user specified configuration options.
 You can access `vcr_c` using triple namespace `:::`, though it is not
 intended for general use. Whenever you make calls to `vcr_configure()`
