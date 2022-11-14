@@ -117,6 +117,10 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 * [wikitaxa][]
 * [worrms][]
 * [ritis][]
+* [qualtRics][]
+* [rtweet][]
+* [rtoot][]
+* [allcontributors][]
 
 ## Contributors
 
@@ -139,3 +143,7 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 [wikitaxa]: https://github.com/ropensci/wikitaxa
 [worrms]: https://github.com/ropensci/worrms
 [ritis]: https://github.com/ropensci/ritis
+[qualtRics]: https://github.com/ropensci/qualtRics
+[rtweet]: https://github.com/ropensci/rtweet
+[rtoot]: https://github.com/schochastics/rtoot
+[allcontributors]: https://github.com/ropenscilabs/allcontributors
