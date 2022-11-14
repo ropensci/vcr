@@ -116,9 +116,6 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 * [bold][]
 * [wikitaxa][]
 * [worrms][]
-* [microdemic][]
-* [zbank][]
-* [rplos][]
 * [ritis][]
 
 ## Contributors
@@ -141,7 +138,4 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 [bold]: https://github.com/ropensci/bold
 [wikitaxa]: https://github.com/ropensci/wikitaxa
 [worrms]: https://github.com/ropensci/worrms
-[microdemic]: https://github.com/ropensci/microdemic
-[zbank]: https://github.com/ropenscilabs/zbank
-[rplos]: https://github.com/ropensci/rplos
 [ritis]: https://github.com/ropensci/ritis
