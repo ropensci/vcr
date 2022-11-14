@@ -26,7 +26,7 @@ invisible(vcr::vcr_configure(
   write_disk_path = "../files"
 ))
 vcr::check_cassette_names()'
-  cat(z, file = file.path(dir, "tests/testthat/setup-rabbit.R"))
+  cat(z, file = file.path(dir, "tests/testthat/helper-rabbit.R"))
 
   file_string <- '{
   "args": {

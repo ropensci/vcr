@@ -17,11 +17,7 @@ file paths: `/`, `?`, `<`, `>`, `\\`, `:`, `*`, `|`, and `\"`
 - Should not have trailing dots
 - Should not be longer than 255 characters
 
-`vcr::check_cassette_names()` is meant to be run during your tests, from a
-`setup-pkgname.R` file inside the `tests/testthat` directory. It only
-checks that cassette names are not duplicated. Note that if you do 
-need to have duplicated cassette names you can do so by using the
-`allowed_duplicates` parameter in `check_cassette_names()`. A helper function
-`check_cassette_names()` runs inside [insert_cassette()] that checks
-that cassettes do not have: spaces, file extensions, unaccepted
-characters (slashes)
+`vcr::check_cassette_names()` is meant to be run during your tests, from a [`helper-*.R` file](https://testthat.r-lib.org/reference/test_dir.html#special-files) inside the `tests/testthat` directory. 
+It only checks that cassette names are not duplicated.
+Note that if you do need to have duplicated cassette names you can do so by using the `allowed_duplicates` parameter in `check_cassette_names()`. 
+A helper function `check_cassette_names()` runs inside [insert_cassette()] that checks that cassettes do not have: spaces, file extensions, unaccepted characters (slashes).

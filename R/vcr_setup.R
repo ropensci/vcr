@@ -106,17 +106,18 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
   }
 
   # add helper-pkgname.R to tests/testthat/
-  hf <- file.path(dir, sprintf("tests/testthat/setup-%s.R", pkg))
-  if (!file.exists(hf)) {
-    file.create(hf, showWarnings = FALSE)
+  rel_hf <- "tests/testthat/helper-vcr.R"
+  abs_hf <- file.path(dir, rel_hf)
+  if (!file.exists(abs_hf)) {
+    file.create(abs_hf, showWarnings = FALSE)
   }
-  if (!any(grepl("vcr_configure", readLines(hf)))) {
+  if (!any(grepl("vcr_configure", readLines(abs_hf)))) {
     if (verbose) vcr_cat_line(paste0("Adding vcr config to ",
-      crayon::blue(sprintf("tests/testthat/setup-%s.R", pkg))))
-    cat(vcr_text$config, file = hf, append = TRUE)
+      crayon::blue(rel_hf)))
+    cat(vcr_text$config, file = abs_hf, append = TRUE)
   } else {
     if (verbose) vcr_cat_info(paste0("vcr config appears to be already setup in ",
-      crayon::blue(sprintf("tests/testthat/setup-%s.R", pkg))))
+      crayon::blue(rel_hf)))
   }
 
   # add dummy test file with example of use_cassette()

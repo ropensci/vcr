@@ -1,3 +1,10 @@
+development version
+=========
+
+* `use_vcr()` now creates a test helper file called `helper-vcr.R` instead of `setup-pkgname.R`. 
+  We are reverting the change from version 0.6.0 and now recommend the use of `helper-*.R` again, so that the vcr setup [is loaded with `devtools::load_all()`](https://testthat.r-lib.org/reference/test_dir.html#special-files). 
+  That way your vcr-enabled tests also work when run interactively (#244).
+
 vcr 1.1.0
 =========
 
