@@ -57,7 +57,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and t
 
 ## Supported HTTP libraries
 
-* [crul](https://docs.ropensci.org/crul/)
+* [crul][]
 * [httr](https://httr.r-lib.org/)
 
 ## Getting Started
