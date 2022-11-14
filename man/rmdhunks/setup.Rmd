@@ -17,7 +17,7 @@ This will:
 * setup a config file for `vcr`
 * add an example test file for `vcr`
 * make a `.gitattributes` file with settings for `vcr` 
-* make a `./tests/testthat/setup-vcr.R` file
+* make a `./tests/testthat/helper-vcr.R` file
 
 What you will see in the R console:
 
@@ -28,7 +28,7 @@ What you will see in the R console:
 ✓ Creating directory: ./tests/testthat  
 ◉ Looking for testthat.R file or similar  
 ✓ tests/testthat.R: added  
-✓ Adding vcr config to tests/testthat/setup-vcr.example.R  
+✓ Adding vcr config to tests/testthat/helper-vcr.example.R  
 ✓ Adding example test file tests/testthat/test-vcr_example.R  
 ✓ .gitattributes: added  
 ◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
@@ -40,7 +40,7 @@ Secrets often turn up in API work. A common example is an API key.
 `vcr` saves responses from APIs as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them.
 The `vcr_configure` function has the `filter_sensitive_data` argument function for just this situation. 
 The `filter_sensitive_data` argument takes a named list where the _name_ of the list is the string that will be used in the recorded cassettes _instead of_ the secret, which is the list _item_. 
-`vcr` will manage the replacement of that for you, so all you need to do is to edit your `setup-vcr.R` file like this:
+`vcr` will manage the replacement of that for you, so all you need to do is to edit your [`helper-vcr.R` file](https://testthat.r-lib.org/reference/test_dir.html#special-files) like this:
 
 ```r
 library("vcr") # *Required* as vcr is set up on loading
@@ -88,7 +88,7 @@ Furthermore, as by default requests matching does not include the API key, thing
 E.g. to have tests pass on continuous integration for external pull requests to your code repository.
 
 * vcr does not need an actual API key for requests once the cassettes are created, as no real requests will be made.
-* you still need to fool your _package_ into believing there is an API key as it will construct requests with it. So add the following lines to a testthat setup file (e.g. `tests/testthat/setup-vcr.R`)
+* you still need to fool your _package_ into believing there is an API key as it will construct requests with it. So add the following lines to a testthat setup file (e.g. `tests/testthat/helper-vcr.R`)
 
 ```r
 if (!nzchar(Sys.getenv("APIKEY"))) {
