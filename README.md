@@ -56,7 +56,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and t
 
 ## Supported HTTP libraries
 
-* [crul](https://docs.ropensci.org/crul/)
+* [crul][]
 * [httr](https://httr.r-lib.org/)
 
 ## Getting Started
@@ -454,15 +454,16 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 ## Example packages using vcr
 
-* [rgbif][]
-* [rredlist][]
+* [allcontributors][]
 * [bold][]
+* [qualtRics][]
+* [rgbif][]
+* [ritis][]
+* [rredlist][]
+* [rtoot][]
+* [rtweet][]
 * [wikitaxa][]
 * [worrms][]
-* [microdemic][]
-* [zbank][]
-* [rplos][]
-* [ritis][]
 
 ## Contributors
 
@@ -477,14 +478,15 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
-[webmockr]: https://docs.ropensci.org/webmockr/
-[crul]: https://docs.ropensci.org/crul/
-[rgbif]: https://github.com/ropensci/rgbif
-[rredlist]: https://github.com/ropensci/rredlist
+[allcontributors]: https://github.com/ropenscilabs/allcontributors
 [bold]: https://github.com/ropensci/bold
+[crul]: https://docs.ropensci.org/crul/
+[qualtRics]: https://github.com/ropensci/qualtRics
+[rgbif]: https://github.com/ropensci/rgbif
+[ritis]: https://github.com/ropensci/ritis
+[rredlist]: https://github.com/ropensci/rredlist
+[rtoot]: https://github.com/schochastics/rtoot
+[rtweet]: https://github.com/ropensci/rtweet
+[webmockr]: https://docs.ropensci.org/webmockr/
 [wikitaxa]: https://github.com/ropensci/wikitaxa
 [worrms]: https://github.com/ropensci/worrms
-[microdemic]: https://github.com/ropensci/microdemic
-[zbank]: https://github.com/ropenscilabs/zbank
-[rplos]: https://github.com/ropensci/rplos
-[ritis]: https://github.com/ropensci/ritis
