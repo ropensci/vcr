@@ -70,6 +70,7 @@ reference:
       - vcr_log_file
       - vcr_log_info
       - crul_request
+      - str_splitter
 
 articles:
 - title: All vignettes
