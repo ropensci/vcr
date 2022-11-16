@@ -12,10 +12,12 @@ Version: 1.1.2.91
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")),
-    person("Aaron", "Wolen", role = "ctb",
+    person("Aaron", "Wolen", role = "aut",
     comment = c(ORCID="0000-0003-2542-2202")),
-    person("Maëlle", "Salmon", role = "ctb",
+    person("Maëlle", "Salmon", role = "aut",
     comment = c(ORCID="0000-0002-2815-0399")),
+    person("Daniel", "Possenriede", role = "aut",
+    comment = c(ORCID="0000-0002-6738-9845")),
     person("rOpenSci", role = "fnd", comment = "https://ropensci.org"))
 URL: https://github.com/ropensci/vcr/ (devel)
     https://books.ropensci.org/http-testing/ (user manual)

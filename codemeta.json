@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.0",
+  "version": "1.1.2.91",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -28,9 +28,7 @@
       "familyName": "Chamberlain",
       "email": "sckott@protonmail.com",
       "@id": "https://orcid.org/0000-0003-1444-9135"
-    }
-  ],
-  "contributor": [
+    },
     {
       "@type": "Person",
       "givenName": "Aaron",
@@ -42,6 +40,12 @@
       "givenName": "Maëlle",
       "familyName": "Salmon",
       "@id": "https://orcid.org/0000-0002-2815-0399"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Daniel",
+      "familyName": "Possenriede",
+      "@id": "https://orcid.org/0000-0002-6738-9845"
     }
   ],
   "funder": [
@@ -281,10 +285,10 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rprojroot"
     },
-    "SystemRequirements": "C++11"
+    "SystemRequirements": null
   },
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd"],
-  "fileSize": "1396.425KB"
+  "fileSize": "899.637KB"
 }
