@@ -1,9 +1,21 @@
-development version
+vcr 1.2.0
 =========
+
+### NEW FEATURES
+
+* Added @dpprdan as an author; changed all ctb to aut (#258)
+
+### MINOR IMPROVEMENTS
 
 * `use_vcr()` now creates a test helper file called `helper-vcr.R` instead of `setup-pkgname.R`. 
   We are reverting the change from version 0.6.0 and now recommend the use of `helper-*.R` again, so that the vcr setup [is loaded with `devtools::load_all()`](https://testthat.r-lib.org/reference/test_dir.html#special-files). 
-  That way your vcr-enabled tests also work when run interactively (#244).
+  That way your vcr-enabled tests also work when run interactively (#244) (#256)
+* default git branch changed from master to main (#253)
+* update example packages in the README (#257)
+
+### BUG FIXES
+
+* roll back a change from the previous CRAN version that removed use of an internal function (`body_from`) (#249) (#252)
 
 vcr 1.1.0
 =========
