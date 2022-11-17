@@ -127,6 +127,7 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 * [Scott Chamberlain](https://github.com/sckott)
 * [Aaron Wolen](https://github.com/aaronwolen)
 * [Maëlle Salmon](https://github.com/maelle)
+* [Daniel Possenriede](https://github.com/dpprdan)
 
 ## Meta
 
