@@ -12,6 +12,7 @@ vcr 1.2.0
   That way your vcr-enabled tests also work when run interactively (#244) (#256)
 * default git branch changed from master to main (#253)
 * update example packages in the README (#257)
+* vcr no longer requires compilation because replaced the single C++ function with a pure R equivalent
 
 ### BUG FIXES
 
