@@ -1,5 +1,5 @@
 
-url <- "https://httpbin.org/get?update=2022-01-01T00:00:00&p2=ok"
+url <- hb("/get?update=2022-01-01T00:00:00&p2=ok")
 req_crul <- function(url) {
     tmp <- crul::HttpClient$new(url)$get()
 }
@@ -23,3 +23,7 @@ test_that('request matching is not sensitive to escaping special characters', {
   res <- req_httr(url)
   expect_true(res$status_code == 200)
 })
+
+# cleanup
+files <- c("get_crul_match.yml", "get_httr_match.yml")
+unlink(file.path(vcr_configuration()$dir, files))
