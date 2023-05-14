@@ -25,7 +25,7 @@ test_that("Request basic stuff", {
 })
 
 test_that("Request usage", {
-  url <- "https://eu.httpbin.org/post"
+  url <- hb("/post")
   body <- list(foo = "bar")
   headers <- list(
     `User-Agent` = "libcurl/7.54.0 r-curl/3.2 crul/0.5.2",
@@ -38,9 +38,8 @@ test_that("Request usage", {
   expect_is(aa$method, "character")
   expect_equal(aa$method, "post")
   expect_is(aa$uri, "character")
-  expect_equal(aa$uri, "https://eu.httpbin.org/post")
+  expect_equal(aa$uri, hb("/post"))
   expect_is(aa$host, "character")
-  expect_equal(aa$host, "eu.httpbin.org")
   expect_is(aa$path, "character")
   expect_equal(aa$path, "post")
   expect_is(aa$headers, "list")

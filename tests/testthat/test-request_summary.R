@@ -1,7 +1,7 @@
 context("request_summary")
 
 library("crul")
-url <- "https://eu.httpbin.org"
+url <- hb()
 cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)
 webmockr::webmockr_allow_net_connect()
@@ -24,11 +24,11 @@ test_that("request_summary works", {
   expect_is(cc, "character")
   expect_is(dd, "character")
 
-  expect_match(aa, "post https://eu.httpbin.org/")
-  expect_match(bb, "post https://eu.httpbin.org/ foo=bar")
+  expect_match(aa, "post .+org/")
+  expect_match(bb, "post .+org/ foo=bar")
 
   expect_match(cc, "post")
-  expect_match(cc, "https://eu.httpbin.org/")
+  expect_match(cc, ".org")
   expect_match(cc, "libcurl")
   expect_match(cc, "r-curl")
   expect_match(cc, "crul")
@@ -37,7 +37,7 @@ test_that("request_summary works", {
   expect_false(grepl("foo=bar", cc))
 
   expect_match(dd, "post")
-  expect_match(dd, "https://eu.httpbin.org/")
+  expect_match(dd, ".org")
   expect_match(dd, "foo=bar")
   expect_match(dd, "libcurl")
   expect_match(dd, "r-curl")

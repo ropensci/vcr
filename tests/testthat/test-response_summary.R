@@ -1,7 +1,7 @@
 context("response_summary")
 
 library("crul")
-url <- "https://eu.httpbin.org"
+url <- hb()
 cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)
 webmockr::webmockr_allow_net_connect()

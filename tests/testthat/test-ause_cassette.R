@@ -10,7 +10,7 @@ test_that("use_cassette works as expected", {
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
   aa <- use_cassette(name = "testing1", {
-    res <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
+    res <- crul::HttpClient$new(hb("/get"))$get()
   })
 
   # test `print.cassette` method

@@ -15,7 +15,7 @@ test_that("filter_query_parameters: remove", {
   # remove only
   # no query param filtering to compare below stuff to
   vcr_configure(dir = mydir)
-  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  con <- crul::HttpClient$new(hb("/get"))
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- con$get(query = list(Foo="bar"))
@@ -24,7 +24,7 @@ test_that("filter_query_parameters: remove", {
   vcr_configure_reset()
   vcr_configure(dir = mydir, filter_query_parameters = "Foo")
   unlink(file.path(vcr_c$dir, "filterparams_remove.yml"))
-  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  con <- crul::HttpClient$new(hb("/get"))
   cas1 <- use_cassette(name = "filterparams_remove", {
     res1 <- con$get(query = list(Foo="bar"))
   })
@@ -62,7 +62,7 @@ test_that("filter_query_parameters: replace", {
   # remove only
   # no query param filtering to compare below stuff to
   vcr_configure(dir = mydir)
-  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  con <- crul::HttpClient$new(hb("/get"))
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- con$get(query = list(Foo="bar"))
@@ -71,7 +71,7 @@ test_that("filter_query_parameters: replace", {
   vcr_configure_reset()
   vcr_configure(dir = mydir, filter_query_parameters = list(Foo = "placeholder"))
   unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
-  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  con <- crul::HttpClient$new(hb("/get"))
   cas1 <- use_cassette(name = "filterparams_replace", {
     res1 <- con$get(query = list(Foo="bar"))
   })
@@ -104,7 +104,7 @@ test_that("filter_query_parameters: replace with secret", {
   skip_on_cran()
 
   library(crul)
-  con <- crul::HttpClient$new("https://eu.httpbin.org/get")
+  con <- crul::HttpClient$new(hb("/get"))
   mydir <- file.path(tempdir(), "filter_query_parameters_replace_with")
   Sys.setenv(MY_KEY = "my-secret-key")
   # Sys.getenv("MY_KEY")
@@ -161,17 +161,17 @@ test_that("filter_query_parameters: remove (httr)", {
   vcr_configure(dir = mydir)
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- GET("https://eu.httpbin.org/get?Foo=bar")
+    res_nofilters <- GET(hb("/get?Foo=bar"))
   })
   # Do filtering
   vcr_configure_reset()
   vcr_configure(dir = mydir, filter_query_parameters = "Foo")
   unlink(file.path(vcr_c$dir, "filterparams_remove.yml"))
   cas1 <- use_cassette(name = "filterparams_remove", {
-    res1 <- GET("https://eu.httpbin.org/get?Foo=bar")
+    res1 <- GET(hb("/get?Foo=bar"))
   })
   cas2 <- use_cassette(name = "filterparams_remove", {
-    res2 <- GET("https://eu.httpbin.org/get?Foo=bar")
+    res2 <- GET(hb("/get?Foo=bar"))
   })
   
   # with no filtering, request headers have Foo
@@ -206,17 +206,17 @@ test_that("filter_query_parameters: replace (httr)", {
   vcr_configure(dir = mydir)
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- GET("https://eu.httpbin.org/get?Foo=bar")
+    res_nofilters <- GET(hb("/get?Foo=bar"))
   })
   # Do filtering
   vcr_configure_reset()
   vcr_configure(dir = mydir, filter_query_parameters = list(Foo = "placeholder"))
   unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
   cas1 <- use_cassette(name = "filterparams_replace", {
-    res1 <- GET("https://eu.httpbin.org/get?Foo=bar")
+    res1 <- GET(hb("/get?Foo=bar"))
   })
   cas2 <- use_cassette(name = "filterparams_replace", {
-    res2 <- GET("https://eu.httpbin.org/get?Foo=bar")
+    res2 <- GET(hb("/get?Foo=bar"))
   })
   
   # with no filtering, request headers have Foo

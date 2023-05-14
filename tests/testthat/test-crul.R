@@ -7,7 +7,7 @@ context("adapter-crul: POST requests works")
 test_that("crul POST requests works", {
   # body type: named list
   out <- use_cassette("crul_post_named_list", {
-    x <- HttpClient$new("https://httpbin.org/post")$post(body = list(foo = "bar"))
+    x <- HttpClient$new(hb("/post"))$post(body = list(foo = "bar"))
   })
   expect_false(out$is_empty())
   expect_is(x, "HttpResponse")
@@ -18,7 +18,7 @@ test_that("crul POST requests works", {
 
   # body type: character
   out2 <- use_cassette("crul_post_string", {
-    z <- HttpClient$new("https://httpbin.org/post")$post(body = "some string")
+    z <- HttpClient$new(hb("/post"))$post(body = "some string")
   })
   expect_false(out2$is_empty())
   expect_is(z, "HttpResponse")
@@ -30,7 +30,7 @@ test_that("crul POST requests works", {
 
   # body type: raw
   out3 <- use_cassette("crul_post_raw", {
-    z <- HttpClient$new("https://httpbin.org/post")$post(body = charToRaw("some string"))
+    z <- HttpClient$new(hb("/post"))$post(body = charToRaw("some string"))
   })
   expect_false(out3$is_empty())
   expect_is(z, "HttpResponse")
@@ -45,7 +45,7 @@ test_that("crul POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("crul_post_upload_file", {
-    b <- HttpClient$new("https://httpbin.org/post")$post(
+    b <- HttpClient$new(hb("/post"))$post(
       body = list(y = crul::upload(ff)))
   })
   expect_false(out4$is_empty())
@@ -59,7 +59,7 @@ test_that("crul POST requests works", {
   
   ## upload_file not in a list
   out6 <- use_cassette("crul_post_upload_file_no_list", {
-    d <- HttpClient$new("https://httpbin.org/post")$post(
+    d <- HttpClient$new(hb("/post"))$post(
       body = crul::upload(system.file("CITATION")))
   })
   expect_false(out6$is_empty())
@@ -72,7 +72,7 @@ test_that("crul POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("crul_post_null", {
-    m <- HttpClient$new("https://httpbin.org/post")$post(body = NULL)
+    m <- HttpClient$new(hb("/post"))$post(body = NULL)
   })
   expect_false(out5$is_empty())
   expect_is(z, "HttpResponse")

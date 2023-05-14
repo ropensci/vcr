@@ -5,7 +5,7 @@ vcr_configure(dir = tmpdir)
 
 test_that("quiet works", {
   library(crul)
-  con <- HttpClient$new("https://eu.httpbin.org")
+  con <- HttpClient$new(hb())
   # default: quiet=TRUE 
   expect_true(vcr_configuration()$quiet)
   expect_message(

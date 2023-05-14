@@ -1,8 +1,8 @@
 test_that("HTTPInteractionList", {
   crul::mock(FALSE)
 
-  url <- "https://eu.httpbin.org/post"
-  url2 <- "https://eu.httpbin.org/get"
+  url <- hb("/post")
+  url2 <- hb("/get")
   url3 <- "https://scottchamberlain.info"
   body <- list(foo = "bar")
   cli <- crul::HttpClient$new(url = url)

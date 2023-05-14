@@ -5,7 +5,7 @@ test_that("use_cassette: match on body w/ empty body", {
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
-  cli <- HttpClient$new(url = "https://httpbin.org")
+  cli <- HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
   # run it

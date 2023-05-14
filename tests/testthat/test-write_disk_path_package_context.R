@@ -10,7 +10,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   dir.create(file.path(dir, "tests/files"), recursive = TRUE)
   strg <- 'ffff <- function() {
   f <- tempfile(fileext = ".json")
-  con <- crul::HttpClient$new("https://httpbin.org")
+  con <- crul::HttpClient$new("https://hb.opencpu.org")
   con$get("get", query = list(apples = 56), disk = f)
 }\n\ntest_that("ffff works", {
   vcr::use_cassette("ffff_testing", {
@@ -35,19 +35,19 @@ vcr::check_cassette_names()'
   "headers": {
     "Accept": "application/json, text/xml, application/xml, */*",
     "Accept-Encoding": "gzip, deflate",
-    "Host": "httpbin.org",
+    "Host": "hb.opencpu.org",
     "User-Agent": "libcurl/7.64.1 r-curl/4.3 crul/0.9.0",
     "X-Amzn-Trace-Id": "Root=1-5e78ddc3-6bdd2bd4ef4d3082831b10ea"
   },
   "origin": "24.21.229.59",
-  "url": "https://httpbin.org/get?apples=56"
+  "url": "https://hb.opencpu.org/get?apples=56"
 }'
   cat(file_string, file = file.path(dir, "tests/files/file3aa4401aca64.json"))
 
   fixtures1 <- "http_interactions:
 - request:
     method: get
-    uri: https://httpbin.org/get?apples=56
+    uri: https://hb.opencpu.org/get?apples=56
     body:
       encoding: ''
       string: ''

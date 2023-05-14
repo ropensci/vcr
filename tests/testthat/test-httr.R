@@ -47,10 +47,10 @@ test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
   out <- use_cassette("httr_test1", {
-    x <- GET("https://httpbin.org/404")
+    x <- GET(hb("/404"))
   })
   invisible(use_cassette("httr_test1", {
-    x2 <- GET("https://httpbin.org/404")
+    x2 <- GET(hb("/404"))
   }))
 
   # cassette
@@ -62,7 +62,7 @@ test_that("httr use_cassette works", {
   # request - 1st http call
   expect_is(x$request, "request")
   expect_equal(x$request$method, "GET")
-  expect_equal(x$request$url, "https://httpbin.org/404")
+  expect_equal(x$request$url, hb("/404"))
   expect_named(x$request$headers, "Accept")
   expect_null(x$request$fields)
   expect_true(x$request$options$httpget)
@@ -71,7 +71,7 @@ test_that("httr use_cassette works", {
   # request - 2nd http call
   expect_is(x2$request, "request")
   expect_equal(x2$request$method, "GET")
-  expect_equal(x2$request$url, "https://httpbin.org/404")
+  expect_equal(x2$request$url, hb("/404"))
   expect_named(x2$request$headers, "Accept")
   expect_null(x2$request$fields)
   expect_true(x2$request$options$httpget)
@@ -80,7 +80,7 @@ test_that("httr use_cassette works", {
   # response
   expect_is(x, "response")
   expect_equal(x$status_code, 404)
-  expect_equal(x$url, "https://httpbin.org/404")
+  expect_equal(x$url, hb("/404"))
   expect_output(print(x), "Not Found")
   expect_output(print(x), "HTML PUBLIC")
 
@@ -100,7 +100,7 @@ test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
   out <- use_cassette("httr_test2", {
-    x <- GET("https://httpbin.org/404")
+    x <- GET(hb("/404"))
   }, preserve_exact_body_bytes = TRUE)
 
   # cassette
@@ -112,7 +112,7 @@ test_that("httr use_cassette works", {
   # response
   expect_is(x, "response")
   expect_equal(x$status_code, 404)
-  expect_equal(x$url, "https://httpbin.org/404")
+  expect_equal(x$url, hb("/404"))
 
   # response body
   str <- yaml::yaml.load_file(out$manfile)
@@ -132,9 +132,9 @@ test_that("httr w/ >1 request per cassette", {
   skip_if_not_installed("xml2")
 
   out <- use_cassette("multiple_queries_httr_record_once", {
-    x404 <- GET("https://httpbin.org/status/404")
-    x500 <- GET("https://httpbin.org/status/500")
-    x418 <- GET("https://httpbin.org/status/418")
+    x404 <- GET(hb("/status/404"))
+    x500 <- GET(hb("/status/500"))
+    x418 <- GET(hb("/status/418"))
 
     expect_equal(status_code(x404), 404)
     expect_equal(status_code(x500), 500)
@@ -171,8 +171,7 @@ context("adapter-httr: use_cassette w/ simple auth")
 test_that("httr works with simple auth and hides auth details", {
 
   use_cassette("httr_test_simple_auth", {
-    x <- GET("https://httpbin.org/basic-auth/foo/bar",
-      authenticate("foo", "bar"))
+    x <- GET(hb("/basic-auth/foo/bar"), authenticate("foo", "bar"))
   })
 
   # successful request
@@ -194,7 +193,7 @@ context("adapter-httr: POST requests works")
 test_that("httr POST requests works", {
   # body type: named list
   out <- use_cassette("httr_post_named_list", {
-    x <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+    x <- POST(hb("/post"), body = list(foo = "bar"))
   })
   expect_false(out$is_empty())
   expect_is(x, "response")
@@ -205,7 +204,7 @@ test_that("httr POST requests works", {
 
   # body type: character
   out2 <- use_cassette("httr_post_string", {
-    z <- POST("https://httpbin.org/post", body = "some string")
+    z <- POST(hb("/post"), body = "some string")
   })
   expect_false(out2$is_empty())
   expect_is(z, "response")
@@ -216,7 +215,7 @@ test_that("httr POST requests works", {
 
   # body type: raw
   out3 <- use_cassette("httr_post_raw", {
-    z <- POST("https://httpbin.org/post", body = charToRaw("some string"))
+    z <- POST(hb("/post"), body = charToRaw("some string"))
   })
   expect_false(out3$is_empty())
   expect_is(z, "response")
@@ -229,7 +228,7 @@ test_that("httr POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("httr_post_upload_file", {
-    b <- POST("https://httpbin.org/post",
+    b <- POST(hb("/post"),
       body = list(y = httr::upload_file(ff)))
   })
   expect_false(out4$is_empty())
@@ -243,7 +242,7 @@ test_that("httr POST requests works", {
   
   ## upload_file not in a list
   # out6 <- use_cassette("httr_post_upload_file_no_list", {
-  #   d <- POST("https://httpbin.org/post",
+  #   d <- POST(hb("/post"),
   #     body = httr::upload_file(system.file("CITATION")))
   # })
   # expect_false(out6$is_empty())
@@ -256,7 +255,7 @@ test_that("httr POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("httr_post_null", {
-    m <- POST("https://httpbin.org/post", body = NULL)
+    m <- POST(hb("/post"), body = NULL)
   })
   expect_false(out5$is_empty())
   expect_is(m, "response")

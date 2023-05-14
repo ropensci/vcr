@@ -137,7 +137,7 @@ test_that("turned_off", {
   # no cassette in use
   expect_true(turned_on())
   suppressMessages(turned_off({
-    beetle <- crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+    beetle <- crul::HttpClient$new(url = hb("/get"))$get()
   }))
   expect_is(beetle, "HttpResponse")
   expect_true(turned_on())

@@ -25,7 +25,7 @@ vcr_configure_reset()
 dir <- tempdir()
 invisible(vcr_configure(dir = dir))
 request <- Request$new(
-  "post", "https://eu.httpbin.org/post?a=5", "", list(foo = "bar"))
+  "post", hb("/post?a=5"), "", list(foo = "bar"))
 
 test_that("vcr_last_error works: no casssette in use yet", {
   err <- UnhandledHTTPRequestError$new(request)
