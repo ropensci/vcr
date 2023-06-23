@@ -3,9 +3,9 @@ name: revdep
 
 jobs:
   revdep:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: startsWith(github.event.head_commit.message, 'REVDEPCHECK')
-    name: ubuntu-20.04 (release)
+    name: ubuntu-22.04 (release)
     strategy:
       fail-fast: false
 
@@ -22,15 +22,12 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::revdepcheck
-          needs: revdep_check
 
       - name: Revdepcheck
-        run: Rscript -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=4)"
+        run: Rscript -e "install.packages('remotes')" -e "remotes::install_github('r-lib/revdepcheck')" -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=4)"
 
       - name: Upload revdepcheck results
         uses: actions/upload-artifact@v3
         with:
-          name: ubuntu-20-04-r-release-results
+          name: ubuntu-22-04-r-release-results
           path: revdep/*.md
