@@ -1,3 +1,8 @@
+vcr 1.2.2
+=========
+
+* change tests to use more reliable test servers
+
 vcr 1.2.0
 =========
 
