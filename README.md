@@ -25,7 +25,7 @@ Easier HTTP testing! Record HTTP requests and responses on disk and replay them 
 
 Now your tests can work without any internet connection!
 
-[Demo of adding vcr testing to an R package](https://github.com/maelle/exemplighratia/pull/2/files), [corresponding narrative](https://books.ropensci.org/http-testing/vcr.html).
+[Demo of adding vcr testing to an R package](https://github.com/ropensci-books/exemplighratia/pull/2/files), [corresponding narrative](https://books.ropensci.org/http-testing/vcr.html).
 
 ## Installation
 
