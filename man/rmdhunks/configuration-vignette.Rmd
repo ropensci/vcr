@@ -80,7 +80,7 @@ vcr_configure(allow_unused_http_interactions = FALSE)
 
 ### serialize_with
 
-Which serializer to use. "yaml" or "json". Note that you can have
+Which serializer to use: "yaml" or "json". Note that you can have
 multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.
