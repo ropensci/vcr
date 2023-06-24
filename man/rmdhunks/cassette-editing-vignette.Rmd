@@ -24,7 +24,7 @@ First, write your test e.g.
 
 ```r
 vcr::use_cassette("api-error", {
-  testhat("Errors are handled well", {
+  test_that("Errors are handled well", {
     vcr::skip_if_vcr_off()
     expect_error(call_my_api()), "error message")
   })
@@ -32,7 +32,7 @@ vcr::use_cassette("api-error", {
 
 ```
 
-Then run your tests a first time.
+Then run your tests the first time.
 
 1. It will fail
 2. It will have created a cassette under `tests/fixtures/api-error.yml` that looks 
@@ -97,7 +97,7 @@ behavior of your package in case of errors.
 Below we assume `api_url()` returns the URL `call_my_api()` calls.
 
 ```r
-testhat("Errors are handled well", {
+test_that("Errors are handled well", {
   webmockr::enable()
   stub <- webmockr::stub_request("get", api_url())
   webmockr::to_return(stub, status = 503)
@@ -119,7 +119,7 @@ First, write your test e.g.
 
 ```r
 vcr::use_cassette("api-error", {
-  testhat("Errors are handled well", {
+  test_that("Errors are handled well", {
     vcr::skip_if_vcr_off()
     expect_message(thing <- call_my_api()), "retry message")
     expect_s4_class(thing, "data.frame")
@@ -128,7 +128,7 @@ vcr::use_cassette("api-error", {
 
 ```
 
-Then run your tests a first time.
+Then run your tests the first time.
 
 1. It will fail
 2. It will have created a cassette under `tests/fixtures/api-error.yml` that looks 
@@ -219,7 +219,7 @@ behavior of your package in case of errors.
 Below we assume `api_url()` returns the URL `call_my_api()` calls.
 
 ```r
-testhat("Errors are handled well", {
+test_that("Errors are handled well", {
   webmockr::enable()
   stub <- webmockr::stub_request("get", api_url())
   stub %>%
