@@ -37,6 +37,7 @@ to make a complete \code{crul} HTTP response object
 }
 
 \examples{
+\dontrun{
 library(vcr)
 vcr_configure(dir = tempdir())
 
@@ -61,7 +62,8 @@ library(vcr)
 vcr_configure(dir = tempdir())
 res <- Cassette$new(name = "jane")
 library(crul)
-HttpClient$new("https://httpbin.org")$get("get")
+# HttpClient$new("https://hb.opencpu.org")$get("get")
+}
 }
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}

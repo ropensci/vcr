@@ -122,7 +122,7 @@ webmockr::webmockr_allow_net_connect()
 current_cassette()
 x$new_recorded_interactions
 x$previously_recorded_interactions()
-cli <- crul::HttpClient$new(url = "https://httpbin.org")
+cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
 cli$get("get")
 x$new_recorded_interactions # 1 interaction
 x$previously_recorded_interactions() # empty

@@ -14,7 +14,7 @@
 #' @examples \dontrun{
 #' # make the request
 #' library(vcr)
-#' url <- "https://eu.httpbin.org/post"
+#' url <- "https://hb.opencpu.org/post"
 #' body <- list(foo = "bar")
 #' cli <- crul::HttpClient$new(url = url)
 #' res <- cli$post(body = body)

@@ -43,7 +43,7 @@ vcr_configure(
 ## make the request
 ### turn off mocking
 crul::mock(FALSE)
-url <- "https://eu.httpbin.org/post"
+url <- "https://hb.opencpu.org/post"
 cli <- crul::HttpClient$new(url = url)
 res <- cli$post(body = list(a = 5))
 

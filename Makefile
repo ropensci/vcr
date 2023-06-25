@@ -22,7 +22,7 @@ doc:
 	${RSCRIPT} -e "devtools::document()"
 
 eg:
-	${RSCRIPT} -e "devtools::run_examples()"
+	${RSCRIPT} -e "devtools::run_examples(run_dontrun=TRUE)"
 
 test:
 	${RSCRIPT} -e "devtools::test()"

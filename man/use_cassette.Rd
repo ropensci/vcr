@@ -145,14 +145,14 @@ library(crul)
 vcr_configure(dir = tempdir())
 
 use_cassette(name = "apple7", {
-  cli <- HttpClient$new(url = "https://httpbin.org")
+  cli <- HttpClient$new(url = "https://hb.opencpu.org")
   resp <- cli$get("get")
 })
 readLines(file.path(tempdir(), "apple7.yml"))
 
 # preserve exact body bytes - records in base64 encoding
 use_cassette("things4", {
-  cli <- crul::HttpClient$new(url = "https://httpbin.org")
+  cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
   bbb <- cli$get("get")
 }, preserve_exact_body_bytes = TRUE)
 ## see the body string value in the output here
@@ -168,7 +168,7 @@ library(httr)
 vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = file.path(tempdir(), "vcr.log")))
 
 use_cassette(name = "stuff350", {
-  res <- GET("https://httpbin.org/get")
+  res <- GET("https://hb.opencpu.org/get")
 })
 readLines(file.path(tempdir(), "stuff350.yml"))
 

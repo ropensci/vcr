@@ -18,7 +18,7 @@
 #' library(crul)
 #' vcr_configure(dir = tempdir(), log = TRUE,
 #'  log_opts = list(file = file.path(tempdir(), "vcr.log")))
-#' cli <- HttpClient$new(url = "https://httpbin.org")
+#' cli <- HttpClient$new(url = "https://hb.opencpu.org")
 #' 
 #' ## testing, same uri and method, changed body in 2nd block
 #' use_cassette(name = "apple7", {

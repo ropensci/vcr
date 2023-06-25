@@ -26,7 +26,7 @@
 #' [webmockr::Response] are used to build a request and response,
 #' respectively, then passed to [webmockr::build_crul_response()]
 #' to make a complete `crul` HTTP response object
-#' @examples
+#' @examples \dontrun{
 #' library(vcr)
 #' vcr_configure(dir = tempdir())
 #'
@@ -51,7 +51,8 @@
 #' vcr_configure(dir = tempdir())
 #' res <- Cassette$new(name = "jane")
 #' library(crul)
-#' HttpClient$new("https://httpbin.org")$get("get")
+#' # HttpClient$new("https://hb.opencpu.org")$get("get")
+#' }
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(

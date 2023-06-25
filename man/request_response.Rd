@@ -40,7 +40,7 @@ your data/etc. as this is only for printing a summary of the response
 }
 \examples{
 # request
-url <- "https://httpbin.org"
+url <- "https://hb.opencpu.org"
 body <- list(foo = "bar")
 headers <- list(
   `User-Agent` = "r-curl/3.2",
