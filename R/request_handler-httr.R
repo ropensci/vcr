@@ -21,7 +21,7 @@
 #' mydir <- file.path(tempdir(), "testing_httr")
 #' invisible(vcr_configure(dir = mydir))
 #' use_cassette(name = "testing2", {
-#'   res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+#'   res <- POST("https://hb.opencpu.org/post", body = list(foo = "bar"))
 #' }, match_requests_on = c("method", "uri", "body"))
 #'
 #' load("~/httr_req_post.rda")

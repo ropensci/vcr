@@ -8,7 +8,7 @@
 #' insert_cassette("foo_bar")
 #' webmockr::webmockr_allow_net_connect()
 #' library(crul)
-#' cli <- crul::HttpClient$new("https://eu.httpbin.org/get")
+#' cli <- crul::HttpClient$new("https://hb.opencpu.org/get")
 #' one <- cli$get(query = list(a = 5))
 #' z <- http_interactions()
 #' z

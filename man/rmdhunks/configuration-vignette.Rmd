@@ -58,7 +58,7 @@ One of: 'all', 'none', 'new_episodes', 'once'. See `?recording` for info on the 
 vcr_configure(record = "new_episodes")
 ```
 
-### match_requests_on 
+### match_requests_on
 
 Customize how `vcr` matches requests
 
@@ -66,7 +66,7 @@ Customize how `vcr` matches requests
 vcr_configure(match_requests_on = c('query', 'headers'))
 ```
 
-### allow_unused_http_interactions 
+### allow_unused_http_interactions
 
 Allow HTTP connections when no cassette
 
@@ -80,7 +80,10 @@ vcr_configure(allow_unused_http_interactions = FALSE)
 
 ### serialize_with
 
-Which serializer to use. Right now only option is "yaml"
+Which serializer to use: "yaml" or "json". Note that you can have
+multiple cassettes with the same name as long as they use different
+serializers; so if you only want one cassette for a given cassette name,
+make sure to not switch serializers, or clean up files you no longer need.
 
 ```{r}
 vcr_configure(serialize_with = "yaml")
@@ -157,7 +160,7 @@ of the cassette.
 vcr_configure(preserve_exact_body_bytes = TRUE)
 ```
 
-### filter_sensitive_data 
+### filter_sensitive_data
 
 A named list of values to replace. Sometimes your package or script is 
 working with sensitive tokens/keys, which you do not want to accidentally 

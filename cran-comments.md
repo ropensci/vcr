@@ -1,7 +1,7 @@
 ## Test environments
 
-* local macOS, R 4.2.2
-* ubuntu 20.04 (on GitHub Actions), R 4.2.2
+* local macOS, R 4.3.1
+* ubuntu 22.04 (on GitHub Actions), R 4.3.1
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -14,8 +14,7 @@ We checked all reverse dependencies, comparing R CMD check results across CRAN a
 
 --------
 
-This version fixes an issue that caused reverse dependencies
-to fail - in addition to a few other improvements.
+This version fixes broken tests that were causing CRAN check errors.
 
 Thanks very much,
 Scott Chamberlain

@@ -8,7 +8,7 @@ vcr
 [![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://cloud.r-project.org/web/checks/check_results_vcr.html)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
-[![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
+[![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/vcr)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
@@ -25,7 +25,7 @@ Easier HTTP testing! Record HTTP requests and responses on disk and replay them 
 
 Now your tests can work without any internet connection!
 
-[Demo of adding vcr testing to an R package](https://github.com/maelle/exemplighratia/pull/2/files), [corresponding narrative](https://books.ropensci.org/http-testing/vcr.html).
+[Demo of adding vcr testing to an R package](https://github.com/ropensci-books/exemplighratia/pull/2/files), [corresponding narrative](https://books.ropensci.org/http-testing/vcr.html).
 
 ## Installation
 
@@ -52,7 +52,7 @@ library("crul")
 
 ## Docs
 
-Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
+Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
 
 ## Supported HTTP libraries
 
@@ -95,7 +95,7 @@ What you will see in the R console:
 ✓ Adding vcr config to tests/testthat/helper-vcr.example.R  
 ✓ Adding example test file tests/testthat/test-vcr_example.R  
 ✓ .gitattributes: added  
-◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
+◉ Learn more about `vcr`: https://books.ropensci.org/http-testing/
 ```
 
 ### Protecting secrets

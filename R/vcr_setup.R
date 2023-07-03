@@ -7,7 +7,7 @@ invisible(vcr::vcr_configure(
 ))\nvcr::check_cassette_names()\n",
   example_test = "# EXAMPLE VCR USAGE: RUN AND DELETE ME
 
-foo <- function() crul::ok('https://httpbin.org/get')
+foo <- function() crul::ok('https://hb.opencpu.org/get')
 
 test_that(\"foo works\", {
   vcr::use_cassette(\"testing\", {

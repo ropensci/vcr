@@ -44,7 +44,7 @@ error with UnhandledHTTPRequestError
 vcr_configure(dir = tempdir())
 cassettes()
 insert_cassette("turtle")
-request <- Request$new("post", 'https://eu.httpbin.org/post?a=5',
+request <- Request$new("post", 'https://hb.opencpu.org/post?a=5',
   "", list(foo = "bar"))
 
 err <- UnhandledHTTPRequestError$new(request)

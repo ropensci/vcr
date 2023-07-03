@@ -31,7 +31,7 @@ What you will see in the R console:
 ✓ Adding vcr config to tests/testthat/helper-vcr.example.R  
 ✓ Adding example test file tests/testthat/test-vcr_example.R  
 ✓ .gitattributes: added  
-◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
+◉ Learn more about `vcr`: https://books.ropensci.org/http-testing/
 ```
 
 ### Protecting secrets
