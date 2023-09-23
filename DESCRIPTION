@@ -31,6 +31,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.8.4),
     httr,
+    httr2,
     webmockr (>= 0.8.0),
     urltools,
     yaml,

@@ -37,6 +37,7 @@
 #' @importFrom urltools url_parse url_compose
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
+#' @importFrom httr2 resp_status_desc req_perform
 #' @importFrom webmockr pluck_body
 #' @author Scott Chamberlain
 #' @docType package
