@@ -28,6 +28,8 @@ Language: en-US
 LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 3.5)
 Imports:
     crul (>= 0.8.4),
     httr,
