@@ -10,8 +10,8 @@ Methods for the httr2 package, building on \link{RequestHandler}
 \dontrun{
 # GET request
 library(httr2)
-req <- request("https://hb.opencpu.org/post") \%>\% 
-   req_body_json(list(foo = "bar")) 
+req <- request("https://hb.opencpu.org/post") \%>\%
+   req_body_json(list(foo = "bar"))
 x <- RequestHandlerHttr2$new(req)
 # x$handle()
 
@@ -19,7 +19,7 @@ x <- RequestHandlerHttr2$new(req)
 library(httr2)
 mydir <- file.path(tempdir(), "testing_httr2")
 invisible(vcr_configure(dir = mydir))
-req <- request("https://hb.opencpu.org/post") \%>\% 
+req <- request("https://hb.opencpu.org/post") \%>\%
   req_body_json(list(foo = "bar"))
 use_cassette(name = "testing3", {
   response <- req_perform(req)

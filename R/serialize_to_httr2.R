@@ -1,21 +1,17 @@
-disk_true <- function(x) {
-  if (is.null(x)) return(FALSE)
-  assert(x, "logical")
-  return(x)
-}
-
 # generate actual httr2 response
+# request <- httr2::request("https://hb.opencpu.org/301")
+# 
 serialize_to_httr2 <- function(request, response) {
   # request
   req <- webmockr::RequestSignature$new(
     method = request$method,
-    uri = request$url,
+    uri = request$uri,
     options = list(
       body = request$body %||% NULL,
       headers = request$headers %||% NULL,
       proxies = NULL,
       auth = NULL,
-      disk = response$disk,
+      disk = if (inherits(response$body, "httr2_path")) response$body %||% NULL,
       fields = request$fields %||% NULL,
       output = request$output %||% NULL
     )

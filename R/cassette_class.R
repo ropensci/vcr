@@ -619,9 +619,12 @@ Cassette <- R6::R6Class(
     },
 
     #' @description Make an `HTTPInteraction` object
-    #' @param x an crul or httr response object, with the request at `$request`
+    #' @param x A crul, httr, or httr2 response object, with the request at `$request`
     #' @return an object of class [HTTPInteraction]
     make_http_interaction = function(x) {
+      # for httr2, duplicate `body` slot in `content`
+      if (inherits(x, "httr2_response")) x$content <- x$body
+
       # content must be raw or character
       assert(unclass(x$content), c('raw', 'character'))
       new_file_path <- ""
@@ -658,9 +661,13 @@ Cassette <- R6::R6Class(
       response <- VcrResponse$new(
         status = if (inherits(x, "response")) {
           c(list(status_code = x$status_code), httr::http_status(x))
-        } else unclass(x$status_http()),
+        } else if (inherits(x, "httr2_response")) {
+          list(status_code = x$status_code, message = httr2::resp_status_desc(x))
+        } else {
+          unclass(x$status_http())
+        },
         headers = if (inherits(x, "response")) x$headers else x$response_headers,
-        body = if (is.raw(x$content)) {
+        body = if (is.raw(x$content) || is.null(x$content)) {
           if (can_rawToChar(x$content)) rawToChar(x$content) else x$content
         } else {
           stopifnot(inherits(unclass(x$content), "character"))

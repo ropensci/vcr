@@ -56,6 +56,8 @@ x$from_hash(h)
 \item{\code{fields}}{(various) request body details}
 
 \item{\code{output}}{(various) request output details, disk, memory, etc}
+
+\item{\code{policies}}{(various) http policies, used in httr2 only}
 }
 \if{html}{\out{</div>}}
 }
@@ -74,7 +76,7 @@ x$from_hash(h)
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk, fields, output)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk, fields, output, policies)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -96,6 +98,8 @@ post, put, patch or delete)}
 \item{\code{fields}}{(various) post fields}
 
 \item{\code{output}}{(various) output details}
+
+\item{\code{policies}}{(various) http policies, used in httr2 only}
 }
 \if{html}{\out{</div>}}
 }
