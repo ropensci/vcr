@@ -1,5 +1,3 @@
-sac <- new.env()
-
 #' @title RequestHandlerHttr2
 #' @description Methods for the httr2 package, building on [RequestHandler]
 #' @export
@@ -7,8 +5,8 @@ sac <- new.env()
 #' @examples \dontrun{
 #' # GET request
 #' library(httr2)
-#' req <- request("https://hb.opencpu.org/post") %>% 
-#'    req_body_json(list(foo = "bar")) 
+#' req <- request("https://hb.opencpu.org/post") %>%
+#'    req_body_json(list(foo = "bar"))
 #' x <- RequestHandlerHttr2$new(req)
 #' # x$handle()
 #'
@@ -16,7 +14,7 @@ sac <- new.env()
 #' library(httr2)
 #' mydir <- file.path(tempdir(), "testing_httr2")
 #' invisible(vcr_configure(dir = mydir))
-#' req <- request("https://hb.opencpu.org/post") %>% 
+#' req <- request("https://hb.opencpu.org/post") %>%
 #'   req_body_json(list(foo = "bar"))
 #' use_cassette(name = "testing3", {
 #'   response <- req_perform(req)
@@ -42,7 +40,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       self$request <- {
         Request$new(request$method, request$url,
           webmockr::pluck_body(request), request$headers,
-          fields = request$fields, opts = request$options, 
+          fields = request$fields, opts = request$options,
           policies = request$policies)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
@@ -81,24 +79,22 @@ RequestHandlerHttr2 <- R6::R6Class(
     },
 
     on_stubbed_by_vcr_request = function(request) {
-      print("------- on_stubbed_by_vcr_request -------")
+      # print("------- on_stubbed_by_vcr_request -------")
       # return stubbed vcr response - no real response to do
-      sac$request_before_serialize <- request
       serialize_to_httr2(request, super$get_stubbed_response(request))
     },
 
     on_recordable_request = function(request) {
-      print("------- on_recordable_request -------")
+      # print("------- on_recordable_request -------")
       # do real request - then stub response - then return stubbed vcr response
-      sac$request <- request
       # real request
       webmockr::httr2_mock(FALSE)
       on.exit(webmockr::httr2_mock(TRUE), add = TRUE)
-      tmp2 <- httr2::req_perform(self$request_original)
-      sac$tmp2 <- tmp2
+      tmp2 <- self$request_original %>% 
+        httr2::req_error(is_error = function(resp) FALSE) %>%
+        httr2::req_perform()
 
       response <- webmockr::build_httr2_response(self$request_original, tmp2)
-      sac$response <- response
 
       # make vcr response | then record interaction
       self$vcr_response <- private$response_for(response)
