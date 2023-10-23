@@ -60,6 +60,7 @@ reference:
       - RequestHandler
       - RequestHandlerCrul
       - RequestHandlerHttr
+      - RequestHandlerHttr2
       - RequestMatcherRegistry
       - Serializers
       - serializer_fetch
