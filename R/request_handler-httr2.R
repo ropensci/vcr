@@ -36,7 +36,6 @@ RequestHandlerHttr2 <- R6::R6Class(
         request$method <- webmockr:::req_method_get_w(request)
       }
       self$request_original <- request
-      sac$request_original <- self$request_original
       self$request <- {
         Request$new(request$method, request$url,
           webmockr::pluck_body(request), request$headers,
