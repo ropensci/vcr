@@ -32,7 +32,7 @@ vcr introduction
 
 The main use case is for unit tests, but you can use it outside of the unit test use case.
 
-`vcr` works with the `crul` and `httr` HTTP request packages.
+`vcr` works with the `crul`, `httr` and `httr2` HTTP request packages.
 
 Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`, and other packages.
 

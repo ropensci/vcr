@@ -556,7 +556,7 @@ Cassette <- R6::R6Class(
     },
 
     #' @description record an http interaction (doesn't write to disk)
-    #' @param x an crul or httr response object, with the request at `$request`
+    #' @param x a crul, httr, or httr2 response object, with the request at `$request`
     #' @return nothing returned
     record_http_interaction = function(x) {
       int <- self$make_http_interaction(x)
@@ -760,6 +760,6 @@ empty_cassette_message <- function(x) {
   c(
     sprintf("Empty cassette (%s) deleted; consider the following:\n", x),
     " - If an error occurred resolve that first, then check:\n",
-    " - vcr only supports crul & httr; requests w/ curl, download.file, etc. are not supported\n",
-    " - If you are using crul/httr, are you sure you made an HTTP request?\n")
+    " - vcr only supports crul, httr & httr2; requests w/ curl, download.file, etc. are not supported\n",
+    " - If you are using crul/httr/httr2, are you sure you made an HTTP request?\n")
 }
