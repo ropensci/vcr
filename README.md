@@ -58,6 +58,7 @@ Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) and 
 
 * [crul][]
 * [httr](https://httr.r-lib.org/)
+* [httr2](https://httr2.r-lib.org/)
 
 ## Getting Started
 
