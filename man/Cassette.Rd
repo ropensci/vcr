@@ -531,7 +531,7 @@ record an http interaction (doesn't write to disk)
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{an crul or httr response object, with the request at \verb{$request}}
+\item{\code{x}}{a crul, httr, or httr2 response object, with the request at \verb{$request}}
 }
 \if{html}{\out{</div>}}
 }
