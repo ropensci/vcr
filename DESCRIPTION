@@ -21,6 +21,7 @@ Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     person("rOpenSci", role = "fnd", comment = "https://ropensci.org"))
 URL: https://github.com/ropensci/vcr/ (devel)
     https://books.ropensci.org/http-testing/ (user manual)
+    https://docs.ropensci.org/vcr/ (website)
 BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
