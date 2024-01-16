@@ -39,7 +39,7 @@ Request <- R6::R6Class(
     body = NULL,
     #' @field headers (character) named list
     headers = NULL,
-    #' @field skip_port_stripping (logical) whether to strip thhe port
+    #' @field skip_port_stripping (logical) whether to strip the port
     skip_port_stripping = FALSE,
     #' @field hash (character) a named list - internal use
     hash = NULL,
@@ -65,10 +65,11 @@ Request <- R6::R6Class(
     #' @param fields (various) post fields
     #' @param output (various) output details
     #' @param policies (various) http policies, used in httr2 only
+    #' @param skip_port_stripping (logical) whether to strip the port.
+    #' default: `FALSE`
     #' @return A new `Request` object
     initialize = function(method, uri, body, headers, opts, disk,
-      fields, output, policies) {
-
+      fields, output, policies, skip_port_stripping = FALSE) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
         if (inherits(body, "list")) {
@@ -78,7 +79,7 @@ Request <- R6::R6Class(
       }
       if (!missing(headers)) self$headers <- headers
       if (!missing(uri)) {
-        if (!self$skip_port_stripping) {
+        if (!skip_port_stripping) {
           self$uri <- private$without_standard_port(uri)
         } else {
           self$uri <- uri

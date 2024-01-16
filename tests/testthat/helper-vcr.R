@@ -83,3 +83,12 @@ codes <- vapply(out, "[[", 1, "status_code")
 if (!any(codes == 200)) stop("all httpbin servers down")
 base_url <- urls[codes == 200][1]
 cat(paste0("using base url for tests: ", base_url), sep = "\n")
+
+# httpbin local
+local_httpbin_app <- function() {
+  check_for_a_pkg("webfakes")
+  webfakes::local_app_process(
+    webfakes::httpbin_app(),
+    .local_envir = testthat::teardown_env()
+  )
+}

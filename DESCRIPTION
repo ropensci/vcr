@@ -8,7 +8,7 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 1.2.2.92
+Version: 1.2.2.93
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")),
@@ -21,6 +21,7 @@ Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     person("rOpenSci", role = "fnd", comment = "https://ropensci.org"))
 URL: https://github.com/ropensci/vcr/ (devel)
     https://books.ropensci.org/http-testing/ (user manual)
+    https://docs.ropensci.org/vcr/ (website)
 BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -50,7 +51,8 @@ Suggests:
     crayon,
     cli,
     curl,
-    withr
+    withr,
+    webfakes
 Remotes: ropensci/webmockr@httr2
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd

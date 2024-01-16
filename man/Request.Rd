@@ -45,7 +45,7 @@ x$from_hash(h)
 
 \item{\code{headers}}{(character) named list}
 
-\item{\code{skip_port_stripping}}{(logical) whether to strip thhe port}
+\item{\code{skip_port_stripping}}{(logical) whether to strip the port}
 
 \item{\code{hash}}{(character) a named list - internal use}
 
@@ -76,7 +76,18 @@ x$from_hash(h)
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk, fields, output, policies)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(
+  method,
+  uri,
+  body,
+  headers,
+  opts,
+  disk,
+  fields,
+  output,
+  policies,
+  skip_port_stripping = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -100,6 +111,9 @@ post, put, patch or delete)}
 \item{\code{output}}{(various) output details}
 
 \item{\code{policies}}{(various) http policies, used in httr2 only}
+
+\item{\code{skip_port_stripping}}{(logical) whether to strip the port.
+default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }
