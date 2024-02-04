@@ -1,11 +1,3 @@
-#' vcr: Record HTTP Calls to Disk
-#'
-#' \pkg{vcr} records test suite 'HTTP' requests and replay them during
-#' future runs.
-#'
-#' Check out the [http testing book](https://books.ropensci.org/http-testing/)
-#' for a lot more documentation on `vcr`, `webmockr`, and `crul`
-#'
 #' @section Backstory:
 #' A Ruby gem of the same name (`VCR`, <https://github.com/vcr/vcr>) was
 #' created many years ago and is the original. Ports in many languages
@@ -29,7 +21,11 @@
 #'
 #' @section Request matching:
 #' See [request-matching] for help on the many request matching options.
-#'
+#' 
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
 #' @importFrom R6 R6Class
 #' @importFrom utils getParseData
 #' @importFrom yaml yaml.load yaml.load_file as.yaml
@@ -38,10 +34,7 @@
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
 #' @importFrom webmockr pluck_body
-#' @author Scott Chamberlain
-#' @docType package
-#' @aliases vcr-package
-#' @name vcr
+## usethis namespace: end
 NULL
 
 #' An HTTP request as prepared by the \pkg{crul} package
