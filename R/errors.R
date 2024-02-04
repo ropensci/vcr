@@ -23,7 +23,7 @@
 #'     - but if record != once, then allow it, unless record == none
 #' - others?
 #'
-#' @examples
+#' @examples \dontrun{
 #' vcr_configure(dir = tempdir())
 #' cassettes()
 #' insert_cassette("turtle")
@@ -53,6 +53,7 @@
 #' # cleanup
 #' eject_cassette("turtle")
 #' unlink(tempdir())
+#' }
 UnhandledHTTPRequestError <- R6::R6Class(
   "UnhandledHTTPRequestError",
   public = list(

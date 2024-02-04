@@ -41,6 +41,7 @@ error with UnhandledHTTPRequestError
 }
 
 \examples{
+\dontrun{
 vcr_configure(dir = tempdir())
 cassettes()
 insert_cassette("turtle")
@@ -70,6 +71,7 @@ err$match_requests_on_suggestion()
 # cleanup
 eject_cassette("turtle")
 unlink(tempdir())
+}
 \dontrun{
 # vcr_last_error()
 }
