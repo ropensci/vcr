@@ -649,7 +649,7 @@ Cassette <- R6::R6Class(
         } else { # crul
           webmockr::pluck_body(x$request)
         },
-        headers = if (inherits(x, "response")) {
+        headers = if (inherits(x, c("response", "httr2_response"))) {
           as.list(x$request$headers)
         } else {
           x$request_headers
@@ -667,7 +667,11 @@ Cassette <- R6::R6Class(
         } else {
           unclass(x$status_http())
         },
-        headers = if (inherits(x, "response")) x$headers else x$response_headers,
+        headers = if (inherits(x, c("response", "httr2_response"))) {
+          x$headers
+        } else {
+          x$response_headers
+        },
         body = if (is.raw(x$content) || is.null(x$content)) {
           if (can_rawToChar(x$content)) rawToChar(x$content) else x$content
         } else {
