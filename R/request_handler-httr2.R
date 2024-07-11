@@ -89,9 +89,12 @@ RequestHandlerHttr2 <- R6::R6Class(
       # real request
       webmockr::httr2_mock(FALSE)
       on.exit(webmockr::httr2_mock(TRUE), add = TRUE)
-      tmp2 <- self$request_original %>% 
-        httr2::req_error(is_error = function(resp) FALSE) %>%
-        httr2::req_perform()
+      xx <- self$request_original %>% 
+        httr2::req_error(is_error = function(resp) FALSE)
+      # print(xx)
+      tryCatch(httr2::req_perform(xx), error = function(e) e)
+      tmp2 <- httr2::last_response()
+      # print("------- after the req_perform -------")
 
       response <- webmockr::build_httr2_response(self$request_original, tmp2)
 
@@ -104,6 +107,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       cas$record_http_interaction(response)
 
       # return real response
+      # print("------- before return -------")
       return(response)
     }
   )
