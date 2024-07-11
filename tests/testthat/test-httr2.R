@@ -118,67 +118,118 @@ test_that("httr2 use_cassette works", {
   unlink(file.path(vcr_configuration()$dir, "httr2_test2.yml"))
 })
 
-
-context("adapter-httr2: use_cassette w/ >1 request per cassette")
-test_that("httr2 w/ >1 request per cassette", {
-  out <- use_cassette("multiple_queries_httr2_record_once", {
-    x404 <- request(hb("/status/404")) %>% req_perform()
-    x500 <- request(hb("/status/500")) %>% req_perform()
-    x418 <- request(hb("/status/418")) %>% req_perform()
+context("adapter-httr2: use_cassette w/ req_error")
+test_that("httr2 w/ req_error", {
+  out <- use_cassette("httr2_errors_modify_with_req_error", {
+    x404 <- request(hb("/status/404")) %>%
+      req_error(is_error = function(resp) FALSE) %>% 
+      req_perform()
+  })
+  # let's do it again to make sure using a cassette w/ errors still works
+  use_cassette("httr2_errors_modify_with_req_error", {
+    x404 <- request(hb("/status/404")) %>%
+      req_error(is_error = function(resp) FALSE) %>% 
+      req_perform()
   })
 
   expect_equal(x404$status_code, 404)
-  expect_equal(x500$status_code, 500)
-  expect_equal(x418$status_code, 418)
 
   # cassette
   expect_is(out, "Cassette")
-  expect_match(out$manfile, "multiple_queries_httr2_record_once")
+  expect_match(out$manfile, "httr2_errors_modify_with_req_error")
   expect_false(out$is_empty())
   expect_is(out$recorded_at, "POSIXct")
 
   # response
   expect_is(x404, "httr2_response")
   expect_equal(x404$status_code, 404)
-  expect_is(x500, "httr2_response")
-  expect_equal(x500$status_code, 500)
-  expect_is(x418, "httr2_response")
-  expect_equal(x418$status_code, 418)
 
   # response body
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
   expect_is(str, "list")
-  expect_is(str[[3]], "list")
-  expect_match(str[[3]]$request$uri , "418")
-  expect_match(str[[3]]$response$body$string, "teapot")
+  expect_is(str[[1]], "list")
+  expect_match(str[[1]]$request$uri , "404")
 
   # cleanup
   unlink(file.path(vcr_configuration()$dir,
-    "multiple_queries_httr2_record_once.yml"))
+    "httr2_errors_modify_with_req_error.yml"))
 })
 
+context("adapter-httr2: use_cassette just catch error")
+test_that("httr2 error", {
+  use_cassette("httr2_errors_catch_error", {
+    expect_error(
+      request(hb("/status/404")) %>% req_perform()
+    )
+  })
+  # let's do it again to make sure using a cassette w/ errors still works
+  use_cassette("httr2_errors_catch_error", {
+    expect_error(
+      request(hb("/status/404")) %>% req_perform()
+    )
+  })
+
+  # cleanup
+  unlink(file.path(vcr_configuration()$dir,
+    "httr2_errors_catch_error.yml"))
+})
+
+context("adapter-httr2: use_cassette w/ multiple errors per cassette")
+test_that("httr2 w/ multiple errors per cassette", {
+  use_cassette("multiple_errors_per_cassette", {
+    expect_error(request(hb("/status/404")) %>% req_perform())
+    expect_error(request(hb("/status/500")) %>% req_perform())
+    expect_error(request(hb("/status/418")) %>% req_perform())
+  })
+  # let's do it again to make sure using a cassette w/ errors still works
+  use_cassette("multiple_errors_per_cassette", {
+    expect_error(request(hb("/status/404")) %>% req_perform())
+    expect_error(request(hb("/status/500")) %>% req_perform())
+    expect_error(request(hb("/status/418")) %>% req_perform())
+  })
+
+  # cleanup
+  unlink(file.path(vcr_configuration()$dir,
+    "multiple_errors_per_cassette.yml"))
+})
+
+## httr removes the header, but with httr2 we have to explicity remove it
 context("adapter-httr2: use_cassette w/ simple auth")
 test_that("httr2 works with simple auth and hides auth details", {
-
-  use_cassette("httr2_test_simple_auth", {
+  # Authorization header IS in the cassette after filtering
+  use_cassette("httr2_test_simple_auth_no_filter", {
     x <- request(hb("/basic-auth/foo/bar")) %>%
       req_auth_basic("foo", "bar") %>%
       req_perform()
   })
 
-  # successful request
-  expect_equal(x$status_code, 200)
+  path <- file.path(vcr_configuration()$dir, "httr2_test_simple_auth_no_filter.yml")
+  chars <- paste0(readLines(path), collapse = "")
+  yml <- yaml::yaml.load_file(path)
 
-  # no auth details in the cassette
-  path <- file.path(vcr_configuration()$dir, "httr2_test_simple_auth.yml")
+  expect_true(grepl("Authorization", chars))
+  expect_true("Authorization" %in% names(yml$http_interactions[[1]]$request$headers))
+
+  # Authorization header IS NOT in the cassette after filtering
+  vcr_configure(dir = tempdir(), filter_request_headers = "Authorization")
+  use_cassette("httr2_test_simple_auth_yes_filter", {
+    x <- request(hb("/basic-auth/foo/bar")) %>%
+      req_auth_basic("foo", "bar") %>%
+      req_perform()
+  })
+
+  path <- file.path(vcr_configuration()$dir, "httr2_test_simple_auth_yes_filter.yml")
   chars <- paste0(readLines(path), collapse = "")
   yml <- yaml::yaml.load_file(path)
 
   expect_false(grepl("Authorization", chars))
   expect_false("Authorization" %in% names(yml$http_interactions[[1]]$request$headers))
 
+  # back to default vcr config
+  vcr_configure(dir = tempdir())
   # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr2_test_simple_auth.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr2_test_simple_auth_no_filter.yml"))
+  unlink(file.path(vcr_configuration()$dir, "httr2_test_simple_auth_yes_filter.yml"))
 })
 
 context("adapter-httr2: POST requests works")
