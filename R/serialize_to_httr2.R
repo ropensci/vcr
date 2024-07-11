@@ -23,7 +23,7 @@ serialize_to_httr2 <- function(request, response) {
   resp$set_body(response$body, inherits(response$body, "httr2_path"))
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)
-  resp$set_status(status = response$status_code %||% 200)
+  resp$set_status(status = response$status$status_code %||% 200)
 
   # generate httr2 response
   webmockr::build_httr2_response(as_httr2_request(req), resp)
