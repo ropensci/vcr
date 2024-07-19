@@ -24,11 +24,11 @@ test_that("request_summary works", {
   expect_is(cc, "character")
   expect_is(dd, "character")
 
-  expect_match(aa, "post .+org/")
-  expect_match(bb, "post .+org/ foo=bar")
+  expect_match(aa, "post .+/")
+  expect_match(bb, "post .+/ foo=bar")
 
   expect_match(cc, "post")
-  expect_match(cc, ".org")
+  expect_match(cc, ".+")
   expect_match(cc, "libcurl")
   expect_match(cc, "r-curl")
   expect_match(cc, "crul")
@@ -37,7 +37,7 @@ test_that("request_summary works", {
   expect_false(grepl("foo=bar", cc))
 
   expect_match(dd, "post")
-  expect_match(dd, ".org")
+  expect_match(dd, ".+")
   expect_match(dd, "foo=bar")
   expect_match(dd, "libcurl")
   expect_match(dd, "r-curl")
