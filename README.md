@@ -488,7 +488,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [rgbif]: https://github.com/ropensci/rgbif
 [ritis]: https://github.com/ropensci/ritis
 [rredlist]: https://github.com/ropensci/rredlist
-[rtoot]: https://github.com/schochastics/rtoot
+[rtoot]: https://github.com/gesistsa/rtoot
 [rtweet]: https://github.com/ropensci/rtweet
 [webmockr]: https://docs.ropensci.org/webmockr/
 [wikitaxa]: https://github.com/ropensci/wikitaxa

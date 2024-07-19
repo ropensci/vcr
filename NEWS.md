@@ -232,7 +232,7 @@ vcr 0.2.6
 ### MINOR IMPROVEMENTS
 
 * lots of tidying for better/consistent style
-* fix for a partial argument call in `as.list()`: `all` to `all.names` ([commit](https://github.com/ropensci/vcr/commit/b20a2d5ffd0f65175dee4d84aa9573f3652df1d2))
+* fix for a partial argument call in `as.list()`: `all` to `all.names`
 
 ### BUG FIXES
 

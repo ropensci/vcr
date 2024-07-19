@@ -145,7 +145,7 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 [rgbif]: https://github.com/ropensci/rgbif
 [ritis]: https://github.com/ropensci/ritis
 [rredlist]: https://github.com/ropensci/rredlist
-[rtoot]: https://github.com/schochastics/rtoot
+[rtoot]: https://github.com/gesistsa/rtoot
 [rtweet]: https://github.com/ropensci/rtweet
 [webmockr]: https://docs.ropensci.org/webmockr/
 [wikitaxa]: https://github.com/ropensci/wikitaxa
