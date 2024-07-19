@@ -4,17 +4,17 @@
   "identifier": "vcr",
   "description": "Record test suite 'HTTP' requests and replays them during future runs. A port of the Ruby gem of the same name (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr' R package for matching 'HTTP' requests by various rules ('HTTP' method, 'URL', query parameters, headers, body, etc.), and then caching real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests matching any previous requests in the same 'cassette' use a cached 'HTTP' response.",
   "name": "vcr: Record 'HTTP' Calls to Disk",
-  "relatedLink": "https://books.ropensci.org/http-testing/",
+  "relatedLink": ["https://books.ropensci.org/http-testing/", "https://docs.ropensci.org/vcr/"],
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.2",
+  "version": "1.6.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.3 (2023-03-15)",
+  "runtimePlatform": "R version 4.4.1 Patched (2024-06-25 r86831)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -184,6 +184,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=withr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "webfakes",
+      "name": "webfakes",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=webfakes"
     }
   ],
   "softwareRequirements": {
@@ -214,6 +226,18 @@
     },
     "3": {
       "@type": "SoftwareApplication",
+      "identifier": "httr2",
+      "name": "httr2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httr2"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
       "version": ">= 0.8.0",
@@ -223,9 +247,9 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=webmockr"
+      "sameAs": "https://github.com/ropensci/webmockr"
     },
-    "4": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "urltools",
       "name": "urltools",
@@ -237,7 +261,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=urltools"
     },
-    "5": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "yaml",
       "name": "yaml",
@@ -249,7 +273,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=yaml"
     },
-    "6": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "R6",
       "name": "R6",
@@ -261,7 +285,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=R6"
     },
-    "7": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "base64enc",
       "name": "base64enc",
@@ -273,7 +297,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=base64enc"
     },
-    "8": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "rprojroot",
       "name": "rprojroot",
@@ -290,5 +314,5 @@
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd"],
-  "fileSize": "899.203KB"
+  "fileSize": "921.187KB"
 }
