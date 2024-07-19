@@ -6,7 +6,7 @@ vcr_configure(dir = tempdir())
 context("adapter-httr2: status code works")
 test_that("httr2 status code works", {
   # httr2_obj <- request(hb("/getttttt"))
-  # save(httr2_obj, file="tests/testthat/httr2_obj.rda")
+  # save(httr2_obj, file="tests/testthat/httr2_obj.rda", version = 2L)
   load("httr2_obj.rda")
 
   expect_is(httr2_obj, "httr2_request")
