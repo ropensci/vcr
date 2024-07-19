@@ -32,19 +32,20 @@ Now your tests can work without any internet connection!
 CRAN version:
 
 
-```r
+``` r
 install.packages("vcr")
 ```
 
 Development version:
 
 
-```r
-remotes::install_github("ropensci/vcr")
+``` r
+# install.packages("pak")
+pak::pak("ropensci/vcr")
 ```
 
 
-```r
+``` r
 library("vcr")
 library("crul")
 ```
@@ -224,7 +225,7 @@ If you want to get a feel for how vcr works, although you don't need too.
 
 
 
-```r
+``` r
 library(vcr)
 library(crul)
 
@@ -239,7 +240,7 @@ system.time(
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
 
 
-```r
+``` r
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
@@ -385,7 +386,7 @@ vcr_configure()
 Calling `vcr_configuration()` gives you some of the more important configuration parameters in a nice tidy print out
 
 
-```r
+``` r
 vcr_configuration()
 #> <vcr configuration>
 #>   Cassette Dir: .
@@ -432,7 +433,7 @@ You can set your own options by tweaking the `match_requests_on` parameter:
 
 
 
-```r
+``` r
 use_cassette(name = "one", {
     cli$post("post", body = list(a = 5))
   },

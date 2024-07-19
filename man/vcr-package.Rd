@@ -42,10 +42,20 @@ See \link{recording} for help on record modes.
 See \link{request-matching} for help on the many request matching options.
 }
 
+\section{Async}{
+
+As of \pkg{crul} v1.5, \code{vcr} will work for async http requests with
+\pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
+async plumbing does not have any hooks for mocking via \pkg{webmockr}
+or recording real requests via this package
+}
+
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/ropensci/vcr/ (devel) https://books.ropensci.org/http-testing/ (user manual) https://docs.ropensci.org/vcr/ (website)}
+  \item \url{https://github.com/ropensci/vcr/}
+  \item \url{https://books.ropensci.org/http-testing/}
+  \item \url{https://docs.ropensci.org/vcr/}
   \item Report bugs at \url{https://github.com/ropensci/vcr/issues}
 }
 

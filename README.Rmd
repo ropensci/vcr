@@ -42,7 +42,8 @@ install.packages("vcr")
 Development version:
 
 ```{r eval=FALSE}
-remotes::install_github("ropensci/vcr")
+# install.packages("pak")
+pak::pak("ropensci/vcr")
 ```
 
 ```{r}
