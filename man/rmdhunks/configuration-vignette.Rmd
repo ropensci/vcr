@@ -135,7 +135,7 @@ use_cassette("foo_bar", {
 
 The request to httpbin.org will be handled by `vcr`, a cassette created for the request/response to that url, while the google.com request will be ignored and not cached at all.
 
-Note: ignoring requests only works for the `crul` package for now; it should work for `httr` in a later `vcr` version.
+Note: ignoring requests only works for the `crul` package for now; it should work for `httr` and `httr2` in a later `vcr` version.
 
 ### uri_parse
 
@@ -195,7 +195,7 @@ value with which to replace the real value.
 
 A request header you set to remove or replace is only removed/replaced
 from the cassette, and any requests using a cassette, but will still be in
-your crul or httr response objects on a real request that creates the
+your `crul`, `httr` or `httr2` response objects on a real request that creates the
 cassette.
 
 Examples:
@@ -223,7 +223,7 @@ value with which to replace the real value.
 
 A response header you set to remove or replace is only removed/replaced
 from the cassette, and any requests using a cassette, but will still be in
-your crul or httr response objects on a real request that creates the
+your `crul`, `httr` or `httr2` response objects on a real request that creates the
 cassette.
 
 Examples:
@@ -251,7 +251,7 @@ value is the value with which to replace the real value.
 
 A response header you set to remove or replace is only removed/replaced
 from the cassette, and any requests using a cassette, but will still be in
-your crul or httr response objects on a real request that creates the
+your `crul`, `httr` or `httr2` response objects on a real request that creates the
 cassette.
 
 Beware of your `match_requests_on` option when using this filter. If you

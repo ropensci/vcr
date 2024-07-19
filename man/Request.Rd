@@ -56,6 +56,8 @@ x$from_hash(h)
 \item{\code{fields}}{(various) request body details}
 
 \item{\code{output}}{(various) request output details, disk, memory, etc}
+
+\item{\code{policies}}{(various) http policies, used in httr2 only}
 }
 \if{html}{\out{</div>}}
 }
@@ -83,6 +85,7 @@ Create a new \code{Request} object
   disk,
   fields,
   output,
+  policies,
   skip_port_stripping = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -106,6 +109,8 @@ post, put, patch or delete)}
 \item{\code{fields}}{(various) post fields}
 
 \item{\code{output}}{(various) output details}
+
+\item{\code{policies}}{(various) http policies, used in httr2 only}
 
 \item{\code{skip_port_stripping}}{(logical) whether to strip the port.
 default: \code{FALSE}}

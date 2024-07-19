@@ -13,7 +13,7 @@ rmd2md:
 		mv configuration.md configuration.Rmd
 
 install: doc build
-	R CMD INSTALL --no-build-vignettes . && rm *.tar.gz
+	R CMD INSTALL . && rm *.tar.gz
 
 build:
 	R CMD build --no-build-vignettes .

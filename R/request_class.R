@@ -51,6 +51,8 @@ Request <- R6::R6Class(
     fields = NULL,
     #' @field output (various) request output details, disk, memory, etc
     output = NULL,
+    #' @field policies (various) http policies, used in httr2 only
+    policies = NULL,
 
     #' @description Create a new `Request` object
     #' @param method (character) the HTTP method (i.e. head, options, get,
@@ -62,12 +64,12 @@ Request <- R6::R6Class(
     #' @param disk (boolean), is body a file on disk
     #' @param fields (various) post fields
     #' @param output (various) output details
+    #' @param policies (various) http policies, used in httr2 only
     #' @param skip_port_stripping (logical) whether to strip the port.
     #' default: `FALSE`
     #' @return A new `Request` object
     initialize = function(method, uri, body, headers, opts, disk,
-      fields, output, skip_port_stripping = FALSE) {
-
+      fields, output, policies, skip_port_stripping = FALSE) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
         if (inherits(body, "list")) {
@@ -93,6 +95,7 @@ Request <- R6::R6Class(
        if (!missing(disk)) self$disk <- disk
        if (!missing(fields)) self$fields <- fields
        if (!missing(output)) self$output <- output
+       if (!missing(policies)) self$policies <- policies
      },
 
     #' @description Convert the request to a list

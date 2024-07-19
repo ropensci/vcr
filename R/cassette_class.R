@@ -556,7 +556,7 @@ Cassette <- R6::R6Class(
     },
 
     #' @description record an http interaction (doesn't write to disk)
-    #' @param x an crul or httr response object, with the request at `$request`
+    #' @param x a crul, httr, or httr2 response object, with the request at `$request`
     #' @return nothing returned
     record_http_interaction = function(x) {
       int <- self$make_http_interaction(x)
@@ -619,9 +619,12 @@ Cassette <- R6::R6Class(
     },
 
     #' @description Make an `HTTPInteraction` object
-    #' @param x an crul or httr response object, with the request at `$request`
+    #' @param x A crul, httr, or httr2 response object, with the request at `$request`
     #' @return an object of class [HTTPInteraction]
     make_http_interaction = function(x) {
+      # for httr2, duplicate `body` slot in `content`
+      if (inherits(x, "httr2_response")) x$content <- x$body
+
       # content must be raw or character
       assert(unclass(x$content), c('raw', 'character'))
       new_file_path <- ""
@@ -646,7 +649,7 @@ Cassette <- R6::R6Class(
         } else { # crul
           webmockr::pluck_body(x$request)
         },
-        headers = if (inherits(x, "response")) {
+        headers = if (inherits(x, c("response", "httr2_response"))) {
           as.list(x$request$headers)
         } else {
           x$request_headers
@@ -659,9 +662,17 @@ Cassette <- R6::R6Class(
       response <- VcrResponse$new(
         status = if (inherits(x, "response")) {
           c(list(status_code = x$status_code), httr::http_status(x))
-        } else unclass(x$status_http()),
-        headers = if (inherits(x, "response")) x$headers else x$response_headers,
-        body = if (is.raw(x$content)) {
+        } else if (inherits(x, "httr2_response")) {
+          list(status_code = x$status_code, message = httr2::resp_status_desc(x))
+        } else {
+          unclass(x$status_http())
+        },
+        headers = if (inherits(x, c("response", "httr2_response"))) {
+          x$headers
+        } else {
+          x$response_headers
+        },
+        body = if (is.raw(x$content) || is.null(x$content)) {
           if (can_rawToChar(x$content)) rawToChar(x$content) else x$content
         } else {
           stopifnot(inherits(unclass(x$content), "character"))
@@ -754,6 +765,6 @@ empty_cassette_message <- function(x) {
   c(
     sprintf("Empty cassette (%s) deleted; consider the following:\n", x),
     " - If an error occurred resolve that first, then check:\n",
-    " - vcr only supports crul & httr; requests w/ curl, download.file, etc. are not supported\n",
-    " - If you are using crul/httr, are you sure you made an HTTP request?\n")
+    " - vcr only supports crul, httr & httr2; requests w/ curl, download.file, etc. are not supported\n",
+    " - If you are using crul/httr/httr2, are you sure you made an HTTP request?\n")
 }

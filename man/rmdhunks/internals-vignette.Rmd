@@ -16,7 +16,7 @@ When you run that request again using `vcr::use_cassette()` or `vcr::insert_cass
 Of course if you do a different request, even slightly (but depending on which matching format you decided to use), then
 the request will have no matching stub and no cached response, and then a real HTTP request is done - we then cache it, then subsequent requests will pull from that cached response.
 
-`webmockr` has adapters for each R client (crul and httr) - so that we actually intercept HTTP requests when `webmockr` is loaded and the user turns it on. So, `webmockr` doesn't actually require an internet or localhost connection at all, but can do its thing just fine by matching on whatever the user requests to match on. In fact, `webmockr` doesn't allow real HTTP requests by default, but can be toggled off of course.
+`webmockr` has adapters for each R client (`crul`, `httr` and `httr2`) - so that we actually intercept HTTP requests when `webmockr` is loaded and the user turns it on. So, `webmockr` doesn't actually require an internet or localhost connection at all, but can do its thing just fine by matching on whatever the user requests to match on. In fact, `webmockr` doesn't allow real HTTP requests by default, but can be toggled off of course.
 
 The main use case we are going for in `vcr` is to deal with real HTTP requests and responses, so we allow real HTTP requests when we need to, and turn it off when we don't.
 
