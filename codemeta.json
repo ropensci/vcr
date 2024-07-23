@@ -247,7 +247,7 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/ropensci/webmockr"
+      "sameAs": "https://CRAN.R-project.org/package=webmockr"
     },
     "5": {
       "@type": "SoftwareApplication",
@@ -314,5 +314,5 @@
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd"],
-  "fileSize": "922.494KB"
+  "fileSize": "922.454KB"
 }
