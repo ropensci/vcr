@@ -1,5 +1,6 @@
 context("use_cassette: write to disk")
 
+vcr_configure_reset()
 tmpdir_wdp <- file.path(tempdir(), "write_disk_path")
 vcr_configure(dir = tmpdir_wdp)
 
@@ -11,18 +12,18 @@ test_that("fails well if write_disk_path not set", {
   library(crul)
   f <- tempfile(fileext = ".json")
   expect_error(
-    use_cassette("write_disk_path_not_set_crul", {
-      out <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
-    }),
+    sw(use_cassette("write_disk_path_not_set_crul", {
+      out <- HttpClient$new(hb("/get"))$get(disk = f)
+    })),
     "write_disk_path must be given"
   )
 
   library(httr)
   g <- tempfile(fileext = ".json")
   expect_error(
-    use_cassette("write_disk_path_not_set_httr", {
-      out <- GET("https://httpbin.org/get", write_disk(g, TRUE))
-    }),
+    sw(use_cassette("write_disk_path_not_set_httr", {
+      out <- GET(hb("/get"), write_disk(g, TRUE))
+    })),
     "write_disk_path must be given"
   )
 })
@@ -42,24 +43,22 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   f <- tempfile(fileext = ".json")
   ## make a request
   use_cassette("test_write_to_disk", {
-    out <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
+    out <- HttpClient$new(hb("/get"))$get(disk = f)
   })
 
   expect_is(out, "HttpResponse")
   expect_is(out$content, "character")
   expect_match(out$content, "\\.json")
   expect_is(out$parse(), "character")
-  expect_match(out$parse(), "httpbin")
 
   # works on 2nd request
   use_cassette("test_write_to_disk", {
-    out2 <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
+    out2 <- HttpClient$new(hb("/get"))$get(disk = f)
   })
   expect_is(out2, "HttpResponse")
   expect_is(out2$content, "character")
   expect_match(out2$content, "\\.json")
   expect_is(out2$parse(), "character")
-  expect_match(out2$parse(), "httpbin")
 
   expect_equal(out$parse(), out2$parse())
 })
@@ -72,7 +71,7 @@ test_that("use_cassette w/ request that writes to disk: httr", {
   f <- tempfile(fileext = ".json")
   ## make a request
   use_cassette("test_write_to_disk_httr", {
-    out <- GET("https://httpbin.org/get", write_disk(f, TRUE))
+    out <- GET(hb("/get"), write_disk(f, TRUE))
   })
 
   expect_is(out, "response")
@@ -81,7 +80,7 @@ test_that("use_cassette w/ request that writes to disk: httr", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk_httr", {
-    out2 <- GET("https://httpbin.org/get", write_disk(f, TRUE))
+    out2 <- GET(hb("/get"), write_disk(f, TRUE))
   })
   expect_is(out2, "response")
   expect_is(out2$content, "path")

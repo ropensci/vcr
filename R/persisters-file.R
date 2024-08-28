@@ -1,3 +1,17 @@
+# vcr_configure(dir = tempdir())
+#
+# (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
+# yy$set_cassette(content = "hello world!")
+#
+# # is empty?
+# yy$is_empty()
+#
+# # get cassette
+# yy$get_cassette(file_name = "file4014931b21b.yml")
+#
+# # clenaup
+# unlink(file.path(tempdir(), "file4014931b21b.yml"))
+
 #' @title File system persister
 #' @description The only built-in cassette persister. Persists cassettes
 #' to the file system.
@@ -12,21 +26,6 @@
 #'       Get absolute path to the `storage_location`
 #'     }
 #'   }
-#' @examples \dontrun{
-#' vcr_configure(dir = tempdir())
-#'
-#' (yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
-#' yy$set_cassette(content = "hello world!")
-#'
-#' # is empty?
-#' yy$is_empty()
-#'
-#' # get cassette
-#' yy$get_cassette(file_name = "file4014931b21b.yml")
-#'
-#' # clenaup
-#' unlink(file.path(tempdir(), "file4014931b21b.yml"))
-#' }
 FileSystem <- R6::R6Class("FileSystem",
   public = list(
     #' @field file_name (character) the file name, not whole path
@@ -65,8 +64,6 @@ FileSystem <- R6::R6Class("FileSystem",
     #' @param file_name (character) the file name, not whole path
     #' @return named list, from `yaml::yaml.load_file`
     get_cassette = function(file_name = NULL) {
-      # @param [String] file_name the file name
-      # @return [String] the cassette content
       file_name <- if (is.null(file_name)) self$file_name else file_name
       if (is.null(file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, file_name)
@@ -92,8 +89,6 @@ FileSystem <- R6::R6Class("FileSystem",
     #' @param content (character) content to record to a cassette
     #' @return no return; writes to disk
     set_cassette = function(file_name = NULL, content) {
-      # @param [String] file_name the file name
-      # @param [String] content the content to store
       file_name <- if (is.null(file_name)) self$file_name else file_name
       if (is.null(file_name)) stop('No file name provided', call. = FALSE)
       path <- private$absolute_path_to_file(self$path, file_name)

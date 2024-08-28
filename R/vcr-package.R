@@ -1,11 +1,3 @@
-#' vcr: Record HTTP Calls to Disk
-#'
-#' \pkg{vcr} records test suite 'HTTP' requests and replay them during
-#' future runs.
-#'
-#' Check out the [http testing book](https://books.ropensci.org/http-testing/)
-#' for a lot more documentation on `vcr`, `webmockr`, and `crul`
-#'
 #' @section Backstory:
 #' A Ruby gem of the same name (`VCR`, <https://github.com/vcr/vcr>) was
 #' created many years ago and is the original. Ports in many languages
@@ -29,20 +21,27 @@
 #'
 #' @section Request matching:
 #' See [request-matching] for help on the many request matching options.
-#'
+#' 
+#' @section Async:
+#' As of \pkg{crul} v1.5, `vcr` will work for async http requests with 
+#' \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
+#' async plumbing does not have any hooks for mocking via \pkg{webmockr}
+#' or recording real requests via this package
+#' 
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
 #' @importFrom R6 R6Class
 #' @importFrom utils getParseData
 #' @importFrom yaml yaml.load yaml.load_file as.yaml
-#' @importFrom lazyeval lazy_dots lazy_eval
 #' @importFrom base64enc base64decode base64encode
 #' @importFrom urltools url_parse url_compose
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
+#' @importFrom httr2 resp_status_desc req_perform
 #' @importFrom webmockr pluck_body
-#' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
-#' @docType package
-#' @aliases vcr-package
-#' @name vcr
+## usethis namespace: end
 NULL
 
 #' An HTTP request as prepared by the \pkg{crul} package

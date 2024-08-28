@@ -1,0 +1,38 @@
+See also the [configuration vignette](https://docs.ropensci.org/vcr/articles/configuration.html).
+
+We set the following defaults:
+
+```{r, echo = FALSE, results='asis', collapse=TRUE}
+defaults <- rev(vcr_config_defaults())
+defaults[unlist(lapply(defaults, is.character))] <- paste0('"', defaults[unlist(lapply(defaults, is.character))], '"')
+cat(sprintf("* %s = `%s`\n", names(defaults), defaults))
+```
+
+
+You can get the defaults programmatically with
+
+```r
+vcr_config_defaults()
+```
+
+You can change all the above defaults with `vcr_configure()`:
+
+```r
+vcr_configure()
+```
+
+Calling `vcr_configuration()` gives you some of the more important configuration parameters in a nice tidy print out
+
+```{r}
+vcr_configuration()
+```
+
+
+<!-- `use_cassette()` is an easier approach. An alternative is to use
+`insert_cassett()` + `eject_cassette()`.
+
+`use_cassette()` does both insert and eject operations for you, but
+you can instead do them manually by using the above functions. You do have
+to eject the cassette after using insert. -->
+
+For more details refer to the [configuration vignette](https://docs.ropensci.org/vcr/articles/configuration.html)

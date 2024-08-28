@@ -18,23 +18,6 @@ Get absolute path to the \code{storage_location}
 }
 }
 }
-\examples{
-\dontrun{
-vcr_configure(dir = tempdir())
-
-(yy <- FileSystem$new(file_name = "file4014931b21b.yml"))
-yy$set_cassette(content = "hello world!")
-
-# is empty?
-yy$is_empty()
-
-# get cassette
-yy$get_cassette(file_name = "file4014931b21b.yml")
-
-# clenaup
-unlink(file.path(tempdir(), "file4014931b21b.yml"))
-}
-}
 \keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -54,15 +37,16 @@ unlink(file.path(tempdir(), "file4014931b21b.yml"))
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FileSystem$new()}}
-\item \href{#method-get_cassette}{\code{FileSystem$get_cassette()}}
-\item \href{#method-is_empty}{\code{FileSystem$is_empty()}}
-\item \href{#method-set_cassette}{\code{FileSystem$set_cassette()}}
-\item \href{#method-clone}{\code{FileSystem$clone()}}
+\item \href{#method-FileSystem-new}{\code{FileSystem$new()}}
+\item \href{#method-FileSystem-get_cassette}{\code{FileSystem$get_cassette()}}
+\item \href{#method-FileSystem-is_empty}{\code{FileSystem$is_empty()}}
+\item \href{#method-FileSystem-set_cassette}{\code{FileSystem$set_cassette()}}
+\item \href{#method-FileSystem-clone}{\code{FileSystem$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-FileSystem-new"></a>}}
+\if{latex}{\out{\hypertarget{method-FileSystem-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{FileSystem} object
 \subsection{Usage}{
@@ -96,7 +80,8 @@ A new \code{FileSystem} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_cassette"></a>}}
+\if{html}{\out{<a id="method-FileSystem-get_cassette"></a>}}
+\if{latex}{\out{\hypertarget{method-FileSystem-get_cassette}{}}}
 \subsection{Method \code{get_cassette()}}{
 Gets the cassette for the given storage key (file name)
 \subsection{Usage}{
@@ -115,7 +100,8 @@ named list, from \code{yaml::yaml.load_file}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_empty"></a>}}
+\if{html}{\out{<a id="method-FileSystem-is_empty"></a>}}
+\if{latex}{\out{\hypertarget{method-FileSystem-is_empty}{}}}
 \subsection{Method \code{is_empty()}}{
 Checks if a cassette is empty or not
 \subsection{Usage}{
@@ -127,7 +113,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_cassette"></a>}}
+\if{html}{\out{<a id="method-FileSystem-set_cassette"></a>}}
+\if{latex}{\out{\hypertarget{method-FileSystem-set_cassette}{}}}
 \subsection{Method \code{set_cassette()}}{
 Sets the cassette for the given storage key (file name)
 \subsection{Usage}{
@@ -148,7 +135,8 @@ no return; writes to disk
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
+\if{html}{\out{<a id="method-FileSystem-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-FileSystem-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

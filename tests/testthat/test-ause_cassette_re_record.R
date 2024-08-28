@@ -3,7 +3,7 @@ context("use_cassette options: re_record_interval")
 # library(crul, quietly = TRUE)
 mydir <- file.path(tempdir(), "use_cassette_re_record")
 # invisible(vcr_configure(dir = mydir))
-conn <- crul::HttpClient$new("https://eu.httpbin.org")
+conn <- crul::HttpClient$new(hb())
 # vcr::vcr_configure(
 #   dir = mydir,
 #   log = TRUE, 

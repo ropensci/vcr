@@ -61,7 +61,12 @@ test_that("RequestIgnorer usage: w/ real requests", {
   expect_error(z$handle(), "vcr does not know how to handle")
   x <- RequestIgnorer$new()
   x$ignore_localhost()
-  expect_error(z$handle(), "Failed to connect")
+  if (Sys.info()[['sysname']] != "Windows") {
+    expect_error(z$handle(), "Failed to connect")
+  }
+
+  # cleanup
+  rm(crul_request)
 
   # ignore by callback - FIXME: we're not yet supporting a user defined fxn
   # req <- list(url = list(url = "http://127.0.0.1"),
@@ -88,14 +93,18 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
 
   library(crul)
 
+  vcr_configure_reset()
+
   # IGNORE BY HOST
   tmpdir <- tempdir()
   vcr_configure(dir = tmpdir)
   # vcr_configuration()
   cas_not_ignored <- use_cassette("test_ignore_host", {
-    HttpClient$new("https://google.com")$get()
+    HttpClient$new(hb())$get()
     HttpClient$new("https://scottchamberlain.info")$get()
   })
+
+  vcr_configure_reset()
 
   vcr_configure(dir = tmpdir, ignore_hosts = "google.com")
   # vcr_configuration()
@@ -104,7 +113,7 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
     HttpClient$new("https://scottchamberlain.info")$get()
   })
 
-  read_cas <- function(x) yaml::yaml.load_file(x)$http_interactions
+  read_cas <- function(x) suppressWarnings(yaml::yaml.load_file(x))$http_interactions
   expect_equal(length(read_cas(cas_not_ignored$file())), 2)
   expect_equal(length(read_cas(cas_ignored$file())), 1)
 

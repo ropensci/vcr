@@ -1,20 +1,20 @@
 ## Test environments
 
-* local OS X install, R 3.6.3 RC
-* ubuntu 14.04 (on travis-ci), R 3.6.2
+* local macOS, R 4.4.1
+* ubuntu 22.04 (on GitHub Actions), R 4.4.1
 * win-builder (devel and release)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
-## Reverse dependencies
+## Revdep check results
 
-* I have run R CMD check on the 28 reverse dependencies. Summary at https://github.com/ropensci/vcr/blob/master/revdep/README.md
+We checked all 53 reverse dependencies, comparing R CMD check results across CRAN and dev verions of this package. We saw zero new problems.
 
 --------
 
-This version makes many improvements to configuration settings, improves documentation, and fixes many bugs.
+This version adds support for httr2.
 
 Thanks very much,
 Scott Chamberlain

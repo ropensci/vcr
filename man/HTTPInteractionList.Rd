@@ -43,12 +43,12 @@ vcr_configure(
 ## make the request
 ### turn off mocking
 crul::mock(FALSE)
-url <- "https://eu.httpbin.org/post"
+url <- "https://hb.opencpu.org/post"
 cli <- crul::HttpClient$new(url = url)
 res <- cli$post(body = list(a = 5))
 
 ## request
-(request <- Request$new("POST", url, body, res$headers))
+(request <- Request$new("POST", url, list(a = 5), res$headers))
 ## response
 (response <- VcrResponse$new(
    res$status_http(),
@@ -94,17 +94,18 @@ x$response_for(request)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{HTTPInteractionList$new()}}
-\item \href{#method-response_for}{\code{HTTPInteractionList$response_for()}}
-\item \href{#method-has_interaction_matching}{\code{HTTPInteractionList$has_interaction_matching()}}
-\item \href{#method-has_used_interaction_matching}{\code{HTTPInteractionList$has_used_interaction_matching()}}
-\item \href{#method-remaining_unused_interaction_count}{\code{HTTPInteractionList$remaining_unused_interaction_count()}}
-\item \href{#method-assert_no_unused_interactions}{\code{HTTPInteractionList$assert_no_unused_interactions()}}
-\item \href{#method-clone}{\code{HTTPInteractionList$clone()}}
+\item \href{#method-HTTPInteractionList-new}{\code{HTTPInteractionList$new()}}
+\item \href{#method-HTTPInteractionList-response_for}{\code{HTTPInteractionList$response_for()}}
+\item \href{#method-HTTPInteractionList-has_interaction_matching}{\code{HTTPInteractionList$has_interaction_matching()}}
+\item \href{#method-HTTPInteractionList-has_used_interaction_matching}{\code{HTTPInteractionList$has_used_interaction_matching()}}
+\item \href{#method-HTTPInteractionList-remaining_unused_interaction_count}{\code{HTTPInteractionList$remaining_unused_interaction_count()}}
+\item \href{#method-HTTPInteractionList-assert_no_unused_interactions}{\code{HTTPInteractionList$assert_no_unused_interactions()}}
+\item \href{#method-HTTPInteractionList-clone}{\code{HTTPInteractionList$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-new"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{HTTPInteractionList} object
 \subsection{Usage}{
@@ -139,7 +140,8 @@ A new \code{HTTPInteractionList} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-response_for"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-response_for"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-response_for}{}}}
 \subsection{Method \code{response_for()}}{
 Check if there's a matching interaction, returns a
 response object
@@ -156,7 +158,8 @@ response object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-has_interaction_matching"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-has_interaction_matching"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-has_interaction_matching}{}}}
 \subsection{Method \code{has_interaction_matching()}}{
 Check if has a matching interaction
 \subsection{Usage}{
@@ -175,7 +178,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-has_used_interaction_matching"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-has_used_interaction_matching"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-has_used_interaction_matching}{}}}
 \subsection{Method \code{has_used_interaction_matching()}}{
 check if has used interactions matching a given request
 \subsection{Usage}{
@@ -194,7 +198,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remaining_unused_interaction_count"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-remaining_unused_interaction_count"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-remaining_unused_interaction_count}{}}}
 \subsection{Method \code{remaining_unused_interaction_count()}}{
 Number of unused interactions
 \subsection{Usage}{
@@ -206,7 +211,8 @@ integer
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-assert_no_unused_interactions"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-assert_no_unused_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-assert_no_unused_interactions}{}}}
 \subsection{Method \code{assert_no_unused_interactions()}}{
 Checks if there are no unused interactions left.
 \subsection{Usage}{
@@ -218,7 +224,8 @@ various
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
+\if{html}{\out{<a id="method-HTTPInteractionList-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-HTTPInteractionList-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

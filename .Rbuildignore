@@ -7,6 +7,7 @@
 man-roxygen
 ^cran-comments\.md$
 ^README\.Rmd$
+^README\.md$
 ^.*\.yml
 ^.*\.log
 Makefile
@@ -17,5 +18,8 @@ inst/ignore
 ^revdep$
 ^notes.R$
 ^notes_matchers.md$
+^notes-redirects.R$
 ^use_vcr_notes.txt$
 ^docs$
+^make_readme.R$
+^LICENSE\.md$

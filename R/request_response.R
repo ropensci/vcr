@@ -18,11 +18,11 @@
 #' max of 80 characters
 #' 
 #' In `response_summary()` we use [gsub] with `useBytes=TRUE` to avoid
-#' problems soemtimes seen with multibyte strings - this shouldn't affect
+#' problems sometimes seen with multibyte strings - this shouldn't affect
 #' your data/etc. as this is only for printing a summary of the response
 #' @examples
 #' # request
-#' url <- "https://httpbin.org"
+#' url <- "https://hb.opencpu.org"
 #' body <- list(foo = "bar")
 #' headers <- list(
 #'   `User-Agent` = "r-curl/3.2",

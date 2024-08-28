@@ -1,0 +1,30 @@
+---
+title: "Why and how to edit your vcr cassettes?"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{5. cassette manual editing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vcr)
+```
+
+
+```{r child='../man/rmdhunks/cassette-editing-vignette.Rmd', eval=TRUE} 
+```
+
+## Conclusion
+
+In this vignette we saw why and how to edit your vcr cassettes.
+We also presented approaches that use webmockr instead of vcr for mocking API responses.
+We mentioned editing cassettes by hand but you could also write a script using the `yaml` 
+or `jsonlite` package to edit your YAML/JSON cassettes programmatically.

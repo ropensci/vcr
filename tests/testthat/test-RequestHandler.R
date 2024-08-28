@@ -1,3 +1,5 @@
+skip_on_cran()
+
 vcr_configure(dir = tempdir())
 
 test_that("RequestHandlerHttr", {

@@ -1,10 +1,10 @@
 context("UnhandledHTTPRequestError")
 
 dir <- tempdir()
-invisible(vcr_configure(dir = dir))
+invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 
 request <- Request$new(
-  "post", "https://eu.httpbin.org/post?a=5", "", list(foo = "bar"))
+  "post", hb("/post?a=5"), "", list(foo = "bar"))
 
 test_that("UnhandledHTTPRequestError fails well", {
   z <- UnhandledHTTPRequestError$new(request)
@@ -21,12 +21,6 @@ test_that("UnhandledHTTPRequestError fails well", {
   expect_error(
     UnhandledHTTPRequestError$new(5),
     "request must be of class Request"
-  )
-
-  # types
-  expect_error(
-    UnhandledHTTPRequestError$new(request, 5),
-    "cassette must be of class character"
   )
 })
 
@@ -61,10 +55,11 @@ invisible(
     list(
       "<<foo_bar_key>>" = Sys.getenv("FOO_BAR"),
       "<<hello_world_key>>" = Sys.getenv("HELLO_WORLD")
-    )
+    ),
+    warn_on_empty_cassette = FALSE
   )
 )
-url <- paste0("https://eu.httpbin.org/get?api_key=", 
+url <- paste0(hb("/get?api_key="), 
   Sys.getenv("FOO_BAR"), "&other_secret=", Sys.getenv("HELLO_WORLD"))
 request <- Request$new("get", url, "")
 unlink(file.path(vcr_c$dir, "bunny"))
@@ -103,9 +98,11 @@ Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
 dir <- tempdir()
 invisible(
   vcr_configure(dir = dir, filter_sensitive_data =
-    list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")))
+    list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
+    warn_on_empty_cassette = FALSE
+  )
 )
-url <- "https://eu.httpbin.org/get"
+url <- hb("/get")
 request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
 unlink(file.path(vcr_c$dir, "frog"))
 cas <- suppressMessages(insert_cassette("frog",
@@ -143,10 +140,11 @@ invisible(
     list(
       "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
       "<<hello_mars_key>>" = Sys.getenv("HELLO_MARS")
-    )
+    ),
+    warn_on_empty_cassette = FALSE
   )
 )
-url <- paste0("https://eu.httpbin.org/get?api_key=", Sys.getenv("HELLO_MARS"))
+url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
 request <- Request$new("get", url, "")
 unlink(file.path(vcr_c$dir, "bunny2"))
 cas <- suppressMessages(insert_cassette("bunny2"))
@@ -190,7 +188,7 @@ vcr_configure_reset()
 #   vcr_configure(dir = dir, filter_sensitive_data =
 #     list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")))
 # )
-# url <- "https://eu.httpbin.org/get"
+# url <- hb("/get")
 # request <- Request$new("get", url, list(api_key = Sys.getenv("FOO_BAR")))
 # unlink(file.path(vcr_c$dir, "alligator"))
 # cas <- suppressMessages(insert_cassette("alligator",

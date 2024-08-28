@@ -1,3 +1,10 @@
+# (x <- Hooks$new())
+# x$hooks
+# x$define_hook(hook_type = "foo", fun = function(x) x ^ 2)
+# x$hooks$foo(4)
+# x$clear_hooks()
+# x$hooks
+
 #' @title Hooks class
 #' 
 #' @description Helps define new hooks, hold hooks, and accessors to get and
@@ -16,14 +23,6 @@
 #'  }
 #' @format NULL
 #' @usage NULL
-#' @examples \dontrun{
-#' (x <- Hooks$new())
-#' x$hooks
-#' x$define_hook(hook_type = "foo", fun = function(x) x ^ 2)
-#' x$hooks$foo(4)
-#' x$clear_hooks()
-#' x$hooks
-#' }
 Hooks <- R6::R6Class(
   'Hooks',
   public = list(

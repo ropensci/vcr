@@ -1,0 +1,142 @@
+
+Sometimes you may need to turn off `vcr`, either for individual
+function calls, individual test blocks, whole test files, or
+for the entire package. The following attempts to break down
+all the options.
+
+`vcr` has the following four exported functions:
+
+- `turned_off()` - Turns vcr off for the duration of a code block
+- `turn_off()` - Turns vcr off completely, so that it no longer handles every
+HTTP request
+- `turn_on()` - turns vcr on; the opposite of `turn_off()`
+- `turned_on()` - Asks if vcr is turned on, returns a boolean
+
+Instead of using the above four functions, you could use environment
+variables to achieve the same thing. This way you could enable/disable
+`vcr` in non-interactive environments such as continuous integration,
+Docker containers, or running R non-interactively from the command line.
+The full set of environment variables `vcr` uses, all of which accept
+only `TRUE` or `FALSE`:
+
+- `VCR_TURN_OFF`: turn off vcr altogether; set to `TRUE` to skip any vcr
+usage; default: `FALSE`
+- `VCR_TURNED_OFF`: set the `turned_off` internal package setting; this
+does not turn off vcr completely as does `VCR_TURN_OFF` does, but rather
+is looked at together with `VCR_IGNORE_CASSETTES`
+- `VCR_IGNORE_CASSETTES`: set the `ignore_cassettes` internal package
+setting; this is looked at together with `VCR_TURNED_OFF`
+
+## turned_off {#turned-off}
+
+`turned_off()` lets you temporarily make a real HTTP request without completely turning
+`vcr` off, unloading it, etc.
+
+What happens internally is we turn off `vcr`, run your code block, then on exit
+turn `vcr` back on - such that `vcr` is only turned off for the duration of your
+code block. Even if your code block errors, `vcr` will be turned back on
+due to use of `on.exit(turn_on())`
+
+```r
+library(vcr)
+library(crul)
+turned_off({
+  con <- HttpClient$new(url = "https://httpbin.org/get")
+  con$get()
+})
+```
+
+```r
+#> <crul response>
+#>   url: https://httpbin.org/get
+#>   request_headers:
+#>     User-Agent: libcurl/7.54.0 r-curl/4.3 crul/0.9.0
+#>     Accept-Encoding: gzip, deflate
+#>     Accept: application/json, text/xml, application/xml, */*
+#>   response_headers:
+#>     status: HTTP/1.1 200 OK
+#>     date: Fri, 14 Feb 2020 19:44:46 GMT
+#>     content-type: application/json
+#>     content-length: 365
+#>     connection: keep-alive
+#>     server: gunicorn/19.9.0
+#>     access-control-allow-origin: *
+#>     access-control-allow-credentials: true
+#>   status: 200
+```
+
+## turn_off/turn_on {#turn-off-on}
+
+`turn_off()` is different from `turned_off()` in that `turn_off()` is not aimed
+at a single call block, but rather it turns `vcr` off for the entire package.
+`turn_off()` does check first before turning `vcr` off that there is not currently
+a cassette in use. `turn_off()` is meant to make R ignore `vcr::insert_cassette()`
+and `vcr::use_cassette()` blocks in your test suite - letting the code in the block
+run as if they were not wrapped in `vcr` code - so that all you have to do to run
+your tests with cached requests/responses AND with real HTTP requests is toggle
+a single R function or environment variable.
+
+```r
+library(vcr)
+vcr_configure(dir = tempdir())
+# real HTTP request works - vcr is not engaged here
+crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+# wrap HTTP request in use_cassette() - vcr is engaged here
+use_cassette("foo_bar", {
+  crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+})
+# turn off & ignore cassettes - use_cassette is ignored, real HTTP request made
+turn_off(ignore_cassettes = TRUE)
+use_cassette("foo_bar", {
+  crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+})
+# if you turn off and don't ignore cassettes, error thrown
+turn_off(ignore_cassettes = FALSE)
+use_cassette("foo_bar", {
+  res2=crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+})
+# vcr back on - now use_cassette behaves as before
+turn_on()
+use_cassette("foo_bar3", {
+  res2=crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+})
+```
+
+## turned_on {#turned-on}
+
+`turned_on()` does what it says on the tin - it tells you if `vcr` is turned on
+or not. 
+
+```{r}
+library(vcr)
+turn_on()
+turned_on()
+turn_off()
+turned_on()
+```
+
+## Environment variables {#lightswitch-env-vars}
+
+The `VCR_TURN_OFF` environment variable can be used within R or on the command line
+to turn off `vcr`. For example, you can run tests for a package that uses `vcr`, but
+ignore any `use_cassette`/`insert_cassette` usage, by running this on the command
+line in the root of your package:
+
+```
+VCR_TURN_OFF=true Rscript -e "devtools::test()"
+```
+
+Or, similarly within R:
+
+```r
+Sys.setenv(VCR_TURN_OFF = TRUE)
+devtools::test()
+```
+
+The `VCR_TURNED_OFF` and `VCR_IGNORE_CASSETTES` environment variables can be used
+in combination to achieve the same thing as `VCR_TURN_OFF`:
+
+```
+VCR_TURNED_OFF=true VCR_IGNORE_CASSETTES=true Rscript -e "devtools::test()"
+```
+

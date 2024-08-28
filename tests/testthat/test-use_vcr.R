@@ -2,7 +2,7 @@ context("use_vcr works")
 
 test_that("use_vcr works", {
   skip_on_cran()
-  
+
   expect_is(use_vcr, "function")
 
   dir <- file.path(tempdir(), "foobar")
@@ -11,13 +11,14 @@ test_that("use_vcr works", {
   expect_null(res)
   expect_true(dir.exists(file.path(dir, "tests")))
   expect_true(file.exists(file.path(dir, "tests/testthat.R")))
-  expect_true(file.exists(file.path(dir, "tests/testthat/helper-foobar.R")))
-  help <- paste0(readLines(file.path(dir, "tests/testthat/helper-foobar.R")),
+  expect_true(file.exists(file.path(dir, "tests/testthat/helper-vcr.R")))
+  help <- paste0(readLines(file.path(dir, "tests/testthat/helper-vcr.R")),
     collapse = " ")
   expect_match(help, "vcr::vcr_configure")
   expect_match(help, "vcr::check_cassette_names")
   expect_true(file.exists(file.path(dir, "tests/testthat/test-vcr_example.R")))
   expect_true(any(grepl("vcr", readLines(file.path(dir, "DESCRIPTION")))))
+  expect_true(any(grepl(">=", readLines(file.path(dir, "DESCRIPTION")))))
   expect_true(file.exists(file.path(dir, ".gitattributes")))
   gitatts <- readLines(file.path(dir, ".gitattributes"))
   expect_true(any(grepl("text=auto", gitatts)))
@@ -37,6 +38,10 @@ test_that("use_vcr fails well", {
 
   # DESCRIPTION file does not exist
   dir2 <- file.path(tempdir(), "foobar3")
-  dir.create(dir, recursive = TRUE)
-  expect_error(use_vcr(dir), "'DESCRIPTION' not found")
+  dir.create(dir2, recursive = TRUE)
+  expect_error(use_vcr(dir2), "'DESCRIPTION' not found")
+
+  # cleanup
+  unlink(dir, TRUE, TRUE)
+  unlink(dir2, TRUE, TRUE)
 })

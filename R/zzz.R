@@ -19,7 +19,12 @@ errmssg <- "use_cassette requires a block.\nIf you cannot wrap your code in a bl
 compact <- function(x) Filter(Negate(is.null), x)
 
 `%||%` <- function(x, y) {
-  if (is.null(x) || all(nchar(x) == 0) || length(x) == 0) y else x
+  if (missing(x) || is.null(x) || all(nchar(x) == 0) || length(x) == 0) y else x
+}
+
+`%try%` <- function(x, y) {
+  z <- tryCatch(x, error = function(e) e)
+  if (inherits(z, "error")) y else x
 }
 
 stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
@@ -104,12 +109,6 @@ check_request_matchers <- function(x) {
          ") is not in the allowed set: ",
          paste0(mro, collapse = ", "), call. = FALSE)
   }
-  # we don't yet support the following matchers: host, path
-  if (any(x %in% c("host", "path"))) {
-    stop("we do not yet support host and path matchers",
-      "\n see https://github.com/ropensci/vcr/issues/70",
-      call. = FALSE)
-  }
   x
 }
 
@@ -122,3 +121,9 @@ check_record_mode <- function(x) {
   }
   x
 }
+
+sup_cond <- function(quiet, fun, cond = suppressMessages) {
+  if (quiet) cond(fun) else force(fun)
+}
+sup_mssg <- function(quiet, fun) sup_cond(quiet, fun)
+sup_warn <- function(quiet, fun) sup_cond(quiet, fun, suppressWarnings)

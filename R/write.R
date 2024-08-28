@@ -3,6 +3,10 @@ write_yaml <- function(x, file, bytes) {
   lapply(x, write_interactions, file = file, bytes = bytes)
 }
 
+write_json <- function(x, file, bytes) {
+  lapply(x, write_interactions_json, file = file, bytes = bytes)
+}
+
 write_header <- function(file) {
   cat("http_interactions:", sep = "\n", file = file)
 }
@@ -29,81 +33,81 @@ dedup_keys <- function(x) {
   return(x)
 }
 
-# param x: a list with "request" and "response" slots
-# param file: a file path
-# param bytes: logical, whether to preserve exact bytes or not
-# NOTE: changed fxn to write body separately to avoid yaml crashes
-write_interactions <- function(x, file, bytes) {
-  # check types
+str_breaks <- function(x) {
+  z <- str_splitter(x, 80L)
+  paste0(z, collapse = "\n")
+}
+
+prep_interaction <- function(x, file, bytes) {
   assert(x, c("list", "HTTPInteraction"))
   assert(file, "character")
-
   if (is.raw(x$response$body)) bytes <- TRUE
-
   body <- if (bytes || is.raw(x$response$body)) {
     bd <- get_body(x$response$body)
     if (!is.raw(bd)) bd <- charToRaw(bd)
-    base64enc::base64encode(bd)
+    tmp <- base64enc::base64encode(bd)
+    str_breaks(tmp)
   } else {
     get_body(x$response$body)
   }
-
-  # count characters (the count not used anymore,
-  # not used as a shorthand to see if it will fail with yaml which malloc fails)
-  body_nchar <- tryCatch(nchar(body), error = function(e) e)
-  # if errors, may be an encoding issue, coerce to utf-8 first
-  # then shouldn't fail with yaml pkg
-  body <- enc2utf8(body)
-  # if (inherits(body_nchar, "error")) {
-  #   body_nchar <- nchar(body)
-  # }
   if (length(body) == 0 || !nzchar(body)) body <- ""
-
-  # cat(sprintf("x$response$body: %s, %s", class(x$response$body), length(x$response$body)), sep = "\n")
-  tmp <- yaml::as.yaml(
+  res = list(
     list(
-      list(
-        request = list(
-          method = x$request$method,
-          uri = x$request$uri,
-          body = list(
-            encoding = "",
-            string = get_body(x$request$body)
-          ),
-          headers = dedup_keys(x$request$headers)
+      request = list(
+        method = x$request$method,
+        uri = x$request$uri,
+        body = list(
+          encoding = "",
+          string = get_body(x$request$body)
         ),
-        response = list(
-          status = x$response$status,
-          headers = dedup_keys(x$response$headers),
-          body = list(
-            encoding = encoding_guess(x$response$body, bytes),
-            file = x$response$disk,
-            # handle large bodies
-            string = body
-            # string = if (body_nchar < 1000000L) {
-            #   body
-            # } else {
-            #   "vcr_replace_me"
-            # }
-          )
-        ),
-        recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
-        recorded_with = pkg_versions()
-      )
+        headers = dedup_keys(x$request$headers)
+      ),
+      response = list(
+        status = x$response$status,
+        headers = dedup_keys(x$response$headers),
+        body = list(
+          encoding = "",
+          file = x$response$disk,
+          string = body
+        )
+      ),
+      recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
+      recorded_with = pkg_versions()
     )
   )
+  if (bytes) {
+    str_index <- which(grepl("string", names(res[[1]]$response$body)))
+    names(res[[1]]$response$body)[str_index] <- "base64_string"
+  }
+  return(res)
+}
 
-  # handle large bodies
-  # if (body_nchar >= 1000000L) tmp <- sub("vcr_replace_me", body, tmp)
-  # if (body_nchar >= 1000000L) tmp <- sub("vcr_replace_me", yaml::as.yaml(body), tmp)
-
-  # filter_sensitive_data replacement
-  # FIXME: eventually move to higher level so that this happens
-  #  regardless of serializer
+# param x: a list with "request" and "response" slots
+# param file: a file path
+# param bytes: logical, whether to preserve exact bytes or not
+write_interactions <- function(x, file, bytes) {
+  z <- prep_interaction(x, file, bytes)
+  z <- headers_remove(z)
+  z <- query_params_remove(z)
+  tmp <- yaml::as.yaml(z)
   tmp <- sensitive_remove(tmp)
-
-  # write to disk/cassette
   cat(tmp, file = file, append = TRUE)
+}
+
+write_interactions_json <- function(x, file, bytes) {
+  z <- prep_interaction(x, file, bytes)
+  z <- headers_remove(z)
+  z <- query_params_remove(z)
+  # combine with existing data on same file, if any
+  on_disk <- invisible(tryCatch(jsonlite::fromJSON(file, FALSE),
+    error = function(e) e))
+  if (!inherits(on_disk, "error") && is.list(on_disk)) {
+    z <- c(on_disk$http_interactions, z)
+  }
+  tmp <- jsonlite::toJSON(
+    list(http_interactions = z), auto_unbox = TRUE, pretty = vcr_c$json_pretty)
+  tmp <- sensitive_remove(tmp)
+  cat(paste0(tmp, "\n"), file = file)
 }
 
 pkg_versions <- function() {

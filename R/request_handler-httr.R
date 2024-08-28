@@ -21,7 +21,7 @@
 #' mydir <- file.path(tempdir(), "testing_httr")
 #' invisible(vcr_configure(dir = mydir))
 #' use_cassette(name = "testing2", {
-#'   res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+#'   res <- POST("https://hb.opencpu.org/post", body = list(foo = "bar"))
 #' }, match_requests_on = c("method", "uri", "body"))
 #'
 #' load("~/httr_req_post.rda")
@@ -45,7 +45,8 @@ RequestHandlerHttr <- R6::R6Class(
       self$request_original <- request
       self$request <- {
         Request$new(request$method, request$url,
-          webmockr::pluck_body(request), request$headers)
+          webmockr::pluck_body(request), request$headers,
+          fields = request$fields, output = request$output)
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     }

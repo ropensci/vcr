@@ -1,0 +1,3 @@
+There's a number of features in this package that are not yet supported, but for which their parameters are found in the package. 
+
+We've tried to make sure the parameters that are ignored are marked as such. Keep an eye out for package updates for changes in these parameters, and/or let us know you want it and we can move it up in the priority list.

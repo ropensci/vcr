@@ -23,6 +23,7 @@
 #' # eject_cassette(cassette = "hello")
 eject_cassette <- function(cassette = NULL, options = list(),
                            skip_no_unused_interactions_assertion = NULL) {
+  on.exit(webmockr::webmockr_disable_net_connect(), add=TRUE)
   if (is.null(cassette)) {
     # current cassette
     cas <- current_cassette()

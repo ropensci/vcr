@@ -14,7 +14,7 @@ Keeps track of the cassette serializers in a hash-like object
 \strong{Private Methods}
 \describe{
 \item{\code{serialize_get()}}{
-Gets a named serializer. This is also run on initialize of this function
+Gets a named serializer. This is also run on \code{Serializers$new()}
 }
 }
 }
@@ -25,6 +25,11 @@ aa$name
 aa$serializers
 yaml_serializer <- aa$serializers$new()
 yaml_serializer
+
+x <- Serializers$new(name = "json")
+x$serializers$new()
+json_serializer <- x$serializers$new()
+json_serializer
 }
 }
 \keyword{internal}
@@ -33,19 +38,20 @@ yaml_serializer
 \describe{
 \item{\code{serializers}}{(list) list of serializer names}
 
-\item{\code{name}}{(character) Name of a serializer. Only option is "yaml"}
+\item{\code{name}}{(character) Name of a serializer. "yaml" (default) or "json"}
 }
 \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Serializers$new()}}
-\item \href{#method-clone}{\code{Serializers$clone()}}
+\item \href{#method-Serializers-new}{\code{Serializers$new()}}
+\item \href{#method-Serializers-clone}{\code{Serializers$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-Serializers-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Serializers-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Serializers object
 \subsection{Usage}{
@@ -57,7 +63,7 @@ Create a new Serializers object
 \describe{
 \item{\code{serializers}}{(list) list of serializer names}
 
-\item{\code{name}}{(character) Name of a serializer. Only option is "yaml"}
+\item{\code{name}}{(character) Name of a serializer. "yaml" (default) or "json"}
 }
 \if{html}{\out{</div>}}
 }
@@ -66,7 +72,8 @@ A new \code{Serializers} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
+\if{html}{\out{<a id="method-Serializers-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Serializers-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

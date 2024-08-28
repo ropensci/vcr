@@ -47,7 +47,10 @@ allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
 \item{serialize_with}{(character) Which serializer to use.
-Valid values are "yaml" (default), the only one supported for now.}
+Valid values are "yaml" (default) and "json". Note that you can have
+multiple cassettes with the same name as long as they use different
+serializers; so if you only want one cassette for a given cassette name,
+make sure to not switch serializers, or clean up files you no longer need.}
 
 \item{persist_with}{(character) Which cassette persister to
 use. Default: "file_system". You can also register and use a
@@ -105,6 +108,10 @@ cassette is ejected
 we return with a useful message, and since we use \code{on.exit()}
 the cassette is still ejected even though there was an error,
 but you don't get an object back
+\item whenever an empty cassette (a yml/json file) is found, we delete it
+before returning from the \code{use_cassette()} function call. we achieve
+this via use of \code{on.exit()} so an empty cassette is deleted even
+if there was an error in the code block you passed in
 }
 }
 
@@ -131,28 +138,6 @@ block.
 \code{use_cassette()} block starts on.
 }
 
-\section{Cassette names}{
-
-\itemize{
-\item Should be meaningful so that it's obvious to you what test/function
-they relate to. Meaningful names are important so that you can quickly
-determine to what test file or test block a cassette belongs. Note that
-vcr cannot check that your cassette names are meaningful.
-\item Should not be duplicated. Duplicated cassette names would lead to
-a test using the wrong cassette.
-\item Should not have spaces. Spaces can lead to problems in using file paths.
-\item Should not include a file extension. vcr handles file extensions for
-the user.
-\item Should not have illegal characters that can lead to problems in using
-file paths: '/', '?', '<', '>', '\\', ':', '*', '|', and '\"'
-\item Should not have control characters, e.g., \verb{\\n}
-\item Should not have just dots, e.g,. \code{.} or \code{..}
-\item Should not have Windows reserved words, e.g, \code{com1}
-\item Should not have trailing dots
-\item Should not be longer than 255 characters
-}
-}
-
 \examples{
 \dontrun{
 library(vcr)
@@ -160,14 +145,14 @@ library(crul)
 vcr_configure(dir = tempdir())
 
 use_cassette(name = "apple7", {
-  cli <- HttpClient$new(url = "https://httpbin.org")
+  cli <- HttpClient$new(url = "https://hb.opencpu.org")
   resp <- cli$get("get")
 })
 readLines(file.path(tempdir(), "apple7.yml"))
 
 # preserve exact body bytes - records in base64 encoding
 use_cassette("things4", {
-  cli <- crul::HttpClient$new(url = "https://httpbin.org")
+  cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
   bbb <- cli$get("get")
 }, preserve_exact_body_bytes = TRUE)
 ## see the body string value in the output here
@@ -180,10 +165,10 @@ unlink(file.path(tempdir(), c("things4.yml", "apple7.yml")))
 # with httr
 library(vcr)
 library(httr)
-vcr_configure(dir = tempdir(), log = TRUE)
+vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = file.path(tempdir(), "vcr.log")))
 
 use_cassette(name = "stuff350", {
-  res <- GET("https://httpbin.org/get")
+  res <- GET("https://hb.opencpu.org/get")
 })
 readLines(file.path(tempdir(), "stuff350.yml"))
 

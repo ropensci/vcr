@@ -7,7 +7,7 @@
 object that handled all aspects of a request
 }
 \examples{
-url <- "https://eu.httpbin.org/post"
+url <- "https://hb.opencpu.org/post"
 body <- list(foo = "bar")
 headers <- list(
   `User-Agent` = "libcurl/7.54.0 r-curl/3.2 crul/0.5.2",
@@ -45,31 +45,49 @@ x$from_hash(h)
 
 \item{\code{headers}}{(character) named list}
 
-\item{\code{skip_port_stripping}}{(logical) whether to strip thhe port}
+\item{\code{skip_port_stripping}}{(logical) whether to strip the port}
 
 \item{\code{hash}}{(character) a named list - internal use}
 
 \item{\code{opts}}{(character) options - internal use}
 
 \item{\code{disk}}{(logical) xx}
+
+\item{\code{fields}}{(various) request body details}
+
+\item{\code{output}}{(various) request output details, disk, memory, etc}
+
+\item{\code{policies}}{(various) http policies, used in httr2 only}
 }
 \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Request$new()}}
-\item \href{#method-to_hash}{\code{Request$to_hash()}}
-\item \href{#method-from_hash}{\code{Request$from_hash()}}
-\item \href{#method-clone}{\code{Request$clone()}}
+\item \href{#method-Request-new}{\code{Request$new()}}
+\item \href{#method-Request-to_hash}{\code{Request$to_hash()}}
+\item \href{#method-Request-from_hash}{\code{Request$from_hash()}}
+\item \href{#method-Request-clone}{\code{Request$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-Request-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, opts, disk)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(
+  method,
+  uri,
+  body,
+  headers,
+  opts,
+  disk,
+  fields,
+  output,
+  policies,
+  skip_port_stripping = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -86,7 +104,16 @@ post, put, patch or delete)}
 
 \item{\code{opts}}{(named list) options internal use}
 
-\item{\code{disk}}{boolean, is body a file on disk}
+\item{\code{disk}}{(boolean), is body a file on disk}
+
+\item{\code{fields}}{(various) post fields}
+
+\item{\code{output}}{(various) output details}
+
+\item{\code{policies}}{(various) http policies, used in httr2 only}
+
+\item{\code{skip_port_stripping}}{(logical) whether to strip the port.
+default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }
@@ -95,7 +122,8 @@ A new \code{Request} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_hash"></a>}}
+\if{html}{\out{<a id="method-Request-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Convert the request to a list
 \subsection{Usage}{
@@ -107,7 +135,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-from_hash"></a>}}
+\if{html}{\out{<a id="method-Request-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Convert the request to a list
 \subsection{Usage}{
@@ -126,7 +155,8 @@ a new \code{Request} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
+\if{html}{\out{<a id="method-Request-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Request-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

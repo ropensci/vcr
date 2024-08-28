@@ -6,56 +6,33 @@
 \description{
 class with methods for serializing via the \pkg{yaml} package
 }
-\examples{
-\dontrun{
-(yy <- YAML$new(path = "stuff2"))
-fun <- yy$serialize()
-fun(list(http_interactions = list(response = list(body = "bar"))),
-  path = yy$path, bytes = FALSE)
-yy$deserialize_path()
-yy$deserialize_string(string = "- hey\n- hi\n- hello")
-yy$deserialize_string(string = "- foo\n- bar\n- 3.14")
-}
-}
 \keyword{internal}
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{file_extension}}{(character) A file extension}
-
-\item{\code{path}}{(character) full path to the yaml file}
-
-\item{\code{string}}{(character) path string}
-}
-\if{html}{\out{</div>}}
+\section{Super class}{
+\code{\link[vcr:Serializer]{vcr::Serializer}} -> \code{YAML}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{YAML$new()}}
-\item \href{#method-serialize}{\code{YAML$serialize()}}
-\item \href{#method-deserialize_string}{\code{YAML$deserialize_string()}}
-\item \href{#method-deserialize_path}{\code{YAML$deserialize_path()}}
-\item \href{#method-clone}{\code{YAML$clone()}}
+\item \href{#method-YAML-new}{\code{YAML$new()}}
+\item \href{#method-YAML-serialize}{\code{YAML$serialize()}}
+\item \href{#method-YAML-deserialize}{\code{YAML$deserialize()}}
+\item \href{#method-YAML-clone}{\code{YAML$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-YAML-new"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new YAML object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$new(file_extension = ".yml", path = NULL, string = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YAML$new(path = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file_extension}}{(character) A file extension}
-
 \item{\code{path}}{(character) path to the cassette, excluding the cassette
-directory and the file extension. only use if not passing a string}
-
-\item{\code{string}}{(character) path string. only use if not passing a path}
+directory and the file extension}
 }
 \if{html}{\out{</div>}}
 }
@@ -64,7 +41,8 @@ A new \code{YAML} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serialize"></a>}}
+\if{html}{\out{<a id="method-YAML-serialize"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-serialize}{}}}
 \subsection{Method \code{serialize()}}{
 Serializes the given hash using internal fxn write_yaml
 \subsection{Usage}{
@@ -87,17 +65,20 @@ Serializes the given hash using internal fxn write_yaml
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_string"></a>}}
-\subsection{Method \code{deserialize_string()}}{
-Deserializes the given string using yaml::yaml.load
+\if{html}{\out{<a id="method-YAML-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-deserialize}{}}}
+\subsection{Method \code{deserialize()}}{
+Deserializes the content at the path using
+yaml::yaml.load_file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize_string(string = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize(cassette)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{string}}{(character) the YAML string}
+\item{\code{cassette}}{the current cassette object so it's properties can
+be retrieved}
 }
 \if{html}{\out{</div>}}
 }
@@ -106,19 +87,8 @@ Deserializes the given string using yaml::yaml.load
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize_path"></a>}}
-\subsection{Method \code{deserialize_path()}}{
-Deserializes the given string using yaml::yaml.load_file
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$deserialize_path()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(list) the deserialized object, an R list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
+\if{html}{\out{<a id="method-YAML-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-YAML-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

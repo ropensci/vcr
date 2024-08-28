@@ -1,0 +1,34 @@
+---
+title: "Record modes"
+author: "Scott Chamberlain"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: readable
+vignette: >
+  %\VignetteIndexEntry{vcr record modes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    collapse = TRUE,
+    warning = FALSE,
+    message = FALSE
+)
+```
+
+Request matching
+================
+
+```{r child='../man/rmdhunks/record-modes.Rmd', eval=TRUE} 
+```
+
+## More documentation
+
+Check out the [http testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
+

@@ -10,7 +10,7 @@ Custom vcr http response object
 \dontrun{
 vcr_configure(dir = tempdir())
 
-
+# basic example of VcrResponse use
 url <- "https://google.com"
 (cli <- crul::HttpClient$new(url = url))
 (res <- cli$get("get", query = list(q = "stuff")))
@@ -22,7 +22,6 @@ x$headers
 x$http_version
 x$to_hash()
 x$from_hash(x$to_hash())
-
 
 # update content length header
 ## example 1
@@ -37,15 +36,28 @@ x$update_content_length_header()
 x$headers$`content-length`
 
 ## example 2
-### no content-length header
+### no content-length header b/c a transfer-encoding header is included
+### and no content-length header allowed if transfer-encoding header
+### used (via rfc7230)
 url <- "https://google.com"
 cli <- crul::HttpClient$new(url = url)
 res <- cli$get()
 x <- VcrResponse$new(res$status_http(), res$response_headers,
    rawToChar(res$content), res$response_headers$status)
-x$headers$`content-length`
+x$headers$`content-length` # = NULL
 x$update_content_length_header() # no change, b/c header doesn't exist
+x$headers$`content-length` # = NULL
 
+## example 3
+### content-length header present, and does change
+body <- " Hello World "
+x <- VcrResponse$new(200, list('content-length'=nchar(body)),
+  body, "HTTP/2")
+x$headers$`content-length` # = 13
+x$body <- gsub("^\\\\s|\\\\s$", "", x$body)
+x$headers$`content-length` # = 13
+x$update_content_length_header()
+x$headers$`content-length` # = 11
 
 # check if body is compressed
 url <- "https://fishbase.ropensci.org"
@@ -91,20 +103,22 @@ f <- tempfile()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{VcrResponse$new()}}
-\item \href{#method-to_hash}{\code{VcrResponse$to_hash()}}
-\item \href{#method-from_hash}{\code{VcrResponse$from_hash()}}
-\item \href{#method-update_content_length_header}{\code{VcrResponse$update_content_length_header()}}
-\item \href{#method-get_header}{\code{VcrResponse$get_header()}}
-\item \href{#method-edit_header}{\code{VcrResponse$edit_header()}}
-\item \href{#method-delete_header}{\code{VcrResponse$delete_header()}}
-\item \href{#method-content_encoding}{\code{VcrResponse$content_encoding()}}
-\item \href{#method-is_compressed}{\code{VcrResponse$is_compressed()}}
-\item \href{#method-clone}{\code{VcrResponse$clone()}}
+\item \href{#method-VcrResponse-new}{\code{VcrResponse$new()}}
+\item \href{#method-VcrResponse-print}{\code{VcrResponse$print()}}
+\item \href{#method-VcrResponse-to_hash}{\code{VcrResponse$to_hash()}}
+\item \href{#method-VcrResponse-from_hash}{\code{VcrResponse$from_hash()}}
+\item \href{#method-VcrResponse-update_content_length_header}{\code{VcrResponse$update_content_length_header()}}
+\item \href{#method-VcrResponse-get_header}{\code{VcrResponse$get_header()}}
+\item \href{#method-VcrResponse-edit_header}{\code{VcrResponse$edit_header()}}
+\item \href{#method-VcrResponse-delete_header}{\code{VcrResponse$delete_header()}}
+\item \href{#method-VcrResponse-content_encoding}{\code{VcrResponse$content_encoding()}}
+\item \href{#method-VcrResponse-is_compressed}{\code{VcrResponse$is_compressed()}}
+\item \href{#method-VcrResponse-clone}{\code{VcrResponse$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-new"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new VcrResponse object
 \subsection{Usage}{
@@ -143,7 +157,27 @@ A new \code{VcrResponse} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_hash"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-print"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-print}{}}}
+\subsection{Method \code{print()}}{
+print method for the \code{VcrResponse} class
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$print(x, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{self}
+
+\item{\code{...}}{ignored}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-VcrResponse-to_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-to_hash}{}}}
 \subsection{Method \code{to_hash()}}{
 Create a hash
 \subsection{Usage}{
@@ -155,7 +189,8 @@ a list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-from_hash"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-from_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-from_hash}{}}}
 \subsection{Method \code{from_hash()}}{
 Get a hash back to an R list
 \subsection{Usage}{
@@ -174,7 +209,8 @@ an \code{VcrResponse} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_content_length_header"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-update_content_length_header"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-update_content_length_header}{}}}
 \subsection{Method \code{update_content_length_header()}}{
 Updates the Content-Length response header so that
 it is accurate for the response body
@@ -187,7 +223,8 @@ no return; modifies the content length header
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_header"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-get_header"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-get_header}{}}}
 \subsection{Method \code{get_header()}}{
 Get a header by name
 \subsection{Usage}{
@@ -206,7 +243,8 @@ the header value (if it exists)
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-edit_header"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-edit_header"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-edit_header}{}}}
 \subsection{Method \code{edit_header()}}{
 Edit a header
 \subsection{Usage}{
@@ -227,7 +265,8 @@ no return; modifies the header in place
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-delete_header"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-delete_header"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-delete_header}{}}}
 \subsection{Method \code{delete_header()}}{
 Delete a header
 \subsection{Usage}{
@@ -246,7 +285,8 @@ no return; the header is deleted if it exists
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-content_encoding"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-content_encoding"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-content_encoding}{}}}
 \subsection{Method \code{content_encoding()}}{
 Get the content-encoding header value
 \subsection{Usage}{
@@ -258,7 +298,8 @@ Get the content-encoding header value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_compressed"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-is_compressed"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-is_compressed}{}}}
 \subsection{Method \code{is_compressed()}}{
 Checks if the encoding is one of "gzip" or "deflate"
 \subsection{Usage}{
@@ -270,7 +311,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
+\if{html}{\out{<a id="method-VcrResponse-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-VcrResponse-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

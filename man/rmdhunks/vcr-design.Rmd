@@ -1,0 +1,139 @@
+This section explains `vcr`'s internal design and architecture.
+
+### Where vcr comes from and why R6
+
+`vcr` was "ported" from the Ruby gem (aka, library) of the same name[^1]. 
+Because it was ported from Ruby, an object-oriented programming language
+I thought it would be easier to use an object system in R that most
+closely resemble that used in Ruby (at least in my opinion). This 
+thinking lead to choosing [R6][]. The exported functions users interact
+with are not R6 classes, but are rather normal R functions. However,
+most of the internal code in the package uses R6. Thus, familiarity
+with R6 is important for people that may want to contribute to `vcr`,
+but not required at all for `vcr` users.
+
+### Principles
+
+#### An easy to use interface hides complexity
+
+As described above, `vcr` uses R6 internally, but users interact with
+normal R functions. Internal functions that are quite complicated are
+largely R6 while exported, simpler functions users interact with are
+normal R functions.
+
+#### Class/function names are inherited from Ruby vcr
+
+Since R `vcr` was ported from Ruby, we kept most of the names of 
+functions/classes and variables. So if you're wondering about why 
+a function, class, or variable has a particular name, its derivation 
+can not be found out in this package, for the most part that is.
+
+#### Hooks into HTTP clients
+
+Perhaps the most fundamental thing about that this package work is
+how it knows what HTTP requests are being made. This stumped me for 
+quite a long time. When looking at Ruby vcr, at first I thought it
+must be "listening" for HTTP requests somehow. Then I found out about
+[monkey patching][mp]; that's how it's achieved in Ruby. That is, the Ruby
+vcr package literally overrides certain methods in Ruby HTTP clients, 
+hijacking internals of the HTTP clients. 
+
+However, monkey patching is not allowed in R. Thus, in R we have to
+somehow have "hooks" into HTTP clients in R. Fortunately, Scott is the
+maintainer of one of the HTTP clients, `crul`, so was able to quickly
+create a hook. Fortunately, there was already a hook mechanism
+in the `httr` and `httr2` packages. 
+
+The actual hooks are not in `vcr`, but in `webmockr`. `vcr` depends on
+`webmockr` for hooking into HTTP clients `httr`, `httr2` and `crul`. 
+
+### Internal classes
+
+An overview of some of the more important aspects of vcr.
+
+#### Configuration
+
+An internal object (`vcr_c`) is created when `vcr` is loaded with
+the default vcr configuration options inside of an R6 class `VCRConfig` -
+see <https://github.com/ropensci/vcr/blob/main/R/onLoad.R>. This
+class is keeps track of default and user specified configuration options.
+You can access `vcr_c` using triple namespace `:::`, though it is not
+intended for general use. Whenever you make calls to `vcr_configure()`
+or other configuration functions, `vcr_c` is affected.
+
+#### Cassette class
+
+`Cassette` is an R6 class that handles internals/state for each cassette.
+Each time you run `use_cassette()` this class is used. The class has quite
+a few methods in it, so there's a lot going on in the class. Ideally
+the class would be separated into subclasses to handle similar sets
+of logic, but there's not an easy way to do that with R6. 
+
+Of note in `Cassette` is that when called, within the `initialize()` 
+call `webmockr` is used to create webmockr stubs. 
+
+#### How HTTP requests are handled
+
+Within `webmockr`, there are calls to the vcr class `RequestHandler`, which
+has child classes `RequestHandlerCrul`, `RequestHandlerHttr` and `RequestHandlerHttr2` for `crul`, `httr` and `httr2`, respectively. These classes determine what to do with each HTTP request. The options for each HTTP request include:
+
+- **Ignored** You can ignore HTTP requests under certain rules using the 
+configuration options `ignore_hosts` and `ignore_localhost`
+- **Stubbed by vcr** This is an HTTP request for which a match is found
+in the cassette defined in the `use_cassette()`/`insert_cassette()` call.
+In this case the matching request/response from the cassette is returned
+with no real HTTP request allowed.
+- **Recordable** This is an HTTP request for which no match is found
+in the cassette defined in the `use_cassette()`/`insert_cassette()` call.
+In this case a real HTTP request is allowed, and the request/response is
+recorded to the cassette.
+- **Unhandled** This is a group of cases, all of which cause an error
+to be thrown with a message trying to help the user figure out how to
+fix the problem.
+
+If you use [vcr logging][logging] you'll see these categories in your logs.
+
+#### Serializers
+
+Serializers handle in what format cassettes are written to files on disk.
+The current options are YAML (default) and JSON. YAML was implemented first
+in `vcr` because that's the default option in Ruby vcr.
+
+An R6 class `Serializer` is the parent class for all serializer types;
+`YAML` and `JSON` are both R6 classes that inherit from `Serializer`. Both
+`YAML` and `JSON` define just two methods: `serialize()` and `deserialize()`
+for converting R structures to yaml or json, and converting yaml or json back
+to R structures, respectively.
+
+
+### Environments
+
+#### Logging
+
+An internal environment (`vcr_log_env`) is used when you use logging.
+At this point it only keeps track of one variable - `file` - to be able
+to refer to what file is used for logging across many classes/functions
+that need to write to the log file.
+
+#### A bit of housekeeping
+
+Another internal environment (`vcr__env`) is used to keep track of a
+few items, including the current cassette in use, and the last vcr error.
+
+#### Lightswitch
+
+Another internal environment (`light_switch`) is used to keep track of users
+turning on and off `vcr`. See `?lightswitch`.
+
+
+
+[^1]: The first version of Ruby's vcr was released in February 2010
+https://rubygems.org/gems/vcr/versions/0.1.0. Ruby vcr source code:
+https://github.com/vcr/vcr/
+
+
+
+
+[R6]: https://adv-r.hadley.nz/r6.html
+[mp]: https://en.wikipedia.org/wiki/Monkey_patch
+[logging]: https://docs.ropensci.org/vcr/articles/debugging.html?q=logging#logging-1

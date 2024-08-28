@@ -1,0 +1,119 @@
+
+```{r, echo=FALSE, message=FALSE}
+library("vcr")
+```
+
+### In tests
+
+In your tests, for whichever tests you want to use `vcr`, wrap them in a `vcr::use_cassette()` call like:
+
+```r
+library(testthat)
+vcr::use_cassette("rl_citation", {
+  test_that("my test", {
+    aa <- rl_citation()
+
+    expect_is(aa, "character")
+    expect_match(aa, "IUCN")
+    expect_match(aa, "www.iucnredlist.org")
+  })
+})
+```
+
+OR put the `vcr::use_cassette()` block on the inside, but put `testthat` expectations outside of
+the `vcr::use_cassette()` block:
+
+```r
+library(testthat)
+test_that("my test", {
+  vcr::use_cassette("rl_citation", {
+    aa <- rl_citation()
+  })
+
+  expect_is(aa, "character")
+  expect_match(aa, "IUCN")
+  expect_match(aa, "www.iucnredlist.org")
+})
+```
+
+Don't wrap the `use_cassette()` block inside your  `test_that()` block with `testthat` expectations inside the `use_cassette()` block, as you'll only get the line number that the `use_cassette()` block starts on on failures.
+
+The first time you run the tests, a "cassette" i.e. a file with recorded HTTP interactions, is created at `tests/fixtures/rl_citation.yml`.
+The times after that, the cassette will be used.
+If you change your code and more HTTP interactions are needed in the code wrapped by `vcr::use_cassette("rl_citation"`, delete `tests/fixtures/rl_citation.yml` and run the tests again for re-recording the cassette.
+
+### Outside of tests
+
+If you want to get a feel for how vcr works, although you don't need too.
+
+```{r echo=FALSE, results='hide', eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+suppressPackageStartupMessages(require(vcr, quietly = TRUE))
+unlink(file.path(cassette_path(), "helloworld.yml"))
+vcr_configure(dir = tempdir())
+```
+
+```{r, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+library(vcr)
+library(crul)
+
+cli <- crul::HttpClient$new(url = "https://eu.httpbin.org")
+system.time(
+  use_cassette(name = "helloworld", {
+    cli$get("get")
+  })
+)
+```
+
+The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
+
+```{r, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+system.time(
+  use_cassette(name = "helloworld", {
+    cli$get("get")
+  })
+)
+```
+
+```{r echo=FALSE, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+unlink(file.path(cassette_path(), "helloworld.yml"))
+```
+
+Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP response - thus, your tests run faster.
+
+The cached response looks something like (condensed for brevity):
+
+```yaml
+http_interactions:
+- request:
+    method: get
+    uri: https://eu.httpbin.org/get
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.2
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+    body:
+      encoding: UTF-8
+      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"application/json,
+        text/xml, application/xml, */*\", \n    \"Accept-Encoding\": \"gzip, deflate\",
+        \n    \"Connection\": \"close\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\":
+        \"libcurl/7.54.0 r-curl/3.2 crul/0.5.2\"\n  }, \n  \"origin\": \"111.222.333.444\",
+        \n  \"url\": \"https://eu.httpbin.org/get\"\n}\n"
+  recorded_at: 2018-04-03 22:55:02 GMT
+  recorded_with: vcr/0.1.0, webmockr/0.2.4, crul/0.5.2
+```
+
+All components of both the request and response are preserved, so that the HTTP client (in this case `crul`) can reconstruct its own response just as it would if it wasn't using `vcr`.
+
+
+### Less basic usage
+
+For tweaking things to your needs, make sure to read the docs about [configuration](https://docs.ropensci.org/vcr/articles/configuration.html) (e.g., where are the fixtures saved? can they be re-recorded automatically regulary?) and [request matching](https://docs.ropensci.org/vcr/articles/request_matching.html) (how does vcr match a request to a recorded interaction?)

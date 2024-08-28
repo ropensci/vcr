@@ -1,7 +1,7 @@
 context("response_summary")
 
 library("crul")
-url <- "https://eu.httpbin.org"
+url <- hb()
 cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)
 webmockr::webmockr_allow_net_connect()
@@ -58,15 +58,25 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   x <- VcrResponse$new(status, headers, google_response, "HTTP/1.1 200 OK")
 
   # errors on print.R6
-  expect_error(print(x), "multibyte")
+  ## doesn't error on Windows
+  #### UPDATE 2020-12-11: THIS NO LONGER ERRORS
+  if (Sys.info()[['sysname']] != "Windows") {
+    # expect_error(print(x), "multibyte")
+    expect_output(print(x), "VcrResponse")
+  }
+
   # errors if using the old code in response_summary w/o useBytes=TRUE
   rv <- as.numeric(sub("\\.", "", paste0(R.version$major, R.version$minor)))
   if (rv <= 353) {
     expect_is(substring(gsub("\n", " ", google_response), 1, 80), 
       "character")
-  } else {
-    expect_error(substring(gsub("\n", " ", google_response), 1, 80))
   }
+   # else {
+    ## doesn't error on Windows
+    # if (Sys.info()[['sysname']] != "Windows") {
+    #   expect_error(substring(gsub("\n", " ", google_response), 1, 80))
+    # }
+  # }
 
   # response_summary doesn't error now with useBytes=TRUE
   aa <- response_summary(x)

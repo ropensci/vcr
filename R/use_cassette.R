@@ -1,7 +1,7 @@
 #' Use a cassette to record HTTP requests
 #'
 #' @export
-#' @inheritSection check_cassette_names Cassette names
+#' @inherit check_cassette_names details
 #' @param name The name of the cassette. vcr will check this to ensure it
 #' is a valid file name. Not allowed: spaces, file extensions, control
 #' characters (e.g., `\n`), illegal characters ('/', '?', '<', '>', '\\', ':',
@@ -24,10 +24,13 @@
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
 #' @param serialize_with (character) Which serializer to use.
-#'  Valid values are "yaml" (default), the only one supported for now.
+#' Valid values are "yaml" (default) and "json". Note that you can have
+#' multiple cassettes with the same name as long as they use different
+#' serializers; so if you only want one cassette for a given cassette name,
+#' make sure to not switch serializers, or clean up files you no longer need.
 #' @param persist_with (character) Which cassette persister to
-#'  use. Default: "file_system". You can also register and use a
-#'  custom persister.
+#' use. Default: "file_system". You can also register and use a
+#' custom persister.
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
@@ -67,6 +70,10 @@
 #' we return with a useful message, and since we use `on.exit()`
 #' the cassette is still ejected even though there was an error,
 #' but you don't get an object back
+#' - whenever an empty cassette (a yml/json file) is found, we delete it
+#' before returning from the `use_cassette()` function call. we achieve
+#' this via use of `on.exit()` so an empty cassette is deleted even
+#' if there was an error in the code block you passed in
 #'
 #' @section Cassettes on disk:
 #' Note that _"eject"_ only means that the R session cassette is no longer
@@ -96,14 +103,14 @@
 #' vcr_configure(dir = tempdir())
 #'
 #' use_cassette(name = "apple7", {
-#'   cli <- HttpClient$new(url = "https://httpbin.org")
+#'   cli <- HttpClient$new(url = "https://hb.opencpu.org")
 #'   resp <- cli$get("get")
 #' })
 #' readLines(file.path(tempdir(), "apple7.yml"))
 #'
 #' # preserve exact body bytes - records in base64 encoding
 #' use_cassette("things4", {
-#'   cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#'   cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
 #'   bbb <- cli$get("get")
 #' }, preserve_exact_body_bytes = TRUE)
 #' ## see the body string value in the output here
@@ -116,10 +123,10 @@
 #' # with httr
 #' library(vcr)
 #' library(httr)
-#' vcr_configure(dir = tempdir(), log = TRUE)
+#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = file.path(tempdir(), "vcr.log")))
 #'
 #' use_cassette(name = "stuff350", {
-#'   res <- GET("https://httpbin.org/get")
+#'   res <- GET("https://hb.opencpu.org/get")
 #' })
 #' readLines(file.path(tempdir(), "stuff350.yml"))
 #'
@@ -172,4 +179,10 @@ use_cassette <- function(name, ...,
   on.exit(cassette$eject())
   cassette$call_block(...)
   return(cassette)
+}
+
+check_empty_cassette <- function(cas) {
+  if (!any(nzchar(readLines(cas$file())))) {
+    warning(empty_cassette_message, call. = FALSE)
+  }
 }

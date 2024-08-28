@@ -5,7 +5,7 @@ vcr__env <- new.env()
 #' @export
 #' @inheritParams use_cassette
 #' @inheritSection use_cassette Cassette options
-#' @inheritSection check_cassette_names Cassette names
+#' @inherit check_cassette_names details
 #' @seealso [use_cassette()], [eject_cassette()]
 #' @return an object of class `Cassette`
 #' @examples \dontrun{
@@ -17,11 +17,20 @@ vcr__env <- new.env()
 #' (x <- insert_cassette(name = "leo5"))
 #' current_cassette()
 #' x$new_recorded_interactions
-#' cli <- crul::HttpClient$new(url = "https://httpbin.org")
+#' x$previously_recorded_interactions()
+#' cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
 #' cli$get("get")
-#' x$new_recorded_interactions
+#' x$new_recorded_interactions # 1 interaction
+#' x$previously_recorded_interactions() # empty
+#' webmockr::stub_registry() # not empty
 #' # very important when using inject_cassette: eject when done
 #' x$eject() # same as eject_cassette("leo5")
+#' x$new_recorded_interactions # same, 1 interaction
+#' x$previously_recorded_interactions() # now not empty
+#' ## stub_registry now empty, eject() calls webmockr::disable(), which
+#' ## calls the disable method for each of crul and httr adadapters,
+#' ## which calls webmockr's remove_stubs() method for each adapter
+#' webmockr::stub_registry()
 #'
 #' # cleanup
 #' unlink(file.path(tempdir(), "leo5.yml"))
@@ -46,9 +55,8 @@ insert_cassette <- function(name,
     }
 
     # enable webmockr
-    webmockr::enable()
-    # FIXME: temporary attempt to make it work: turn on mocking for httr
-    # webmockr::httr_mock()
+    webmockr::enable(quiet=vcr_c$quiet)
+    sup_mssg(vcr_c$quiet, webmockr::webmockr_allow_net_connect())
 
     # record cassete name for use in logging, etc.
     vcr__env$current_cassette <- name
@@ -66,7 +74,6 @@ insert_cassette <- function(name,
       clean_outdated_http_interactions = clean_outdated_http_interactions %||% vcr_c$clean_outdated_http_interactions,
       tag = NULL,
       tags = NULL,
-      decode_compressed_response = NULL,
       allow_unused_http_interactions = NULL,
       exclusive = NULL
     )

@@ -9,6 +9,7 @@ test_that("use_cassette w/ binary files on disk: crul", {
   library(crul)
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
+  skip_if(!check_url(url, timeout_ms=5000L), sprintf("url not up (%s)", url))
   ## make a temp file
   f <- file.path(tempdir(), "41001c1990.nc")
   ## make a request
@@ -42,7 +43,12 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
 
   library(crul)
   ## url
-  url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
+  # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
+  url <- "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
+  # ...github.com/ redirects to 
+  # "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
+  # thus breaking the test
+  skip_if(!check_url(url, timeout_ms=5000L), sprintf("url not up (%s)", url))
   ## make a temp file
   f <- file.path(tempdir(), basename(url))
   ## make a request
@@ -73,7 +79,8 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   ## easy enough to move the file
   library(crul)
   foo_bar <- function() {
-    url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
+    # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
+    url <- "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
     f <- file.path(tempdir(), basename(url))
     HttpClient$new(url)$get(disk = f)
   }
@@ -99,6 +106,7 @@ test_that("use_cassette w/ binary files on disk: httr", {
   library(httr)
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
+  skip_if(!check_url(url, timeout_ms=5000L), sprintf("url not up (%s)", url))
   ## make a temp file
   f <- file.path(tempdir(), "41001c1990.nc")
   ## make a request

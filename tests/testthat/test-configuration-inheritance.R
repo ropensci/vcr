@@ -20,8 +20,12 @@ test_that("default cassette options match default config", {
     unlink(vcr_files())
   })
 
+  vcr_configure(
+    warn_on_empty_cassette = FALSE
+  )
+
   config <- VCRConfig$new()
-  cas1 <- use_cassette("default-use", {})
+  cas1 <- sw(use_cassette("default-use", {}))
 
   expect_identical(
     config$as_list()[params],
@@ -46,10 +50,11 @@ test_that("cassettes inherit configured options", {
   vcr_configure(
     record = "none",
     match_requests_on = "body",
-    preserve_exact_body_bytes = TRUE
+    preserve_exact_body_bytes = TRUE,
+    warn_on_empty_cassette = FALSE
   )
 
-  cas1 <- use_cassette("configured-use", {})
+  cas1 <- sw(use_cassette("configured-use", {}))
 
   expect_match(cas1$record, "none")
   expect_setequal(cas1$match_requests_on, "body")
@@ -72,14 +77,15 @@ test_that("cassettes can override configured options", {
   vcr_configure(
     record = "none",
     match_requests_on = "body",
-    preserve_exact_body_bytes = TRUE
+    preserve_exact_body_bytes = TRUE,
+    warn_on_empty_cassette = FALSE
   )
 
-  cas1 <- use_cassette("overridden-use", {},
+  cas1 <- sw(use_cassette("overridden-use", {},
     record = "new_episodes",
     match_requests_on = "query",
     preserve_exact_body_bytes = FALSE
-  )
+  ))
 
   expect_match(cas1$record, "new_episodes")
   expect_setequal(cas1$match_requests_on, "query")

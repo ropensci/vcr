@@ -33,7 +33,12 @@ for any requests that write responses to disk. by default this parameter
 is \code{NULL}. For testing a package, you'll probably want this path to
 be in your \verb{tests/} directory, perhaps next to your cassettes
 directory, e.g., where your cassettes are in \code{tests/fixtures}, your
-files from requests that write to disk are in \code{tests/files}
+files from requests that write to disk are in \code{tests/files}.
+If you want to ignore these files in your installed package,
+add them to \code{.Rinstignore}. If you want these files ignored on build
+then add them to \code{.Rbuildignore} (though if you do, tests that depend
+on these files probably will not work because they won't be found; so
+you'll likely have to skip the associated tests as well).
 }
 }
 
@@ -57,23 +62,60 @@ google.com. These hosts are ignored and real HTTP requests allowed to go
 through
 \item \code{ignore_localhost} (logical) Default: \code{FALSE}
 \item \code{ignore_request} List of requests to ignore. NOT USED RIGHT NOW, sorry
-\item \code{filter_sensitive_data} named list of values to replace. Format is:\preformatted{list(thing_to_replace_it_with = thing_to_replace)
-}
+\item \code{filter_sensitive_data} named list of values to replace. Format is:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(thing_to_replace_it_with = thing_to_replace)
+}\if{html}{\out{</div>}}
 
 We replace all instances of \code{thing_to_replace} with
-\code{thing_to_replace_it_with}. Before recording (writing to a cassette) we do
+\code{thing_to_replace_it_with}. Uses \code{\link[=gsub]{gsub()}} internally, with \code{fixed=TRUE};
+so does exact matches. Before recording (writing to a cassette) we do
 the replacement and then when reading from the cassette we do the reverse
 replacement to get back to the real data. Before record replacement happens
 in internal function \code{write_interactions()}, while before playback
-replacement happens in internal function \code{YAML$deserialize_path()}
+replacement happens in internal function \code{YAML$deserialize()}
+\item \code{filter_sensitive_data_regex} named list of values to replace. Follows
+\code{filter_sensitive_data} format, except uses \code{fixed=FALSE} in the \code{\link[=gsub]{gsub()}}
+function call; this means that the value in \code{thing_to_replace} is a regex
+pattern.
+\item \code{filter_request_headers} (character/list) \strong{request} headers to filter.
+A character vector of request headers to remove - the headers will not be
+recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the request header.
+\item \code{filter_response_headers} (named list) \strong{response} headers to filter.
+A character vector of response headers to remove - the headers will not be
+recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the response header.
+\item \code{filter_query_parameters} (named list) query parameters to filter.
+A character vector of query parameters to remove - the query parameters
+will not be recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the query parameter.
 }
 }
 
+}
+
+\subsection{Errors}{
+\itemize{
+\item \code{verbose_errors} Do you want more verbose errors or less verbose
+errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
+less verbose errors. If \code{TRUE}, error messages will include more details
+about what went wrong and suggest possible solutions. For testing
+in an interactive R session, if \code{verbose_errors=FALSE}, you can run
+\code{vcr_last_error()} to get the full error. If in non-interactive mode,
+which most users will be in when running the entire test suite for a
+package, you can set an environment variable (\code{VCR_VERBOSE_ERRORS})
+to toggle this setting (e.g.,
+\verb{Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()})
+}
 \subsection{Internals}{
 \itemize{
 \item \code{cassettes} (list) don't use
 \item \code{linked_context} (logical) linked context
-\item \code{uri_parser} the uri parser, default: \code{\link[crul:url_parse]{crul::url_parse()}}
+\item \code{uri_parser} the uri parser, default: \code{crul::url_parse()}
 }
 }
 
@@ -97,19 +139,30 @@ that prefix, then the rest of the message.
 These settings can be configured globally, using \code{vcr_configure()}, or
 locally, using either \code{use_cassette()} or \code{insert_cassette()}. Global
 settings are applied to \emph{all} cassettes but are overridden by settings
-defined locally for individuall cassettes.
+defined locally for individual cassettes.
 \itemize{
 \item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
 See \link{recording}
 \item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
 See \link{request-matching} for details.
-\item \code{serialize_with}: (character) only option is "yaml"
+\item \code{serialize_with}: (character) "yaml" or "json". Note that you can have
+multiple cassettes with the same name as long as they use different
+serializers; so if you only want one cassette for a given cassette name,
+make sure to not switch serializers, or clean up files you no longer need.
+\item \code{json_pretty}: (logical) want JSON to be newline separated to be easier
+to read? Or remove newlines to save disk space? default: FALSE
 \item \code{persist_with} (character) only option is "FileSystem"
 \item \code{preserve_exact_body_bytes} (logical) preserve exact body bytes for
 \item \code{re_record_interval} (numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.
 \item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}
+\item \code{quiet} (logical) Suppress any messages from both vcr and webmockr.
+Default: \code{TRUE}
+\item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
+empty cassette is detected? Empty cassettes are cleaned up (deleted) either
+way. This option only determines whether a warning is thrown or not.
+Default: \code{FALSE}
 }
 }
 }

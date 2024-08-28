@@ -1,23 +1,26 @@
 {
-  "@context": [
-    "http://purl.org/codemeta/2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "vcr",
-  "description": "Record test suite 'HTTP' requests and replays them during\n    future runs. A port of the Ruby gem of the same name\n    (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr'\n    R package for matching 'HTTP' requests by various rules ('HTTP' method,\n    'URL', query parameters, headers, body, etc.), and then caching\n    real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests\n    matching any previous requests in the same 'cassette' use a cached\n    'HTTP' response.",
+  "description": "Record test suite 'HTTP' requests and replays them during future runs. A port of the Ruby gem of the same name (<https://github.com/vcr/vcr/>). Works by hooking into the 'webmockr' R package for matching 'HTTP' requests by various rules ('HTTP' method, 'URL', query parameters, headers, body, etc.), and then caching real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests matching any previous requests in the same 'cassette' use a cached 'HTTP' response.",
   "name": "vcr: Record 'HTTP' Calls to Disk",
+  "relatedLink": ["https://books.ropensci.org/http-testing/", "https://docs.ropensci.org/vcr/"],
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.5.0",
+  "version": "1.6.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.3 RC (2020-02-21 r77868)",
+  "runtimePlatform": "R version 4.4.1 Patched (2024-06-25 r86831)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -25,6 +28,30 @@
       "familyName": "Chamberlain",
       "email": "sckott@protonmail.com",
       "@id": "https://orcid.org/0000-0003-1444-9135"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Aaron",
+      "familyName": "Wolen",
+      "@id": "https://orcid.org/0000-0003-2542-2202"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Maëlle",
+      "familyName": "Salmon",
+      "@id": "https://orcid.org/0000-0002-2815-0399"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Daniel",
+      "familyName": "Possenriede",
+      "@id": "https://orcid.org/0000-0002-6738-9845"
+    }
+  ],
+  "funder": [
+    {
+      "@type": "Organization",
+      "name": "rOpenSci"
     }
   ],
   "maintainer": [
@@ -41,7 +68,7 @@
       "@type": "SoftwareApplication",
       "identifier": "roxygen2",
       "name": "roxygen2",
-      "version": ">= 7.0.2",
+      "version": ">= 7.2.1",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -145,10 +172,34 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=curl"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "webfakes",
+      "name": "webfakes",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=webfakes"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "crul",
       "name": "crul",
@@ -161,7 +212,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=crul"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "httr",
       "name": "httr",
@@ -173,11 +224,23 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=httr"
     },
-    {
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "httr2",
+      "name": "httr2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httr2"
+    },
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "webmockr",
       "name": "webmockr",
-      "version": ">= 0.6.0",
+      "version": ">= 0.8.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -186,7 +249,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=webmockr"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "urltools",
       "name": "urltools",
@@ -198,7 +261,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=urltools"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "yaml",
       "name": "yaml",
@@ -210,7 +273,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=yaml"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "R6",
       "name": "R6",
@@ -222,19 +285,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=R6"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "lazyeval",
-      "name": "lazyeval",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=lazyeval"
-    },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "base64enc",
       "name": "base64enc",
@@ -245,34 +296,23 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=base64enc"
-    }
-  ],
+    },
+    "9": {
+      "@type": "SoftwareApplication",
+      "identifier": "rprojroot",
+      "name": "rprojroot",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rprojroot"
+    },
+    "SystemRequirements": null
+  },
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
-  "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd", "unit-testing", "rstats", "vcr", "r", "r-package"],
-  "contIntegration": ["https://travis-ci.org/ropensci/vcr", "https://ci.appveyor.com/project/sckott/vcr", "https://codecov.io/gh/ropensci/vcr"],
-  "readme": "https://github.com/ropensci/vcr/blob/master/README.md",
-  "fileSize": "148.962KB",
-  "relatedLink": [
-    "https://ropenscilabs.github.io/http-testing-book/",
-    "https://books.ropensci.org/http-testing/"
-  ],
-  "releaseNotes": "https://github.com/ropensci/vcr/blob/master/NEWS.md",
-  "developmentStatus": "https://www.repostatus.org/#active",
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
-  "contributor": [
-    {
-      "@type": "Person",
-      "givenName": "Aaron",
-      "familyName": "Wolen",
-      "@id": "https://orcid.org/0000-0003-2542-2202"
-    }
-  ],
-  "copyrightHolder": {},
-  "funder": {}
+  "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd"],
+  "fileSize": "922.454KB"
 }

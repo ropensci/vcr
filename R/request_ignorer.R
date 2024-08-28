@@ -1,18 +1,16 @@
+# (x <- RequestIgnorer$new())
+# x$LOCALHOST_ALIASES
+# x$ignored_hosts
+# x$ignore_hosts(hosts = "google.com")
+# x$ignored_hosts
+# x$ignore_localhost()
+# x$ignored_hosts
+# x$ignore_localhost_value('127.0.0.1')
+# x$ignored_hosts
+
 #' @title Request ignorer
 #' @description request ignorer methods
 #' @keywords internal
-#' @examples \dontrun{
-#' (x <- RequestIgnorer$new())
-#' x$LOCALHOST_ALIASES
-#' x$ignored_hosts
-#' x$ignore_hosts(hosts = "google.com")
-#' x$ignored_hosts
-#' x$ignore_localhost()
-#' x$ignored_hosts
-#' x$ignore_localhost_value('127.0.0.1')
-#' x$ignored_hosts
-#' }
-
 RequestIgnorer <- R6::R6Class(
   "RequestIgnorer",
   public = list(
@@ -52,7 +50,7 @@ RequestIgnorer <- R6::R6Class(
     },
 
     #' @description ignore a specific named localhost
-    #' @param value (character) A localhost value to ignore, e.g, 'localhost'
+    #' @param value (character) A localhost value to ignore, e.g., 'localhost'
     #' @return no return; defines request ignorer hook
     ignore_localhost_value = function(value) {
       self$ignore_hosts(value)

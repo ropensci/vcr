@@ -3,7 +3,7 @@ context("write_interactions")
 # body <- readRDS(file = "~/d1xmlbody.rds")
 # body <- substring(body, 1, 3000)
 # nchar(body)
-request <- Request$new("POST", uri = 'https://eu.httpbin.org/post?a=5',
+request <- Request$new("POST", uri = hb('/post?a=5'),
   body = "", headers = list(foo = "bar"))
 status <- list(status_code = "200", message = "OK",
                explanation = "Request fulfilled, document follows")

@@ -29,6 +29,8 @@ test_that("turn_off", {
 # turn back on
 turn_on()
 
+vcr_configure(warn_on_empty_cassette = FALSE)
+
 test_that("turn_off and ignore_cassettes works correctly", {
   # before turned off, insert_cassette works
   z <- insert_cassette("abcd")
@@ -117,6 +119,7 @@ test_that("lightswitch env var handling fails well", {
 unlink(file.path(vcr_configuration()$dir, "defg.yml"))
 unlink(file.path(vcr_configuration()$dir, "asdffd.yml"))
 unlink(file.path(vcr_configuration()$dir, "asdffdddd.yml"))
+unlink(file.path(vcr_configuration()$dir, "abcd.yml"))
 
 # reset lightswitch env vars
 Sys.setenv(VCR_TURN_OFF="")
@@ -134,7 +137,7 @@ test_that("turned_off", {
   # no cassette in use
   expect_true(turned_on())
   suppressMessages(turned_off({
-    beetle <- crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+    beetle <- crul::HttpClient$new(url = hb("/get"))$get()
   }))
   expect_is(beetle, "HttpResponse")
   expect_true(turned_on())

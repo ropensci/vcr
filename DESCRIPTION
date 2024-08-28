@@ -8,14 +8,20 @@ Description: Record test suite 'HTTP' requests and replays them during
     real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests
     matching any previous requests in the same 'cassette' use a cached
     'HTTP' response.
-Version: 0.5.0
+Version: 1.6.0.91
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
     email = "sckott@protonmail.com", 
     comment = c(ORCID="0000-0003-1444-9135")),
-    person("Aaron", "Wolen", role = "ctb",
-    comment = c(ORCID="0000-0003-2542-2202")))
-URL: https://github.com/ropensci/vcr/ (devel)
-    https://books.ropensci.org/http-testing/ (user manual)
+    person("Aaron", "Wolen", role = "aut",
+    comment = c(ORCID="0000-0003-2542-2202")),
+    person("Maëlle", "Salmon", role = "aut",
+    comment = c(ORCID="0000-0002-2815-0399")),
+    person("Daniel", "Possenriede", role = "aut",
+    comment = c(ORCID="0000-0002-6738-9845")),
+    person("rOpenSci", role = "fnd", comment = "https://ropensci.org"))
+URL: https://github.com/ropensci/vcr/,
+    https://books.ropensci.org/http-testing/,
+    https://docs.ropensci.org/vcr/
 BugReports: https://github.com/ropensci/vcr/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -26,14 +32,15 @@ Roxygen: list(markdown = TRUE)
 Imports:
     crul (>= 0.8.4),
     httr,
-    webmockr (>= 0.6.0),
+    httr2,
+    webmockr (>= 0.8.0),
     urltools,
     yaml,
     R6,
-    lazyeval,
-    base64enc
+    base64enc,
+    rprojroot
 Suggests:
-    roxygen2 (>= 7.0.2),
+    roxygen2 (>= 7.2.1),
     jsonlite,
     testthat,
     knitr,
@@ -41,8 +48,10 @@ Suggests:
     desc,
     crayon,
     cli,
-    curl
-RoxygenNote: 7.0.2
+    curl,
+    withr,
+    webfakes
 X-schema.org-applicationCategory: Web
 X-schema.org-keywords: http, https, API, web-services, curl, mock, mocking, http-mocking, testing, testing-tools, tdd
 X-schema.org-isPartOf: https://ropensci.org
+RoxygenNote: 7.3.2

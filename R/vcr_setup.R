@@ -1,13 +1,13 @@
 vcr_text <- list(
   test_all = "library(\"testthat\")
 test_check(\"%s\")\n",
-  config = "library(\"vcr\")
+  config = "library(\"vcr\") # *Required* as vcr is set up on loading
 invisible(vcr::vcr_configure(
-  dir = \"../fixtures\"
+  dir = vcr::vcr_test_path(\"fixtures\")
 ))\nvcr::check_cassette_names()\n",
   example_test = "# EXAMPLE VCR USAGE: RUN AND DELETE ME
 
-foo <- function() crul::ok('https://httpbin.org/get')
+foo <- function() crul::ok('https://hb.opencpu.org/get')
 
 test_that(\"foo works\", {
   vcr::use_cassette(\"testing\", {
@@ -40,11 +40,11 @@ pkg_name <- function(dir) {
     stringsAsFactors = FALSE)[["Package"]]
 }
 
-suggest_vcr <- function(dir, verbose = TRUE) {
+suggest_vcr <- function(dir, verbose = TRUE, version = "*") {
   if (verbose) vcr_cat_line(sprintf("Adding %s to %s field in DESCRIPTION",
     crayon::blue("vcr"),
     crayon::red("Suggests")))
-  desc::desc_set_dep("vcr", "Suggests", file = dir)
+  desc::desc_set_dep("vcr", "Suggests", file = dir, version = version)
   invisible()
 }
 
@@ -67,6 +67,9 @@ test_r_file_exists <- function(dir) {
 #' current directory
 #' @param verbose (logical) print progress messages. default: `TRUE`
 #' @return only messages about progress, returns invisible()
+#' @details Sets a mimimum vcr version, which is usually the latest
+#' (stable) version on CRAN. You can of course easily remove or change
+#' the version requirement yourself after running this function.
 use_vcr <- function(dir = ".", verbose = TRUE) {
   assert(dir, "character")
   stopifnot(length(dir) == 1)
@@ -81,7 +84,7 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
     crayon::blue("tests/fixtures")))
 
   # add vcr to Suggests in DESCRIPTION file
-  suggest_vcr(dir, verbose)
+  suggest_vcr(dir, verbose, ">= 0.6.0")
 
   # add tests/testthat.R if not present
   if (!dir.exists(file.path(dir, "tests/testthat"))) {
@@ -90,30 +93,31 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
     dir.create(file.path(dir, "tests/testthat"), recursive = TRUE)
   }
   if (verbose) vcr_cat_info("Looking for testthat.R file or similar")
-  tall <- file.path(dir, sprintf("tests/testthat.R", pkg))
+  tall <- file.path(dir, "tests/testthat.R")
   if (!test_r_file_exists(dir)) {
-    if (verbose) 
+    if (verbose)
       vcr_cat_line(paste0(crayon::blue("tests/testthat.R:" ), " added"))
     file.create(tall, showWarnings = FALSE)
     cat(sprintf(vcr_text$test_all, pkg), file = tall, append = TRUE)
   } else {
-    if (verbose) 
+    if (verbose)
       vcr_cat_info(paste0(crayon::blue("tests/testthat.R (or similar):" ),
         " exists"))
   }
 
   # add helper-pkgname.R to tests/testthat/
-  hf <- file.path(dir, sprintf("tests/testthat/helper-%s.R", pkg))
-  if (!file.exists(hf)) {
-    file.create(hf, showWarnings = FALSE)
+  rel_hf <- "tests/testthat/helper-vcr.R"
+  abs_hf <- file.path(dir, rel_hf)
+  if (!file.exists(abs_hf)) {
+    file.create(abs_hf, showWarnings = FALSE)
   }
-  if (!any(grepl("vcr_configure", readLines(hf)))) {
+  if (!any(grepl("vcr_configure", readLines(abs_hf)))) {
     if (verbose) vcr_cat_line(paste0("Adding vcr config to ",
-      crayon::blue(sprintf("tests/testthat/helper-%s.R", pkg))))
-    cat(vcr_text$config, file = hf, append = TRUE)
+      crayon::blue(rel_hf)))
+    cat(vcr_text$config, file = abs_hf, append = TRUE)
   } else {
     if (verbose) vcr_cat_info(paste0("vcr config appears to be already setup in ",
-      crayon::blue(sprintf("tests/testthat/helper-%s.R", pkg))))
+      crayon::blue(rel_hf)))
   }
 
   # add dummy test file with example of use_cassette()
@@ -125,23 +129,23 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
   # add .gitattributes file
   gitattsfile <- file.path(dir, ".gitattributes")
   if (!file.exists(gitattsfile)) {
-    if (verbose) 
+    if (verbose)
       vcr_cat_line(paste0(crayon::blue(".gitattributes:" ), " added"))
     cat(vcr_text$gitattributes, file = gitattsfile)
   } else {
-    if (verbose) 
+    if (verbose)
       vcr_cat_info(paste0(crayon::blue(".gitattributes:" ), " exists"))
     txt <- readLines(gitattsfile)
     if (
       any(grepl("tests\\/fixtures\\/\\*\\*\\/\\* -diff", txt)) &&
       any(grepl("* text=auto", txt))
     ) {
-      if (verbose) 
+      if (verbose)
         vcr_cat_info(
           paste0(crayon::blue(".gitattributes"),
             " already setup to ignore cassette diffs"))
     } else {
-      if (verbose) 
+      if (verbose)
         vcr_cat_info(sprintf("appending lines to %s to ignore cassette diffs",
           crayon::blue(".gitattributes")))
       cat(vcr_text$gitattributes, file = gitattsfile, append = TRUE)

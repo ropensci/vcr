@@ -8,7 +8,7 @@ test_that("use_cassette w/ with images: httr", {
   skip_if_not_installed("jpeg")
   
   library(httr)
-  url <- "https://httpbin.org/image/jpeg"
+  url <- hb("/image/jpeg")
 
   ## preserve_exact_body_bytes = FALSE
   # works on 1st request - doing a real http request
@@ -57,7 +57,7 @@ test_that("use_cassette w/ with images: crul", {
   skip_on_cran()
   
   library(crul)
-  url <- "https://httpbin.org/image/jpeg"
+  url <- hb("/image/jpeg")
 
   ## preserve_exact_body_bytes = FALSE
   # works on 1st request - doing a real http request

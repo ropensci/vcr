@@ -18,3 +18,8 @@ only messages about progress, returns invisible()
 \description{
 Setup vcr for a package
 }
+\details{
+Sets a mimimum vcr version, which is usually the latest
+(stable) version on CRAN. You can of course easily remove or change
+the version requirement yourself after running this function.
+}

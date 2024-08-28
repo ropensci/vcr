@@ -49,12 +49,12 @@ NullList <- R6::R6Class(
 #' ## make the request
 #' ### turn off mocking
 #' crul::mock(FALSE)
-#' url <- "https://eu.httpbin.org/post"
+#' url <- "https://hb.opencpu.org/post"
 #' cli <- crul::HttpClient$new(url = url)
 #' res <- cli$post(body = list(a = 5))
 #'
 #' ## request
-#' (request <- Request$new("POST", url, body, res$headers))
+#' (request <- Request$new("POST", url, list(a = 5), res$headers))
 #' ## response
 #' (response <- VcrResponse$new(
 #'    res$status_http(),
@@ -115,7 +115,6 @@ HTTPInteractionList <- R6::R6Class(
        self$allow_playback_repeats <- allow_playback_repeats
        self$parent_list <- parent_list
        self$used_interactions <- used_interactions
-
        interaction_summaries <- vapply(interactions, function(x) {
          sprintf("%s => %s",
                  request_summary(Request$new()$from_hash(x$request)),
@@ -202,27 +201,32 @@ HTTPInteractionList <- R6::R6Class(
        length(self$interactions) > 0
      },
 
-     # return: integer
+     gather_match_checks = function(request) {
+      out <- logical(0)
+      iter <- 0
+      while (!any(out) && iter < length(self$interactions)) {
+        iter <- iter + 1
+        bool <- private$interaction_matches_request(
+          request, self$interactions[[iter]])
+        out <- c(out, bool)
+      }
+      return(out)
+     },
+
+     # return: logical
      matching_interaction_bool = function(request) {
-       matchez <- vapply(self$interactions, function(w) {
-         private$interaction_matches_request(request, w)
-       }, logical(1))
-       if (!any(matchez)) return(FALSE)
-       any(matchez)
+       any(private$gather_match_checks(request))
      },
 
+     # return: integer
      matching_interaction_index = function(request) {
-       matchez <- vapply(self$interactions, function(w) {
-         private$interaction_matches_request(request, w)
-       }, logical(1))
-       # if (!all(matchez)) return(numeric(0))
-       if (!any(matchez)) return(numeric(0))
-       which(matchez)
+       which(private$gather_match_checks(request))
      },
 
-     # return: interactions list
+     # return: interactions list or `FALSE`
      matching_used_interaction_for = function(request) {
        if (!self$allow_playback_repeats) return(FALSE)
+       if (length(self$used_interactions) == 0) return(FALSE)
        tmp <- FALSE
        i <- 0
        while (!tmp) {

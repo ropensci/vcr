@@ -1,0 +1,32 @@
+---
+title: "Turning vcr on and off"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: readable
+vignette: >
+  %\VignetteIndexEntry{Turning vcr on and off}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vcr)
+```
+
+```{r child='../man/rmdhunks/lightswitch.Rmd', eval=TRUE} 
+```
+
+```{r, echo=FALSE}
+
+vcr::turn_on()
+```

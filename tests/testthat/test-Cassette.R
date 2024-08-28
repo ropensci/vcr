@@ -7,7 +7,8 @@ test_that("Cassette", {
   expect_is(cl,  "Cassette")
 
   # eject cassette
-  cl$eject()
+  ## expect warning from empty cassette checker 
+  expect_warning(cl$eject())
 })
 
 test_that("Cassette fails well", {
@@ -28,24 +29,18 @@ test_that("Cassette fails well with invalid request matchers", {
   )
 })
 
-test_that("Cassette fails well with unsupported matcher", {
-  expect_error(Cassette$new("foobar89", match_requests_on = "host"),
-    "we do not yet support host and path matchers")
-})
-
-
 test_that("make_http_interaction works as expected", {
   #### Prepare http responses
-  # crul_resp1 <- crul::HttpClient$new("https://httpbin.org/get?foo=bar")$get()
+  # crul_resp1 <- crul::HttpClient$new(hb("/get?foo=bar"))$get()
   # save(crul_resp1, file = "tests/testthat/crul_resp1.rda", version = 2)
 
-  # crul_resp2 <- crul::HttpClient$new("https://httpbin.org/image/png")$get()
+  # crul_resp2 <- crul::HttpClient$new(hb("/image/png"))$get()
   # save(crul_resp2, file = "tests/testthat/crul_resp2.rda", version = 2)
 
-  # httr_resp1 <- httr::GET("https://httpbin.org/get?foo=bar")
+  # httr_resp1 <- httr::GET(hb("/get?foo=bar"))
   # save(httr_resp1, file = "tests/testthat/httr_resp1.rda", version = 2)
 
-  # httr_resp2 <- httr::GET("https://httpbin.org/image/png")
+  # httr_resp2 <- httr::GET(hb("/image/png"))
   # save(httr_resp2, file = "tests/testthat/httr_resp2.rda", version = 2)
   
   # make a cassettes
@@ -70,7 +65,8 @@ test_that("make_http_interaction works as expected", {
   expect_is(bb$response$body, "raw")
 
   # eject cassette
-  zz$eject()
+  ## expect warning from empty cassette checker
+  expect_warning(zz$eject())
 })
 
 
