@@ -3,7 +3,7 @@ context("use_cassette: record modes work as expected")
 library(crul, quietly = TRUE)
 mydir <- file.path(tempdir(), "use_cassette_record_mode")
 invisible(vcr_configure(dir = mydir))
-conn <- crul::HttpClient$new("https://eu.httpbin.org")
+conn <- crul::HttpClient$new(hb())
 
 test_that("use_cassette record mode: once", {
   # record mode `once`:

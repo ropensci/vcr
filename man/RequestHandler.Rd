@@ -95,14 +95,14 @@ eject_cassette("testing_record_mode_none")
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RequestHandler$new()}}
-\item \href{#method-handle}{\code{RequestHandler$handle()}}
-\item \href{#method-clone}{\code{RequestHandler$clone()}}
+\item \href{#method-RequestHandler-new}{\code{RequestHandler$new()}}
+\item \href{#method-RequestHandler-handle}{\code{RequestHandler$handle()}}
+\item \href{#method-RequestHandler-clone}{\code{RequestHandler$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RequestHandler-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandler-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RequestHandler} object
 \subsection{Usage}{
@@ -121,8 +121,8 @@ A new \code{RequestHandler} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-handle"></a>}}
-\if{latex}{\out{\hypertarget{method-handle}{}}}
+\if{html}{\out{<a id="method-RequestHandler-handle"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandler-handle}{}}}
 \subsection{Method \code{handle()}}{
 Handle the request (\code{request} given in \verb{$initialize()})
 \subsection{Usage}{
@@ -134,8 +134,8 @@ handles a request, outcomes vary
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RequestHandler-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandler-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

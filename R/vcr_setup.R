@@ -7,7 +7,7 @@ invisible(vcr::vcr_configure(
 ))\nvcr::check_cassette_names()\n",
   example_test = "# EXAMPLE VCR USAGE: RUN AND DELETE ME
 
-foo <- function() crul::ok('https://httpbin.org/get')
+foo <- function() crul::ok('https://hb.opencpu.org/get')
 
 test_that(\"foo works\", {
   vcr::use_cassette(\"testing\", {
@@ -93,7 +93,7 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
     dir.create(file.path(dir, "tests/testthat"), recursive = TRUE)
   }
   if (verbose) vcr_cat_info("Looking for testthat.R file or similar")
-  tall <- file.path(dir, sprintf("tests/testthat.R", pkg))
+  tall <- file.path(dir, "tests/testthat.R")
   if (!test_r_file_exists(dir)) {
     if (verbose)
       vcr_cat_line(paste0(crayon::blue("tests/testthat.R:" ), " added"))
@@ -106,17 +106,18 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
   }
 
   # add helper-pkgname.R to tests/testthat/
-  hf <- file.path(dir, sprintf("tests/testthat/setup-%s.R", pkg))
-  if (!file.exists(hf)) {
-    file.create(hf, showWarnings = FALSE)
+  rel_hf <- "tests/testthat/helper-vcr.R"
+  abs_hf <- file.path(dir, rel_hf)
+  if (!file.exists(abs_hf)) {
+    file.create(abs_hf, showWarnings = FALSE)
   }
-  if (!any(grepl("vcr_configure", readLines(hf)))) {
+  if (!any(grepl("vcr_configure", readLines(abs_hf)))) {
     if (verbose) vcr_cat_line(paste0("Adding vcr config to ",
-      crayon::blue(sprintf("tests/testthat/setup-%s.R", pkg))))
-    cat(vcr_text$config, file = hf, append = TRUE)
+      crayon::blue(rel_hf)))
+    cat(vcr_text$config, file = abs_hf, append = TRUE)
   } else {
     if (verbose) vcr_cat_info(paste0("vcr config appears to be already setup in ",
-      crayon::blue(sprintf("tests/testthat/setup-%s.R", pkg))))
+      crayon::blue(rel_hf)))
   }
 
   # add dummy test file with example of use_cassette()

@@ -28,16 +28,16 @@ x$registry
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RequestMatcherRegistry$new()}}
-\item \href{#method-register}{\code{RequestMatcherRegistry$register()}}
-\item \href{#method-register_built_ins}{\code{RequestMatcherRegistry$register_built_ins()}}
-\item \href{#method-try_to_register_body_as_json}{\code{RequestMatcherRegistry$try_to_register_body_as_json()}}
-\item \href{#method-clone}{\code{RequestMatcherRegistry$clone()}}
+\item \href{#method-RequestMatcherRegistry-new}{\code{RequestMatcherRegistry$new()}}
+\item \href{#method-RequestMatcherRegistry-register}{\code{RequestMatcherRegistry$register()}}
+\item \href{#method-RequestMatcherRegistry-register_built_ins}{\code{RequestMatcherRegistry$register_built_ins()}}
+\item \href{#method-RequestMatcherRegistry-try_to_register_body_as_json}{\code{RequestMatcherRegistry$try_to_register_body_as_json()}}
+\item \href{#method-RequestMatcherRegistry-clone}{\code{RequestMatcherRegistry$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RequestMatcherRegistry-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestMatcherRegistry-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new RequestMatcherRegistry object
 \subsection{Usage}{
@@ -61,8 +61,8 @@ A new \code{RequestMatcherRegistry} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-register"></a>}}
-\if{latex}{\out{\hypertarget{method-register}{}}}
+\if{html}{\out{<a id="method-RequestMatcherRegistry-register"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestMatcherRegistry-register}{}}}
 \subsection{Method \code{register()}}{
 Register a custom matcher
 \subsection{Usage}{
@@ -84,8 +84,8 @@ no return; registers the matcher
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-register_built_ins"></a>}}
-\if{latex}{\out{\hypertarget{method-register_built_ins}{}}}
+\if{html}{\out{<a id="method-RequestMatcherRegistry-register_built_ins"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestMatcherRegistry-register_built_ins}{}}}
 \subsection{Method \code{register_built_ins()}}{
 Register all built in matchers
 \subsection{Usage}{
@@ -97,8 +97,8 @@ no return; registers all built in matchers
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-try_to_register_body_as_json"></a>}}
-\if{latex}{\out{\hypertarget{method-try_to_register_body_as_json}{}}}
+\if{html}{\out{<a id="method-RequestMatcherRegistry-try_to_register_body_as_json"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestMatcherRegistry-try_to_register_body_as_json}{}}}
 \subsection{Method \code{try_to_register_body_as_json()}}{
 Try to register body as JSON
 \subsection{Usage}{
@@ -117,8 +117,8 @@ no return; registers the matcher
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RequestMatcherRegistry-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestMatcherRegistry-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

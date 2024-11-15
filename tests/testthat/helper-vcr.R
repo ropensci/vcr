@@ -62,3 +62,38 @@ check_url <- function(x, ...) {
 }
 sw <- function(x) suppressWarnings(x)
 sm <- function(x) suppressMessages(x)
+
+
+# Base url for tests
+hb <- function(x = NULL) {
+  tryCatch(
+    if (is.null(x)) base_url else paste0(base_url, x),
+    error = function(e) "https://not.aurl"
+  )
+}
+urls <- c(
+  "https://hb.cran.dev",
+  "https://hb.opencpu.org",
+  "https://nghttp2.org/httpbin"
+)
+h <- curl::new_handle(timeout = 10, failonerror = FALSE)
+base_url <- ""
+tryCatch({
+  out <- list()
+  for (i in seq_along(urls)) {
+    out[[i]] <- curl::curl_fetch_memory(urls[i], handle = h)
+  }
+  codes <- vapply(out, "[[", 1, "status_code")
+  if (all(codes != 200)) stop("all httpbin servers down")
+  base_url <- urls[codes == 200][1]
+  cat(paste0("using base url for tests: ", base_url), sep = "\n")
+}, error = function(e) message(e$message))
+
+# httpbin local
+local_httpbin_app <- function() {
+  check_for_a_pkg("webfakes")
+  webfakes::local_app_process(
+    webfakes::httpbin_app(),
+    .local_envir = testthat::teardown_env()
+  )
+}

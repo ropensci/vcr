@@ -19,10 +19,10 @@ test_that("you can record a new cassette of same name with different serializer"
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
   cas_yml <- use_cassette(name = "testing1", {
-    res <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
+    res <- crul::HttpClient$new(hb("/get"))$get()
   }, serialize_with = "yaml")
   cas_json <- use_cassette(name = "testing1", {
-    res2 <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
+    res2 <- crul::HttpClient$new(hb("/get"))$get()
   }, serialize_with = "json")
   expect_is(cas_yml, "Cassette")
   expect_is(cas_json, "Cassette")

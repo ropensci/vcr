@@ -62,8 +62,10 @@ google.com. These hosts are ignored and real HTTP requests allowed to go
 through
 \item \code{ignore_localhost} (logical) Default: \code{FALSE}
 \item \code{ignore_request} List of requests to ignore. NOT USED RIGHT NOW, sorry
-\item \code{filter_sensitive_data} named list of values to replace. Format is:\preformatted{list(thing_to_replace_it_with = thing_to_replace)
-}
+\item \code{filter_sensitive_data} named list of values to replace. Format is:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(thing_to_replace_it_with = thing_to_replace)
+}\if{html}{\out{</div>}}
 
 We replace all instances of \code{thing_to_replace} with
 \code{thing_to_replace_it_with}. Uses \code{\link[=gsub]{gsub()}} internally, with \code{fixed=TRUE};
@@ -158,7 +160,7 @@ be recorded back to file. Default: \code{FALSE}
 \item \code{quiet} (logical) Suppress any messages from both vcr and webmockr.
 Default: \code{TRUE}
 \item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
-empty cassette is detected? Empty cassettes are claned up (deleted) either
+empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 way. This option only determines whether a warning is thrown or not.
 Default: \code{FALSE}
 \item \code{record_separate_redirects} (logical) If http redirects are

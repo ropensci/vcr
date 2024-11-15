@@ -29,7 +29,7 @@ test_that("JSON usage", {
 
   # does one request work?
   aa <- use_cassette("testing2", {
-    res <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
+    res <- crul::HttpClient$new(hb("/get"))$get()
   })
   expect_is(aa, "Cassette")
   expect_is(res, "HttpResponse")
@@ -37,8 +37,8 @@ test_that("JSON usage", {
 
   # do two requests work?
   cc <- use_cassette("testing4", {
-    ref <- crul::HttpClient$new("https://eu.httpbin.org/get")$get()
-    the <- crul::HttpClient$new("https://eu.httpbin.org/post")$post(body = "fafaa")
+    ref <- crul::HttpClient$new(hb("/get"))$get()
+    the <- crul::HttpClient$new(hb("/post"))$post(body = "fafaa")
   })
   expect_is(ref, "HttpResponse")
   expect_is(the, "HttpResponse")
@@ -46,11 +46,10 @@ test_that("JSON usage", {
 
   # preserve exact body bytes
   dd <- use_cassette("testing5", {
-    raf <- crul::HttpClient$new("https://eu.httpbin.org/get")$get(
+    raf <- crul::HttpClient$new(hb("/get"))$get(
       query=list(cheese="string"))
-    raz <- crul::HttpClient$new(
-      "https://eu.httpbin.org/post"
-      )$post(body = list(foo = "bar", baz = "ball"))
+    raz <- crul::HttpClient$new(hb("/post"))$post(
+      body = list(foo = "bar", baz = "ball"))
   }, preserve_exact_body_bytes = TRUE)
   expect_is(raf, "HttpResponse")
   expect_is(raz, "HttpResponse")

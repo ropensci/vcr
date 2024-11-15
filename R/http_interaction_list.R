@@ -49,7 +49,7 @@ NullList <- R6::R6Class(
 #' ## make the request
 #' ### turn off mocking
 #' crul::mock(FALSE)
-#' url <- "https://eu.httpbin.org/post"
+#' url <- "https://hb.opencpu.org/post"
 #' cli <- crul::HttpClient$new(url = url)
 #' res <- cli$post(body = list(a = 5))
 #'
@@ -115,7 +115,6 @@ HTTPInteractionList <- R6::R6Class(
        self$allow_playback_repeats <- allow_playback_repeats
        self$parent_list <- parent_list
        self$used_interactions <- used_interactions
-
        interaction_summaries <- vapply(interactions, function(x) {
          sprintf("%s => %s",
                  request_summary(Request$new()$from_hash(x$request)),

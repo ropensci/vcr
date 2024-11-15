@@ -1,20 +1,20 @@
 ## Test environments
 
-* local OS X install, R 4.0.3 Patched
-* ubuntu 16.04 (on GitHub Actions), R 4.0.3
+* local macOS, R 4.4.1
+* ubuntu 22.04 (on GitHub Actions), R 4.4.1
 * win-builder (devel and release)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
-## Reverse dependencies
+## Revdep check results
 
-* I have run R CMD check on the 43 reverse dependencies. Summary at https://github.com/ropensci/vcr/actions?query=workflow%3Arevdep Problems were found in checks, but were not related to vcr.
+We checked all 53 reverse dependencies, comparing R CMD check results across CRAN and dev verions of this package. We saw zero new problems.
 
 --------
 
-This version adds new features, and improves documentation.
+This version adds support for httr2.
 
 Thanks very much,
 Scott Chamberlain

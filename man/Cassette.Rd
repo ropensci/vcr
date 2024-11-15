@@ -37,6 +37,7 @@ to make a complete \code{crul} HTTP response object
 }
 
 \examples{
+\dontrun{
 library(vcr)
 vcr_configure(dir = tempdir())
 
@@ -61,7 +62,8 @@ library(vcr)
 vcr_configure(dir = tempdir())
 res <- Cassette$new(name = "jane")
 library(crul)
-HttpClient$new("https://httpbin.org")$get("get")
+# HttpClient$new("https://hb.opencpu.org")$get("get")
+}
 }
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
@@ -136,43 +138,43 @@ be recorded back to file}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Cassette$new()}}
-\item \href{#method-print}{\code{Cassette$print()}}
-\item \href{#method-call_block}{\code{Cassette$call_block()}}
-\item \href{#method-eject}{\code{Cassette$eject()}}
-\item \href{#method-file}{\code{Cassette$file()}}
-\item \href{#method-recording}{\code{Cassette$recording()}}
-\item \href{#method-is_empty}{\code{Cassette$is_empty()}}
-\item \href{#method-originally_recorded_at}{\code{Cassette$originally_recorded_at()}}
-\item \href{#method-serializable_hash}{\code{Cassette$serializable_hash()}}
-\item \href{#method-interactions_to_record}{\code{Cassette$interactions_to_record()}}
-\item \href{#method-merged_interactions}{\code{Cassette$merged_interactions()}}
-\item \href{#method-up_to_date_interactions}{\code{Cassette$up_to_date_interactions()}}
-\item \href{#method-should_re_record}{\code{Cassette$should_re_record()}}
-\item \href{#method-should_stub_requests}{\code{Cassette$should_stub_requests()}}
-\item \href{#method-should_remove_matching_existing_interactions}{\code{Cassette$should_remove_matching_existing_interactions()}}
-\item \href{#method-storage_key}{\code{Cassette$storage_key()}}
-\item \href{#method-raw_cassette_bytes}{\code{Cassette$raw_cassette_bytes()}}
-\item \href{#method-make_dir}{\code{Cassette$make_dir()}}
-\item \href{#method-deserialized_hash}{\code{Cassette$deserialized_hash()}}
-\item \href{#method-previously_recorded_interactions}{\code{Cassette$previously_recorded_interactions()}}
-\item \href{#method-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
-\item \href{#method-record_http_interaction}{\code{Cassette$record_http_interaction()}}
-\item \href{#method-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
-\item \href{#method-make_args}{\code{Cassette$make_args()}}
-\item \href{#method-write_metadata}{\code{Cassette$write_metadata()}}
-\item \href{#method-http_interactions}{\code{Cassette$http_interactions()}}
-\item \href{#method-make_http_interaction}{\code{Cassette$make_http_interaction()}}
-\item \href{#method-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
-\item \href{#method-set_request}{\code{Cassette$set_request()}}
-\item \href{#method-set_handler}{\code{Cassette$set_handler()}}
-\item \href{#method-add_redirect}{\code{Cassette$add_redirect()}}
-\item \href{#method-clone}{\code{Cassette$clone()}}
+\item \href{#method-Cassette-new}{\code{Cassette$new()}}
+\item \href{#method-Cassette-print}{\code{Cassette$print()}}
+\item \href{#method-Cassette-call_block}{\code{Cassette$call_block()}}
+\item \href{#method-Cassette-eject}{\code{Cassette$eject()}}
+\item \href{#method-Cassette-file}{\code{Cassette$file()}}
+\item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
+\item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
+\item \href{#method-Cassette-originally_recorded_at}{\code{Cassette$originally_recorded_at()}}
+\item \href{#method-Cassette-serializable_hash}{\code{Cassette$serializable_hash()}}
+\item \href{#method-Cassette-interactions_to_record}{\code{Cassette$interactions_to_record()}}
+\item \href{#method-Cassette-merged_interactions}{\code{Cassette$merged_interactions()}}
+\item \href{#method-Cassette-up_to_date_interactions}{\code{Cassette$up_to_date_interactions()}}
+\item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
+\item \href{#method-Cassette-should_stub_requests}{\code{Cassette$should_stub_requests()}}
+\item \href{#method-Cassette-should_remove_matching_existing_interactions}{\code{Cassette$should_remove_matching_existing_interactions()}}
+\item \href{#method-Cassette-storage_key}{\code{Cassette$storage_key()}}
+\item \href{#method-Cassette-raw_cassette_bytes}{\code{Cassette$raw_cassette_bytes()}}
+\item \href{#method-Cassette-make_dir}{\code{Cassette$make_dir()}}
+\item \href{#method-Cassette-deserialized_hash}{\code{Cassette$deserialized_hash()}}
+\item \href{#method-Cassette-previously_recorded_interactions}{\code{Cassette$previously_recorded_interactions()}}
+\item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
+\item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
+\item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
+\item \href{#method-Cassette-make_args}{\code{Cassette$make_args()}}
+\item \href{#method-Cassette-write_metadata}{\code{Cassette$write_metadata()}}
+\item \href{#method-Cassette-http_interactions}{\code{Cassette$http_interactions()}}
+\item \href{#method-Cassette-make_http_interaction}{\code{Cassette$make_http_interaction()}}
+\item \href{#method-Cassette-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
+\item \href{#method-Cassette-set_request}{\code{Cassette$set_request()}}
+\item \href{#method-Cassette-set_handler}{\code{Cassette$set_handler()}}
+\item \href{#method-Cassette-add_redirect}{\code{Cassette$add_redirect()}}
+\item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Cassette-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Cassette} object
 \subsection{Usage}{
@@ -254,8 +256,8 @@ A new \code{Cassette} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Cassette-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-print}{}}}
 \subsection{Method \code{print()}}{
 print method for \code{Cassette} objects
 \subsection{Usage}{
@@ -273,8 +275,8 @@ print method for \code{Cassette} objects
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-call_block"></a>}}
-\if{latex}{\out{\hypertarget{method-call_block}{}}}
+\if{html}{\out{<a id="method-Cassette-call_block"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-call_block}{}}}
 \subsection{Method \code{call_block()}}{
 run code
 \subsection{Usage}{
@@ -293,8 +295,8 @@ various
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-eject"></a>}}
-\if{latex}{\out{\hypertarget{method-eject}{}}}
+\if{html}{\out{<a id="method-Cassette-eject"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-eject}{}}}
 \subsection{Method \code{eject()}}{
 ejects the current cassette
 \subsection{Usage}{
@@ -306,8 +308,8 @@ self
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-file"></a>}}
-\if{latex}{\out{\hypertarget{method-file}{}}}
+\if{html}{\out{<a id="method-Cassette-file"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-file}{}}}
 \subsection{Method \code{file()}}{
 get the file path for the cassette
 \subsection{Usage}{
@@ -319,8 +321,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-recording"></a>}}
-\if{latex}{\out{\hypertarget{method-recording}{}}}
+\if{html}{\out{<a id="method-Cassette-recording"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-recording}{}}}
 \subsection{Method \code{recording()}}{
 is the cassette in recording mode?
 \subsection{Usage}{
@@ -332,8 +334,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_empty"></a>}}
-\if{latex}{\out{\hypertarget{method-is_empty}{}}}
+\if{html}{\out{<a id="method-Cassette-is_empty"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-is_empty}{}}}
 \subsection{Method \code{is_empty()}}{
 is the cassette on disk empty
 \subsection{Usage}{
@@ -345,8 +347,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-originally_recorded_at"></a>}}
-\if{latex}{\out{\hypertarget{method-originally_recorded_at}{}}}
+\if{html}{\out{<a id="method-Cassette-originally_recorded_at"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-originally_recorded_at}{}}}
 \subsection{Method \code{originally_recorded_at()}}{
 timestamp the cassette was originally recorded at
 \subsection{Usage}{
@@ -358,8 +360,8 @@ POSIXct date
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serializable_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-serializable_hash}{}}}
+\if{html}{\out{<a id="method-Cassette-serializable_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-serializable_hash}{}}}
 \subsection{Method \code{serializable_hash()}}{
 Get a list of the http interactions to record + recorded_with
 \subsection{Usage}{
@@ -371,8 +373,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-interactions_to_record"></a>}}
-\if{latex}{\out{\hypertarget{method-interactions_to_record}{}}}
+\if{html}{\out{<a id="method-Cassette-interactions_to_record"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-interactions_to_record}{}}}
 \subsection{Method \code{interactions_to_record()}}{
 Get the list of http interactions to record
 \subsection{Usage}{
@@ -384,8 +386,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-merged_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-merged_interactions}{}}}
+\if{html}{\out{<a id="method-Cassette-merged_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-merged_interactions}{}}}
 \subsection{Method \code{merged_interactions()}}{
 Get interactions to record
 \subsection{Usage}{
@@ -397,8 +399,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-up_to_date_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-up_to_date_interactions}{}}}
+\if{html}{\out{<a id="method-Cassette-up_to_date_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-up_to_date_interactions}{}}}
 \subsection{Method \code{up_to_date_interactions()}}{
 Cleans out any old interactions based on the
 re_record_interval and clean_outdated_http_interactions settings
@@ -418,8 +420,8 @@ list of interactions to record
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-should_re_record"></a>}}
-\if{latex}{\out{\hypertarget{method-should_re_record}{}}}
+\if{html}{\out{<a id="method-Cassette-should_re_record"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-should_re_record}{}}}
 \subsection{Method \code{should_re_record()}}{
 Should re-record interactions?
 \subsection{Usage}{
@@ -431,8 +433,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-should_stub_requests"></a>}}
-\if{latex}{\out{\hypertarget{method-should_stub_requests}{}}}
+\if{html}{\out{<a id="method-Cassette-should_stub_requests"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-should_stub_requests}{}}}
 \subsection{Method \code{should_stub_requests()}}{
 Is record mode NOT "all"?
 \subsection{Usage}{
@@ -444,8 +446,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-should_remove_matching_existing_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-should_remove_matching_existing_interactions}{}}}
+\if{html}{\out{<a id="method-Cassette-should_remove_matching_existing_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-should_remove_matching_existing_interactions}{}}}
 \subsection{Method \code{should_remove_matching_existing_interactions()}}{
 Is record mode "all"?
 \subsection{Usage}{
@@ -457,8 +459,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-storage_key"></a>}}
-\if{latex}{\out{\hypertarget{method-storage_key}{}}}
+\if{html}{\out{<a id="method-Cassette-storage_key"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-storage_key}{}}}
 \subsection{Method \code{storage_key()}}{
 Get the serializer path
 \subsection{Usage}{
@@ -470,8 +472,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-raw_cassette_bytes"></a>}}
-\if{latex}{\out{\hypertarget{method-raw_cassette_bytes}{}}}
+\if{html}{\out{<a id="method-Cassette-raw_cassette_bytes"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-raw_cassette_bytes}{}}}
 \subsection{Method \code{raw_cassette_bytes()}}{
 Get character string of entire cassette; bytes is a misnomer
 \subsection{Usage}{
@@ -483,8 +485,8 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-make_dir"></a>}}
-\if{latex}{\out{\hypertarget{method-make_dir}{}}}
+\if{html}{\out{<a id="method-Cassette-make_dir"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-make_dir}{}}}
 \subsection{Method \code{make_dir()}}{
 Create the directory that holds the cassettes, if not present
 \subsection{Usage}{
@@ -496,8 +498,8 @@ no return; creates a directory recursively, if missing
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialized_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialized_hash}{}}}
+\if{html}{\out{<a id="method-Cassette-deserialized_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-deserialized_hash}{}}}
 \subsection{Method \code{deserialized_hash()}}{
 get http interactions from the cassette via the serializer
 \subsection{Usage}{
@@ -509,8 +511,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-previously_recorded_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-previously_recorded_interactions}{}}}
+\if{html}{\out{<a id="method-Cassette-previously_recorded_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-previously_recorded_interactions}{}}}
 \subsection{Method \code{previously_recorded_interactions()}}{
 get all previously recorded interactions
 \subsection{Usage}{
@@ -522,8 +524,8 @@ list
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-write_recorded_interactions_to_disk"></a>}}
-\if{latex}{\out{\hypertarget{method-write_recorded_interactions_to_disk}{}}}
+\if{html}{\out{<a id="method-Cassette-write_recorded_interactions_to_disk"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-write_recorded_interactions_to_disk}{}}}
 \subsection{Method \code{write_recorded_interactions_to_disk()}}{
 write recorded interactions to disk
 \subsection{Usage}{
@@ -535,8 +537,8 @@ nothing returned
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-record_http_interaction"></a>}}
-\if{latex}{\out{\hypertarget{method-record_http_interaction}{}}}
+\if{html}{\out{<a id="method-Cassette-record_http_interaction"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-record_http_interaction}{}}}
 \subsection{Method \code{record_http_interaction()}}{
 record an http interaction (doesn't write to disk)
 \subsection{Usage}{
@@ -546,7 +548,7 @@ record an http interaction (doesn't write to disk)
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{an crul or httr response object, with the request at \verb{$request}}
+\item{\code{x}}{a crul, httr, or httr2 response object, with the request at \verb{$request}}
 }
 \if{html}{\out{</div>}}
 }
@@ -555,8 +557,8 @@ nothing returned
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-any_new_recorded_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-any_new_recorded_interactions}{}}}
+\if{html}{\out{<a id="method-Cassette-any_new_recorded_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-any_new_recorded_interactions}{}}}
 \subsection{Method \code{any_new_recorded_interactions()}}{
 Are there any new recorded interactions?
 \subsection{Usage}{
@@ -568,8 +570,8 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-make_args"></a>}}
-\if{latex}{\out{\hypertarget{method-make_args}{}}}
+\if{html}{\out{<a id="method-Cassette-make_args"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-make_args}{}}}
 \subsection{Method \code{make_args()}}{
 make list of all options
 \subsection{Usage}{
@@ -581,8 +583,8 @@ nothing returned
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-write_metadata"></a>}}
-\if{latex}{\out{\hypertarget{method-write_metadata}{}}}
+\if{html}{\out{<a id="method-Cassette-write_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-write_metadata}{}}}
 \subsection{Method \code{write_metadata()}}{
 write metadata to the cassette
 \subsection{Usage}{
@@ -594,8 +596,8 @@ nothing returned
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-http_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-http_interactions}{}}}
+\if{html}{\out{<a id="method-Cassette-http_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-http_interactions}{}}}
 \subsection{Method \code{http_interactions()}}{
 make \link{HTTPInteractionList} object, assign to http_interactions_ var
 \subsection{Usage}{
@@ -607,8 +609,8 @@ nothing returned
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-make_http_interaction"></a>}}
-\if{latex}{\out{\hypertarget{method-make_http_interaction}{}}}
+\if{html}{\out{<a id="method-Cassette-make_http_interaction"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-make_http_interaction}{}}}
 \subsection{Method \code{make_http_interaction()}}{
 Make an \code{HTTPInteraction} object
 \subsection{Usage}{
@@ -618,7 +620,7 @@ Make an \code{HTTPInteraction} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{an crul or httr response object, with the request at \verb{$request}}
+\item{\code{x}}{A crul, httr, or httr2 response object, with the request at \verb{$request}}
 }
 \if{html}{\out{</div>}}
 }
@@ -627,8 +629,8 @@ an object of class \link{HTTPInteraction}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serialize_to_crul"></a>}}
-\if{latex}{\out{\hypertarget{method-serialize_to_crul}{}}}
+\if{html}{\out{<a id="method-Cassette-serialize_to_crul"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-serialize_to_crul}{}}}
 \subsection{Method \code{serialize_to_crul()}}{
 Make a crul response object
 \subsection{Usage}{
@@ -640,8 +642,8 @@ a crul response
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_request"></a>}}
-\if{latex}{\out{\hypertarget{method-set_request}{}}}
+\if{html}{\out{<a id="method-Cassette-set_request"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-set_request}{}}}
 \subsection{Method \code{set_request()}}{
 Set original HTTP request in the cassette in
 case needed for redirect handling
@@ -661,8 +663,8 @@ case needed for redirect handling
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_handler"></a>}}
-\if{latex}{\out{\hypertarget{method-set_handler}{}}}
+\if{html}{\out{<a id="method-Cassette-set_handler"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-set_handler}{}}}
 \subsection{Method \code{set_handler()}}{
 Set RequestHandler in the cassette in
 case needed for redirect handling
@@ -682,8 +684,8 @@ case needed for redirect handling
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_redirect"></a>}}
-\if{latex}{\out{\hypertarget{method-add_redirect}{}}}
+\if{html}{\out{<a id="method-Cassette-add_redirect"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-add_redirect}{}}}
 \subsection{Method \code{add_redirect()}}{
 Add an http request to a pool
 \subsection{Usage}{
@@ -702,8 +704,8 @@ Add an http request to a pool
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Cassette-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

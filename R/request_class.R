@@ -3,7 +3,7 @@
 #' @export
 #' @keywords internal
 #' @examples
-#' url <- "https://eu.httpbin.org/post"
+#' url <- "https://hb.opencpu.org/post"
 #' body <- list(foo = "bar")
 #' headers <- list(
 #'   `User-Agent` = "libcurl/7.54.0 r-curl/3.2 crul/0.5.2",
@@ -39,7 +39,7 @@ Request <- R6::R6Class(
     body = NULL,
     #' @field headers (character) named list
     headers = NULL,
-    #' @field skip_port_stripping (logical) whether to strip thhe port
+    #' @field skip_port_stripping (logical) whether to strip the port
     skip_port_stripping = FALSE,
     #' @field hash (character) a named list - internal use
     hash = NULL,
@@ -51,6 +51,8 @@ Request <- R6::R6Class(
     fields = NULL,
     #' @field output (various) request output details, disk, memory, etc
     output = NULL,
+    #' @field policies (various) http policies, used in httr2 only
+    policies = NULL,
 
     #' @description Create a new `Request` object
     #' @param method (character) the HTTP method (i.e. head, options, get,
@@ -62,10 +64,12 @@ Request <- R6::R6Class(
     #' @param disk (boolean), is body a file on disk
     #' @param fields (various) post fields
     #' @param output (various) output details
+    #' @param policies (various) http policies, used in httr2 only
+    #' @param skip_port_stripping (logical) whether to strip the port.
+    #' default: `FALSE`
     #' @return A new `Request` object
     initialize = function(method, uri, body, headers, opts, disk,
-      fields, output) {
-
+      fields, output, policies, skip_port_stripping = FALSE) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
         if (inherits(body, "list")) {
@@ -75,7 +79,7 @@ Request <- R6::R6Class(
       }
       if (!missing(headers)) self$headers <- headers
       if (!missing(uri)) {
-        if (!self$skip_port_stripping) {
+        if (!skip_port_stripping) {
           self$uri <- private$without_standard_port(uri)
         } else {
           self$uri <- uri
@@ -91,6 +95,7 @@ Request <- R6::R6Class(
        if (!missing(disk)) self$disk <- disk
        if (!missing(fields)) self$fields <- fields
        if (!missing(output)) self$output <- output
+       if (!missing(policies)) self$policies <- policies
      },
 
     #' @description Convert the request to a list
@@ -113,6 +118,7 @@ Request <- R6::R6Class(
       Request$new(
         method  = hash[['method']],
         uri     = hash[['uri']],
+        # body    = hash[['body']],
         body    = body_from(hash[['body']]),
         headers = hash[['headers']],
         disk = hash[['disk']]
@@ -155,7 +161,8 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
 body_from <- function(x) {
   if (is.null(x)) x <- ""
   if (
-    (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
+    (!is.null(attr(x, "base64")) && attr(x, "base64"))
+    # (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
   ) {
     b64dec <- base64enc::base64decode(x)
     b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
@@ -168,7 +175,8 @@ body_from <- function(x) {
       b64dec_r2c
     }
   } else {
-    try_encode_string(x, Encoding_safe(x))
+    x
+    # try_encode_string(x, Encoding_safe(x))
   }
 }
 
@@ -178,14 +186,28 @@ try_encoding <- function(x) {
   if (inherits(z, "error")) "ASCII-8BIT" else z
 }
 
-is_base64 <- function(x) {
-  if (inherits(x, "form_file")) return(FALSE)
-  as_num <- tryCatch(as.numeric(x), warning = function(w) w)
-  if (!inherits(as_num, "warning")) return(FALSE)
-  # split string by newlines b/c base64 w/ newlines won't be 
-  # recognized as valid base64
-  x <- strsplit(x, "\r|\n", useBytes = TRUE)[[1]]
-  all(grepl(b64_pattern, x))
+is_base64 <- function(x, cassette) {
+  if (!is.list(x)) {
+    if ("base64" %in% names(attributes(x))) {
+      return(attr(x, 'base64'))
+    }
+    return(FALSE)
+  }
+
+  # new base64 setup where it is stored in "base64_string"
+  hasb64str <- "base64_string" %in% names(x)
+  if (hasb64str) return(TRUE)
+
+  if (
+    cassette$preserve_exact_body_bytes && "string" %in% names(x)
+  ) {
+    # old base64 setup where it was stored in "string"
+    message("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
+    return(TRUE)
+  } else {
+    # not using base64
+    return(FALSE)
+  }
 }
 
 Encoding_safe <- function(x) {

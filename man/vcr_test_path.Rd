@@ -9,7 +9,7 @@ vcr_test_path(...)
 \arguments{
 \item{...}{Character vectors giving path component. each character string
 gets added on to the path, e.g., \code{vcr_test_path("a", "b")} becomes
-\code{tests/a/b} when run from the root of the package.}
+\code{tests/a/b} relative to the root of the package.}
 }
 \value{
 A character vector giving the path
@@ -17,6 +17,9 @@ A character vector giving the path
 \description{
 This function, similar to \code{testthat::test_path()}, is designed to work both
 interactively and during tests, locating files in the \verb{tests/} directory.
+}
+\note{
+\code{vcr_test_path()} assumes you are using testthat for your unit tests.
 }
 \examples{
 if (interactive()) {

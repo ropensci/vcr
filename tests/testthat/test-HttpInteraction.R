@@ -3,7 +3,7 @@ context("HttpInteraction")
 test_that("HttpInteraction", {
   crul::mock(FALSE)
 
-  url <- "https://eu.httpbin.org/post"
+  url <- hb("/post")
   body <- list(foo = "bar")
   cli <- crul::HttpClient$new(url = url)
   res <- cli$post(body = body)

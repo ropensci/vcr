@@ -60,6 +60,7 @@ reference:
       - RequestHandler
       - RequestHandlerCrul
       - RequestHandlerHttr
+      - RequestHandlerHttr2
       - RequestMatcherRegistry
       - Serializers
       - serializer_fetch
@@ -70,6 +71,7 @@ reference:
       - vcr_log_file
       - vcr_log_info
       - crul_request
+      - str_splitter
 
 articles:
 - title: All vignettes
@@ -84,3 +86,4 @@ articles:
   - '`record-modes`'
   - '`lightswitch`'
   - '`internals`'
+  - '`design`'

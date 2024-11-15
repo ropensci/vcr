@@ -35,10 +35,12 @@ YAML <- R6::R6Class("YAML",
 
     #' @description Deserializes the content at the path using
     #' yaml::yaml.load_file
+    #' @param cassette the current cassette object so it's properties can
+    #' be retrieved
     #' @return (list) the deserialized object, an R list
-    deserialize = function() {
+    deserialize = function(cassette) {
       tmp <- yaml_load_desecret(self$path)
-      private$process_body(tmp)
+      private$process_body(tmp, cassette)
     }
   )
 )

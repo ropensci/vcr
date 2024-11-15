@@ -29,15 +29,15 @@ Make a hook.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-invoke_hook}{\code{Hooks$invoke_hook()}}
-\item \href{#method-clear_hooks}{\code{Hooks$clear_hooks()}}
-\item \href{#method-define_hook}{\code{Hooks$define_hook()}}
-\item \href{#method-clone}{\code{Hooks$clone()}}
+\item \href{#method-Hooks-invoke_hook}{\code{Hooks$invoke_hook()}}
+\item \href{#method-Hooks-clear_hooks}{\code{Hooks$clear_hooks()}}
+\item \href{#method-Hooks-define_hook}{\code{Hooks$define_hook()}}
+\item \href{#method-Hooks-clone}{\code{Hooks$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-invoke_hook"></a>}}
-\if{latex}{\out{\hypertarget{method-invoke_hook}{}}}
+\if{html}{\out{<a id="method-Hooks-invoke_hook"></a>}}
+\if{latex}{\out{\hypertarget{method-Hooks-invoke_hook}{}}}
 \subsection{Method \code{invoke_hook()}}{
 invoke a hook
 \subsection{Usage}{
@@ -58,8 +58,8 @@ executes hook
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear_hooks"></a>}}
-\if{latex}{\out{\hypertarget{method-clear_hooks}{}}}
+\if{html}{\out{<a id="method-Hooks-clear_hooks"></a>}}
+\if{latex}{\out{\hypertarget{method-Hooks-clear_hooks}{}}}
 \subsection{Method \code{clear_hooks()}}{
 clear all hooks
 \subsection{Usage}{
@@ -71,8 +71,8 @@ no return
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-define_hook"></a>}}
-\if{latex}{\out{\hypertarget{method-define_hook}{}}}
+\if{html}{\out{<a id="method-Hooks-define_hook"></a>}}
+\if{latex}{\out{\hypertarget{method-Hooks-define_hook}{}}}
 \subsection{Method \code{define_hook()}}{
 define a hook
 \subsection{Usage}{
@@ -96,8 +96,8 @@ no return; defines hook internally
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Hooks-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Hooks-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

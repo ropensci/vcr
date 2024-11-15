@@ -1,3 +1,98 @@
+vcr 1.6.0
+=========
+
+### NEW FEATURES
+
+* `vcr` now supports `httr2` in addition to `httr` and `crul`. (#237) (#268)
+* `vcr` now supports async http requests with `crul` (w/ `crul` v1.5 or greater). no change was required in `vcr` for this to happen. a PR was merged in `crul` to hook into `vcr`. there's no support for async in `httr` as that package does not do any async and no support in `httr2` because `req_perform_parallel` does not have a mocking hook as does `req_perform` (#246)
+
+### BUG FIXES
+
+* Ports in URLs (e.g., 8000) were being accidentally stripped. Fixed now (#264) (#266)
+
+### MINOR IMPROVEMENTS
+
+* Add link to DESCRIPTION file for packge documentation. thanks @olivroy (#265)
+* Use `_PACKAGE` syntax for package level doc (#263)
+
+
+vcr 1.2.2
+=========
+
+* change tests to use more reliable test servers
+
+vcr 1.2.0
+=========
+
+### NEW FEATURES
+
+* Added @dpprdan as an author; changed all ctb to aut (#258)
+
+### MINOR IMPROVEMENTS
+
+* `use_vcr()` now creates a test helper file called `helper-vcr.R` instead of `setup-pkgname.R`. 
+  We are reverting the change from version 0.6.0 and now recommend the use of `helper-*.R` again, so that the vcr setup [is loaded with `devtools::load_all()`](https://testthat.r-lib.org/reference/test_dir.html#special-files). 
+  That way your vcr-enabled tests also work when run interactively (#244) (#256)
+* default git branch changed from master to main (#253)
+* update example packages in the README (#257)
+* vcr no longer requires compilation because replaced the single C++ function with a pure R equivalent
+
+### BUG FIXES
+
+* roll back a change from the previous CRAN version that removed use of an internal function (`body_from`) (#249) (#252)
+
+vcr 1.1.0
+=========
+
+### MINOR IMPROVEMENTS
+
+* request matching was sensitive to escaping special characters, that's been fixed (#240) (#247) thanks to @KevCaz
+* fix broken link given in error suggestion (#239) thanks to @maelle
+* using `preserve_exact_body_bytes = TRUE` now writes a base64 encoded string into a field in yaml or json on disk called `base64_string`. When `preserve_exact_body_bytes = FALSE` (the default) the response body goes into a field called `string`
+
+### BUG FIXES
+
+* `vcr_test_path` fix to find root package path correctly with R 4.2 on Windows (#242) (#243) thanks to @dpprdan
+
+vcr 1.0.2
+=========
+
+### BUG FIXES
+
+* fix to `vcr_test_path()` to find root package path correctly (#235) (#236)
+
+vcr 1.0.0
+=========
+
+### NEW FEATURES
+
+* `check_cassette_names()` gains `allowed_duplicates` parameter to allow duplicate cassette names; we typically advise users not to use duplicate cassette names, but there are cases where you may want to share cassettes across tests (#227)
+* `vcr_configure()` gains `filter_query_parameters` parameter for filtering out query parameters so they don't show up in the recorded request on disk (#212)
+* `use_vcr()`: now sets a mimimum vcr version, which is usually the latest (stable) version on CRAN. You can of course easily remove or change the version requirement yourself after running it (#214)
+* `vcr_configure()` gains `warn_on_empty_cassette` parameter: Should a warning be thrown when an empty cassette is detected? Empty cassettes are cleaned up (deleted) either way (#224) thanks @llrs and @dpprdan
+* `vcr_configure()` gains `quiet` parameter: suppress any messages from both vcr and webmockr (#226) (#25)
+* `vcr_configure()` gains new option `filter_sensitive_data_regex`; now `filter_sensitive_data` is for fixed string matching, while `filter_sensitive_data_regex` is for regex based matching (#222) thanks @tomsing1 for reporting
+* gains package import `rprojroot`
+
+### MINOR IMPROVEMENTS
+
+* `filter_sensitive_data` option now strips leading and trailing single and double quotes from strings before being used IN CASE a user accidentally quotes a secret - logic being that even though a secret may have a single or double quote in it, its very unlikely that it would have both a leading and trailing quote (single or double) (#221)
+
+### Documentation
+
+* new vignette explaining the design of the vcr package (also can be found in the HTTP Testing book) (#232) (#233)
+* no user facing change - but vignettes moved into man/rmdhunks so that they can be pulled into the HTTP Testing book easily (#209) (#216)
+* fix in configuration vignette to clarify a `filter_request_headers` example  (#215) thanks @maelle
+* docs update (#33) (#217)
+
+### BUG FIXES
+
+* `filter_request_headers` was unfortunately adding a request header to the request written to disk when the header did not exist; now fixed (#213)
+* bug in internal function `is_base64()`; `strsplit()` needed `useBytes=TRUE` (#219)
+* `filter_sensitive_data` was not working when strings contained regex characters; fixed, and see also above new config variable for regex specific filtering  (#222) thanks @tomsing1 for reporting
+* `vcr_test_path()` should now correctly set paths (#225) (#228) (#229) (#230)
+
+
 vcr 0.6.0
 =========
 
@@ -132,12 +227,12 @@ vcr 0.2.6
 ## NEW FEATURES
 
 * gains function `use_vcr()` to setup `vcr` for your package. This requires 3 pkgs all in Suggests; so are not required if you don't need to use `use_vcr()` (#52) (#95) thanks @maelle for the feedback!
-* `vcr` actually supports all four recording modes: `none`, `once`, `new_episodes`, and `all`. `once` is what's used by default. See `?recording` for description of the recording modes. For now [the test file test-ause_cassette_record_modes.R](https://github.com/ropensci/vcr/blob/master/tests/testthat/test-ause_cassette_record_modes.R) gives some examples and what to expect for each record mode; in the future the http testing book will have much more information in the _Record modes_ chapter <https://books.ropensci.org/http-testing/record-modes.html> ([commit](https://github.com/ropensci/vcr/commit/04aa5f784b18308d8f62d1b6b0be2f3e140f2a5a))
+* `vcr` actually supports all four recording modes: `none`, `once`, `new_episodes`, and `all`. `once` is what's used by default. See `?recording` for description of the recording modes. For now [the test file test-ause_cassette_record_modes.R](https://github.com/ropensci/vcr/blob/main/tests/testthat/test-ause_cassette_record_modes.R) gives some examples and what to expect for each record mode; in the future the http testing book will have much more information in the _Record modes_ chapter <https://books.ropensci.org/http-testing/record-modes.html> ([commit](https://github.com/ropensci/vcr/commit/04aa5f784b18308d8f62d1b6b0be2f3e140f2a5a))
 
 ### MINOR IMPROVEMENTS
 
 * lots of tidying for better/consistent style
-* fix for a partial argument call in `as.list()`: `all` to `all.names` ([commit](https://github.com/ropensci/vcr/commit/b20a2d5ffd0f65175dee4d84aa9573f3652df1d2))
+* fix for a partial argument call in `as.list()`: `all` to `all.names`
 
 ### BUG FIXES
 

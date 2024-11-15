@@ -18,7 +18,7 @@
 #' # turn off for duration of a block
 #' library(crul)
 #' turned_off({
-#'  res <- HttpClient$new(url = "https://eu.httpbin.org/get")$get()
+#'  res <- HttpClient$new(url = "https://hb.opencpu.org/get")$get()
 #' })
 #' res
 #'
@@ -26,7 +26,7 @@
 #' turn_off()
 #' library(webmockr)
 #' crul::mock()
-#' # HttpClient$new(url = "https://eu.httpbin.org/get")$get(verbose = TRUE)
+#' # HttpClient$new(url = "https://hb.opencpu.org/get")$get(verbose = TRUE)
 #' turn_on()
 #' }
 turned_off <- function(..., ignore_cassettes = FALSE) {

@@ -5,7 +5,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
-  cli <- HttpClient$new(url = "https://httpbin.org")
+  cli <- HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
   # run it
@@ -66,11 +66,11 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   ### matchers: host only (note how query is ignored)
   # run it
   aa <- use_cassette(name = "testing_host1", {
-    res <- HttpClient$new(url = "https://httpbin.org")$get(query = list(b=99999))
+    res <- HttpClient$new(url = hb())$get(query = list(b=99999))
   }, match_requests_on = "host")
   # run it again
   bb <- use_cassette(name = "testing_host1", {
-    res2 <- HttpClient$new(url = "https://httpbin.org")$get(query = list(a=5))
+    res2 <- HttpClient$new(url = hb())$get(query = list(a=5))
   }, match_requests_on = "host")
   # the recorded_at time doesn't change
   # - that is, the request matched and the recorded response in aa
@@ -136,11 +136,11 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   ### matchers: method, uri, body
   # run it
   aa <- use_cassette(name = "testing2", {
-    res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+    res <- POST(hb("/post"), body = list(foo = "bar"))
   }, match_requests_on = c("method", "uri", "body"))
   # run it again
   bb <- use_cassette(name = "testing2", {
-    res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+    res <- POST(hb("/post"), body = list(foo = "bar"))
   }, match_requests_on = c("method", "uri", "body"))
   # the recorded_at time doesn't change
   # - that is, the request matched and the recorded response in aa
@@ -154,11 +154,11 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   ### matchers: method, body (uri ignored essentially)
   # run it
   aa <- use_cassette(name = "testing4", {
-    res <- POST("https://httpbin.org/post", query = list(a = 5), body = list(foo = "bar"))
+    res <- POST(hb("/post"), query = list(a = 5), body = list(foo = "bar"))
   }, match_requests_on = c("method", "body"))
   # run it again
   bb <- use_cassette(name = "testing4", {
-    res <- POST("https://httpbin.org/post", query = list(b = 2), body = list(foo = "bar"))
+    res <- POST(hb("/post"), query = list(b = 2), body = list(foo = "bar"))
   }, match_requests_on = c("method", "body"))
   # the recorded_at time doesn't change
   # - that is, the request matched and the recorded response in aa
@@ -172,15 +172,15 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   ### matchers: body only
   # run it
   aa <- use_cassette(name = "testing5", {
-    res <- POST("https://httpbin.org/post", body = list(foo = "bar"))
+    res <- POST(hb("/post"), body = list(foo = "bar"))
   }, match_requests_on = "body")
   # run it again, method and uri changed
   bb <- use_cassette(name = "testing5", {
-    res <- PUT("https://httpbin.org/put", body = list(foo = "bar"))
+    res <- PUT(hb("/put"), body = list(foo = "bar"))
   }, match_requests_on = "body")
   # run it again, method and uri changed again
   cc <- use_cassette(name = "testing5", {
-    res <- PATCH("https://httpbin.org/patch", body = list(foo = "bar"))
+    res <- PATCH(hb("/patch"), body = list(foo = "bar"))
   }, match_requests_on = "body")
   # the recorded_at time doesn't change
   # - that is, the request matched and the recorded response in aa

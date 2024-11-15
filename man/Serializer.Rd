@@ -21,15 +21,15 @@ Serializer class - base class for JSON/YAML serializers
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Serializer$new()}}
-\item \href{#method-serialize}{\code{Serializer$serialize()}}
-\item \href{#method-deserialize}{\code{Serializer$deserialize()}}
-\item \href{#method-clone}{\code{Serializer$clone()}}
+\item \href{#method-Serializer-new}{\code{Serializer$new()}}
+\item \href{#method-Serializer-serialize}{\code{Serializer$serialize()}}
+\item \href{#method-Serializer-deserialize}{\code{Serializer$deserialize()}}
+\item \href{#method-Serializer-clone}{\code{Serializer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Serializer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Serializer-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new YAML object
 \subsection{Usage}{
@@ -51,8 +51,8 @@ A new \code{YAML} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serialize"></a>}}
-\if{latex}{\out{\hypertarget{method-serialize}{}}}
+\if{html}{\out{<a id="method-Serializer-serialize"></a>}}
+\if{latex}{\out{\hypertarget{method-Serializer-serialize}{}}}
 \subsection{Method \code{serialize()}}{
 Serializes a hash - REPLACED BY YAML/JSON METHODS
 \subsection{Usage}{
@@ -75,8 +75,8 @@ Serializes a hash - REPLACED BY YAML/JSON METHODS
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-deserialize"></a>}}
-\if{latex}{\out{\hypertarget{method-deserialize}{}}}
+\if{html}{\out{<a id="method-Serializer-deserialize"></a>}}
+\if{latex}{\out{\hypertarget{method-Serializer-deserialize}{}}}
 \subsection{Method \code{deserialize()}}{
 Serializes a file - REPLACED BY YAML/JSON METHODS
 \subsection{Usage}{
@@ -85,8 +85,8 @@ Serializes a file - REPLACED BY YAML/JSON METHODS
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Serializer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Serializer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

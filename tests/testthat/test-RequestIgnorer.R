@@ -100,7 +100,7 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   vcr_configure(dir = tmpdir)
   # vcr_configuration()
   cas_not_ignored <- use_cassette("test_ignore_host", {
-    HttpClient$new("https://httpbin.org")$get()
+    HttpClient$new(hb())$get()
     HttpClient$new("https://scottchamberlain.info")$get()
   })
 

@@ -25,14 +25,14 @@ vcr_configure_reset()
 dir <- tempdir()
 invisible(vcr_configure(dir = dir))
 request <- Request$new(
-  "post", "https://eu.httpbin.org/post?a=5", "", list(foo = "bar"))
+  "post", hb("/post?a=5"), "", list(foo = "bar"))
 
 test_that("vcr_last_error works: no casssette in use yet", {
   err <- UnhandledHTTPRequestError$new(request)
   expect_error(err$construct_message())
   expect_message(vcr_last_error(), "There is currently no cassette in use")
   expect_message(vcr_last_error(), "If you want vcr to record this request")
-  expect_message(vcr_last_error(), "http-testing/logging")
+  expect_message(vcr_last_error(), "http-testing/debugging-")
 })
 
 test_that("vcr_last_error works: casssette in use", {

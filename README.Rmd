@@ -16,10 +16,10 @@ knitr::opts_chunk$set(
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![cran checks](https://cranchecks.info/badges/worst/vcr)](https://cranchecks.info/pkgs/vcr)
+[![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://cloud.r-project.org/web/checks/check_results_vcr.html)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
-[![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
+[![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/vcr)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
@@ -42,7 +42,8 @@ install.packages("vcr")
 Development version:
 
 ```{r eval=FALSE}
-remotes::install_github("ropensci/vcr")
+# install.packages("pak")
+pak::pak("ropensci/vcr")
 ```
 
 ```{r}
@@ -53,12 +54,13 @@ library("crul")
 
 ## Docs
 
-Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
+Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
 
 ## Supported HTTP libraries
 
-* [crul](https://docs.ropensci.org/crul/)
+* [crul][]
 * [httr](https://httr.r-lib.org/)
+* [httr2](https://httr2.r-lib.org/)
 
 ## Getting Started
 
@@ -111,21 +113,23 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 
 ## Example packages using vcr
 
-* [rgbif][]
-* [rredlist][]
+* [allcontributors][]
 * [bold][]
+* [qualtRics][]
+* [rgbif][]
+* [ritis][]
+* [rredlist][]
+* [rtoot][]
+* [rtweet][]
 * [wikitaxa][]
 * [worrms][]
-* [microdemic][]
-* [zbank][]
-* [rplos][]
-* [ritis][]
 
 ## Contributors
 
 * [Scott Chamberlain](https://github.com/sckott)
 * [Aaron Wolen](https://github.com/aaronwolen)
 * [Maëlle Salmon](https://github.com/maelle)
+* [Daniel Possenriede](https://github.com/dpprdan)
 
 ## Meta
 
@@ -134,14 +138,15 @@ The canonical `vcr` (in Ruby) lists ports in other languages at <https://github.
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
-[webmockr]: https://docs.ropensci.org/webmockr/
-[crul]: https://docs.ropensci.org/crul/
-[rgbif]: https://github.com/ropensci/rgbif
-[rredlist]: https://github.com/ropensci/rredlist
+[allcontributors]: https://github.com/ropenscilabs/allcontributors
 [bold]: https://github.com/ropensci/bold
+[crul]: https://docs.ropensci.org/crul/
+[qualtRics]: https://github.com/ropensci/qualtRics
+[rgbif]: https://github.com/ropensci/rgbif
+[ritis]: https://github.com/ropensci/ritis
+[rredlist]: https://github.com/ropensci/rredlist
+[rtoot]: https://github.com/gesistsa/rtoot
+[rtweet]: https://github.com/ropensci/rtweet
+[webmockr]: https://docs.ropensci.org/webmockr/
 [wikitaxa]: https://github.com/ropensci/wikitaxa
 [worrms]: https://github.com/ropensci/worrms
-[microdemic]: https://github.com/ropensci/microdemic
-[zbank]: https://github.com/ropenscilabs/zbank
-[rplos]: https://github.com/ropensci/rplos
-[ritis]: https://github.com/ropensci/ritis

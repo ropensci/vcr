@@ -5,10 +5,10 @@ vcr
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![cran checks](https://cranchecks.info/badges/worst/vcr)](https://cranchecks.info/pkgs/vcr)
+[![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://cloud.r-project.org/web/checks/check_results_vcr.html)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
-[![codecov](https://codecov.io/gh/ropensci/vcr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/vcr)
+[![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/vcr)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
@@ -25,26 +25,27 @@ Easier HTTP testing! Record HTTP requests and responses on disk and replay them 
 
 Now your tests can work without any internet connection!
 
-[Demo of adding vcr testing to an R package](https://github.com/maelle/exemplighratia/pull/2/files)
+[Demo of adding vcr testing to an R package](https://github.com/ropensci-books/exemplighratia/pull/2/files), [corresponding narrative](https://books.ropensci.org/http-testing/vcr.html).
 
 ## Installation
 
 CRAN version:
 
 
-```r
+``` r
 install.packages("vcr")
 ```
 
 Development version:
 
 
-```r
-remotes::install_github("ropensci/vcr")
+``` r
+# install.packages("pak")
+pak::pak("ropensci/vcr")
 ```
 
 
-```r
+``` r
 library("vcr")
 library("crul")
 ```
@@ -52,12 +53,13 @@ library("crul")
 
 ## Docs
 
-Check out the [HTTP testing book](https://books.ropensci.org/http-testing) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
+Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) and the [vcr vignettes](https://docs.ropensci.org/vcr/articles/).
 
 ## Supported HTTP libraries
 
-* [crul](https://docs.ropensci.org/crul)
+* [crul][]
 * [httr](https://httr.r-lib.org/)
+* [httr2](https://httr2.r-lib.org/)
 
 ## Getting Started
 
@@ -81,7 +83,7 @@ This will:
 * setup a config file for `vcr`
 * add an example test file for `vcr`
 * make a `.gitattributes` file with settings for `vcr` 
-* make a `./tests/testthat/setup-vcr.R` file
+* make a `./tests/testthat/helper-vcr.R` file
 
 What you will see in the R console:
 
@@ -92,10 +94,10 @@ What you will see in the R console:
 ✓ Creating directory: ./tests/testthat  
 ◉ Looking for testthat.R file or similar  
 ✓ tests/testthat.R: added  
-✓ Adding vcr config to tests/testthat/setup-vcr.example.R  
+✓ Adding vcr config to tests/testthat/helper-vcr.example.R  
 ✓ Adding example test file tests/testthat/test-vcr_example.R  
 ✓ .gitattributes: added  
-◉ Learn more about `vcr`: https://books.ropensci.org/http-testing
+◉ Learn more about `vcr`: https://books.ropensci.org/http-testing/
 ```
 
 ### Protecting secrets
@@ -104,7 +106,7 @@ Secrets often turn up in API work. A common example is an API key.
 `vcr` saves responses from APIs as YAML files, and this will include your secrets unless you indicate to `vcr` what they are and how to protect them.
 The `vcr_configure` function has the `filter_sensitive_data` argument function for just this situation. 
 The `filter_sensitive_data` argument takes a named list where the _name_ of the list is the string that will be used in the recorded cassettes _instead of_ the secret, which is the list _item_. 
-`vcr` will manage the replacement of that for you, so all you need to do is to edit your `setup-vcr.R` file like this:
+`vcr` will manage the replacement of that for you, so all you need to do is to edit your [`helper-vcr.R` file](https://testthat.r-lib.org/reference/test_dir.html#special-files) like this:
 
 ```r
 library("vcr") # *Required* as vcr is set up on loading
@@ -152,7 +154,7 @@ Furthermore, as by default requests matching does not include the API key, thing
 E.g. to have tests pass on continuous integration for external pull requests to your code repository.
 
 * vcr does not need an actual API key for requests once the cassettes are created, as no real requests will be made.
-* you still need to fool your _package_ into believing there is an API key as it will construct requests with it. So add the following lines to a testthat setup file (e.g. `tests/testthat/setup-vcr.R`)
+* you still need to fool your _package_ into believing there is an API key as it will construct requests with it. So add the following lines to a testthat setup file (e.g. `tests/testthat/helper-vcr.R`)
 
 ```r
 if (!nzchar(Sys.getenv("APIKEY"))) {
@@ -223,7 +225,7 @@ If you want to get a feel for how vcr works, although you don't need too.
 
 
 
-```r
+``` r
 library(vcr)
 library(crul)
 
@@ -238,7 +240,7 @@ system.time(
 The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
 
 
-```r
+``` r
 system.time(
   use_cassette(name = "helloworld", {
     cli$get("get")
@@ -359,10 +361,14 @@ We set the following defaults:
  * log = `FALSE`
  * log_opts = `list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)`
  * filter_sensitive_data = `NULL`
+ * filter_sensitive_data_regex = `NULL`
  * filter_request_headers = `NULL`
  * filter_response_headers = `NULL`
+ * filter_query_parameters = `NULL`
  * write_disk_path = `NULL`
  * verbose_errors = `FALSE`
+ * quiet = `TRUE`
+ * warn_on_empty_cassette = `TRUE`
 
 
 You can get the defaults programmatically with
@@ -380,7 +386,7 @@ vcr_configure()
 Calling `vcr_configuration()` gives you some of the more important configuration parameters in a nice tidy print out
 
 
-```r
+``` r
 vcr_configuration()
 #> <vcr configuration>
 #>   Cassette Dir: .
@@ -427,7 +433,7 @@ You can set your own options by tweaking the `match_requests_on` parameter:
 
 
 
-```r
+``` r
 use_cassette(name = "one", {
     cli$post("post", body = list(a = 5))
   },
@@ -450,21 +456,23 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 ## Example packages using vcr
 
-* [rgbif][]
-* [rredlist][]
+* [allcontributors][]
 * [bold][]
+* [qualtRics][]
+* [rgbif][]
+* [ritis][]
+* [rredlist][]
+* [rtoot][]
+* [rtweet][]
 * [wikitaxa][]
 * [worrms][]
-* [microdemic][]
-* [zbank][]
-* [rplos][]
-* [ritis][]
 
 ## Contributors
 
 * [Scott Chamberlain](https://github.com/sckott)
 * [Aaron Wolen](https://github.com/aaronwolen)
 * [Maëlle Salmon](https://github.com/maelle)
+* [Daniel Possenriede](https://github.com/dpprdan)
 
 ## Meta
 
@@ -473,14 +481,15 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
-[webmockr]: https://docs.ropensci.org/webmockr
-[crul]: https://docs.ropensci.org/crul
-[rgbif]: https://github.com/ropensci/rgbif
-[rredlist]: https://github.com/ropensci/rredlist
+[allcontributors]: https://github.com/ropenscilabs/allcontributors
 [bold]: https://github.com/ropensci/bold
+[crul]: https://docs.ropensci.org/crul/
+[qualtRics]: https://github.com/ropensci/qualtRics
+[rgbif]: https://github.com/ropensci/rgbif
+[ritis]: https://github.com/ropensci/ritis
+[rredlist]: https://github.com/ropensci/rredlist
+[rtoot]: https://github.com/gesistsa/rtoot
+[rtweet]: https://github.com/ropensci/rtweet
+[webmockr]: https://docs.ropensci.org/webmockr/
 [wikitaxa]: https://github.com/ropensci/wikitaxa
 [worrms]: https://github.com/ropensci/worrms
-[microdemic]: https://github.com/ropensci/microdemic
-[zbank]: https://github.com/ropenscilabs/zbank
-[rplos]: https://github.com/ropensci/rplos
-[ritis]: https://github.com/ropensci/ritis

@@ -17,11 +17,11 @@ You can customize how we match requests with one or more of the
 following options, some of which are on by default, some of which can be
 used together, and some alone.
 \itemize{
-\item \code{method}: Use the \strong{method} request matcher to match requests on
-the HTTP method (i.e. GET, POST, PUT, DELETE, etc). You will
-generally want to use this matcher. The \strong{method} matcher is used
-(along with the \strong{uri} matcher) by default if you do not specify
-how requests should match.
+\item \code{method}: Use the \strong{method} request matcher to match requests on the
+HTTP method (i.e. GET, POST, PUT, DELETE, etc). You will generally
+want to use this matcher. The \strong{method} matcher is used (along with
+the \strong{uri} matcher) by default if you do not specify how requests
+should match.
 \item \code{uri}: Use the \strong{uri} request matcher to match requests on the
 request URI. The \strong{uri} matcher is used (along with the \strong{method}
 matcher) by default if you do not specify how requests should match.
@@ -30,10 +30,10 @@ request host. You can use this (alone, or in combination with
 \strong{path}) as an alternative to \strong{uri} so that non-deterministic
 portions of the URI are not considered as part of the request
 matching.
-\item \code{path}: Use the \strong{path} request matcher to match requests on the
-path portion of the request URI. You can use this (alone, or in
-combination with \strong{host}) as an alternative to \strong{uri} so that
-non-deterministic portions of the URI
+\item \code{path}: Use the \strong{path} request matcher to match requests on the path
+portion of the request URI. You can use this (alone, or in combination
+with \strong{host}) as an alternative to \strong{uri} so that non-deterministic
+portions of the URI
 \item \code{query}: Use the \strong{query} request matcher to match requests on the
 query string portion of the request URI. You can use this (alone, or
 in combination with others) as an alternative to \strong{uri} so that
@@ -46,15 +46,21 @@ the request headers.
 }
 
 You can set your own options by tweaking the \code{match_requests_on}
-parameter in \code{use_cassette()}:\if{html}{\out{<div class="r">}}\preformatted{library(vcr)
-}\if{html}{\out{</div>}}\if{html}{\out{<div class="r">}}\preformatted{use_cassette(name = "foo_bar", \{
+parameter in \code{use_cassette()}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(vcr)
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{use_cassette(name = "foo_bar", \{
     cli$post("post", body = list(a = 5))
   \}, 
   match_requests_on = c('method', 'headers', 'body')
 )
 }\if{html}{\out{</div>}}
 \subsection{Matching}{
-\subsection{headers}{\if{html}{\out{<div class="r">}}\preformatted{library(crul)
+\subsection{headers}{
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(crul)
 library(vcr)
 cli <- crul::HttpClient$new("https://httpbin.org/get", 
   headers = list(foo = "bar"))
