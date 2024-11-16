@@ -782,7 +782,9 @@ Cassette <- R6::R6Class(
     #' @description Add an http request to a pool
     #' @param x (list) a response
     #' @return `NULL`
-    add_redirect = function(x) self$redirect_pool <- append(self$redirect_pool, list(x))
+    add_redirect = function(x) {
+      self$redirect_pool <- append(self$redirect_pool, list(x))
+    }
   ),
 
   private = list(
