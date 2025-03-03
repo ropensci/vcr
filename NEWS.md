@@ -1,3 +1,11 @@
+vcr 1.7.0
+=========
+
+### MINOR IMPROVEMENTS
+
+* Change maintainer email address (#274)
+
+
 vcr 1.6.0
 =========
 
@@ -14,6 +22,7 @@ vcr 1.6.0
 
 * Add link to DESCRIPTION file for packge documentation. thanks @olivroy (#265)
 * Use `_PACKAGE` syntax for package level doc (#263)
+* Improvements to the cassette editing vignette (#262) thanks @adamhsparks
 
 
 vcr 1.2.2
@@ -30,8 +39,8 @@ vcr 1.2.0
 
 ### MINOR IMPROVEMENTS
 
-* `use_vcr()` now creates a test helper file called `helper-vcr.R` instead of `setup-pkgname.R`. 
-  We are reverting the change from version 0.6.0 and now recommend the use of `helper-*.R` again, so that the vcr setup [is loaded with `devtools::load_all()`](https://testthat.r-lib.org/reference/test_dir.html#special-files). 
+* `use_vcr()` now creates a test helper file called `helper-vcr.R` instead of `setup-pkgname.R`.
+  We are reverting the change from version 0.6.0 and now recommend the use of `helper-*.R` again, so that the vcr setup [is loaded with `devtools::load_all()`](https://testthat.r-lib.org/reference/test_dir.html#special-files).
   That way your vcr-enabled tests also work when run interactively (#244) (#256)
 * default git branch changed from master to main (#253)
 * update example packages in the README (#257)

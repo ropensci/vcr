@@ -61,7 +61,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Scott Chamberlain \email{sckott@protonmail.com} (\href{https://orcid.org/0000-0003-1444-9135}{ORCID})
+\strong{Maintainer}: Scott Chamberlain \email{myrmecocystus@gmail.com} (\href{https://orcid.org/0000-0003-1444-9135}{ORCID})
 
 Authors:
 \itemize{

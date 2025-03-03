@@ -10,7 +10,7 @@ Description: Record test suite 'HTTP' requests and replays them during
     'HTTP' response.
 Version: 1.6.0.91
 Authors@R: c(person("Scott", "Chamberlain", role = c("aut", "cre"),
-    email = "sckott@protonmail.com", 
+    email = "myrmecocystus@gmail.com",
     comment = c(ORCID="0000-0003-1444-9135")),
     person("Aaron", "Wolen", role = "aut",
     comment = c(ORCID="0000-0003-2542-2202")),
