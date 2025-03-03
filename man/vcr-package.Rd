@@ -72,7 +72,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item rOpenSci (https://ropensci.org) [funder]
+  \item rOpenSci (019jywm96) [funder]
 }
 
 }
