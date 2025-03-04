@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/ropensci/vcr/",
   "issueTracker": "https://github.com/ropensci/vcr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.6.0.91",
+  "version": "1.7.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.2 (2024-10-31)",
+  "runtimePlatform": "R version 4.4.3 (2025-02-28)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -314,5 +314,5 @@
   "applicationCategory": "Web",
   "isPartOf": "https://ropensci.org",
   "keywords": ["http", "https", "API", "web-services", "curl", "mock", "mocking", "http-mocking", "testing", "testing-tools", "tdd"],
-  "fileSize": "922.447KB"
+  "fileSize": "922.605KB"
 }
