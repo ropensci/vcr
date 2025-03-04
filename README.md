@@ -5,7 +5,7 @@ vcr
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://cloud.r-project.org/web/checks/check_results_vcr.html)
+[![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/vcr)
@@ -330,7 +330,7 @@ See the [vignette about internals](https://docs.ropensci.org/vcr/articles/intern
 
 ### Just want to mock and not store on disk?
 
-You're looking for [webmockr][], that vcr itself uses. 
+You're looking for [webmockr][], that vcr itself uses.
 `webmockr` only matches requests based on criteria you choose, but does not cache HTTP interactions to disk as `vcr` does.
 
 ## Configuration
@@ -481,7 +481,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 * Get citation information for `vcr` in R doing `citation(package = 'vcr')`
 * Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
 
-[allcontributors]: https://github.com/ropenscilabs/allcontributors
+[allcontributors]: https://github.com/ropensci/allcontributors
 [bold]: https://github.com/ropensci/bold
 [crul]: https://docs.ropensci.org/crul/
 [qualtRics]: https://github.com/ropensci/qualtRics
@@ -489,7 +489,7 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 [ritis]: https://github.com/ropensci/ritis
 [rredlist]: https://github.com/ropensci/rredlist
 [rtoot]: https://github.com/gesistsa/rtoot
-[rtweet]: https://github.com/ropensci/rtweet
+[rtweet]: https://github.com/ropensci-archive/rtweet
 [webmockr]: https://docs.ropensci.org/webmockr/
 [wikitaxa]: https://github.com/ropensci/wikitaxa
 [worrms]: https://github.com/ropensci/worrms
