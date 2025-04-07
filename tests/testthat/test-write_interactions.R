@@ -3,14 +3,25 @@ context("write_interactions")
 # body <- readRDS(file = "~/d1xmlbody.rds")
 # body <- substring(body, 1, 3000)
 # nchar(body)
-request <- Request$new("POST", uri = hb('/post?a=5'),
-  body = "", headers = list(foo = "bar"))
-status <- list(status_code = "200", message = "OK",
-               explanation = "Request fulfilled, document follows")
+request <- Request$new(
+  "POST",
+  uri = hb('/post?a=5'),
+  body = "",
+  headers = list(foo = "bar")
+)
+status <- list(
+  status_code = "200",
+  message = "OK",
+  explanation = "Request fulfilled, document follows"
+)
 # resp_body <- body
 resp_body <- "asdf jasljf asdfjlsaf"
-response <- VcrResponse$new(status, list(this_is_my = "response_header"),
-                            resp_body, "HTTP/1.1 200 OK")
+response <- VcrResponse$new(
+  status,
+  list(this_is_my = "response_header"),
+  resp_body,
+  "HTTP/1.1 200 OK"
+)
 x <- HTTPInteraction$new(request = request, response = response)
 x <- x$to_hash()
 
@@ -22,11 +33,11 @@ test_that("write_interactions fails well", {
   expect_error(write_interactions(bytes = TRUE), "argument \"x\" is missing")
 
   # types
-  expect_error(write_interactions(5, bytes = TRUE),
-               "x must be of class list")
-  expect_error(write_interactions(x, 4, bytes = TRUE),
-               "file must be of class character")
-
+  expect_error(write_interactions(5, bytes = TRUE), "x must be of class list")
+  expect_error(
+    write_interactions(x, 4, bytes = TRUE),
+    "file must be of class character"
+  )
 })
 
 test_that("write_interactions works as expected", {
@@ -44,8 +55,10 @@ test_that("write_interactions works as expected", {
   expect_is(yml, "list")
   expect_equal(length(yml), 1)
   expect_is(yml[[1]], "list")
-  expect_named(yml[[1]], c('request', 'response',
-                           'recorded_at', 'recorded_with'))
+  expect_named(
+    yml[[1]],
+    c('request', 'response', 'recorded_at', 'recorded_with')
+  )
 })
 
 # cleanup

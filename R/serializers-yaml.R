@@ -10,7 +10,8 @@
 #' @title The YAML serializer
 #' @description class with methods for serializing via the \pkg{yaml} package
 #' @keywords internal
-YAML <- R6::R6Class("YAML",
+YAML <- R6::R6Class(
+  "YAML",
   inherit = Serializer,
   public = list(
     #' @description Create a new YAML object

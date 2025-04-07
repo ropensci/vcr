@@ -101,8 +101,15 @@ VcrResponse <- R6::R6Class(
     #' @param adapter_metadata Additional metadata used by a specific VCR adapter
     #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
-    initialize = function(status, headers, body, http_version, opts,
-      adapter_metadata = NULL, disk) {
+    initialize = function(
+      status,
+      headers,
+      body,
+      http_version,
+      opts,
+      adapter_metadata = NULL,
+      disk
+    ) {
       if (!missing(status)) self$status <- status
       if (!missing(headers)) self$headers <- headers
       if (!missing(body)) {
@@ -129,11 +136,12 @@ VcrResponse <- R6::R6Class(
     #' @return a list
     to_hash = function() {
       self$hash <- list(
-        status       = self$status,
-        headers      = self$headers,
-        body         =
-          serializable_body(self$body,
-            self$opts$preserve_exact_body_bytes %||% FALSE),
+        status = self$status,
+        headers = self$headers,
+        body = serializable_body(
+          self$body,
+          self$opts$preserve_exact_body_bytes %||% FALSE
+        ),
         http_version = self$http_version,
         disk = self$disk
       )
@@ -172,7 +180,7 @@ VcrResponse <- R6::R6Class(
     #' @param key (character) header name to get
     #' @return the header value (if it exists)
     get_header = function(key) {
-       self$headers[[key]]
+      self$headers[[key]]
     },
 
     #' @description Edit a header
@@ -180,26 +188,26 @@ VcrResponse <- R6::R6Class(
     #' @param value (character) new value to assign
     #' @return no return; modifies the header in place
     edit_header = function(key, value = NULL) {
-       self$headers[[key]] <- value
+      self$headers[[key]] <- value
     },
 
     #' @description Delete a header
     #' @param key (character) header name to delete
     #' @return no return; the header is deleted if it exists
     delete_header = function(key) {
-       self$headers[key] <- NULL
+      self$headers[key] <- NULL
     },
 
     #' @description Get the content-encoding header value
     #' @return (character) the content-encoding value
     content_encoding = function() {
-       self$get_header("content-encoding")[1]
+      self$get_header("content-encoding")[1]
     },
 
     #' @description Checks if the encoding is one of "gzip" or "deflate"
     #' @return logical
     is_compressed = function() {
-       self$content_encoding() %in% c("gzip", "deflate")
+      self$content_encoding() %in% c("gzip", "deflate")
     }
   )
 )

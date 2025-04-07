@@ -6,7 +6,7 @@ vcr_configure(dir = tmpdir)
 test_that("quiet works", {
   library(crul)
   con <- HttpClient$new(hb())
-  # default: quiet=TRUE 
+  # default: quiet=TRUE
   expect_true(vcr_configuration()$quiet)
   expect_message(
     use_cassette("foo3", con$get("get")),
@@ -20,7 +20,7 @@ test_that("quiet works", {
     use_cassette("foo2", con$get("get")),
     NA
   )
-  
+
   # quiet=FALSE
   vcr_configure(quiet = FALSE)
   expect_false(vcr_configuration()$quiet)

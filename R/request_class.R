@@ -68,8 +68,18 @@ Request <- R6::R6Class(
     #' @param skip_port_stripping (logical) whether to strip the port.
     #' default: `FALSE`
     #' @return A new `Request` object
-    initialize = function(method, uri, body, headers, opts, disk,
-      fields, output, policies, skip_port_stripping = FALSE) {
+    initialize = function(
+      method,
+      uri,
+      body,
+      headers,
+      opts,
+      disk,
+      fields,
+      output,
+      policies,
+      skip_port_stripping = FALSE
+    ) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
         if (inherits(body, "list")) {
@@ -90,36 +100,39 @@ Request <- R6::R6Class(
         self$host <- tmp$domain
         self$path <- tmp$path
         self$query <- tmp$parameter
-       }
-       if (!missing(opts)) self$opts <- opts
-       if (!missing(disk)) self$disk <- disk
-       if (!missing(fields)) self$fields <- fields
-       if (!missing(output)) self$output <- output
-       if (!missing(policies)) self$policies <- policies
-     },
+      }
+      if (!missing(opts)) self$opts <- opts
+      if (!missing(disk)) self$disk <- disk
+      if (!missing(fields)) self$fields <- fields
+      if (!missing(output)) self$output <- output
+      if (!missing(policies)) self$policies <- policies
+    },
 
     #' @description Convert the request to a list
     #' @return list
     to_hash = function() {
-       self$hash <- list(
-         method  = self$method,
-         uri     = self$uri,
-         body    = serializable_body(self$body, self$opts$preserve_exact_body_bytes %||% FALSE),
-         headers = self$headers,
-         disk = self$disk
-       )
-       return(self$hash)
-     },
+      self$hash <- list(
+        method = self$method,
+        uri = self$uri,
+        body = serializable_body(
+          self$body,
+          self$opts$preserve_exact_body_bytes %||% FALSE
+        ),
+        headers = self$headers,
+        disk = self$disk
+      )
+      return(self$hash)
+    },
 
     #' @description Convert the request to a list
     #' @param hash a list
     #' @return a new `Request` object
     from_hash = function(hash) {
       Request$new(
-        method  = hash[['method']],
-        uri     = hash[['uri']],
+        method = hash[['method']],
+        uri = hash[['uri']],
         # body    = hash[['body']],
-        body    = body_from(hash[['body']]),
+        body = body_from(hash[['body']]),
         headers = hash[['headers']],
         disk = hash[['disk']]
       )
@@ -129,7 +142,10 @@ Request <- R6::R6Class(
     without_standard_port = function(uri) {
       if (is.null(uri)) return(uri)
       u <- private$parsed_uri(uri)
-      if (paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in% c('http', 'https/443')) {
+      if (
+        paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in%
+          c('http', 'https/443')
+      ) {
         return(uri)
       }
       u$port <- NA
@@ -198,9 +214,7 @@ is_base64 <- function(x, cassette) {
   hasb64str <- "base64_string" %in% names(x)
   if (hasb64str) return(TRUE)
 
-  if (
-    cassette$preserve_exact_body_bytes && "string" %in% names(x)
-  ) {
+  if (cassette$preserve_exact_body_bytes && "string" %in% names(x)) {
     # old base64 setup where it was stored in "string"
     message("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
     return(TRUE)

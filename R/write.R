@@ -99,13 +99,18 @@ write_interactions_json <- function(x, file, bytes) {
   z <- headers_remove(z)
   z <- query_params_remove(z)
   # combine with existing data on same file, if any
-  on_disk <- invisible(tryCatch(jsonlite::fromJSON(file, FALSE),
-    error = function(e) e))
+  on_disk <- invisible(tryCatch(
+    jsonlite::fromJSON(file, FALSE),
+    error = function(e) e
+  ))
   if (!inherits(on_disk, "error") && is.list(on_disk)) {
     z <- c(on_disk$http_interactions, z)
   }
   tmp <- jsonlite::toJSON(
-    list(http_interactions = z), auto_unbox = TRUE, pretty = vcr_c$json_pretty)
+    list(http_interactions = z),
+    auto_unbox = TRUE,
+    pretty = vcr_c$json_pretty
+  )
   tmp <- sensitive_remove(tmp)
   cat(paste0(tmp, "\n"), file = file)
 }

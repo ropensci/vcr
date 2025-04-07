@@ -1,6 +1,6 @@
 # generate actual httr2 response
 # request <- httr2::request("https://hb.opencpu.org/301")
-# 
+#
 serialize_to_httr2 <- function(request, response) {
   # request
   req <- webmockr::RequestSignature$new(
@@ -30,8 +30,16 @@ serialize_to_httr2 <- function(request, response) {
 }
 
 as_httr2_request <- function(x) {
-  structure(list(url = x$url$url, method = toupper(x$method),
-    headers = x$headers, body = x$body, fields = x$fields,
-    options = x$options, policies = x$policies),
-  class = "httr2_request")
+  structure(
+    list(
+      url = x$url$url,
+      method = toupper(x$method),
+      headers = x$headers,
+      body = x$body,
+      fields = x$fields,
+      options = x$options,
+      policies = x$policies
+    ),
+    class = "httr2_request"
+  )
 }

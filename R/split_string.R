@@ -7,5 +7,5 @@
 #' str_splitter(str, 5L)
 #' }
 str_splitter <- function(str, length) {
-	gsub(sprintf("(.{%s})", length), "\\1 ", str)
+  gsub(sprintf("(.{%s})", length), "\\1 ", str)
 }

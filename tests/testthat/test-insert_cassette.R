@@ -19,13 +19,16 @@ test_that("insert_cassette fails well", {
 
   # update_content_length_header valid type
   expect_error(
-    suppressMessages(insert_cassette("newbar3", update_content_length_header = 5)),
+    suppressMessages(insert_cassette(
+      "newbar3",
+      update_content_length_header = 5
+    )),
     "update_content_length_header must be of class logical"
   )
 
   # preserve_exact_body_bytes valid type
   expect_error(
-    suppressMessages(insert_cassette("newbar4",  preserve_exact_body_bytes = 5)),
+    suppressMessages(insert_cassette("newbar4", preserve_exact_body_bytes = 5)),
     "preserve_exact_body_bytes must be of class logical"
   )
 

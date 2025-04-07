@@ -32,8 +32,12 @@ stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
 assert <- function(x, y) {
   if (!is.null(x)) {
     if (!inherits(x, y)) {
-      stop(deparse(substitute(x)), " must be of class ",
-           paste0(y, collapse = ", "), call. = FALSE)
+      stop(
+        deparse(substitute(x)),
+        " must be of class ",
+        paste0(y, collapse = ", "),
+        call. = FALSE
+      )
     }
   }
   invisible(x)
@@ -59,8 +63,10 @@ check_for_a_pkg <- function(x) {
 }
 
 has_internet <- function() {
-  z <- try(suppressWarnings(readLines('https://www.google.com', n = 1)),
-    silent = TRUE)
+  z <- try(
+    suppressWarnings(readLines('https://www.google.com', n = 1)),
+    silent = TRUE
+  )
   !inherits(z, "try-error")
 }
 
@@ -75,8 +81,7 @@ can_charToRaw <- function(x) {
 
 stp <- function(...) stop(..., call. = FALSE)
 check_cassette_name <- function(x) {
-  if (grepl("\\s", x))
-    stp("no spaces allowed in cassette names")
+  if (grepl("\\s", x)) stp("no spaces allowed in cassette names")
   if (grepl("\\.yml$|\\.yaml$", x))
     stp("don't include a cassette path extension")
   # the below adapted from fs::path_sanitize, which adapted
@@ -87,27 +92,29 @@ check_cassette_name <- function(x) {
   windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
   windows_trailing <- "[. ]+$"
   if (grepl(illegal, x))
-    stp("none of the following characters allowed in cassette ",
-      "names: (/, ?, <, >, \\, :, *, |, and \")")
-  if (grepl(control, x))
-    stp("no control characters allowed in cassette names")
-  if (grepl(reserved, x))
-    stp("cassette names can not be simply ., .., etc.")
+    stp(
+      "none of the following characters allowed in cassette ",
+      "names: (/, ?, <, >, \\, :, *, |, and \")"
+    )
+  if (grepl(control, x)) stp("no control characters allowed in cassette names")
+  if (grepl(reserved, x)) stp("cassette names can not be simply ., .., etc.")
   if (grepl(windows_reserved, x))
     stp("cassette names can not have reserved windows strings")
   if (grepl(windows_trailing, x))
     stp("cassette names can not have a trailing .")
-  if (nchar(x) > 255)
-    stp("cassette name can not be > 255 characters")
+  if (nchar(x) > 255) stp("cassette name can not be > 255 characters")
 }
 
 check_request_matchers <- function(x) {
   mro <- c("method", "uri", "headers", "host", "path", "body", "query")
   if (!all(x %in% mro)) {
-    stop("1 or more 'match_requests_on' values (",
-         paste0(x, collapse = ", "),
-         ") is not in the allowed set: ",
-         paste0(mro, collapse = ", "), call. = FALSE)
+    stop(
+      "1 or more 'match_requests_on' values (",
+      paste0(x, collapse = ", "),
+      ") is not in the allowed set: ",
+      paste0(mro, collapse = ", "),
+      call. = FALSE
+    )
   }
   x
 }
@@ -116,8 +123,13 @@ check_record_mode <- function(x) {
   stopifnot(length(x) == 1, is.character(x))
   recmodes <- c("none", "once", "new_episodes", "all")
   if (!x %in% recmodes) {
-    stop("'record' value of '", x, "' is not in the allowed set: ",
-         paste0(recmodes, collapse = ", "), call. = FALSE)
+    stop(
+      "'record' value of '",
+      x,
+      "' is not in the allowed set: ",
+      paste0(recmodes, collapse = ", "),
+      call. = FALSE
+    )
   }
   x
 }

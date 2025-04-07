@@ -4,7 +4,7 @@ test_that("can_rawToChar", {
   # non-raw class can not be converted
   expect_false(can_rawToChar(5))
   expect_false(can_rawToChar("foo bar"))
-  
+
   # raw from char can be converted
   aa <- charToRaw("foo bar")
   expect_is(aa, "raw")
@@ -29,7 +29,7 @@ test_that("is_base64", {
 
   expect_error(is_base64(), "\"x\" is missing")
   expect_false(is_base64(base64enc::base64encode(charToRaw("foo")), not64))
-  
+
   expect_true(is_base64(list(base64_string = "adfadsf"), is64))
   z = expect_message(is_base64(list(string = "adfadsf"), is64))
   expect_true(z)

@@ -87,7 +87,8 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
       "test_ignore_host.yml",
       "test_ignore_host_ignored.yml",
       "test_ignore_localhost_ignored.yml",
-      "test_ignore_localhost.yml")
+      "test_ignore_localhost.yml"
+    )
     unlink(file.path(vcr_configuration()$dir, files))
   })
 
@@ -113,10 +114,10 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
     HttpClient$new("https://scottchamberlain.info")$get()
   })
 
-  read_cas <- function(x) suppressWarnings(yaml::yaml.load_file(x))$http_interactions
+  read_cas <- function(x)
+    suppressWarnings(yaml::yaml.load_file(x))$http_interactions
   expect_equal(length(read_cas(cas_not_ignored$file())), 2)
   expect_equal(length(read_cas(cas_ignored$file())), 1)
-
 
   # IGNORE LOCALHOST
   # Start python simple server on cli: python3 -m http.server

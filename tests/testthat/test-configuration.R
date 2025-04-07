@@ -8,8 +8,8 @@ teardown({
 test_that("VCRConfig", {
   expect_is(VCRConfig, "R6ClassGenerator")
   cl <- vcr_configuration()
-  expect_is(cl,  "R6")
-  expect_is(cl,  "VCRConfig")
+  expect_is(cl, "R6")
+  expect_is(cl, "VCRConfig")
 })
 
 test_that("config fails well with invalid record mode", {

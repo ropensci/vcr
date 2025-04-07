@@ -2,16 +2,20 @@ get_method <- function(x) {
   x <- as.character(x)
   tmp <- grep(
     "(get)$|(post)$|(put)$|(delete)$|(options)$|(patch)$|(head)$",
-    tolower(x), value = TRUE)
+    tolower(x),
+    value = TRUE
+  )
   tmp <- sub("httr::", "", tmp)
   if (length(tmp) == 0) NULL else tmp
 }
 
 is_url <- function(x) {
   grepl(
-    "https?://", x, ignore.case = TRUE) ||
-    grepl("localhost:[0-9]{4}", x, ignore.case = TRUE
-    )
+    "https?://",
+    x,
+    ignore.case = TRUE
+  ) ||
+    grepl("localhost:[0-9]{4}", x, ignore.case = TRUE)
 }
 
 get_uri <- function(x) {
@@ -40,10 +44,14 @@ parseurl <- function(x) {
   tmp <- urltools::url_parse(x)
   tmp <- as.list(tmp)
   if (!is.na(tmp$parameter)) {
-    tmp$parameter <- sapply(strsplit(tmp$parameter, "&")[[1]], function(z) {
-      zz <- strsplit(z, split = "=")[[1]]
-      as.list(stats::setNames(zz[2], zz[1]))
-    }, USE.NAMES = FALSE)
+    tmp$parameter <- sapply(
+      strsplit(tmp$parameter, "&")[[1]],
+      function(z) {
+        zz <- strsplit(z, split = "=")[[1]]
+        as.list(stats::setNames(zz[2], zz[1]))
+      },
+      USE.NAMES = FALSE
+    )
   }
   tmp
 }

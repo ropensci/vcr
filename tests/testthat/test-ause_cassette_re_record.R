@@ -6,7 +6,7 @@ mydir <- file.path(tempdir(), "use_cassette_re_record")
 conn <- crul::HttpClient$new(hb())
 # vcr::vcr_configure(
 #   dir = mydir,
-#   log = TRUE, 
+#   log = TRUE,
 #   log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
 # )
 yml_path <- file.path(vcr_c$dir, "re_record1.yml")
@@ -17,30 +17,39 @@ test_that("use_cassette options: re_record_interval", {
   unlink(file.path(vcr_c$dir, "re_record1.yml"))
 
   # first use
-  use_cassette("re_record1", {
-    res <- conn$get("get")
-  },
-  re_record_interval = 10L,
-  clean_outdated_http_interactions = TRUE)
+  use_cassette(
+    "re_record1",
+    {
+      res <- conn$get("get")
+    },
+    re_record_interval = 10L,
+    clean_outdated_http_interactions = TRUE
+  )
   rr1 <- yaml::yaml.load_file(yml_path)
 
   # second use, not expired, no change in recorded_at value
-  use_cassette("re_record1", {
-    res <- conn$get("get")
-  },
-  re_record_interval = 10L,
-  clean_outdated_http_interactions = TRUE)
+  use_cassette(
+    "re_record1",
+    {
+      res <- conn$get("get")
+    },
+    re_record_interval = 10L,
+    clean_outdated_http_interactions = TRUE
+  )
   rr2 <- yaml::yaml.load_file(yml_path)
 
   expect_equal(rr1$recorded_at, rr2$recorded_at)
 
   # third use, Sys.sleep, now expired, A change in recorded_at value
   Sys.sleep(10)
-  use_cassette("re_record1", {
-    res <- conn$get("get")
-  },
-  re_record_interval = 10L,
-  clean_outdated_http_interactions = TRUE)
+  use_cassette(
+    "re_record1",
+    {
+      res <- conn$get("get")
+    },
+    re_record_interval = 10L,
+    clean_outdated_http_interactions = TRUE
+  )
   rr3 <- yaml::yaml.load_file(yml_path)
 
   # tests
@@ -49,14 +58,14 @@ test_that("use_cassette options: re_record_interval", {
 
   ## 1st and 2nd should be identical
   expect_true(
-    rr1$http_interactions[[1]]$recorded_at == 
-    rr2$http_interactions[[1]]$recorded_at
+    rr1$http_interactions[[1]]$recorded_at ==
+      rr2$http_interactions[[1]]$recorded_at
   )
 
   ## 1st and 3rd should be different
   expect_true(
     rr1$http_interactions[[1]]$recorded_at <
-    rr3$http_interactions[[1]]$recorded_at
+      rr3$http_interactions[[1]]$recorded_at
   )
 })
 

@@ -3,8 +3,8 @@ context("Request")
 test_that("Request basic stuff", {
   expect_is(Request, "R6ClassGenerator")
   aa <- Request$new()
-  expect_is(aa,  "R6")
-  expect_is(aa,  "Request")
+  expect_is(aa, "R6")
+  expect_is(aa, "Request")
 
   # vars
   expect_null(aa$disk)
@@ -20,8 +20,8 @@ test_that("Request basic stuff", {
   expect_false(aa$skip_port_stripping)
 
   # methods
-  expect_is(aa$from_hash,  "function")
-  expect_is(aa$to_hash,  "function")
+  expect_is(aa$from_hash, "function")
+  expect_is(aa$to_hash, "function")
 })
 
 test_that("Request usage", {

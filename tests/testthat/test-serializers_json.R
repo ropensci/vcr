@@ -45,12 +45,18 @@ test_that("JSON usage", {
   expect_length(jsonlite::fromJSON(cc$file(), FALSE)[[1]], 2)
 
   # preserve exact body bytes
-  dd <- use_cassette("testing5", {
-    raf <- crul::HttpClient$new(hb("/get"))$get(
-      query=list(cheese="string"))
-    raz <- crul::HttpClient$new(hb("/post"))$post(
-      body = list(foo = "bar", baz = "ball"))
-  }, preserve_exact_body_bytes = TRUE)
+  dd <- use_cassette(
+    "testing5",
+    {
+      raf <- crul::HttpClient$new(hb("/get"))$get(
+        query = list(cheese = "string")
+      )
+      raz <- crul::HttpClient$new(hb("/post"))$post(
+        body = list(foo = "bar", baz = "ball")
+      )
+    },
+    preserve_exact_body_bytes = TRUE
+  )
   expect_is(raf, "HttpResponse")
   expect_is(raz, "HttpResponse")
   expect_length(jsonlite::fromJSON(dd$file(), FALSE)[[1]], 2)
@@ -63,6 +69,5 @@ test_that("JSON fails well", {
 
   z <- JSON$new()
   # if no path specified, fails with useful message as is
-  expect_error(suppressWarnings(z$deserialize()),
-    "cannot open the connection")
+  expect_error(suppressWarnings(z$deserialize()), "cannot open the connection")
 })

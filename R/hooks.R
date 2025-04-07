@@ -6,7 +6,7 @@
 # x$hooks
 
 #' @title Hooks class
-#' 
+#'
 #' @description Helps define new hooks, hold hooks, and accessors to get and
 #' use hooks.
 #'
@@ -59,10 +59,7 @@ Hooks <- R6::R6Class(
     make_hook = function(x, plac, fun) {
       defhk <- DefinedHooks$new()
       self$hooks[[x]] <-
-        defhk$set_hook(name = x,
-                       placement_method = plac,
-                       fun = fun
-        )
+        defhk$set_hook(name = x, placement_method = plac, fun = fun)
     }
   )
 )

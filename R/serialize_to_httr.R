@@ -55,8 +55,16 @@ httr_ops <- function(method, w) {
   return(w)
 }
 as_httr_request <- function(x) {
-  structure(list(method = toupper(x$method), url = x$url$url,
-    headers = keep_last(x$headers), fields = x$fields,
-    options = httr_ops(x$method, compact(keep_last(x$options))),
-    auth_token = x$auth, output = x$output), class = "request")
+  structure(
+    list(
+      method = toupper(x$method),
+      url = x$url$url,
+      headers = keep_last(x$headers),
+      fields = x$fields,
+      options = httr_ops(x$method, compact(keep_last(x$options))),
+      auth_token = x$auth,
+      output = x$output
+    ),
+    class = "request"
+  )
 }

@@ -36,7 +36,14 @@ test_that("encoding_guess", {
   expect_equal(suppressMessages(encoding_guess("asdff")), "UTF-8")
   expect_message(encoding_guess("asdff"), "encoding couldn't be detected")
   expect_equal(encoding_guess("asdff", bytes = TRUE), "ASCII-8BIT")
-  expect_equal(encoding_guess("asdff", bytes = TRUE, force_guess = FALSE), "ASCII-8BIT")
-  expect_equal(suppressMessages(
-    encoding_guess("asdff", bytes = TRUE, force_guess = TRUE)), "UTF-8")
+  expect_equal(
+    encoding_guess("asdff", bytes = TRUE, force_guess = FALSE),
+    "ASCII-8BIT"
+  )
+  expect_equal(
+    suppressMessages(
+      encoding_guess("asdff", bytes = TRUE, force_guess = TRUE)
+    ),
+    "UTF-8"
+  )
 })

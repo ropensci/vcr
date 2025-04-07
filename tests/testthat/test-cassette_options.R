@@ -1,6 +1,9 @@
 test_that("Cassette options", {
-  cl <- Cassette$new(name = "stuff", re_record_interval = 1000L,
-    clean_outdated_http_interactions = TRUE)
+  cl <- Cassette$new(
+    name = "stuff",
+    re_record_interval = 1000L,
+    clean_outdated_http_interactions = TRUE
+  )
   expect_is(cl, "R6")
   expect_is(cl, "Cassette")
 

@@ -67,7 +67,7 @@ test_that("httr use_cassette works", {
   expect_null(x$request$fields)
   expect_true(x$request$options$httpget)
   expect_is(x$request$output, "write_function")
-  
+
   # request - 2nd http call
   expect_is(x2$request, "request")
   expect_equal(x2$request$method, "GET")
@@ -99,9 +99,13 @@ context("adapter-httr: use_cassette w/ preserve_exact_body_bytes")
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
-  out <- use_cassette("httr_test2", {
-    x <- GET(hb("/404"))
-  }, preserve_exact_body_bytes = TRUE)
+  out <- use_cassette(
+    "httr_test2",
+    {
+      x <- GET(hb("/404"))
+    },
+    preserve_exact_body_bytes = TRUE
+  )
 
   # cassette
   expect_is(out, "Cassette")
@@ -117,7 +121,8 @@ test_that("httr use_cassette works", {
   # response body
   str <- yaml::yaml.load_file(out$manfile)
   str <- rawToChar(base64enc::base64decode(
-    str$http_interactions[[1]]$response$body$base64_string))
+    str$http_interactions[[1]]$response$body$base64_string
+  ))
   expect_is(str, "character")
   expect_match(str, "404")
   expect_match(str, "DOCTYPE HTML")
@@ -159,17 +164,18 @@ test_that("httr w/ >1 request per cassette", {
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
   expect_is(str, "list")
   expect_is(str[[3]], "list")
-  expect_match(str[[3]]$request$uri , "418")
+  expect_match(str[[3]]$request$uri, "418")
   expect_match(str[[3]]$response$body$string, "teapot")
 
   # cleanup
-  unlink(file.path(vcr_configuration()$dir,
-    "multiple_queries_httr_record_once.yml"))
+  unlink(file.path(
+    vcr_configuration()$dir,
+    "multiple_queries_httr_record_once.yml"
+  ))
 })
 
 context("adapter-httr: use_cassette w/ simple auth")
 test_that("httr works with simple auth and hides auth details", {
-
   use_cassette("httr_test_simple_auth", {
     x <- GET(hb("/basic-auth/foo/bar"), authenticate("foo", "bar"))
   })
@@ -183,7 +189,9 @@ test_that("httr works with simple auth and hides auth details", {
   yml <- yaml::yaml.load_file(path)
 
   expect_false(grepl("Authorization", chars))
-  expect_false("Authorization" %in% names(yml$http_interactions[[1]]$request$headers))
+  expect_false(
+    "Authorization" %in% names(yml$http_interactions[[1]]$request$headers)
+  )
 
   # cleanup
   unlink(file.path(vcr_configuration()$dir, "httr_test_simple_auth.yml"))
@@ -228,8 +236,7 @@ test_that("httr POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("httr_post_upload_file", {
-    b <- POST(hb("/post"),
-      body = list(y = httr::upload_file(ff)))
+    b <- POST(hb("/post"), body = list(y = httr::upload_file(ff)))
   })
   expect_false(out4$is_empty())
   expect_is(b, "response")
@@ -239,7 +246,7 @@ test_that("httr POST requests works", {
   expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
   unlink(ff)
-  
+
   ## upload_file not in a list
   # out6 <- use_cassette("httr_post_upload_file_no_list", {
   #   d <- POST(hb("/post"),

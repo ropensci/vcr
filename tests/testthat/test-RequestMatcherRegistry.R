@@ -12,16 +12,36 @@ test_that("RequestMatcherRegistry contains the right stuff", {
 })
 
 test_that("RequestMatcherRegistry basic functionality works", {
-  one <- list(method = "get", uri = "http://foo.bar",
-              body = '{"key": "value"}', headers = list(a = 5, b = 6))
-  two <- list(method = "post", uri = "http://foo.bar/world",
-              body = '{"key": "value"}', headers = list(a = 5, c = 7))
-  three <- list(method = "get", uri = "http://foo.bar?stuff=things",
-              body = '{"key": "another-value"}', headers = list(a = 5, c = 7))
-  four <- list(method = "post", uri = "http://foo.bar?stuff=things7",
-                body = '{"key": "another-value"}', headers = list(a = 5, c = 7))
-  five <- list(method = "post", uri = "http://foo.bar/world?stuff=things7",
-               body = '{"key": "another-value"}', headers = list(a = 5, c = 7))
+  one <- list(
+    method = "get",
+    uri = "http://foo.bar",
+    body = '{"key": "value"}',
+    headers = list(a = 5, b = 6)
+  )
+  two <- list(
+    method = "post",
+    uri = "http://foo.bar/world",
+    body = '{"key": "value"}',
+    headers = list(a = 5, c = 7)
+  )
+  three <- list(
+    method = "get",
+    uri = "http://foo.bar?stuff=things",
+    body = '{"key": "another-value"}',
+    headers = list(a = 5, c = 7)
+  )
+  four <- list(
+    method = "post",
+    uri = "http://foo.bar?stuff=things7",
+    body = '{"key": "another-value"}',
+    headers = list(a = 5, c = 7)
+  )
+  five <- list(
+    method = "post",
+    uri = "http://foo.bar/world?stuff=things7",
+    body = '{"key": "another-value"}',
+    headers = list(a = 5, c = 7)
+  )
   a <- Request$new()$from_hash(one)
   b <- Request$new()$from_hash(two)
   c <- Request$new()$from_hash(three)
@@ -77,7 +97,9 @@ test_that("RequestMatcherRegistry basic functionality works", {
   expect_true(request_matchers$registry$path$matches(b, e))
   ## trailing slash is removed
   expect_true(request_matchers$registry$path$matches(
-    list(path="foo"), list(path="foo/")))
+    list(path = "foo"),
+    list(path = "foo/")
+  ))
 
   # query
   expect_true(request_matchers$registry$body_as_json$matches(a, b))
