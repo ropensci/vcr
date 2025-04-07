@@ -1,5 +1,3 @@
-context("serializers: JSON")
-
 test_that("JSON basic stuff", {
   expect_is(JSON, "R6ClassGenerator")
   aa <- JSON$new()

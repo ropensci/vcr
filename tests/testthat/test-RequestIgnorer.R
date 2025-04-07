@@ -1,5 +1,3 @@
-context("RequestIgnorer")
-
 test_that("RequestIgnorer basic stuff", {
   expect_is(RequestIgnorer, "R6ClassGenerator")
   aa <- RequestIgnorer$new()

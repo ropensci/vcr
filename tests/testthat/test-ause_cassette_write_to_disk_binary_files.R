@@ -1,5 +1,3 @@
-context("use_cassette: handle binary files on disk")
-
 tmpdir <- tempdir()
 vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 

@@ -1,5 +1,3 @@
-context("handling images: httr")
-
 tmpdir <- tempdir()
 vcr_configure(dir = tmpdir)
 
@@ -50,8 +48,6 @@ test_that("use_cassette w/ with images: httr", {
   expect_is(httr::content(res2), "array")
   expect_equal(length(res2$content), 35588)
 })
-
-context("handling images: crul")
 
 test_that("use_cassette w/ with images: crul", {
   skip_on_cran()

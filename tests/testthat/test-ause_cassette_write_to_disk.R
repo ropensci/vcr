@@ -1,5 +1,3 @@
-context("use_cassette: write to disk")
-
 vcr_configure_reset()
 tmpdir_wdp <- file.path(tempdir(), "write_disk_path")
 vcr_configure(dir = tmpdir_wdp)

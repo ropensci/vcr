@@ -1,7 +1,6 @@
 tmpdir <- tempdir()
 vcr_configure(dir = tmpdir, warn_on_empty_cassette = FALSE)
 
-context("cassettes")
 test_that("cassettes works", {
   aa <- cassettes()
   expect_is(aa, "list")
@@ -23,7 +22,6 @@ unlink(file.path(vcr_configuration()$dir, "foobar24.yml"))
 
 # FIXME: add tests for on_disk and verb params
 
-context("current_cassette")
 test_that("current_cassette works", {
   # no cassettes in use
   aa <- current_cassette()
@@ -41,7 +39,6 @@ test_that("current_cassette works", {
 
 unlink(file.path(vcr_configuration()$dir, "rrrrrrrrrrr.yml"))
 
-context("cassette_path")
 test_that("cassette_path works", {
   # before vcr_config set, there's a temp dir
   aa <- cassette_path()

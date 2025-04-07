@@ -1,5 +1,3 @@
-context("HttpInteraction")
-
 test_that("HttpInteraction", {
   crul::mock(FALSE)
 

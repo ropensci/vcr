@@ -1,5 +1,3 @@
-context("use_vcr works")
-
 test_that("use_vcr works", {
   skip_on_cran()
 

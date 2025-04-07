@@ -1,5 +1,3 @@
-context("RequestMatcherRegistry")
-
 test_that("RequestMatcherRegistry contains the right stuff", {
   expect_is(request_matchers, "RequestMatcherRegistry")
   expect_is(request_matchers$default_matchers, "list")

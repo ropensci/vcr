@@ -1,7 +1,6 @@
 tmpdir <- tempdir()
 vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 
-context("use_cassette: works as expected")
 test_that("use_cassette works as expected", {
   skip_on_cran()
 
@@ -39,7 +38,6 @@ test_that("use_cassette works as expected", {
 })
 
 
-context("use_cassette fails well")
 test_that("use_cassette fails well", {
 
   # requires a code block

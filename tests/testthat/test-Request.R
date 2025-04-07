@@ -1,5 +1,3 @@
-context("Request")
-
 test_that("Request basic stuff", {
   expect_is(Request, "R6ClassGenerator")
   aa <- Request$new()

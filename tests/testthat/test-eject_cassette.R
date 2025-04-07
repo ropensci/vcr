@@ -1,5 +1,3 @@
-context("eject_cassette")
-
 vcr_configure(warn_on_empty_cassette = FALSE)
 
 test_that("eject_cassette", {

@@ -1,5 +1,3 @@
-context("Configuration")
-
 teardown({
   vcr_configure_reset()
   vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))

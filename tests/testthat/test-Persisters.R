@@ -1,5 +1,3 @@
-context("Persisters")
-
 test_that("Persisters", {
   expect_is(Persisters, "R6ClassGenerator")
   cl <- Persisters$new()

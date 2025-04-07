@@ -1,5 +1,3 @@
-context("write_interactions")
-
 # body <- readRDS(file = "~/d1xmlbody.rds")
 # body <- substring(body, 1, 3000)
 # nchar(body)

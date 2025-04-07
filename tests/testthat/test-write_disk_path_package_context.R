@@ -1,5 +1,3 @@
-context("write_disk_path: package context")
-
 test_that("use_cassette w/ request that writes to disk: crul", {
   skip_on_cran()
 

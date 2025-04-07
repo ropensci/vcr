@@ -1,5 +1,3 @@
-context("Cassette")
-
 test_that("Cassette", {
   expect_is(Cassette, "R6ClassGenerator")
   cl <- Cassette$new(name = "stuff")

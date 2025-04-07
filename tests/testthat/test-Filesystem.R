@@ -1,5 +1,3 @@
-context("FileSystem")
-
 test_that("FileSystem", {
   expect_is(FileSystem, "R6ClassGenerator")
   aa <- FileSystem$new()

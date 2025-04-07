@@ -3,7 +3,6 @@ skip_on_cran()
 library("httr")
 vcr_configure(dir = tempdir())
 
-context("adapter-httr: status code works")
 test_that("httr status code works", {
   skip_if_not_installed("xml2")
 
@@ -41,8 +40,6 @@ test_that("httr status code works", {
   unlink(file.path(vcr_configuration()$dir, "greencow.yml"))
 })
 
-
-context("adapter-httr: use_cassette works")
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
@@ -94,8 +91,6 @@ test_that("httr use_cassette works", {
   unlink(file.path(vcr_configuration()$dir, "httr_test1.yml"))
 })
 
-
-context("adapter-httr: use_cassette w/ preserve_exact_body_bytes")
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
@@ -126,8 +121,6 @@ test_that("httr use_cassette works", {
   unlink(file.path(vcr_configuration()$dir, "httr_test2.yml"))
 })
 
-
-context("adapter-httr: use_cassette w/ >1 request per cassette")
 test_that("httr w/ >1 request per cassette", {
   skip_if_not_installed("xml2")
 
@@ -167,7 +160,6 @@ test_that("httr w/ >1 request per cassette", {
     "multiple_queries_httr_record_once.yml"))
 })
 
-context("adapter-httr: use_cassette w/ simple auth")
 test_that("httr works with simple auth and hides auth details", {
 
   use_cassette("httr_test_simple_auth", {
@@ -189,7 +181,6 @@ test_that("httr works with simple auth and hides auth details", {
   unlink(file.path(vcr_configuration()$dir, "httr_test_simple_auth.yml"))
 })
 
-context("adapter-httr: POST requests works")
 test_that("httr POST requests works", {
   # body type: named list
   out <- use_cassette("httr_post_named_list", {

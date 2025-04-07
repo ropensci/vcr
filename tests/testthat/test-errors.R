@@ -1,5 +1,3 @@
-context("UnhandledHTTPRequestError")
-
 dir <- tempdir()
 invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 
@@ -43,8 +41,6 @@ unlink(file.path(vcr_configuration()$dir, "turtle.yml"))
 # reset configuration
 vcr_configure_reset()
 
-
-context("UnhandledHTTPRequestError: secret handling")
 
 ## API key in query param
 Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")

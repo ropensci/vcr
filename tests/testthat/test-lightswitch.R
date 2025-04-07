@@ -1,5 +1,3 @@
-context("lightswitch functions")
-
 test_that("default options set as expected", {
   expect_false(light_switch$turned_off)
   expect_false(light_switch$ignore_cassettes)

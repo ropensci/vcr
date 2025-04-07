@@ -3,7 +3,6 @@ skip_on_cran()
 library("crul")
 vcr_configure(dir = tempdir())
 
-context("adapter-crul: POST requests works")
 test_that("crul POST requests works", {
   # body type: named list
   out <- use_cassette("crul_post_named_list", {

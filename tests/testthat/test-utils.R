@@ -1,5 +1,3 @@
-context("utilities")
-
 test_that("can_rawToChar", {
   # non-raw class can not be converted
   expect_false(can_rawToChar(5))

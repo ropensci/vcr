@@ -1,5 +1,3 @@
-context("no_cassette_in_use")
-
 # dir <- tempdir()
 # invisible(vcr_configure(dir = dir))
 #

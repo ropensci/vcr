@@ -3,7 +3,6 @@ skip_on_cran()
 library("httr2")
 vcr_configure(dir = tempdir())
 
-context("adapter-httr2: status code works")
 test_that("httr2 status code works", {
   # httr2_obj <- request(hb("/getttttt"))
   # save(httr2_obj, file="tests/testthat/httr2_obj.rda", version = 2L)
@@ -43,8 +42,6 @@ test_that("httr2 status code works", {
   unlink(file.path(vcr_configuration()$dir, "bluecow"))
 })
 
-
-context("adapter-httr2: use_cassette works")
 test_that("httr2 use_cassette works", {
   out <- use_cassette("httr2_test1", {
     x <- request(hb("/get")) %>% req_perform()
@@ -88,8 +85,6 @@ test_that("httr2 use_cassette works", {
   unlink(file.path(vcr_configuration()$dir, "httr2_test1.yml"))
 })
 
-
-context("adapter-httr2: use_cassette w/ preserve_exact_body_bytes")
 test_that("httr2 use_cassette works", {
   out <- use_cassette("httr2_test2", {
     x <- request(hb("/get")) %>% req_perform()
@@ -118,7 +113,6 @@ test_that("httr2 use_cassette works", {
   unlink(file.path(vcr_configuration()$dir, "httr2_test2.yml"))
 })
 
-context("adapter-httr2: use_cassette w/ req_error")
 test_that("httr2 w/ req_error", {
   out <- use_cassette("httr2_errors_modify_with_req_error", {
     x404 <- request(hb("/status/404")) %>%
@@ -155,7 +149,6 @@ test_that("httr2 w/ req_error", {
     "httr2_errors_modify_with_req_error.yml"))
 })
 
-context("adapter-httr2: use_cassette just catch error")
 test_that("httr2 error", {
   use_cassette("httr2_errors_catch_error", {
     expect_error(
@@ -174,7 +167,6 @@ test_that("httr2 error", {
     "httr2_errors_catch_error.yml"))
 })
 
-context("adapter-httr2: use_cassette w/ multiple errors per cassette")
 test_that("httr2 w/ multiple errors per cassette", {
   use_cassette("multiple_errors_per_cassette", {
     expect_error(request(hb("/status/404")) %>% req_perform())
@@ -194,7 +186,6 @@ test_that("httr2 w/ multiple errors per cassette", {
 })
 
 ## httr removes the header, but with httr2 we have to explicity remove it
-context("adapter-httr2: use_cassette w/ simple auth")
 test_that("httr2 works with simple auth and hides auth details", {
   # Authorization header IS in the cassette after filtering
   use_cassette("httr2_test_simple_auth_no_filter", {
@@ -232,7 +223,6 @@ test_that("httr2 works with simple auth and hides auth details", {
   unlink(file.path(vcr_configuration()$dir, "httr2_test_simple_auth_yes_filter.yml"))
 })
 
-context("adapter-httr2: POST requests works")
 test_that("httr2 POST requests works", {
   # body type: named list
   out <- use_cassette("httr2_post_named_list", {

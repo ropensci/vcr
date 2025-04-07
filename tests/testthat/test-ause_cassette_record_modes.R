@@ -1,5 +1,3 @@
-context("use_cassette: record modes work as expected")
-
 library(crul, quietly = TRUE)
 mydir <- file.path(tempdir(), "use_cassette_record_mode")
 invisible(vcr_configure(dir = mydir))
