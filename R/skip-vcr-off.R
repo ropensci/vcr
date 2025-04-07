@@ -15,20 +15,19 @@
 #'
 #' @seealso [turn_off()]
 skip_if_vcr_off <- function() {
-
   if (!requireNamespace("testthat", quietly = TRUE)) {
     stop(
       paste0(
         "This function is meant to be used within testthat tests.",
         "Please install testthat."
       )
-      )
+    )
   }
 
   if (
     nzchar(Sys.getenv("VCR_TURN_OFF")) &&
-    as.logical(Sys.getenv("VCR_TURN_OFF"))
-    ) {
+      as.logical(Sys.getenv("VCR_TURN_OFF"))
+  ) {
     testthat::skip("Not run when vcr is off")
   }
 }

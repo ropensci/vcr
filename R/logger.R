@@ -77,8 +77,11 @@ vcr_log_info <- function(message, include_date = TRUE) {
 }
 
 make_prefix <- function() {
-  sprintf("[%s: '%s']", vcr_c$log_opts$log_prefix,
-    vcr__env$current_cassette %||% "<none>")
+  sprintf(
+    "[%s: '%s']",
+    vcr_c$log_opts$log_prefix,
+    vcr__env$current_cassette %||% "<none>"
+  )
 }
 
 vcr_log_write <- function(message) {

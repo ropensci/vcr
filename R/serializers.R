@@ -15,7 +15,7 @@
 #' aa$serializers
 #' yaml_serializer <- aa$serializers$new()
 #' yaml_serializer
-#' 
+#'
 #' x <- Serializers$new(name = "json")
 #' x$serializers$new()
 #' json_serializer <- x$serializers$new()
@@ -42,12 +42,17 @@ Serializers <- R6::R6Class(
 
   private = list(
     serialize_get = function() {
-      self$serializers <- switch(self$name,
+      self$serializers <- switch(
+        self$name,
         yaml = YAML,
         json = JSON,
-        stop(sprintf(
-          "The requested vcr cassette serializer (%s) is not registered.",
-          self$name), call. = FALSE)
+        stop(
+          sprintf(
+            "The requested vcr cassette serializer (%s) is not registered.",
+            self$name
+          ),
+          call. = FALSE
+        )
       )
     }
   )
@@ -64,7 +69,9 @@ serializer_fetch <- function(x = "yaml", name) {
 check_serializer <- function(x) {
   if (!x %in% c("yaml", "json")) {
     mssg <- sprintf(
-      "The requested vcr cassette serializer (%s) is not registered.", x)
+      "The requested vcr cassette serializer (%s) is not registered.",
+      x
+    )
     stop(mssg, call. = FALSE)
   }
 }

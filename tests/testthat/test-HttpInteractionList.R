@@ -12,17 +12,32 @@ test_that("HTTPInteractionList", {
   res3 <- crul::HttpClient$new(url = url3)$get()
 
   # requests
-  request <- Request$new("POST", uri = url,
-    body = body, headers = res$response_headers)
-  request2 <- Request$new("GET", uri = url2,
-    body = body, headers = res2$response_headers)
-  request3 <- Request$new("GET", uri = url3,
-    headers = res3$response_headers)
+  request <- Request$new(
+    "POST",
+    uri = url,
+    body = body,
+    headers = res$response_headers
+  )
+  request2 <- Request$new(
+    "GET",
+    uri = url2,
+    body = body,
+    headers = res2$response_headers
+  )
+  request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
   # response
-  response <- VcrResponse$new(res$status_http(), res$response_headers,
-     res$parse("UTF-8"), res$response_headers$status)
-  response2 <- VcrResponse$new(res2$status_http(), res2$response_headers,
-     res2$parse("UTF-8"), res2$response_headers$status)
+  response <- VcrResponse$new(
+    res$status_http(),
+    res$response_headers,
+    res$parse("UTF-8"),
+    res$response_headers$status
+  )
+  response2 <- VcrResponse$new(
+    res2$status_http(),
+    res2$response_headers,
+    res2$parse("UTF-8"),
+    res2$response_headers$status
+  )
 
   # make HTTPInteraction object
   inter <- HTTPInteraction$new(request = request, response = response)
@@ -30,8 +45,8 @@ test_that("HTTPInteractionList", {
 
   # make HTTPInteractionList object
   x <- suppressMessages(HTTPInteractionList$new(
-     interactions = list(inter, inter2),
-     request_matchers = vcr_configuration()$match_requests_on
+    interactions = list(inter, inter2),
+    request_matchers = vcr_configuration()$match_requests_on
   ))
 
   # objects and methods
@@ -52,10 +67,10 @@ test_that("HTTPInteractionList", {
   expect_is(suppressWarnings(x$response_for(request)), "VcrResponse")
 
   # private methods
-  ### need to remake the HTTPInteractionList object b/c response_for alters it 
+  ### need to remake the HTTPInteractionList object b/c response_for alters it
   x <- suppressMessages(HTTPInteractionList$new(
-     interactions = list(inter, inter2),
-     request_matchers = vcr_configuration()$match_requests_on
+    interactions = list(inter, inter2),
+    request_matchers = vcr_configuration()$match_requests_on
   ))
   priv <- x$.__enclos_env__$private
 
@@ -67,8 +82,8 @@ test_that("HTTPInteractionList", {
 
   # remake after response_for use
   x <- suppressMessages(HTTPInteractionList$new(
-     interactions = list(inter, inter2),
-     request_matchers = vcr_configuration()$match_requests_on
+    interactions = list(inter, inter2),
+    request_matchers = vcr_configuration()$match_requests_on
   ))
   priv <- x$.__enclos_env__$private
 
@@ -91,16 +106,15 @@ test_that("HTTPInteractionList", {
   expect_false(priv$interaction_matches_request(request, x$interactions[[2]]))
   expect_false(priv$interaction_matches_request(request2, x$interactions[[1]]))
   expect_true(priv$interaction_matches_request(request2, x$interactions[[2]]))
-  
+
   ### allow_playback_repeats=TRUE -> then we check the used interactions
   x <- suppressMessages(HTTPInteractionList$new(
-     interactions = list(inter, inter2),
-     request_matchers = vcr_configuration()$match_requests_on,
-     allow_playback_repeats = TRUE
+    interactions = list(inter, inter2),
+    request_matchers = vcr_configuration()$match_requests_on,
+    allow_playback_repeats = TRUE
   ))
   priv <- x$.__enclos_env__$private
   expect_false(priv$matching_used_interaction_for(request))
   x$response_for(request) # request used
-  expect_is(priv$matching_used_interaction_for(request),
-    "HTTPInteraction")
+  expect_is(priv$matching_used_interaction_for(request), "HTTPInteraction")
 })

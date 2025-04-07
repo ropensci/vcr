@@ -83,7 +83,10 @@ vcr::check_cassette_names()'
   setwd(dir)
   on.exit(setwd(og))
 
-  mm <- testthat::test_dir("tests/testthat", reporter = testthat::ListReporter$new())
+  mm <- testthat::test_dir(
+    "tests/testthat",
+    reporter = testthat::ListReporter$new()
+  )
   expect_equal(capture.output(mm[[1]]$results[[1]])[2], "As expected")
   expect_equal(capture.output(mm[[1]]$results[[2]])[2], "As expected")
 

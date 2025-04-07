@@ -46,7 +46,8 @@ test_that("crul POST requests works", {
   cat("hello world\n", file = ff)
   out4 <- use_cassette("crul_post_upload_file", {
     b <- HttpClient$new(hb("/post"))$post(
-      body = list(y = crul::upload(ff)))
+      body = list(y = crul::upload(ff))
+    )
   })
   expect_false(out4$is_empty())
   expect_is(b, "HttpResponse")
@@ -56,11 +57,12 @@ test_that("crul POST requests works", {
   expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
   unlink(ff)
-  
+
   ## upload_file not in a list
   out6 <- use_cassette("crul_post_upload_file_no_list", {
     d <- HttpClient$new(hb("/post"))$post(
-      body = crul::upload(system.file("CITATION")))
+      body = crul::upload(system.file("CITATION"))
+    )
   })
   expect_false(out6$is_empty())
   expect_is(d, "HttpResponse")
@@ -88,5 +90,8 @@ test_that("crul POST requests works", {
   unlink(file.path(vcr_configuration()$dir, "crul_post_raw.yml"))
   unlink(file.path(vcr_configuration()$dir, "crul_post_upload_file.yml"))
   unlink(file.path(vcr_configuration()$dir, "crul_post_null.yml"))
-  unlink(file.path(vcr_configuration()$dir, "crul_post_upload_file_no_list.yml"))
+  unlink(file.path(
+    vcr_configuration()$dir,
+    "crul_post_upload_file_no_list.yml"
+  ))
 })

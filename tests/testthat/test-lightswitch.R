@@ -69,8 +69,8 @@ test_that("lightswitch env var's", {
   invisible(z$eject())
 
   # after being turned off, insert_cassette throws an error
-  Sys.setenv(VCR_TURNED_OFF=TRUE)
-  Sys.setenv(VCR_IGNORE_CASSETTES=FALSE)
+  Sys.setenv(VCR_TURNED_OFF = TRUE)
+  Sys.setenv(VCR_IGNORE_CASSETTES = FALSE)
   expect_equal(Sys.getenv("VCR_TURN_OFF"), "")
   expect_equal(Sys.getenv("VCR_IGNORE_CASSETTES"), "FALSE")
   expect_equal(Sys.getenv("VCR_TURNED_OFF"), "TRUE")
@@ -80,9 +80,9 @@ test_that("lightswitch env var's", {
   # - insert_cassette returns `NULL`
   # - use_cassette returns `NULL` & block is run
   # - current_cassette returns `list()`
-  Sys.setenv(VCR_TURN_OFF=FALSE)
-  Sys.setenv(VCR_TURNED_OFF=TRUE)
-  Sys.setenv(VCR_IGNORE_CASSETTES=TRUE)
+  Sys.setenv(VCR_TURN_OFF = FALSE)
+  Sys.setenv(VCR_TURNED_OFF = TRUE)
+  Sys.setenv(VCR_IGNORE_CASSETTES = TRUE)
   expect_null(insert_cassette("asdffd"))
   uc <- use_cassette("asdffdddd", {
     yielded <- 55
@@ -93,25 +93,25 @@ test_that("lightswitch env var's", {
 })
 
 # reset lightswitch env vars
-Sys.setenv(VCR_TURN_OFF="")
-Sys.setenv(VCR_TURNED_OFF="")
-Sys.setenv(VCR_IGNORE_CASSETTES="")
+Sys.setenv(VCR_TURN_OFF = "")
+Sys.setenv(VCR_TURNED_OFF = "")
+Sys.setenv(VCR_IGNORE_CASSETTES = "")
 
 test_that("lightswitch env var handling fails well", {
   # various problems
-  Sys.setenv(VCR_TURN_OFF=4)
+  Sys.setenv(VCR_TURN_OFF = 4)
   expect_error(vcr_env_handle(), "invalid option for env var")
-  Sys.setenv(VCR_TURN_OFF="4")
+  Sys.setenv(VCR_TURN_OFF = "4")
   expect_error(vcr_env_handle(), "invalid option for env var")
-  Sys.setenv(VCR_TURN_OFF="adfasdfsfd")
+  Sys.setenv(VCR_TURN_OFF = "adfasdfsfd")
   expect_error(vcr_env_handle(), "invalid option for env var")
 
   # different boolean forms work
-  Sys.setenv(VCR_TURN_OFF="true")
+  Sys.setenv(VCR_TURN_OFF = "true")
   expect_null(vcr_env_handle())
-  Sys.setenv(VCR_TURN_OFF="FALSE")
+  Sys.setenv(VCR_TURN_OFF = "FALSE")
   expect_null(vcr_env_handle())
-  Sys.setenv(VCR_TURN_OFF=TRUE)
+  Sys.setenv(VCR_TURN_OFF = TRUE)
   expect_null(vcr_env_handle())
 })
 
@@ -122,9 +122,9 @@ unlink(file.path(vcr_configuration()$dir, "asdffdddd.yml"))
 unlink(file.path(vcr_configuration()$dir, "abcd.yml"))
 
 # reset lightswitch env vars
-Sys.setenv(VCR_TURN_OFF="")
-Sys.setenv(VCR_TURNED_OFF="")
-Sys.setenv(VCR_IGNORE_CASSETTES="")
+Sys.setenv(VCR_TURN_OFF = "")
+Sys.setenv(VCR_TURNED_OFF = "")
+Sys.setenv(VCR_IGNORE_CASSETTES = "")
 
 test_that("turned_off", {
   turn_on()

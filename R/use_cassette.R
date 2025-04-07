@@ -150,7 +150,9 @@
 #' two; res2
 #' }
 
-use_cassette <- function(name, ...,
+use_cassette <- function(
+  name,
+  ...,
   record = NULL,
   match_requests_on = NULL,
   update_content_length_header = FALSE,
@@ -159,9 +161,10 @@ use_cassette <- function(name, ...,
   persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL) {
-
-  cassette <- insert_cassette(name,
+  clean_outdated_http_interactions = NULL
+) {
+  cassette <- insert_cassette(
+    name,
     record = record,
     match_requests_on = match_requests_on,
     update_content_length_header = update_content_length_header,

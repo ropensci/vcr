@@ -9,7 +9,8 @@
 #' @title The JSON serializer
 #' @description class with methods for serializing via \pkg{jsonlite}
 #' @keywords internal
-JSON <- R6::R6Class("JSON",
+JSON <- R6::R6Class(
+  "JSON",
   inherit = Serializer,
   public = list(
     #' @description Create a new `JSON` object

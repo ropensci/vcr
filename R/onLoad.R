@@ -20,7 +20,7 @@ initialize_ivars <- function() {
   cassette_persisters <<- Persisters$new()
 }
 
-.onLoad <- function(libname, pkgname){
+.onLoad <- function(libname, pkgname) {
   # initialize vcr config object
   vcr_c <<- VCRConfig$new()
   # initialize hooks

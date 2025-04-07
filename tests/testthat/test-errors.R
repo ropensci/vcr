@@ -4,7 +4,11 @@ dir <- tempdir()
 invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 
 request <- Request$new(
-  "post", hb("/post?a=5"), "", list(foo = "bar"))
+  "post",
+  hb("/post?a=5"),
+  "",
+  list(foo = "bar")
+)
 
 test_that("UnhandledHTTPRequestError fails well", {
   z <- UnhandledHTTPRequestError$new(request)
@@ -51,16 +55,21 @@ Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
 Sys.setenv(HELLO_WORLD = "asdfadfasfsfs239823n23")
 dir <- tempdir()
 invisible(
-  vcr_configure(dir = dir, filter_sensitive_data = 
-    list(
+  vcr_configure(
+    dir = dir,
+    filter_sensitive_data = list(
       "<<foo_bar_key>>" = Sys.getenv("FOO_BAR"),
       "<<hello_world_key>>" = Sys.getenv("HELLO_WORLD")
     ),
     warn_on_empty_cassette = FALSE
   )
 )
-url <- paste0(hb("/get?api_key="), 
-  Sys.getenv("FOO_BAR"), "&other_secret=", Sys.getenv("HELLO_WORLD"))
+url <- paste0(
+  hb("/get?api_key="),
+  Sys.getenv("FOO_BAR"),
+  "&other_secret=",
+  Sys.getenv("HELLO_WORLD")
+)
 request <- Request$new("get", url, "")
 unlink(file.path(vcr_c$dir, "bunny"))
 cas <- suppressMessages(insert_cassette("bunny"))
@@ -97,16 +106,19 @@ vcr_configure_reset()
 Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
 dir <- tempdir()
 invisible(
-  vcr_configure(dir = dir, filter_sensitive_data =
-    list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
+  vcr_configure(
+    dir = dir,
+    filter_sensitive_data = list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
     warn_on_empty_cassette = FALSE
   )
 )
 url <- hb("/get")
 request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
 unlink(file.path(vcr_c$dir, "frog"))
-cas <- suppressMessages(insert_cassette("frog",
-  match_requests_on = c("method", "uri", "headers")))
+cas <- suppressMessages(insert_cassette(
+  "frog",
+  match_requests_on = c("method", "uri", "headers")
+))
 
 test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
@@ -136,8 +148,9 @@ vcr_configure_reset()
 Sys.setenv(HELLO_MARS = "asdfadfasfsfs239823n23")
 dir <- tempdir()
 invisible(
-  vcr_configure(dir = dir, filter_sensitive_data = 
-    list(
+  vcr_configure(
+    dir = dir,
+    filter_sensitive_data = list(
       "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
       "<<hello_mars_key>>" = Sys.getenv("HELLO_MARS")
     ),
@@ -175,10 +188,6 @@ eject_cassette()
 unlink(file.path(vcr_configuration()$dir, "bunny2.yml"))
 # reset configuration
 vcr_configure_reset()
-
-
-
-
 
 # FIXME: use this test block when body matching implemented
 ## API key in body

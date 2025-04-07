@@ -18,7 +18,7 @@ test_that("filter_query_parameters: remove", {
   con <- crul::HttpClient$new(hb("/get"))
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- con$get(query = list(Foo="bar"))
+    res_nofilters <- con$get(query = list(Foo = "bar"))
   })
   # Do filtering
   vcr_configure_reset()
@@ -26,12 +26,12 @@ test_that("filter_query_parameters: remove", {
   unlink(file.path(vcr_c$dir, "filterparams_remove.yml"))
   con <- crul::HttpClient$new(hb("/get"))
   cas1 <- use_cassette(name = "filterparams_remove", {
-    res1 <- con$get(query = list(Foo="bar"))
+    res1 <- con$get(query = list(Foo = "bar"))
   })
   cas2 <- use_cassette(name = "filterparams_remove", {
-    res2 <- con$get(query = list(Foo="bar"))
+    res2 <- con$get(query = list(Foo = "bar"))
   })
-  
+
   # with no filtering, request headers have Foo
   expect_true(grepl("Foo", res_nofilters$request$url$url))
   # with filtering, request params still in real request
@@ -47,8 +47,10 @@ test_that("filter_query_parameters: remove", {
   # Foo NOT found in cassette w/ filtering
   expect_false(grepl("Foo", yaml1$http_interactions[[1]]$request$uri))
   # casette objects from both requests identical
-  expect_identical(yaml::yaml.load_file(cas1$file()),
-    yaml::yaml.load_file(cas2$file()))
+  expect_identical(
+    yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file())
+  )
 })
 
 vcr_configure_reset()
@@ -65,20 +67,23 @@ test_that("filter_query_parameters: replace", {
   con <- crul::HttpClient$new(hb("/get"))
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- con$get(query = list(Foo="bar"))
+    res_nofilters <- con$get(query = list(Foo = "bar"))
   })
   # Do filtering
   vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_query_parameters = list(Foo = "placeholder"))
+  vcr_configure(
+    dir = mydir,
+    filter_query_parameters = list(Foo = "placeholder")
+  )
   unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
   con <- crul::HttpClient$new(hb("/get"))
   cas1 <- use_cassette(name = "filterparams_replace", {
-    res1 <- con$get(query = list(Foo="bar"))
+    res1 <- con$get(query = list(Foo = "bar"))
   })
   cas2 <- use_cassette(name = "filterparams_replace", {
-    res2 <- con$get(query = list(Foo="bar"))
+    res2 <- con$get(query = list(Foo = "bar"))
   })
-  
+
   # with no filtering, request headers have Foo
   expect_true(grepl("Foo", res_nofilters$request$url$url))
   # with filtering, request params still in real request
@@ -94,8 +99,10 @@ test_that("filter_query_parameters: replace", {
   # Foo NOT found in cassette w/ filtering
   expect_false(grepl("bar", yaml1$http_interactions[[1]]$request$uri))
   # casette objects from both requests identical
-  expect_identical(yaml::yaml.load_file(cas1$file()),
-    yaml::yaml.load_file(cas2$file()))
+  expect_identical(
+    yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file())
+  )
 })
 
 vcr_configure_reset()
@@ -114,19 +121,22 @@ test_that("filter_query_parameters: replace with secret", {
   vcr_configure(dir = mydir)
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- con$get(query = list(Foo=Sys.getenv("MY_KEY")))
+    res_nofilters <- con$get(query = list(Foo = Sys.getenv("MY_KEY")))
   })
   # Do filtering
   vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_query_parameters = list(Foo = c(Sys.getenv("MY_KEY"), "bar")))
+  vcr_configure(
+    dir = mydir,
+    filter_query_parameters = list(Foo = c(Sys.getenv("MY_KEY"), "bar"))
+  )
   unlink(file.path(vcr_c$dir, "filterparams_replacewith.yml"))
   cas1 <- use_cassette(name = "filterparams_replacewith", {
-    res1 <- con$get(query = list(Foo=Sys.getenv("MY_KEY")))
+    res1 <- con$get(query = list(Foo = Sys.getenv("MY_KEY")))
   })
   cas2 <- use_cassette(name = "filterparams_replacewith", {
-    res2 <- con$get(query = list(Foo=Sys.getenv("MY_KEY")))
+    res2 <- con$get(query = list(Foo = Sys.getenv("MY_KEY")))
   })
-  
+
   # with no filtering, request headers have Foo
   expect_true(grepl("my-secret-key", res_nofilters$request$url$url))
   # with filtering, request params still in real request
@@ -138,12 +148,17 @@ test_that("filter_query_parameters: replace with secret", {
   yaml1 <- yaml::yaml.load_file(cas1$file())
   yaml_no_filter <- yaml::yaml.load_file(cas_nofilters$file())
   # Foo found in cassette w/o filtering
-  expect_true(grepl("my-secret-key", yaml_no_filter$http_interactions[[1]]$request$uri))
+  expect_true(grepl(
+    "my-secret-key",
+    yaml_no_filter$http_interactions[[1]]$request$uri
+  ))
   # Foo NOT found in cassette w/ filtering
   expect_false(grepl("my-secret-key", yaml1$http_interactions[[1]]$request$uri))
   # casette objects from both requests identical
-  expect_identical(yaml::yaml.load_file(cas1$file()),
-    yaml::yaml.load_file(cas2$file()))
+  expect_identical(
+    yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file())
+  )
 
   Sys.unsetenv("MY_KEY")
 })
@@ -173,7 +188,7 @@ test_that("filter_query_parameters: remove (httr)", {
   cas2 <- use_cassette(name = "filterparams_remove", {
     res2 <- GET(hb("/get?Foo=bar"))
   })
-  
+
   # with no filtering, request headers have Foo
   expect_true(grepl("Foo", res_nofilters$request$url))
   # with filtering, request params still in real request
@@ -189,8 +204,10 @@ test_that("filter_query_parameters: remove (httr)", {
   # Foo NOT found in cassette w/ filtering
   expect_false(grepl("Foo", yaml1$http_interactions[[1]]$request$uri))
   # casette objects from both requests identical
-  expect_identical(yaml::yaml.load_file(cas1$file()),
-    yaml::yaml.load_file(cas2$file()))
+  expect_identical(
+    yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file())
+  )
 })
 
 vcr_configure_reset()
@@ -210,7 +227,10 @@ test_that("filter_query_parameters: replace (httr)", {
   })
   # Do filtering
   vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_query_parameters = list(Foo = "placeholder"))
+  vcr_configure(
+    dir = mydir,
+    filter_query_parameters = list(Foo = "placeholder")
+  )
   unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
   cas1 <- use_cassette(name = "filterparams_replace", {
     res1 <- GET(hb("/get?Foo=bar"))
@@ -218,7 +238,7 @@ test_that("filter_query_parameters: replace (httr)", {
   cas2 <- use_cassette(name = "filterparams_replace", {
     res2 <- GET(hb("/get?Foo=bar"))
   })
-  
+
   # with no filtering, request headers have Foo
   expect_true(grepl("Foo", res_nofilters$request$url))
   # with filtering, request params still in real request
@@ -234,8 +254,10 @@ test_that("filter_query_parameters: replace (httr)", {
   # Foo NOT found in cassette w/ filtering
   expect_false(grepl("bar", yaml1$http_interactions[[1]]$request$uri))
   # casette objects from both requests identical
-  expect_identical(yaml::yaml.load_file(cas1$file()),
-    yaml::yaml.load_file(cas2$file()))
+  expect_identical(
+    yaml::yaml.load_file(cas1$file()),
+    yaml::yaml.load_file(cas2$file())
+  )
 })
 
 vcr_configure_reset()

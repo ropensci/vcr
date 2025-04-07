@@ -6,15 +6,22 @@ cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)
 webmockr::webmockr_allow_net_connect()
 
-status <- list(status_code = 200, message = "OK",
-    explanation = "Request fulfilled, document follows")
+status <- list(
+  status_code = 200,
+  message = "OK",
+  explanation = "Request fulfilled, document follows"
+)
 
 test_that("response_summary works", {
   skip_on_cran()
 
   res <- cli$get("get", query = list(q = "stuff"))
-  x <- VcrResponse$new(res$status_http(), res$response_headers,
-     res$parse("UTF-8"), res$response_headers$status)
+  x <- VcrResponse$new(
+    res$status_http(),
+    res$response_headers,
+    res$parse("UTF-8"),
+    res$response_headers$status
+  )
 
   aa <- response_summary(x)
 
@@ -68,14 +75,13 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   # errors if using the old code in response_summary w/o useBytes=TRUE
   rv <- as.numeric(sub("\\.", "", paste0(R.version$major, R.version$minor)))
   if (rv <= 353) {
-    expect_is(substring(gsub("\n", " ", google_response), 1, 80), 
-      "character")
+    expect_is(substring(gsub("\n", " ", google_response), 1, 80), "character")
   }
-   # else {
-    ## doesn't error on Windows
-    # if (Sys.info()[['sysname']] != "Windows") {
-    #   expect_error(substring(gsub("\n", " ", google_response), 1, 80))
-    # }
+  # else {
+  ## doesn't error on Windows
+  # if (Sys.info()[['sysname']] != "Windows") {
+  #   expect_error(substring(gsub("\n", " ", google_response), 1, 80))
+  # }
   # }
 
   # response_summary doesn't error now with useBytes=TRUE

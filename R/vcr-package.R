@@ -21,13 +21,13 @@
 #'
 #' @section Request matching:
 #' See [request-matching] for help on the many request matching options.
-#' 
+#'
 #' @section Async:
-#' As of \pkg{crul} v1.5, `vcr` will work for async http requests with 
+#' As of \pkg{crul} v1.5, `vcr` will work for async http requests with
 #' \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
 #' async plumbing does not have any hooks for mocking via \pkg{webmockr}
 #' or recording real requests via this package
-#' 
+#'
 #' @keywords internal
 "_PACKAGE"
 

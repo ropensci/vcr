@@ -1,6 +1,7 @@
 #' Serializer class - base class for JSON/YAML serializers
 #' @keywords internal
-Serializer <- R6::R6Class("Serializer",
+Serializer <- R6::R6Class(
+  "Serializer",
   public = list(
     #' @field file_extension (character) A file extension
     file_extension = NULL,
@@ -15,7 +16,12 @@ Serializer <- R6::R6Class("Serializer",
     initialize = function(file_extension = NULL, path = NULL) {
       self$file_extension <- file_extension
       if (is.null(path)) {
-        self$path <- paste0(cassette_path(), "/", basename(tempfile()), self$file_extension)
+        self$path <- paste0(
+          cassette_path(),
+          "/",
+          basename(tempfile()),
+          self$file_extension
+        )
       } else {
         self$path <- paste0(cassette_path(), "/", path, self$file_extension)
       }
@@ -25,9 +31,11 @@ Serializer <- R6::R6Class("Serializer",
     #' @param path (character) the file path
     #' @param bytes (logical) whether to preserve exact body bytes or not
     #' @return (character) the YAML or JSON string to write to disk
-    serialize = function(x, path, bytes) {},
+    serialize = function(x, path, bytes) {
+    },
     #' @description Serializes a file - REPLACED BY YAML/JSON METHODS
-    deserialize = function() {}
+    deserialize = function() {
+    }
   ),
   private = list(
     strip_newlines = function(x) {
@@ -46,14 +54,16 @@ Serializer <- R6::R6Class("Serializer",
             slot <- str_slots[str_slots %in% names(z$response$body)]
 
             # if character and newlines detected, remove newlines
-            z$response$body[[slot]] <- private$strip_newlines(z$response$body[[slot]])
+            z$response$body[[slot]] <- private$strip_newlines(z$response$body[[
+              slot
+            ]])
             b64dec <- base64enc::base64decode(z$response$body[[slot]])
             b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
             z$response$body[[slot]] <- if (inherits(b64dec_r2c, "error")) {
               # probably is binary (e.g., pdf), so can't be converted to char.
               b64dec
             } else {
-              # probably was originally character data, so 
+              # probably was originally character data, so
               #  can convert to character from binary
               b64dec_r2c
             }

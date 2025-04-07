@@ -41,7 +41,6 @@ test_that("use_cassette works as expected", {
 
 context("use_cassette fails well")
 test_that("use_cassette fails well", {
-
   # requires a code block
   unlink(file.path(vcr_c$dir, "foobar333.yml"))
   expect_error(
@@ -54,37 +53,67 @@ test_that("use_cassette fails well", {
 
   # record valid values
   expect_error(
-    suppressMessages(use_cassette("newbar", {}, record = "stuff")),
+    suppressMessages(use_cassette(
+      "newbar",
+      {
+      },
+      record = "stuff"
+    )),
     "'record' value of 'stuff' is not in the allowed set"
   )
 
   # match_requests_on valid values
   expect_error(
-    suppressMessages(use_cassette("newbar", {}, match_requests_on = "stuff")),
+    suppressMessages(use_cassette(
+      "newbar",
+      {
+      },
+      match_requests_on = "stuff"
+    )),
     "'match_requests_on' values \\(stuff\\) is not in the allowed set"
   )
 
   # update_content_length_header valid type
   expect_error(
-    suppressMessages(use_cassette("newbar3", {}, update_content_length_header = 5)),
+    suppressMessages(use_cassette(
+      "newbar3",
+      {
+      },
+      update_content_length_header = 5
+    )),
     "update_content_length_header must be of class logical"
   )
 
   # preserve_exact_body_bytes valid type
   expect_error(
-    suppressMessages(use_cassette("newbar4", {}, preserve_exact_body_bytes = 5)),
+    suppressMessages(use_cassette(
+      "newbar4",
+      {
+      },
+      preserve_exact_body_bytes = 5
+    )),
     "preserve_exact_body_bytes must be of class logical"
   )
 
   # persist_with valid value
   expect_error(
-    suppressMessages(use_cassette("newbar5", {}, persist_with = "jello")),
+    suppressMessages(use_cassette(
+      "newbar5",
+      {
+      },
+      persist_with = "jello"
+    )),
     "The requested VCR cassette persister \\(jello\\) is not registered"
   )
 
   # persist_with valid value
   expect_error(
-    suppressMessages(use_cassette("newbar6", {}, serialize_with = "howdy")),
+    suppressMessages(use_cassette(
+      "newbar6",
+      {
+      },
+      serialize_with = "howdy"
+    )),
     "The requested vcr cassette serializer \\(howdy\\) is not registered"
   )
 })
