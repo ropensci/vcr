@@ -29,7 +29,7 @@ test_that("is_base64", {
   expect_false(is_base64(base64enc::base64encode(charToRaw("foo")), not64))
   
   expect_true(is_base64(list(base64_string = "adfadsf"), is64))
-  z = expect_message(is_base64(list(string = "adfadsf"), is64))
+  expect_message(z <- is_base64(list(string = "adfadsf"), is64))
   expect_true(z)
 
   expect_false(is_base64(list(string = "adfadsf"), not64))
