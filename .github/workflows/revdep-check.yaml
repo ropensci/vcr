@@ -23,9 +23,12 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::pak
 
       - name: Revdepcheck
-        run: Rscript -e "install.packages('remotes')" -e "remotes::install_github('r-lib/revdepcheck')" -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=4)"
+        run: Rscript -e "pak::pak('r-lib/revdepcheck')" -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=4)"
 
       - name: Upload revdepcheck results
         uses: actions/upload-artifact@v4
