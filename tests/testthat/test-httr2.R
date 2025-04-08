@@ -47,10 +47,10 @@ test_that("httr2 status code works", {
 context("adapter-httr2: use_cassette works")
 test_that("httr2 use_cassette works", {
   out <- use_cassette("httr2_test1", {
-    x <- request(hb("/get")) %>% req_perform()
+    x <- request(hb("/get")) |> req_perform()
   })
   invisible(use_cassette("httr2_test1", {
-    x2 <- request(hb("/get")) %>% req_perform()
+    x2 <- request(hb("/get")) |> req_perform()
   }))
 
   # cassette
@@ -94,7 +94,7 @@ test_that("httr2 use_cassette works", {
   out <- use_cassette(
     "httr2_test2",
     {
-      x <- request(hb("/get")) %>% req_perform()
+      x <- request(hb("/get")) |> req_perform()
     },
     preserve_exact_body_bytes = TRUE
   )
@@ -126,14 +126,14 @@ test_that("httr2 use_cassette works", {
 context("adapter-httr2: use_cassette w/ req_error")
 test_that("httr2 w/ req_error", {
   out <- use_cassette("httr2_errors_modify_with_req_error", {
-    x404 <- request(hb("/status/404")) %>%
-      req_error(is_error = function(resp) FALSE) %>%
+    x404 <- request(hb("/status/404")) |>
+      req_error(is_error = function(resp) FALSE) |>
       req_perform()
   })
   # let's do it again to make sure using a cassette w/ errors still works
   use_cassette("httr2_errors_modify_with_req_error", {
-    x404 <- request(hb("/status/404")) %>%
-      req_error(is_error = function(resp) FALSE) %>%
+    x404 <- request(hb("/status/404")) |>
+      req_error(is_error = function(resp) FALSE) |>
       req_perform()
   })
 
@@ -166,13 +166,13 @@ context("adapter-httr2: use_cassette just catch error")
 test_that("httr2 error", {
   use_cassette("httr2_errors_catch_error", {
     expect_error(
-      request(hb("/status/404")) %>% req_perform()
+      request(hb("/status/404")) |> req_perform()
     )
   })
   # let's do it again to make sure using a cassette w/ errors still works
   use_cassette("httr2_errors_catch_error", {
     expect_error(
-      request(hb("/status/404")) %>% req_perform()
+      request(hb("/status/404")) |> req_perform()
     )
   })
 
@@ -183,15 +183,15 @@ test_that("httr2 error", {
 context("adapter-httr2: use_cassette w/ multiple errors per cassette")
 test_that("httr2 w/ multiple errors per cassette", {
   use_cassette("multiple_errors_per_cassette", {
-    expect_error(request(hb("/status/404")) %>% req_perform())
-    expect_error(request(hb("/status/500")) %>% req_perform())
-    expect_error(request(hb("/status/418")) %>% req_perform())
+    expect_error(request(hb("/status/404")) |> req_perform())
+    expect_error(request(hb("/status/500")) |> req_perform())
+    expect_error(request(hb("/status/418")) |> req_perform())
   })
   # let's do it again to make sure using a cassette w/ errors still works
   use_cassette("multiple_errors_per_cassette", {
-    expect_error(request(hb("/status/404")) %>% req_perform())
-    expect_error(request(hb("/status/500")) %>% req_perform())
-    expect_error(request(hb("/status/418")) %>% req_perform())
+    expect_error(request(hb("/status/404")) |> req_perform())
+    expect_error(request(hb("/status/500")) |> req_perform())
+    expect_error(request(hb("/status/418")) |> req_perform())
   })
 
   # cleanup
@@ -203,8 +203,8 @@ context("adapter-httr2: use_cassette w/ simple auth")
 test_that("httr2 works with simple auth and hides auth details", {
   # Authorization header IS in the cassette after filtering
   use_cassette("httr2_test_simple_auth_no_filter", {
-    x <- request(hb("/basic-auth/foo/bar")) %>%
-      req_auth_basic("foo", "bar") %>%
+    x <- request(hb("/basic-auth/foo/bar")) |>
+      req_auth_basic("foo", "bar") |>
       req_perform()
   })
 
@@ -223,8 +223,8 @@ test_that("httr2 works with simple auth and hides auth details", {
   # Authorization header IS NOT in the cassette after filtering
   vcr_configure(dir = tempdir(), filter_request_headers = "Authorization")
   use_cassette("httr2_test_simple_auth_yes_filter", {
-    x <- request(hb("/basic-auth/foo/bar")) %>%
-      req_auth_basic("foo", "bar") %>%
+    x <- request(hb("/basic-auth/foo/bar")) |>
+      req_auth_basic("foo", "bar") |>
       req_perform()
   })
 
@@ -257,8 +257,8 @@ context("adapter-httr2: POST requests works")
 test_that("httr2 POST requests works", {
   # body type: named list
   out <- use_cassette("httr2_post_named_list", {
-    x <- request(hb("/post")) %>%
-      req_body_json(list(foo = "bar")) %>%
+    x <- request(hb("/post")) |>
+      req_body_json(list(foo = "bar")) |>
       req_perform()
   })
   expect_false(out$is_empty())
@@ -270,8 +270,8 @@ test_that("httr2 POST requests works", {
 
   # body type: character
   out2 <- use_cassette("httr2_post_string", {
-    z <- request(hb("/post")) %>%
-      req_body_raw("some string") %>%
+    z <- request(hb("/post")) |>
+      req_body_raw("some string") |>
       req_perform()
   })
   expect_false(out2$is_empty())
@@ -283,8 +283,8 @@ test_that("httr2 POST requests works", {
 
   # body type: raw
   out3 <- use_cassette("httr2_post_raw", {
-    z <- request(hb("/post")) %>%
-      req_body_raw(charToRaw("some string")) %>%
+    z <- request(hb("/post")) |>
+      req_body_raw(charToRaw("some string")) |>
       req_perform()
     # z <- POST(hb("/post"), body = charToRaw("some string"))
   })
@@ -299,8 +299,8 @@ test_that("httr2 POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("httr2_post_body_file", {
-    b <- request(hb("/post")) %>%
-      req_body_file(ff) %>%
+    b <- request(hb("/post")) |>
+      req_body_file(ff) |>
       req_perform()
   })
   expect_false(out4$is_empty())
@@ -316,8 +316,8 @@ test_that("httr2 POST requests works", {
   gg <- tempfile(fileext = ".txt")
   cat("hello world\n", file = gg)
   out4 <- use_cassette("httr2_post_body_multipart", {
-    b <- request(hb("/post")) %>%
-      req_body_multipart(a = curl::form_file(gg), b = "some data") %>%
+    b <- request(hb("/post")) |>
+      req_body_multipart(a = curl::form_file(gg), b = "some data") |>
       req_perform()
   })
   expect_false(out4$is_empty())
@@ -331,8 +331,8 @@ test_that("httr2 POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("httr2_post_null", {
-    m <- request(hb("/post")) %>%
-      req_body_raw("") %>%
+    m <- request(hb("/post")) |>
+      req_body_raw("") |>
       req_perform()
   })
   expect_false(out5$is_empty())

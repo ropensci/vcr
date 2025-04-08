@@ -97,8 +97,10 @@ RequestHandlerHttr2 <- R6::R6Class(
       # real request
       webmockr::httr2_mock(FALSE)
       on.exit(webmockr::httr2_mock(TRUE), add = TRUE)
-      xx <- self$request_original %>%
-        httr2::req_error(is_error = function(resp) FALSE)
+      xx <- httr2::req_error(
+        self$request_original,
+        is_error = function(resp) FALSE
+      )
       # print(xx)
       tryCatch(httr2::req_perform(xx), error = function(e) e)
       tmp2 <- httr2::last_response()
