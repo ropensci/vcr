@@ -1,6 +1,4 @@
-teardown({
-  vcr_configure_reset()
-})
+on.exit(vcr_configure_reset())
 
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   skip_on_cran()

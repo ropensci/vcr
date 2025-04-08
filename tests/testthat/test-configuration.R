@@ -1,4 +1,4 @@
-teardown({
+on.exit({
   vcr_configure_reset()
   vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 })
