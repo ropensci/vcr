@@ -1,11 +1,10 @@
 test_that("Persisters", {
-  expect_is(Persisters, "R6ClassGenerator")
   cl <- Persisters$new()
-  expect_is(cl,  "R6")
-  expect_is(cl,  "Persisters")
+  expect_s3_class(cl,  "R6")
+  expect_s3_class(cl,  "Persisters")
 
   fs <- cl$persisters$new()
-  expect_is(fs, "FileSystem")
+  expect_s3_class(fs, "FileSystem")
 })
 
 test_that("Persisters fails well", {

@@ -29,8 +29,8 @@ test_that("use_cassette: match on body w/ empty body", {
   # string (in cases where no request bodies are sent or in a cassette
   # that is)
   
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing9")
   expect_equal(aa$match_requests_on, c("method", "uri", "body"))
 

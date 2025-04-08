@@ -25,7 +25,7 @@ test_that("vcr_log_file: console", {
   aa <- vcr_log_file("console")
 
   expect_true(aa)
-  expect_is(vcr_log_env, "environment")
+  expect_type(vcr_log_env, "environment")
   expect_equal(vcr_log_env$file, "console")
 })
 

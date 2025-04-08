@@ -12,7 +12,7 @@ test_that("filter sensitive strings", {
   vcr_configure(
     filter_sensitive_data = list("<<my-key>>" = "234223){@%!kl]")
   )
-  expect_is(vcr_c$filter_sensitive_data, "list")
+  expect_type(vcr_c$filter_sensitive_data, "list")
   expect_identical(sensitive_put_back(x), x)
   expect_identical(sensitive_remove("foo234223){@%!kl]bar"), "foo<<my-key>>bar")
   expect_identical(sensitive_put_back(sensitive_remove(x)), x)
@@ -30,7 +30,7 @@ test_that("filter sensitive regex strings", {
   vcr_configure(
     filter_sensitive_data_regex = list("<<my-key>>" = "foo[0-9]+bar")
   )
-  expect_is(vcr_c$filter_sensitive_data_regex, "list")
+  expect_type(vcr_c$filter_sensitive_data_regex, "list")
   expect_identical(sensitive_put_back(x), x)
   expect_identical(sensitive_remove("foo234223bar"), "<<my-key>>")
   # FIXME: 

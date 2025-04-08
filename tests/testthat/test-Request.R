@@ -1,8 +1,7 @@
 test_that("Request basic stuff", {
-  expect_is(Request, "R6ClassGenerator")
   aa <- Request$new()
-  expect_is(aa,  "R6")
-  expect_is(aa,  "Request")
+  expect_s3_class(aa,  "R6")
+  expect_s3_class(aa,  "Request")
 
   # vars
   expect_null(aa$disk)
@@ -18,8 +17,8 @@ test_that("Request basic stuff", {
   expect_false(aa$skip_port_stripping)
 
   # methods
-  expect_is(aa$from_hash,  "function")
-  expect_is(aa$to_hash,  "function")
+  expect_type(aa$from_hash, "closure")
+  expect_type(aa$to_hash, "closure")
 })
 
 test_that("Request usage", {
@@ -31,21 +30,17 @@ test_that("Request usage", {
     Accept = "application/json, text/xml, application/xml, */*"
   )
   aa <- Request$new("POST", url, body, headers)
-  expect_is(aa$body, "character")
   expect_equal(aa$body, "foo=bar")
-  expect_is(aa$method, "character")
   expect_equal(aa$method, "post")
-  expect_is(aa$uri, "character")
   expect_equal(aa$uri, hb("/post"))
-  expect_is(aa$host, "character")
-  expect_is(aa$path, "character")
+  expect_type(aa$host, "character")
   expect_equal(aa$path, "post")
-  expect_is(aa$headers, "list")
+  expect_type(aa$headers, "list")
   expect_true("User-Agent" %in% names(aa$headers))
   h <- aa$to_hash()
-  expect_is(h, "list")
+  expect_type(h, "list")
   zz <- aa$from_hash(h)
-  expect_is(zz, "Request")
+  expect_s3_class(zz, "Request")
   # hash in aa is a list
   aa$hash <- NULL
   # equal but not identical

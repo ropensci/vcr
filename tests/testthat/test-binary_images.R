@@ -14,17 +14,17 @@ test_that("use_cassette w/ with images: httr", {
     out <- httr::GET(url)
   })
 
-  expect_is(out, "response")
-  expect_is(out$content, "raw")
-  expect_is(httr::content(out), "array")
+  expect_s3_class(out, "response")
+  expect_type(out$content, "raw")
+  expect_equal(dims(httr::content(out)), 3)
 
   # works on 2nd request - using cassette
   use_cassette("test_write_httr_binary_img", {
     out2 <- httr::GET(url)
   })
-  expect_is(out2, "response")
-  expect_is(out2$content, "raw")
-  expect_is(httr::content(out2), "array")
+  expect_s3_class(out2, "response")
+  expect_type(out2$content, "raw")
+  expect_equal(dims(httr::content(out2)), 3)
 
   expect_identical(httr::content(out), httr::content(out2))
   
@@ -34,18 +34,18 @@ test_that("use_cassette w/ with images: httr", {
     res1 <- httr::GET(url)
   }, preserve_exact_body_bytes = TRUE)
   
-  expect_is(res1, "response")
-  expect_is(res1$content, "raw")
-  expect_is(httr::content(res1), "array")
+  expect_s3_class(res1, "response")
+  expect_type(res1$content, "raw")
+  expect_equal(dims(httr::content(res1)), 3)
   expect_equal(length(res1$content), 35588)
 
   use_cassette("test_write_httr_binary_img_bytes", {
     res2 <- httr::GET(url)
   }, preserve_exact_body_bytes = TRUE)
   
-  expect_is(res2, "response")
-  expect_is(res2$content, "raw")
-  expect_is(httr::content(res2), "array")
+  expect_s3_class(res2, "response")
+  expect_type(res2$content, "raw")
+  expect_equal(dims(httr::content(res2)), 3)
   expect_equal(length(res2$content), 35588)
 })
 
@@ -61,15 +61,15 @@ test_that("use_cassette w/ with images: crul", {
     out <- crul::HttpClient$new(url)$get()
   })
 
-  expect_is(out, "HttpResponse")
-  expect_is(out$content, "raw")
+  expect_s3_class(out, "HttpResponse")
+  expect_type(out$content, "raw")
 
   # works on 2nd request - using cassette
   use_cassette("test_write_crul_binary_img", {
     out2 <- crul::HttpClient$new(url)$get()
   })
-  expect_is(out2, "HttpResponse")
-  expect_is(out2$content, "raw")
+  expect_s3_class(out2, "HttpResponse")
+  expect_type(out2$content, "raw")
 
   expect_identical(out$content, out2$content)
 
@@ -80,15 +80,15 @@ test_that("use_cassette w/ with images: crul", {
     res1 <- crul::HttpClient$new(url)$get()
   }, preserve_exact_body_bytes = TRUE)
 
-  expect_is(res1, "HttpResponse")
-  expect_is(res1$content, "raw")
+  expect_s3_class(res1, "HttpResponse")
+  expect_type(res1$content, "raw")
 
   # works on 2nd request - using cassette
   use_cassette("test_write_crul_binary_img_bytes", {
     res2 <- crul::HttpClient$new(url)$get()
   }, preserve_exact_body_bytes = TRUE)
-  expect_is(res2, "HttpResponse")
-  expect_is(res2$content, "raw")
+  expect_s3_class(res2, "HttpResponse")
+  expect_type(res2$content, "raw")
 
   expect_identical(res1$content, res2$content)
 })

@@ -13,7 +13,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 }\n\ntest_that("ffff works", {
   vcr::use_cassette("ffff_testing", {
     x <- ffff()
-    expect_is(x, "HttpResponse")
+    expect_s3_class(x, "HttpResponse")
     expect_match(x$url, "apples")
   })
 })'

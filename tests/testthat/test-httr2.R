@@ -8,12 +8,12 @@ test_that("httr2 status code works", {
   # save(httr2_obj, file="tests/testthat/httr2_obj.rda", version = 2L)
   load("httr2_obj.rda")
 
-  expect_is(httr2_obj, "httr2_request")
+  expect_s3_class(httr2_obj, "httr2_request")
 
   x <- RequestHandlerHttr2$new(httr2_obj)
 
-  expect_is(x, "RequestHandlerHttr2")
-  expect_is(x$handle, "function")
+  expect_s3_class(x, "RequestHandlerHttr2")
+  expect_type(x$handle, "closure")
   expect_error(x$handle())
 
   # do request
@@ -21,7 +21,7 @@ test_that("httr2 status code works", {
   the_response <- x$handle()
   # the_response <- httr2::last_response()
 
-  expect_is(the_response, "httr2_response")
+  expect_s3_class(the_response, "httr2_response")
   # status code is correct
   expect_equal(the_response$status_code, 404)
 
@@ -32,7 +32,7 @@ test_that("httr2 status code works", {
   x$handle()
   response2 <- httr2::last_response()
 
-  expect_is(response2, "httr2_response")
+  expect_s3_class(response2, "httr2_response")
   # status code is correct
   expect_equal(response2$status_code, 404)
 
@@ -51,33 +51,33 @@ test_that("httr2 use_cassette works", {
   }))
 
   # cassette
-  expect_is(out, "Cassette")
+  expect_s3_class(out, "Cassette")
   expect_match(out$manfile, "httr2_test1")
   expect_false(out$is_empty())
-  expect_is(out$recorded_at, "POSIXct")
+  expect_s3_class(out$recorded_at, "POSIXct")
 
   # request - 1st http call
-  expect_is(x$request, "httr2_request")
+  expect_s3_class(x$request, "httr2_request")
   expect_equal(x$request$method, "GET")
   expect_equal(x$request$url, hb("/get"))
   expect_named(x$request$headers, NULL)
-  expect_is(x$request$fields, "list")
+  expect_type(x$request$fields, "list")
   
   # request - 2nd http call
-  expect_is(x2$request, "httr2_request")
+  expect_s3_class(x2$request, "httr2_request")
   expect_equal(x2$request$method, "GET")
   expect_equal(x2$request$url, hb("/get"))
   expect_named(x2$request$headers, NULL)
   expect_null(x2$request$fields)
 
   # response - stuff
-  expect_is(x, "httr2_response")
+  expect_s3_class(x, "httr2_response")
   expect_equal(x$status_code, 200)
   expect_equal(x$url, hb("/get"))
 
   # fixture file
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
-  expect_is(str[[1]]$response$body$string, "character")
+  expect_type(str[[1]]$response$body$string, "character")
   expect_match(str[[1]]$response$body$string, "headers")
   expect_match(str[[1]]$response$body$string, "libcurl")
 
@@ -91,13 +91,13 @@ test_that("httr2 use_cassette works", {
   }, preserve_exact_body_bytes = TRUE)
 
   # cassette
-  expect_is(out, "Cassette")
+  expect_s3_class(out, "Cassette")
   expect_match(out$manfile, "httr2_test2")
   expect_false(out$is_empty())
-  expect_is(out$recorded_at, "POSIXct")
+  expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
-  expect_is(x, "httr2_response")
+  expect_s3_class(x, "httr2_response")
   expect_equal(x$status_code, 200)
   expect_equal(x$url, hb("/get"))
 
@@ -105,7 +105,7 @@ test_that("httr2 use_cassette works", {
   str <- yaml::yaml.load_file(out$manfile)
   str <- rawToChar(base64enc::base64decode(
     str$http_interactions[[1]]$response$body$base64_string))
-  expect_is(str, "character")
+  expect_type(str, "character")
   expect_match(str, "Connection")
   expect_match(str, "httpbin")
 
@@ -129,19 +129,19 @@ test_that("httr2 w/ req_error", {
   expect_equal(x404$status_code, 404)
 
   # cassette
-  expect_is(out, "Cassette")
+  expect_s3_class(out, "Cassette")
   expect_match(out$manfile, "httr2_errors_modify_with_req_error")
   expect_false(out$is_empty())
-  expect_is(out$recorded_at, "POSIXct")
+  expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
-  expect_is(x404, "httr2_response")
+  expect_s3_class(x404, "httr2_response")
   expect_equal(x404$status_code, 404)
 
   # response body
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
-  expect_is(str, "list")
-  expect_is(str[[1]], "list")
+  expect_type(str, "list")
+  expect_type(str[[1]], "list")
   expect_match(str[[1]]$request$uri , "404")
 
   # cleanup
@@ -231,7 +231,7 @@ test_that("httr2 POST requests works", {
       req_perform()
   })
   expect_false(out$is_empty())
-  expect_is(x, "httr2_response")
+  expect_s3_class(x, "httr2_response")
   expect_equal(x$status_code, 200)
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -244,7 +244,7 @@ test_that("httr2 POST requests works", {
       req_perform()
   })
   expect_false(out2$is_empty())
-  expect_is(z, "httr2_response")
+  expect_s3_class(z, "httr2_response")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out2$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -258,7 +258,7 @@ test_that("httr2 POST requests works", {
     # z <- POST(hb("/post"), body = charToRaw("some string"))
   })
   expect_false(out3$is_empty())
-  expect_is(z, "httr2_response")
+  expect_s3_class(z, "httr2_response")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out3$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -273,7 +273,7 @@ test_that("httr2 POST requests works", {
       req_perform()
   })
   expect_false(out4$is_empty())
-  expect_is(b, "httr2_response")
+  expect_s3_class(b, "httr2_response")
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -290,7 +290,7 @@ test_that("httr2 POST requests works", {
       req_perform()
   })
   expect_false(out4$is_empty())
-  expect_is(b, "httr2_response")
+  expect_s3_class(b, "httr2_response")
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -305,7 +305,7 @@ test_that("httr2 POST requests works", {
       req_perform()
   })
   expect_false(out5$is_empty())
-  expect_is(m, "httr2_response")
+  expect_s3_class(m, "httr2_response")
   expect_equal(m$status_code, 200)
   str <- yaml::yaml.load_file(out5$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)

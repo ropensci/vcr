@@ -13,7 +13,7 @@ vcr::use_cassette("rl_citation", {
   test_that("my test", {
     aa <- rl_citation()
 
-    expect_is(aa, "character")
+    expect_type(aa, "character")
     expect_match(aa, "IUCN")
     expect_match(aa, "www.iucnredlist.org")
   })
@@ -30,7 +30,7 @@ test_that("my test", {
     aa <- rl_citation()
   })
 
-  expect_is(aa, "character")
+  expect_type(aa, "character")
   expect_match(aa, "IUCN")
   expect_match(aa, "www.iucnredlist.org")
 })

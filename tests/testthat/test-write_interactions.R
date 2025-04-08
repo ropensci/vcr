@@ -31,7 +31,7 @@ test_that("write_interactions works as expected", {
   write_interactions(x, tfile, FALSE)
   txt <- readLines(tfile)
   # sum(nchar(txt))
-  expect_is(txt, "character")
+  expect_type(txt, "character")
   expect_gt(length(txt), 10)
   expect_true(any(grepl("- request", txt)))
   expect_true(any(grepl("method: post", txt)))
@@ -39,9 +39,9 @@ test_that("write_interactions works as expected", {
 
   # yaml reading works
   yml <- yaml::yaml.load_file(tfile)
-  expect_is(yml, "list")
+  expect_type(yml, "list")
   expect_equal(length(yml), 1)
-  expect_is(yml[[1]], "list")
+  expect_type(yml[[1]], "list")
   expect_named(yml[[1]], c('request', 'response',
                            'recorded_at', 'recorded_with'))
 })

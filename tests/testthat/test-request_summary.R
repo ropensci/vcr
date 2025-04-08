@@ -17,10 +17,10 @@ test_that("request_summary works", {
   cc <- request_summary(request = x, c('method', 'uri', 'headers'))
   dd <- request_summary(request = x, c('method', 'uri', 'body', 'headers'))
 
-  expect_is(aa, "character")
-  expect_is(bb, "character")
-  expect_is(cc, "character")
-  expect_is(dd, "character")
+  expect_type(aa, "character")
+  expect_type(bb, "character")
+  expect_type(cc, "character")
+  expect_type(dd, "character")
 
   expect_match(aa, "post .+/")
   expect_match(bb, "post .+/ foo=bar")

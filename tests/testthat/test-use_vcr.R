@@ -1,7 +1,7 @@
 test_that("use_vcr works", {
   skip_on_cran()
 
-  expect_is(use_vcr, "function")
+  expect_type(use_vcr, "closure")
 
   dir <- file.path(tempdir(), "foobar")
   invisible(make_pkg(dir))
