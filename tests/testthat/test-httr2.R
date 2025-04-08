@@ -257,6 +257,12 @@ test_that("httr2 POST requests works", {
   expect_s3_class(x, "httr2_response")
   expect_equal(x$status_code, 200)
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
+  # request body
+  expect_equal(
+    "{\"foo\":\"bar\"}",
+    str[[1]]$request$body$string
+  )
+  # response body
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "{\"foo\":\"bar\"}")
 
@@ -270,6 +276,12 @@ test_that("httr2 POST requests works", {
   expect_s3_class(z, "httr2_response")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out2$manfile)$http_interactions
+  # request body
+  expect_equal(
+    "some string",
+    str[[1]]$request$body$string
+  )
+  # response body
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "some string")
 
@@ -284,6 +296,12 @@ test_that("httr2 POST requests works", {
   expect_s3_class(z, "httr2_response")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out3$manfile)$http_interactions
+  # request body
+  expect_equal(
+    "some string",
+    str[[1]]$request$body$string
+  )
+  # response body
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "some string")
 

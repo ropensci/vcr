@@ -739,14 +739,7 @@ Cassette <- R6::R6Class(
       request <- Request$new(
         method = x$request$method,
         uri = x$url,
-        body = if (inherits(x, "response")) {
-          # httr
-          bd <- webmockr::pluck_body(x$request)
-          if (inherits(bd, "raw")) rawToChar(bd) else bd
-        } else {
-          # crul
-          webmockr::pluck_body(x$request)
-        },
+        body = take_body(x$request),
         headers = if (inherits(x, c("response", "httr2_response"))) {
           as.list(x$request$headers)
         } else {

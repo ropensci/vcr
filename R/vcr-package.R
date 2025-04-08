@@ -32,6 +32,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @import rlang
 #' @importFrom R6 R6Class
 #' @importFrom utils getParseData
 #' @importFrom yaml yaml.load yaml.load_file as.yaml
