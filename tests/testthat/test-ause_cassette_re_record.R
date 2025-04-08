@@ -18,7 +18,7 @@ test_that("use_cassette options: re_record_interval", {
   use_cassette("re_record1", {
     res <- conn$get("get")
   },
-  re_record_interval = 10L,
+  re_record_interval = 3L,
   clean_outdated_http_interactions = TRUE)
   rr1 <- yaml::yaml.load_file(yml_path)
 
@@ -26,18 +26,18 @@ test_that("use_cassette options: re_record_interval", {
   use_cassette("re_record1", {
     res <- conn$get("get")
   },
-  re_record_interval = 10L,
+  re_record_interval = 3L,
   clean_outdated_http_interactions = TRUE)
   rr2 <- yaml::yaml.load_file(yml_path)
 
   expect_equal(rr1$recorded_at, rr2$recorded_at)
 
   # third use, Sys.sleep, now expired, A change in recorded_at value
-  Sys.sleep(10)
+  Sys.sleep(3L)
   use_cassette("re_record1", {
     res <- conn$get("get")
   },
-  re_record_interval = 10L,
+  re_record_interval = 3L,
   clean_outdated_http_interactions = TRUE)
   rr3 <- yaml::yaml.load_file(yml_path)
 
