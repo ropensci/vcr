@@ -4,6 +4,8 @@ library("crul")
 vcr_configure(dir = tempdir())
 
 test_that("crul POST requests works", {
+  withr::local_options(warnPartialMatchDollar = FALSE)
+
   # body type: named list
   out <- use_cassette("crul_post_named_list", {
     x <- HttpClient$new(hb("/post"))$post(body = list(foo = "bar"))
