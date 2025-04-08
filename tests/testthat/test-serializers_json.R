@@ -1,21 +1,16 @@
-context("serializers: JSON")
-
 test_that("JSON basic stuff", {
-  expect_is(JSON, "R6ClassGenerator")
   aa <- JSON$new()
-  expect_is(aa, "R6")
-  expect_is(aa, "JSON")
+  expect_s3_class(aa, "R6")
+  expect_s3_class(aa, "JSON")
 
   # vars
-  expect_is(aa$file_extension, "character")
   expect_equal(aa$file_extension, ".json")
-  expect_is(aa$path, "character")
   expect_match(aa$path, "\\.json")
   expect_null(aa$string)
 
   # methods
-  expect_is(aa$serialize, "function")
-  expect_is(aa$deserialize, "function")
+  expect_type(aa$serialize, "closure")
+  expect_type(aa$deserialize, "closure")
 })
 
 test_that("JSON usage", {
@@ -31,8 +26,8 @@ test_that("JSON usage", {
   aa <- use_cassette("testing2", {
     res <- crul::HttpClient$new(hb("/get"))$get()
   })
-  expect_is(aa, "Cassette")
-  expect_is(res, "HttpResponse")
+  expect_s3_class(aa, "Cassette")
+  expect_s3_class(res, "HttpResponse")
   expect_length(jsonlite::fromJSON(aa$file(), FALSE)[[1]], 1)
 
   # do two requests work?
@@ -40,8 +35,8 @@ test_that("JSON usage", {
     ref <- crul::HttpClient$new(hb("/get"))$get()
     the <- crul::HttpClient$new(hb("/post"))$post(body = "fafaa")
   })
-  expect_is(ref, "HttpResponse")
-  expect_is(the, "HttpResponse")
+  expect_s3_class(ref, "HttpResponse")
+  expect_s3_class(the, "HttpResponse")
   expect_length(jsonlite::fromJSON(cc$file(), FALSE)[[1]], 2)
 
   # preserve exact body bytes
@@ -57,8 +52,8 @@ test_that("JSON usage", {
     },
     preserve_exact_body_bytes = TRUE
   )
-  expect_is(raf, "HttpResponse")
-  expect_is(raz, "HttpResponse")
+  expect_s3_class(raf, "HttpResponse")
+  expect_s3_class(raz, "HttpResponse")
   expect_length(jsonlite::fromJSON(dd$file(), FALSE)[[1]], 2)
   bodies <- jsonlite::fromJSON(dd$file())[[1]]$response$body$string
   for (i in bodies) expect_true(is_base64(i))

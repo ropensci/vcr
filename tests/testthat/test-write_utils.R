@@ -1,5 +1,3 @@
-context("write: utils")
-
 test_that("write_header", {
   f <- tempfile()
   write_header(f)

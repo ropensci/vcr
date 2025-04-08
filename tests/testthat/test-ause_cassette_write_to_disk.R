@@ -1,5 +1,3 @@
-context("use_cassette: write to disk")
-
 vcr_configure_reset()
 tmpdir_wdp <- file.path(tempdir(), "write_disk_path")
 vcr_configure(dir = tmpdir_wdp)
@@ -49,19 +47,19 @@ test_that("use_cassette w/ request that writes to disk: crul", {
     out <- HttpClient$new(hb("/get"))$get(disk = f)
   })
 
-  expect_is(out, "HttpResponse")
-  expect_is(out$content, "character")
+  expect_s3_class(out, "HttpResponse")
+  expect_type(out$content, "character")
   expect_match(out$content, "\\.json")
-  expect_is(out$parse(), "character")
+  expect_type(out$parse(), "character")
 
   # works on 2nd request
   use_cassette("test_write_to_disk", {
     out2 <- HttpClient$new(hb("/get"))$get(disk = f)
   })
-  expect_is(out2, "HttpResponse")
-  expect_is(out2$content, "character")
+  expect_s3_class(out2, "HttpResponse")
+  expect_type(out2$content, "character")
   expect_match(out2$content, "\\.json")
-  expect_is(out2$parse(), "character")
+  expect_type(out2$parse(), "character")
 
   expect_equal(out$parse(), out2$parse())
 })
@@ -77,16 +75,16 @@ test_that("use_cassette w/ request that writes to disk: httr", {
     out <- GET(hb("/get"), write_disk(f, TRUE))
   })
 
-  expect_is(out, "response")
-  expect_is(out$content, "path")
+  expect_s3_class(out, "response")
+  expect_s3_class(out$content, "path")
   expect_match(out$content, "\\.json")
 
   # works on 2nd request
   use_cassette("test_write_to_disk_httr", {
     out2 <- GET(hb("/get"), write_disk(f, TRUE))
   })
-  expect_is(out2, "response")
-  expect_is(out2$content, "path")
+  expect_s3_class(out2, "response")
+  expect_s3_class(out2$content, "path")
   expect_match(out2$content, "\\.json")
 
   expect_equal(httr::content(out), httr::content(out2))

@@ -1,5 +1,3 @@
-context("use_cassette: record modes work as expected")
-
 library(crul, quietly = TRUE)
 mydir <- file.path(tempdir(), "use_cassette_record_mode")
 invisible(vcr_configure(dir = mydir))
@@ -16,20 +14,22 @@ test_that("use_cassette record mode: once", {
 
   # record interaction
   one <- use_cassette("once", (res <- conn$get("get")), record = "once")
-  expect_is(one, "Cassette")
-  expect_is(res, "HttpResponse")
+  expect_s3_class(one, "Cassette")
+  expect_s3_class(res, "HttpResponse")
 
   # interaction should replay
   #  - we know it replayed if it doesn't timeout as timeout only
   #   used in real request
   two <- use_cassette(
     "once",
+
     {
       res2 <- conn$get("get", timeout_ms = 10)
     },
+
     record = "once"
   )
-  expect_is(two, "Cassette")
+  expect_s3_class(two, "Cassette")
   expect_equal(length(one$http_interactions_$used_interactions), 0)
   expect_equal(length(two$http_interactions_$used_interactions), 1)
   expect_equal(length(one$new_recorded_interactions), 1)
@@ -40,7 +40,7 @@ test_that("use_cassette record mode: once", {
   unlink(file.path(vcr_c$dir, "once.yml"))
   expect_false(file.exists(file.path(vcr_c$dir, "once.yml")))
   three <- use_cassette("once", (res3 <- conn$get("get")), record = "once")
-  expect_is(three, "Cassette")
+  expect_s3_class(three, "Cassette")
 
   # raise error on attempted NEW INTERACTION on existing cassette file
   expect_error(
@@ -66,8 +66,8 @@ test_that("use_cassette record mode: none", {
 
   # previously recorded interaction should replay
   one <- use_cassette("none", (res <- conn$get("get")), record = "none")
-  expect_is(one, "Cassette")
-  expect_is(res, "HttpResponse")
+  expect_s3_class(one, "Cassette")
+  expect_s3_class(res, "HttpResponse")
 
   # raise error if any NEW INTERACTIONS attempted
   # FIXME:
@@ -98,8 +98,8 @@ test_that("use_cassette record mode: new_episodes", {
     },
     record = "new_episodes"
   )
-  expect_is(one, "Cassette")
-  expect_is(res, "HttpResponse")
+  expect_s3_class(one, "Cassette")
+  expect_s3_class(res, "HttpResponse")
   one_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "new_episodes.yml"))
   expect_equal(length(one_yml$http_interactions), 1)
 
@@ -111,8 +111,8 @@ test_that("use_cassette record mode: new_episodes", {
     },
     record = "new_episodes"
   )
-  expect_is(one_again, "Cassette")
-  expect_is(res2, "HttpResponse")
+  expect_s3_class(one_again, "Cassette")
+  expect_s3_class(res2, "HttpResponse")
   one_again_yml <- yaml::yaml.load_file(file.path(
     vcr_c$dir,
     "new_episodes.yml"
@@ -127,8 +127,8 @@ test_that("use_cassette record mode: new_episodes", {
     },
     record = "new_episodes"
   )
-  expect_is(two, "Cassette")
-  expect_is(res3, "HttpResponse")
+  expect_s3_class(two, "Cassette")
+  expect_s3_class(res3, "HttpResponse")
   two_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "new_episodes.yml"))
   expect_equal(length(two_yml$http_interactions), 2)
 
@@ -144,8 +144,8 @@ test_that("use_cassette record mode: new_episodes", {
     },
     record = "new_episodes"
   )
-  expect_is(two, "Cassette")
-  expect_is(res3, "HttpResponse")
+  expect_s3_class(two, "Cassette")
+  expect_s3_class(res3, "HttpResponse")
   two_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "new_episodes.yml"))
   expect_equal(length(two_yml$http_interactions), 2)
 })

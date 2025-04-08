@@ -1,10 +1,7 @@
-context("Cassette")
-
 test_that("Cassette", {
-  expect_is(Cassette, "R6ClassGenerator")
   cl <- Cassette$new(name = "stuff")
-  expect_is(cl, "R6")
-  expect_is(cl, "Cassette")
+  expect_s3_class(cl, "R6")
+  expect_s3_class(cl, "Cassette")
 
   # eject cassette
   ## expect warning from empty cassette checker
@@ -50,19 +47,19 @@ test_that("make_http_interaction works as expected", {
   # $response$body should be class `character`
   load("crul_resp1.rda")
   aa <- zz$make_http_interaction(crul_resp1)
-  expect_is(aa, "HTTPInteraction")
-  expect_is(aa$request, "Request")
-  expect_is(aa$response, "VcrResponse")
-  expect_is(aa$response$body, "character")
+  expect_s3_class(aa, "HTTPInteraction")
+  expect_s3_class(aa$request, "Request")
+  expect_s3_class(aa$response, "VcrResponse")
+  expect_type(aa$response$body, "character")
 
   # crul, with image response body
   # $response$body should be class `raw`
   load("crul_resp2.rda")
   bb <- zz$make_http_interaction(crul_resp2)
-  expect_is(bb, "HTTPInteraction")
-  expect_is(bb$request, "Request")
-  expect_is(bb$response, "VcrResponse")
-  expect_is(bb$response$body, "raw")
+  expect_s3_class(bb, "HTTPInteraction")
+  expect_s3_class(bb$request, "Request")
+  expect_s3_class(bb$response, "VcrResponse")
+  expect_type(bb$response$body, "raw")
 
   # eject cassette
   ## expect warning from empty cassette checker

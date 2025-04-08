@@ -1,11 +1,14 @@
-context("response_summary")
-
 library("crul")
 url <- hb()
 cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)
 webmockr::webmockr_allow_net_connect()
 
+status <- list(
+  status_code = 200,
+  message = "OK",
+  explanation = "Request fulfilled, document follows"
+)
 status <- list(
   status_code = 200,
   message = "OK",
@@ -25,7 +28,7 @@ test_that("response_summary works", {
 
   aa <- response_summary(x)
 
-  expect_is(aa, "character")
+  expect_type(aa, "character")
   expect_match(aa, "200")
   expect_match(aa, "args")
   expect_match(aa, "headers")
@@ -45,7 +48,7 @@ test_that("response_summary - with raw bytes that can't be converted to char", {
 
   aa <- response_summary(x)
 
-  expect_is(aa, "character")
+  expect_type(aa, "character")
   expect_match(aa, "200")
   expect_match(aa, "<raw>")
 })
@@ -75,7 +78,7 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   # errors if using the old code in response_summary w/o useBytes=TRUE
   rv <- as.numeric(sub("\\.", "", paste0(R.version$major, R.version$minor)))
   if (rv <= 353) {
-    expect_is(substring(gsub("\n", " ", google_response), 1, 80), "character")
+    expect_type(substring(gsub("\n", " ", google_response), 1, 80), "character")
   }
   # else {
   ## doesn't error on Windows
@@ -87,7 +90,7 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   # response_summary doesn't error now with useBytes=TRUE
   aa <- response_summary(x)
 
-  expect_is(aa, "character")
+  expect_type(aa, "character")
   expect_match(aa, "200")
   expect_match(aa, "doctype html")
 })

@@ -3,14 +3,15 @@ skip_on_cran()
 library("crul")
 vcr_configure(dir = tempdir())
 
-context("adapter-crul: POST requests works")
 test_that("crul POST requests works", {
+  withr::local_options(warnPartialMatchDollar = FALSE)
+
   # body type: named list
   out <- use_cassette("crul_post_named_list", {
     x <- HttpClient$new(hb("/post"))$post(body = list(foo = "bar"))
   })
   expect_false(out$is_empty())
-  expect_is(x, "HttpResponse")
+  expect_s3_class(x, "HttpResponse")
   expect_equal(x$status_code, 200)
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -21,7 +22,7 @@ test_that("crul POST requests works", {
     z <- HttpClient$new(hb("/post"))$post(body = "some string")
   })
   expect_false(out2$is_empty())
-  expect_is(z, "HttpResponse")
+  expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out2$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -33,7 +34,7 @@ test_that("crul POST requests works", {
     z <- HttpClient$new(hb("/post"))$post(body = charToRaw("some string"))
   })
   expect_false(out3$is_empty())
-  expect_is(z, "HttpResponse")
+  expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out3$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -50,7 +51,7 @@ test_that("crul POST requests works", {
     )
   })
   expect_false(out4$is_empty())
-  expect_is(b, "HttpResponse")
+  expect_s3_class(b, "HttpResponse")
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -65,7 +66,7 @@ test_that("crul POST requests works", {
     )
   })
   expect_false(out6$is_empty())
-  expect_is(d, "HttpResponse")
+  expect_s3_class(d, "HttpResponse")
   expect_equal(d$status_code, 200)
   str <- yaml::yaml.load_file(out6$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
@@ -77,7 +78,7 @@ test_that("crul POST requests works", {
     m <- HttpClient$new(hb("/post"))$post(body = NULL)
   })
   expect_false(out5$is_empty())
-  expect_is(z, "HttpResponse")
+  expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out5$manfile)$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)

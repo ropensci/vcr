@@ -1,6 +1,4 @@
-teardown({
-  vcr_configure_reset()
-})
+on.exit(vcr_configure_reset())
 
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   skip_on_cran()
@@ -36,8 +34,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing1")
   expect_equal(aa$match_requests_on, c("method", "uri", "body"))
 
@@ -108,8 +106,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing2")
   expect_equal(aa$match_requests_on, c("method", "uri", "body"))
 

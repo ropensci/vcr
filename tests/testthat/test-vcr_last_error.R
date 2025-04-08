@@ -1,5 +1,3 @@
-context("vcr_last_error")
-
 dir <- tempdir()
 invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 vcr__env$last_error <- list()

@@ -45,7 +45,7 @@ Suggests:
     knitr,
     rmarkdown,
     roxygen2 (>= 7.2.1),
-    testthat,
+    testthat (>= 3.0.0),
     webfakes,
     withr
 VignetteBuilder: 
@@ -59,3 +59,6 @@ X-schema.org-applicationCategory: Web
 X-schema.org-isPartOf: https://ropensci.org
 X-schema.org-keywords: http, https, API, web-services, curl, mock,
     mocking, http-mocking, testing, testing-tools, tdd
+Config/testthat/parallel: true
+Config/testthat/start-first: ause_cassette_re_record
+Config/testthat/edition: 3

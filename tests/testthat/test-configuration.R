@@ -1,15 +1,12 @@
-context("Configuration")
-
-teardown({
+on.exit({
   vcr_configure_reset()
   vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 })
 
 test_that("VCRConfig", {
-  expect_is(VCRConfig, "R6ClassGenerator")
   cl <- vcr_configuration()
-  expect_is(cl, "R6")
-  expect_is(cl, "VCRConfig")
+  expect_s3_class(cl, "R6")
+  expect_s3_class(cl, "VCRConfig")
 })
 
 test_that("config fails well with invalid record mode", {

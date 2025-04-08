@@ -1,6 +1,4 @@
-setup({
-  vcr_test_configuration()
-})
+vcr_test_configuration()
 
 # parameters shared by config and cassettes
 # (commented params are not exposed by Cassette$cassette_opts())

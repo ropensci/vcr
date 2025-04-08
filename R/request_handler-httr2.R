@@ -39,10 +39,13 @@ RequestHandlerHttr2 <- R6::R6Class(
       self$request <- {
         Request$new(
           request$method,
+
           request$url,
           webmockr::pluck_body(request),
+
           request$headers,
           fields = request$fields,
+
           opts = request$options,
           policies = request$policies
         )
