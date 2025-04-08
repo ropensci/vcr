@@ -16,6 +16,13 @@ test_that("use_cassette: match on body w/ empty body", {
     },
     match_requests_on = c("method", "uri", "body")
   )
+  aa <- use_cassette(
+    name = "testing9",
+    {
+      res <- cli$post("post")
+    },
+    match_requests_on = c("method", "uri", "body")
+  )
   # run it again
   bb <- use_cassette(
     name = "testing9",

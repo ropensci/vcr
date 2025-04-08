@@ -12,6 +12,17 @@ status <- list(
   message = "OK",
   explanation = "Request fulfilled, document follows"
 )
+request <- Request$new(
+  "POST",
+  uri = hb('/post?a=5'),
+  body = "",
+  headers = list(foo = "bar")
+)
+status <- list(
+  status_code = "200",
+  message = "OK",
+  explanation = "Request fulfilled, document follows"
+)
 # resp_body <- body
 resp_body <- "asdf jasljf asdfjlsaf"
 response <- VcrResponse$new(

@@ -5,6 +5,7 @@ conn <- crul::HttpClient$new(hb())
 # vcr::vcr_configure(
 #   dir = mydir,
 #   log = TRUE,
+#   log = TRUE,
 #   log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
 # )
 yml_path <- file.path(vcr_c$dir, "re_record1.yml")
@@ -17,6 +18,7 @@ test_that("use_cassette options: re_record_interval", {
   # first use
   use_cassette(
     "re_record1",
+
     {
       res <- conn$get("get")
     },
@@ -28,6 +30,7 @@ test_that("use_cassette options: re_record_interval", {
   # second use, not expired, no change in recorded_at value
   use_cassette(
     "re_record1",
+
     {
       res <- conn$get("get")
     },
@@ -42,6 +45,7 @@ test_that("use_cassette options: re_record_interval", {
   Sys.sleep(3L)
   use_cassette(
     "re_record1",
+
     {
       res <- conn$get("get")
     },

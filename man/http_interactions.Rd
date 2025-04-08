@@ -30,7 +30,7 @@ eject_cassette("foo_bar")
 
 # insert cassette again
 insert_cassette("foo_bar")
-# now interactions will be present 
+# now interactions will be present
 z <- http_interactions()
 z$interactions
 z$used_interactions

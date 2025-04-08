@@ -22,9 +22,11 @@ test_that("use_cassette record mode: once", {
   #   used in real request
   two <- use_cassette(
     "once",
+
     {
       res2 <- conn$get("get", timeout_ms = 10)
     },
+
     record = "once"
   )
   expect_s3_class(two, "Cassette")

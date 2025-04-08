@@ -9,6 +9,11 @@ status <- list(
   message = "OK",
   explanation = "Request fulfilled, document follows"
 )
+status <- list(
+  status_code = 200,
+  message = "OK",
+  explanation = "Request fulfilled, document follows"
+)
 
 test_that("response_summary works", {
   skip_on_cran()

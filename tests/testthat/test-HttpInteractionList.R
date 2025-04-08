@@ -25,6 +25,19 @@ test_that("HTTPInteractionList", {
     headers = res2$response_headers
   )
   request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
+  request <- Request$new(
+    "POST",
+    uri = url,
+    body = body,
+    headers = res$response_headers
+  )
+  request2 <- Request$new(
+    "GET",
+    uri = url2,
+    body = body,
+    headers = res2$response_headers
+  )
+  request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
   # response
   response <- VcrResponse$new(
     res$status_http(),
