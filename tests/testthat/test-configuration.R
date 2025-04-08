@@ -5,8 +5,8 @@ on.exit({
 
 test_that("VCRConfig", {
   cl <- vcr_configuration()
-  expect_s3_class(cl,  "R6")
-  expect_s3_class(cl,  "VCRConfig")
+  expect_s3_class(cl, "R6")
+  expect_s3_class(cl, "VCRConfig")
 })
 
 test_that("config fails well with invalid record mode", {

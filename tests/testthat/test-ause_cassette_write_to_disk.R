@@ -27,7 +27,10 @@ test_that("fails well if write_disk_path not set", {
 })
 
 # cleanup
-files <- c("write_disk_path_not_set_crul.yml", "write_disk_path_not_set_httr.yml")
+files <- c(
+  "write_disk_path_not_set_crul.yml",
+  "write_disk_path_not_set_httr.yml"
+)
 unlink(file.path(vcr_configuration()$dir, files))
 
 tmpdir <- tempdir()

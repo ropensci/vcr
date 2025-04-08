@@ -39,8 +39,13 @@ Persisters <- R6::R6Class(
     # Gets and sets a named persister
     persister_get = function() {
       if (!self$name %in% 'FileSystem') {
-        stop(sprintf("The requested VCR cassette persister (%s) is not registered.", self$name),
-             call. = FALSE)
+        stop(
+          sprintf(
+            "The requested VCR cassette persister (%s) is not registered.",
+            self$name
+          ),
+          call. = FALSE
+        )
       }
       self$persisters <- switch(self$name, FileSystem = FileSystem)
     }

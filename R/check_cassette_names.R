@@ -10,9 +10,11 @@
 #' @param allowed_duplicates (character) cassette names that can be duplicated
 #' @includeRmd man/rmdhunks/cassette-names.Rmd details
 
-check_cassette_names <- function(pattern = "test-", behavior = "stop",
-  allowed_duplicates = NULL) {
-
+check_cassette_names <- function(
+  pattern = "test-",
+  behavior = "stop",
+  allowed_duplicates = NULL
+) {
   assert(allowed_duplicates, "character")
   files <- list.files(".", pattern = pattern, full.names = TRUE)
   if (length(files) == 0) return()
@@ -33,13 +35,18 @@ check_cassette_names <- function(pattern = "test-", behavior = "stop",
     fdups <- c()
     for (i in seq_along(dups)) {
       matched <- lapply(nms, function(w) dups[i] %in% w)
-      fdups[i] <- sprintf("%s (found in %s)", dups[i],
+      fdups[i] <- sprintf(
+        "%s (found in %s)",
+        dups[i],
         paste0(basename(names(nms[unlist(matched)])), collapse = ", ")
       )
     }
-    mssg <- c("you should not have duplicated cassette names:",
-      paste0("\n    ", paste0(fdups, collapse = "\n    ")))
-    switch(behavior,
+    mssg <- c(
+      "you should not have duplicated cassette names:",
+      paste0("\n    ", paste0(fdups, collapse = "\n    "))
+    )
+    switch(
+      behavior,
       stop = stop(mssg, call. = FALSE),
       warning = warning(mssg, call. = FALSE, immediate. = TRUE)
     )

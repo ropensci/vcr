@@ -48,7 +48,7 @@ HTTPInteraction <- R6::R6Class(
     request = NULL,
     #' @field response A `VcrResponse` class object
     response = NULL,
-    #' @field recorded_at (character) Time http interaction recorded at 
+    #' @field recorded_at (character) Time http interaction recorded at
     recorded_at = NULL,
 
     #' @description Create a new `HTTPInteraction` object
@@ -65,9 +65,11 @@ HTTPInteraction <- R6::R6Class(
     #' @description Create a hash from the HTTPInteraction object
     #' @return a named list
     to_hash = function() {
-      list(request = self$request$to_hash(),
-           response = self$response$to_hash(),
-           recorded_at = self$recorded_at)
+      list(
+        request = self$request$to_hash(),
+        response = self$response$to_hash(),
+        recorded_at = self$recorded_at
+      )
     },
 
     #' @description Create a HTTPInteraction object from a hash

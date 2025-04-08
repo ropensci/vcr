@@ -35,13 +35,16 @@
 #' cassette_path()
 #'
 #' vcr_configure_reset()
-cassettes <- function(on_disk = TRUE, verb = FALSE){
+cassettes <- function(on_disk = TRUE, verb = FALSE) {
   # combine cassettes on disk with cassettes in session
   if (on_disk) {
-    out <- unlist(list(
-      lapply(get_cassette_data_paths(), read_cassette_meta, verbose = verb),
-      cassettes_session()
-    ), FALSE)
+    out <- unlist(
+      list(
+        lapply(get_cassette_data_paths(), read_cassette_meta, verbose = verb),
+        cassettes_session()
+      ),
+      FALSE
+    )
     out[!duplicated(names(out))]
   } else {
     cassettes_session()
@@ -63,7 +66,7 @@ cassette_path <- function() vcr_c$dir
 
 cassette_exists <- function(x) x %in% get_cassette_names()
 
-read_cassette_meta <- function(x, verbose = TRUE, ...){
+read_cassette_meta <- function(x, verbose = TRUE, ...) {
   tmp <- yaml::yaml.load_file(x, ...)
   if (!inherits(tmp, "list") | !"http_interactions" %in% names(tmp)) {
     if (verbose) message(x, " not found, missing data, or malformed")
@@ -73,26 +76,31 @@ read_cassette_meta <- function(x, verbose = TRUE, ...){
   }
 }
 
-get_cassette_meta_paths <- function(){
-  metafiles <- names(grep("metadata", vapply(cassette_files(), basename, ""),
-    value = TRUE))
-  as.list(stats::setNames(metafiles, unname(sapply(metafiles, function(x)
-    yaml::yaml.load_file(x)$name))))
+get_cassette_meta_paths <- function() {
+  metafiles <- names(grep(
+    "metadata",
+    vapply(cassette_files(), basename, ""),
+    value = TRUE
+  ))
+  as.list(stats::setNames(
+    metafiles,
+    unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))
+  ))
 }
 
-cassette_files <- function(){
+cassette_files <- function() {
   path <- path.expand(cassette_path())
   check_create_path(path)
   list.files(path, full.names = TRUE)
 }
 
-get_cassette_path <- function(x){
-  if ( x %in% get_cassette_names() ) get_cassette_data_paths()[[x]]
+get_cassette_path <- function(x) {
+  if (x %in% get_cassette_names()) get_cassette_data_paths()[[x]]
 }
 
 is_path <- function(x) file.exists(path.expand(x))
 
-get_cassette_names <- function(){
+get_cassette_names <- function() {
   tmp <- vcr_files()
   if (length(tmp) == 0) return("")
   sub("\\.yml|\\.yaml|\\.json", "", basename(tmp))
@@ -100,13 +108,15 @@ get_cassette_names <- function(){
 
 vcr_files <- function() {
   # remove some file types
-  files <- names(grep("metadata|rs-graphics|_pkgdown|travis|appveyor",
+  files <- names(grep(
+    "metadata|rs-graphics|_pkgdown|travis|appveyor",
     vapply(cassette_files(), basename, ""),
-    invert = TRUE, value = TRUE))
+    invert = TRUE,
+    value = TRUE
+  ))
   # include only certain file types
   tokeep <- switch(vcr_c$serialize_with, yaml = "yml|yaml", json = "json")
-  names(grep(tokeep, vapply(cassette_files(), basename, ""),
-    value = TRUE))
+  names(grep(tokeep, vapply(cassette_files(), basename, ""), value = TRUE))
 }
 
 get_cassette_data_paths <- function() {
@@ -115,7 +125,7 @@ get_cassette_data_paths <- function() {
   as.list(stats::setNames(files, get_cassette_names()))
 }
 
-check_create_path <- function(x){
+check_create_path <- function(x) {
   if (file.exists(x)) dir.create(x, recursive = TRUE, showWarnings = FALSE)
 }
 

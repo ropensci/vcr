@@ -5,8 +5,11 @@ vcr_configure(dir = tempdir())
 test_that("RequestHandlerHttr", {
   load("httr_obj.rda")
 
-  expect_error(RequestHandlerHttr$new(),
-    "\"request\" is missing", class = "error")
+  expect_error(
+    RequestHandlerHttr$new(),
+    "\"request\" is missing",
+    class = "error"
+  )
 })
 
 test_that("RequestHandlerHttr: httr", {

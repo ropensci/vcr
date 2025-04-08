@@ -26,7 +26,8 @@
 #'       Get absolute path to the `storage_location`
 #'     }
 #'   }
-FileSystem <- R6::R6Class("FileSystem",
+FileSystem <- R6::R6Class(
+  "FileSystem",
   public = list(
     #' @field file_name (character) the file name, not whole path
     file_name = NULL,
@@ -47,9 +48,13 @@ FileSystem <- R6::R6Class("FileSystem",
     #' @param write2disk (logical) write to disk or just make a new FileSystem
     #' object. Default: `FALSE`
     #' @return A new `FileSystem` object
-    initialize = function(file_name = NULL, write_fxn = NULL,
-                          content = NULL, path = NULL,
-                          write2disk = FALSE) {
+    initialize = function(
+      file_name = NULL,
+      write_fxn = NULL,
+      content = NULL,
+      path = NULL,
+      write2disk = FALSE
+    ) {
       self$file_name <- file_name
       self$content <- content
       self$write_fxn <- write_fxn

@@ -56,7 +56,10 @@ turn_off <- function(ignore_cassettes = FALSE) {
       stop(
         sprintf(
           "A vcr cassette is currently in use: %s.\n  You must eject it before you can turn vcr off",
-          cassette$name), call. = FALSE)
+          cassette$name
+        ),
+        call. = FALSE
+      )
     }
   }
   light_switch$ignore_cassettes <- ignore_cassettes

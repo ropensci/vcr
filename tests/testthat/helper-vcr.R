@@ -5,7 +5,8 @@ library(vcr)
 vcr_test_configuration <- function(
   dir = tmpdir,
   write_disk_path = file.path(tmpdir, "files"),
-  ...) {
+  ...
+) {
   vcr_configure_reset()
   vcr_configure(dir = dir, write_disk_path = write_disk_path, ...)
 }
@@ -25,8 +26,7 @@ Suggests:
     testthat\n"
 
 make_pkg <- function(dir) {
-  if (length(list.files(dir)) > 1)
-    stop("dir is not empty")
+  if (length(list.files(dir)) > 1) stop("dir is not empty")
   dir.create(dir, recursive = TRUE)
   dir.create(file.path(dir, "man"), recursive = TRUE)
   dir.create(file.path(dir, "R"), recursive = TRUE)
@@ -78,16 +78,19 @@ urls <- c(
 )
 h <- curl::new_handle(timeout = 10, failonerror = FALSE)
 base_url <- ""
-tryCatch({
-  out <- list()
-  for (i in seq_along(urls)) {
-    out[[i]] <- curl::curl_fetch_memory(urls[i], handle = h)
-  }
-  codes <- vapply(out, "[[", 1, "status_code")
-  if (all(codes != 200)) stop("all httpbin servers down")
-  base_url <- urls[codes == 200][1]
-  cat(paste0("using base url for tests: ", base_url), sep = "\n")
-}, error = function(e) message(e$message))
+tryCatch(
+  {
+    out <- list()
+    for (i in seq_along(urls)) {
+      out[[i]] <- curl::curl_fetch_memory(urls[i], handle = h)
+    }
+    codes <- vapply(out, "[[", 1, "status_code")
+    if (all(codes != 200)) stop("all httpbin servers down")
+    base_url <- urls[codes == 200][1]
+    cat(paste0("using base url for tests: ", base_url), sep = "\n")
+  },
+  error = function(e) message(e$message)
+)
 
 # httpbin local
 local_httpbin_app <- function() {

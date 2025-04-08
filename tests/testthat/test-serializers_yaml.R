@@ -37,8 +37,7 @@ test_that("YAML fails well", {
 
   z <- YAML$new()
   # if no path specified, fails with useful message as is
-  expect_error(suppressWarnings(z$deserialize()),
-    "cannot open the connection")
+  expect_error(suppressWarnings(z$deserialize()), "cannot open the connection")
 })
 test_that("Windows encoding", {
   path <- test_path("cassettes/ropenaq-encoding.yaml")

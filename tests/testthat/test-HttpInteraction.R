@@ -7,14 +7,19 @@ test_that("HttpInteraction", {
   res <- cli$post(body = body)
 
   # request
-  request <- Request$new("POST", uri = url,
-    body = body, headers = res$response_headers)
+  request <- Request$new(
+    "POST",
+    uri = url,
+    body = body,
+    headers = res$response_headers
+  )
   # response
   response <- VcrResponse$new(
-     res$status_http(),
-     res$response_headers,
-     res$parse("UTF-8"),
-     res$response_headers$status)
+    res$status_http(),
+    res$response_headers,
+    res$parse("UTF-8"),
+    res$response_headers$status
+  )
 
   x <- HTTPInteraction$new(request = request, response = response)
 

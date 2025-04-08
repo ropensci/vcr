@@ -18,7 +18,7 @@
 #' be in your `tests/` directory, perhaps next to your cassettes
 #' directory, e.g., where your cassettes are in `tests/fixtures`, your
 #' files from requests that write to disk are in `tests/files`.
-#' If you want to ignore these files in your installed package, 
+#' If you want to ignore these files in your installed package,
 #' add them to `.Rinstignore`. If you want these files ignored on build
 #' then add them to `.Rbuildignore` (though if you do, tests that depend
 #' on these files probably will not work because they won't be found; so
@@ -47,18 +47,18 @@
 #'   list(thing_to_replace_it_with = thing_to_replace)
 #'   ```
 #'   We replace all instances of `thing_to_replace` with
-#' `thing_to_replace_it_with`. Uses [gsub()] internally, with `fixed=TRUE`; 
+#' `thing_to_replace_it_with`. Uses [gsub()] internally, with `fixed=TRUE`;
 #' so does exact matches. Before recording (writing to a cassette) we do
 #' the replacement and then when reading from the cassette we do the reverse
 #' replacement to get back to the real data. Before record replacement happens
 #' in internal function `write_interactions()`, while before playback
 #' replacement happens in internal function `YAML$deserialize()`
-#' 
+#'
 #' - `filter_sensitive_data_regex` named list of values to replace. Follows
 #' `filter_sensitive_data` format, except uses `fixed=FALSE` in the [gsub()]
 #' function call; this means that the value in `thing_to_replace` is a regex
 #' pattern.
-#' 
+#'
 #' - `filter_request_headers` (character/list) **request** headers to filter.
 #' A character vector of request headers to remove - the headers will not be
 #' recorded to disk. Alternatively, a named list similar to
@@ -74,9 +74,9 @@
 #' will not be recorded to disk. Alternatively, a named list similar to
 #' `filter_sensitive_data` instructing vcr with what value to replace the
 #' real value of the query parameter.
-#' 
+#'
 #' ## Errors
-#' 
+#'
 #' - `verbose_errors` Do you want more verbose errors or less verbose
 #' errors when cassette recording/usage fails? Default is `FALSE`, that is,
 #' less verbose errors. If `TRUE`, error messages will include more details
@@ -128,7 +128,7 @@
 #' be recorded back to file. Default: `FALSE`
 #' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
 #' Default: `TRUE`
-#' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an 
+#' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an
 #' empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 #' way. This option only determines whether a warning is thrown or not.
 #' Default: `FALSE`
@@ -230,9 +230,9 @@ VCRConfig <- R6::R6Class(
     .log_opts = NULL,
     .filter_sensitive_data = NULL,
     .filter_sensitive_data_regex = NULL,
-    .filter_request_headers  = NULL,
-    .filter_response_headers  = NULL,
-    .filter_query_parameters  = NULL,
+    .filter_request_headers = NULL,
+    .filter_response_headers = NULL,
+    .filter_query_parameters = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL,
     .quiet = NULL,
@@ -301,7 +301,8 @@ VCRConfig <- R6::R6Class(
       private$.clean_outdated_http_interactions <- value
     },
     allow_http_connections_when_no_cassette = function(value) {
-      if (missing(value)) return(private$.allow_http_connections_when_no_cassette)
+      if (missing(value))
+        return(private$.allow_http_connections_when_no_cassette)
       private$.allow_http_connections_when_no_cassette <- value
     },
     cassettes = function(value) {
@@ -360,9 +361,8 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.filter_query_parameters)
       if (is.character(value)) value <- as.list(value)
       lapply(value, function(w) {
-        if (!length(w) %in% 0:2) 
-          stop("filter query values must be of length 1 or 2",
-            call. = FALSE)
+        if (!length(w) %in% 0:2)
+          stop("filter query values must be of length 1 or 2", call. = FALSE)
       })
       private$.filter_query_parameters <- assert(value, "list")
     },
@@ -410,8 +410,8 @@ VCRConfig <- R6::R6Class(
       log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
       filter_sensitive_data = NULL,
       filter_sensitive_data_regex = NULL,
-      filter_request_headers  = NULL,
-      filter_response_headers  = NULL,
+      filter_request_headers = NULL,
+      filter_response_headers = NULL,
       filter_query_parameters = NULL,
       write_disk_path = NULL,
       verbose_errors = FALSE,
@@ -440,8 +440,8 @@ VCRConfig <- R6::R6Class(
       self$log_opts <- log_opts
       self$filter_sensitive_data <- filter_sensitive_data
       self$filter_sensitive_data_regex <- filter_sensitive_data_regex
-      self$filter_request_headers  = filter_request_headers
-      self$filter_response_headers  = filter_response_headers
+      self$filter_request_headers = filter_request_headers
+      self$filter_response_headers = filter_response_headers
       self$filter_query_parameters = filter_query_parameters
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
@@ -466,14 +466,25 @@ VCRConfig <- R6::R6Class(
       cat(paste0("  Record: ", private$.record), sep = "\n")
       cat(paste0("  Serialize with: ", private$.serialize_with), sep = "\n")
       cat(paste0("  URI Parser: ", private$.uri_parser), sep = "\n")
-      cat(paste0("  Match Requests on: ",
-        pastec(private$.match_requests_on)), sep = "\n")
-      cat(paste0("  Preserve Bytes?: ",
-        private$.preserve_exact_body_bytes), sep = "\n")
-      logloc <- if (private$.log) sprintf(" (%s)", private$.log_opts$file) else ""
+      cat(
+        paste0("  Match Requests on: ", pastec(private$.match_requests_on)),
+        sep = "\n"
+      )
+      cat(
+        paste0("  Preserve Bytes?: ", private$.preserve_exact_body_bytes),
+        sep = "\n"
+      )
+      logloc <- if (private$.log) sprintf(" (%s)", private$.log_opts$file) else
+        ""
       cat(paste0("  Logging?: ", private$.log, logloc), sep = "\n")
-      cat(paste0("  ignored hosts: ", pastec(private$.ignore_hosts)), sep = "\n")
-      cat(paste0("  ignore localhost?: ", private$.ignore_localhost), sep = "\n")
+      cat(
+        paste0("  ignored hosts: ", pastec(private$.ignore_hosts)),
+        sep = "\n"
+      )
+      cat(
+        paste0("  ignore localhost?: ", private$.ignore_localhost),
+        sep = "\n"
+      )
       cat(paste0("  Write disk path: ", private$.write_disk_path), sep = "\n")
       invisible(self)
     }

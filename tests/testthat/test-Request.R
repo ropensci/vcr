@@ -1,7 +1,7 @@
 test_that("Request basic stuff", {
   aa <- Request$new()
-  expect_s3_class(aa,  "R6")
-  expect_s3_class(aa,  "Request")
+  expect_s3_class(aa, "R6")
+  expect_s3_class(aa, "Request")
 
   # vars
   expect_null(aa$disk)

@@ -1,10 +1,10 @@
 test_that("FileSystem", {
   aa <- FileSystem$new()
-  expect_s3_class(aa,  "R6")
-  expect_s3_class(aa,  "FileSystem")
+  expect_s3_class(aa, "R6")
+  expect_s3_class(aa, "FileSystem")
   expect_null(aa$content)
   expect_null(aa$file_name)
-  expect_type(aa$get_cassette,  "closure")
+  expect_type(aa$get_cassette, "closure")
   expect_false(aa$write2disk)
   expect_null(aa$write_fxn)
 })

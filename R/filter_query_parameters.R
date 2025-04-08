@@ -44,7 +44,12 @@ query_params_put_back <- function(int) {
           vals <- toputback[[i]]
           if (length(vals) == 2) {
             b$request$uri <-
-              replace_param_with(b$request$uri, names(toputback)[i], vals[2], vals[1])
+              replace_param_with(
+                b$request$uri,
+                names(toputback)[i],
+                vals[2],
+                vals[1]
+              )
           } else {
             b$request$uri <-
               replace_param(b$request$uri, names(toputback)[i], vals)
@@ -81,7 +86,7 @@ query_params_remove_str <- function(uri) {
   return(uri)
 }
 list2str <- function(w) {
-  paste(names(w), unlist(unname(w)), sep="=", collapse="&")
+  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
 }
 buildurl <- function(x) {
   x$parameter <- list2str(x$parameter)

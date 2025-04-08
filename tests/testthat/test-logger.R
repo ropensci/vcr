@@ -1,4 +1,7 @@
-vcr_configure(log = TRUE, log_opts = list(file = "vcr.log", log_prefix = "Cassette"))
+vcr_configure(
+  log = TRUE,
+  log_opts = list(file = "vcr.log", log_prefix = "Cassette")
+)
 
 test_that("vcr_log_file fails well", {
   # must pass a file name

@@ -22,7 +22,7 @@ vcr_test_path <- function(...) {
   # dirname () moves up one level from testthat dir
   root <- dirname(rprojroot::find_testthat_root_file())
   path <- file.path(root, ...)
-  if (!dir.exists(path)){
+  if (!dir.exists(path)) {
     message("could not find ", path, "; creating it")
     dir.create(path)
   }

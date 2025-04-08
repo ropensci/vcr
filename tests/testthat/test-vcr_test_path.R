@@ -49,5 +49,4 @@ test_that("vcr_test_path errors with wrongly specified paths", {
   expect_error(vcr_test_path("", "a"), "non empty", fixed = TRUE)
   ## User must provide a dir name
   expect_error(vcr_test_path(), "provide", fixed = TRUE)
-
 })

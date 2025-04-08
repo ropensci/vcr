@@ -95,13 +95,22 @@ UnhandledHTTPRequestError <- R6::R6Class(
       vcr__env$last_error$cassettes_description <- self$cassettes_description()
       vcr__env$last_error$formatted_suggestion <- self$formatted_suggestions()
       mssg <- paste0(
-        c("", "", paste0(rep("=", 80), collapse = ""),
+        c(
+          "",
+          "",
+          paste0(rep("=", 80), collapse = ""),
           "An HTTP request has been made that vcr does not know how to handle:",
           self$request_description(),
-          if (vcr_c$verbose_errors) self$cassettes_description() else self$cassettes_list(),
-          if (vcr_c$verbose_errors) vcr__env$last_error$formatted_suggestion else self$get_help(),
-          paste0(rep("=", 80), collapse = ""), "", ""),
-        collapse = "\n")
+          if (vcr_c$verbose_errors) self$cassettes_description() else
+            self$cassettes_list(),
+          if (vcr_c$verbose_errors)
+            vcr__env$last_error$formatted_suggestion else self$get_help(),
+          paste0(rep("=", 80), collapse = ""),
+          "",
+          ""
+        ),
+        collapse = "\n"
+      )
       orig_warn_len <- getOption("warning.length")
       on.exit(options(warning.length = orig_warn_len))
       options(warning.length = 2000)
@@ -112,16 +121,18 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @return character
     request_description = function() {
       lines <- c()
-      lines <- c(lines,
+      lines <- c(
+        lines,
         paste(
           toupper(self$request$method),
           sensitive_remove(self$request$uri), # remove sensitive data
-          sep = " "))
+          sep = " "
+        )
+      )
       if (self$match_request_on_headers()) {
-        lines <- c(lines,
-          sprintf("  Headers:\n%s",
-            sensitive_remove(self$formatted_headers())
-          )
+        lines <- c(
+          lines,
+          sprintf("  Headers:\n%s", sensitive_remove(self$formatted_headers()))
         )
       }
       if (self$match_request_on_body()) {
@@ -155,9 +166,13 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get request headers
     #' @return character
     formatted_headers = function() {
-      tmp <- Map(function(a, b) {
-        sprintf("    %s: %s", a, b)
-      }, names(self$request$headers), self$request$headers)
+      tmp <- Map(
+        function(a, b) {
+          sprintf("    %s: %s", a, b)
+        },
+        names(self$request$headers),
+        self$request$headers
+      )
       paste0(tmp, collapse = "\n")
     },
 
@@ -166,14 +181,24 @@ UnhandledHTTPRequestError <- R6::R6Class(
     cassettes_description = function() {
       if (length(cassettes_session()) > 0) {
         tmp <- self$cassettes_list()
-        tmp2 <- paste0(c("\n",
-         "Under the current configuration vcr can not find a suitable HTTP interaction",
-         "to replay and is prevented from recording new requests. There are a few ways",
-         "you can deal with this:\n"), collapse = "\n")
+        tmp2 <- paste0(
+          c(
+            "\n",
+            "Under the current configuration vcr can not find a suitable HTTP interaction",
+            "to replay and is prevented from recording new requests. There are a few ways",
+            "you can deal with this:\n"
+          ),
+          collapse = "\n"
+        )
         c(tmp, tmp2)
       } else {
-        paste0(c("There is currently no cassette in use. There are a few ways",
-         "you can configure vcr to handle this request:\n"), collapse = "\n")
+        paste0(
+          c(
+            "There is currently no cassette in use. There are a few ways",
+            "you can configure vcr to handle this request:\n"
+          ),
+          collapse = "\n"
+        )
       }
     },
 
@@ -192,23 +217,33 @@ UnhandledHTTPRequestError <- R6::R6Class(
         zz <- c(
           paste0("  - ", self$cassette$file() %try% ""),
           paste0("    - record_mode: ", self$cassette$record),
-          paste0("    - match_requests_on: ",
-          paste0(self$cassette$match_requests_on, collapse = ", "))
+          paste0(
+            "    - match_requests_on: ",
+            paste0(self$cassette$match_requests_on, collapse = ", ")
+          )
         )
         paste0(c(lines, zz), collapse = "\n")
       } else {
-        paste0(c("There is currently no cassette in use. There are a few ways",
-         "you can configure vcr to handle this request:\n"), collapse = "\n")
+        paste0(
+          c(
+            "There is currently no cassette in use. There are a few ways",
+            "you can configure vcr to handle this request:\n"
+          ),
+          collapse = "\n"
+        )
       }
     },
 
     #' @description get help message for non-verbose error
     #' @return character
     get_help = function() {
-      vm <- if (interactive()) "Run `vcr::vcr_last_error()`" else "Set `VCR_VERBOSE_ERRORS=TRUE`"
-      c(paste0(vm, " for more verbose errors"),
+      vm <- if (interactive()) "Run `vcr::vcr_last_error()`" else
+        "Set `VCR_VERBOSE_ERRORS=TRUE`"
+      c(
+        paste0(vm, " for more verbose errors"),
         "If you're not sure what to do, open an issue https://github.com/ropensci/vcr/issues",
-        "& see https://books.ropensci.org/http-testing")
+        "& see https://books.ropensci.org/http-testing"
+      )
     },
 
     #' @description make suggestions for what to do
@@ -216,13 +251,20 @@ UnhandledHTTPRequestError <- R6::R6Class(
     formatted_suggestions = function() {
       formatted_points <- c()
       sugs <- self$suggestions()
-      xx <- Map(function(bp, index) {
-        fp <- c(formatted_points, self$format_bullet_point(bp$text, index))
-        fn <- self$format_foot_note(bp$url, index)
-        list(fp = fp, fn = fn)
-      }, sugs, seq_along(sugs) - 1)
-      paste0(c(vapply(xx, "[[", "", 1), "\n", vapply(xx, "[[", "", 2)),
-             collapse = "", sep = "\n")
+      xx <- Map(
+        function(bp, index) {
+          fp <- c(formatted_points, self$format_bullet_point(bp$text, index))
+          fn <- self$format_foot_note(bp$url, index)
+          list(fp = fp, fn = fn)
+        },
+        sugs,
+        seq_along(sugs) - 1
+      )
+      paste0(
+        c(vapply(xx, "[[", "", 1), "\n", vapply(xx, "[[", "", 2)),
+        collapse = "",
+        sep = "\n"
+      )
     },
 
     #' @description add bullet point to beginning of a line
@@ -231,8 +273,10 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @return character
     format_bullet_point = function(lines, index) {
       lines[1] <- paste0("  * ", lines[1])
-      lines[length(lines)] <- paste(lines[length(lines)],
-        sprintf("[%s].", index + 1))
+      lines[length(lines)] <- paste(
+        lines[length(lines)],
+        sprintf("[%s].", index + 1)
+      )
       paste0(lines, collapse = "\n    ")
     },
 
@@ -269,8 +313,12 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get all no cassette suggestions
     #' @return list
     no_cassette_suggestions = function() {
-      x <- c("try_debug_logger", "use_a_cassette",
-        "allow_http_connections_when_no_cassette", "ignore_request")
+      x <- c(
+        "try_debug_logger",
+        "use_a_cassette",
+        "allow_http_connections_when_no_cassette",
+        "ignore_request"
+      )
       lapply(x, self$suggestion_for)
     },
 
@@ -291,19 +339,28 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description are there any used interactions
     #' @return logical
     has_used_interaction_matching = function() {
-      any(vapply(cassettes_session(), function(z) {
-        z$http_interactions()
-        z$http_interactions_$has_used_interaction_matching(self$request) %||% FALSE
-      }, logical(1)))
+      any(vapply(
+        cassettes_session(),
+        function(z) {
+          z$http_interactions()
+          z$http_interactions_$has_used_interaction_matching(self$request) %||%
+            FALSE
+        },
+        logical(1)
+      ))
     },
 
     #' @description match requests on suggestion
     #' @return list
     match_requests_on_suggestion = function() {
-      num_remaining_interactions <- sum(vapply(cassettes_session(), function(z) {
-        z$http_interactions()
-        z$http_interactions_$remaining_unused_interaction_count()
-      }, numeric(1)))
+      num_remaining_interactions <- sum(vapply(
+        cassettes_session(),
+        function(z) {
+          z$http_interactions()
+          z$http_interactions_$remaining_unused_interaction_count()
+        },
+        numeric(1)
+      ))
 
       if (num_remaining_interactions == 0) return(NULL)
 
@@ -316,15 +373,17 @@ UnhandledHTTPRequestError <- R6::R6Class(
       tmp <- self$suggestion_for("match_requests_on")
       description_lines <- tmp$text
       link <- tmp$url
-      description_lines[1] <- sprintf(description_lines[1],
-        interaction_description)
+      description_lines[1] <- sprintf(
+        description_lines[1],
+        interaction_description
+      )
       list(text = paste0(description_lines, collapse = "\n    "), url = link)
     }
   )
 )
 
 #' Get full suggestion messages for the last vcr cassette failure
-#' 
+#'
 #' @export
 #' @rdname UnhandledHTTPRequestError
 #' @examples \dontrun{
@@ -332,17 +391,26 @@ UnhandledHTTPRequestError <- R6::R6Class(
 #' }
 vcr_last_error <- function() {
   if (is.null(vcr__env$last_error) || length(vcr__env$last_error) == 0) {
-    stop("no error to report; either no cassette in use \n",
+    stop(
+      "no error to report; either no cassette in use \n",
       "  or there's a problem with this package (i.e., open an issue)",
-      call. = FALSE)
+      call. = FALSE
+    )
   }
   message(
     paste0(
-      c("", "", paste0(rep("=", 80), collapse = ""),
+      c(
+        "",
+        "",
+        paste0(rep("=", 80), collapse = ""),
         vcr__env$last_error$request_description,
         vcr__env$last_error$cassettes_description,
         vcr__env$last_error$formatted_suggestion,
-        paste0(rep("=", 80), collapse = ""), "", ""),
-      collapse = "\n")
+        paste0(rep("=", 80), collapse = ""),
+        "",
+        ""
+      ),
+      collapse = "\n"
+    )
   )
 }

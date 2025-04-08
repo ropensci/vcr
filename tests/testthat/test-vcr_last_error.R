@@ -10,7 +10,7 @@ test_that("vcr_last_error fails well", {
   cas <- suppressMessages(insert_cassette("rabbit"))
 
   expect_error(vcr_last_error(), "no error to report")
-  
+
   # cleanup before next test block
   eject_cassette()
   unlink(file.path(vcr_configuration()$dir, "rabbit.yml"))
@@ -23,7 +23,11 @@ vcr_configure_reset()
 dir <- tempdir()
 invisible(vcr_configure(dir = dir))
 request <- Request$new(
-  "post", hb("/post?a=5"), "", list(foo = "bar"))
+  "post",
+  hb("/post?a=5"),
+  "",
+  list(foo = "bar")
+)
 
 test_that("vcr_last_error works: no casssette in use yet", {
   err <- UnhandledHTTPRequestError$new(request)
@@ -39,7 +43,10 @@ test_that("vcr_last_error works: casssette in use", {
 
   err <- UnhandledHTTPRequestError$new(request)
   expect_error(err$construct_message())
-  expect_message(vcr_last_error(), "vcr is currently using the following cassette")
+  expect_message(
+    vcr_last_error(),
+    "vcr is currently using the following cassette"
+  )
   expect_message(vcr_last_error(), "Under the current configuration")
   expect_message(vcr_last_error(), "new_episodes")
 })

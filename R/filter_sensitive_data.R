@@ -2,7 +2,7 @@ trimquotes <- function(x, y) {
   pattern <- "^\"|\"$|^'|'$"
   if (grepl(pattern, x)) {
     msg <- "filter_sensitive_data: leading & trailing quotes trimmed from '"
-    warning(paste0(msg, y, "'"), call.=FALSE)
+    warning(paste0(msg, y, "'"), call. = FALSE)
   }
   return(gsub(pattern, "", x))
 }

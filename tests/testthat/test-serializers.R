@@ -18,12 +18,20 @@ test_that("you can record a new cassette of same name with different serializer"
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
-  cas_yml <- use_cassette(name = "testing1", {
-    res <- crul::HttpClient$new(hb("/get"))$get()
-  }, serialize_with = "yaml")
-  cas_json <- use_cassette(name = "testing1", {
-    res2 <- crul::HttpClient$new(hb("/get"))$get()
-  }, serialize_with = "json")
+  cas_yml <- use_cassette(
+    name = "testing1",
+    {
+      res <- crul::HttpClient$new(hb("/get"))$get()
+    },
+    serialize_with = "yaml"
+  )
+  cas_json <- use_cassette(
+    name = "testing1",
+    {
+      res2 <- crul::HttpClient$new(hb("/get"))$get()
+    },
+    serialize_with = "json"
+  )
   expect_s3_class(cas_yml, "Cassette")
   expect_s3_class(cas_json, "Cassette")
   expect_equal(cas_yml$name, cas_json$name)

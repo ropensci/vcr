@@ -89,9 +89,13 @@ RequestHandler <- R6::R6Class(
     initialize = function(request) {
       self$request_original <- request
       self$request <- {
-        Request$new(request$method, request$url$url %||% request$url,
-          webmockr::pluck_body(request) %||% "", request$headers,
-          disk = !is.null(request$output$path))
+        Request$new(
+          request$method,
+          request$url$url %||% request$url,
+          webmockr::pluck_body(request) %||% "",
+          request$headers,
+          disk = !is.null(request$output$path)
+        )
       }
       self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
@@ -99,16 +103,26 @@ RequestHandler <- R6::R6Class(
     #' @description Handle the request (`request` given in `$initialize()`)
     #' @return handles a request, outcomes vary
     handle = function() {
-      vcr_log_info(sprintf("Handling request: %s (disabled: %s)",
-        private$request_summary(self$request),
-        private$is_disabled()), vcr_c$log_opts$date)
+      vcr_log_info(
+        sprintf(
+          "Handling request: %s (disabled: %s)",
+          private$request_summary(self$request),
+          private$is_disabled()
+        ),
+        vcr_c$log_opts$date
+      )
 
       req_type <- private$request_type()
       req_type_fun <- sprintf("private$on_%s_request", req_type)
 
-      vcr_log_info(sprintf("Identified request type: (%s) for %s",
-        req_type,
-        private$request_summary(self$request)), vcr_c$log_opts$date)
+      vcr_log_info(
+        sprintf(
+          "Identified request type: (%s) for %s",
+          req_type,
+          private$request_summary(self$request)
+        ),
+        vcr_c$log_opts$date
+      )
 
       eval(parse(text = req_type_fun))(self$request)
     }
@@ -118,7 +132,7 @@ RequestHandler <- R6::R6Class(
     request_summary = function(request) {
       request_matchers <- if (
         !inherits(self$cassette, c("error", "list")) &&
-        !is.null(self$cassette)
+          !is.null(self$cassette)
       ) {
         self$cassette$match_requests_on
       } else {
@@ -159,7 +173,6 @@ RequestHandler <- R6::R6Class(
       hi$has_interaction_matching(request)
     },
     is_disabled = function(adapter = "crul") !webmockr::enabled(adapter),
-
 
     # get stubbed response
     get_stubbed_response = function(request) {

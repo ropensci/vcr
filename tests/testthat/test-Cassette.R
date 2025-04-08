@@ -1,10 +1,10 @@
 test_that("Cassette", {
   cl <- Cassette$new(name = "stuff")
-  expect_s3_class(cl,  "R6")
-  expect_s3_class(cl,  "Cassette")
+  expect_s3_class(cl, "R6")
+  expect_s3_class(cl, "Cassette")
 
   # eject cassette
-  ## expect warning from empty cassette checker 
+  ## expect warning from empty cassette checker
   expect_warning(cl$eject())
 })
 
@@ -39,7 +39,7 @@ test_that("make_http_interaction works as expected", {
 
   # httr_resp2 <- httr::GET(hb("/image/png"))
   # save(httr_resp2, file = "tests/testthat/httr_resp2.rda", version = 2)
-  
+
   # make a cassettes
   zz <- Cassette$new(name = "bluecheese")
 
