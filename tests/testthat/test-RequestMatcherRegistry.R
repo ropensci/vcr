@@ -1,14 +1,12 @@
-context("RequestMatcherRegistry")
-
 test_that("RequestMatcherRegistry contains the right stuff", {
-  expect_is(request_matchers, "RequestMatcherRegistry")
-  expect_is(request_matchers$default_matchers, "list")
+  expect_s3_class(request_matchers, "RequestMatcherRegistry")
+  expect_type(request_matchers$default_matchers, "list")
   expect_equal(request_matchers$default_matchers, list('method', 'uri'))
-  expect_is(request_matchers$register, "function")
-  expect_is(request_matchers$register_built_ins, "function")
-  expect_is(request_matchers$registry, "list")
-  expect_is(request_matchers$registry[[1]], "Matcher")
-  expect_is(request_matchers$try_to_register_body_as_json, "function")
+  expect_type(request_matchers$register, "closure")
+  expect_type(request_matchers$register_built_ins, "closure")
+  expect_type(request_matchers$registry, "list")
+  expect_s3_class(request_matchers$registry[[1]], "Matcher")
+  expect_type(request_matchers$try_to_register_body_as_json, "closure")
 })
 
 test_that("RequestMatcherRegistry basic functionality works", {

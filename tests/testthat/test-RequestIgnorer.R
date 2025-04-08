@@ -1,21 +1,18 @@
-context("RequestIgnorer")
-
 test_that("RequestIgnorer basic stuff", {
-  expect_is(RequestIgnorer, "R6ClassGenerator")
   aa <- RequestIgnorer$new()
-  expect_is(aa, "R6")
-  expect_is(aa, "RequestIgnorer")
+  expect_s3_class(aa, "R6")
+  expect_s3_class(aa, "RequestIgnorer")
 
   # vars
   expect_equal(aa$LOCALHOST_ALIASES, c('localhost', '127.0.0.1', '0.0.0.0'))
-  expect_is(aa$ignored_hosts, "EnvHash")
+  expect_s3_class(aa$ignored_hosts, "EnvHash")
 
   # methods
-  expect_is(aa$ignore_localhost, "function")
-  expect_is(aa$ignore_localhost_value, "function")
-  expect_is(aa$ignore_request, "function")
-  expect_is(aa$ignore_hosts, "function")
-  expect_is(aa$should_be_ignored, "function")
+  expect_type(aa$ignore_localhost, "closure")
+  expect_type(aa$ignore_localhost_value, "closure")
+  expect_type(aa$ignore_request, "closure")
+  expect_type(aa$ignore_hosts, "closure")
+  expect_type(aa$should_be_ignored, "closure")
 })
 
 test_that("RequestIgnorer usage", {

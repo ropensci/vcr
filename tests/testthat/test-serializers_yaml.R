@@ -1,20 +1,16 @@
-context("serializers: YAML")
-
 test_that("YAML basic stuff", {
-  expect_is(YAML, "R6ClassGenerator")
   aa <- YAML$new()
-  expect_is(aa, "R6")
-  expect_is(aa, "YAML")
+  expect_s3_class(aa, "R6")
+  expect_s3_class(aa, "YAML")
 
   # vars
-  expect_is(aa$file_extension, "character")
   expect_equal(aa$file_extension, ".yml")
-  expect_is(aa$path, "character")
+  expect_type(aa$path, "character")
   expect_match(aa$path, "\\.yml")
 
   # methods
-  expect_is(aa$serialize, "function")
-  expect_is(aa$deserialize, "function")
+  expect_type(aa$serialize, "closure")
+  expect_type(aa$deserialize, "closure")
 })
 
 test_that("YAML usage", {
@@ -30,7 +26,7 @@ test_that("YAML usage", {
   expect_warning(z$deserialize(), "incomplete final line")
   # after file exists, with yaml in it, without incomplete final line:
   cat("foo: 123\nbar: 456\n", file = z$path)
-  expect_is(z$deserialize(), "list")
+  expect_type(z$deserialize(), "list")
 
   # cleanup
   unlink(z$path)
@@ -45,5 +41,5 @@ test_that("YAML fails well", {
 })
 test_that("Windows encoding", {
   path <- test_path("cassettes/ropenaq-encoding.yaml")
-  expect_is(yaml_load_desecret(path), "list") # could fail on Windows
+  expect_type(yaml_load_desecret(path), "list") # could fail on Windows
 })

@@ -28,8 +28,8 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing1")
   expect_equal(aa$match_requests_on, c("method", "uri", "body"))
 
@@ -54,8 +54,8 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing2")
   expect_equal(aa$match_requests_on, c("method", "body"))
 
@@ -82,8 +82,8 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing3")
   expect_equal(aa$match_requests_on, "body")
 
@@ -108,8 +108,8 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing_host1")
   expect_equal(aa$match_requests_on, "host")
 
@@ -140,8 +140,8 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing_path1")
   expect_equal(aa$match_requests_on, "path")
 
@@ -172,8 +172,8 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing_host_path")
   expect_equal(aa$match_requests_on, c("host", "path"))
 
@@ -210,8 +210,8 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing2")
   expect_equal(aa$match_requests_on, c("method", "uri", "body"))
 
@@ -236,8 +236,8 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing4")
   expect_equal(aa$match_requests_on, c("method", "body"))
 
@@ -271,8 +271,8 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
   expect_identical(recorded_at(bb), recorded_at(cc))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing5")
   expect_equal(aa$match_requests_on, "body")
   expect_equal(bb$match_requests_on, "body")
@@ -298,8 +298,8 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   # - that is, the request matched and the recorded response in aa
   # - was used
   expect_identical(recorded_at(aa), recorded_at(bb))
-  expect_is(aa, "Cassette")
-  expect_is(aa$name, "character")
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
   expect_equal(aa$name, "testing_httr_host_path")
   expect_equal(aa$match_requests_on, c("host", "path"))
 

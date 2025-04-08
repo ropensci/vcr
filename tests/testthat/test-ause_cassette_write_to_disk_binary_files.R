@@ -1,5 +1,3 @@
-context("use_cassette: handle binary files on disk")
-
 tmpdir <- tempdir()
 vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 
@@ -17,19 +15,19 @@ test_that("use_cassette w/ binary files on disk: crul", {
     out <- HttpClient$new(url)$get(disk = f)
   })
 
-  expect_is(out, "HttpResponse")
-  expect_is(out$content, "character")
+  expect_s3_class(out, "HttpResponse")
+  expect_type(out$content, "character")
   expect_match(out$content, "\\.nc")
-  expect_is(out$parse(), "raw")
+  expect_type(out$parse(), "raw")
 
   # works on 2nd request
   use_cassette("test_write_to_disk_binary", {
     out2 <- HttpClient$new(url)$get(disk = f)
   })
-  expect_is(out2, "HttpResponse")
-  expect_is(out2$content, "character")
+  expect_s3_class(out2, "HttpResponse")
+  expect_type(out2$content, "character")
   expect_match(out2$content, "\\.nc")
-  expect_is(out2$parse(), "raw")
+  expect_type(out2$parse(), "raw")
 
   expect_equal(out$parse(), out2$parse())
 })
@@ -56,19 +54,19 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
     out <- HttpClient$new(url)$get(disk = f)
   })
 
-  expect_is(out, "HttpResponse")
-  expect_is(out$content, "character")
+  expect_s3_class(out, "HttpResponse")
+  expect_type(out$content, "character")
   expect_match(out$content, "\\.jpeg")
-  expect_is(out$parse(), "raw")
+  expect_type(out$parse(), "raw")
 
   # works on 2nd request
   use_cassette("test_write_to_disk_binary_img", {
     out2 <- HttpClient$new(url)$get(disk = f)
   })
-  expect_is(out2, "HttpResponse")
-  expect_is(out2$content, "character")
+  expect_s3_class(out2, "HttpResponse")
+  expect_type(out2$content, "character")
   expect_match(out2$content, "\\.jpeg")
-  expect_is(out2$parse(), "raw")
+  expect_type(out2$parse(), "raw")
 
   expect_equal(out$parse(), out2$parse())
 
@@ -90,10 +88,10 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
     out2 <- foo_bar()
   })
 
-  expect_is(out$content, "character")
-  expect_is(out$parse(), "raw")
-  expect_is(out2$content, "character")
-  expect_is(out2$parse(), "raw")
+  expect_type(out$content, "character")
+  expect_type(out$parse(), "raw")
+  expect_type(out2$content, "character")
+  expect_type(out2$parse(), "raw")
   expect_equal(out$parse(), out2$parse())
 })
 
@@ -112,16 +110,16 @@ test_that("use_cassette w/ binary files on disk: httr", {
     out <- GET(url, write_disk(f, TRUE))
   })
 
-  expect_is(out, "response")
-  expect_is(out$content, "path")
+  expect_s3_class(out, "response")
+  expect_s3_class(out$content, "path")
   expect_match(out$content, "\\.nc")
 
   # works on 2nd request
   use_cassette("test_write_to_disk_binary_httr", {
     out2 <- GET(url, write_disk(f, TRUE))
   })
-  expect_is(out2, "response")
-  expect_is(out2$content, "path")
+  expect_s3_class(out2, "response")
+  expect_s3_class(out2$content, "path")
   expect_match(out2$content, "\\.nc")
 
   expect_equal(httr::content(out), httr::content(out2))

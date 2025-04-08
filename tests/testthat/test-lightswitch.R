@@ -1,5 +1,3 @@
-context("lightswitch functions")
-
 test_that("default options set as expected", {
   expect_false(light_switch$turned_off)
   expect_false(light_switch$ignore_cassettes)
@@ -34,7 +32,7 @@ vcr_configure(warn_on_empty_cassette = FALSE)
 test_that("turn_off and ignore_cassettes works correctly", {
   # before turned off, insert_cassette works
   z <- insert_cassette("abcd")
-  expect_is(z, "Cassette")
+  expect_s3_class(z, "Cassette")
   z$eject()
 
   # after being turned off, insert_cassette throws an error
@@ -65,7 +63,7 @@ test_that("lightswitch env var's", {
   # VCR_TURN_OFF not set, insert_cassette works
   expect_equal(Sys.getenv("VCR_TURN_OFF"), "")
   z <- insert_cassette("abcd")
-  expect_is(z, "Cassette")
+  expect_s3_class(z, "Cassette")
   invisible(z$eject())
 
   # after being turned off, insert_cassette throws an error
@@ -139,7 +137,7 @@ test_that("turned_off", {
   suppressMessages(turned_off({
     beetle <- crul::HttpClient$new(url = hb("/get"))$get()
   }))
-  expect_is(beetle, "HttpResponse")
+  expect_s3_class(beetle, "HttpResponse")
   expect_true(turned_on())
 })
 

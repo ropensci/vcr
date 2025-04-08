@@ -3,7 +3,6 @@ vcr_configure(
   log_opts = list(file = "vcr.log", log_prefix = "Cassette")
 )
 
-context("logger: vcr_log_file fails well")
 test_that("vcr_log_file fails well", {
   # must pass a file name
   expect_error(vcr_log_file(), "argument \"file\" is missing")
@@ -21,7 +20,6 @@ test_that("vcr_log_file fails well", {
   )
 })
 
-context("logger: vcr_log_file works")
 test_that("vcr_log_file works as expected", {
   expect_true(vcr_log_file("adsf"))
 })
@@ -30,7 +28,7 @@ test_that("vcr_log_file: console", {
   aa <- vcr_log_file("console")
 
   expect_true(aa)
-  expect_is(vcr_log_env, "environment")
+  expect_type(vcr_log_env, "environment")
   expect_equal(vcr_log_env$file, "console")
 })
 

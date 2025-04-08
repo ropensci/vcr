@@ -1,5 +1,3 @@
-context("UnhandledHTTPRequestError")
-
 dir <- tempdir()
 invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
 
@@ -31,10 +29,10 @@ test_that("UnhandledHTTPRequestError fails well", {
 test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
-  expect_is(a, "UnhandledHTTPRequestError")
-  expect_is(a$cassette, "Cassette")
+  expect_s3_class(a, "UnhandledHTTPRequestError")
+  expect_s3_class(a$cassette, "Cassette")
   expect_equal(a$cassette$name, "turtle")
-  expect_is(a$construct_message, "function")
+  expect_type(a$construct_message, "closure")
 
   expect_error(
     a$construct_message(),
@@ -47,8 +45,6 @@ unlink(file.path(vcr_configuration()$dir, "turtle.yml"))
 # reset configuration
 vcr_configure_reset()
 
-
-context("UnhandledHTTPRequestError: secret handling")
 
 ## API key in query param
 Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
@@ -77,10 +73,10 @@ cas <- suppressMessages(insert_cassette("bunny"))
 test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
-  expect_is(a, "UnhandledHTTPRequestError")
-  expect_is(a$cassette, "Cassette")
+  expect_s3_class(a, "UnhandledHTTPRequestError")
+  expect_s3_class(a$cassette, "Cassette")
   expect_equal(a$cassette$name, "bunny")
-  expect_is(a$construct_message, "function")
+  expect_type(a$construct_message, "closure")
 
   expect_error(
     a$construct_message(),
@@ -123,10 +119,10 @@ cas <- suppressMessages(insert_cassette(
 test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
-  expect_is(a, "UnhandledHTTPRequestError")
-  expect_is(a$cassette, "Cassette")
+  expect_s3_class(a, "UnhandledHTTPRequestError")
+  expect_s3_class(a$cassette, "Cassette")
   expect_equal(a$cassette$name, "frog")
-  expect_is(a$construct_message, "function")
+  expect_type(a$construct_message, "closure")
 
   expect_error(
     a$construct_message(),
@@ -165,10 +161,10 @@ cas <- suppressMessages(insert_cassette("bunny2"))
 test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
-  expect_is(a, "UnhandledHTTPRequestError")
-  expect_is(a$cassette, "Cassette")
+  expect_s3_class(a, "UnhandledHTTPRequestError")
+  expect_s3_class(a$cassette, "Cassette")
   expect_equal(a$cassette$name, "bunny2")
-  expect_is(a$construct_message, "function")
+  expect_type(a$construct_message, "closure")
 
   expect_error(
     a$construct_message(),
@@ -206,10 +202,10 @@ vcr_configure_reset()
 # test_that("UnhandledHTTPRequestError works as expected", {
 #   a <- UnhandledHTTPRequestError$new(request)
 
-#   expect_is(a, "UnhandledHTTPRequestError")
-#   expect_is(a$cassette, "Cassette")
+#   expect_s3_class(a, "UnhandledHTTPRequestError")
+#   expect_s3_class(a$cassette, "Cassette")
 #   expect_equal(a$cassette$name, "alligator")
-#   expect_is(a$construct_message, "function")
+#   expect_s3_class(a$construct_message, "function")
 
 #   expect_error(
 #     a$construct_message(),

@@ -25,6 +25,19 @@ test_that("HTTPInteractionList", {
     headers = res2$response_headers
   )
   request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
+  request <- Request$new(
+    "POST",
+    uri = url,
+    body = body,
+    headers = res$response_headers
+  )
+  request2 <- Request$new(
+    "GET",
+    uri = url2,
+    body = body,
+    headers = res2$response_headers
+  )
+  request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
   # response
   response <- VcrResponse$new(
     res$status_http(),
@@ -50,21 +63,21 @@ test_that("HTTPInteractionList", {
   ))
 
   # objects and methods
-  expect_is(x$request_matchers, "character")
+  expect_type(x$request_matchers, "character")
   expect_equal(x$request_matchers, c('method', 'uri'))
   ## parent list
-  expect_is(x$parent_list, "NullList")
+  expect_s3_class(x$parent_list, "NullList")
   expect_null(x$parent_list$response_for())
   expect_false(x$parent_list$has_interaction_matching())
   expect_false(x$parent_list$has_used_interaction_matching())
   expect_equal(x$parent_list$remaining_unused_interaction_count(), 0)
 
-  expect_is(x$used_interactions, "list")
+  expect_type(x$used_interactions, "list")
   expect_false(x$allow_playback_repeats)
-  expect_is(x$interactions, "list")
-  expect_is(x$interactions[[1]], "HTTPInteraction")
-  expect_is(x$response_for, "function")
-  expect_is(suppressWarnings(x$response_for(request)), "VcrResponse")
+  expect_type(x$interactions, "list")
+  expect_s3_class(x$interactions[[1]], "HTTPInteraction")
+  expect_type(x$response_for, "closure")
+  expect_s3_class(suppressWarnings(x$response_for(request)), "VcrResponse")
 
   # private methods
   ### need to remake the HTTPInteractionList object b/c response_for alters it
@@ -116,5 +129,8 @@ test_that("HTTPInteractionList", {
   priv <- x$.__enclos_env__$private
   expect_false(priv$matching_used_interaction_for(request))
   x$response_for(request) # request used
-  expect_is(priv$matching_used_interaction_for(request), "HTTPInteraction")
+  expect_s3_class(
+    priv$matching_used_interaction_for(request),
+    "HTTPInteraction"
+  )
 })

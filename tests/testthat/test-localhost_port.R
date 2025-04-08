@@ -24,7 +24,7 @@ test_that("testing against localhost port works", {
   path <- file.path(tmpdir, "localhost_port.yml")
   file <- yaml::yaml.load_file(path)
   url <- file$http_interactions[[1]]$request$uri
-  expect_is(url, "character")
+  expect_type(url, "character")
   expect_match(url, "http://.+:[0-9]+/")
   expect_match(url, as.character(port))
 })
