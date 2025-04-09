@@ -37,5 +37,5 @@ eject_cassette <- function(
     if (is.null(cas)) stp("cassette '", cassette, "' not found")
   }
   # eject it
-  cas$eject()
+  invisible(cas$eject())
 }
