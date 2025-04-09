@@ -464,7 +464,7 @@ VCRConfig <- R6::R6Class(
 
     # return current configuration as a list
     as_list = function() {
-      setNames(mget(names(private), private), self$fields())
+      stats::setNames(mget(names(private), private), self$fields())
     },
 
     print = function(...) {
