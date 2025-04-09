@@ -1,8 +1,3 @@
-on.exit({
-  vcr_configure_reset()
-  vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
-})
-
 test_that("VCRConfig", {
   cl <- vcr_configuration()
   expect_s3_class(cl, "R6")
@@ -23,9 +18,20 @@ test_that("config fails well with invalid request matchers", {
   )
 })
 
+test_that("returns previous values", {
+  local_vcr_configure(dir = "dir1", record = "none")
+
+  old <- vcr_configure(dir = "dir2", record = "once")
+  expect_equal(old, list(dir = "dir1", record = "none"))
+})
+
+test_that("if called with no args returns a list of all args", {
+  out <- vcr_configure()
+  expect_equal(out, vcr_c$as_list())
+})
+
 test_that("vcr_configure() only affects settings passed as arguments", {
-  vcr_configure_reset()
-  vcr_configure(dir = "olddir", record = "none")
+  local_vcr_configure(dir = "olddir", record = "none")
   config1 <- vcr_c$clone()
 
   vcr_configure(dir = "newdir")
@@ -39,6 +45,8 @@ test_that("vcr_configure() only affects settings passed as arguments", {
 })
 
 test_that("warnings are thrown for invalid parameters", {
+  local_vcr_configure()
+
   expect_warning(
     vcr_configure(foo = "bar"),
     "The following configuration parameters are not valid"

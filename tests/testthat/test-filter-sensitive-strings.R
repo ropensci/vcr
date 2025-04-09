@@ -9,7 +9,7 @@ test_that("filter sensitive strings", {
   expect_identical(sensitive_remove(x), x)
 
   # vcr_c$filter_sensitive_data is not NULL
-  vcr_configure(
+  local_vcr_configure(
     filter_sensitive_data = list("<<my-key>>" = "234223){@%!kl]")
   )
   expect_type(vcr_c$filter_sensitive_data, "list")
@@ -27,7 +27,7 @@ test_that("filter sensitive regex strings", {
   expect_identical(sensitive_remove(x), x)
 
   # vcr_c$filter_sensitive_data is not NULL
-  vcr_configure(
+  local_vcr_configure(
     filter_sensitive_data_regex = list("<<my-key>>" = "foo[0-9]+bar")
   )
   expect_type(vcr_c$filter_sensitive_data_regex, "list")
@@ -41,8 +41,8 @@ test_that("filter sensitive regex strings", {
 
 test_that("filter sensitive data strips leading/trailing single/double quotes", {
   Sys.setenv(MY_KEY_ON_GH_ACTIONS = "\"ab123c\"")
-  tmpdir <- tempdir()
-  vcr_configure(
+  tmpdir <- withr::local_tempdir()
+  local_vcr_configure(
     dir = tmpdir,
     filter_sensitive_data = list(
       "<somekey>" = Sys.getenv("MY_KEY_ON_GH_ACTIONS")
@@ -70,6 +70,3 @@ test_that("filter sensitive data strips leading/trailing single/double quotes", 
   # unset
   Sys.unsetenv("MY_KEY_ON_GH_ACTIONS")
 })
-
-# reset config
-vcr_configure_reset()

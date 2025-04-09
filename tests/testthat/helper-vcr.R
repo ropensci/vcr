@@ -1,6 +1,11 @@
 tmpdir <- tempdir()
 library(vcr)
 
+local_vcr_configure <- function(..., .frame = parent.frame()) {
+  old <- vcr_configure(...)
+  withr::defer(vcr_config_set(old), envir = .frame)
+}
+
 # define and restore consistent configuration options for tests
 vcr_test_configuration <- function(
   dir = tmpdir,
