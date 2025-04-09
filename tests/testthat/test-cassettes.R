@@ -23,21 +23,28 @@ unlink(file.path(vcr_configuration()$dir, "foobar24.yml"))
 # FIXME: add tests for on_disk and verb params
 
 test_that("current_cassette works", {
+  on.exit({
+    unlink(file.path(vcr_configuration()$dir, "aaa.yml"))
+    unlink(file.path(vcr_configuration()$dir, "bbb.yml"))
+  })
+
   # no cassettes in use
   aa <- current_cassette()
-  expect_type(aa, "list")
-  expect_equal(length(aa), 0)
+  expect_equal(aa, NULL)
 
   # cassette in use
-  cas <- insert_cassette("rrrrrrrrrrr")
-  aa <- current_cassette()
-  expect_s3_class(aa, "Cassette")
-  expect_gt(length(aa), 1)
-  expect_equal(aa$name, 'rrrrrrrrrrr')
-  cas$eject()
-})
+  cas_a <- insert_cassette("aaa")
+  expect_equal(current_cassette()$name, "aaa")
 
-unlink(file.path(vcr_configuration()$dir, "rrrrrrrrrrr.yml"))
+  cas_b <- insert_cassette("bbb")
+  expect_equal(current_cassette()$name, "bbb")
+
+  cas_b$eject()
+  expect_equal(current_cassette()$name, "aaa")
+
+  cas_a$eject()
+  expect_equal(current_cassette(), NULL)
+})
 
 test_that("cassette_path works", {
   # before vcr_config set, there's a temp dir
