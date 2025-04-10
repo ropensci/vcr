@@ -6,8 +6,8 @@
 #' real_http_connections_allowed()
 real_http_connections_allowed <- function() {
   trycurr <- tryCatch(current_cassette(), error = function(e) e)
-  if (!inherits(trycurr, c("error", "list")))
+  if (!inherits(trycurr, "error") && !is.null(trycurr))
     return(current_cassette()$recording())
-  if (identical(trycurr, list())) return(FALSE)
+  if (is.null(trycurr)) return(FALSE)
   !(vcr_c$allow_http_connections_when_no_cassette || !turned_on())
 }

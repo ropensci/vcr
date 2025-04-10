@@ -1,11 +1,10 @@
-vcr_configure_reset()
-
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir)
-
 test_that("quiet works", {
   library(crul)
   con <- HttpClient$new(hb())
+
+  tmpdir <- withr::local_tempdir()
+  local_vcr_configure(dir = tmpdir)
+
   # default: quiet=TRUE
   expect_true(vcr_configuration()$quiet)
   expect_message(
@@ -22,7 +21,7 @@ test_that("quiet works", {
   )
 
   # quiet=FALSE
-  vcr_configure(quiet = FALSE)
+  local_vcr_configure(quiet = FALSE)
   expect_false(vcr_configuration()$quiet)
   webmockr::webmockr_disable_net_connect()
   expect_message(
@@ -38,5 +37,3 @@ test_that("quiet works", {
     "disabled"
   )
 })
-
-vcr_configure_reset()

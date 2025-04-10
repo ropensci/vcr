@@ -25,11 +25,10 @@ List cassettes, get current cassette, etc.
 \itemize{
 \item \code{cassettes()}: returns cassettes found in your R session, you can toggle
 whether we pull from those on disk or not
-\item \code{current_cassette()}: returns an empty list when no cassettes are in use,
-while it returns the current cassette (a \code{Cassette} object) when one is
-in use
-\item \code{cassette_path()}: just gives you the current directory path where
-cassettes will be stored
+\item \code{current_cassette()}: returns \code{NULL} when no cassettes are in use;
+returns the current cassette (a \code{Cassette} object) when one is in use
+\item \code{cassette_path()}: returns the current directory path where cassettes
+will be stored
 }
 }
 \examples{

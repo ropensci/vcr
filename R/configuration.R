@@ -175,7 +175,7 @@ vcr_configure <- function(...) {
     params <- params[!invalid]
   }
 
-  if (length(params) == 0) return(vcr_c)
+  if (length(params) == 0) return(invisible(vcr_c$as_list()))
 
   # TODO: Is this still the right place to change these settings?
   ignore_hosts <- params$ignore_hosts
@@ -186,10 +186,17 @@ vcr_configure <- function(...) {
     if (ignore_localhost) x$ignore_localhost()
   }
 
+  vcr_config_set(params)
+}
+
+vcr_config_set <- function(params) {
+  old <- vcr_c$as_list()[names(params)]
+
   for (i in seq_along(params)) {
     vcr_c[[names(params)[i]]] <- params[[i]]
   }
-  return(vcr_c)
+
+  invisible(old)
 }
 
 #' @export
@@ -457,7 +464,7 @@ VCRConfig <- R6::R6Class(
 
     # return current configuration as a list
     as_list = function() {
-      setNames(mget(names(private), private), self$fields())
+      stats::setNames(mget(names(private), private), self$fields())
     },
 
     print = function(...) {

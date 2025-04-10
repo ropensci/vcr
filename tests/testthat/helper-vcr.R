@@ -1,6 +1,11 @@
 tmpdir <- tempdir()
 library(vcr)
 
+local_vcr_configure <- function(..., .frame = parent.frame()) {
+  old <- vcr_configure(...)
+  withr::defer(vcr_config_set(old), envir = .frame)
+}
+
 # define and restore consistent configuration options for tests
 vcr_test_configuration <- function(
   dir = tmpdir,
@@ -63,34 +68,38 @@ check_url <- function(x, ...) {
 sw <- function(x) suppressWarnings(x)
 sm <- function(x) suppressMessages(x)
 
-
-# Base url for tests
 hb <- function(x = NULL) {
-  tryCatch(
-    if (is.null(x)) base_url else paste0(base_url, x),
-    error = function(e) "https://not.aurl"
-  )
+  base_url <- getOption("vcr::httpbin_server")
+  if (is.null(base_url)) {
+    base_url <- find_httpbin_server()
+    options(`vcr::httpbin_server` = base_url)
+  }
+
+  if (is.null(x)) {
+    base_url
+  } else {
+    paste0(base_url, x)
+  }
 }
-urls <- c(
-  "https://hb.cran.dev",
-  "https://hb.opencpu.org",
-  "https://nghttp2.org/httpbin"
-)
-h <- curl::new_handle(timeout = 10, failonerror = FALSE)
-base_url <- ""
-tryCatch(
-  {
-    out <- list()
-    for (i in seq_along(urls)) {
-      out[[i]] <- curl::curl_fetch_memory(urls[i], handle = h)
+
+find_httpbin_server <- function() {
+  urls <- c(
+    "https://hb.cran.dev",
+    "https://hb.opencpu.org",
+    "https://nghttp2.org/httpbin"
+  )
+  h <- curl::new_handle(timeout = 10, failonerror = FALSE)
+
+  for (i in seq_along(urls)) {
+    url <- urls[[i]]
+    out <- curl::curl_fetch_memory(url, handle = h)
+    if (out$status_code == 200) {
+      cat(paste0("using base url for tests: ", url), sep = "\n")
+      return(url)
     }
-    codes <- vapply(out, "[[", 1, "status_code")
-    if (all(codes != 200)) stop("all httpbin servers down")
-    base_url <- urls[codes == 200][1]
-    cat(paste0("using base url for tests: ", base_url), sep = "\n")
-  },
-  error = function(e) message(e$message)
-)
+  }
+  stop("all httpbin servers down")
+}
 
 # httpbin local
 local_httpbin_app <- function() {
