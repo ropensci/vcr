@@ -27,7 +27,7 @@ function to evaluate whatever code is passed to it; within call_block
 the code block to allow real HTTP requests, then
 \code{\link[webmockr:webmockr_configure]{webmockr::webmockr_disable_net_connect()}} is called after evalulating
 the code block to disallow real HTTP requests
-\item \code{make_http_interaction()} method: \code{\link[webmockr:pluck_body]{webmockr::pluck_body()}} utility
+\item \code{make_http_interaction()} method: \code{\link[=take_body]{take_body()}} utility
 function is used to pull the request body out of the HTTP request
 \item \code{serialize_to_crul()} method: method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
 \link[webmockr:Response]{webmockr::Response} are used to build a request and response,

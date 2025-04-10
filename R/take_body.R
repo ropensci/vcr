@@ -1,3 +1,9 @@
+#' Extract request body
+#'
+#' @details S3 methods and the packages they are used for
+#' - request: `httr`
+#' - list: `crul`
+#' - httr2_request: `httr2`
 #' @keywords internal
 take_body <- function(x, ...) {
   UseMethod("take_body")

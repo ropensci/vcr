@@ -41,7 +41,6 @@
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
 #' @importFrom httr2 resp_status_desc req_perform
-#' @importFrom webmockr pluck_body
 ## usethis namespace: end
 NULL
 

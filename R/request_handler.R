@@ -92,7 +92,7 @@ RequestHandler <- R6::R6Class(
         Request$new(
           request$method,
           request$url$url %||% request$url,
-          webmockr::pluck_body(request) %||% "",
+          take_body(request) %||% "",
           request$headers,
           disk = !is.null(request$output$path)
         )

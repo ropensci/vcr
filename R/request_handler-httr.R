@@ -47,7 +47,7 @@ RequestHandlerHttr <- R6::R6Class(
         Request$new(
           request$method,
           request$url,
-          webmockr::pluck_body(request),
+          take_body(request),
           request$headers,
           fields = request$fields,
           output = request$output
@@ -81,7 +81,7 @@ RequestHandlerHttr <- R6::R6Class(
       on.exit(webmockr::httr_mock(TRUE), add = TRUE)
       tmp2 <- eval(parse(text = paste0("httr::", request$method)))(
         request$url,
-        body = webmockr::pluck_body(request),
+        body = take_body(request),
         do.call(httr::config, request$options),
         httr::add_headers(request$headers)
       )
@@ -109,7 +109,7 @@ RequestHandlerHttr <- R6::R6Class(
         text = paste0("httr::", self$request_original$method)
       ))(
         self$request_original$url,
-        body = webmockr::pluck_body(self$request_original),
+        body = take_body(self$request_original),
         do.call(httr::config, self$request_original$options),
         httr::add_headers(self$request_original$headers),
         if (!is.null(self$request_original$output$path))

@@ -20,7 +20,7 @@
 #' the code block to allow real HTTP requests, then
 #' [webmockr::webmockr_disable_net_connect()] is called after evalulating
 #' the code block to disallow real HTTP requests
-#' - `make_http_interaction()` method: [webmockr::pluck_body()] utility
+#' - `make_http_interaction()` method: [take_body()] utility
 #' function is used to pull the request body out of the HTTP request
 #' - `serialize_to_crul()` method: method: [webmockr::RequestSignature] and
 #' [webmockr::Response] are used to build a request and response,

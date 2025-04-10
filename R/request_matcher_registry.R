@@ -57,7 +57,10 @@ RequestMatcherRegistry <- R6::R6Class(
             curl::curl_unescape(r2$uri)
           )
       )
-      self$register("body", function(r1, r2) identical(r1$body, r2$body))
+      self$register(
+        "body",
+        function(r1, r2) identical(as.character(r1$body), as.character(r2$body))
+      )
       self$register(
         'headers',
         function(r1, r2) identical(r1$headers, r2$headers)
