@@ -90,7 +90,7 @@ find_httpbin_server <- function() {
 
 # httpbin local
 local_httpbin_app <- function() {
-  check_for_a_pkg("webfakes")
+  check_installed("webfakes")
   webfakes::local_app_process(
     webfakes::httpbin_app(),
     .local_envir = testthat::teardown_env()
