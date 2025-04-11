@@ -14,11 +14,6 @@ compact <- function(x) Filter(Negate(is.null), x)
   if (missing(x) || is.null(x) || all(nchar(x) == 0) || length(x) == 0) y else x
 }
 
-`%try%` <- function(x, y) {
-  z <- tryCatch(x, error = function(e) e)
-  if (inherits(z, "error")) y else x
-}
-
 stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
 
 assert <- function(x, y) {
