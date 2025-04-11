@@ -7,20 +7,18 @@ test_that("fails well if write_disk_path not set", {
 
   expect_null(vcr_c$write_disk_path)
 
-  library(crul)
   f <- tempfile(fileext = ".json")
   expect_error(
     sw(use_cassette("write_disk_path_not_set_crul", {
-      out <- HttpClient$new(hb("/get"))$get(disk = f)
+      out <- crul::HttpClient$new(hb("/get"))$get(disk = f)
     })),
     "write_disk_path must be given"
   )
 
-  library(httr)
   g <- tempfile(fileext = ".json")
   expect_error(
     sw(use_cassette("write_disk_path_not_set_httr", {
-      out <- GET(hb("/get"), write_disk(g, TRUE))
+      out <- httr::GET(hb("/get"), httr::write_disk(g, TRUE))
     })),
     "write_disk_path must be given"
   )
@@ -39,12 +37,11 @@ vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 test_that("use_cassette w/ request that writes to disk: crul", {
   skip_on_cran()
 
-  library(crul)
   ## make a temp file
   f <- tempfile(fileext = ".json")
   ## make a request
   use_cassette("test_write_to_disk", {
-    out <- HttpClient$new(hb("/get"))$get(disk = f)
+    out <- crul::HttpClient$new(hb("/get"))$get(disk = f)
   })
 
   expect_s3_class(out, "HttpResponse")
@@ -54,7 +51,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk", {
-    out2 <- HttpClient$new(hb("/get"))$get(disk = f)
+    out2 <- crul::HttpClient$new(hb("/get"))$get(disk = f)
   })
   expect_s3_class(out2, "HttpResponse")
   expect_type(out2$content, "character")
@@ -67,12 +64,11 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 test_that("use_cassette w/ request that writes to disk: httr", {
   skip_on_cran()
 
-  library(httr)
   ## make a temp file
   f <- tempfile(fileext = ".json")
   ## make a request
   use_cassette("test_write_to_disk_httr", {
-    out <- GET(hb("/get"), write_disk(f, TRUE))
+    out <- httr::GET(hb("/get"), httr::write_disk(f, TRUE))
   })
 
   expect_s3_class(out, "response")
@@ -81,7 +77,7 @@ test_that("use_cassette w/ request that writes to disk: httr", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk_httr", {
-    out2 <- GET(hb("/get"), write_disk(f, TRUE))
+    out2 <- httr::GET(hb("/get"), httr::write_disk(f, TRUE))
   })
   expect_s3_class(out2, "response")
   expect_s3_class(out2$content, "path")

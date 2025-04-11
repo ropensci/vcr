@@ -1,5 +1,3 @@
-library(vcr)
-
 local_vcr_configure <- function(..., .frame = parent.frame()) {
   old <- vcr_configure(...)
   withr::defer(vcr_config_set(old), envir = .frame)

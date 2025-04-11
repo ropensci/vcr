@@ -1,4 +1,3 @@
-library("crul")
 url <- hb()
 cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)

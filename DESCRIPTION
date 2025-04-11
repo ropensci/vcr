@@ -29,8 +29,6 @@ BugReports: https://github.com/ropensci/vcr/issues
 Imports:
     base64enc,
     crul (>= 0.8.4),
-    httr,
-    httr2,
     R6,
     rprojroot,
     urltools,
@@ -43,6 +41,8 @@ Suggests:
     curl,
     desc,
     jsonlite,
+    httr,
+    httr2,
     knitr,
     rmarkdown,
     roxygen2 (>= 7.2.1),

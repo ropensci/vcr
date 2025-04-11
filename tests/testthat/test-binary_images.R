@@ -3,7 +3,6 @@ test_that("use_cassette w/ with images: httr", {
   skip_if_not_installed("jpeg")
   local_vcr_configure(dir = withr::local_tempdir())
 
-  library(httr)
   url <- hb("/image/jpeg")
 
   ## preserve_exact_body_bytes = FALSE
@@ -59,7 +58,6 @@ test_that("use_cassette w/ with images: crul", {
   skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
-  library(crul)
   url <- hb("/image/jpeg")
 
   ## preserve_exact_body_bytes = FALSE
