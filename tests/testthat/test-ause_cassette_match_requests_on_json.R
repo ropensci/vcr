@@ -1,14 +1,9 @@
-on.exit(vcr_configure_reset())
-
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   skip_on_cran()
   skip_on_ci()
 
   webmockr::webmockr_reset()
-
-  on.exit(unlink(mydir, recursive = TRUE))
-  mydir <- file.path(tempdir(), "crul_json_encoding")
-  invisible(vcr_configure(dir = mydir))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   cli <- crul::HttpClient$new(url = hb())
 
@@ -78,10 +73,7 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   skip_on_cran()
   skip_on_ci()
-
-  on.exit(unlink(mydir, recursive = TRUE))
-  mydir <- file.path(tempdir(), "httr_json_encoding")
-  invisible(vcr_configure(dir = mydir))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   ### matchers: method, uri, body
   # run it
@@ -114,7 +106,11 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
     use_cassette(
       name = "testing2",
       {
-        res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json")
+        res <- httr::POST(
+          hb("/post"),
+          body = list(foo = "bar1"),
+          encode = "json"
+        )
       },
       match_requests_on = "body"
     ),

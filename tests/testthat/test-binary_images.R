@@ -1,9 +1,7 @@
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir)
-
 test_that("use_cassette w/ with images: httr", {
   skip_on_cran()
   skip_if_not_installed("jpeg")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   url <- hb("/image/jpeg")
 
@@ -58,6 +56,7 @@ test_that("use_cassette w/ with images: httr", {
 
 test_that("use_cassette w/ with images: crul", {
   skip_on_cran()
+  local_vcr_configure(dir = withr::local_tempdir())
 
   url <- hb("/image/jpeg")
 
@@ -105,15 +104,3 @@ test_that("use_cassette w/ with images: crul", {
 
   expect_identical(res1$content, res2$content)
 })
-
-# cleanup
-files <- c(
-  "test_write_httr_binary_img.yml",
-  "test_write_httr_binary_img_bytes.yml",
-  "test_write_crul_binary_img.yml",
-  "test_write_crul_binary_img_bytes.yml"
-)
-unlink(file.path(vcr_configuration()$dir, files))
-
-# reset configuration
-vcr_configure_reset()

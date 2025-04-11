@@ -1,9 +1,9 @@
 skip_on_cran()
 
-vcr_configure(dir = tempdir())
 
 test_that("crul POST requests works", {
   withr::local_options(warnPartialMatchDollar = FALSE)
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # body type: named list
   out <- use_cassette("crul_post_named_list", {
@@ -83,15 +83,4 @@ test_that("crul POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "crul_post_named_list.yml"))
-  unlink(file.path(vcr_configuration()$dir, "crul_post_string.yml"))
-  unlink(file.path(vcr_configuration()$dir, "crul_post_raw.yml"))
-  unlink(file.path(vcr_configuration()$dir, "crul_post_upload_file.yml"))
-  unlink(file.path(vcr_configuration()$dir, "crul_post_null.yml"))
-  unlink(file.path(
-    vcr_configuration()$dir,
-    "crul_post_upload_file_no_list.yml"
-  ))
 })

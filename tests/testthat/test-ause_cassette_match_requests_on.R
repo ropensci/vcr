@@ -1,9 +1,7 @@
 test_that("use_cassette: match_requests_on - body works w/ crul", {
   skip_on_cran()
 
-  mydir <- file.path(tempdir(), "asdfasdfsd")
-  invisible(vcr_configure(dir = mydir))
-  unlink(file.path(vcr_c$dir, "testing1.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
   cli <- crul::HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
@@ -175,17 +173,12 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   expect_type(aa$name, "character")
   expect_equal(aa$name, "testing_host_path")
   expect_equal(aa$match_requests_on, c("host", "path"))
-
-  # cleanup
-  unlink(mydir, recursive = TRUE)
 })
 
 test_that("use_cassette: match_requests_on - body works w/ httr", {
   skip_on_cran()
 
-  mydir <- file.path(tempdir(), "testing_httr")
-  invisible(vcr_configure(dir = mydir))
-  unlink(file.path(vcr_c$dir, "testing1.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   ### matchers: method, uri, body
   # run it
@@ -308,11 +301,4 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   expect_type(aa$name, "character")
   expect_equal(aa$name, "testing_httr_host_path")
   expect_equal(aa$match_requests_on, c("host", "path"))
-
-  # cleanup
-  unlink(mydir, recursive = TRUE)
 })
-
-# cleanup
-# reset configuration
-vcr_configure_reset()

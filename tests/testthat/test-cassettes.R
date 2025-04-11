@@ -1,7 +1,9 @@
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir, warn_on_empty_cassette = FALSE)
-
 test_that("cassettes works", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+
   aa <- cassettes()
   expect_type(aa, "list")
   expect_equal(length(aa), 0)
@@ -18,15 +20,13 @@ test_that("cassettes works", {
   cc$eject()
 })
 
-unlink(file.path(vcr_configuration()$dir, "foobar24.yml"))
-
 # FIXME: add tests for on_disk and verb params
 
 test_that("current_cassette works", {
-  on.exit({
-    unlink(file.path(vcr_configuration()$dir, "aaa.yml"))
-    unlink(file.path(vcr_configuration()$dir, "bbb.yml"))
-  })
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
 
   # no cassettes in use
   aa <- current_cassette()
@@ -47,15 +47,13 @@ test_that("current_cassette works", {
 })
 
 test_that("cassette_path works", {
+  local_vcr_configure(dir = withr::local_tempdir())
   # before vcr_config set, there's a temp dir
   aa <- cassette_path()
   expect_type(aa, "character")
 
   # after vcr_config set, dir should be different
-  vcr_configure(dir = "foo")
+  local_vcr_configure(dir = "foo")
   aa <- cassette_path()
   expect_equal(aa, "foo")
 })
-
-# reset
-vcr_configure_reset()

@@ -1,5 +1,3 @@
-mydir <- file.path(tempdir(), "use_cassette_record_mode")
-invisible(vcr_configure(dir = mydir))
 conn <- crul::HttpClient$new(hb())
 
 test_that("use_cassette record mode: once", {
@@ -8,8 +6,7 @@ test_that("use_cassette record mode: once", {
   # - Record new interactions if there is no cassette file.
   # - Cause an error to be raised for new requests if there is a cassette file.
   skip_on_cran()
-
-  unlink(file.path(vcr_c$dir, "once.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # record interaction
   one <- use_cassette("once", (res <- conn$get("get")), record = "once")
@@ -57,8 +54,7 @@ test_that("use_cassette record mode: none", {
   # - Replay previously recorded interactions.
   # - Cause an error to be raised for any new requests.
   skip_on_cran()
-
-  unlink(file.path(vcr_c$dir, "none.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # record first with another record mode to make the cassette
   invisible(use_cassette("none", (res <- conn$get("get"))))
@@ -86,8 +82,7 @@ test_that("use_cassette record mode: new_episodes", {
   # - Record new interactions.
   # - Replay previously recorded interactions.
   skip_on_cran()
-
-  unlink(file.path(vcr_c$dir, "new_episodes.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # record first interaction
   one <- use_cassette(
@@ -154,8 +149,7 @@ test_that("use_cassette record mode: all", {
   # - Record new interactions.
   # - Never replay previously recorded interactions.
   skip_on_cran()
-
-  unlink(file.path(vcr_c$dir, "all.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # record first interaction
   one <- use_cassette("all", (res <- conn$get("get")), record = "all")
@@ -209,11 +203,3 @@ test_that("use_cassette record mode: all", {
     "pepperjack"
   )
 })
-
-# cleanup
-unlink(file.path(vcr_c$dir, "once.yml"))
-unlink(file.path(vcr_c$dir, "none.yml"))
-unlink(file.path(vcr_c$dir, "new_episodes.yml"))
-unlink(file.path(vcr_c$dir, "all.yml"))
-# reset configuration
-vcr_configure_reset()
