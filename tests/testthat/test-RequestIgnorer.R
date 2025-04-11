@@ -79,32 +79,15 @@ test_that("RequestIgnorer usage: w/ real requests", {
 test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   skip_on_cran()
 
-  on.exit({
-    files <- c(
-      "test_ignore_host.yml",
-      "test_ignore_host_ignored.yml",
-      "test_ignore_localhost_ignored.yml",
-      "test_ignore_localhost.yml"
-    )
-    unlink(file.path(vcr_configuration()$dir, files))
-  })
-
-
-  vcr_configure_reset()
-
   # IGNORE BY HOST
-  tmpdir <- tempdir()
-  vcr_configure(dir = tmpdir)
-  # vcr_configuration()
+  tmpdir <- withr::local_tempdir()
+  local_vcr_configure(dir = tmpdir)
   cas_not_ignored <- use_cassette("test_ignore_host", {
     crul::HttpClient$new(hb())$get()
     crul::HttpClient$new("https://scottchamberlain.info")$get()
   })
 
-  vcr_configure_reset()
-
-  vcr_configure(dir = tmpdir, ignore_hosts = "google.com")
-  # vcr_configuration()
+  local_vcr_configure(dir = tmpdir, ignore_hosts = "google.com")
   cas_ignored <- use_cassette("test_ignore_host_ignored", {
     crul::HttpClient$new("https://google.com")$get()
     crul::HttpClient$new("https://scottchamberlain.info")$get()
@@ -118,14 +101,14 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   # IGNORE LOCALHOST
   # Start python simple server on cli: python3 -m http.server
   skip_if_localhost_8000_gone()
-  tmpdir <- tempdir()
-  vcr_configure(dir = tmpdir)
+  tmpdir <- withr::local_tempdir()
+  local_vcr_configure(dir = tmpdir)
   cas_local_not_ignored <- use_cassette("test_ignore_localhost", {
     crul::HttpClient$new("https://scottchamberlain.info")$get()
     crul::HttpClient$new("http://127.0.0.1:8000")$get()
   })
 
-  vcr_configure(dir = tmpdir, ignore_localhost = TRUE)
+  local_vcr_configure(dir = tmpdir, ignore_localhost = TRUE)
   # vcr_configuration()
   cas_local_ignored <- use_cassette("test_ignore_localhost_ignored", {
     crul::HttpClient$new("https://scottchamberlain.info")$get()
@@ -135,9 +118,6 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   expect_equal(length(read_cas(cas_local_not_ignored$file())), 2)
   expect_equal(length(read_cas(cas_local_ignored$file())), 1)
 })
-
-# reset
-vcr_configure(dir = tmpdir)
 
 test_that("RequestIgnorer fails well", {
   expect_error(RequestIgnorer$new(a = 5), "unused argument")
