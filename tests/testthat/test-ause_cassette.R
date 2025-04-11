@@ -4,7 +4,6 @@ vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 test_that("use_cassette works as expected", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))

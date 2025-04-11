@@ -3,7 +3,6 @@ vcr_configure_reset()
 test_that("filter_headers/request/remove", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_headers_request_remove")
   # mydir <- "terrible2"
 
@@ -75,7 +74,6 @@ vcr_configure_reset()
 test_that("filter_headers/request/replace", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_headers_request_replace")
 
   # request headers: replace only
@@ -133,7 +131,6 @@ vcr_configure_reset()
 test_that("filter_headers doesn't add a header that doesn't exist", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_headers_doesnt_add_header")
   vcr_configure_reset()
   vcr_configure(
@@ -168,7 +165,6 @@ vcr_configure_reset()
 test_that("filter_headers/response/remove", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_headers_response_remove")
 
   # response headers: remove only
@@ -223,7 +219,6 @@ vcr_configure_reset()
 test_that("filter_headers/response/replace", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_headers_response_replace")
 
   # response headers: replace only
@@ -278,7 +273,6 @@ vcr_configure_reset()
 test_that("filter_headers/request/remove/json", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_headers_request_remove_json")
 
   # request headers: remove only

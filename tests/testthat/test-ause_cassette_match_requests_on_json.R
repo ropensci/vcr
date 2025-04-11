@@ -5,8 +5,7 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   webmockr::webmockr_reset()
   local_vcr_configure(dir = withr::local_tempdir())
 
-  library(crul)
-  cli <- HttpClient$new(url = hb())
+  cli <- crul::HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
   # run it
@@ -66,19 +65,17 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   skip_on_ci()
   local_vcr_configure(dir = withr::local_tempdir())
 
-  library(httr)
-
   ### matchers: method, uri, body
   # run it
   aa <- use_cassette(
     "testing2",
-    res <- POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("method", "uri", "body")
   )
   # run it again
   bb <- use_cassette(
     "testing2",
-    res <- POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("method", "uri", "body")
   )
   # the recorded_at time doesn't change
@@ -94,7 +91,7 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   expect_error(
     use_cassette(
       "testing2",
-      res <- POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
+      res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
       match_requests_on = "body"
     ),
     "An HTTP request has been made that vcr does not know how to handle"
@@ -103,7 +100,7 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   # matching succeeds when the changed body is ignored
   cc <- use_cassette(
     "testing2",
-    res <- POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
+    res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
     match_requests_on = c("uri", "method")
   )
   expect_identical(recorded_at(aa), recorded_at(cc))

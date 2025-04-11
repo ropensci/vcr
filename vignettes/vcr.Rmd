@@ -2,11 +2,7 @@
 title: "Introduction to vcr"
 author: "Scott Chamberlain"
 date: "`r Sys.Date()`"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    theme: readable
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{1. vcr introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -94,5 +90,3 @@ library("vcr")
 
 ```{r child='../man/rmdhunks/missing-features.Rmd', eval=TRUE} 
 ```
-
-

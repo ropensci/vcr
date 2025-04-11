@@ -1,4 +1,3 @@
-library(crul, quietly = TRUE)
 conn <- crul::HttpClient$new(hb())
 
 test_that("use_cassette record mode: once", {

@@ -162,7 +162,7 @@ serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
   if (is.null(x)) return(x)
   if (preserve_exact_body_bytes) {
     if (can_charToRaw(x)) {
-      tmp <- base64enc::base64encode(charToRaw(x))
+      tmp <- jsonlite::base64_enc(charToRaw(x))
       base64 <- TRUE
     } else {
       tmp <- x
@@ -180,7 +180,7 @@ body_from <- function(x) {
     (!is.null(attr(x, "base64")) && attr(x, "base64"))
     # (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
   ) {
-    b64dec <- base64enc::base64decode(x)
+    b64dec <- jsonlite::base64_dec(x)
     b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
     if (inherits(b64dec_r2c, "error")) {
       # probably is binary (e.g., pdf), so can't be converted to char.
