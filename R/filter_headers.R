@@ -55,6 +55,5 @@ request_headers_redact <- function(x) {
 request_headers_redact_one <- function(headers) {
   redacted_headers <- attr(headers, "redact")
   headers[intersect(redacted_headers, names(headers))] <- "<redacted>"
-  }
   headers
 }
