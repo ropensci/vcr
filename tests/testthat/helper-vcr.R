@@ -1,5 +1,4 @@
 tmpdir <- tempdir()
-library(vcr)
 
 local_vcr_configure <- function(..., .frame = parent.frame()) {
   old <- vcr_configure(...)

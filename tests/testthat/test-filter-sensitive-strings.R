@@ -48,7 +48,6 @@ test_that("filter sensitive data strips leading/trailing single/double quotes", 
       "<somekey>" = Sys.getenv("MY_KEY_ON_GH_ACTIONS")
     )
   )
-  library(crul)
   x <- HttpClient$new("https://hb.opencpu.org")
   cas <- sw(use_cassette("testing2", {
     res <- x$get("get", query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS")))
