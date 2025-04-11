@@ -45,7 +45,7 @@ prep_interaction <- function(x, file, bytes) {
   body <- if (bytes || is.raw(x$response$body)) {
     bd <- get_body(x$response$body)
     if (!is.raw(bd)) bd <- charToRaw(bd)
-    tmp <- base64enc::base64encode(bd)
+    tmp <- jsonlite::base64_enc(bd)
     str_breaks(tmp)
   } else {
     get_body(x$response$body)

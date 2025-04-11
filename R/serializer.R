@@ -57,7 +57,7 @@ Serializer <- R6::R6Class(
             z$response$body[[slot]] <- private$strip_newlines(z$response$body[[
               slot
             ]])
-            b64dec <- base64enc::base64decode(z$response$body[[slot]])
+            b64dec <- jsonlite::base64_dec(z$response$body[[slot]])
             b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
             z$response$body[[slot]] <- if (inherits(b64dec_r2c, "error")) {
               # probably is binary (e.g., pdf), so can't be converted to char.
