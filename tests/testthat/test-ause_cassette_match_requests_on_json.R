@@ -10,7 +10,6 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   mydir <- file.path(tempdir(), "crul_json_encoding")
   invisible(vcr_configure(dir = mydir))
 
-  library(crul)
   cli <- HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
@@ -80,7 +79,6 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   skip_on_cran()
   skip_on_ci()
 
-  library(httr)
   on.exit(unlink(mydir, recursive = TRUE))
   mydir <- file.path(tempdir(), "httr_json_encoding")
   invisible(vcr_configure(dir = mydir))

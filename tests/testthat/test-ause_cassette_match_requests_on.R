@@ -1,7 +1,6 @@
 test_that("use_cassette: match_requests_on - body works w/ crul", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
@@ -184,7 +183,6 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
 test_that("use_cassette: match_requests_on - body works w/ httr", {
   skip_on_cran()
 
-  library(httr)
   mydir <- file.path(tempdir(), "testing_httr")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))

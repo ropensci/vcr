@@ -1,6 +1,5 @@
 skip_on_cran()
 
-library("httr2")
 vcr_configure(dir = tempdir())
 
 test_that("httr2 status code works", {

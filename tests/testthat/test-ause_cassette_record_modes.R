@@ -1,4 +1,3 @@
-library(crul, quietly = TRUE)
 mydir <- file.path(tempdir(), "use_cassette_record_mode")
 invisible(vcr_configure(dir = mydir))
 conn <- crul::HttpClient$new(hb())

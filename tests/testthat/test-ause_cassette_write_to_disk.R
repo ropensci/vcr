@@ -7,7 +7,6 @@ test_that("fails well if write_disk_path not set", {
 
   expect_null(vcr_c$write_disk_path)
 
-  library(crul)
   f <- tempfile(fileext = ".json")
   expect_error(
     sw(use_cassette("write_disk_path_not_set_crul", {
@@ -16,7 +15,6 @@ test_that("fails well if write_disk_path not set", {
     "write_disk_path must be given"
   )
 
-  library(httr)
   g <- tempfile(fileext = ".json")
   expect_error(
     sw(use_cassette("write_disk_path_not_set_httr", {
@@ -39,7 +37,6 @@ vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 test_that("use_cassette w/ request that writes to disk: crul", {
   skip_on_cran()
 
-  library(crul)
   ## make a temp file
   f <- tempfile(fileext = ".json")
   ## make a request
@@ -67,7 +64,6 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 test_that("use_cassette w/ request that writes to disk: httr", {
   skip_on_cran()
 
-  library(httr)
   ## make a temp file
   f <- tempfile(fileext = ".json")
   ## make a request

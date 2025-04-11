@@ -1,5 +1,4 @@
 test_that("quiet works", {
-  library(crul)
   con <- HttpClient$new(hb())
 
   tmpdir <- withr::local_tempdir()

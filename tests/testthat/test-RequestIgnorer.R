@@ -89,7 +89,6 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
     unlink(file.path(vcr_configuration()$dir, files))
   })
 
-  library(crul)
 
   vcr_configure_reset()
 

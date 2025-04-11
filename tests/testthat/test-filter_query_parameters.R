@@ -9,7 +9,6 @@ vcr_configure_reset()
 test_that("filter_query_parameters: remove", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_query_parameters")
 
   # remove only
@@ -58,7 +57,6 @@ vcr_configure_reset()
 test_that("filter_query_parameters: replace", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "filter_query_parameters")
 
   # remove only
@@ -110,7 +108,6 @@ vcr_configure_reset()
 test_that("filter_query_parameters: replace with secret", {
   skip_on_cran()
 
-  library(crul)
   con <- crul::HttpClient$new(hb("/get"))
   mydir <- file.path(tempdir(), "filter_query_parameters_replace_with")
   Sys.setenv(MY_KEY = "my-secret-key")
@@ -168,7 +165,6 @@ vcr_configure_reset()
 test_that("filter_query_parameters: remove (httr)", {
   skip_on_cran()
 
-  library(httr)
   mydir <- file.path(tempdir(), "filter_query_parameters_httr")
 
   # remove only
@@ -215,7 +211,6 @@ vcr_configure_reset()
 test_that("filter_query_parameters: replace (httr)", {
   skip_on_cran()
 
-  library(httr)
   mydir <- file.path(tempdir(), "filter_query_parameters_httr")
 
   # remove only

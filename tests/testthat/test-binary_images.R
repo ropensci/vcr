@@ -5,7 +5,6 @@ test_that("use_cassette w/ with images: httr", {
   skip_on_cran()
   skip_if_not_installed("jpeg")
 
-  library(httr)
   url <- hb("/image/jpeg")
 
   ## preserve_exact_body_bytes = FALSE
@@ -60,7 +59,6 @@ test_that("use_cassette w/ with images: httr", {
 test_that("use_cassette w/ with images: crul", {
   skip_on_cran()
 
-  library(crul)
   url <- hb("/image/jpeg")
 
   ## preserve_exact_body_bytes = FALSE

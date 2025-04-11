@@ -4,7 +4,6 @@ vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 test_that("use_cassette w/ binary files on disk: crul", {
   skip_on_cran()
 
-  library(crul)
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
   skip_if(!check_url(url, timeout_ms = 5000L), sprintf("url not up (%s)", url))
@@ -39,7 +38,6 @@ unlink(file.path(vcr_configuration()$dir, "test_write_to_disk_binary.yml"))
 test_that("use_cassette w/ binary files on disk with image: crul", {
   skip_on_cran()
 
-  library(crul)
   ## url
   # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
   url <- "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
@@ -73,7 +71,6 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   # a function wrapping crul
   ## example where user doesn't know/specify the path
   ## easy enough to move the file
-  library(crul)
   foo_bar <- function() {
     # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
     url <- "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
@@ -99,7 +96,6 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
 test_that("use_cassette w/ binary files on disk: httr", {
   skip_on_cran()
 
-  library(httr)
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
   skip_if(!check_url(url, timeout_ms = 5000L), sprintf("url not up (%s)", url))

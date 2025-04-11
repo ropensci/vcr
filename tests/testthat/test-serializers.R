@@ -14,7 +14,6 @@ tmpdir <- tempdir()
 vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 
 test_that("you can record a new cassette of same name with different serializer", {
-  library(crul)
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
