@@ -27,10 +27,10 @@ URL: https://github.com/ropensci/vcr/,
     https://docs.ropensci.org/vcr/
 BugReports: https://github.com/ropensci/vcr/issues
 Imports:
-    base64enc,
     crul (>= 0.8.4),
     httr,
     httr2,
+    jsonlite,
     R6,
     rprojroot,
     urltools,
@@ -42,7 +42,6 @@ Suggests:
     crayon,
     curl,
     desc,
-    jsonlite,
     knitr,
     rmarkdown,
     roxygen2 (>= 7.2.1),

@@ -36,7 +36,6 @@
 #' @importFrom R6 R6Class
 #' @importFrom utils getParseData
 #' @importFrom yaml yaml.load yaml.load_file as.yaml
-#' @importFrom base64enc base64decode base64encode
 #' @importFrom urltools url_parse url_compose
 #' @importFrom crul HttpClient mock
 #' @importFrom httr http_status content
