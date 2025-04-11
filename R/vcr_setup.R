@@ -80,7 +80,7 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
   assert(dir, "character")
   stopifnot(length(dir) == 1)
   if (!dir.exists(dir)) stop("'dir' does not exist")
-  invisible(lapply(c("desc", "cli", "crayon"), check_for_a_pkg))
+  check_installed(c("desc", "cli", "crayon"))
 
   pkg <- pkg_name(dir)
   if (verbose) vcr_cat_info(paste0("Using package: ", crayon::blue(pkg)))
