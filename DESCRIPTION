@@ -28,16 +28,16 @@ URL: https://github.com/ropensci/vcr/,
 BugReports: https://github.com/ropensci/vcr/issues
 Imports:
     base64enc,
+    cli,
     crul (>= 0.8.4),
     httr,
     httr2,
     R6,
+    rlang,
     rprojroot,
     urltools,
     webmockr (>= 0.8.0),
-    yaml,
-    rlang,
-    cli
+    yaml
 Suggests:
     crayon,
     curl,
