@@ -96,3 +96,7 @@ local_httpbin_app <- function() {
     .local_envir = testthat::teardown_env()
   )
 }
+
+read_cassette <- function(name) {
+  yaml::yaml.load_file(file.path(vcr_c$dir, name))
+}
