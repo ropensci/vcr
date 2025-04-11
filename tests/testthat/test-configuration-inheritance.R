@@ -14,10 +14,6 @@ params <- c(
 )
 
 test_that("default cassette options match default config", {
-  on.exit({
-    unlink(vcr_files())
-  })
-
   vcr_configure(
     warn_on_empty_cassette = FALSE
   )

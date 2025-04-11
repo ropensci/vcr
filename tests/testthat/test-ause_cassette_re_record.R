@@ -1,19 +1,8 @@
-# library(crul, quietly = TRUE)
-mydir <- file.path(tempdir(), "use_cassette_re_record")
-# invisible(vcr_configure(dir = mydir))
 conn <- crul::HttpClient$new(hb())
-# vcr::vcr_configure(
-#   dir = mydir,
-#   log = TRUE,
-#   log = TRUE,
-#   log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
-# )
-yml_path <- file.path(vcr_c$dir, "re_record1.yml")
 
 test_that("use_cassette options: re_record_interval", {
   skip_on_cran()
-
-  unlink(file.path(vcr_c$dir, "re_record1.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # first use
   use_cassette(
@@ -25,7 +14,7 @@ test_that("use_cassette options: re_record_interval", {
     re_record_interval = 3L,
     clean_outdated_http_interactions = TRUE
   )
-  rr1 <- yaml::yaml.load_file(yml_path)
+  rr1 <- read_cassette("re_record1.yml")
 
   # second use, not expired, no change in recorded_at value
   use_cassette(
@@ -37,7 +26,7 @@ test_that("use_cassette options: re_record_interval", {
     re_record_interval = 3L,
     clean_outdated_http_interactions = TRUE
   )
-  rr2 <- yaml::yaml.load_file(yml_path)
+  rr2 <- read_cassette("re_record1.yml")
 
   expect_equal(rr1$recorded_at, rr2$recorded_at)
 
@@ -52,7 +41,7 @@ test_that("use_cassette options: re_record_interval", {
     re_record_interval = 3L,
     clean_outdated_http_interactions = TRUE
   )
-  rr3 <- yaml::yaml.load_file(yml_path)
+  rr3 <- read_cassette("re_record1.yml")
 
   # tests
   # expect_equal(rr1$http_interactions[[1]]$re_record_interval, 10)
@@ -70,12 +59,3 @@ test_that("use_cassette options: re_record_interval", {
       rr3$http_interactions[[1]]$recorded_at
   )
 })
-
-# cleanup
-unlink(file.path(vcr_c$dir, "re_record1.yml"))
-# reset configuration
-vcr_configure_reset()
-
-# cas <- insert_cassette("re_record1",
-#   re_record_interval = 10L,
-#   clean_outdated_http_interactions = TRUE)
