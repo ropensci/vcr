@@ -215,7 +215,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         lines <- c(lines, xx)
         # FIXME: should fix this to generalize to many cassettes, see ruby code
         zz <- c(
-          paste0("  - ", self$cassette$file() %try% ""),
+          paste0("  - ", self$cassette$file()),
           paste0("    - record_mode: ", self$cassette$record),
           paste0(
             "    - match_requests_on: ",
