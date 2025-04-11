@@ -54,11 +54,7 @@ request_headers_redact <- function(x) {
 
 request_headers_redact_one <- function(headers) {
   redacted_headers <- attr(headers, "redact")
-  if (is_empty(redacted_headers)) return(headers)
-  for (i in seq_along(headers)) {
-    if (names(headers)[i] %in% redacted_headers) {
-      headers[[i]] <- "<redacted>"
-    }
+  headers[intersect(redacted_headers, names(headers))] <- "<redacted>"
   }
   headers
 }
