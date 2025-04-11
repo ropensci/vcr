@@ -83,7 +83,7 @@ test_that("use_cassette w/ request that writes to disk: httr", {
   # works on 2nd request
   use_cassette(
     "test_write_to_disk_httr",
-    out2 <- httr::GET(hb("/get"), write_disk(f, TRUE))
+    out2 <- httr::GET(hb("/get"), httr::write_disk(f, TRUE))
   )
   expect_s3_class(out2, "response")
   expect_s3_class(out2$content, "path")
