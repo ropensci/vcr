@@ -1,5 +1,3 @@
-vcr_test_configuration()
-
 # parameters shared by config and cassettes
 # (commented params are not exposed by Cassette$cassette_opts())
 params <- c(
@@ -14,7 +12,8 @@ params <- c(
 )
 
 test_that("default cassette options match default config", {
-  vcr_configure(
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
     warn_on_empty_cassette = FALSE
   )
 
@@ -37,16 +36,12 @@ test_that("default cassette options match default config", {
 })
 
 test_that("cassettes inherit configured options", {
-  on.exit({
-    unlink(vcr_files())
-    vcr_test_configuration()
-  })
-
-  vcr_configure(
+  local_vcr_configure(
     record = "none",
     match_requests_on = "body",
     preserve_exact_body_bytes = TRUE,
-    warn_on_empty_cassette = FALSE
+    warn_on_empty_cassette = FALSE,
+    dir = withr::local_tempdir()
   )
 
   cas1 <- sw(use_cassette("configured-use", {
@@ -65,16 +60,12 @@ test_that("cassettes inherit configured options", {
 })
 
 test_that("cassettes can override configured options", {
-  on.exit({
-    unlink(vcr_files())
-    vcr_test_configuration()
-  })
-
-  vcr_configure(
+  local_vcr_configure(
     record = "none",
     match_requests_on = "body",
     preserve_exact_body_bytes = TRUE,
-    warn_on_empty_cassette = FALSE
+    warn_on_empty_cassette = FALSE,
+    dir = withr::local_tempdir()
   )
 
   cas1 <- sw(use_cassette(
