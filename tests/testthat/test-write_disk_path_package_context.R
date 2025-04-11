@@ -18,8 +18,8 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   })
 })'
   cat(strg, file = file.path(dir, "tests/testthat/test-ffff.R"))
-  z <- 'library("vcr")
-invisible(vcr::vcr_configure(
+  z <- '
+invisible(vcr_configure(
   dir = "../fixtures",
   write_disk_path = "../files"
 ))

@@ -1,6 +1,5 @@
 test_that("quiet works", {
-  library(crul)
-  con <- HttpClient$new(hb())
+  con <- crul::HttpClient$new(hb())
 
   tmpdir <- withr::local_tempdir()
   local_vcr_configure(dir = tmpdir)

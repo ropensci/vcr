@@ -1,11 +1,7 @@
 ---
 title: "Debugging your tests that use vcr"
 date: "`r Sys.Date()`"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    theme: readable
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{4. vcr tests debugging}
   %\VignetteEngine{knitr::rmarkdown}

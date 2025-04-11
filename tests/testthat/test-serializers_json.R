@@ -16,7 +16,6 @@ test_that("JSON basic stuff", {
 test_that("JSON usage", {
   skip_on_cran()
 
-  library(crul)
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir, serialize_with = 'json'))
   unlink(file.path(vcr_c$dir, "testing1.json"))

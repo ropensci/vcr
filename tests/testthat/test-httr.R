@@ -1,6 +1,5 @@
 skip_on_cran()
 
-library("httr")
 vcr_configure(dir = tempdir())
 
 test_that("httr status code works", {
@@ -44,10 +43,10 @@ test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
   out <- use_cassette("httr_test1", {
-    x <- GET(hb("/404"))
+    x <- httr::GET(hb("/404"))
   })
   invisible(use_cassette("httr_test1", {
-    x2 <- GET(hb("/404"))
+    x2 <- httr::GET(hb("/404"))
   }))
 
   # cassette
@@ -97,7 +96,7 @@ test_that("httr use_cassette works", {
   out <- use_cassette(
     "httr_test2",
     {
-      x <- GET(hb("/404"))
+      x <- httr::GET(hb("/404"))
     },
     preserve_exact_body_bytes = TRUE
   )
@@ -130,13 +129,13 @@ test_that("httr w/ >1 request per cassette", {
   skip_if_not_installed("xml2")
 
   out <- use_cassette("multiple_queries_httr_record_once", {
-    x404 <- GET(hb("/status/404"))
-    x500 <- GET(hb("/status/500"))
-    x418 <- GET(hb("/status/418"))
+    x404 <- httr::GET(hb("/status/404"))
+    x500 <- httr::GET(hb("/status/500"))
+    x418 <- httr::GET(hb("/status/418"))
 
-    expect_equal(status_code(x404), 404)
-    expect_equal(status_code(x500), 500)
-    expect_equal(status_code(x418), 418)
+    expect_equal(httr::status_code(x404), 404)
+    expect_equal(httr::status_code(x500), 500)
+    expect_equal(httr::status_code(x418), 418)
   })
 
   # cassette
@@ -169,7 +168,7 @@ test_that("httr w/ >1 request per cassette", {
 
 test_that("httr works with simple auth and hides auth details", {
   use_cassette("httr_test_simple_auth", {
-    x <- GET(hb("/basic-auth/foo/bar"), authenticate("foo", "bar"))
+    x <- httr::GET(hb("/basic-auth/foo/bar"), httr::authenticate("foo", "bar"))
   })
 
   # successful request
@@ -192,7 +191,7 @@ test_that("httr works with simple auth and hides auth details", {
 test_that("httr POST requests works", {
   # body type: named list
   out <- use_cassette("httr_post_named_list", {
-    x <- POST(hb("/post"), body = list(foo = "bar"))
+    x <- httr::POST(hb("/post"), body = list(foo = "bar"))
   })
   expect_false(out$is_empty())
   expect_s3_class(x, "response")
@@ -203,7 +202,7 @@ test_that("httr POST requests works", {
 
   # body type: character
   out2 <- use_cassette("httr_post_string", {
-    z <- POST(hb("/post"), body = "some string")
+    z <- httr::POST(hb("/post"), body = "some string")
   })
   expect_false(out2$is_empty())
   expect_s3_class(z, "response")
@@ -214,7 +213,7 @@ test_that("httr POST requests works", {
 
   # body type: raw
   out3 <- use_cassette("httr_post_raw", {
-    z <- POST(hb("/post"), body = charToRaw("some string"))
+    z <- httr::POST(hb("/post"), body = charToRaw("some string"))
   })
   expect_false(out3$is_empty())
   expect_s3_class(z, "response")
@@ -227,7 +226,7 @@ test_that("httr POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("httr_post_upload_file", {
-    b <- POST(hb("/post"), body = list(y = httr::upload_file(ff)))
+    b <- httr::POST(hb("/post"), body = list(y = httr::upload_file(ff)))
   })
   expect_false(out4$is_empty())
   expect_s3_class(b, "response")
@@ -253,7 +252,7 @@ test_that("httr POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("httr_post_null", {
-    m <- POST(hb("/post"), body = NULL)
+    m <- httr::POST(hb("/post"), body = NULL)
   })
   expect_false(out5$is_empty())
   expect_s3_class(m, "response")
