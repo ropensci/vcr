@@ -7,14 +7,14 @@ test_that("use_cassette: match on body w/ empty body", {
   ### matchers: method, uri, body
   # run it
   aa <- use_cassette(
-    name = "testing9",
+    "testing9",
     {
       res <- cli$post("post")
     },
     match_requests_on = c("method", "uri", "body")
   )
   aa <- use_cassette(
-    name = "testing9",
+    "testing9",
     {
       res <- cli$post("post")
     },
@@ -22,7 +22,7 @@ test_that("use_cassette: match on body w/ empty body", {
   )
   # run it again
   bb <- use_cassette(
-    name = "testing9",
+    "testing9",
     {
       res <- cli$post("post")
     },

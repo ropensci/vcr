@@ -7,9 +7,10 @@ test_that("use_cassette works as expected", {
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
-  aa <- use_cassette(name = "testing1", {
+  aa <- use_cassette(
+    "testing1",
     res <- crul::HttpClient$new(hb("/get"))$get()
-  })
+  )
 
   # test `print.cassette` method
   expect_output(print(aa), "<vcr - Cassette>")
@@ -50,12 +51,13 @@ test_that("use_cassette fails well", {
 
   # record valid values
   expect_error(
-    suppressMessages(use_cassette(
-      "newbar",
-      {
-      },
-      record = "stuff"
-    )),
+    suppressMessages(
+      use_cassette(
+        "newbar",
+        NULL,
+        record = "stuff"
+      )
+    ),
     "'record' value of 'stuff' is not in the allowed set"
   )
 
@@ -63,8 +65,7 @@ test_that("use_cassette fails well", {
   expect_error(
     suppressMessages(use_cassette(
       "newbar",
-      {
-      },
+      NULL,
       match_requests_on = "stuff"
     )),
     "'match_requests_on' values \\(stuff\\) is not in the allowed set"
@@ -74,8 +75,7 @@ test_that("use_cassette fails well", {
   expect_error(
     suppressMessages(use_cassette(
       "newbar3",
-      {
-      },
+      NULL,
       update_content_length_header = 5
     )),
     "update_content_length_header must be of class logical"
@@ -85,8 +85,7 @@ test_that("use_cassette fails well", {
   expect_error(
     suppressMessages(use_cassette(
       "newbar4",
-      {
-      },
+      NULL,
       preserve_exact_body_bytes = 5
     )),
     "preserve_exact_body_bytes must be of class logical"
@@ -96,8 +95,7 @@ test_that("use_cassette fails well", {
   expect_error(
     suppressMessages(use_cassette(
       "newbar5",
-      {
-      },
+      NULL,
       persist_with = "jello"
     )),
     "The requested VCR cassette persister \\(jello\\) is not registered"
@@ -107,8 +105,7 @@ test_that("use_cassette fails well", {
   expect_error(
     suppressMessages(use_cassette(
       "newbar6",
-      {
-      },
+      NULL,
       serialize_with = "howdy"
     )),
     "The requested vcr cassette serializer \\(howdy\\) is not registered"

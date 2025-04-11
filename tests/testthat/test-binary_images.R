@@ -7,18 +7,20 @@ test_that("use_cassette w/ with images: httr", {
 
   ## preserve_exact_body_bytes = FALSE
   # works on 1st request - doing a real http request
-  use_cassette("test_write_httr_binary_img", {
+  use_cassette(
+    "test_write_httr_binary_img",
     out <- httr::GET(url)
-  })
+  )
 
   expect_s3_class(out, "response")
   expect_type(out$content, "raw")
   expect_equal(dims(httr::content(out)), 3)
 
   # works on 2nd request - using cassette
-  use_cassette("test_write_httr_binary_img", {
+  use_cassette(
+    "test_write_httr_binary_img",
     out2 <- httr::GET(url)
-  })
+  )
   expect_s3_class(out2, "response")
   expect_type(out2$content, "raw")
   expect_equal(dims(httr::content(out2)), 3)

@@ -10,18 +10,14 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   ### matchers: method, uri, body
   # run it
   aa <- use_cassette(
-    name = "testing1",
-    {
-      res <- cli$post("post", body = list(foo = "bar"), encode = "json")
-    },
+    "testing1",
+    res <- cli$post("post", body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("method", "uri", "body")
   )
   # run it again
   bb <- use_cassette(
-    name = "testing1",
-    {
-      res <- cli$post("post", body = list(foo = "bar"), encode = "json")
-    },
+    "testing1",
+    res <- cli$post("post", body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("method", "uri", "body")
   )
   # the recorded_at time doesn't change
@@ -37,10 +33,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   expect_error(
     # fails when comparing multipart- and json-encoded bodies
     use_cassette(
-      name = "testing1",
-      {
-        cli$post("post", body = list(foo = "bar"))
-      },
+      "testing1",
+      cli$post("post", body = list(foo = "bar")),
       match_requests_on = c("method", "uri", "body")
     ),
     "An HTTP request has been made that vcr does not know how to handle"
@@ -49,10 +43,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   # matching fails when the body changes
   expect_error(
     use_cassette(
-      name = "testing1",
-      {
-        res <- cli$post("post", body = list(foo = "baz"), encode = "json")
-      },
+      "testing1",
+      res <- cli$post("post", body = list(foo = "baz"), encode = "json"),
       match_requests_on = "body"
     ),
     "An HTTP request has been made that vcr does not know how to handle"
@@ -60,10 +52,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
 
   # matching succeeds when the changed body is ignored
   cc <- use_cassette(
-    name = "testing1",
-    {
-      res <- cli$post("post", body = list(foo = "baz"), encode = "json")
-    },
+    "testing1",
+    res <- cli$post("post", body = list(foo = "baz"), encode = "json"),
     match_requests_on = c("uri", "method")
   )
   expect_identical(recorded_at(aa), recorded_at(cc))
@@ -78,18 +68,14 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   ### matchers: method, uri, body
   # run it
   aa <- use_cassette(
-    name = "testing2",
-    {
-      res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json")
-    },
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("method", "uri", "body")
   )
   # run it again
   bb <- use_cassette(
-    name = "testing2",
-    {
-      res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json")
-    },
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("method", "uri", "body")
   )
   # the recorded_at time doesn't change
@@ -104,14 +90,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   # matching fails when the body changes
   expect_error(
     use_cassette(
-      name = "testing2",
-      {
-        res <- httr::POST(
-          hb("/post"),
-          body = list(foo = "bar1"),
-          encode = "json"
-        )
-      },
+      "testing2",
+      res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
       match_requests_on = "body"
     ),
     "An HTTP request has been made that vcr does not know how to handle"
@@ -119,10 +99,8 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
 
   # matching succeeds when the changed body is ignored
   cc <- use_cassette(
-    name = "testing2",
-    {
-      res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json")
-    },
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
     match_requests_on = c("uri", "method")
   )
   expect_identical(recorded_at(aa), recorded_at(cc))

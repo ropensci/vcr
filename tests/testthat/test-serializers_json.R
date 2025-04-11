@@ -22,9 +22,10 @@ test_that("JSON usage", {
   vcr_configuration()
 
   # does one request work?
-  aa <- use_cassette("testing2", {
+  aa <- use_cassette(
+    "testing2",
     res <- crul::HttpClient$new(hb("/get"))$get()
-  })
+  )
   expect_s3_class(aa, "Cassette")
   expect_s3_class(res, "HttpResponse")
   expect_length(jsonlite::fromJSON(aa$file(), FALSE)[[1]], 1)

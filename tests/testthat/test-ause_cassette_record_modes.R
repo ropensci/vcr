@@ -9,7 +9,11 @@ test_that("use_cassette record mode: once", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record interaction
-  one <- use_cassette("once", (res <- conn$get("get")), record = "once")
+  one <- use_cassette(
+    "once",
+    res <- conn$get("get"),
+    record = "once"
+  )
   expect_s3_class(one, "Cassette")
   expect_s3_class(res, "HttpResponse")
 
@@ -18,11 +22,7 @@ test_that("use_cassette record mode: once", {
   #   used in real request
   two <- use_cassette(
     "once",
-
-    {
-      res2 <- conn$get("get", timeout_ms = 10)
-    },
-
+    res2 <- conn$get("get", timeout_ms = 10),
     record = "once"
   )
   expect_s3_class(two, "Cassette")
@@ -35,7 +35,11 @@ test_that("use_cassette record mode: once", {
   # delete cassette file, new interaction should be recorded successfully
   unlink(file.path(vcr_c$dir, "once.yml"))
   expect_false(file.exists(file.path(vcr_c$dir, "once.yml")))
-  three <- use_cassette("once", (res3 <- conn$get("get")), record = "once")
+  three <- use_cassette(
+    "once",
+    res3 <- conn$get("get"),
+    record = "once"
+  )
   expect_s3_class(three, "Cassette")
 
   # raise error on attempted NEW INTERACTION on existing cassette file
@@ -57,10 +61,17 @@ test_that("use_cassette record mode: none", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record first with another record mode to make the cassette
-  invisible(use_cassette("none", (res <- conn$get("get"))))
+  invisible(use_cassette(
+    "none",
+    res <- conn$get("get")
+  ))
 
   # previously recorded interaction should replay
-  one <- use_cassette("none", (res <- conn$get("get")), record = "none")
+  one <- use_cassette(
+    "none",
+    res <- conn$get("get"),
+    record = "none"
+  )
   expect_s3_class(one, "Cassette")
   expect_s3_class(res, "HttpResponse")
 
@@ -87,9 +98,7 @@ test_that("use_cassette record mode: new_episodes", {
   # record first interaction
   one <- use_cassette(
     "new_episodes",
-    {
-      res <- conn$get("get")
-    },
+    res <- conn$get("get"),
     record = "new_episodes"
   )
   expect_s3_class(one, "Cassette")
@@ -100,9 +109,7 @@ test_that("use_cassette record mode: new_episodes", {
   # first interaction again, should be played back
   one_again <- use_cassette(
     "new_episodes",
-    {
-      res2 <- conn$get("get")
-    },
+    res2 <- conn$get("get"),
     record = "new_episodes"
   )
   expect_s3_class(one_again, "Cassette")
@@ -116,9 +123,7 @@ test_that("use_cassette record mode: new_episodes", {
   # record new interaction, is recorded below first one above
   two <- use_cassette(
     "new_episodes",
-    {
-      res3 <- conn$get("get", query = list(project = "mars-explorer"))
-    },
+    res3 <- conn$get("get", query = list(project = "mars-explorer")),
     record = "new_episodes"
   )
   expect_s3_class(two, "Cassette")
@@ -152,7 +157,11 @@ test_that("use_cassette record mode: all", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record first interaction
-  one <- use_cassette("all", (res <- conn$get("get")), record = "all")
+  one <- use_cassette(
+    "all",
+    res <- conn$get("get"),
+    record = "all"
+  )
   one_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "all.yml"))
   expect_equal(length(one_yml$http_interactions), 1)
 
@@ -161,7 +170,11 @@ test_that("use_cassette record mode: all", {
 
   # previously recorded interactions do not playback
   # - recorded time and response header time have changed
-  two <- use_cassette("all", (res2 <- conn$get("get")), record = "all")
+  two <- use_cassette(
+    "all",
+    res2 <- conn$get("get"),
+    record = "all"
+  )
   two_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "all.yml"))
   expect_equal(length(two_yml$http_interactions), 1)
 
@@ -191,9 +204,7 @@ test_that("use_cassette record mode: all", {
   # new interactions are recorded
   three <- use_cassette(
     "all",
-    {
-      res3 <- conn$get("get", query = list(cheese = "pepperjack"))
-    },
+    res3 <- conn$get("get", query = list(cheese = "pepperjack")),
     record = "all"
   )
   three_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "all.yml"))

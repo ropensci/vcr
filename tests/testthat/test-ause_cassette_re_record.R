@@ -7,10 +7,7 @@ test_that("use_cassette options: re_record_interval", {
   # first use
   use_cassette(
     "re_record1",
-
-    {
-      res <- conn$get("get")
-    },
+    res <- conn$get("get"),
     re_record_interval = 3L,
     clean_outdated_http_interactions = TRUE
   )
@@ -19,10 +16,7 @@ test_that("use_cassette options: re_record_interval", {
   # second use, not expired, no change in recorded_at value
   use_cassette(
     "re_record1",
-
-    {
-      res <- conn$get("get")
-    },
+    res <- conn$get("get"),
     re_record_interval = 3L,
     clean_outdated_http_interactions = TRUE
   )
@@ -34,10 +28,7 @@ test_that("use_cassette options: re_record_interval", {
   Sys.sleep(3L)
   use_cassette(
     "re_record1",
-
-    {
-      res <- conn$get("get")
-    },
+    res <- conn$get("get"),
     re_record_interval = 3L,
     clean_outdated_http_interactions = TRUE
   )
