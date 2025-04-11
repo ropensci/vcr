@@ -4,7 +4,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   mydir <- file.path(tempdir(), "asdfasdfsd")
   invisible(vcr_configure(dir = mydir))
   unlink(file.path(vcr_c$dir, "testing1.yml"))
-  cli <- HttpClient$new(url = hb())
+  cli <- crul::HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
   # run it
@@ -61,7 +61,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   ### matchers: body only
   # run it
   # FIXME: still not quite working
-  cli2 <- HttpClient$new(url = "https://stuff.com")
+  cli2 <- crul::HttpClient$new(url = "https://stuff.com")
   aa <- use_cassette(
     name = "testing3",
     {
@@ -91,7 +91,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   aa <- use_cassette(
     name = "testing_host1",
     {
-      res <- HttpClient$new(url = hb())$get(query = list(b = 99999))
+      res <- crul::HttpClient$new(url = hb())$get(query = list(b = 99999))
     },
     match_requests_on = "host"
   )
@@ -99,7 +99,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   bb <- use_cassette(
     name = "testing_host1",
     {
-      res2 <- HttpClient$new(url = hb())$get(query = list(a = 5))
+      res2 <- crul::HttpClient$new(url = hb())$get(query = list(a = 5))
     },
     match_requests_on = "host"
   )
@@ -117,7 +117,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   aa <- use_cassette(
     name = "testing_path1",
     {
-      res <- HttpClient$new("https://scottchamberlain.info")$get(
+      res <- crul::HttpClient$new("https://scottchamberlain.info")$get(
         "about",
         query = list(b = 99999)
       )
@@ -128,7 +128,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   bb <- use_cassette(
     name = "testing_path1",
     {
-      res2 <- HttpClient$new("https://ropensci.org")$get(
+      res2 <- crul::HttpClient$new("https://ropensci.org")$get(
         "about",
         query = list(a = 5)
       )
@@ -149,7 +149,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   aa <- use_cassette(
     name = "testing_host_path",
     {
-      res <- HttpClient$new(url = "https://ropensci.org")$get(
+      res <- crul::HttpClient$new(url = "https://ropensci.org")$get(
         "about",
         query = list(b = 99999)
       )
@@ -160,7 +160,7 @@ test_that("use_cassette: match_requests_on - body works w/ crul", {
   bb <- use_cassette(
     name = "testing_host_path",
     {
-      res2 <- HttpClient$new(url = "https://ropensci.org")$post(
+      res2 <- crul::HttpClient$new(url = "https://ropensci.org")$post(
         "about",
         query = list(a = 5)
       )

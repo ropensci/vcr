@@ -11,7 +11,7 @@ test_that("use_cassette w/ binary files on disk: crul", {
   f <- file.path(tempdir(), "41001c1990.nc")
   ## make a request
   use_cassette("test_write_to_disk_binary", {
-    out <- HttpClient$new(url)$get(disk = f)
+    out <- crul::HttpClient$new(url)$get(disk = f)
   })
 
   expect_s3_class(out, "HttpResponse")
@@ -21,7 +21,7 @@ test_that("use_cassette w/ binary files on disk: crul", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk_binary", {
-    out2 <- HttpClient$new(url)$get(disk = f)
+    out2 <- crul::HttpClient$new(url)$get(disk = f)
   })
   expect_s3_class(out2, "HttpResponse")
   expect_type(out2$content, "character")
@@ -49,7 +49,7 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   f <- file.path(tempdir(), basename(url))
   ## make a request
   use_cassette("test_write_to_disk_binary_img", {
-    out <- HttpClient$new(url)$get(disk = f)
+    out <- crul::HttpClient$new(url)$get(disk = f)
   })
 
   expect_s3_class(out, "HttpResponse")
@@ -59,7 +59,7 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk_binary_img", {
-    out2 <- HttpClient$new(url)$get(disk = f)
+    out2 <- crul::HttpClient$new(url)$get(disk = f)
   })
   expect_s3_class(out2, "HttpResponse")
   expect_type(out2$content, "character")
@@ -75,7 +75,7 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
     # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
     url <- "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
     f <- file.path(tempdir(), basename(url))
-    HttpClient$new(url)$get(disk = f)
+    crul::HttpClient$new(url)$get(disk = f)
   }
 
   use_cassette("test_write_to_disk_binary_img_fxn", {

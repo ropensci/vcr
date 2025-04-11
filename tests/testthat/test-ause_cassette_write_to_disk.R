@@ -10,7 +10,7 @@ test_that("fails well if write_disk_path not set", {
   f <- tempfile(fileext = ".json")
   expect_error(
     sw(use_cassette("write_disk_path_not_set_crul", {
-      out <- HttpClient$new(hb("/get"))$get(disk = f)
+      out <- crul::HttpClient$new(hb("/get"))$get(disk = f)
     })),
     "write_disk_path must be given"
   )
@@ -41,7 +41,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   f <- tempfile(fileext = ".json")
   ## make a request
   use_cassette("test_write_to_disk", {
-    out <- HttpClient$new(hb("/get"))$get(disk = f)
+    out <- crul::HttpClient$new(hb("/get"))$get(disk = f)
   })
 
   expect_s3_class(out, "HttpResponse")
@@ -51,7 +51,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk", {
-    out2 <- HttpClient$new(hb("/get"))$get(disk = f)
+    out2 <- crul::HttpClient$new(hb("/get"))$get(disk = f)
   })
   expect_s3_class(out2, "HttpResponse")
   expect_type(out2$content, "character")

@@ -97,8 +97,8 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   vcr_configure(dir = tmpdir)
   # vcr_configuration()
   cas_not_ignored <- use_cassette("test_ignore_host", {
-    HttpClient$new(hb())$get()
-    HttpClient$new("https://scottchamberlain.info")$get()
+    crul::HttpClient$new(hb())$get()
+    crul::HttpClient$new("https://scottchamberlain.info")$get()
   })
 
   vcr_configure_reset()
@@ -106,8 +106,8 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   vcr_configure(dir = tmpdir, ignore_hosts = "google.com")
   # vcr_configuration()
   cas_ignored <- use_cassette("test_ignore_host_ignored", {
-    HttpClient$new("https://google.com")$get()
-    HttpClient$new("https://scottchamberlain.info")$get()
+    crul::HttpClient$new("https://google.com")$get()
+    crul::HttpClient$new("https://scottchamberlain.info")$get()
   })
 
   read_cas <- function(x)
@@ -121,15 +121,15 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   tmpdir <- tempdir()
   vcr_configure(dir = tmpdir)
   cas_local_not_ignored <- use_cassette("test_ignore_localhost", {
-    HttpClient$new("https://scottchamberlain.info")$get()
-    HttpClient$new("http://127.0.0.1:8000")$get()
+    crul::HttpClient$new("https://scottchamberlain.info")$get()
+    crul::HttpClient$new("http://127.0.0.1:8000")$get()
   })
 
   vcr_configure(dir = tmpdir, ignore_localhost = TRUE)
   # vcr_configuration()
   cas_local_ignored <- use_cassette("test_ignore_localhost_ignored", {
-    HttpClient$new("https://scottchamberlain.info")$get()
-    HttpClient$new("http://127.0.0.1:8000")$get()
+    crul::HttpClient$new("https://scottchamberlain.info")$get()
+    crul::HttpClient$new("http://127.0.0.1:8000")$get()
   })
 
   expect_equal(length(read_cas(cas_local_not_ignored$file())), 2)

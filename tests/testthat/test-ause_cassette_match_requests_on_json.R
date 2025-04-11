@@ -10,7 +10,7 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   mydir <- file.path(tempdir(), "crul_json_encoding")
   invisible(vcr_configure(dir = mydir))
 
-  cli <- HttpClient$new(url = hb())
+  cli <- crul::HttpClient$new(url = hb())
 
   ### matchers: method, uri, body
   # run it
