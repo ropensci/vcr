@@ -11,7 +11,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   con <- crul::HttpClient$new("https://hb.opencpu.org")
   con$get("get", query = list(apples = 56), disk = f)
 }\n\ntest_that("ffff works", {
-  vcr::use_cassette("ffff_testing", {
+  use_cassette("ffff_testing", {
     x <- ffff()
     expect_s3_class(x, "HttpResponse")
     expect_match(x$url, "apples")

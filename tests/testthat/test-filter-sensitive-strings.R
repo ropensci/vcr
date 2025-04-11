@@ -50,9 +50,10 @@ test_that("filter sensitive data strips leading/trailing single/double quotes", 
   )
   library(crul)
   x <- HttpClient$new("https://hb.opencpu.org")
-  cas <- sw(use_cassette("testing2", {
+  cas <- sw(use_cassette(
+    "testing2",
     res <- x$get("get", query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS")))
-  }))
+  ))
   int <- yaml::yaml.load_file(cas$file())$http_interactions[[1]]
   expect_false(grepl(
     Sys.getenv("MY_KEY_ON_GH_ACTIONS"),
@@ -63,9 +64,10 @@ test_that("filter sensitive data strips leading/trailing single/double quotes", 
   expect_false(grepl(Sys.getenv("MY_KEY_ON_GH_ACTIONS"), body$url))
 
   # throws a warning when it happens
-  expect_warning(use_cassette("testing3", {
+  expect_warning(use_cassette(
+    "testing3",
     x$get("get", query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS")))
-  }))
+  ))
 
   # unset
   Sys.unsetenv("MY_KEY_ON_GH_ACTIONS")

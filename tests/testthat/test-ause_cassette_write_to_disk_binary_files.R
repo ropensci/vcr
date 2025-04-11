@@ -11,9 +11,10 @@ test_that("use_cassette w/ binary files on disk: crul", {
   ## make a temp file
   f <- file.path(tempdir(), "41001c1990.nc")
   ## make a request
-  use_cassette("test_write_to_disk_binary", {
+  use_cassette(
+    "test_write_to_disk_binary",
     out <- HttpClient$new(url)$get(disk = f)
-  })
+  )
 
   expect_s3_class(out, "HttpResponse")
   expect_type(out$content, "character")
@@ -50,9 +51,10 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   ## make a temp file
   f <- file.path(tempdir(), basename(url))
   ## make a request
-  use_cassette("test_write_to_disk_binary_img", {
+  use_cassette(
+    "test_write_to_disk_binary_img",
     out <- HttpClient$new(url)$get(disk = f)
-  })
+  )
 
   expect_s3_class(out, "HttpResponse")
   expect_type(out$content, "character")
@@ -60,9 +62,10 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   expect_type(out$parse(), "raw")
 
   # works on 2nd request
-  use_cassette("test_write_to_disk_binary_img", {
+  use_cassette(
+    "test_write_to_disk_binary_img",
     out2 <- HttpClient$new(url)$get(disk = f)
-  })
+  )
   expect_s3_class(out2, "HttpResponse")
   expect_type(out2$content, "character")
   expect_match(out2$content, "\\.jpeg")
@@ -81,12 +84,14 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
     HttpClient$new(url)$get(disk = f)
   }
 
-  use_cassette("test_write_to_disk_binary_img_fxn", {
+  use_cassette(
+    "test_write_to_disk_binary_img_fxn",
     out <- foo_bar()
-  })
-  use_cassette("test_write_to_disk_binary_img_fxn", {
+  )
+  use_cassette(
+    "test_write_to_disk_binary_img_fxn",
     out2 <- foo_bar()
-  })
+  )
 
   expect_type(out$content, "character")
   expect_type(out$parse(), "raw")
@@ -106,18 +111,20 @@ test_that("use_cassette w/ binary files on disk: httr", {
   ## make a temp file
   f <- file.path(tempdir(), "41001c1990.nc")
   ## make a request
-  use_cassette("test_write_to_disk_binary_httr", {
+  use_cassette(
+    "test_write_to_disk_binary_httr",
     out <- GET(url, write_disk(f, TRUE))
-  })
+  )
 
   expect_s3_class(out, "response")
   expect_s3_class(out$content, "path")
   expect_match(out$content, "\\.nc")
 
   # works on 2nd request
-  use_cassette("test_write_to_disk_binary_httr", {
+  use_cassette(
+    "test_write_to_disk_binary_httr",
     out2 <- GET(url, write_disk(f, TRUE))
-  })
+  )
   expect_s3_class(out2, "response")
   expect_s3_class(out2$content, "path")
   expect_match(out2$content, "\\.nc")

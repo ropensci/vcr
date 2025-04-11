@@ -10,18 +10,20 @@ test_that("fails well if write_disk_path not set", {
   library(crul)
   f <- tempfile(fileext = ".json")
   expect_error(
-    sw(use_cassette("write_disk_path_not_set_crul", {
+    sw(use_cassette(
+      "write_disk_path_not_set_crul",
       out <- HttpClient$new(hb("/get"))$get(disk = f)
-    })),
+    )),
     "write_disk_path must be given"
   )
 
   library(httr)
   g <- tempfile(fileext = ".json")
   expect_error(
-    sw(use_cassette("write_disk_path_not_set_httr", {
+    sw(use_cassette(
+      "write_disk_path_not_set_httr",
       out <- GET(hb("/get"), write_disk(g, TRUE))
-    })),
+    )),
     "write_disk_path must be given"
   )
 })
@@ -43,9 +45,10 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   ## make a temp file
   f <- tempfile(fileext = ".json")
   ## make a request
-  use_cassette("test_write_to_disk", {
+  use_cassette(
+    "test_write_to_disk",
     out <- HttpClient$new(hb("/get"))$get(disk = f)
-  })
+  )
 
   expect_s3_class(out, "HttpResponse")
   expect_type(out$content, "character")
@@ -53,9 +56,10 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   expect_type(out$parse(), "character")
 
   # works on 2nd request
-  use_cassette("test_write_to_disk", {
+  use_cassette(
+    "test_write_to_disk",
     out2 <- HttpClient$new(hb("/get"))$get(disk = f)
-  })
+  )
   expect_s3_class(out2, "HttpResponse")
   expect_type(out2$content, "character")
   expect_match(out2$content, "\\.json")
@@ -71,18 +75,20 @@ test_that("use_cassette w/ request that writes to disk: httr", {
   ## make a temp file
   f <- tempfile(fileext = ".json")
   ## make a request
-  use_cassette("test_write_to_disk_httr", {
+  use_cassette(
+    "test_write_to_disk_httr",
     out <- GET(hb("/get"), write_disk(f, TRUE))
-  })
+  )
 
   expect_s3_class(out, "response")
   expect_s3_class(out$content, "path")
   expect_match(out$content, "\\.json")
 
   # works on 2nd request
-  use_cassette("test_write_to_disk_httr", {
+  use_cassette(
+    "test_write_to_disk_httr",
     out2 <- GET(hb("/get"), write_disk(f, TRUE))
-  })
+  )
   expect_s3_class(out2, "response")
   expect_s3_class(out2$content, "path")
   expect_match(out2$content, "\\.json")

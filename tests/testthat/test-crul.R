@@ -46,9 +46,7 @@ test_that("crul POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("crul_post_upload_file", {
-    b <- HttpClient$new(hb("/post"))$post(
-      body = list(y = crul::upload(ff))
-    )
+    b <- HttpClient$new(hb("/post"))$post(body = list(y = crul::upload(ff)))
   })
   expect_false(out4$is_empty())
   expect_s3_class(b, "HttpResponse")

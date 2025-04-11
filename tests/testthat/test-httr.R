@@ -43,12 +43,14 @@ test_that("httr status code works", {
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
 
-  out <- use_cassette("httr_test1", {
+  out <- use_cassette(
+    "httr_test1",
     x <- GET(hb("/404"))
-  })
-  invisible(use_cassette("httr_test1", {
+  )
+  invisible(use_cassette(
+    "httr_test1",
     x2 <- GET(hb("/404"))
-  }))
+  ))
 
   # cassette
   expect_s3_class(out, "Cassette")
@@ -96,9 +98,7 @@ test_that("httr use_cassette works", {
 
   out <- use_cassette(
     "httr_test2",
-    {
-      x <- GET(hb("/404"))
-    },
+    x <- GET(hb("/404")),
     preserve_exact_body_bytes = TRUE
   )
 
@@ -168,9 +168,10 @@ test_that("httr w/ >1 request per cassette", {
 })
 
 test_that("httr works with simple auth and hides auth details", {
-  use_cassette("httr_test_simple_auth", {
+  use_cassette(
+    "httr_test_simple_auth",
     x <- GET(hb("/basic-auth/foo/bar"), authenticate("foo", "bar"))
-  })
+  )
 
   # successful request
   expect_equal(x$status_code, 200)
@@ -191,9 +192,10 @@ test_that("httr works with simple auth and hides auth details", {
 
 test_that("httr POST requests works", {
   # body type: named list
-  out <- use_cassette("httr_post_named_list", {
+  out <- use_cassette(
+    "httr_post_named_list",
     x <- POST(hb("/post"), body = list(foo = "bar"))
-  })
+  )
   expect_false(out$is_empty())
   expect_s3_class(x, "response")
   expect_equal(x$status_code, 200)
@@ -202,9 +204,10 @@ test_that("httr POST requests works", {
   expect_equal(strj$form, list(foo = "bar"))
 
   # body type: character
-  out2 <- use_cassette("httr_post_string", {
+  out2 <- use_cassette(
+    "httr_post_string",
     z <- POST(hb("/post"), body = "some string")
-  })
+  )
   expect_false(out2$is_empty())
   expect_s3_class(z, "response")
   expect_equal(z$status_code, 200)
@@ -213,9 +216,10 @@ test_that("httr POST requests works", {
   expect_equal(strj$data, "some string")
 
   # body type: raw
-  out3 <- use_cassette("httr_post_raw", {
+  out3 <- use_cassette(
+    "httr_post_raw",
     z <- POST(hb("/post"), body = charToRaw("some string"))
-  })
+  )
   expect_false(out3$is_empty())
   expect_s3_class(z, "response")
   expect_equal(z$status_code, 200)
@@ -226,9 +230,10 @@ test_that("httr POST requests works", {
   # body type: upload_file
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
-  out4 <- use_cassette("httr_post_upload_file", {
+  out4 <- use_cassette(
+    "httr_post_upload_file",
     b <- POST(hb("/post"), body = list(y = httr::upload_file(ff)))
-  })
+  )
   expect_false(out4$is_empty())
   expect_s3_class(b, "response")
   expect_equal(b$status_code, 200)
@@ -252,9 +257,10 @@ test_that("httr POST requests works", {
   # expect_match(strj$data, "bibentry\\(") # data not empty
 
   # body type: NULL
-  out5 <- use_cassette("httr_post_null", {
+  out5 <- use_cassette(
+    "httr_post_null",
     m <- POST(hb("/post"), body = NULL)
-  })
+  )
   expect_false(out5$is_empty())
   expect_s3_class(m, "response")
   expect_equal(m$status_code, 200)
