@@ -44,3 +44,21 @@ headers_remove <- function(x) {
   x <- filter_req_or_res(x, vcr_c$filter_request_headers, "request")
   filter_req_or_res(x, vcr_c$filter_response_headers, "response")
 }
+
+request_headers_redact <- function(x) {
+  lapply(x, \(int) {
+    int$request$headers <- request_headers_redact_one(int$request$headers)
+    int
+  })
+}
+
+request_headers_redact_one <- function(headers) {
+  redacted_headers <- attr(headers, "redact")
+  if (is_empty(redacted_headers)) return(headers)
+  for (i in seq_along(headers)) {
+    if (names(headers)[i] %in% redacted_headers) {
+      headers[[i]] <- "<redacted>"
+    }
+  }
+  headers
+}
