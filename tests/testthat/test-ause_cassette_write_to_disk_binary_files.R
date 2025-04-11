@@ -103,7 +103,7 @@ test_that("use_cassette w/ binary files on disk: httr", {
   f <- file.path(tempdir(), "41001c1990.nc")
   ## make a request
   use_cassette("test_write_to_disk_binary_httr", {
-    out <- GET(url, write_disk(f, TRUE))
+    out <- httr::GET(url, httr::write_disk(f, TRUE))
   })
 
   expect_s3_class(out, "response")
@@ -112,7 +112,7 @@ test_that("use_cassette w/ binary files on disk: httr", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk_binary_httr", {
-    out2 <- GET(url, write_disk(f, TRUE))
+    out2 <- httr::GET(url, httr::write_disk(f, TRUE))
   })
   expect_s3_class(out2, "response")
   expect_s3_class(out2$content, "path")

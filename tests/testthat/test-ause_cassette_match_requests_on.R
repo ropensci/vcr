@@ -192,7 +192,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   aa <- use_cassette(
     name = "testing2",
     {
-      res <- POST(hb("/post"), body = list(foo = "bar"))
+      res <- httr::POST(hb("/post"), body = list(foo = "bar"))
     },
     match_requests_on = c("method", "uri", "body")
   )
@@ -200,7 +200,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   bb <- use_cassette(
     name = "testing2",
     {
-      res <- POST(hb("/post"), body = list(foo = "bar"))
+      res <- httr::POST(hb("/post"), body = list(foo = "bar"))
     },
     match_requests_on = c("method", "uri", "body")
   )
@@ -218,7 +218,11 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   aa <- use_cassette(
     name = "testing4",
     {
-      res <- POST(hb("/post"), query = list(a = 5), body = list(foo = "bar"))
+      res <- httr::POST(
+        hb("/post"),
+        query = list(a = 5),
+        body = list(foo = "bar")
+      )
     },
     match_requests_on = c("method", "body")
   )
@@ -226,7 +230,11 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   bb <- use_cassette(
     name = "testing4",
     {
-      res <- POST(hb("/post"), query = list(b = 2), body = list(foo = "bar"))
+      res <- httr::POST(
+        hb("/post"),
+        query = list(b = 2),
+        body = list(foo = "bar")
+      )
     },
     match_requests_on = c("method", "body")
   )
@@ -244,7 +252,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   aa <- use_cassette(
     name = "testing5",
     {
-      res <- POST(hb("/post"), body = list(foo = "bar"))
+      res <- httr::POST(hb("/post"), body = list(foo = "bar"))
     },
     match_requests_on = "body"
   )
@@ -252,7 +260,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   bb <- use_cassette(
     name = "testing5",
     {
-      res <- PUT(hb("/put"), body = list(foo = "bar"))
+      res <- httr::PUT(hb("/put"), body = list(foo = "bar"))
     },
     match_requests_on = "body"
   )
@@ -260,7 +268,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   cc <- use_cassette(
     name = "testing5",
     {
-      res <- PATCH(hb("/patch"), body = list(foo = "bar"))
+      res <- httr::PATCH(hb("/patch"), body = list(foo = "bar"))
     },
     match_requests_on = "body"
   )
@@ -280,7 +288,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   aa <- use_cassette(
     name = "testing_httr_host_path",
     {
-      res <- GET("https://ropensci.org/about", query = list(b = 99999))
+      res <- httr::GET("https://ropensci.org/about", query = list(b = 99999))
     },
     match_requests_on = c("host", "path")
   )
@@ -288,7 +296,7 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   bb <- use_cassette(
     name = "testing_httr_host_path",
     {
-      res2 <- POST("https://ropensci.org/about", query = list(a = 5))
+      res2 <- httr::POST("https://ropensci.org/about", query = list(a = 5))
     },
     match_requests_on = c("host", "path")
   )

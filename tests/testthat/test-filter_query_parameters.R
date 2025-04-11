@@ -172,17 +172,17 @@ test_that("filter_query_parameters: remove (httr)", {
   vcr_configure(dir = mydir)
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- GET(hb("/get?Foo=bar"))
+    res_nofilters <- httr::GET(hb("/get?Foo=bar"))
   })
   # Do filtering
   vcr_configure_reset()
   vcr_configure(dir = mydir, filter_query_parameters = "Foo")
   unlink(file.path(vcr_c$dir, "filterparams_remove.yml"))
   cas1 <- use_cassette(name = "filterparams_remove", {
-    res1 <- GET(hb("/get?Foo=bar"))
+    res1 <- httr::GET(hb("/get?Foo=bar"))
   })
   cas2 <- use_cassette(name = "filterparams_remove", {
-    res2 <- GET(hb("/get?Foo=bar"))
+    res2 <- httr::GET(hb("/get?Foo=bar"))
   })
 
   # with no filtering, request headers have Foo
@@ -218,7 +218,7 @@ test_that("filter_query_parameters: replace (httr)", {
   vcr_configure(dir = mydir)
   unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
-    res_nofilters <- GET(hb("/get?Foo=bar"))
+    res_nofilters <- httr::GET(hb("/get?Foo=bar"))
   })
   # Do filtering
   vcr_configure_reset()
@@ -228,10 +228,10 @@ test_that("filter_query_parameters: replace (httr)", {
   )
   unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
   cas1 <- use_cassette(name = "filterparams_replace", {
-    res1 <- GET(hb("/get?Foo=bar"))
+    res1 <- httr::GET(hb("/get?Foo=bar"))
   })
   cas2 <- use_cassette(name = "filterparams_replace", {
-    res2 <- GET(hb("/get?Foo=bar"))
+    res2 <- httr::GET(hb("/get?Foo=bar"))
   })
 
   # with no filtering, request headers have Foo

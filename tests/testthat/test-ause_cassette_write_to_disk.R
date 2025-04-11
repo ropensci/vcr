@@ -18,7 +18,7 @@ test_that("fails well if write_disk_path not set", {
   g <- tempfile(fileext = ".json")
   expect_error(
     sw(use_cassette("write_disk_path_not_set_httr", {
-      out <- GET(hb("/get"), write_disk(g, TRUE))
+      out <- httr::GET(hb("/get"), httr::write_disk(g, TRUE))
     })),
     "write_disk_path must be given"
   )
@@ -68,7 +68,7 @@ test_that("use_cassette w/ request that writes to disk: httr", {
   f <- tempfile(fileext = ".json")
   ## make a request
   use_cassette("test_write_to_disk_httr", {
-    out <- GET(hb("/get"), write_disk(f, TRUE))
+    out <- httr::GET(hb("/get"), httr::write_disk(f, TRUE))
   })
 
   expect_s3_class(out, "response")
@@ -77,7 +77,7 @@ test_that("use_cassette w/ request that writes to disk: httr", {
 
   # works on 2nd request
   use_cassette("test_write_to_disk_httr", {
-    out2 <- GET(hb("/get"), write_disk(f, TRUE))
+    out2 <- httr::GET(hb("/get"), httr::write_disk(f, TRUE))
   })
   expect_s3_class(out2, "response")
   expect_s3_class(out2$content, "path")
