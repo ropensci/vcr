@@ -1,8 +1,8 @@
 test_that("check_cassette_names", {
   skip_on_cran()
 
-  dir <- file.path(tempdir(), "barfly")
-  invisible(make_pkg(dir))
+  dir <- make_pkg()
+
   res <- use_vcr(dir, verbose = FALSE)
   strg_dup <- 'test_that("bar", {\n  vcr::use_cassette("testing", cat("bar"))\n  vcr::use_cassette("testing", cat("bar"))\n})'
   cat(strg_dup, file = file.path(dir, "tests/testthat/test-catbar.R"))
@@ -11,10 +11,7 @@ test_that("check_cassette_names", {
   strg_not_used <- 'hi'
   cat(strg_not_used, file = file.path(dir, "tests/testthat/cat.R"))
 
-  og <- getwd()
-  setwd(file.path(dir, "tests/testthat"))
-  on.exit(setwd(og))
-
+  withr::local_dir(file.path(dir, "tests/testthat"))
   expect_error(
     check_cassette_names(),
     "you should not have duplicated cassette names",

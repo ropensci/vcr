@@ -9,6 +9,8 @@ req_httr <- function(url) {
 test_that('request matching is not sensitive to escaping special characters', {
   skip_on_cran()
   skip_on_ci()
+  local_vcr_configure(dir = withr::local_tempdir())
+
   # run twice the request with curl (curl does not escape)
   aa <- use_cassette(
     'get_crul_match',
@@ -26,7 +28,3 @@ test_that('request matching is not sensitive to escaping special characters', {
   res <- req_httr(url)
   expect_true(res$status_code == 200)
 })
-
-# cleanup
-files <- c("get_crul_match.yml", "get_httr_match.yml")
-unlink(file.path(vcr_configuration()$dir, files))

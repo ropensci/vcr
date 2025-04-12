@@ -20,6 +20,7 @@ test_that("YAML usage", {
   expect_error(suppressWarnings(z$deserialize()), "cannot open")
   # after file exists, before any yaml in it:
   cat("", file = z$path)
+  on.exit(unlink(z$path))
   expect_equal(z$deserialize(), list())
   # after file exists, with yaml in it, with incomplete final line:
   cat("foo: 123\nbar: 456", file = z$path)
@@ -27,9 +28,6 @@ test_that("YAML usage", {
   # after file exists, with yaml in it, without incomplete final line:
   cat("foo: 123\nbar: 456\n", file = z$path)
   expect_type(z$deserialize(), "list")
-
-  # cleanup
-  unlink(z$path)
 })
 
 test_that("YAML fails well", {

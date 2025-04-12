@@ -1,23 +1,18 @@
-vcr_configure_reset()
-
 test_that("filter_headers/request/remove", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_headers_request_remove")
-  # mydir <- "terrible2"
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # request headers: remove only
   # no header filtering to compare below stuff to
-  vcr_configure(dir = mydir)
   con <- crul::HttpClient$new(hb("/get"), headers = list(Foo = "bar"))
-  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con$get()
   })
-  # Do filtering
-  vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_request_headers = c("Foo", "Accept"))
-  unlink(file.path(vcr_c$dir, "filterheaders_remove.yml"))
+
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    filter_request_headers = c("Foo", "Accept")
+  )
   con <- crul::HttpClient$new(hb("/get"), headers = list(Foo = "bar"))
   cas1 <- use_cassette(name = "filterheaders_remove", {
     res1 <- con$get()
@@ -73,25 +68,20 @@ vcr_configure_reset()
 
 test_that("filter_headers/request/replace", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_headers_request_replace")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # request headers: replace only
   # no header filtering to compare below stuff to
-  vcr_configure_reset()
-  vcr_configure(dir = mydir)
   con1 <- crul::HttpClient$new(
     hb("/get"),
     headers = list(Authorization = "mysecret")
   )
-  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con1$get()
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
+
+  local_vcr_configure(
     filter_request_headers = list("Authorization" = "XXXXXXX")
   )
   cas_rep1 <- use_cassette(name = "filterheaders_replace", {
@@ -126,19 +116,15 @@ test_that("filter_headers/request/replace", {
   )
 })
 
-vcr_configure_reset()
-
 test_that("filter_headers doesn't add a header that doesn't exist", {
   skip_on_cran()
 
   mydir <- file.path(tempdir(), "filter_headers_doesnt_add_header")
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
     filter_request_headers = list("Authorization" = "XXXXXXX")
   )
   con1 <- crul::HttpClient$new(hb("/get"))
-  unlink(file.path(vcr_c$dir, "filterheaders_no_header.yml"))
   cas_nh1 <- use_cassette(name = "filterheaders_no_header", {
     res <- con1$get()
   })
@@ -160,24 +146,17 @@ test_that("filter_headers doesn't add a header that doesn't exist", {
   expect_null(yaml2$http_interactions[[1]]$request$headers$Authorization)
 })
 
-vcr_configure_reset()
-
 test_that("filter_headers/response/remove", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_headers_response_remove")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # response headers: remove only
-  vcr_configure(dir = mydir)
   con <- crul::HttpClient$new(hb("/get"))
-  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con$get()
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_response_headers = c("date", "server"))
-  unlink(file.path(vcr_c$dir, "filterheaders_response_remove.yml"))
+  local_vcr_configure(filter_response_headers = c("date", "server"))
   cas1 <- use_cassette(name = "filterheaders_response_remove", {
     res1 <- con$get()
   })
@@ -214,27 +193,19 @@ test_that("filter_headers/response/remove", {
   )
 })
 
-vcr_configure_reset()
-
 test_that("filter_headers/response/replace", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_headers_response_replace")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # response headers: replace only
-  vcr_configure(dir = mydir)
   con <- crul::HttpClient$new(hb("/get"))
-  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con$get()
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
+  local_vcr_configure(
     filter_response_headers = list(server = "who-dis!?")
   )
-  unlink(file.path(vcr_c$dir, "filterheaders_response_replace.yml"))
   cas1 <- use_cassette(name = "filterheaders_response_replace", {
     res1 <- con$get()
   })
@@ -267,30 +238,19 @@ test_that("filter_headers/response/replace", {
   )
 })
 
-vcr_configure_reset()
-
 #### JSON - just checking 1 of the above with json
 test_that("filter_headers/request/remove/json", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_headers_request_remove_json")
+  local_vcr_configure(dir = withr::local_tempdir(), serialize_with = 'json')
 
   # request headers: remove only
   # no header filtering to compare below stuff to
-  vcr_configure(dir = mydir, serialize_with = 'json')
   con <- crul::HttpClient$new(hb("/get"), headers = list(Foo = "bar"))
-  unlink(file.path(vcr_c$dir, "filterheaders_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con$get()
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
-    filter_request_headers = c("Foo", "Accept"),
-    serialize_with = 'json'
-  )
-  unlink(file.path(vcr_c$dir, "filterheaders_remove_json.yml"))
+  local_vcr_configure(filter_request_headers = c("Foo", "Accept"))
   con <- crul::HttpClient$new(hb("/get"), headers = list(Foo = "bar"))
   cas1 <- use_cassette(name = "filterheaders_remove_json", {
     res1 <- con$get()
@@ -341,5 +301,3 @@ test_that("filter_headers/request/remove/json", {
     jsonlite::fromJSON(cas2$file(), FALSE)
   )
 })
-
-vcr_configure_reset()

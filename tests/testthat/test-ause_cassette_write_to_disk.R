@@ -1,9 +1,6 @@
-vcr_configure_reset()
-tmpdir_wdp <- file.path(tempdir(), "write_disk_path")
-vcr_configure(dir = tmpdir_wdp)
-
 test_that("fails well if write_disk_path not set", {
   skip_on_cran()
+  local_vcr_configure(dir = withr::local_tempdir())
 
   expect_null(vcr_c$write_disk_path)
 
@@ -26,18 +23,12 @@ test_that("fails well if write_disk_path not set", {
   )
 })
 
-# cleanup
-files <- c(
-  "write_disk_path_not_set_crul.yml",
-  "write_disk_path_not_set_httr.yml"
-)
-unlink(file.path(vcr_configuration()$dir, files))
-
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
-
 test_that("use_cassette w/ request that writes to disk: crul", {
   skip_on_cran()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## make a temp file
   f <- tempfile(fileext = ".json")
@@ -67,9 +58,13 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 
 test_that("use_cassette w/ request that writes to disk: httr", {
   skip_on_cran()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## make a temp file
-  f <- tempfile(fileext = ".json")
+  f <- withr::local_tempfile(fileext = ".json")
   ## make a request
   use_cassette(
     "test_write_to_disk_httr",
@@ -91,10 +86,3 @@ test_that("use_cassette w/ request that writes to disk: httr", {
 
   expect_equal(httr::content(out), httr::content(out2))
 })
-
-# cleanup
-files <- c("test_write_to_disk.yml", "test_write_to_disk_httr.yml")
-unlink(file.path(vcr_configuration()$dir, files))
-
-# reset configuration
-vcr_configure_reset()

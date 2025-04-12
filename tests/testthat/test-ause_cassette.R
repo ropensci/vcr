@@ -3,10 +3,8 @@ vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
 
 test_that("use_cassette works as expected", {
   skip_on_cran()
+  local_vcr_configure(dir = withr::local_tempdir())
 
-  mydir <- file.path(tempdir(), "asdfasdfsd")
-  invisible(vcr_configure(dir = mydir))
-  unlink(file.path(vcr_c$dir, "testing1.yml"))
   aa <- use_cassette(
     "testing1",
     res <- crul::HttpClient$new(hb("/get"))$get()
@@ -37,10 +35,10 @@ test_that("use_cassette works as expected", {
   expect_true(any(grepl('recorded_with', cas)))
 })
 
-
 test_that("use_cassette fails well", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   # requires a code block
-  unlink(file.path(vcr_c$dir, "foobar333.yml"))
   expect_error(
     sw(sm(use_cassette("foobar333"))),
     "`vcr::use_cassette` requires a code block"
@@ -111,12 +109,3 @@ test_that("use_cassette fails well", {
     "The requested vcr cassette serializer \\(howdy\\) is not registered"
   )
 })
-
-# cleanup
-unlink(list.files(vcr_c$dir, pattern = "newbar", full.names = TRUE))
-unlink(file.path(vcr_c$dir, "foobar333.yml"))
-unlink("foobar333.yml")
-unlink("testing1.yml")
-
-# reset configuration
-vcr_configure_reset()

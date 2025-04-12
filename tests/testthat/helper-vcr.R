@@ -15,12 +15,14 @@ RoxygenNote: 6.1.1
 Suggests:
     testthat\n"
 
-make_pkg <- function(dir) {
-  if (length(list.files(dir)) > 1) stop("dir is not empty")
-  dir.create(dir, recursive = TRUE)
+make_pkg <- function(frame = parent.frame()) {
+  dir <- withr::local_tempdir(.local_envir = frame)
+
   dir.create(file.path(dir, "man"), recursive = TRUE)
   dir.create(file.path(dir, "R"), recursive = TRUE)
   cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
+
+  dir
 }
 
 has_port <- function(port) crul::ok(paste0('http://localhost:', port))
