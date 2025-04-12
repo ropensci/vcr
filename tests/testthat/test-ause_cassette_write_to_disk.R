@@ -1,8 +1,6 @@
 test_that("fails well if write_disk_path not set", {
   skip_on_cran()
-  local_vcr_configure(dir = withr::local_tempdir())
-
-  expect_null(vcr_c$write_disk_path)
+  local_vcr_configure(dir = withr::local_tempdir(), write_disk_path = NULL)
 
   f <- tempfile(fileext = ".json")
   expect_error(
