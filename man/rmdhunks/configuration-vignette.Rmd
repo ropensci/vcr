@@ -70,8 +70,8 @@ vcr_configure(match_requests_on = c('query', 'headers'))
 
 Allow HTTP connections when no cassette
 
-Default is `TRUE`, and thus does not error when http interactions are unused. You 
-can set to `FALSE` in which case vcr errors when a cassette is ejected and 
+Default is `TRUE`, and thus does not error when http interactions are unused. You
+can set to `FALSE` in which case vcr errors when a cassette is ejected and
 not all http interactions have been used.
 
 ```{r}
@@ -101,7 +101,7 @@ vcr_configure(persist_with = "FileSystem")
 
 **ignore_hosts**
 
-Specify particular hosts to ignore. By ignore, we mean that 
+Specify particular hosts to ignore. By ignore, we mean that
 real HTTP requests to the ignored host will be allowed to occur, while
 all others will not.
 
@@ -141,7 +141,7 @@ Note: ignoring requests only works for the `crul` package for now; it should wor
 
 Which uri parser to use
 
-By default we use `crul::url_parse`, but you can use a different one. Remember 
+By default we use `crul::url_parse`, but you can use a different one. Remember
 to pass in the function quoted, and namespaced.
 
 ```{r}
@@ -150,10 +150,10 @@ vcr_configure(uri_parser = "urltools::url_parse")
 
 ### preserve_exact_body_bytes
 
-Some HTTP servers are not well-behaved and respond with invalid data. Set 
-`preserve_exact_body_bytes` to `TRUE` to base64 encode the result body in 
+Some HTTP servers are not well-behaved and respond with invalid data. Set
+`preserve_exact_body_bytes` to `TRUE` to base64 encode the result body in
 order to preserve the bytes exactly as-is. `vcr` does not do this by
-default, since base64-encoding the string removes the human readability 
+default, since base64-encoding the string removes the human readability
 of the cassette.
 
 ```{r}
@@ -162,8 +162,8 @@ vcr_configure(preserve_exact_body_bytes = TRUE)
 
 ### filter_sensitive_data
 
-A named list of values to replace. Sometimes your package or script is 
-working with sensitive tokens/keys, which you do not want to accidentally 
+A named list of values to replace. Sometimes your package or script is
+working with sensitive tokens/keys, which you do not want to accidentally
 share with the world.
 
 Before recording (writing to a cassette) we do the replacement and then when
@@ -176,9 +176,9 @@ vcr_configure(
 )
 ```
 
-Before recording to disk, the env var `MY_API_KEY` is retrieved from your machine, 
-and we find instances of it, and replace with `<some_api_key>`. When replaying 
-to create the HTTP response object we put the real value of the env var 
+Before recording to disk, the env var `MY_API_KEY` is retrieved from your machine,
+and we find instances of it, and replace with `<some_api_key>`. When replaying
+to create the HTTP response object we put the real value of the env var
 back in place.
 
 To target specific request or response headers see `filter_request_headers`
@@ -187,7 +187,7 @@ and `filter_response_headers`.
 ### filter_request_headers
 
 Expects a character vector or a named list. If a character vector, or any
-unnamed element in a list, the request header is removed before being 
+unnamed element in a list, the request header is removed before being
 written to the cassette.
 
 If a named list is passed, the name is the header and the value is the
@@ -197,6 +197,9 @@ A request header you set to remove or replace is only removed/replaced
 from the cassette, and any requests using a cassette, but will still be in
 your `crul`, `httr` or `httr2` response objects on a real request that creates the
 cassette.
+
+Note that for the `httr2` package only we redact request headers automatically
+that are marked (via attributes) as redacted.
 
 Examples:
 
@@ -258,11 +261,11 @@ Beware of your `match_requests_on` option when using this filter. If you
 filter out a query parameter it's probably a bad idea to match on `query`
 given that there is no way for vcr to restore the exact http request
 from your cassette after one or more query parameters is removed or changed.
-One way you could filter a query parameter and still match on query or 
+One way you could filter a query parameter and still match on query or
 at least on the complete uri is to use replacement behavior (a named list),
 but instead of `list(a="b")` use two values `list(a=c("b","c"))`, where
 "c" is the string to be stored in the cassette. You could of course replace
-those values with values from environment variables so that you obscure 
+those values with values from environment variables so that you obscure
 the real values if your code is public.
 
 Examples:
