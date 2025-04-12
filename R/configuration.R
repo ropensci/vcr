@@ -160,6 +160,15 @@
 #' vcr_configure(dir = tempdir(),
 #'   filter_sensitive_data = list(foo = "<bar>", hello = "<world>")
 #' )
+#' vcr_configure(
+#'  # Use regex to remove sensitive information (e.g. IP data) from cassettes
+#'  filter_sensitive_data_regex = list(
+#'    '"ip": "redacted"' = '"ip": "[0-9.]+"',
+#'    '"hostname": "redacted"' = '"hostname": "[^"]*"',
+#'    '"org": "redacted"' = '"org": "[^"]*"'
+#'  ),
+#'  dir = tempdir()
+#')
 #' @export
 
 vcr_configure <- function(...) {
