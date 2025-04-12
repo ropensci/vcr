@@ -57,3 +57,11 @@ request_headers_redact_one <- function(headers) {
   headers[intersect(redacted_headers, names(headers))] <- "<redacted>"
   headers
 }
+
+headers_unclass <- function(x) {
+  lapply(x, \(int) {
+    int$request$headers <- unclass(int$request$headers)
+    int$response$headers <- unclass(int$response$headers)
+    int
+  })
+}

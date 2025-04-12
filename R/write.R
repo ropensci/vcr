@@ -99,6 +99,7 @@ write_interactions_json <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
   z <- headers_remove(z)
   z <- request_headers_redact(z)
+  z <- headers_unclass(z)
   z <- query_params_remove(z)
   # combine with existing data on same file, if any
   on_disk <- invisible(tryCatch(

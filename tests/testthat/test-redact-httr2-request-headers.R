@@ -1,4 +1,4 @@
-test_that("request headers redacted appropriately", {
+test_that("request headers redacted appropriately, httr2 - yaml", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   use_cassette("redacted_httr2", {
@@ -14,7 +14,8 @@ test_that("request headers redacted appropriately", {
   expect_equal(headers$SecretHeader, "<redacted>")
 })
 
-test_that("redact request headers doesnt do anything with httr", {
+
+test_that("redact request headers doesn't do anything, httr - yaml", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   use_cassette("no_redaction_httr", {
@@ -31,7 +32,7 @@ test_that("redact request headers doesnt do anything with httr", {
   )
 })
 
-test_that("redact request headers doesnt do anything with crul", {
+test_that("redact request headers doesn't do anything, crul - yaml", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   use_cassette("no_redaction_crul", {
@@ -46,4 +47,24 @@ test_that("redact request headers doesnt do anything with crul", {
     cas$http_interactions[[1]]$request$headers$SomeHeader,
     "NotHidden"
   )
+})
+
+test_that("request headers redacted appropriately, httr2 - json", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  use_cassette(
+    "redacted_httr2_json",
+    {
+      httr2::request(hb("/get")) %>%
+        httr2::req_headers(NotASecret = "NotHidden") %>%
+        httr2::req_headers_redacted(SecretHeader = "Hidden") %>%
+        httr2::req_perform()
+    },
+    serialize_with = "json"
+  )
+
+  cas <- read_cassette("redacted_httr2_json.json")
+  headers <- cas$http_interactions[[1]]$request$headers
+  expect_equal(headers$NotASecret, "NotHidden")
+  expect_equal(headers$SecretHeader, "<redacted>")
 })
