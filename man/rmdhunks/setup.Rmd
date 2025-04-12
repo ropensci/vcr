@@ -106,3 +106,13 @@ APIKEY="mytotallysecretkey"
 ```
 
 You can have this set at a project or user level, and `usethis` has the [`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html) function to help edit the file.
+
+#### httr2 request headers
+
+`vcr` automatically redacts request headers that are marked (via attributes) as redacted when using the `httr2` package. This includes the following functions:
+
+- `httr2::req_headers_redacted()`
+- `httr2::req_auth_basic()`
+- `httr2::req_auth_bearer_token()`
+
+There is no way to avoid this behavior other than not redacting the request headers.
