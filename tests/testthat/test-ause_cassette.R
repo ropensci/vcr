@@ -36,11 +36,14 @@ test_that("use_cassette works as expected", {
 })
 
 test_that("use_cassette fails well", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(), 
+    warn_on_empty_cassette = FALSE
+  )
 
   # requires a code block
   expect_error(
-    sw(sm(use_cassette("foobar333"))),
+    use_cassette("foobar333"),
     "`vcr::use_cassette` requires a code block"
   )
 
@@ -49,13 +52,7 @@ test_that("use_cassette fails well", {
 
   # record valid values
   expect_error(
-    suppressMessages(
-      use_cassette(
-        "newbar",
-        NULL,
-        record = "stuff"
-      )
-    ),
+    use_cassette("newbar", NULL, record = "stuff"),
     "'record' value of 'stuff' is not in the allowed set"
   )
 
