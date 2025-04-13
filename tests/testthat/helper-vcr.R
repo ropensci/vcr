@@ -54,6 +54,17 @@ check_url <- function(x, ...) {
 }
 
 hb <- function(x = NULL) {
+  server <- getOption("vcr::httpbin_local_server")
+  if (is.null(server)) {
+    app <- webfakes::httpbin_app()
+    server <- webfakes::new_app_process(app)
+    options(`vcr::httpbin_local_server` = server)
+  }
+
+  server$url(x)
+}
+
+hb_remote <- function(x = NULL) {
   base_url <- getOption("vcr::httpbin_server")
   if (is.null(base_url)) {
     base_url <- find_httpbin_server()

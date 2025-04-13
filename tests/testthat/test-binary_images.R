@@ -40,7 +40,7 @@ test_that("use_cassette w/ with images: httr", {
   expect_s3_class(res1, "response")
   expect_type(res1$content, "raw")
   expect_equal(dims(httr::content(res1)), 3)
-  expect_equal(length(res1$content), 35588)
+  expect_equal(length(res1$content), 4742)
 
   use_cassette(
     "test_write_httr_binary_img_bytes",
@@ -53,7 +53,7 @@ test_that("use_cassette w/ with images: httr", {
   expect_s3_class(res2, "response")
   expect_type(res2$content, "raw")
   expect_equal(dims(httr::content(res2)), 3)
-  expect_equal(length(res2$content), 35588)
+  expect_equal(length(res2$content), 4742)
 })
 
 test_that("use_cassette w/ with images: crul", {

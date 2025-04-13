@@ -151,7 +151,7 @@ test_that("filter_headers/response/remove", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # response headers: remove only
-  con <- crul::HttpClient$new(hb("/get"))
+  con <- crul::HttpClient$new(hb_remote("/get"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con$get()
   })
@@ -198,7 +198,7 @@ test_that("filter_headers/response/replace", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # response headers: replace only
-  con <- crul::HttpClient$new(hb("/get"))
+  con <- crul::HttpClient$new(hb_remote("/get"))
   cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
     res_nofilters <- con$get()
   })

@@ -45,10 +45,10 @@ test_that("httr2 status code works", {
 
 test_that("httr2 use_cassette works", {
   out <- use_cassette("httr2_test1", {
-    x <- httr2::request(hb("/get")) |> httr2::req_perform()
+    x <- httr2::request(hb_remote("/get")) |> httr2::req_perform()
   })
   invisible(use_cassette("httr2_test1", {
-    x2 <- httr2::request(hb("/get")) |> httr2::req_perform()
+    x2 <- httr2::request(hb_remote("/get")) |> httr2::req_perform()
   }))
 
   # cassette
@@ -60,21 +60,21 @@ test_that("httr2 use_cassette works", {
   # request - 1st http call
   expect_s3_class(x$request, "httr2_request")
   expect_equal(x$request$method, "GET")
-  expect_equal(x$request$url, hb("/get"))
+  expect_equal(x$request$url, hb_remote("/get"))
   expect_named(x$request$headers, NULL)
   expect_type(x$request$fields, "list")
 
   # request - 2nd http call
   expect_s3_class(x2$request, "httr2_request")
   expect_equal(x2$request$method, "GET")
-  expect_equal(x2$request$url, hb("/get"))
+  expect_equal(x2$request$url, hb_remote("/get"))
   expect_named(x2$request$headers, NULL)
   expect_null(x2$request$fields)
 
   # response - stuff
   expect_s3_class(x, "httr2_response")
   expect_equal(x$status_code, 200)
-  expect_equal(x$url, hb("/get"))
+  expect_equal(x$url, hb_remote("/get"))
 
   # fixture file
   str <- yaml::yaml.load_file(out$manfile)$http_interactions
@@ -91,7 +91,7 @@ test_that("httr2 use_cassette works", {
     "httr2_test2",
 
     {
-      x <- httr2::request(hb("/get")) |> httr2::req_perform()
+      x <- httr2::request(hb_remote("/get")) |> httr2::req_perform()
     },
 
     preserve_exact_body_bytes = TRUE
@@ -106,7 +106,7 @@ test_that("httr2 use_cassette works", {
   # response
   expect_s3_class(x, "httr2_response")
   expect_equal(x$status_code, 200)
-  expect_equal(x$url, hb("/get"))
+  expect_equal(x$url, hb_remote("/get"))
 
   # response body
   str <- yaml::yaml.load_file(out$manfile)
@@ -250,7 +250,7 @@ test_that("httr2 works with simple auth and hides auth details", {
 test_that("httr2 POST requests works", {
   # body type: named list
   out <- use_cassette("httr2_post_named_list", {
-    x <- httr2::request(hb("/post")) |>
+    x <- httr2::request(hb_remote("/post")) |>
       httr2::req_body_json(list(foo = "bar")) |>
       httr2::req_perform()
   })
@@ -269,7 +269,7 @@ test_that("httr2 POST requests works", {
 
   # body type: character
   out2 <- use_cassette("httr2_post_string", {
-    z <- httr2::request(hb("/post")) |>
+    z <- httr2::request(hb_remote("/post")) |>
       httr2::req_body_raw("some string") |>
       httr2::req_perform()
   })
@@ -288,7 +288,7 @@ test_that("httr2 POST requests works", {
 
   # body type: raw
   out3 <- use_cassette("httr2_post_raw", {
-    z <- httr2::request(hb("/post")) |>
+    z <- httr2::request(hb_remote("/post")) |>
       httr2::req_body_raw(charToRaw("some string")) |>
       httr2::req_perform()
     # z <- POST(hb("/post"), body = charToRaw("some string"))
@@ -310,7 +310,7 @@ test_that("httr2 POST requests works", {
   ff <- tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("httr2_post_body_file", {
-    b <- httr2::request(hb("/post")) |>
+    b <- httr2::request(hb_remote("/post")) |>
       httr2::req_body_file(ff) |>
       httr2::req_perform()
   })
@@ -327,7 +327,7 @@ test_that("httr2 POST requests works", {
   gg <- tempfile(fileext = ".txt")
   cat("hello world\n", file = gg)
   out4 <- use_cassette("httr2_post_body_multipart", {
-    b <- httr2::request(hb("/post")) |>
+    b <- httr2::request(hb_remote("/post")) |>
       httr2::req_body_multipart(a = curl::form_file(gg), b = "some data") |>
       httr2::req_perform()
   })
@@ -342,7 +342,7 @@ test_that("httr2 POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("httr2_post_null", {
-    m <- httr2::request(hb("/post")) |>
+    m <- httr2::request(hb_remote("/post")) |>
       httr2::req_body_raw("") |>
       httr2::req_perform()
   })

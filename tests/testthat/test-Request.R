@@ -32,7 +32,7 @@ test_that("Request usage", {
   aa <- Request$new("POST", url, body, headers)
   expect_equal(aa$body, "foo=bar")
   expect_equal(aa$method, "post")
-  expect_equal(aa$uri, hb("/post"))
+  expect_equal(aa$uri, "http://127.0.0.1/post")
   expect_type(aa$host, "character")
   expect_equal(aa$path, "post")
   expect_type(aa$headers, "list")

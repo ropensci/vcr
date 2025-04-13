@@ -83,7 +83,7 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   tmpdir <- withr::local_tempdir()
   local_vcr_configure(dir = tmpdir)
   cas_not_ignored <- use_cassette("test_ignore_host", {
-    crul::HttpClient$new(hb())$get()
+    crul::HttpClient$new(hb_remote())$get()
     crul::HttpClient$new("https://scottchamberlain.info")$get()
   })
 
