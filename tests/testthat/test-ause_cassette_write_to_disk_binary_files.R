@@ -1,9 +1,9 @@
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
-
 test_that("use_cassette w/ binary files on disk: crul", {
   skip_on_cran()
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
@@ -35,6 +35,10 @@ test_that("use_cassette w/ binary files on disk: crul", {
 
 test_that("use_cassette w/ binary files on disk with image: crul", {
   skip_on_cran()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## url
   # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
@@ -97,7 +101,10 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
 
 test_that("use_cassette w/ binary files on disk: httr", {
   skip_on_cran()
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
