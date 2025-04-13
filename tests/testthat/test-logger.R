@@ -1,8 +1,3 @@
-vcr_configure(
-  log = TRUE,
-  log_opts = list(file = "vcr.log", log_prefix = "Cassette")
-)
-
 test_that("vcr_log_file fails well", {
   # must pass a file name
   expect_error(vcr_log_file(), "argument \"file\" is missing")
@@ -21,6 +16,7 @@ test_that("vcr_log_file fails well", {
 })
 
 test_that("vcr_log_file works as expected", {
+  on.exit(unlink("adsf"))
   expect_true(vcr_log_file("adsf"))
 })
 
@@ -33,6 +29,8 @@ test_that("vcr_log_file: console", {
 })
 
 test_that("vcr_log_write: console", {
+  local_vcr_configure(log = TRUE)
+
   aa <- vcr_log_file("console")
   expect_true(aa)
 
@@ -40,6 +38,7 @@ test_that("vcr_log_write: console", {
 })
 
 test_that("vcr_log_info: console", {
+  local_vcr_configure(log = TRUE)
   aa <- vcr_log_file("console")
   expect_true(aa)
 
@@ -61,10 +60,3 @@ test_that("vcr_log_info: console", {
   expect_false(grepl(as.character(format(Sys.Date(), "%Y")), log_nodate))
   expect_false(grepl("[0-9]{2}:[0-9]{2}:[0-9]{2}", log_nodate))
 })
-
-# reset configuration
-vcr_configure_reset()
-
-# cleanup
-unlink("adsf")
-unlink("vcr.log")

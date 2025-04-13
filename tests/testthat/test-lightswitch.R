@@ -14,36 +14,40 @@ test_that("turn_on & turned_on", {
 })
 
 test_that("turn_off", {
+  local_light_switch()
+
   expect_true(turned_on())
-
   expect_false(light_switch$turned_off)
-  expect_true(suppressMessages(turn_off()))
-  expect_message(turn_off(), "vcr turned off")
-  expect_true(light_switch$turned_off)
 
+  expect_message(val <- turn_off(), "vcr turned off")
+  expect_true(val)
+
+  expect_true(light_switch$turned_off)
   expect_false(turned_on())
 })
 
-# turn back on
-turn_on()
-
-vcr_configure(warn_on_empty_cassette = FALSE)
-
 test_that("turn_off and ignore_cassettes works correctly", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+  local_light_switch()
+
   # before turned off, insert_cassette works
   z <- insert_cassette("abcd")
   expect_s3_class(z, "Cassette")
   z$eject()
 
   # after being turned off, insert_cassette throws an error
-  turn_off()
+  suppressMessages(turn_off())
   expect_error(insert_cassette("abcd"), "vcr is turned off")
 
   # after being turned off && ignore_cassettes=TRUE:
   # - insert_cassette returns `NULL`
   # - use_cassette returns `NULL` & block is run
   # - current_cassette returns `list()`
-  turn_off(ignore_cassettes = TRUE)
+  suppressMessages(turn_off(ignore_cassettes = TRUE))
+
   expect_null(insert_cassette("abcd"))
   uc <- use_cassette("abcd", {
     yielded <- 5
@@ -53,13 +57,13 @@ test_that("turn_off and ignore_cassettes works correctly", {
   expect_equal(length(current_cassette()), 0)
 })
 
-# cleanup
-unlink(file.path(vcr_configuration()$dir, "abcd.yml"))
-
-# turn back on
-turn_on()
-
 test_that("lightswitch env var's", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+  local_light_switch()
+
   # VCR_TURN_OFF not set, insert_cassette works
   expect_equal(Sys.getenv("VCR_TURN_OFF"), "")
   z <- insert_cassette("abcd")
@@ -67,8 +71,7 @@ test_that("lightswitch env var's", {
   invisible(z$eject())
 
   # after being turned off, insert_cassette throws an error
-  Sys.setenv(VCR_TURNED_OFF = TRUE)
-  Sys.setenv(VCR_IGNORE_CASSETTES = FALSE)
+  withr::local_envvar(VCR_TURNED_OFF = TRUE, VCR_IGNORE_CASSETTES = FALSE)
   expect_equal(Sys.getenv("VCR_TURN_OFF"), "")
   expect_equal(Sys.getenv("VCR_IGNORE_CASSETTES"), "FALSE")
   expect_equal(Sys.getenv("VCR_TURNED_OFF"), "TRUE")
@@ -78,10 +81,13 @@ test_that("lightswitch env var's", {
   # - insert_cassette returns `NULL`
   # - use_cassette returns `NULL` & block is run
   # - current_cassette returns `list()`
-  Sys.setenv(VCR_TURN_OFF = FALSE)
-  Sys.setenv(VCR_TURNED_OFF = TRUE)
-  Sys.setenv(VCR_IGNORE_CASSETTES = TRUE)
+  withr::local_envvar(
+    VCR_TURN_OFF = FALSE,
+    VCR_TURNED_OFF = TRUE,
+    VCR_IGNORE_CASSETTES = TRUE
+  )
   expect_null(insert_cassette("asdffd"))
+
   uc <- use_cassette("asdffdddd", {
     yielded <- 55
   })
@@ -90,43 +96,34 @@ test_that("lightswitch env var's", {
   expect_equal(length(current_cassette()), 0)
 })
 
-# reset lightswitch env vars
-Sys.setenv(VCR_TURN_OFF = "")
-Sys.setenv(VCR_TURNED_OFF = "")
-Sys.setenv(VCR_IGNORE_CASSETTES = "")
-
 test_that("lightswitch env var handling fails well", {
+  local_light_switch()
+
   # various problems
-  Sys.setenv(VCR_TURN_OFF = 4)
+  withr::local_envvar(VCR_TURN_OFF = 4)
   expect_error(vcr_env_handle(), "invalid option for env var")
-  Sys.setenv(VCR_TURN_OFF = "4")
+  withr::local_envvar(VCR_TURN_OFF = "4")
   expect_error(vcr_env_handle(), "invalid option for env var")
-  Sys.setenv(VCR_TURN_OFF = "adfasdfsfd")
+  withr::local_envvar(VCR_TURN_OFF = "adfasdfsfd")
   expect_error(vcr_env_handle(), "invalid option for env var")
 
   # different boolean forms work
-  Sys.setenv(VCR_TURN_OFF = "true")
+  withr::local_envvar(VCR_TURN_OFF = "true")
   expect_null(vcr_env_handle())
-  Sys.setenv(VCR_TURN_OFF = "FALSE")
+  withr::local_envvar(VCR_TURN_OFF = "FALSE")
   expect_null(vcr_env_handle())
-  Sys.setenv(VCR_TURN_OFF = TRUE)
+  withr::local_envvar(VCR_TURN_OFF = TRUE)
   expect_null(vcr_env_handle())
 })
 
-# cleanup
-unlink(file.path(vcr_configuration()$dir, "defg.yml"))
-unlink(file.path(vcr_configuration()$dir, "asdffd.yml"))
-unlink(file.path(vcr_configuration()$dir, "asdffdddd.yml"))
-unlink(file.path(vcr_configuration()$dir, "abcd.yml"))
-
-# reset lightswitch env vars
-Sys.setenv(VCR_TURN_OFF = "")
-Sys.setenv(VCR_TURNED_OFF = "")
-Sys.setenv(VCR_IGNORE_CASSETTES = "")
-
 test_that("turned_off", {
-  turn_on()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+  local_light_switch()
 
+  turn_on()
   # if a cassette is in use
   mycas <- insert_cassette("adfadfdfadfadsf")
   expect_error(turned_off(5 + 5), "You must eject it")
@@ -140,10 +137,3 @@ test_that("turned_off", {
   expect_s3_class(beetle, "HttpResponse")
   expect_true(turned_on())
 })
-
-# cleanup
-# eject_cassette()
-unlink(file.path(vcr_configuration()$dir, "adfadfdfadfadsf.yml"))
-
-# reset configuration
-vcr_configure_reset()

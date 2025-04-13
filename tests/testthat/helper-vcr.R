@@ -3,6 +3,11 @@ local_vcr_configure <- function(..., .frame = parent.frame()) {
   withr::defer(vcr_config_set(old), envir = .frame)
 }
 
+local_light_switch <- function(frame = parent.frame()) {
+  old <- as.list(light_switch)
+  withr::defer(env_bind(light_switch, !!!old), envir = frame)
+}
+
 desc_text <- "Package: %s
 Title: Does A Thing
 Description: Does a thing.
