@@ -110,6 +110,7 @@ testthat::set_state_inspector(\() {
   temp_files <- temp_files[!grepl("^webfakes", temp_files)]
 
   list(
-    temp_files = temp_files
+    temp_files = temp_files,
+    vcr_config = vcr_c$as_list()
   )
 })

@@ -92,7 +92,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
 test_that("UnhandledHTTPRequestError works as expected", {
   ## API key in header
   withr::local_envvar(FOO_BAR = "2k2k2k288gjrj2i21i")
-  vcr_configure(
+  local_vcr_configure(
     dir = withr::local_tempdir(),
     filter_sensitive_data = list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
     warn_on_empty_cassette = FALSE
@@ -125,7 +125,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
 test_that("UnhandledHTTPRequestError works as expected", {
   ## API key not found or empty (i.e., "")
   withr::local_envvar(HELLO_MARS = "asdfadfasfsfs239823n23")
-  vcr_configure(
+  local_vcr_configure(
     dir = withr::local_tempdir(),
     filter_sensitive_data = list(
       "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
