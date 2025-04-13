@@ -3,6 +3,11 @@ local_vcr_configure <- function(..., .frame = parent.frame()) {
   withr::defer(vcr_config_set(old), envir = .frame)
 }
 
+local_light_switch <- function(frame = parent.frame()) {
+  old <- as.list(light_switch)
+  withr::defer(env_bind(light_switch, !!!old), envir = frame)
+}
+
 desc_text <- "Package: %s
 Title: Does A Thing
 Description: Does a thing.
@@ -98,3 +103,14 @@ local_httpbin_app <- function() {
 read_cassette <- function(name) {
   yaml::yaml.load_file(file.path(vcr_c$dir, name))
 }
+
+testthat::set_state_inspector(\() {
+  temp_files <- dir(tempdir())
+  temp_files <- temp_files[!grepl("^callr", temp_files)]
+  temp_files <- temp_files[!grepl("^webfakes", temp_files)]
+
+  list(
+    temp_files = temp_files,
+    vcr_config = vcr_c$as_list()
+  )
+})

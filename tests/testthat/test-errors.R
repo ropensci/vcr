@@ -1,25 +1,21 @@
-dir <- tempdir()
-invisible(vcr_configure(dir = dir, warn_on_empty_cassette = FALSE))
-
-request <- Request$new(
-  "post",
-  hb("/post?a=5"),
-  "",
-  list(foo = "bar")
-)
-
 test_that("UnhandledHTTPRequestError fails well", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+  request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
+
   z <- UnhandledHTTPRequestError$new(request)
   expect_error(
     z$construct_message(),
     "There is currently no cassette in use"
   )
 
-  # insert  a cassette
-  unlink(file.path(vcr_c$dir, "turtle"))
-  cas <- suppressMessages(insert_cassette("turtle"))
+  # insert a cassette
+  cas <- insert_cassette("asdsfd")
+  withr::defer(eject_cassette())
 
-  # types
+  # # types
   expect_error(
     UnhandledHTTPRequestError$new(5),
     "request must be of class Request"
@@ -27,6 +23,14 @@ test_that("UnhandledHTTPRequestError fails well", {
 })
 
 test_that("UnhandledHTTPRequestError works as expected", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+  request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
+  cas <- insert_cassette("turtle")
+  withr::defer(eject_cassette())
+
   a <- UnhandledHTTPRequestError$new(request)
 
   expect_s3_class(a, "UnhandledHTTPRequestError")
@@ -39,38 +43,31 @@ test_that("UnhandledHTTPRequestError works as expected", {
     "An HTTP request has been made that vcr does not know how to handle"
   )
 })
-# cleanup
-eject_cassette()
-unlink(file.path(vcr_configuration()$dir, "turtle.yml"))
-# reset configuration
-vcr_configure_reset()
 
-
-## API key in query param
-Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
-Sys.setenv(HELLO_WORLD = "asdfadfasfsfs239823n23")
-dir <- tempdir()
-invisible(
-  vcr_configure(
-    dir = dir,
+test_that("UnhandledHTTPRequestError works as expected", {
+  ## API key in query param
+  withr::local_envvar(
+    FOO_BAR = "2k2k2k288gjrj2i21i",
+    HELLO_WORLD = "asdfadfasfsfs239823n23"
+  )
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
     filter_sensitive_data = list(
       "<<foo_bar_key>>" = Sys.getenv("FOO_BAR"),
       "<<hello_world_key>>" = Sys.getenv("HELLO_WORLD")
     ),
     warn_on_empty_cassette = FALSE
   )
-)
-url <- paste0(
-  hb("/get?api_key="),
-  Sys.getenv("FOO_BAR"),
-  "&other_secret=",
-  Sys.getenv("HELLO_WORLD")
-)
-request <- Request$new("get", url, "")
-unlink(file.path(vcr_c$dir, "bunny"))
-cas <- suppressMessages(insert_cassette("bunny"))
+  url <- paste0(
+    hb("/get?api_key="),
+    Sys.getenv("FOO_BAR"),
+    "&other_secret=",
+    Sys.getenv("HELLO_WORLD")
+  )
+  request <- Request$new("get", url, "")
+  cas <- insert_cassette("bunny")
+  withr::defer(eject_cassette())
 
-test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
   expect_s3_class(a, "UnhandledHTTPRequestError")
@@ -91,32 +88,23 @@ test_that("UnhandledHTTPRequestError works as expected", {
     "<<hello_world_key>>"
   )
 })
-# cleanup
-eject_cassette()
-unlink(file.path(vcr_configuration()$dir, "bunny.yml"))
-# reset configuration
-vcr_configure_reset()
 
-
-## API key in header
-Sys.setenv(FOO_BAR = "2k2k2k288gjrj2i21i")
-dir <- tempdir()
-invisible(
-  vcr_configure(
-    dir = dir,
+test_that("UnhandledHTTPRequestError works as expected", {
+  ## API key in header
+  withr::local_envvar(FOO_BAR = "2k2k2k288gjrj2i21i")
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
     filter_sensitive_data = list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
     warn_on_empty_cassette = FALSE
   )
-)
-url <- hb("/get")
-request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
-unlink(file.path(vcr_c$dir, "frog"))
-cas <- suppressMessages(insert_cassette(
-  "frog",
-  match_requests_on = c("method", "uri", "headers")
-))
+  url <- hb("/get")
+  request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
+  cas <- insert_cassette(
+    "frog",
+    match_requests_on = c("method", "uri", "headers")
+  )
+  withr::defer(eject_cassette())
 
-test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
   expect_s3_class(a, "UnhandledHTTPRequestError")
@@ -133,32 +121,23 @@ test_that("UnhandledHTTPRequestError works as expected", {
     "api_key: <<foo_bar_key>>"
   )
 })
-# cleanup
-eject_cassette()
-unlink(file.path(vcr_configuration()$dir, "frog.yml"))
-# reset configuration
-vcr_configure_reset()
 
-
-## API key not found or empty (i.e., "")
-Sys.setenv(HELLO_MARS = "asdfadfasfsfs239823n23")
-dir <- tempdir()
-invisible(
-  vcr_configure(
-    dir = dir,
+test_that("UnhandledHTTPRequestError works as expected", {
+  ## API key not found or empty (i.e., "")
+  withr::local_envvar(HELLO_MARS = "asdfadfasfsfs239823n23")
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
     filter_sensitive_data = list(
       "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
       "<<hello_mars_key>>" = Sys.getenv("HELLO_MARS")
     ),
     warn_on_empty_cassette = FALSE
   )
-)
-url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
-request <- Request$new("get", url, "")
-unlink(file.path(vcr_c$dir, "bunny2"))
-cas <- suppressMessages(insert_cassette("bunny2"))
+  url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
+  request <- Request$new("get", url, "")
+  cas <- insert_cassette("bunny2")
+  withr::defer(eject_cassette())
 
-test_that("UnhandledHTTPRequestError works as expected", {
   a <- UnhandledHTTPRequestError$new(request)
 
   expect_s3_class(a, "UnhandledHTTPRequestError")
@@ -179,11 +158,6 @@ test_that("UnhandledHTTPRequestError works as expected", {
   res <- tryCatch(a$construct_message(), error = function(e) e)
   expect_false(grepl("<<bar_foo_key>>", res$message))
 })
-# cleanup
-eject_cassette()
-unlink(file.path(vcr_configuration()$dir, "bunny2.yml"))
-# reset configuration
-vcr_configure_reset()
 
 # FIXME: use this test block when body matching implemented
 ## API key in body

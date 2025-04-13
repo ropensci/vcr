@@ -1,6 +1,3 @@
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
-
 test_that("use_cassette works as expected", {
   skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
@@ -37,7 +34,7 @@ test_that("use_cassette works as expected", {
 
 test_that("use_cassette fails well", {
   local_vcr_configure(
-    dir = withr::local_tempdir(), 
+    dir = withr::local_tempdir(),
     warn_on_empty_cassette = FALSE
   )
 

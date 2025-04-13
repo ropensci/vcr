@@ -1,7 +1,5 @@
 skip_on_cran()
 
-vcr_configure(dir = tempdir())
-
 test_that("httr2 status code works", {
   local_vcr_configure(dir = withr::local_tempdir())
 
@@ -38,12 +36,11 @@ test_that("httr2 status code works", {
   expect_equal(response2$status_code, 404)
 
   eject_cassette("bluecow")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "bluecow"))
 })
 
 test_that("httr2 use_cassette works", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   out <- use_cassette("httr2_test1", {
     x <- httr2::request(hb("/get")) |> httr2::req_perform()
   })
@@ -81,15 +78,12 @@ test_that("httr2 use_cassette works", {
   expect_type(str[[1]]$response$body$string, "character")
   expect_match(str[[1]]$response$body$string, "headers")
   expect_match(str[[1]]$response$body$string, "libcurl")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr2_test1.yml"))
 })
 
 test_that("httr2 use_cassette works", {
+  local_vcr_configure(dir = withr::local_tempdir())
   out <- use_cassette(
     "httr2_test2",
-
     {
       x <- httr2::request(hb("/get")) |> httr2::req_perform()
     },
@@ -116,12 +110,11 @@ test_that("httr2 use_cassette works", {
   expect_type(str, "character")
   expect_match(str, "Connection")
   expect_match(str, "httpbin")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr2_test2.yml"))
 })
 
 test_that("httr2 w/ req_error", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   out <- use_cassette("httr2_errors_modify_with_req_error", {
     x404 <- httr2::request(hb("/status/404")) |>
       httr2::req_error(is_error = function(resp) FALSE) |>
@@ -151,15 +144,11 @@ test_that("httr2 w/ req_error", {
   expect_type(str, "list")
   expect_type(str[[1]], "list")
   expect_match(str[[1]]$request$uri, "404")
-
-  # cleanup
-  unlink(file.path(
-    vcr_configuration()$dir,
-    "httr2_errors_modify_with_req_error.yml"
-  ))
 })
 
 test_that("httr2 error", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   use_cassette("httr2_errors_catch_error", {
     expect_error(
       httr2::request(hb("/status/404")) |> httr2::req_perform()
@@ -171,12 +160,11 @@ test_that("httr2 error", {
       httr2::request(hb("/status/404")) |> httr2::req_perform()
     )
   })
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr2_errors_catch_error.yml"))
 })
 
 test_that("httr2 w/ multiple errors per cassette", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   use_cassette("multiple_errors_per_cassette", {
     expect_error(httr2::request(hb("/status/404")) |> httr2::req_perform())
     expect_error(httr2::request(hb("/status/500")) |> httr2::req_perform())
@@ -188,13 +176,11 @@ test_that("httr2 w/ multiple errors per cassette", {
     expect_error(httr2::request(hb("/status/500")) |> httr2::req_perform())
     expect_error(httr2::request(hb("/status/418")) |> httr2::req_perform())
   })
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "multiple_errors_per_cassette.yml"))
 })
 
 ## httr removes the header, but with httr2 we have to explicity remove it
 test_that("httr2 works with simple auth and hides auth details", {
+  local_vcr_configure(dir = withr::local_tempdir())
   # Authorization header IS in the cassette after filtering
   use_cassette("httr2_test_simple_auth_no_filter", {
     x <- httr2::request(hb("/basic-auth/foo/bar")) |>
@@ -202,52 +188,27 @@ test_that("httr2 works with simple auth and hides auth details", {
       httr2::req_perform()
   })
 
-  path <- file.path(
-    vcr_configuration()$dir,
-    "httr2_test_simple_auth_no_filter.yml"
-  )
-  chars <- paste0(readLines(path), collapse = "")
-  yml <- yaml::yaml.load_file(path)
-
-  expect_true(grepl("Authorization", chars))
+  yml <- read_cassette("httr2_test_simple_auth_no_filter.yml")
   expect_true(
     "Authorization" %in% names(yml$http_interactions[[1]]$request$headers)
   )
 
   # Authorization header IS NOT in the cassette after filtering
-  vcr_configure(dir = tempdir(), filter_request_headers = "Authorization")
+  local_vcr_configure(filter_request_headers = "Authorization")
   use_cassette("httr2_test_simple_auth_yes_filter", {
     x <- httr2::request(hb("/basic-auth/foo/bar")) |>
       httr2::req_auth_basic("foo", "bar") |>
       httr2::req_perform()
   })
-
-  path <- file.path(
-    vcr_configuration()$dir,
-    "httr2_test_simple_auth_yes_filter.yml"
-  )
-  chars <- paste0(readLines(path), collapse = "")
-  yml <- yaml::yaml.load_file(path)
-
-  expect_false(grepl("Authorization", chars))
+  yml <- read_cassette("httr2_test_simple_auth_yes_filter.yml")
   expect_false(
     "Authorization" %in% names(yml$http_interactions[[1]]$request$headers)
   )
-
-  # back to default vcr config
-  vcr_configure(dir = tempdir())
-  # cleanup
-  unlink(file.path(
-    vcr_configuration()$dir,
-    "httr2_test_simple_auth_no_filter.yml"
-  ))
-  unlink(file.path(
-    vcr_configuration()$dir,
-    "httr2_test_simple_auth_yes_filter.yml"
-  ))
 })
 
 test_that("httr2 POST requests works", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   # body type: named list
   out <- use_cassette("httr2_post_named_list", {
     x <- httr2::request(hb("/post")) |>
@@ -307,7 +268,7 @@ test_that("httr2 POST requests works", {
   expect_equal(strj$data, "some string")
 
   # file with req_body_file
-  ff <- tempfile(fileext = ".txt")
+  ff <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("httr2_post_body_file", {
     b <- httr2::request(hb("/post")) |>
@@ -321,10 +282,9 @@ test_that("httr2 POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(length(strj$files$y), 0) # files empty
   expect_match(strj$data, "hello world") # data not empty
-  unlink(ff)
 
   # using multipart
-  gg <- tempfile(fileext = ".txt")
+  gg <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = gg)
   out4 <- use_cassette("httr2_post_body_multipart", {
     b <- httr2::request(hb("/post")) |>
@@ -338,7 +298,6 @@ test_that("httr2 POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_match(strj$files$a, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
-  unlink(gg)
 
   # body type: NULL
   out5 <- use_cassette("httr2_post_null", {
@@ -353,11 +312,4 @@ test_that("httr2 POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr2_post_named_list.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr2_post_string.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr2_post_raw.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr2_post_upload_file.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr2_post_null.yml"))
 })

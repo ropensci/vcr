@@ -1,9 +1,8 @@
 # orginally via https://github.com/ropensci/vcr/issues/264
 
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir)
-
 test_that("testing against localhost port works", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   # httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
   httpbin <- local_httpbin_app()
   url <- httpbin$url("/status/404")
@@ -21,13 +20,9 @@ test_that("testing against localhost port works", {
   })
 
   # check that the port is actually in the cassette file
-  path <- file.path(tmpdir, "localhost_port.yml")
-  file <- yaml::yaml.load_file(path)
+  file <- read_cassette("localhost_port.yml")
   url <- file$http_interactions[[1]]$request$uri
   expect_type(url, "character")
   expect_match(url, "http://.+:[0-9]+/")
   expect_match(url, as.character(port))
 })
-
-# reset configuration
-vcr_configure_reset()

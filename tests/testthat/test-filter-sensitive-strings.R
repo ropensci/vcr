@@ -3,8 +3,7 @@ skip_on_cran()
 test_that("filter sensitive strings", {
   x <- "foo234223){@%!kl]bar"
 
-  # vcr_c$filter_sensitive_data is NULL
-  expect_null(vcr_c$filter_sensitive_data)
+  local_vcr_configure(filter_sensitive_data = NULL)
   expect_identical(sensitive_put_back(x), x)
   expect_identical(sensitive_remove(x), x)
 
@@ -51,7 +50,7 @@ test_that("filter sensitive data strips leading/trailing single/double quotes", 
   x <- crul::HttpClient$new("https://hb.opencpu.org")
   expect_snapshot(
     cas <- use_cassette(
-    "testing2",
+      "testing2",
       res <- x$get(
         "get",
         query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS"))

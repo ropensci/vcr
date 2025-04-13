@@ -1,5 +1,5 @@
 test_that("write_header", {
-  f <- tempfile()
+  f <- withr::local_tempfile()
   write_header(f)
   expect_equal(readLines(f), "http_interactions:")
 })

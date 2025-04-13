@@ -1,6 +1,9 @@
-vcr_configure(warn_on_empty_cassette = FALSE)
-
 test_that("eject_cassette", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+
   # eject without giving name, ejects current cassette
   invisible(insert_cassette("foobar78"))
   ej <- eject_cassette()
@@ -14,7 +17,3 @@ test_that("eject_cassette", {
   expect_s3_class(ej, "Cassette")
   expect_false(file.exists(ej$file()))
 })
-
-# cleanup
-unlink(file.path(vcr_configuration()$dir, "foobar78.yml"))
-unlink(file.path(vcr_configuration()$dir, "foobar22.yml"))

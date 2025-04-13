@@ -1,4 +1,6 @@
 test_that("Cassette", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   cl <- Cassette$new(name = "stuff")
   expect_s3_class(cl, "R6")
   expect_s3_class(cl, "Cassette")
@@ -13,6 +15,7 @@ test_that("Cassette fails well", {
 })
 
 test_that("Cassette fails well with invalid record mode", {
+  local_vcr_configure(dir = withr::local_tempdir())
   expect_error(
     Cassette$new(name = "stuff2", record = "asdfadfs"),
     "'record' value of 'asdfadfs' is not in the allowed set"
@@ -27,6 +30,7 @@ test_that("Cassette fails well with invalid request matchers", {
 })
 
 test_that("make_http_interaction works as expected", {
+  local_vcr_configure(dir = withr::local_tempdir())
   #### Prepare http responses
   # crul_resp1 <- crul::HttpClient$new(hb("/get?foo=bar"))$get()
   # save(crul_resp1, file = "tests/testthat/crul_resp1.rda", version = 2)
@@ -65,10 +69,3 @@ test_that("make_http_interaction works as expected", {
   ## expect warning from empty cassette checker
   expect_warning(zz$eject())
 })
-
-
-# cleanup
-unlink(file.path(vcr_configuration()$dir, "stuff.yml"))
-unlink(file.path(vcr_configuration()$dir, "stuff2.yml"))
-unlink(file.path(vcr_configuration()$dir, "foobar89.yml"))
-unlink(file.path(vcr_configuration()$dir, "bluecheese.yml"))

@@ -7,7 +7,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   dir.create(file.path(dir, "tests/fixtures"), recursive = TRUE)
   dir.create(file.path(dir, "tests/files"), recursive = TRUE)
   strg <- 'ffff <- function() {
-  f <- tempfile(fileext = ".json")
+  f <- withr::local_tempfile(fileext = ".json")
   con <- crul::HttpClient$new("https://hb.opencpu.org")
   con$get("get", query = list(apples = 56), disk = f)
 }\n\ntest_that("ffff works", {

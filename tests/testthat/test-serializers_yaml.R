@@ -15,12 +15,14 @@ test_that("YAML basic stuff", {
 
 test_that("YAML usage", {
   z <- YAML$new(path = "stuff")
+  withr::defer(unlink(z$path))
   expect_match(z$path, "stuff.yml")
+
   # before file exists:
   expect_error(suppressWarnings(z$deserialize()), "cannot open")
+
   # after file exists, before any yaml in it:
-  cat("", file = z$path)
-  on.exit(unlink(z$path))
+  file.create(z$path)
   expect_equal(z$deserialize(), list())
   # after file exists, with yaml in it, with incomplete final line:
   cat("foo: 123\nbar: 456", file = z$path)

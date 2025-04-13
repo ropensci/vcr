@@ -42,10 +42,12 @@ test_that("crul POST requests works", {
 
   # body type: upload_file
   ## upload_file in a list
-  ff <- tempfile(fileext = ".txt")
+  ff <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("crul_post_upload_file", {
-    b <- crul::HttpClient$new(hb("/post"))$post(body = list(y = crul::upload(ff)))
+    b <- crul::HttpClient$new(hb("/post"))$post(
+      body = list(y = crul::upload(ff))
+    )
   })
   expect_false(out4$is_empty())
   expect_s3_class(b, "HttpResponse")
@@ -54,7 +56,6 @@ test_that("crul POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
-  unlink(ff)
 
   ## upload_file not in a list
   out6 <- use_cassette("crul_post_upload_file_no_list", {
