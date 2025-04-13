@@ -3,8 +3,7 @@ test_that("use_vcr works", {
 
   expect_type(use_vcr, "closure")
 
-  dir <- file.path(tempdir(), "foobar")
-  invisible(make_pkg(dir))
+  dir <- make_pkg()
   res <- use_vcr(dir, verbose = FALSE)
   expect_null(res)
   expect_true(dir.exists(file.path(dir, "tests")))
@@ -23,9 +22,6 @@ test_that("use_vcr works", {
   gitatts <- readLines(file.path(dir, ".gitattributes"))
   expect_true(any(grepl("text=auto", gitatts)))
   expect_true(any(grepl("tests/fixtures", gitatts)))
-
-  # cleanup
-  unlink(dir, TRUE, TRUE)
 })
 
 test_that("use_vcr fails well", {
@@ -33,15 +29,10 @@ test_that("use_vcr fails well", {
   expect_error(use_vcr(letters[1:2]), "length\\(dir\\) == 1 is not TRUE")
 
   # dir does not exist
-  dir <- file.path(tempdir(), "foobar2")
+  dir <- "doesnt_exist"
   expect_error(use_vcr(dir), "'dir' does not exist")
 
   # DESCRIPTION file does not exist
-  dir2 <- file.path(tempdir(), "foobar3")
-  dir.create(dir2, recursive = TRUE)
+  dir2 <- withr::local_tempdir()
   expect_error(use_vcr(dir2), "'DESCRIPTION' not found")
-
-  # cleanup
-  unlink(dir, TRUE, TRUE)
-  unlink(dir2, TRUE, TRUE)
 })

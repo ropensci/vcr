@@ -22,6 +22,3 @@ test_that("Cassette options", {
   ## expect NO warning when warn_on_empty_cassette=FALSE
   expect_warning(cl$eject(), NA)
 })
-
-# cleanup
-unlink(file.path(vcr_configuration()$dir, "stuff.yml"))

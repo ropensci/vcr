@@ -34,8 +34,6 @@ response <- VcrResponse$new(
 x <- HTTPInteraction$new(request = request, response = response)
 x <- x$to_hash()
 
-tfile <- tempfile(fileext = ".yml")
-
 test_that("write_interactions fails well", {
   # missing
   expect_error(write_interactions(), "argument \"x\" is missing")
@@ -50,6 +48,8 @@ test_that("write_interactions fails well", {
 })
 
 test_that("write_interactions works as expected", {
+  tfile <- withr::local_tempfile()
+
   write_interactions(x, tfile, FALSE)
   txt <- readLines(tfile)
   # sum(nchar(txt))
@@ -69,6 +69,3 @@ test_that("write_interactions works as expected", {
     c('request', 'response', 'recorded_at', 'recorded_with')
   )
 })
-
-# cleanup
-unlink(tfile)

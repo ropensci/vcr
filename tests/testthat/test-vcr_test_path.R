@@ -2,7 +2,7 @@ test_that("vcr_test_path works with testthat", {
   skip_on_cran()
 
   # setup
-  dir <- file.path(tempdir(), "bunny")
+  dir <- withr::local_tempdir()
   dir.create(file.path(dir, "tests", "testthat"), recursive = TRUE)
   withr::local_dir(dir)
 
@@ -15,16 +15,13 @@ test_that("vcr_test_path works with testthat", {
     fixed = TRUE,
     all = FALSE
   )
-
-  # cleanup
-  unlink(dir, recursive = TRUE, force = TRUE)
 })
 
 test_that("vcr_test_path works with testthat in a dir that isn't `tests`", {
   skip_on_cran()
 
   # setup
-  dir <- file.path(tempdir(), "tests_xyz")
+  dir <- withr::local_tempdir()
   dir.create(file.path(dir, "testthat"), recursive = TRUE)
   withr::local_dir(dir)
 
@@ -37,9 +34,6 @@ test_that("vcr_test_path works with testthat in a dir that isn't `tests`", {
     fixed = TRUE,
     all = FALSE
   )
-
-  # cleanup
-  unlink(dir, recursive = TRUE, force = TRUE)
 })
 
 test_that("vcr_test_path errors with wrongly specified paths", {

@@ -9,14 +9,9 @@ test_that("serializer_fetch", {
   expect_equal(z$file_extension, ".yml")
 })
 
-
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
-
 test_that("you can record a new cassette of same name with different serializer", {
-  mydir <- file.path(tempdir(), "asdfasdfsd")
-  invisible(vcr_configure(dir = mydir))
-  unlink(file.path(vcr_c$dir, "testing1.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
+
   cas_yml <- use_cassette(
     name = "testing1",
 

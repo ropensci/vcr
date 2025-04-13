@@ -1,8 +1,8 @@
 test_that("use_cassette w/ request that writes to disk: crul", {
   skip_on_cran()
+  local_vcr_configure()
 
-  dir <- file.path(tempdir(), "rabbit")
-  invisible(make_pkg(dir))
+  dir <- make_pkg()
   res <- use_vcr(dir, verbose = FALSE)
   dir.create(file.path(dir, "tests/fixtures"), recursive = TRUE)
   dir.create(file.path(dir, "tests/files"), recursive = TRUE)
@@ -75,22 +75,11 @@ vcr::check_cassette_names()'
 "
   cat(fixtures1, file = file.path(dir, "tests/fixtures/ffff_testing.yml"))
 
-  unlink(file.path(dir, "tests/testthat/test-vcr_example.R"))
-
-  og <- getwd()
-  setwd(dir)
-  on.exit(setwd(og))
-
+  withr::local_dir(dir)
   mm <- testthat::test_dir(
     "tests/testthat",
     reporter = testthat::ListReporter$new()
   )
   expect_equal(capture.output(mm[[1]]$results[[1]])[2], "As expected")
   expect_equal(capture.output(mm[[1]]$results[[2]])[2], "As expected")
-
-  # cleanup
-  unlink(dir, TRUE, TRUE)
 })
-
-# reset configuration
-vcr_configure_reset()
