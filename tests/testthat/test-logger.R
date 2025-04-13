@@ -16,7 +16,7 @@ test_that("vcr_log_file fails well", {
 })
 
 test_that("vcr_log_file works as expected", {
-  on.exit(unlink("adsf"))
+  withr::defer(unlink("adsf"))
   expect_true(vcr_log_file("adsf"))
 })
 

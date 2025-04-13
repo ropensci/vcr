@@ -9,7 +9,7 @@ test_that("vcr_last_error fails well", {
 
   # insert  a cassette - same result
   cas <- suppressMessages(insert_cassette("rabbit"))
-  on.exit(eject_cassette())
+  withr::defer(eject_cassette())
   expect_error(vcr_last_error(), "no error to report")
 })
 

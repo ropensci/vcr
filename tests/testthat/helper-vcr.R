@@ -103,3 +103,13 @@ local_httpbin_app <- function() {
 read_cassette <- function(name) {
   yaml::yaml.load_file(file.path(vcr_c$dir, name))
 }
+
+testthat::set_state_inspector(\() {
+  temp_files <- dir(tempdir())
+  temp_files <- temp_files[!grepl("^callr", temp_files)]
+  temp_files <- temp_files[!grepl("^webfakes", temp_files)]
+
+  list(
+    temp_files = temp_files
+  )
+})

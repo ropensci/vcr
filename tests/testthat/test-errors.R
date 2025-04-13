@@ -12,10 +12,10 @@ test_that("UnhandledHTTPRequestError fails well", {
   )
 
   # insert a cassette
-  cas <- insert_cassette("turtle")
-  on.exit(eject_cassette())
+  cas <- insert_cassette("asdsfd")
+  withr::defer(eject_cassette())
 
-  # types
+  # # types
   expect_error(
     UnhandledHTTPRequestError$new(5),
     "request must be of class Request"
@@ -29,7 +29,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
   )
   request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
   cas <- insert_cassette("turtle")
-  on.exit(eject_cassette())
+  withr::defer(eject_cassette())
 
   a <- UnhandledHTTPRequestError$new(request)
 
@@ -43,7 +43,6 @@ test_that("UnhandledHTTPRequestError works as expected", {
     "An HTTP request has been made that vcr does not know how to handle"
   )
 })
-
 
 test_that("UnhandledHTTPRequestError works as expected", {
   ## API key in query param
@@ -67,7 +66,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
   )
   request <- Request$new("get", url, "")
   cas <- insert_cassette("bunny")
-  on.exit(eject_cassette())
+  withr::defer(eject_cassette())
 
   a <- UnhandledHTTPRequestError$new(request)
 
@@ -90,7 +89,6 @@ test_that("UnhandledHTTPRequestError works as expected", {
   )
 })
 
-
 test_that("UnhandledHTTPRequestError works as expected", {
   ## API key in header
   withr::local_envvar(FOO_BAR = "2k2k2k288gjrj2i21i")
@@ -105,7 +103,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
     "frog",
     match_requests_on = c("method", "uri", "headers")
   )
-  on.exit(eject_cassette())
+  withr::defer(eject_cassette())
 
   a <- UnhandledHTTPRequestError$new(request)
 
@@ -138,7 +136,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
   url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
   request <- Request$new("get", url, "")
   cas <- insert_cassette("bunny2")
-  on.exit(eject_cassette())
+  withr::defer(eject_cassette())
 
   a <- UnhandledHTTPRequestError$new(request)
 
