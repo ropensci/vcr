@@ -137,7 +137,6 @@ test_that("UnhandledHTTPRequestError works as expected", {
   )
   url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
   request <- Request$new("get", url, "")
-  unlink(file.path(vcr_c$dir, "bunny2"))
   cas <- insert_cassette("bunny2")
   on.exit(eject_cassette())
 
