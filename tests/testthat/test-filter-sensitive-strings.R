@@ -40,19 +40,24 @@ test_that("filter sensitive regex strings", {
 })
 
 test_that("filter sensitive data strips leading/trailing single/double quotes", {
-  Sys.setenv(MY_KEY_ON_GH_ACTIONS = "\"ab123c\"")
+  withr::local_envvar(MY_KEY_ON_GH_ACTIONS = "\"ab123c\"")
   tmpdir <- withr::local_tempdir()
   local_vcr_configure(
-    dir = tmpdir,
+    dir = withr::local_tempdir(),
     filter_sensitive_data = list(
       "<somekey>" = Sys.getenv("MY_KEY_ON_GH_ACTIONS")
     )
   )
   x <- crul::HttpClient$new("https://hb.opencpu.org")
-  cas <- sw(use_cassette(
+  expect_snapshot(
+    cas <- use_cassette(
     "testing2",
-    res <- x$get("get", query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS")))
-  ))
+      res <- x$get(
+        "get",
+        query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS"))
+      )
+    )
+  )
   int <- yaml::yaml.load_file(cas$file())$http_interactions[[1]]
   expect_false(grepl(
     Sys.getenv("MY_KEY_ON_GH_ACTIONS"),
@@ -61,13 +66,4 @@ test_that("filter sensitive data strips leading/trailing single/double quotes", 
   body <- jsonlite::fromJSON(int$response$body$string)
   expect_false(grepl(Sys.getenv("MY_KEY_ON_GH_ACTIONS"), body$args$key))
   expect_false(grepl(Sys.getenv("MY_KEY_ON_GH_ACTIONS"), body$url))
-
-  # throws a warning when it happens
-  expect_warning(use_cassette(
-    "testing3",
-    x$get("get", query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS")))
-  ))
-
-  # unset
-  Sys.unsetenv("MY_KEY_ON_GH_ACTIONS")
 })

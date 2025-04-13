@@ -1,27 +1,25 @@
-vcr_configure_reset()
-tmpdir_wdp <- file.path(tempdir(), "write_disk_path")
-vcr_configure(dir = tmpdir_wdp)
-
 test_that("fails well if write_disk_path not set", {
   skip_on_cran()
-
-  expect_null(vcr_c$write_disk_path)
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
 
   f <- tempfile(fileext = ".json")
   expect_error(
-    sw(use_cassette(
+    use_cassette(
       "write_disk_path_not_set_crul",
       out <- crul::HttpClient$new(hb("/get"))$get(disk = f)
-    )),
+    ),
     "write_disk_path must be given"
   )
 
   g <- tempfile(fileext = ".json")
   expect_error(
-    sw(use_cassette(
+    use_cassette(
       "write_disk_path_not_set_httr",
       out <- httr::GET(hb("/get"), httr::write_disk(g, TRUE))
-    )),
+    ),
     "write_disk_path must be given"
   )
 })
