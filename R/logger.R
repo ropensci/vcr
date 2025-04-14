@@ -71,7 +71,11 @@ vcr_log_file <- function(file, overwrite = TRUE) {
 #' @export
 #' @rdname vcr_logging
 vcr_log_info <- function(message, include_date = TRUE) {
-  if (include_date) message <- paste(as.character(Sys.time()), "-", message)
+  if (include_date) {
+    now <- format(Sys.time(), format = "%Y-%m-%d %H:%M:%S")
+    message <- paste(now, "-", message)
+  }
+
   message <- paste(make_prefix(), "-", message)
   vcr_log_write(message)
 }
