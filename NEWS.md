@@ -1,3 +1,10 @@
+vcr (development version)
+=========
+
+### BREAKING CHANGES
+
+* `as.cassette()` has been removed. It's not used, and not needed anymore.
+
 vcr 1.7.0
 =========
 

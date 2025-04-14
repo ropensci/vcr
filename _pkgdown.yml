@@ -41,8 +41,6 @@ reference:
       - turned_on
   - title: "Managing cassettes"
     contents:
-      - as.cassette
-      - as.cassettepath
       - cassette_path
       - cassettes
       - current_cassette
