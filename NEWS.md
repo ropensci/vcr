@@ -1,6 +1,10 @@
 vcr 1.7.0
 =========
 
+### BREAKING CHANGES
+
+* `cassettes()` no longer has `on_disk` or `verb` arguments and now only ever lists currently active cassettes().
+
 ### MINOR IMPROVEMENTS
 
 * Change maintainer email address (#274)

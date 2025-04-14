@@ -35,8 +35,7 @@ eject_cassette <- function(
     cas <- current_cassette()
     if (length(cas) == 0) stp("no cassette in use currently")
   } else {
-    if (!cassette_exists(cassette)) stp("cassette '", cassette, "' not found")
-    cas <- cassettes(FALSE)[[cassette]]
+    cas <- cassettes()[[cassette]]
     if (is.null(cas)) stp("cassette '", cassette, "' not found")
   }
   # eject it

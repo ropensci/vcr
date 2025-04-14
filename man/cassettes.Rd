@@ -6,25 +6,19 @@
 \alias{cassette_path}
 \title{List cassettes, get current cassette, etc.}
 \usage{
-cassettes(on_disk = TRUE, verb = FALSE)
+cassettes()
 
 current_cassette()
 
 cassette_path()
-}
-\arguments{
-\item{on_disk}{(logical) Check for cassettes on disk + cassettes in session
-(\code{TRUE}), or check for only cassettes in session (\code{FALSE}). Default: \code{TRUE}}
-
-\item{verb}{(logical) verbose messages}
 }
 \description{
 List cassettes, get current cassette, etc.
 }
 \details{
 \itemize{
-\item \code{cassettes()}: returns cassettes found in your R session, you can toggle
-whether we pull from those on disk or not
+\item \code{cassettes()}: returns cassettes all active cassettes in the current
+session.
 \item \code{current_cassette()}: returns \code{NULL} when no cassettes are in use;
 returns the current cassette (a \code{Cassette} object) when one is in use
 \item \code{cassette_path()}: returns the current directory path where cassettes
@@ -36,15 +30,15 @@ vcr_configure(dir = tempdir())
 
 # list all cassettes
 cassettes()
-cassettes(on_disk = FALSE)
 
 # list the currently active cassette
 insert_cassette("stuffthings")
 current_cassette()
-eject_cassette()
-
 cassettes()
-cassettes(on_disk = FALSE)
+
+eject_cassette()
+cassettes()
+
 
 # list the path to cassettes
 cassette_path()
