@@ -1,6 +1,6 @@
 local_vcr_configure <- function(..., .frame = parent.frame()) {
   old <- vcr_configure(...)
-  withr::defer(vcr_config_set(old), envir = .frame)
+  withr::defer(vcr_configure(!!!old), envir = .frame)
 }
 
 local_light_switch <- function(frame = parent.frame()) {
