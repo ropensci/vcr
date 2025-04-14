@@ -4,16 +4,9 @@
 \alias{eject_cassette}
 \title{Eject a cassette}
 \usage{
-eject_cassette(
-  cassette = NULL,
-  options = list(),
-  skip_no_unused_interactions_assertion = NULL
-)
+eject_cassette(options = list(), skip_no_unused_interactions_assertion = NULL)
 }
 \arguments{
-\item{cassette}{(character) a single cassette names to eject; see \code{name}
-parameter definition in \code{\link[=insert_cassette]{insert_cassette()}} for cassette name rules}
-
 \item{options}{(list) a list of options to apply to the eject process}
 
 \item{skip_no_unused_interactions_assertion}{(logical) If \code{TRUE}, this will
