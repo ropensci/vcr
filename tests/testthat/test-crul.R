@@ -45,7 +45,7 @@ test_that("crul POST requests works", {
   ff <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("crul_post_upload_file", {
-    b <- crul::HttpClient$new(hb("/post"))$post(
+    b <- crul::HttpClient$new(hb_remote("/post"))$post(
       body = list(y = crul::upload(ff))
     )
   })
@@ -73,7 +73,7 @@ test_that("crul POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("crul_post_null", {
-    m <- crul::HttpClient$new(hb("/post"))$post(body = NULL)
+    m <- crul::HttpClient$new(hb_remote("/post"))$post(body = NULL)
   })
   expect_false(out5$is_empty())
   expect_s3_class(z, "HttpResponse")

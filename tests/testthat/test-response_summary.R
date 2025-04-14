@@ -1,4 +1,4 @@
-url <- hb()
+url <- hb_remote()
 cli <- crul::HttpClient$new(url = url)
 crul::mock(FALSE)
 webmockr::webmockr_allow_net_connect()

@@ -41,11 +41,11 @@ test_that("httr use_cassette works", {
 
   out <- use_cassette(
     "httr_test1",
-    x <- httr::GET(hb("/404"))
+    x <- httr::GET(hb_remote("/404"))
   )
   invisible(use_cassette(
     "httr_test1",
-    x2 <- httr::GET(hb("/404"))
+    x2 <- httr::GET(hb_remote("/404"))
   ))
 
   # cassette
@@ -57,7 +57,7 @@ test_that("httr use_cassette works", {
   # request - 1st http call
   expect_s3_class(x$request, "request")
   expect_equal(x$request$method, "GET")
-  expect_equal(x$request$url, hb("/404"))
+  expect_equal(x$request$url, hb_remote("/404"))
   expect_named(x$request$headers, "Accept")
   expect_null(x$request$fields)
   expect_true(x$request$options$httpget)
@@ -66,7 +66,7 @@ test_that("httr use_cassette works", {
   # request - 2nd http call
   expect_s3_class(x2$request, "request")
   expect_equal(x2$request$method, "GET")
-  expect_equal(x2$request$url, hb("/404"))
+  expect_equal(x2$request$url, hb_remote("/404"))
   expect_named(x2$request$headers, "Accept")
   expect_null(x2$request$fields)
   expect_true(x2$request$options$httpget)
@@ -75,7 +75,7 @@ test_that("httr use_cassette works", {
   # response
   expect_s3_class(x, "response")
   expect_equal(x$status_code, 404)
-  expect_equal(x$url, hb("/404"))
+  expect_equal(x$url, hb_remote("/404"))
   expect_output(print(x), "Not Found")
   expect_output(print(x), "HTML PUBLIC")
 
@@ -92,7 +92,7 @@ test_that("httr use_cassette works", {
 
   out <- use_cassette(
     "httr_test2",
-    x <- httr::GET(hb("/404")),
+    x <- httr::GET(hb_remote("/404")),
     preserve_exact_body_bytes = TRUE
   )
 
@@ -105,7 +105,7 @@ test_that("httr use_cassette works", {
   # response
   expect_s3_class(x, "response")
   expect_equal(x$status_code, 404)
-  expect_equal(x$url, hb("/404"))
+  expect_equal(x$url, hb_remote("/404"))
 
   # response body
   str <- yaml::yaml.load_file(out$manfile)
@@ -176,7 +176,7 @@ test_that("httr POST requests works", {
   # body type: named list
   out <- use_cassette(
     "httr_post_named_list",
-    x <- httr::POST(hb("/post"), body = list(foo = "bar"))
+    x <- httr::POST(hb_remote("/post"), body = list(foo = "bar"))
   )
   expect_false(out$is_empty())
   expect_s3_class(x, "response")
@@ -188,7 +188,7 @@ test_that("httr POST requests works", {
   # body type: character
   out2 <- use_cassette(
     "httr_post_string",
-    z <- httr::POST(hb("/post"), body = "some string")
+    z <- httr::POST(hb_remote("/post"), body = "some string")
   )
   expect_false(out2$is_empty())
   expect_s3_class(z, "response")
@@ -200,7 +200,7 @@ test_that("httr POST requests works", {
   # body type: raw
   out3 <- use_cassette(
     "httr_post_raw",
-    z <- httr::POST(hb("/post"), body = charToRaw("some string"))
+    z <- httr::POST(hb_remote("/post"), body = charToRaw("some string"))
   )
   expect_false(out3$is_empty())
   expect_s3_class(z, "response")
@@ -214,7 +214,7 @@ test_that("httr POST requests works", {
   cat("hello world\n", file = ff)
   out4 <- use_cassette(
     "httr_post_upload_file",
-    b <- httr::POST(hb("/post"), body = list(y = httr::upload_file(ff)))
+    b <- httr::POST(hb_remote("/post"), body = list(y = httr::upload_file(ff)))
   )
   expect_false(out4$is_empty())
   expect_s3_class(b, "response")
@@ -226,7 +226,7 @@ test_that("httr POST requests works", {
 
   ## upload_file not in a list
   # out6 <- use_cassette("httr_post_upload_file_no_list", {
-  #   d <- POST(hb("/post"),
+  #   d <- POST(hb_remote("/post"),
   #     body = httr::upload_file(system.file("CITATION")))
   # })
   # expect_false(out6$is_empty())
@@ -240,7 +240,7 @@ test_that("httr POST requests works", {
   # body type: NULL
   out5 <- use_cassette(
     "httr_post_null",
-    m <- httr::POST(hb("/post"), body = NULL)
+    m <- httr::POST(hb_remote("/post"), body = NULL)
   )
   expect_false(out5$is_empty())
   expect_s3_class(m, "response")

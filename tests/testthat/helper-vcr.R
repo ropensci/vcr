@@ -59,6 +59,17 @@ check_url <- function(x, ...) {
 }
 
 hb <- function(x = NULL) {
+  server <- getOption("vcr::httpbin_local_server")
+  if (is.null(server)) {
+    app <- webfakes::httpbin_app()
+    server <- webfakes::new_app_process(app)
+    options(`vcr::httpbin_local_server` = server)
+  }
+
+  server$url(x)
+}
+
+hb_remote <- function(x = NULL) {
   base_url <- getOption("vcr::httpbin_server")
   if (is.null(base_url)) {
     base_url <- find_httpbin_server()
@@ -89,15 +100,6 @@ find_httpbin_server <- function() {
     }
   }
   stop("all httpbin servers down")
-}
-
-# httpbin local
-local_httpbin_app <- function() {
-  check_installed("webfakes")
-  webfakes::local_app_process(
-    webfakes::httpbin_app(),
-    .local_envir = testthat::teardown_env()
-  )
 }
 
 read_cassette <- function(name) {
