@@ -32,7 +32,12 @@
 #'
 #' vcr_configure_reset()
 cassettes <- function() {
-  cassettes_session()
+  if (cassette_active()) {
+    the$cassettes
+  } else {
+    # Consistently return a named list
+    set_names(list())
+  }
 }
 
 #' @export
@@ -51,12 +56,12 @@ current_cassette <- function() {
 cassette_path <- function() vcr_c$dir
 
 cassette_push <- function(cassette) {
-  the$cassettes[casette$name] <- cassette
+  the$cassettes[[cassette$name]] <- cassette
   invisible(cassette)
 }
 cassette_pop <- function() {
   n <- length(the$cassettes)
-  cassette <- cassettes[[n]]
+  cassette <- the$cassettes[[n]]
   the$cassettes <- the$cassettes[-n]
 
   cassette

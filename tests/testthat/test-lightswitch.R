@@ -36,7 +36,7 @@ test_that("turn_off and ignore_cassettes works correctly", {
   # before turned off, insert_cassette works
   z <- insert_cassette("abcd")
   expect_s3_class(z, "Cassette")
-  z$eject()
+  eject_cassette()
 
   # after being turned off, insert_cassette throws an error
   suppressMessages(turn_off())
@@ -68,7 +68,7 @@ test_that("lightswitch env var's", {
   expect_equal(Sys.getenv("VCR_TURN_OFF"), "")
   z <- insert_cassette("abcd")
   expect_s3_class(z, "Cassette")
-  invisible(z$eject())
+  eject_cassette()
 
   # after being turned off, insert_cassette throws an error
   withr::local_envvar(VCR_TURNED_OFF = TRUE, VCR_IGNORE_CASSETTES = FALSE)
@@ -127,7 +127,7 @@ test_that("turned_off", {
   # if a cassette is in use
   mycas <- insert_cassette("adfadfdfadfadsf")
   expect_error(turned_off(5 + 5), "You must eject it")
-  mycas$eject()
+  eject_cassette()
 
   # no cassette in use
   expect_true(turned_on())

@@ -179,7 +179,7 @@ use_cassette <- function(
     force(...)
     return(NULL)
   }
-  on.exit(cassette$eject())
+  on.exit(eject_cassette())
   cassette$call_block(...)
   return(cassette)
 }

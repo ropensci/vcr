@@ -50,7 +50,8 @@ test_that("insert_cassette works as expected", {
     warn_on_empty_cassette = FALSE
   )
 
-  aa <- suppressMessages(insert_cassette("foobar3"))
+  aa <- insert_cassette("foobar3")
+  withr::defer(eject_cassette())
   expect_s3_class(aa, "Cassette")
   expect_type(aa$name, "character")
   expect_equal(aa$name, "foobar3")
@@ -58,9 +59,6 @@ test_that("insert_cassette works as expected", {
   expect_false(aa$any_new_recorded_interactions())
   expect_type(aa$args, "list")
   expect_type(aa$call_block, "closure")
-
-  # eject
-  aa$eject()
 })
 
 test_that("insert_cassette fails well on name checking", {

@@ -81,8 +81,8 @@ vcr_log_info <- function(message, include_date = TRUE) {
 }
 
 make_prefix <- function() {
-  casette_name <- if (cassette_active()) current_cassette()$name else "<none>"
-  sprintf("[%s: '%s']", vcr_c$log_opts$log_prefix, casette_name)
+  cassette_name <- if (cassette_active()) current_cassette()$name else "<none>"
+  sprintf("[%s: '%s']", vcr_c$log_opts$log_prefix, cassette_name)
 }
 
 vcr_log_write <- function(message) {
