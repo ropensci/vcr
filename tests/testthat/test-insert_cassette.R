@@ -57,7 +57,6 @@ test_that("insert_cassette works as expected", {
   expect_false(aa$allow_playback_repeats)
   expect_false(aa$any_new_recorded_interactions())
   expect_type(aa$args, "list")
-  expect_type(aa$call_block, "closure")
 
   # eject
   aa$eject()

@@ -2,6 +2,7 @@
 % Please edit documentation in R/use_cassette.R
 \name{use_cassette}
 \alias{use_cassette}
+\alias{local_cassette}
 \title{Use a cassette to record HTTP requests}
 \usage{
 use_cassette(
@@ -16,6 +17,20 @@ use_cassette(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL
+)
+
+local_cassette(
+  name,
+  record = NULL,
+  match_requests_on = NULL,
+  update_content_length_header = FALSE,
+  allow_playback_repeats = FALSE,
+  serialize_with = NULL,
+  persist_with = NULL,
+  preserve_exact_body_bytes = NULL,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL,
+  frame = parent.frame()
 )
 }
 \arguments{
@@ -66,23 +81,49 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
+
+\item{frame}{For expert use only: the frame on the call stack that defines
+the scope of this function.}
 }
 \value{
 an object of class \code{Cassette}
 }
 \description{
-Use a cassette to record HTTP requests
+\code{use_cassette(...)} uses a cassette for the code in \code{...},
+\code{local_cassette()} uses a cassette for the current function scope (e.g.
+for one tests).
 }
 \details{
-A run down of the family of top level \pkg{vcr} functions
+Cassette names:
 \itemize{
-\item \code{use_cassette} Initializes a cassette. Returns the inserted
-cassette.
-\item \code{insert_cassette} Internally used within \code{use_cassette}
-\item \code{eject_cassette} ejects the current cassette. The cassette
-will no longer be used. In addition, any newly recorded HTTP interactions
-will be written to disk.
+\item Should be meaningful so that it is obvious to you what test/function
+they relate to. Meaningful names are important so that you can quickly
+determine to what test file or test block a cassette belongs. Note
+that vcr cannot check that your cassette names are meaningful.
+\item Should not be duplicated. Duplicated cassette names would lead to a
+test using the wrong cassette.
+\item Should not have spaces. Spaces can lead to problems in using file
+paths.
+\item Should not include a file extension. vcr handles file extensions for
+the user.
+\item Should not have illegal characters that can lead to problems in using
+file paths: \code{/}, \verb{?}, \code{<}, \code{>}, \verb{\\}, \code{:}, \code{*}, \code{|}, and \verb{\"}
+\item Should not have control characters, e.g., \verb{\n}
+\item Should not have just dots, e.g., \code{.} or \code{..}
+\item Should not have Windows reserved words, e.g., \code{com1}
+\item Should not have trailing dots
+\item Should not be longer than 255 characters
 }
+
+\code{vcr::check_cassette_names()} is meant to be run during your tests, from
+a \href{https://testthat.r-lib.org/reference/test_dir.html#special-files}{\verb{helper-*.R} file}
+inside the \code{tests/testthat} directory. It only checks that cassette
+names are not duplicated. Note that if you do need to have duplicated
+cassette names you can do so by using the \code{allowed_duplicates} parameter
+in \code{check_cassette_names()}. A helper function \code{check_cassette_names()}
+runs inside \code{\link[=insert_cassette]{insert_cassette()}} that checks that
+cassettes do not have: spaces, file extensions, unaccepted characters
+(slashes).
 }
 \section{Cassette options}{
 
@@ -193,5 +234,8 @@ two; res2
 }
 }
 \seealso{
+\code{\link[=insert_cassette]{insert_cassette()}} and \code{\link[=eject_cassette]{eject_cassette()}} for the underlying
+functions.
+
 \code{\link[=insert_cassette]{insert_cassette()}}, \code{\link[=eject_cassette]{eject_cassette()}}
 }

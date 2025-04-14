@@ -35,6 +35,7 @@ Imports:
     rprojroot,
     urltools,
     webmockr (>= 0.8.0),
+    withr,
     yaml
 Suggests:
     crayon,
@@ -46,8 +47,7 @@ Suggests:
     rmarkdown,
     roxygen2 (>= 7.2.1),
     testthat (>= 3.0.0),
-    webfakes,
-    withr
+    webfakes
 VignetteBuilder:
     knitr
 Config/testthat/edition: 3
