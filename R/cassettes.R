@@ -35,34 +35,42 @@
 #'
 #' vcr_configure_reset()
 cassettes <- function(on_disk = TRUE, verb = FALSE) {
-  # combine cassettes on disk with cassettes in session
+  cassettes <- the$cassettes
+
   if (on_disk) {
-    out <- unlist(
-      list(
-        lapply(get_cassette_data_paths(), read_cassette_meta, verbose = verb),
-        cassettes_session()
-      ),
-      FALSE
+
+    get_cassette_data_paths <- function() {
+      files <- vcr_files()
+      names <- tools::file_path_sans_ext(basename(paths))
+      as.list(stats::setNames(files, get_cassette_names()))
+    }
+
+    cassettes_disk <- lapply(
+      get_cassette_data_paths(),
+      read_cassette_meta,
+      verbose = verb
     )
-    out[!duplicated(names(out))]
-  } else {
-    cassettes_session()
+    cassetes <- modifyList(cassettes, cassettes_disk)
   }
+
+  out
 }
 
 #' @export
 #' @rdname cassettes
 current_cassette <- function() {
-  cassettes <- cassettes(FALSE)
-  n <- length(cassettes)
-  if (n == 0) NULL else cassettes[[n]]
+  if (cassette_active()) {
+    n <- length(the$cassettes)
+    the$cassettes[[n]]
+  } else {
+    NULL
+  }
 }
 
 #' @export
 #' @rdname cassettes
 cassette_path <- function() vcr_c$dir
 
-cassette_exists <- function(x) x %in% get_cassette_names()
 
 read_cassette_meta <- function(x, verbose = TRUE, ...) {
   tmp <- yaml::yaml.load_file(x, ...)
@@ -74,35 +82,6 @@ read_cassette_meta <- function(x, verbose = TRUE, ...) {
   }
 }
 
-get_cassette_meta_paths <- function() {
-  metafiles <- names(grep(
-    "metadata",
-    vapply(cassette_files(), basename, ""),
-    value = TRUE
-  ))
-  as.list(stats::setNames(
-    metafiles,
-    unname(sapply(metafiles, function(x) yaml::yaml.load_file(x)$name))
-  ))
-}
-
-cassette_files <- function() {
-  path <- path.expand(cassette_path())
-  check_create_path(path)
-  list.files(path, full.names = TRUE)
-}
-
-get_cassette_path <- function(x) {
-  if (x %in% get_cassette_names()) get_cassette_data_paths()[[x]]
-}
-
-is_path <- function(x) file.exists(path.expand(x))
-
-get_cassette_names <- function() {
-  tmp <- vcr_files()
-  if (length(tmp) == 0) return("")
-  sub("\\.yml|\\.yaml|\\.json", "", basename(tmp))
-}
 
 vcr_files <- function() {
   # remove some file types
@@ -117,26 +96,23 @@ vcr_files <- function() {
   names(grep(tokeep, vapply(cassette_files(), basename, ""), value = TRUE))
 }
 
-get_cassette_data_paths <- function() {
-  files <- vcr_files()
-  if (length(files) == 0) return(list())
-  as.list(stats::setNames(files, get_cassette_names()))
-}
+
 
 check_create_path <- function(x) {
   if (file.exists(x)) dir.create(x, recursive = TRUE, showWarnings = FALSE)
 }
 
-cassettes_session <- function(x) {
-  xx <- ls(envir = vcr_cassettes)
-  if (length(xx) > 0) {
-    stats::setNames(lapply(xx, get, envir = vcr_cassettes), xx)
-  } else {
-    list()
-  }
+cassette_push <- function(cassette) {
+  the$cassettes[casette$name] <- cassette
+  invisible(cassette)
 }
+cassette_pop <- function() {
+  n <- length(the$cassettes)
+  cassette <- cassettes[[n]]
+  the$cassettes <- the$cassettes[-n]
 
-include_cassette <- function(cassette) {
-  # assign cassette to bucket of cassettes in session
-  assign(cassette$name, cassette, envir = vcr_cassettes)
+  cassette
+}
+cassette_active <- function() {
+  length(the$cassettes) > 0
 }
