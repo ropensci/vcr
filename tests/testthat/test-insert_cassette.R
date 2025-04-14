@@ -1,5 +1,5 @@
 test_that("insert_cassette fails well", {
-  unlink(file.path(vcr_c$dir, "foobar55.yml"))
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # must pass a cassette name
   expect_error(insert_cassette(), "argument \"name\" is missing")
@@ -44,11 +44,12 @@ test_that("insert_cassette fails well", {
   )
 })
 
-unlink(list.files(vcr_c$dir, pattern = "newbar", full.names = TRUE))
-
-vcr_configure(warn_on_empty_cassette = FALSE)
-
 test_that("insert_cassette works as expected", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+
   aa <- suppressMessages(insert_cassette("foobar3"))
   expect_s3_class(aa, "Cassette")
   expect_type(aa$name, "character")
@@ -61,7 +62,6 @@ test_that("insert_cassette works as expected", {
   # eject
   aa$eject()
 })
-
 
 test_that("insert_cassette fails well on name checking", {
   # no spaces
@@ -107,10 +107,3 @@ test_that("insert_cassette fails well on name checking", {
   long_name <- paste0(unlist(replicate(10, letters, FALSE)), collapse = "")
   expect_error(insert_cassette(long_name))
 })
-
-
-# cleanup
-unlink(file.path(vcr_configuration()$dir, "foobar3.yml"))
-unlink(list.files(pattern = "newbar", full.names = TRUE))
-unlink("foobar55.yml")
-unlink("testing1.yml")

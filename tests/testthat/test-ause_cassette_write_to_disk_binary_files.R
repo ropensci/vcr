@@ -1,15 +1,15 @@
-tmpdir <- tempdir()
-vcr_configure(dir = tmpdir, write_disk_path = file.path(tmpdir, "files"))
-
 test_that("use_cassette w/ binary files on disk: crul", {
   skip_on_cran()
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
   skip_if(!check_url(url, timeout_ms = 5000L), sprintf("url not up (%s)", url))
   ## make a temp file
-  f <- file.path(tempdir(), "41001c1990.nc")
+  f <- file.path(withr::local_tempdir(), "41001c1990.nc")
   ## make a request
   use_cassette(
     "test_write_to_disk_binary",
@@ -35,6 +35,10 @@ test_that("use_cassette w/ binary files on disk: crul", {
 
 test_that("use_cassette w/ binary files on disk with image: crul", {
   skip_on_cran()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## url
   # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
@@ -44,7 +48,7 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   # thus breaking the test
   skip_if(!check_url(url, timeout_ms = 5000L), sprintf("url not up (%s)", url))
   ## make a temp file
-  f <- file.path(tempdir(), basename(url))
+  f <- file.path(withr::local_tempdir(), basename(url))
   ## make a request
   use_cassette(
     "test_write_to_disk_binary_img",
@@ -74,7 +78,7 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
   foo_bar <- function() {
     # url <- "https://github.com/sckott/rforcats/raw/gh-pages/assets/img/250.jpeg"
     url <- "https://raw.githubusercontent.com/sckott/rforcats/gh-pages/assets/img/250.jpeg"
-    f <- file.path(tempdir(), basename(url))
+    f <- file.path(withr::local_tempdir(), basename(url))
     crul::HttpClient$new(url)$get(disk = f)
   }
 
@@ -97,13 +101,16 @@ test_that("use_cassette w/ binary files on disk with image: crul", {
 
 test_that("use_cassette w/ binary files on disk: httr", {
   skip_on_cran()
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = withr::local_tempdir()
+  )
 
   ## url
   url <- "https://dods.ndbc.noaa.gov/thredds/fileServer/data/cwind/41001/41001c1997.nc"
   skip_if(!check_url(url, timeout_ms = 5000L), sprintf("url not up (%s)", url))
   ## make a temp file
-  f <- file.path(tempdir(), "41001c1990.nc")
+  f <- file.path(withr::local_tempdir(), "41001c1990.nc")
   ## make a request
   use_cassette(
     "test_write_to_disk_binary_httr",

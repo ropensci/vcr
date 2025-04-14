@@ -11,6 +11,7 @@ test_that("RequestHandlerHttr", {
 })
 
 test_that("RequestHandlerHttr: httr", {
+  local_vcr_configure(dir = withr::local_tempdir())
   skip_if_not_installed("xml2")
 
   load("httr_obj.rda")
@@ -29,7 +30,4 @@ test_that("RequestHandlerHttr: httr", {
   expect_equal(response$status_code, 404)
 
   eject_cassette("greencow")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "greencow.yml"))
 })

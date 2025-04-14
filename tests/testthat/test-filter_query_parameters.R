@@ -1,28 +1,19 @@
-vcr_configure_reset()
-
 test_that("filter_query_parameters: fails well", {
   expect_error(vcr_configure(filter_query_parameters = list(a = 1:3)))
 })
-
-vcr_configure_reset()
-
 test_that("filter_query_parameters: remove", {
   skip_on_cran()
 
-  mydir <- file.path(tempdir(), "filter_query_parameters")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # remove only
   # no query param filtering to compare below stuff to
-  vcr_configure(dir = mydir)
   con <- crul::HttpClient$new(hb("/get"))
-  unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- con$get(query = list(Foo = "bar"))
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_query_parameters = "Foo")
-  unlink(file.path(vcr_c$dir, "filterparams_remove.yml"))
+  local_vcr_configure(filter_query_parameters = "Foo")
   con <- crul::HttpClient$new(hb("/get"))
   cas1 <- use_cassette(name = "filterparams_remove", {
     res1 <- con$get(query = list(Foo = "bar"))
@@ -52,28 +43,21 @@ test_that("filter_query_parameters: remove", {
   )
 })
 
-vcr_configure_reset()
-
 test_that("filter_query_parameters: replace", {
   skip_on_cran()
 
-  mydir <- file.path(tempdir(), "filter_query_parameters")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # remove only
   # no query param filtering to compare below stuff to
-  vcr_configure(dir = mydir)
   con <- crul::HttpClient$new(hb("/get"))
-  unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- con$get(query = list(Foo = "bar"))
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
+  local_vcr_configure(
     filter_query_parameters = list(Foo = "placeholder")
   )
-  unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
   con <- crul::HttpClient$new(hb("/get"))
   cas1 <- use_cassette(name = "filterparams_replace", {
     res1 <- con$get(query = list(Foo = "bar"))
@@ -103,30 +87,23 @@ test_that("filter_query_parameters: replace", {
   )
 })
 
-vcr_configure_reset()
-
 test_that("filter_query_parameters: replace with secret", {
   skip_on_cran()
+  local_vcr_configure(dir = withr::local_tempdir())
 
   con <- crul::HttpClient$new(hb("/get"))
-  mydir <- file.path(tempdir(), "filter_query_parameters_replace_with")
-  Sys.setenv(MY_KEY = "my-secret-key")
+  withr::local_envvar(MY_KEY = "my-secret-key")
   # Sys.getenv("MY_KEY")
 
   # remove only
   # no query param filtering to compare below stuff to
-  vcr_configure(dir = mydir)
-  unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- con$get(query = list(Foo = Sys.getenv("MY_KEY")))
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
+  local_vcr_configure(
     filter_query_parameters = list(Foo = c(Sys.getenv("MY_KEY"), "bar"))
   )
-  unlink(file.path(vcr_c$dir, "filterparams_replacewith.yml"))
   cas1 <- use_cassette(name = "filterparams_replacewith", {
     res1 <- con$get(query = list(Foo = Sys.getenv("MY_KEY")))
   })
@@ -156,28 +133,19 @@ test_that("filter_query_parameters: replace with secret", {
     yaml::yaml.load_file(cas1$file()),
     yaml::yaml.load_file(cas2$file())
   )
-
-  Sys.unsetenv("MY_KEY")
 })
-
-vcr_configure_reset()
 
 test_that("filter_query_parameters: remove (httr)", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_query_parameters_httr")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # remove only
   # no query param filtering to compare below stuff to
-  vcr_configure(dir = mydir)
-  unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- httr::GET(hb("/get?Foo=bar"))
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(dir = mydir, filter_query_parameters = "Foo")
-  unlink(file.path(vcr_c$dir, "filterparams_remove.yml"))
+  local_vcr_configure(filter_query_parameters = "Foo")
   cas1 <- use_cassette(name = "filterparams_remove", {
     res1 <- httr::GET(hb("/get?Foo=bar"))
   })
@@ -206,27 +174,19 @@ test_that("filter_query_parameters: remove (httr)", {
   )
 })
 
-vcr_configure_reset()
-
 test_that("filter_query_parameters: replace (httr)", {
   skip_on_cran()
-
-  mydir <- file.path(tempdir(), "filter_query_parameters_httr")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   # remove only
   # no query param filtering to compare below stuff to
-  vcr_configure(dir = mydir)
-  unlink(file.path(vcr_c$dir, "filterparams_no_filtering.yml"))
   cas_nofilters <- use_cassette(name = "filterparams_no_filtering", {
     res_nofilters <- httr::GET(hb("/get?Foo=bar"))
   })
   # Do filtering
-  vcr_configure_reset()
-  vcr_configure(
-    dir = mydir,
+  local_vcr_configure(
     filter_query_parameters = list(Foo = "placeholder")
   )
-  unlink(file.path(vcr_c$dir, "filterparams_replace.yml"))
   cas1 <- use_cassette(name = "filterparams_replace", {
     res1 <- httr::GET(hb("/get?Foo=bar"))
   })
@@ -254,5 +214,3 @@ test_that("filter_query_parameters: replace (httr)", {
     yaml::yaml.load_file(cas2$file())
   )
 })
-
-vcr_configure_reset()

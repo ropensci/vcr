@@ -1,8 +1,7 @@
 skip_on_cran()
 
-vcr_configure(dir = tempdir())
-
 test_that("httr status code works", {
+  local_vcr_configure(dir = withr::local_tempdir())
   skip_if_not_installed("xml2")
 
   load("httr_obj.rda")
@@ -34,13 +33,11 @@ test_that("httr status code works", {
   expect_equal(response2$status_code, 404)
 
   eject_cassette("greencow")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "greencow.yml"))
 })
 
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   out <- use_cassette(
     "httr_test1",
@@ -87,13 +84,11 @@ test_that("httr use_cassette works", {
   expect_type(str[[1]]$response$body$string, "character")
   expect_match(str[[1]]$response$body$string, "404")
   expect_match(str[[1]]$response$body$string, "DOCTYPE HTML")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr_test1.yml"))
 })
 
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   out <- use_cassette(
     "httr_test2",
@@ -120,13 +115,11 @@ test_that("httr use_cassette works", {
   expect_type(str, "character")
   expect_match(str, "404")
   expect_match(str, "DOCTYPE HTML")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr_test2.yml"))
 })
 
 test_that("httr w/ >1 request per cassette", {
   skip_if_not_installed("xml2")
+  local_vcr_configure(dir = withr::local_tempdir())
 
   out <- use_cassette("multiple_queries_httr_record_once", {
     x404 <- httr::GET(hb("/status/404"))
@@ -158,38 +151,28 @@ test_that("httr w/ >1 request per cassette", {
   expect_type(str[[3]], "list")
   expect_match(str[[3]]$request$uri, "418")
   expect_match(str[[3]]$response$body$string, "teapot")
-
-  # cleanup
-  unlink(file.path(
-    vcr_configuration()$dir,
-    "multiple_queries_httr_record_once.yml"
-  ))
 })
 
 test_that("httr works with simple auth and hides auth details", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   use_cassette(
     "httr_test_simple_auth",
     x <- httr::GET(hb("/basic-auth/foo/bar"), httr::authenticate("foo", "bar"))
   )
-
   # successful request
   expect_equal(x$status_code, 200)
 
   # no auth details in the cassette
-  path <- file.path(vcr_configuration()$dir, "httr_test_simple_auth.yml")
-  chars <- paste0(readLines(path), collapse = "")
-  yml <- yaml::yaml.load_file(path)
-
-  expect_false(grepl("Authorization", chars))
+  yml <- read_cassette("httr_test_simple_auth.yml")
   expect_false(
     "Authorization" %in% names(yml$http_interactions[[1]]$request$headers)
   )
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr_test_simple_auth.yml"))
 })
 
 test_that("httr POST requests works", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
   # body type: named list
   out <- use_cassette(
     "httr_post_named_list",
@@ -227,7 +210,7 @@ test_that("httr POST requests works", {
   expect_equal(strj$data, "some string")
 
   # body type: upload_file
-  ff <- tempfile(fileext = ".txt")
+  ff <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette(
     "httr_post_upload_file",
@@ -240,7 +223,6 @@ test_that("httr POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
-  unlink(ff)
 
   ## upload_file not in a list
   # out6 <- use_cassette("httr_post_upload_file_no_list", {
@@ -267,11 +249,4 @@ test_that("httr POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")
-
-  # cleanup
-  unlink(file.path(vcr_configuration()$dir, "httr_post_named_list.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr_post_string.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr_post_raw.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr_post_upload_file.yml"))
-  unlink(file.path(vcr_configuration()$dir, "httr_post_null.yml"))
 })

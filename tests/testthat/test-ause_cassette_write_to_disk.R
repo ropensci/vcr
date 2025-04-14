@@ -6,7 +6,7 @@ test_that("fails well if write_disk_path not set", {
     warn_on_empty_cassette = FALSE
   )
 
-  f <- tempfile(fileext = ".json")
+  f <- withr::local_tempfile(fileext = ".json")
   expect_error(
     use_cassette(
       "write_disk_path_not_set_crul",
@@ -15,7 +15,7 @@ test_that("fails well if write_disk_path not set", {
     "write_disk_path must be given"
   )
 
-  g <- tempfile(fileext = ".json")
+  g <- withr::local_tempfile(fileext = ".json")
   expect_error(
     use_cassette(
       "write_disk_path_not_set_httr",
@@ -33,7 +33,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   )
 
   ## make a temp file
-  f <- tempfile(fileext = ".json")
+  f <- withr::local_tempfile(fileext = ".json")
   ## make a request
   use_cassette(
     "test_write_to_disk",

@@ -24,7 +24,4 @@ test_that("check_cassette_names", {
 
   # can allow duplicated names via the allowed_duplicates param
   expect_error(check_cassette_names(allowed_duplicates = "testing"), NA)
-
-  # cleanup
-  unlink(dir, TRUE, TRUE)
 })

@@ -64,8 +64,6 @@ test_that("filter_headers/request/remove", {
   )
 })
 
-vcr_configure_reset()
-
 test_that("filter_headers/request/replace", {
   skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
