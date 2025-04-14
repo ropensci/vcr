@@ -165,7 +165,7 @@ Cassette <- R6::R6Class(
       ext <- switch(self$serialize_with, yaml = "yml", json = "json")
       self$manfile <- sprintf(
         "%s/%s.%s",
-        path.expand(self$root_dir),
+        path.expand(cassette_path()),
         self$name,
         ext
       )
