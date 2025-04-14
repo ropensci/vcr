@@ -4,20 +4,11 @@ test_that("cassettes works", {
     warn_on_empty_cassette = FALSE
   )
 
-  aa <- cassettes()
-  expect_type(aa, "list")
-  expect_equal(length(aa), 0)
+  expect_equal(cassettes(), list())
 
-  cc <- suppressMessages(insert_cassette("foobar24"))
-
-  bb <- cassettes()
-  # cassette in named list
-  expect_named(bb, "foobar24")
-  # even after cassette inserted, list is empty
-  expect_equal(length(bb$foobar24), 0)
-
-  # eject
-  cc$eject()
+  insert_cassette("foobar24")
+  withr::defer(eject_cassette())
+  expect_s3_class(cassettes()$foobar24, "Cassette")
 })
 
 # FIXME: add tests for on_disk and verb params
