@@ -165,7 +165,7 @@
 #' @export
 
 vcr_configure <- function(...) {
-  params <- list(...)
+  params <- list2(...)
 
   invalid <- !names(params) %in% vcr_c$fields()
   if (any(invalid)) {
@@ -188,10 +188,6 @@ vcr_configure <- function(...) {
     if (ignore_localhost) x$ignore_localhost()
   }
 
-  vcr_config_set(params)
-}
-
-vcr_config_set <- function(params) {
   old <- vcr_c$as_list()[names(params)]
 
   for (i in seq_along(params)) {

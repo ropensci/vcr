@@ -25,6 +25,13 @@ test_that("returns previous values", {
   expect_equal(old, list(dir = "dir1", record = "none"))
 })
 
+test_that("supports !!!", {
+  local_vcr_configure()
+
+  local_vcr_configure(!!!list(dir = "dir1"))
+  expect_equal(vcr_c$dir, "dir1")
+})
+
 test_that("if called with no args returns a list of all args", {
   out <- vcr_configure()
   expect_equal(out, vcr_c$as_list())
