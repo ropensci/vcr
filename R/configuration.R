@@ -376,10 +376,8 @@ VCRConfig <- R6::R6Class(
       private$.write_disk_path <- value
     },
     verbose_errors = function(value) {
-      env_ve <- vcr_env_verbose_errors()
-      if (missing(value) && is.null(env_ve)) return(private$.verbose_errors)
-      value <- env_ve %||% value
-      private$.verbose_errors <- assert(value, "logical")
+      if (missing(value)) return(private$.verbose_errors)
+      private$.verbose_errors <- value
     },
     quiet = function(value) {
       if (missing(value)) return(private$.quiet)
@@ -419,7 +417,7 @@ VCRConfig <- R6::R6Class(
       filter_response_headers = NULL,
       filter_query_parameters = NULL,
       write_disk_path = NULL,
-      verbose_errors = FALSE,
+      verbose_errors = get_envvar_lgl("VCR_VERBOSE_ERRORS", FALSE),
       quiet = TRUE,
       warn_on_empty_cassette = TRUE
     ) {
@@ -497,13 +495,3 @@ VCRConfig <- R6::R6Class(
 )
 
 pastec <- function(x) paste0(x, collapse = ", ")
-
-vcr_env_verbose_errors <- function() {
-  var <- "VCR_VERBOSE_ERRORS"
-  x <- Sys.getenv(var, "")
-  if (x != "") {
-    x <- as.logical(x)
-    vcr_env_var_check(x, var)
-    x
-  }
-}

@@ -2,30 +2,34 @@
 % Please edit documentation in R/lightswitch.R
 \name{lightswitch}
 \alias{lightswitch}
-\alias{turned_off}
 \alias{turn_on}
-\alias{turned_on}
 \alias{turn_off}
-\title{Turn vcr on and off, check on/off status, and turn off for a given http call}
+\alias{turned_off}
+\alias{turned_on}
+\title{Turn vcr on and off}
 \usage{
-turned_off(..., ignore_cassettes = FALSE)
-
 turn_on()
 
-turned_on()
-
 turn_off(ignore_cassettes = FALSE)
+
+turned_off(code, ignore_cassettes = FALSE)
+
+turned_on()
 }
 \arguments{
-\item{...}{Any block of code to run, presumably an http request}
-
 \item{ignore_cassettes}{(logical) Controls what happens when a cassette is
 inserted while vcr is turned off. If \code{TRUE} is passed, the cassette
 insertion will be ignored; otherwise an error will be raised.
 Default: \code{FALSE}}
+
+\item{code}{Any block of code to run, presumably an http request}
 }
 \description{
-Turn vcr on and off, check on/off status, and turn off for a given http call
+\itemize{
+\item \code{turn_on()} and \code{turn_off()} turn on and off for the whole session.
+\item \code{turned_off(code)} temporarily turns off while \code{code} is running.
+\item \code{turned_on()} reports on if vcr is turned on or not.
+}
 }
 \details{
 Sometimes you may need to turn off \code{vcr}, either for individual function
