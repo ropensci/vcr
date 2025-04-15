@@ -10,6 +10,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-2815-0399")),
     person("Daniel", "Possenriede", role = "aut",
            comment = c(ORCID = "0000-0002-6738-9845")),
+    person("Hadley", "Wickham", , "hadley@posit.co", role = "aut"),
     person("rOpenSci", role = "fnd",
            comment = c(ROR = "019jywm96"))
   )

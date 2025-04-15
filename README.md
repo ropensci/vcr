@@ -479,10 +479,11 @@ We've tried to make sure the parameters that are ignored are marked as such. Kee
 
 ## Contributors
 
-* [Scott Chamberlain](https://github.com/sckott)
 * [Aaron Wolen](https://github.com/aaronwolen)
-* [Maëlle Salmon](https://github.com/maelle)
 * [Daniel Possenriede](https://github.com/dpprdan)
+* [Hadley Wickham](https://github.com/hadley)
+* [Maëlle Salmon](https://github.com/maelle)
+* [Scott Chamberlain](https://github.com/sckott)
 
 ## Meta
 
