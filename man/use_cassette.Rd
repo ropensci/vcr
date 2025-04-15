@@ -82,8 +82,10 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
 
-\item{frame}{For expert use only: the frame on the call stack that defines
-the scope of this function.}
+\item{frame}{Attach exit handlers to this environment. Typically, this
+should be either the current environment or a parent frame (accessed
+through \code{\link[=parent.frame]{parent.frame()}}). See \code{vignette("withr", package = "withr")}
+for more details.}
 }
 \value{
 an object of class \code{Cassette}

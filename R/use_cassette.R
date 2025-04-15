@@ -187,8 +187,10 @@ use_cassette <- function(
 
 #' @rdname use_cassette
 #' @export
-#' @param frame For expert use only: the frame on the call stack that defines
-#'   the scope of this function.
+#' @param frame Attach exit handlers to this environment. Typically, this
+#'   should be either the current environment or a parent frame (accessed
+#'   through [parent.frame()]). See `vignette("withr", package = "withr")`
+#'   for more details.
 local_cassette <- function(
   name,
   record = NULL,
