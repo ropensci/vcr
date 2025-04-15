@@ -14,12 +14,6 @@
 #' - `eject()` method: [webmockr::disable()] is called before exiting
 #' eject to disable webmock so that webmockr does not affect any HTTP
 #' requests that happen afterwards
-#' - `call_block()` method: call_block is used in the [use_cassette()]
-#' function to evaluate whatever code is passed to it; within call_block
-#' [webmockr::webmockr_allow_net_connect()] is run before we evaluate
-#' the code block to allow real HTTP requests, then
-#' [webmockr::webmockr_disable_net_connect()] is called after evalulating
-#' the code block to disallow real HTTP requests
 #' - `make_http_interaction()` method: [take_body()] utility
 #' function is used to pull the request body out of the HTTP request
 #' - `serialize_to_crul()` method: method: [webmockr::RequestSignature] and
@@ -368,21 +362,6 @@ Cassette <- R6::R6Class(
         sep = "\n"
       )
       invisible(self)
-    },
-
-    #' @description run code
-    #' @param ... pass in things to be evaluated
-    #' @return various
-    call_block = function(...) {
-      tmp <- list(...)
-      if (length(tmp) == 0) {
-        stop(
-          "`vcr::use_cassette` requires a code block. ",
-          "If you cannot wrap your code in a block, use ",
-          "`vcr::insert_cassette` / `vcr::eject_cassette` instead"
-        )
-      }
-      invisible(force(...))
     },
 
     #' @description ejects the current cassette

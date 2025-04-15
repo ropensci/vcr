@@ -1,5 +1,3 @@
-#' Eject a cassette
-#'
 #' @export
 #' @param cassette (character) a single cassette names to eject; see `name`
 #' parameter definition in [insert_cassette()] for cassette name rules
@@ -9,8 +7,8 @@
 #' `allow_unused_http_interactions = FALSE` cassette option. This is intended
 #' for use when your test has had an error, but your test framework has
 #' already handled it - IGNORED FOR NOW
-#' @return The ejected cassette if there was one
-#' @seealso [use_cassette()], [insert_cassette()]
+#' @rdname insert_cassette
+#' @order 2
 #' @examples
 #' vcr_configure(dir = tempdir())
 #' insert_cassette("hello")
@@ -26,10 +24,8 @@ eject_cassette <- function(
   options = list(),
   skip_no_unused_interactions_assertion = NULL
 ) {
-  on.exit(
-    suppressMessages(webmockr::webmockr_disable_net_connect()),
-    add = TRUE
-  )
+  withr::defer(suppressMessages(webmockr::webmockr_disable_net_connect()))
+
   if (is.null(cassette)) {
     # current cassette
     cas <- current_cassette()

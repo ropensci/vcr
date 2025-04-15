@@ -60,6 +60,8 @@ can_charToRaw <- function(x) {
 
 stp <- function(...) stop(..., call. = FALSE)
 check_cassette_name <- function(x) {
+  if (length(x) != 1) stp("cassette name must be a single string")
+
   if (grepl("\\s", x)) stp("no spaces allowed in cassette names")
   if (grepl("\\.yml$|\\.yaml$", x))
     stp("don't include a cassette path extension")

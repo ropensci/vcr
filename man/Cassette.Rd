@@ -21,12 +21,6 @@ stubs are cleaned up.
 \item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
 eject to disable webmock so that webmockr does not affect any HTTP
 requests that happen afterwards
-\item \code{call_block()} method: call_block is used in the \code{\link[=use_cassette]{use_cassette()}}
-function to evaluate whatever code is passed to it; within call_block
-\code{\link[webmockr:webmockr_configure]{webmockr::webmockr_allow_net_connect()}} is run before we evaluate
-the code block to allow real HTTP requests, then
-\code{\link[webmockr:webmockr_configure]{webmockr::webmockr_disable_net_connect()}} is called after evalulating
-the code block to disallow real HTTP requests
 \item \code{make_http_interaction()} method: \code{\link[=take_body]{take_body()}} utility
 function is used to pull the request body out of the HTTP request
 \item \code{serialize_to_crul()} method: method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
@@ -132,7 +126,6 @@ be recorded back to file}
 \itemize{
 \item \href{#method-Cassette-new}{\code{Cassette$new()}}
 \item \href{#method-Cassette-print}{\code{Cassette$print()}}
-\item \href{#method-Cassette-call_block}{\code{Cassette$call_block()}}
 \item \href{#method-Cassette-eject}{\code{Cassette$eject()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
@@ -255,26 +248,6 @@ print method for \code{Cassette} objects
 \item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-call_block"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-call_block}{}}}
-\subsection{Method \code{call_block()}}{
-run code
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$call_block(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{pass in things to be evaluated}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-various
 }
 }
 \if{html}{\out{<hr>}}
