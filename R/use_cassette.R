@@ -2,7 +2,7 @@
 #'
 #' `use_cassette(...)` uses a cassette for the code in `...`,
 #' `local_cassette()` uses a cassette for the current function scope (e.g.
-#' for one tests).
+#' for one test).
 #'
 #' @export
 #' @inherit check_cassette_names details
