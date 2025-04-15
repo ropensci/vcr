@@ -1,28 +1,17 @@
 #' Eject a cassette
 #'
 #' @export
-#' @param options (list) a list of options to apply to the eject process
-#' @param skip_no_unused_interactions_assertion (logical) If `TRUE`, this will
-#' skip the "no unused HTTP interactions" assertion enabled by the
-#' `allow_unused_http_interactions = FALSE` cassette option. This is intended
-#' for use when your test has had an error, but your test framework has
-#' already handled it - IGNORED FOR NOW
-#' @return The ejected cassette if there was one
+#' @return The ejected cassette, invisibly.
 #' @seealso [use_cassette()], [insert_cassette()]
 #' @examples
 #' vcr_configure(dir = tempdir())
-#' insert_cassette("hello")
-#' (x <- current_cassette())
 #'
-#' # by default does current cassette
-#' x <- eject_cassette()
-#' x
-#' # can also select by cassette name
-#' # eject_cassette(cassette = "hello")
-eject_cassette <- function(
-  options = list(),
-  skip_no_unused_interactions_assertion = NULL
-) {
+#' insert_cassette("hello")
+#' current_cassette()
+#'
+#' eject_cassette()
+#' current_cassette()
+eject_cassette <- function() {
   if (!cassette_active()) {
     cli::cli_abort("No cassette in use")
   }

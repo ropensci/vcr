@@ -4,33 +4,22 @@
 \alias{eject_cassette}
 \title{Eject a cassette}
 \usage{
-eject_cassette(options = list(), skip_no_unused_interactions_assertion = NULL)
-}
-\arguments{
-\item{options}{(list) a list of options to apply to the eject process}
-
-\item{skip_no_unused_interactions_assertion}{(logical) If \code{TRUE}, this will
-skip the "no unused HTTP interactions" assertion enabled by the
-\code{allow_unused_http_interactions = FALSE} cassette option. This is intended
-for use when your test has had an error, but your test framework has
-already handled it - IGNORED FOR NOW}
+eject_cassette()
 }
 \value{
-The ejected cassette if there was one
+The ejected cassette, invisibly.
 }
 \description{
 Eject a cassette
 }
 \examples{
 vcr_configure(dir = tempdir())
-insert_cassette("hello")
-(x <- current_cassette())
 
-# by default does current cassette
-x <- eject_cassette()
-x
-# can also select by cassette name
-# eject_cassette(cassette = "hello")
+insert_cassette("hello")
+current_cassette()
+
+eject_cassette()
+current_cassette()
 }
 \seealso{
 \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
