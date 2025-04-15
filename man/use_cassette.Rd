@@ -91,7 +91,7 @@ an object of class \code{Cassette}
 \description{
 \code{use_cassette(...)} uses a cassette for the code in \code{...},
 \code{local_cassette()} uses a cassette for the current function scope (e.g.
-for one tests).
+for one test).
 }
 \details{
 Cassette names:
@@ -236,6 +236,4 @@ two; res2
 \seealso{
 \code{\link[=insert_cassette]{insert_cassette()}} and \code{\link[=eject_cassette]{eject_cassette()}} for the underlying
 functions.
-
-\code{\link[=insert_cassette]{insert_cassette()}}, \code{\link[=eject_cassette]{eject_cassette()}}
 }

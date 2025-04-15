@@ -92,7 +92,6 @@
 #'
 #' @return an object of class `Cassette`
 #'
-#' @seealso [insert_cassette()], [eject_cassette()]
 #' @examples \dontrun{
 #' library(vcr)
 #' library(crul)
