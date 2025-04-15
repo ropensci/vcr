@@ -48,7 +48,6 @@ insert_cassette <- function(
   clean_outdated_http_interactions = NULL
 ) {
   check_cassette_name(name)
-  vcr_env_handle()
 
   if (!turned_on()) {
     if (!light_switch$ignore_cassettes) {
