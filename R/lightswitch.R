@@ -3,6 +3,10 @@
 #' * `turn_on()` and `turn_off()` turn on and off for the whole session.
 #' * `turned_off(code)` temporarily turns off while `code` is running.
 #' * `turned_on()` reports on if vcr is turned on or not.
+#' * `skip_if_vcr_off()` skips a test if vcr is turned off. This is
+#'   occassionally useful if you're using a cassette to simulate a faked
+#'   request, or if the real request would return differents values (e.g.
+#'   you're testing date parsing and the request returns the current date).
 #'
 #' @export
 #' @name lightswitch
@@ -67,6 +71,16 @@ turned_off <- function(code, ignore_cassettes = FALSE) {
 #' @export
 turned_on <- function() {
   !light_switch$turned_off
+}
+
+#' @rdname lightswitch
+#' @export
+skip_if_vcr_off <- function() {
+  check_required("testthat")
+  if (!turned_on()) {
+    testthat::skip("vcr is turned off")
+  }
+  invisible()
 }
 
 # Initial values from env vars ------------------------------------------------

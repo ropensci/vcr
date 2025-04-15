@@ -38,6 +38,15 @@ test_that("turned_off works iif no cassettes active", {
   }))
 })
 
+test_that("skip_if_vcr_off works", {
+  local_light_switch()
+
+  expect_no_condition(skip_if_vcr_off(), class = "skip")
+
+  suppressMessages(turn_off())
+  expect_condition(skip_if_vcr_off(), class = "skip")
+})
+
 # env vars ---------------------------------------------------------------------
 
 test_that("default options set as expected", {

@@ -6,6 +6,7 @@
 \alias{turn_off}
 \alias{turned_off}
 \alias{turned_on}
+\alias{skip_if_vcr_off}
 \title{Turn vcr on and off}
 \usage{
 turn_on()
@@ -15,6 +16,8 @@ turn_off(ignore_cassettes = FALSE)
 turned_off(code, ignore_cassettes = FALSE)
 
 turned_on()
+
+skip_if_vcr_off()
 }
 \arguments{
 \item{ignore_cassettes}{(logical) Controls what happens when a cassette is
@@ -29,6 +32,10 @@ Default: \code{FALSE}}
 \item \code{turn_on()} and \code{turn_off()} turn on and off for the whole session.
 \item \code{turned_off(code)} temporarily turns off while \code{code} is running.
 \item \code{turned_on()} reports on if vcr is turned on or not.
+\item \code{skip_if_vcr_off()} skips a test if vcr is turned off. This is
+occassionally useful if you're using a cassette to simulate a faked
+request, or if the real request would return differents values (e.g.
+you're testing date parsing and the request returns the current date).
 }
 }
 \details{
