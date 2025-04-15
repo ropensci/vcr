@@ -69,7 +69,7 @@ err$match_requests_on_suggestion()
 # err$construct_message()
 
 # cleanup
-eject_cassette("turtle")
+eject_cassette()
 unlink(tempdir())
 }
 \dontrun{

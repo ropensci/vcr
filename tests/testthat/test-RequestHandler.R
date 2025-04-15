@@ -29,5 +29,5 @@ test_that("RequestHandlerHttr: httr", {
   # status code is correct
   expect_equal(response$status_code, 404)
 
-  eject_cassette("greencow")
+  eject_cassette()
 })

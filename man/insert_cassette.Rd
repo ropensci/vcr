@@ -128,7 +128,7 @@ x$new_recorded_interactions # 1 interaction
 x$previously_recorded_interactions() # empty
 webmockr::stub_registry() # not empty
 # very important when using inject_cassette: eject when done
-x$eject() # same as eject_cassette("leo5")
+eject_cassette()
 x$new_recorded_interactions # same, 1 interaction
 x$previously_recorded_interactions() # now not empty
 ## stub_registry now empty, eject() calls webmockr::disable(), which

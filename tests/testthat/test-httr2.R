@@ -24,7 +24,7 @@ test_that("httr2 status code works", {
   # status code is correct
   expect_equal(the_response$status_code, 404)
 
-  eject_cassette("bluecow")
+  eject_cassette()
 
   # call again
   insert_cassette("bluecow")
@@ -35,7 +35,7 @@ test_that("httr2 status code works", {
   # status code is correct
   expect_equal(response2$status_code, 404)
 
-  eject_cassette("bluecow")
+  eject_cassette()
 })
 
 test_that("httr2 use_cassette works", {

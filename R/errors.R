@@ -51,7 +51,7 @@
 #' # err$construct_message()
 #'
 #' # cleanup
-#' eject_cassette("turtle")
+#' eject_cassette()
 #' unlink(tempdir())
 #' }
 UnhandledHTTPRequestError <- R6::R6Class(
