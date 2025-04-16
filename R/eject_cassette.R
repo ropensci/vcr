@@ -1,8 +1,6 @@
-#' Eject a cassette
-#'
 #' @export
-#' @return The ejected cassette, invisibly.
-#' @seealso [use_cassette()], [insert_cassette()]
+#' @rdname insert_cassette
+#' @order 2
 #' @examples
 #' vcr_configure(dir = tempdir())
 #'

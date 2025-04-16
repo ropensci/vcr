@@ -8,9 +8,7 @@ light_switch <- NULL
 the <- NULL
 
 initialize_ivars <- function() {
-  light_switch <<- new.env()
-  light_switch$turned_off <<- FALSE
-  light_switch$ignore_cassettes <<- FALSE
+  light_switch <<- list2env(lightswitch_init(), parent = emptyenv())
   vcr_c$cassettes <<- list()
   vcr_c$linked_context <<- NULL
 

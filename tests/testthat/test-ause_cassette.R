@@ -20,7 +20,6 @@ test_that("use_cassette works as expected", {
   expect_false(aa$allow_playback_repeats)
   expect_true(aa$any_new_recorded_interactions())
   expect_type(aa$args, "list")
-  expect_type(aa$call_block, "closure")
 
   expect_s3_class(res, "HttpResponse")
   expect_type(res$content, "raw")
@@ -38,14 +37,11 @@ test_that("use_cassette fails well", {
     warn_on_empty_cassette = FALSE
   )
 
-  # requires a code block
-  expect_error(
-    use_cassette("foobar333"),
-    "`vcr::use_cassette` requires a code block"
-  )
-
   # must pass a cassette name
-  expect_error(use_cassette(), "argument \"name\" is missing")
+  expect_snapshot(use_cassette(), error = TRUE)
+
+  # requires a code block
+  expect_snapshot(use_cassette("foobar333"), error = TRUE)
 
   # record valid values
   expect_error(
@@ -102,4 +98,16 @@ test_that("use_cassette fails well", {
     )),
     "The requested vcr cassette serializer \\(howdy\\) is not registered"
   )
+})
+
+test_that("local_cassette sets up temporary cassette", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
+  expect_equal(current_cassette(), NULL)
+
+  local({
+    local_cassette("foo")
+    expect_equal(current_cassette()$name, "foo")
+  })
+
+  expect_equal(current_cassette(), NULL)
 })

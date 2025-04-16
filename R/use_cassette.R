@@ -1,5 +1,9 @@
 #' Use a cassette to record HTTP requests
 #'
+#' `use_cassette(...)` uses a cassette for the code in `...`,
+#' `local_cassette()` uses a cassette for the current function scope (e.g.
+#' for one test).
+#'
 #' @export
 #' @inherit check_cassette_names details
 #' @param name The name of the cassette. vcr will check this to ensure it
@@ -39,16 +43,8 @@
 #' cassette should be re-recorded. default: `NULL` (not re-recorded)
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file? default: `FALSE`
-#'
-#' @details A run down of the family of top level \pkg{vcr} functions
-#'
-#' - `use_cassette` Initializes a cassette. Returns the inserted
-#'  cassette.
-#' - `insert_cassette` Internally used within `use_cassette`
-#' - `eject_cassette` ejects the current cassette. The cassette
-#'  will no longer be used. In addition, any newly recorded HTTP interactions
-#'  will be written to disk.
-#'
+#' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
+#'   functions.
 #' @section Cassette options:
 #'
 #' Default values for arguments controlling cassette behavior are
@@ -96,7 +92,6 @@
 #'
 #' @return an object of class `Cassette`
 #'
-#' @seealso [insert_cassette()], [eject_cassette()]
 #' @examples \dontrun{
 #' library(vcr)
 #' library(crul)
@@ -163,6 +158,52 @@ use_cassette <- function(
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL
 ) {
+  check_required(name)
+  if (missing(...)) {
+    cli::cli_abort(c(
+      "{.arg ...} must not be empty.",
+      i = "Do you want {.fn local_cassette} instead?"
+    ))
+  }
+
+  cassette <- local_cassette(
+    name,
+    record = record,
+    match_requests_on = match_requests_on,
+    update_content_length_header = update_content_length_header,
+    allow_playback_repeats = allow_playback_repeats,
+    serialize_with = serialize_with,
+    persist_with = persist_with,
+    preserve_exact_body_bytes = preserve_exact_body_bytes,
+    re_record_interval = re_record_interval,
+    clean_outdated_http_interactions = clean_outdated_http_interactions
+  )
+
+  # force all arguments
+  list(...)
+
+  invisible(cassette)
+}
+
+#' @rdname use_cassette
+#' @export
+#' @param frame Attach exit handlers to this environment. Typically, this
+#'   should be either the current environment or a parent frame (accessed
+#'   through [parent.frame()]). See `vignette("withr", package = "withr")`
+#'   for more details.
+local_cassette <- function(
+  name,
+  record = NULL,
+  match_requests_on = NULL,
+  update_content_length_header = FALSE,
+  allow_playback_repeats = FALSE,
+  serialize_with = NULL,
+  persist_with = NULL,
+  preserve_exact_body_bytes = NULL,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL,
+  frame = parent.frame()
+) {
   cassette <- insert_cassette(
     name,
     record = record,
@@ -175,17 +216,9 @@ use_cassette <- function(
     re_record_interval = re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions
   )
-  if (is.null(cassette)) {
-    force(...)
-    return(NULL)
+  if (!is.null(cassette)) {
+    withr::defer(eject_cassette(), envir = frame)
   }
-  on.exit(eject_cassette())
-  cassette$call_block(...)
-  return(cassette)
-}
 
-check_empty_cassette <- function(cas) {
-  if (!any(nzchar(readLines(cas$file())))) {
-    warning(empty_cassette_message, call. = FALSE)
-  }
+  invisible(cassette)
 }

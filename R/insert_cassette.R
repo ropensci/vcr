@@ -1,40 +1,17 @@
 vcr__env <- new.env()
 
-#' Insert a cassette to record HTTP requests
+#' Manually insert and eject a cassette
+#'
+#' Generally you should not need to use these functions, instead preferring
+#' [use_cassette()] or [local_cassette()]
 #'
 #' @export
 #' @inheritParams use_cassette
 #' @inheritSection use_cassette Cassette options
 #' @inherit check_cassette_names details
-#' @seealso [use_cassette()], [eject_cassette()]
-#' @return an object of class `Cassette`
-#' @examples \dontrun{
-#' library(vcr)
-#' library(crul)
-#' vcr_configure(dir = tempdir())
-#' webmockr::webmockr_allow_net_connect()
-#'
-#' (x <- insert_cassette(name = "leo5"))
-#' current_cassette()
-#' x$new_recorded_interactions
-#' x$previously_recorded_interactions()
-#' cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
-#' cli$get("get")
-#' x$new_recorded_interactions # 1 interaction
-#' x$previously_recorded_interactions() # empty
-#' webmockr::stub_registry() # not empty
-#' # very important when using inject_cassette: eject when done
-#' eject_cassette()
-#' x$new_recorded_interactions # same, 1 interaction
-#' x$previously_recorded_interactions() # now not empty
-#' ## stub_registry now empty, eject() calls webmockr::disable(), which
-#' ## calls the disable method for each of crul and httr adadapters,
-#' ## which calls webmockr's remove_stubs() method for each adapter
-#' webmockr::stub_registry()
-#'
-#' # cleanup
-#' unlink(file.path(tempdir(), "leo5.yml"))
-#' }
+#' @return A [Cassette], invisibly.
+#' @order 1
+#' @keywords internal
 insert_cassette <- function(
   name,
   record = NULL,
@@ -48,7 +25,6 @@ insert_cassette <- function(
   clean_outdated_http_interactions = NULL
 ) {
   check_cassette_name(name)
-  vcr_env_handle()
 
   if (!turned_on()) {
     if (!light_switch$ignore_cassettes) {

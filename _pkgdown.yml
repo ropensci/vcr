@@ -16,8 +16,6 @@ reference:
       Probably the only functions you'll need
     contents:
       - use_cassette
-      - insert_cassette
-      - eject_cassette
   - title: "Recording and matching"
     desc: >
       Details on recording and request matching options

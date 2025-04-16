@@ -10,6 +10,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-2815-0399")),
     person("Daniel", "Possenriede", role = "aut",
            comment = c(ORCID = "0000-0002-6738-9845")),
+    person("Hadley", "Wickham", , "hadley@posit.co", role = "aut"),
     person("rOpenSci", role = "fnd",
            comment = c(ROR = "019jywm96"))
   )
@@ -35,6 +36,7 @@ Imports:
     rprojroot,
     urltools,
     webmockr (>= 0.8.0),
+    withr,
     yaml
 Suggests:
     crayon,
@@ -46,8 +48,7 @@ Suggests:
     rmarkdown,
     roxygen2 (>= 7.2.1),
     testthat (>= 3.0.0),
-    webfakes,
-    withr
+    webfakes
 VignetteBuilder:
     knitr
 Config/testthat/edition: 3
