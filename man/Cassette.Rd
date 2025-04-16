@@ -89,9 +89,6 @@ default: method & uri}
 
 \item{\code{root_dir}}{root dir, gathered from \code{\link[=vcr_configuration]{vcr_configuration()}}}
 
-\item{\code{update_content_length_header}}{(logical) Whether to overwrite the
-\code{Content-Length} header}
-
 \item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
 interaction to be played back multiple times}
 
@@ -155,7 +152,6 @@ Create a new \code{Cassette} object
   persist_with,
   match_requests_on,
   re_record_interval,
-  update_content_length_header,
   allow_playback_repeats,
   preserve_exact_body_bytes,
   clean_outdated_http_interactions
@@ -186,10 +182,6 @@ be in a future version)}
 
 \item{\code{re_record_interval}}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}
-
-\item{\code{update_content_length_header}}{(logical) Whether or
-not to overwrite the \code{Content-Length} header of the responses to
-match the length of the response body. Default: \code{FALSE}}
 
 \item{\code{allow_playback_repeats}}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.

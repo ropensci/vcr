@@ -58,16 +58,6 @@ test_that("use_cassette fails well", {
     "'match_requests_on' values \\(stuff\\) is not in the allowed set"
   )
 
-  # update_content_length_header valid type
-  expect_error(
-    suppressMessages(use_cassette(
-      "newbar3",
-      NULL,
-      update_content_length_header = 5
-    )),
-    "update_content_length_header must be of class logical"
-  )
-
   # preserve_exact_body_bytes valid type
   expect_error(
     suppressMessages(use_cassette(
