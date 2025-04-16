@@ -95,8 +95,6 @@ interaction to be played back multiple times}
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
 
-\item{\code{args}}{(list) internal use}
-
 \item{\code{http_interactions_}}{(list) internal use}
 
 \item{\code{new_recorded_interactions}}{(list) internal use}
@@ -135,8 +133,6 @@ be recorded back to file}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
-\item \href{#method-Cassette-make_args}{\code{Cassette$make_args()}}
-\item \href{#method-Cassette-write_metadata}{\code{Cassette$write_metadata()}}
 \item \href{#method-Cassette-http_interactions}{\code{Cassette$http_interactions()}}
 \item \href{#method-Cassette-make_http_interaction}{\code{Cassette$make_http_interaction()}}
 \item \href{#method-Cassette-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
@@ -497,32 +493,6 @@ Are there any new recorded interactions?
 
 \subsection{Returns}{
 logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-make_args"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-make_args}{}}}
-\subsection{Method \code{make_args()}}{
-make list of all options
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$make_args()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-write_metadata"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-write_metadata}{}}}
-\subsection{Method \code{write_metadata()}}{
-write metadata to the cassette
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$write_metadata()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
 }
 }
 \if{html}{\out{<hr>}}

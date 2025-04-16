@@ -79,8 +79,6 @@ Cassette <- R6::R6Class(
     #' @field preserve_exact_body_bytes (logical) Whether to base64 encode the
     #' bytes of the requests and responses
     preserve_exact_body_bytes = FALSE,
-    #' @field args (list) internal use
-    args = list(),
     #' @field http_interactions_ (list) internal use
     http_interactions_ = NULL,
     #' @field new_recorded_interactions (list) internal use
@@ -164,8 +162,6 @@ Cassette <- R6::R6Class(
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
       }
-      self$make_args()
-      if (!file.exists(self$manfile)) self$write_metadata()
       self$recorded_at <- file.info(self$file())$mtime
       self$serializer = serializer_fetch(self$serialize_with, self$name)
       self$persister = persister_fetch(self$persist_with, self$serializer$path)
@@ -586,38 +582,6 @@ Cassette <- R6::R6Class(
     #' @return logical
     any_new_recorded_interactions = function() {
       length(self$new_recorded_interactions) != 0
-    },
-
-    #' @description make list of all options
-    #' @return nothing returned
-    make_args = function() {
-      self$args <- list(
-        record = self$record,
-        match_requests_on = self$match_requests_on,
-        re_record_interval = self$re_record_interval,
-        allow_playback_repeats = self$allow_playback_repeats,
-        serialize_with = self$serialize_with,
-        persist_with = self$persist_with,
-        preserve_exact_body_bytes = self$preserve_exact_body_bytes
-      )
-    },
-
-    #' @description write metadata to the cassette
-    #' @return nothing returned
-    write_metadata = function() {
-      aa <- c(name = self$name, self$args)
-      for (i in seq_along(aa)) {
-        cat(
-          sprintf("%s: %s", names(aa[i]), aa[i]),
-          file = sprintf(
-            "%s/%s_metadata.yml",
-            path.expand(cassette_path()),
-            self$name
-          ),
-          sep = "\n",
-          append = TRUE
-        )
-      }
     },
 
     #' @description make [HTTPInteractionList] object, assign to http_interactions_ var
