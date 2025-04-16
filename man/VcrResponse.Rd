@@ -23,42 +23,6 @@ x$http_version
 x$to_hash()
 x$from_hash(x$to_hash())
 
-# update content length header
-## example 1
-### content-length header present, but no change
-url <- "https://fishbase.ropensci.org"
-cli <- crul::HttpClient$new(url = url, headers = list(`Accept-Encoding` = '*'))
-res <- cli$get("species/34")
-x <- VcrResponse$new(res$status_http(), res$response_headers,
-   res$parse("UTF-8"), res$response_headers$status)
-x$headers$`content-length`
-x$update_content_length_header()
-x$headers$`content-length`
-
-## example 2
-### no content-length header b/c a transfer-encoding header is included
-### and no content-length header allowed if transfer-encoding header
-### used (via rfc7230)
-url <- "https://google.com"
-cli <- crul::HttpClient$new(url = url)
-res <- cli$get()
-x <- VcrResponse$new(res$status_http(), res$response_headers,
-   rawToChar(res$content), res$response_headers$status)
-x$headers$`content-length` # = NULL
-x$update_content_length_header() # no change, b/c header doesn't exist
-x$headers$`content-length` # = NULL
-
-## example 3
-### content-length header present, and does change
-body <- " Hello World "
-x <- VcrResponse$new(200, list('content-length'=nchar(body)),
-  body, "HTTP/2")
-x$headers$`content-length` # = 13
-x$body <- gsub("^\\\\s|\\\\s$", "", x$body)
-x$headers$`content-length` # = 13
-x$update_content_length_header()
-x$headers$`content-length` # = 11
-
 # check if body is compressed
 url <- "https://fishbase.ropensci.org"
 (cli <- crul::HttpClient$new(url = url))
@@ -107,7 +71,6 @@ f <- tempfile()
 \item \href{#method-VcrResponse-print}{\code{VcrResponse$print()}}
 \item \href{#method-VcrResponse-to_hash}{\code{VcrResponse$to_hash()}}
 \item \href{#method-VcrResponse-from_hash}{\code{VcrResponse$from_hash()}}
-\item \href{#method-VcrResponse-update_content_length_header}{\code{VcrResponse$update_content_length_header()}}
 \item \href{#method-VcrResponse-get_header}{\code{VcrResponse$get_header()}}
 \item \href{#method-VcrResponse-edit_header}{\code{VcrResponse$edit_header()}}
 \item \href{#method-VcrResponse-delete_header}{\code{VcrResponse$delete_header()}}
@@ -206,20 +169,6 @@ Get a hash back to an R list
 }
 \subsection{Returns}{
 an \code{VcrResponse} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-update_content_length_header"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-update_content_length_header}{}}}
-\subsection{Method \code{update_content_length_header()}}{
-Updates the Content-Length response header so that
-it is accurate for the response body
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$update_content_length_header()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-no return; modifies the content length header
 }
 }
 \if{html}{\out{<hr>}}
