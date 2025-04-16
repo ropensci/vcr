@@ -15,7 +15,7 @@
 #' z$interactions
 #' z$used_interactions
 #' # on eject, request written to the cassette
-#' eject_cassette("foo_bar")
+#' eject_cassette()
 #'
 #' # insert cassette again
 #' insert_cassette("foo_bar")

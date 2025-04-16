@@ -5,7 +5,7 @@ request_ignorer <- NULL
 cassette_serializers <- NULL
 cassette_persisters <- NULL
 light_switch <- NULL
-vcr_cassettes <- NULL
+the <- NULL
 
 initialize_ivars <- function() {
   light_switch <<- list2env(lightswitch_init(), parent = emptyenv())
@@ -24,7 +24,8 @@ initialize_ivars <- function() {
   # initialize hooks
   VCRHooks <<- Hooks$new()
   # initialize bucket of cassettes in session
-  vcr_cassettes <<- new.env()
+  the <<- new.env(parent = emptyenv())
+  the$cassettes <- list()
   # lots of things
   initialize_ivars()
 } # nocov end

@@ -21,8 +21,7 @@ test_that("httr status code works", {
   expect_s3_class(response, "response")
   # status code is correct
   expect_equal(response$status_code, 404)
-
-  eject_cassette("greencow")
+  eject_cassette()
 
   # call again
   insert_cassette("greencow")
@@ -31,8 +30,7 @@ test_that("httr status code works", {
   expect_s3_class(response2, "response")
   # status code is correct
   expect_equal(response2$status_code, 404)
-
-  eject_cassette("greencow")
+  eject_cassette()
 })
 
 test_that("httr use_cassette works", {

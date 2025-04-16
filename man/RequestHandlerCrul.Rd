@@ -40,7 +40,7 @@ if (interactive()) {
 cas <- insert_cassette(name = "apple7",
   match_requests_on = c("method", "uri", "body"))
 resp2 <- cli$post("post", body = list(foo = "bar"))
-eject_cassette("apple7")
+eject_cassette()
 
 ## testing, same body, changed method in 2nd block
 if (interactive()) {

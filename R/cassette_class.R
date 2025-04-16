@@ -277,9 +277,6 @@ Cassette <- R6::R6Class(
           showWarnings = FALSE,
           recursive = TRUE
         )
-
-      # put cassette in vcr_cassettes environment
-      include_cassette(self)
     },
 
     #' @description print method for `Cassette` objects
@@ -317,13 +314,9 @@ Cassette <- R6::R6Class(
     eject = function() {
       on.exit(private$remove_empty_cassette())
       self$write_recorded_interactions_to_disk()
-      # remove cassette from list of current cassettes
-      rm(list = self$name, envir = vcr_cassettes)
       if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
       # disable webmockr
       webmockr::disable(quiet = vcr_c$quiet)
-      # set current casette name to NULL
-      vcr__env$current_cassette <- NULL
       # return self
       return(self)
     },

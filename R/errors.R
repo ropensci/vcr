@@ -51,7 +51,7 @@
 #' # err$construct_message()
 #'
 #' # cleanup
-#' eject_cassette("turtle")
+#' eject_cassette()
 #' unlink(tempdir())
 #' }
 UnhandledHTTPRequestError <- R6::R6Class(
@@ -144,7 +144,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get current request matchers
     #' @return character
     current_matchers = function() {
-      if (length(cassettes_session()) > 0) {
+      if (cassette_active()) {
         current_cassette()$match_requests_on
       } else {
         vcr_configuration()$match_requests_on
@@ -179,7 +179,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description construct description of current or lack thereof cassettes
     #' @return character
     cassettes_description = function() {
-      if (length(cassettes_session()) > 0) {
+      if (cassette_active()) {
         tmp <- self$cassettes_list()
         tmp2 <- paste0(
           c(
@@ -205,9 +205,9 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description cassette details
     #' @return character
     cassettes_list = function() {
-      if (length(cassettes_session()) > 0) {
+      if (cassette_active()) {
         lines <- c()
-        xx <- if (length(cassettes_session()) == 1) {
+        xx <- if (length(the$cassettes) == 1) {
           "vcr is currently using the following cassette:"
         } else {
           "vcr is currently using the following cassettes:"
@@ -298,7 +298,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get all suggestions
     #' @return list
     suggestions = function() {
-      if (length(cassettes_session()) == 0) {
+      if (!cassette_active()) {
         return(self$no_cassette_suggestions())
       }
 
@@ -325,7 +325,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get the appropriate record mode suggestion
     #' @return character
     record_mode_suggestion = function() {
-      record_modes <- unlist(lapply(cassettes_session(), function(z) z$record))
+      record_modes <- unlist(lapply(the$cassettes, function(z) z$record))
 
       if (all(record_modes == "none")) {
         "deal_with_none"
@@ -340,7 +340,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @return logical
     has_used_interaction_matching = function() {
       any(vapply(
-        cassettes_session(),
+        the$cassettes,
         function(z) {
           z$http_interactions()
           z$http_interactions_$has_used_interaction_matching(self$request) %||%
@@ -354,7 +354,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @return list
     match_requests_on_suggestion = function() {
       num_remaining_interactions <- sum(vapply(
-        cassettes_session(),
+        the$cassettes,
         function(z) {
           z$http_interactions()
           z$http_interactions_$remaining_unused_interaction_count()

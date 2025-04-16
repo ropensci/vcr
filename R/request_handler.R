@@ -67,7 +67,7 @@
 #' crul_request$url$handle <- curl::new_handle()
 #' z <- RequestHandlerCrul$new(crul_request)
 #' # z$handle()
-#' eject_cassette("testing_record_mode_none")
+#' eject_cassette()
 #' }
 RequestHandler <- R6::R6Class(
   'RequestHandler',

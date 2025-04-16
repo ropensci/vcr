@@ -4,10 +4,6 @@ test_that("Cassette", {
   cl <- Cassette$new(name = "stuff")
   expect_s3_class(cl, "R6")
   expect_s3_class(cl, "Cassette")
-
-  # eject cassette
-  ## expect warning from empty cassette checker
-  expect_warning(cl$eject())
 })
 
 test_that("Cassette fails well", {
@@ -64,8 +60,4 @@ test_that("make_http_interaction works as expected", {
   expect_s3_class(bb$request, "Request")
   expect_s3_class(bb$response, "VcrResponse")
   expect_type(bb$response$body, "raw")
-
-  # eject cassette
-  ## expect warning from empty cassette checker
-  expect_warning(zz$eject())
 })

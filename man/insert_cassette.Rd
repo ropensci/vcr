@@ -17,11 +17,7 @@ insert_cassette(
   clean_outdated_http_interactions = NULL
 )
 
-eject_cassette(
-  cassette = NULL,
-  options = list(),
-  skip_no_unused_interactions_assertion = NULL
-)
+eject_cassette()
 }
 \arguments{
 \item{name}{The name of the cassette. vcr will check this to ensure it
@@ -63,17 +59,6 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
-
-\item{cassette}{(character) a single cassette names to eject; see \code{name}
-parameter definition in \code{\link[=insert_cassette]{insert_cassette()}} for cassette name rules}
-
-\item{options}{(list) a list of options to apply to the eject process}
-
-\item{skip_no_unused_interactions_assertion}{(logical) If \code{TRUE}, this will
-skip the "no unused HTTP interactions" assertion enabled by the
-\code{allow_unused_http_interactions = FALSE} cassette option. This is intended
-for use when your test has had an error, but your test framework has
-already handled it - IGNORED FOR NOW}
 }
 \value{
 A \link{Cassette}, invisibly.
@@ -127,13 +112,11 @@ other than \code{NULL} when calling either \code{insert_cassette()} or
 
 \examples{
 vcr_configure(dir = tempdir())
-insert_cassette("hello")
-(x <- current_cassette())
 
-# by default does current cassette
-x <- eject_cassette()
-x
-# can also select by cassette name
-# eject_cassette(cassette = "hello")
+insert_cassette("hello")
+current_cassette()
+
+eject_cassette()
+current_cassette()
 }
 \keyword{internal}

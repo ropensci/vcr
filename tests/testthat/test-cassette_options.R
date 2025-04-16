@@ -12,13 +12,10 @@ test_that("Cassette options", {
   expect_equal(cl$re_record_interval, 1000L)
   expect_type(cl$clean_outdated_http_interactions, "logical")
   expect_true(cl$clean_outdated_http_interactions)
-
-  # eject cassette
   ## expect warning from empty cassette checker
   expect_warning(cl$eject())
 
   local_vcr_configure(warn_on_empty_cassette = FALSE)
   cl <- Cassette$new(name = "stuff2")
-  ## expect NO warning when warn_on_empty_cassette=FALSE
-  expect_warning(cl$eject(), NA)
+  expect_no_warning(cl$eject())
 })
