@@ -27,11 +27,8 @@ YAML <- R6::R6Class(
     #' @param path (character) the file path
     #' @param bytes (logical) whether to preserve exact body bytes or not
     #' @return (character) the YAML string to write to disk
-    serialize = function(x, path, bytes) {
-      #write_yaml(x, self$path)
-      function(x, path, bytes) {
-        write_yaml(x, path, bytes)
-      }
+    serialize = function(x, bytes) {
+      write_yaml(x, self$path, bytes)
     },
 
     #' @description Deserializes the content at the path using

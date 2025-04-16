@@ -78,10 +78,6 @@ library(crul)
 
 \item{\code{serializer}}{(character) serializer to use (yaml|json)}
 
-\item{\code{persist_with}}{(character) persister to use (FileSystem only)}
-
-\item{\code{persister}}{(character) persister to use (FileSystem only)}
-
 \item{\code{match_requests_on}}{(character) matchers to use
 default: method & uri}
 
@@ -149,7 +145,6 @@ Create a new \code{Cassette} object
   name,
   record,
   serialize_with,
-  persist_with,
   match_requests_on,
   re_record_interval,
   allow_playback_repeats,
@@ -169,10 +164,6 @@ is a valid file name.}
 
 \item{\code{serialize_with}}{(character) Which serializer to use.
 Valid values are "yaml" (default), the only one supported for now.}
-
-\item{\code{persist_with}}{(character) Which cassette persister to
-use. Default: "file_system". You can also register and use a
-custom persister.}
 
 \item{\code{match_requests_on}}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to

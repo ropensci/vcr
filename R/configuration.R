@@ -122,7 +122,6 @@
 #' make sure to not switch serializers, or clean up files you no longer need.
 #' - `json_pretty`: (logical) want JSON to be newline separated to be easier
 #' to read? Or remove newlines to save disk space? default: FALSE
-#' - `persist_with` (character) only option is "FileSystem"
 #' - `preserve_exact_body_bytes` (logical) preserve exact body bytes for
 #' - `re_record_interval` (numeric) When given, the cassette will be
 #' re-recorded at the given interval, in seconds.
@@ -219,7 +218,6 @@ VCRConfig <- R6::R6Class(
     .allow_unused_http_interactions = NULL,
     .serialize_with = NULL,
     .json_pretty = NULL,
-    .persist_with = NULL,
     .ignore_hosts = NULL,
     .ignore_localhost = NULL,
     .ignore_request = NULL,
@@ -268,10 +266,6 @@ VCRConfig <- R6::R6Class(
     json_pretty = function(value) {
       if (missing(value)) return(private$.json_pretty)
       private$.json_pretty <- value
-    },
-    persist_with = function(value) {
-      if (missing(value)) return(private$.persist_with)
-      private$.persist_with <- value
     },
     ignore_hosts = function(value) {
       if (missing(value)) return(private$.ignore_hosts)
@@ -397,7 +391,6 @@ VCRConfig <- R6::R6Class(
       allow_unused_http_interactions = TRUE,
       serialize_with = "yaml",
       json_pretty = FALSE,
-      persist_with = "FileSystem",
       ignore_hosts = NULL,
       ignore_localhost = FALSE,
       ignore_request = NULL,
@@ -427,7 +420,6 @@ VCRConfig <- R6::R6Class(
       self$allow_unused_http_interactions <- allow_unused_http_interactions
       self$serialize_with <- serialize_with
       self$json_pretty <- json_pretty
-      self$persist_with <- persist_with
       self$ignore_hosts <- ignore_hosts
       self$ignore_localhost <- ignore_localhost
       self$ignore_request <- ignore_request

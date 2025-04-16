@@ -62,10 +62,6 @@ Cassette <- R6::R6Class(
     serialize_with = "yaml",
     #' @field serializer (character) serializer to use (yaml|json)
     serializer = NA,
-    #' @field persist_with (character) persister to use (FileSystem only)
-    persist_with = "FileSystem",
-    #' @field persister (character) persister to use (FileSystem only)
-    persister = NA,
     #' @field match_requests_on (character) matchers to use
     #' default: method & uri
     match_requests_on = c("method", "uri"),
@@ -98,9 +94,6 @@ Cassette <- R6::R6Class(
     #' "once", "all", "none", "new_episodes". See [recording] for more information
     #' @param serialize_with (character) Which serializer to use.
     #'  Valid values are "yaml" (default), the only one supported for now.
-    #' @param persist_with (character) Which cassette persister to
-    #'  use. Default: "file_system". You can also register and use a
-    #'  custom persister.
     #' @param match_requests_on List of request matchers
     #' to use to determine what recorded HTTP interaction to replay. Defaults to
     #' `["method", "uri"]`. The built-in matchers are "method", "uri",
@@ -122,7 +115,6 @@ Cassette <- R6::R6Class(
       name,
       record,
       serialize_with,
-      persist_with,
       match_requests_on,
       re_record_interval,
       allow_playback_repeats,
@@ -133,8 +125,6 @@ Cassette <- R6::R6Class(
       self$root_dir <- vcr_configuration()$dir
       self$serialize_with <- serialize_with %||% vcr_c$serialize_with
       self$serializer <- serializer_fetch(self$name, ext = self$serialize_with)
-
-      self$persist_with <- persist_with %||% vcr_c$persist_with
       if (!missing(record)) {
         self$record <- check_record_mode(record)
       }
@@ -164,7 +154,6 @@ Cassette <- R6::R6Class(
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
       }
       self$recorded_at <- file.info(self$file())$mtime
-      self$persister = persister_fetch(self$persist_with, self$serializer$path)
 
       # check for re-record
       if (self$should_re_record()) self$record <- "all"
@@ -236,7 +225,6 @@ Cassette <- R6::R6Class(
         self$name,
         self$record,
         self$serialize_with,
-        self$persist_with,
         self$match_requests_on,
         self$allow_playback_repeats,
         self$preserve_exact_body_bytes
@@ -248,7 +236,6 @@ Cassette <- R6::R6Class(
             "name",
             "record",
             "serialize_with",
-            "persist_with",
             "match_requests_on",
             "allow_playback_repeats",
             "preserve_exact_body_bytes"
@@ -286,7 +273,6 @@ Cassette <- R6::R6Class(
       cat(paste0("<vcr - Cassette> ", self$name), sep = "\n")
       cat(paste0("  Record method: ", self$record), sep = "\n")
       cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
-      cat(paste0("  Persist with: ", self$persist_with), sep = "\n")
       cat(
         paste0("  Re-record interval (s): ", self$re_record_interval),
         sep = "\n"
@@ -550,8 +536,7 @@ Cassette <- R6::R6Class(
       if (!self$any_new_recorded_interactions()) return(NULL)
       hash <- self$serializable_hash()
       if (length(hash[["http_interactions"]]) == 0) return(NULL)
-      fun <- self$serializer$serialize()
-      fun(hash[[1]], self$persister$file_name, self$preserve_exact_body_bytes)
+      self$serializer$serialize(hash[[1]], self$preserve_exact_body_bytes)
     },
 
     #' @description record an http interaction (doesn't write to disk)

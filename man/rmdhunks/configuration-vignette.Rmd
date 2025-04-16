@@ -89,14 +89,6 @@ make sure to not switch serializers, or clean up files you no longer need.
 vcr_configure(serialize_with = "yaml")
 ```
 
-### persist_with
-
-Which persister to use. Right now only option is "FileSystem"
-
-```{r}
-vcr_configure(persist_with = "FileSystem")
-```
-
 ### ignoring some requests
 
 **ignore_hosts**
