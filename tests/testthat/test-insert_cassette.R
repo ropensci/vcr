@@ -36,12 +36,6 @@ test_that("insert_cassette fails well", {
     suppressMessages(insert_cassette("newbar5", persist_with = "foobar55")),
     "The requested VCR cassette persister \\(foobar55\\) is not registered"
   )
-
-  # persist_with valid value
-  expect_error(
-    suppressMessages(insert_cassette("newbar6", serialize_with = "howdy")),
-    "The requested vcr cassette serializer \\(howdy\\) is not registered"
-  )
 })
 
 test_that("insert_cassette works as expected", {

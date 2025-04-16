@@ -58,8 +58,6 @@ reference:
       - RequestHandlerHttr
       - RequestHandlerHttr2
       - RequestMatcherRegistry
-      - Serializers
-      - serializer_fetch
       - UnhandledHTTPRequestError
       - VcrResponse
       - request_summary

@@ -88,16 +88,6 @@ test_that("use_cassette fails well", {
     )),
     "The requested VCR cassette persister \\(jello\\) is not registered"
   )
-
-  # persist_with valid value
-  expect_error(
-    suppressMessages(use_cassette(
-      "newbar6",
-      NULL,
-      serialize_with = "howdy"
-    )),
-    "The requested vcr cassette serializer \\(howdy\\) is not registered"
-  )
 })
 
 test_that("local_cassette sets up temporary cassette", {
