@@ -3,7 +3,6 @@ VCRHooks <- NULL
 request_matchers <- NULL
 request_ignorer <- NULL
 cassette_serializers <- NULL
-cassette_persisters <- NULL
 light_switch <- NULL
 vcr_cassettes <- NULL
 
@@ -15,7 +14,6 @@ initialize_ivars <- function() {
   request_matchers <<- RequestMatcherRegistry$new()
   request_ignorer <<- RequestIgnorer$new()
   cassette_serializers <<- Serializers$new()
-  cassette_persisters <<- Persisters$new()
 }
 
 .onLoad <- function(libname, pkgname) {

@@ -32,9 +32,6 @@
 #' multiple cassettes with the same name as long as they use different
 #' serializers; so if you only want one cassette for a given cassette name,
 #' make sure to not switch serializers, or clean up files you no longer need.
-#' @param persist_with (character) Which cassette persister to
-#' use. Default: "file_system". You can also register and use a
-#' custom persister.
 #' @param preserve_exact_body_bytes (logical) Whether or not
 #' to base64 encode the bytes of the requests and responses for
 #' this cassette when serializing it. See also `preserve_exact_body_bytes`
@@ -153,7 +150,6 @@ use_cassette <- function(
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
-  persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL
@@ -173,7 +169,6 @@ use_cassette <- function(
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
-    persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions
@@ -198,7 +193,6 @@ local_cassette <- function(
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
-  persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
@@ -211,7 +205,6 @@ local_cassette <- function(
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
-    persist_with = persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions

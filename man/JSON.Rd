@@ -45,15 +45,13 @@ A new \code{JSON} object
 \subsection{Method \code{serialize()}}{
 Serializes the given hash using internal fxn write_json
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{JSON$serialize(x, path, bytes)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{JSON$serialize(x, bytes)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{x}}{(list) the object to serialize}
-
-\item{\code{path}}{(character) the file path}
 
 \item{\code{bytes}}{(logical) whether to preserve exact body bytes or not}
 }

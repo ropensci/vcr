@@ -11,7 +11,6 @@ test_that("use_cassette works as expected", {
   expect_output(print(aa), "<vcr - Cassette>")
   expect_output(print(aa), "Record method: once")
   expect_output(print(aa), "Serialize with: yaml")
-  expect_output(print(aa), "Persist with: FileSystem")
   expect_output(print(aa), "preserve_exact_body_bytes")
 
   expect_s3_class(aa, "Cassette")
@@ -77,16 +76,6 @@ test_that("use_cassette fails well", {
       preserve_exact_body_bytes = 5
     )),
     "preserve_exact_body_bytes must be of class logical"
-  )
-
-  # persist_with valid value
-  expect_error(
-    suppressMessages(use_cassette(
-      "newbar5",
-      NULL,
-      persist_with = "jello"
-    )),
-    "The requested VCR cassette persister \\(jello\\) is not registered"
   )
 
   # persist_with valid value

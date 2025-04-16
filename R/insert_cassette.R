@@ -19,7 +19,6 @@ insert_cassette <- function(
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
-  persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL
@@ -59,7 +58,6 @@ insert_cassette <- function(
     update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with %||% vcr_c$serialize_with,
-    persist_with = persist_with %||% vcr_c$persist_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes %||%
       vcr_c$preserve_exact_body_bytes,
     re_record_interval = re_record_interval %||% vcr_c$re_record_interval,

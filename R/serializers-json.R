@@ -22,13 +22,10 @@ JSON <- R6::R6Class(
 
     #' @description Serializes the given hash using internal fxn write_json
     #' @param x (list) the object to serialize
-    #' @param path (character) the file path
     #' @param bytes (logical) whether to preserve exact body bytes or not
     #' @return (character) the json string to write to disk
-    serialize = function(x, path, bytes) {
-      function(x, path, bytes) {
-        write_json(x, path, bytes)
-      }
+    serialize = function(x, bytes) {
+      write_json(x, self$path, bytes)
     },
 
     #' @description Deserializes the content at the file path using

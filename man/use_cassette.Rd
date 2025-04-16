@@ -13,7 +13,6 @@ use_cassette(
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
-  persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL
@@ -26,7 +25,6 @@ local_cassette(
   update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
-  persist_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
@@ -66,10 +64,6 @@ Valid values are "yaml" (default) and "json". Note that you can have
 multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.}
-
-\item{persist_with}{(character) Which cassette persister to
-use. Default: "file_system". You can also register and use a
-custom persister.}
 
 \item{preserve_exact_body_bytes}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for

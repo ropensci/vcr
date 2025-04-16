@@ -28,10 +28,9 @@ Serializer <- R6::R6Class(
     },
     #' @description Serializes a hash - REPLACED BY YAML/JSON METHODS
     #' @param x (list) the object to serialize
-    #' @param path (character) the file path
     #' @param bytes (logical) whether to preserve exact body bytes or not
     #' @return (character) the YAML or JSON string to write to disk
-    serialize = function(x, path, bytes) {
+    serialize = function(x, bytes) {
     },
     #' @description Serializes a file - REPLACED BY YAML/JSON METHODS
     deserialize = function() {

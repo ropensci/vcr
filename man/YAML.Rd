@@ -46,7 +46,7 @@ A new \code{YAML} object
 \subsection{Method \code{serialize()}}{
 Serializes the given hash using internal fxn write_yaml
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{YAML$serialize(x, path, bytes)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{YAML$serialize(x, bytes)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -54,9 +54,9 @@ Serializes the given hash using internal fxn write_yaml
 \describe{
 \item{\code{x}}{(list) the object to serialize}
 
-\item{\code{path}}{(character) the file path}
-
 \item{\code{bytes}}{(logical) whether to preserve exact body bytes or not}
+
+\item{\code{path}}{(character) the file path}
 }
 \if{html}{\out{</div>}}
 }

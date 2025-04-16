@@ -7,7 +7,6 @@ params <- c(
   # "clean_outdated_http_interactions",
   # "allow_unused_http_interactions",
   "serialize_with",
-  "persist_with",
   "preserve_exact_body_bytes"
 )
 

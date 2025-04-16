@@ -153,7 +153,6 @@ serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.
 \item \code{json_pretty}: (logical) want JSON to be newline separated to be easier
 to read? Or remove newlines to save disk space? default: FALSE
-\item \code{persist_with} (character) only option is "FileSystem"
 \item \code{preserve_exact_body_bytes} (logical) preserve exact body bytes for
 \item \code{re_record_interval} (numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.
