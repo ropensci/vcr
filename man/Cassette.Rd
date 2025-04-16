@@ -87,18 +87,10 @@ default: method & uri}
 
 \item{\code{re_record_interval}}{(numeric) the re-record interval}
 
-\item{\code{tag}}{ignored, not used right now}
-
-\item{\code{tags}}{ignored, not used right now}
-
 \item{\code{root_dir}}{root dir, gathered from \code{\link[=vcr_configuration]{vcr_configuration()}}}
 
 \item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
 interaction to be played back multiple times}
-
-\item{\code{allow_unused_http_interactions}}{(logical) ignored, not used right now}
-
-\item{\code{exclusive}}{(logical) ignored, not used right now}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
@@ -164,11 +156,7 @@ Create a new \code{Cassette} object
   persist_with,
   match_requests_on,
   re_record_interval,
-  tag,
-  tags,
   allow_playback_repeats,
-  allow_unused_http_interactions,
-  exclusive,
   preserve_exact_body_bytes,
   clean_outdated_http_interactions
 )}\if{html}{\out{</div>}}
@@ -199,15 +187,9 @@ be in a future version)}
 \item{\code{re_record_interval}}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}
 
-\item{\code{tag, tags}}{tags ignored, not used right now}
-
 \item{\code{allow_playback_repeats}}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
-
-\item{\code{allow_unused_http_interactions}}{(logical) ignored, not used right now}
-
-\item{\code{exclusive}}{(logical) ignored, not used right now}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
