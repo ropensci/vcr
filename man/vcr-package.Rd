@@ -68,6 +68,7 @@ Authors:
   \item Aaron Wolen (\href{https://orcid.org/0000-0003-2542-2202}{ORCID})
   \item Maëlle Salmon (\href{https://orcid.org/0000-0002-2815-0399}{ORCID})
   \item Daniel Possenriede (\href{https://orcid.org/0000-0002-6738-9845}{ORCID})
+  \item Hadley Wickham \email{hadley@posit.co}
 }
 
 Other contributors:
