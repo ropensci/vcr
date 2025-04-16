@@ -16,25 +16,10 @@ test_that("insert_cassette fails well", {
     "'match_requests_on' values \\(stuff\\) is not in the allowed set"
   )
 
-  # update_content_length_header valid type
-  expect_error(
-    suppressMessages(insert_cassette(
-      "newbar3",
-      update_content_length_header = 5
-    )),
-    "update_content_length_header must be of class logical"
-  )
-
   # preserve_exact_body_bytes valid type
   expect_error(
     suppressMessages(insert_cassette("newbar4", preserve_exact_body_bytes = 5)),
     "preserve_exact_body_bytes must be of class logical"
-  )
-
-  # persist_with valid value
-  expect_error(
-    suppressMessages(insert_cassette("newbar6", serialize_with = "howdy")),
-    "The requested vcr cassette serializer \\(howdy\\) is not registered"
   )
 })
 
@@ -44,16 +29,13 @@ test_that("insert_cassette works as expected", {
     warn_on_empty_cassette = FALSE
   )
 
-  aa <- suppressMessages(insert_cassette("foobar3"))
+  aa <- insert_cassette("foobar3")
+  withr::defer(eject_cassette())
   expect_s3_class(aa, "Cassette")
   expect_type(aa$name, "character")
   expect_equal(aa$name, "foobar3")
   expect_false(aa$allow_playback_repeats)
   expect_false(aa$any_new_recorded_interactions())
-  expect_type(aa$args, "list")
-
-  # eject
-  aa$eject()
 })
 
 test_that("insert_cassette fails well on name checking", {

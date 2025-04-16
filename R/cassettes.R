@@ -32,31 +32,40 @@
 #'
 #' vcr_configure_reset()
 cassettes <- function() {
-  cassettes_session()
+  if (cassette_active()) {
+    the$cassettes
+  } else {
+    # Consistently return a named list
+    set_names(list())
+  }
 }
 
 #' @export
 #' @rdname cassettes
 current_cassette <- function() {
-  cassettes <- cassettes()
-  n <- length(cassettes)
-  if (n == 0) NULL else cassettes[[n]]
+  if (cassette_active()) {
+    n <- length(the$cassettes)
+    the$cassettes[[n]]
+  } else {
+    NULL
+  }
 }
 
 #' @export
 #' @rdname cassettes
 cassette_path <- function() vcr_c$dir
 
-cassettes_session <- function(x) {
-  xx <- ls(envir = vcr_cassettes)
-  if (length(xx) > 0) {
-    stats::setNames(lapply(xx, get, envir = vcr_cassettes), xx)
-  } else {
-    list()
-  }
+cassette_push <- function(cassette) {
+  the$cassettes[[cassette$name]] <- cassette
+  invisible(cassette)
 }
+cassette_pop <- function() {
+  n <- length(the$cassettes)
+  cassette <- the$cassettes[[n]]
+  the$cassettes <- the$cassettes[-n]
 
-include_cassette <- function(cassette) {
-  # assign cassette to bucket of cassettes in session
-  assign(cassette$name, cassette, envir = vcr_cassettes)
+  cassette
+}
+cassette_active <- function() {
+  length(the$cassettes) > 0
 }

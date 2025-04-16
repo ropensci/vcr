@@ -16,7 +16,6 @@ insert_cassette <- function(
   name,
   record = NULL,
   match_requests_on = NULL,
-  update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
@@ -36,7 +35,7 @@ insert_cassette <- function(
     }
   }
 
-  if (name %in% names(cassettes_session())) {
+  if (any(name %in% names(the$cassettes))) {
     stop(
       sprintf("There is already a cassette with the same name: %s", name),
       "\n  see ?eject_cassette"
@@ -47,25 +46,18 @@ insert_cassette <- function(
   webmockr::enable(quiet = vcr_c$quiet)
   sup_mssg(vcr_c$quiet, webmockr::webmockr_allow_net_connect())
 
-  # record cassete name for use in logging, etc.
-  vcr__env$current_cassette <- name
-
   # make cassette
-  invisible(Cassette$new(
+  cassette <- Cassette$new(
     name,
     record = record %||% vcr_c$record,
     match_requests_on = match_requests_on %||% vcr_c$match_requests_on,
-    update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with %||% vcr_c$serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes %||%
       vcr_c$preserve_exact_body_bytes,
     re_record_interval = re_record_interval %||% vcr_c$re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions %||%
-      vcr_c$clean_outdated_http_interactions,
-    tag = NULL,
-    tags = NULL,
-    allow_unused_http_interactions = NULL,
-    exclusive = NULL
-  ))
+      vcr_c$clean_outdated_http_interactions
+  )
+  cassette_push(cassette)
 }

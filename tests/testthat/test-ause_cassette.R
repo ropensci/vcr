@@ -18,7 +18,6 @@ test_that("use_cassette works as expected", {
   expect_equal(aa$name, "testing1")
   expect_false(aa$allow_playback_repeats)
   expect_true(aa$any_new_recorded_interactions())
-  expect_type(aa$args, "list")
 
   expect_s3_class(res, "HttpResponse")
   expect_type(res$content, "raw")
@@ -58,16 +57,6 @@ test_that("use_cassette fails well", {
     "'match_requests_on' values \\(stuff\\) is not in the allowed set"
   )
 
-  # update_content_length_header valid type
-  expect_error(
-    suppressMessages(use_cassette(
-      "newbar3",
-      NULL,
-      update_content_length_header = 5
-    )),
-    "update_content_length_header must be of class logical"
-  )
-
   # preserve_exact_body_bytes valid type
   expect_error(
     suppressMessages(use_cassette(
@@ -76,16 +65,6 @@ test_that("use_cassette fails well", {
       preserve_exact_body_bytes = 5
     )),
     "preserve_exact_body_bytes must be of class logical"
-  )
-
-  # persist_with valid value
-  expect_error(
-    suppressMessages(use_cassette(
-      "newbar6",
-      NULL,
-      serialize_with = "howdy"
-    )),
-    "The requested vcr cassette serializer \\(howdy\\) is not registered"
   )
 })
 

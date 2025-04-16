@@ -74,7 +74,7 @@ crul_request$url$url <- "https://api.crossref.org/works/10.1039/c8sm90002g/"
 crul_request$url$handle <- curl::new_handle()
 z <- RequestHandlerCrul$new(crul_request)
 # z$handle()
-eject_cassette("testing_record_mode_none")
+eject_cassette()
 }
 }
 \section{Public fields}{

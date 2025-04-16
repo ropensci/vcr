@@ -83,26 +83,13 @@ default: method & uri}
 
 \item{\code{re_record_interval}}{(numeric) the re-record interval}
 
-\item{\code{tag}}{ignored, not used right now}
-
-\item{\code{tags}}{ignored, not used right now}
-
 \item{\code{root_dir}}{root dir, gathered from \code{\link[=vcr_configuration]{vcr_configuration()}}}
-
-\item{\code{update_content_length_header}}{(logical) Whether to overwrite the
-\code{Content-Length} header}
 
 \item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
 interaction to be played back multiple times}
 
-\item{\code{allow_unused_http_interactions}}{(logical) ignored, not used right now}
-
-\item{\code{exclusive}}{(logical) ignored, not used right now}
-
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
-
-\item{\code{args}}{(list) internal use}
 
 \item{\code{http_interactions_}}{(list) internal use}
 
@@ -142,8 +129,6 @@ be recorded back to file}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
-\item \href{#method-Cassette-make_args}{\code{Cassette$make_args()}}
-\item \href{#method-Cassette-write_metadata}{\code{Cassette$write_metadata()}}
 \item \href{#method-Cassette-http_interactions}{\code{Cassette$http_interactions()}}
 \item \href{#method-Cassette-make_http_interaction}{\code{Cassette$make_http_interaction()}}
 \item \href{#method-Cassette-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
@@ -162,12 +147,7 @@ Create a new \code{Cassette} object
   serialize_with,
   match_requests_on,
   re_record_interval,
-  tag,
-  tags,
-  update_content_length_header,
   allow_playback_repeats,
-  allow_unused_http_interactions,
-  exclusive,
   preserve_exact_body_bytes,
   clean_outdated_http_interactions
 )}\if{html}{\out{</div>}}
@@ -194,19 +174,9 @@ be in a future version)}
 \item{\code{re_record_interval}}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}
 
-\item{\code{tag, tags}}{tags ignored, not used right now}
-
-\item{\code{update_content_length_header}}{(logical) Whether or
-not to overwrite the \code{Content-Length} header of the responses to
-match the length of the response body. Default: \code{FALSE}}
-
 \item{\code{allow_playback_repeats}}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
-
-\item{\code{allow_unused_http_interactions}}{(logical) ignored, not used right now}
-
-\item{\code{exclusive}}{(logical) ignored, not used right now}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
@@ -514,32 +484,6 @@ Are there any new recorded interactions?
 
 \subsection{Returns}{
 logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-make_args"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-make_args}{}}}
-\subsection{Method \code{make_args()}}{
-make list of all options
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$make_args()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-write_metadata"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-write_metadata}{}}}
-\subsection{Method \code{write_metadata()}}{
-write metadata to the cassette
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$write_metadata()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
 }
 }
 \if{html}{\out{<hr>}}

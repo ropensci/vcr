@@ -67,27 +67,14 @@ Cassette <- R6::R6Class(
     match_requests_on = c("method", "uri"),
     #' @field re_record_interval (numeric) the re-record interval
     re_record_interval = NULL,
-    #' @field tag ignored, not used right now
-    tag = NA,
-    #' @field tags ignored, not used right now
-    tags = NA,
     #' @field root_dir root dir, gathered from [vcr_configuration()]
     root_dir = NA,
-    #' @field update_content_length_header (logical) Whether to overwrite the
-    #' `Content-Length` header
-    update_content_length_header = FALSE,
     #' @field allow_playback_repeats (logical) Whether to allow a single HTTP
     #' interaction to be played back multiple times
     allow_playback_repeats = FALSE,
-    #' @field allow_unused_http_interactions (logical) ignored, not used right now
-    allow_unused_http_interactions = TRUE,
-    #' @field exclusive (logical) ignored, not used right now
-    exclusive = FALSE,
     #' @field preserve_exact_body_bytes (logical) Whether to base64 encode the
     #' bytes of the requests and responses
     preserve_exact_body_bytes = FALSE,
-    #' @field args (list) internal use
-    args = list(),
     #' @field http_interactions_ (list) internal use
     http_interactions_ = NULL,
     #' @field new_recorded_interactions (list) internal use
@@ -114,15 +101,9 @@ Cassette <- R6::R6Class(
     #' be in a future version)
     #' @param re_record_interval (numeric) When given, the cassette will be
     #' re-recorded at the given interval, in seconds.
-    #' @param tag,tags tags ignored, not used right now
-    #' @param update_content_length_header (logical) Whether or
-    #' not to overwrite the `Content-Length` header of the responses to
-    #' match the length of the response body. Default: `FALSE`
     #' @param allow_playback_repeats (logical) Whether or not to
     #' allow a single HTTP interaction to be played back multiple times.
     #' Default: `FALSE`.
-    #' @param allow_unused_http_interactions (logical) ignored, not used right now
-    #' @param exclusive (logical) ignored, not used right now
     #' @param preserve_exact_body_bytes (logical) Whether or not
     #' to base64 encode the bytes of the requests and responses for
     #' this cassette when serializing it. See also `preserve_exact_body_bytes`
@@ -136,19 +117,14 @@ Cassette <- R6::R6Class(
       serialize_with,
       match_requests_on,
       re_record_interval,
-      tag,
-      tags,
-      update_content_length_header,
       allow_playback_repeats,
-      allow_unused_http_interactions,
-      exclusive,
       preserve_exact_body_bytes,
       clean_outdated_http_interactions
     ) {
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
       self$serialize_with <- serialize_with %||% vcr_c$serialize_with
-      check_serializer(self$serialize_with)
+      self$serializer <- serializer_fetch(self$name, ext = self$serialize_with)
       if (!missing(record)) {
         self$record <- check_record_mode(record)
       }
@@ -166,19 +142,10 @@ Cassette <- R6::R6Class(
       }
       if (!missing(re_record_interval))
         self$re_record_interval <- re_record_interval
-      if (!missing(tag)) self$tag = tag
-      if (!missing(tags)) self$tags = tags
-      if (!missing(update_content_length_header)) {
-        assert(update_content_length_header, "logical")
-        self$update_content_length_header = update_content_length_header
-      }
       if (!missing(allow_playback_repeats)) {
         assert(allow_playback_repeats, "logical")
         self$allow_playback_repeats = allow_playback_repeats
       }
-      if (!missing(allow_unused_http_interactions))
-        self$allow_unused_http_interactions = allow_unused_http_interactions
-      if (!missing(exclusive)) self$exclusive = exclusive
       if (!missing(preserve_exact_body_bytes)) {
         assert(preserve_exact_body_bytes, "logical")
         self$preserve_exact_body_bytes <- preserve_exact_body_bytes
@@ -186,10 +153,7 @@ Cassette <- R6::R6Class(
       if (!missing(clean_outdated_http_interactions)) {
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
       }
-      self$make_args()
-      if (!file.exists(self$manfile)) self$write_metadata()
       self$recorded_at <- file.info(self$file())$mtime
-      self$serializer = serializer_fetch(self$serialize_with, self$name)
 
       # check for re-record
       if (self$should_re_record()) self$record <- "all"
@@ -262,7 +226,6 @@ Cassette <- R6::R6Class(
         self$record,
         self$serialize_with,
         self$match_requests_on,
-        self$update_content_length_header,
         self$allow_playback_repeats,
         self$preserve_exact_body_bytes
       )
@@ -274,7 +237,6 @@ Cassette <- R6::R6Class(
             "record",
             "serialize_with",
             "match_requests_on",
-            "update_content_length_header",
             "allow_playback_repeats",
             "preserve_exact_body_bytes"
           )
@@ -302,9 +264,6 @@ Cassette <- R6::R6Class(
           showWarnings = FALSE,
           recursive = TRUE
         )
-
-      # put cassette in vcr_cassettes environment
-      include_cassette(self)
     },
 
     #' @description print method for `Cassette` objects
@@ -326,24 +285,9 @@ Cassette <- R6::R6Class(
         sep = "\n"
       )
       cat(
-        paste0(
-          "  update_content_length_header: ",
-          self$update_content_length_header
-        ),
-        sep = "\n"
-      )
-      cat(
         paste0("  allow_playback_repeats: ", self$allow_playback_repeats),
         sep = "\n"
       )
-      cat(
-        paste0(
-          "  allow_unused_http_interactions: ",
-          self$allow_unused_http_interactions
-        ),
-        sep = "\n"
-      )
-      cat(paste0("  exclusive: ", self$exclusive), sep = "\n")
       cat(
         paste0("  preserve_exact_body_bytes: ", self$preserve_exact_body_bytes),
         sep = "\n"
@@ -356,13 +300,9 @@ Cassette <- R6::R6Class(
     eject = function() {
       on.exit(private$remove_empty_cassette())
       self$write_recorded_interactions_to_disk()
-      # remove cassette from list of current cassettes
-      rm(list = self$name, envir = vcr_cassettes)
       if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
       # disable webmockr
       webmockr::disable(quiet = vcr_c$quiet)
-      # set current casette name to NULL
-      vcr__env$current_cassette <- NULL
       # return self
       return(self)
     },
@@ -570,8 +510,6 @@ Cassette <- R6::R6Class(
               opts = self$cassette_opts,
               disk = z$response$body$file
             )
-            if (self$update_content_length_header)
-              response$update_content_length_header()
             zz <- HTTPInteraction$new(
               request = Request$new(
                 z$request$method,
@@ -622,43 +560,6 @@ Cassette <- R6::R6Class(
     #' @return logical
     any_new_recorded_interactions = function() {
       length(self$new_recorded_interactions) != 0
-    },
-
-    #' @description make list of all options
-    #' @return nothing returned
-    make_args = function() {
-      self$args <- list(
-        record = self$record,
-        match_requests_on = self$match_requests_on,
-        re_record_interval = self$re_record_interval,
-        tag = self$tag,
-        tags = self$tags,
-        update_content_length_header = self$update_content_length_header,
-        allow_playback_repeats = self$allow_playback_repeats,
-        allow_unused_http_interactions = self$allow_unused_http_interactions,
-        exclusive = self$exclusive,
-        serialize_with = self$serialize_with,
-        persist_with = self$persist_with,
-        preserve_exact_body_bytes = self$preserve_exact_body_bytes
-      )
-    },
-
-    #' @description write metadata to the cassette
-    #' @return nothing returned
-    write_metadata = function() {
-      aa <- c(name = self$name, self$args)
-      for (i in seq_along(aa)) {
-        cat(
-          sprintf("%s: %s", names(aa[i]), aa[i]),
-          file = sprintf(
-            "%s/%s_metadata.yml",
-            path.expand(cassette_path()),
-            self$name
-          ),
-          sep = "\n",
-          append = TRUE
-        )
-      }
     },
 
     #' @description make [HTTPInteractionList] object, assign to http_interactions_ var
@@ -760,8 +661,6 @@ Cassette <- R6::R6Class(
         opts = self$cassette_opts,
         disk = is_disk
       )
-      if (self$update_content_length_header)
-        response$update_content_length_header()
       HTTPInteraction$new(request = request, response = response)
     },
 

@@ -21,9 +21,6 @@
 #' to use to determine what recorded HTTP interaction to replay. Defaults to
 #' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
 #' "path", "headers", "body" and "query"
-#' @param update_content_length_header (logical) Whether or
-#' not to overwrite the `Content-Length` header of the responses to
-#' match the length of the response body. Default: `FALSE`
 #' @param allow_playback_repeats (logical) Whether or not to
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
@@ -147,7 +144,6 @@ use_cassette <- function(
   ...,
   record = NULL,
   match_requests_on = NULL,
-  update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
@@ -166,7 +162,6 @@ use_cassette <- function(
     name,
     record = record,
     match_requests_on = match_requests_on,
-    update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
@@ -190,7 +185,6 @@ local_cassette <- function(
   name,
   record = NULL,
   match_requests_on = NULL,
-  update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
@@ -202,7 +196,6 @@ local_cassette <- function(
     name,
     record = record,
     match_requests_on = match_requests_on,
-    update_content_length_header = update_content_length_header,
     allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
