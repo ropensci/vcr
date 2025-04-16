@@ -78,3 +78,12 @@ Serializer <- R6::R6Class(
     }
   )
 )
+
+serializer_fetch <- function(path, ext = "yaml") {
+  switch(
+    ext,
+    json = JSON$new(path),
+    yaml = YAML$new(path),
+    cli::cli_abort("Unsupported cassette serializer {.str {ext}}.")
+  )
+}

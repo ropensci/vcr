@@ -132,7 +132,8 @@ Cassette <- R6::R6Class(
       self$name <- name
       self$root_dir <- vcr_configuration()$dir
       self$serialize_with <- serialize_with %||% vcr_c$serialize_with
-      check_serializer(self$serialize_with)
+      self$serializer <- serializer_fetch(self$name, ext = self$serialize_with)
+
       self$persist_with <- persist_with %||% vcr_c$persist_with
       if (!missing(record)) {
         self$record <- check_record_mode(record)
@@ -163,7 +164,6 @@ Cassette <- R6::R6Class(
         self$clean_outdated_http_interactions <- clean_outdated_http_interactions
       }
       self$recorded_at <- file.info(self$file())$mtime
-      self$serializer = serializer_fetch(self$serialize_with, self$name)
       self$persister = persister_fetch(self$persist_with, self$serializer$path)
 
       # check for re-record
