@@ -71,10 +71,6 @@ Cassette <- R6::R6Class(
     match_requests_on = c("method", "uri"),
     #' @field re_record_interval (numeric) the re-record interval
     re_record_interval = NULL,
-    #' @field tag ignored, not used right now
-    tag = NA,
-    #' @field tags ignored, not used right now
-    tags = NA,
     #' @field root_dir root dir, gathered from [vcr_configuration()]
     root_dir = NA,
     #' @field update_content_length_header (logical) Whether to overwrite the
@@ -83,10 +79,6 @@ Cassette <- R6::R6Class(
     #' @field allow_playback_repeats (logical) Whether to allow a single HTTP
     #' interaction to be played back multiple times
     allow_playback_repeats = FALSE,
-    #' @field allow_unused_http_interactions (logical) ignored, not used right now
-    allow_unused_http_interactions = TRUE,
-    #' @field exclusive (logical) ignored, not used right now
-    exclusive = FALSE,
     #' @field preserve_exact_body_bytes (logical) Whether to base64 encode the
     #' bytes of the requests and responses
     preserve_exact_body_bytes = FALSE,
@@ -119,15 +111,12 @@ Cassette <- R6::R6Class(
     #' be in a future version)
     #' @param re_record_interval (numeric) When given, the cassette will be
     #' re-recorded at the given interval, in seconds.
-    #' @param tag,tags tags ignored, not used right now
     #' @param update_content_length_header (logical) Whether or
     #' not to overwrite the `Content-Length` header of the responses to
     #' match the length of the response body. Default: `FALSE`
     #' @param allow_playback_repeats (logical) Whether or not to
     #' allow a single HTTP interaction to be played back multiple times.
     #' Default: `FALSE`.
-    #' @param allow_unused_http_interactions (logical) ignored, not used right now
-    #' @param exclusive (logical) ignored, not used right now
     #' @param preserve_exact_body_bytes (logical) Whether or not
     #' to base64 encode the bytes of the requests and responses for
     #' this cassette when serializing it. See also `preserve_exact_body_bytes`
@@ -142,12 +131,8 @@ Cassette <- R6::R6Class(
       persist_with,
       match_requests_on,
       re_record_interval,
-      tag,
-      tags,
       update_content_length_header,
       allow_playback_repeats,
-      allow_unused_http_interactions,
-      exclusive,
       preserve_exact_body_bytes,
       clean_outdated_http_interactions
     ) {
@@ -173,8 +158,6 @@ Cassette <- R6::R6Class(
       }
       if (!missing(re_record_interval))
         self$re_record_interval <- re_record_interval
-      if (!missing(tag)) self$tag = tag
-      if (!missing(tags)) self$tags = tags
       if (!missing(update_content_length_header)) {
         assert(update_content_length_header, "logical")
         self$update_content_length_header = update_content_length_header
@@ -183,9 +166,6 @@ Cassette <- R6::R6Class(
         assert(allow_playback_repeats, "logical")
         self$allow_playback_repeats = allow_playback_repeats
       }
-      if (!missing(allow_unused_http_interactions))
-        self$allow_unused_http_interactions = allow_unused_http_interactions
-      if (!missing(exclusive)) self$exclusive = exclusive
       if (!missing(preserve_exact_body_bytes)) {
         assert(preserve_exact_body_bytes, "logical")
         self$preserve_exact_body_bytes <- preserve_exact_body_bytes
@@ -345,14 +325,6 @@ Cassette <- R6::R6Class(
         paste0("  allow_playback_repeats: ", self$allow_playback_repeats),
         sep = "\n"
       )
-      cat(
-        paste0(
-          "  allow_unused_http_interactions: ",
-          self$allow_unused_http_interactions
-        ),
-        sep = "\n"
-      )
-      cat(paste0("  exclusive: ", self$exclusive), sep = "\n")
       cat(
         paste0("  preserve_exact_body_bytes: ", self$preserve_exact_body_bytes),
         sep = "\n"
