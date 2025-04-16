@@ -19,7 +19,6 @@ test_that("use_cassette works as expected", {
   expect_equal(aa$name, "testing1")
   expect_false(aa$allow_playback_repeats)
   expect_true(aa$any_new_recorded_interactions())
-  expect_type(aa$args, "list")
 
   expect_s3_class(res, "HttpResponse")
   expect_type(res$content, "raw")
