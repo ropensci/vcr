@@ -70,8 +70,6 @@ library(crul)
 
 \item{\code{record}}{(character) record mode}
 
-\item{\code{manfile}}{(character) cassette file path}
-
 \item{\code{recorded_at}}{(character) date/time recorded at}
 
 \item{\code{serialize_with}}{(character) serializer to use (yaml|json)}
@@ -121,9 +119,7 @@ be recorded back to file}
 \item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
 \item \href{#method-Cassette-should_stub_requests}{\code{Cassette$should_stub_requests()}}
 \item \href{#method-Cassette-should_remove_matching_existing_interactions}{\code{Cassette$should_remove_matching_existing_interactions()}}
-\item \href{#method-Cassette-storage_key}{\code{Cassette$storage_key()}}
 \item \href{#method-Cassette-raw_cassette_bytes}{\code{Cassette$raw_cassette_bytes()}}
-\item \href{#method-Cassette-make_dir}{\code{Cassette$make_dir()}}
 \item \href{#method-Cassette-deserialized_hash}{\code{Cassette$deserialized_hash()}}
 \item \href{#method-Cassette-previously_recorded_interactions}{\code{Cassette$previously_recorded_interactions()}}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
@@ -376,19 +372,6 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-storage_key"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-storage_key}{}}}
-\subsection{Method \code{storage_key()}}{
-Get the serializer path
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$storage_key()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-character
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-raw_cassette_bytes"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-raw_cassette_bytes}{}}}
 \subsection{Method \code{raw_cassette_bytes()}}{
@@ -399,19 +382,6 @@ Get character string of entire cassette; bytes is a misnomer
 
 \subsection{Returns}{
 character
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-make_dir"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-make_dir}{}}}
-\subsection{Method \code{make_dir()}}{
-Create the directory that holds the cassettes, if not present
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$make_dir()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-no return; creates a directory recursively, if missing
 }
 }
 \if{html}{\out{<hr>}}

@@ -1,16 +1,6 @@
-test_that("JSON basic stuff", {
-  aa <- JSON$new()
-  expect_s3_class(aa, "R6")
-  expect_s3_class(aa, "JSON")
-
-  # vars
-  expect_equal(aa$file_extension, ".json")
-  expect_match(aa$path, "\\.json")
-  expect_null(aa$string)
-
-  # methods
-  expect_type(aa$serialize, "closure")
-  expect_type(aa$deserialize, "closure")
+test_that("generates correct path", {
+  aa <- JSON$new("path", "name")
+  expect_equal(aa$path, "path/name.json")
 })
 
 test_that("JSON usage", {
@@ -58,7 +48,7 @@ test_that("JSON usage", {
 test_that("JSON fails well", {
   expect_error(JSON$new(a = 5), "unused argument")
 
-  z <- JSON$new()
+  z <- JSON$new("path", "name")
   # if no path specified, fails with useful message as is
   expect_error(suppressWarnings(z$deserialize()), "cannot open the connection")
 })

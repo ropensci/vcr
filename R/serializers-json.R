@@ -6,33 +6,18 @@
 #   path = ww$path, bytes = FALSE)
 # ww$deserialize()
 
-#' @title The JSON serializer
-#' @description class with methods for serializing via \pkg{jsonlite}
-#' @keywords internal
 JSON <- R6::R6Class(
   "JSON",
   inherit = Serializer,
   public = list(
-    #' @description Create a new `JSON` object
-    #' @param path (character) full path to the yaml file
-    #' @return A new `JSON` object
-    initialize = function(path = NULL) {
-      super$initialize(".json", path)
+    initialize = function(path, name) {
+      super$initialize(path, name, ".json")
     },
 
-    #' @description Serializes the given hash using internal fxn write_json
-    #' @param x (list) the object to serialize
-    #' @param bytes (logical) whether to preserve exact body bytes or not
-    #' @return (character) the json string to write to disk
-    serialize = function(x, bytes) {
-      write_json(x, self$path, bytes)
+    serialize = function(data, preserve_bytes) {
+      write_json(data, self$path, preserve_bytes)
     },
 
-    #' @description Deserializes the content at the file path using
-    #' jsonlite::fromJSON
-    #' @param cassette the current cassette object so it's properties can
-    #' be retrieved
-    #' @return (list) the deserialized object, an R list
     deserialize = function(cassette) {
       str <- sensitive_put_back(readLines(self$path))
       tmp <- jsonlite::fromJSON(str, FALSE)

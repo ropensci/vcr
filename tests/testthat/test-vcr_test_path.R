@@ -3,7 +3,7 @@ test_that("vcr_test_path works with testthat", {
 
   # setup
   dir <- withr::local_tempdir()
-  dir.create(file.path(dir, "tests", "testthat"), recursive = TRUE)
+  dir_create(file.path(dir, "tests", "testthat"))
   withr::local_dir(dir)
 
   # test
@@ -22,7 +22,7 @@ test_that("vcr_test_path works with testthat in a dir that isn't `tests`", {
 
   # setup
   dir <- withr::local_tempdir()
-  dir.create(file.path(dir, "testthat"), recursive = TRUE)
+  dir_create(file.path(dir, "testthat"))
   withr::local_dir(dir)
 
   # test

@@ -102,7 +102,7 @@ use_vcr <- function(dir = ".", verbose = TRUE) {
         "Creating directory: ",
         file.path(dir, "tests/testthat")
       ))
-    dir.create(file.path(dir, "tests/testthat"), recursive = TRUE)
+    dir_create(file.path(dir, "tests/testthat"))
   }
   if (verbose) vcr_cat_info("Looking for testthat.R file or similar")
   tall <- file.path(dir, "tests/testthat.R")

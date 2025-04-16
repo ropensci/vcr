@@ -48,7 +48,7 @@ test_that("httr use_cassette works", {
 
   # cassette
   expect_s3_class(out, "Cassette")
-  expect_match(out$manfile, "httr_test1")
+  expect_match(out$file(), "httr_test1")
   expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
@@ -78,7 +78,7 @@ test_that("httr use_cassette works", {
   expect_output(print(x), "HTML PUBLIC")
 
   # response body
-  str <- yaml::yaml.load_file(out$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out$file())$http_interactions
   expect_type(str[[1]]$response$body$string, "character")
   expect_match(str[[1]]$response$body$string, "404")
   expect_match(str[[1]]$response$body$string, "DOCTYPE HTML")
@@ -96,7 +96,7 @@ test_that("httr use_cassette works", {
 
   # cassette
   expect_s3_class(out, "Cassette")
-  expect_match(out$manfile, "httr_test2")
+  expect_match(out$file(), "httr_test2")
   expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
@@ -106,7 +106,7 @@ test_that("httr use_cassette works", {
   expect_equal(x$url, hb_remote("/404"))
 
   # response body
-  str <- yaml::yaml.load_file(out$manfile)
+  str <- yaml::yaml.load_file(out$file())
   str <- rawToChar(jsonlite::base64_dec(
     str$http_interactions[[1]]$response$body$base64_string
   ))
@@ -131,7 +131,7 @@ test_that("httr w/ >1 request per cassette", {
 
   # cassette
   expect_s3_class(out, "Cassette")
-  expect_match(out$manfile, "multiple_queries_httr_record_once")
+  expect_match(out$file(), "multiple_queries_httr_record_once")
   expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
@@ -144,7 +144,7 @@ test_that("httr w/ >1 request per cassette", {
   expect_equal(x418$status_code, 418)
 
   # response body
-  str <- yaml::yaml.load_file(out$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out$file())$http_interactions
   expect_type(str, "list")
   expect_type(str[[3]], "list")
   expect_match(str[[3]]$request$uri, "418")
@@ -179,7 +179,7 @@ test_that("httr POST requests works", {
   expect_false(out$is_empty())
   expect_s3_class(x, "response")
   expect_equal(x$status_code, 200)
-  str <- yaml::yaml.load_file(out$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$form, list(foo = "bar"))
 
@@ -191,7 +191,7 @@ test_that("httr POST requests works", {
   expect_false(out2$is_empty())
   expect_s3_class(z, "response")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out2$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out2$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "some string")
 
@@ -203,7 +203,7 @@ test_that("httr POST requests works", {
   expect_false(out3$is_empty())
   expect_s3_class(z, "response")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out3$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out3$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "some string")
 
@@ -217,7 +217,7 @@ test_that("httr POST requests works", {
   expect_false(out4$is_empty())
   expect_s3_class(b, "response")
   expect_equal(b$status_code, 200)
-  str <- yaml::yaml.load_file(out4$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out4$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
@@ -230,7 +230,7 @@ test_that("httr POST requests works", {
   # expect_false(out6$is_empty())
   # expect_s3_class(d, "response")
   # expect_equal(d$status_code, 200)
-  # str <- yaml::yaml.load_file(out6$manfile)$http_interactions
+  # str <- yaml::yaml.load_file(out6$file())$http_interactions
   # strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   # expect_equal(length(strj$files), 0) # files empty
   # expect_match(strj$data, "bibentry\\(") # data not empty
@@ -243,7 +243,7 @@ test_that("httr POST requests works", {
   expect_false(out5$is_empty())
   expect_s3_class(m, "response")
   expect_equal(m$status_code, 200)
-  str <- yaml::yaml.load_file(out5$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out5$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")

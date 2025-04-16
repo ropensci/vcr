@@ -1,22 +1,11 @@
-test_that("YAML basic stuff", {
-  aa <- YAML$new()
-  expect_s3_class(aa, "R6")
-  expect_s3_class(aa, "YAML")
-
-  # vars
-  expect_equal(aa$file_extension, ".yml")
-  expect_type(aa$path, "character")
-  expect_match(aa$path, "\\.yml")
-
-  # methods
-  expect_type(aa$serialize, "closure")
-  expect_type(aa$deserialize, "closure")
+test_that("correctly computes path", {
+  aa <- YAML$new("path", "name")
+  expect_equal(aa$path, "path/name.yml")
 })
 
 test_that("YAML usage", {
-  z <- YAML$new(path = "stuff")
-  withr::defer(unlink(z$path))
-  expect_match(z$path, "stuff.yml")
+  z <- YAML$new(withr::local_tempdir(), "name")
+  expect_equal(basename(z$path), "name.yml")
 
   # before file exists:
   expect_error(suppressWarnings(z$deserialize()), "cannot open")
@@ -35,7 +24,7 @@ test_that("YAML usage", {
 test_that("YAML fails well", {
   expect_error(YAML$new(a = 5), "unused argument")
 
-  z <- YAML$new()
+  z <- YAML$new("path", "name")
   # if no path specified, fails with useful message as is
   expect_error(suppressWarnings(z$deserialize()), "cannot open the connection")
 })

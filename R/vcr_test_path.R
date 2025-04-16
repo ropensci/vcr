@@ -24,7 +24,7 @@ vcr_test_path <- function(...) {
   path <- file.path(root, ...)
   if (!dir.exists(path)) {
     message("could not find ", path, "; creating it")
-    dir.create(path)
+    dir_create(path)
   }
   path
 }

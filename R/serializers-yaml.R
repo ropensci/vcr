@@ -7,35 +7,18 @@
 # yy$deserialize()
 # }
 
-#' @title The YAML serializer
-#' @description class with methods for serializing via the \pkg{yaml} package
-#' @keywords internal
 YAML <- R6::R6Class(
   "YAML",
   inherit = Serializer,
   public = list(
-    #' @description Create a new YAML object
-    #' @param path (character) path to the cassette, excluding the cassette
-    #' directory and the file extension
-    #' @return A new `YAML` object
-    initialize = function(path = NULL) {
-      super$initialize(".yml", path)
+    initialize = function(path, name) {
+      super$initialize(path, name, ".yml")
     },
 
-    #' @description Serializes the given hash using internal fxn write_yaml
-    #' @param x (list) the object to serialize
-    #' @param path (character) the file path
-    #' @param bytes (logical) whether to preserve exact body bytes or not
-    #' @return (character) the YAML string to write to disk
-    serialize = function(x, bytes) {
-      write_yaml(x, self$path, bytes)
+    serialize = function(data, preserve_bytes) {
+      write_yaml(data, self$path, preserve_bytes)
     },
 
-    #' @description Deserializes the content at the path using
-    #' yaml::yaml.load_file
-    #' @param cassette the current cassette object so it's properties can
-    #' be retrieved
-    #' @return (list) the deserialized object, an R list
     deserialize = function(cassette) {
       tmp <- yaml_load_desecret(self$path)
       private$process_body(tmp, cassette)

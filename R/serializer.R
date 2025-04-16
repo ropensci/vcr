@@ -1,38 +1,15 @@
-#' Serializer class - base class for JSON/YAML serializers
-#' @keywords internal
 Serializer <- R6::R6Class(
   "Serializer",
   public = list(
-    #' @field file_extension (character) A file extension
     file_extension = NULL,
-    #' @field path (character) full path to the yaml file
     path = NULL,
 
-    #' @description Create a new YAML object
-    #' @param file_extension (character) A file extension
-    #' @param path (character) path to the cassette, excluding the cassette
-    #' directory and the file extension
-    #' @return A new `YAML` object
-    initialize = function(file_extension = NULL, path = NULL) {
-      self$file_extension <- file_extension
-      if (is.null(path)) {
-        self$path <- paste0(
-          cassette_path(),
-          "/",
-          basename(tempfile()),
-          self$file_extension
-        )
-      } else {
-        self$path <- paste0(cassette_path(), "/", path, self$file_extension)
-      }
+    initialize = function(path, name, ext) {
+      self$file_extension <- ext
+      self$path <- paste0(path, "/", name, self$file_extension)
     },
-    #' @description Serializes a hash - REPLACED BY YAML/JSON METHODS
-    #' @param x (list) the object to serialize
-    #' @param bytes (logical) whether to preserve exact body bytes or not
-    #' @return (character) the YAML or JSON string to write to disk
-    serialize = function(x, bytes) {
+    serialize = function(data, preserve_bytes = TRUE) {
     },
-    #' @description Serializes a file - REPLACED BY YAML/JSON METHODS
     deserialize = function() {
     }
   ),
@@ -78,11 +55,11 @@ Serializer <- R6::R6Class(
   )
 )
 
-serializer_fetch <- function(path, ext = "yaml") {
+serializer_fetch <- function(type, path, name) {
   switch(
-    ext,
-    json = JSON$new(path),
-    yaml = YAML$new(path),
-    cli::cli_abort("Unsupported cassette serializer {.str {ext}}.")
+    type,
+    json = JSON$new(path, name),
+    yaml = YAML$new(path, name),
+    cli::cli_abort("Unsupported cassette serializer {.str {type}}.")
   )
 }
