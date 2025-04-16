@@ -59,7 +59,7 @@ insert_cassette <- function(
       vcr_c$preserve_exact_body_bytes,
     re_record_interval = re_record_interval %||% vcr_c$re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions %||%
-      vcr_c$clean_outdated_http_interactions,
+      vcr_c$clean_outdated_http_interactions
   )
   cassette_push(cassette)
 }
