@@ -10,7 +10,6 @@ use_cassette(
   ...,
   record = NULL,
   match_requests_on = NULL,
-  update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
   persist_with = NULL,
@@ -23,7 +22,6 @@ local_cassette(
   name,
   record = NULL,
   match_requests_on = NULL,
-  update_content_length_header = FALSE,
   allow_playback_repeats = FALSE,
   serialize_with = NULL,
   persist_with = NULL,
@@ -52,10 +50,6 @@ complete list of the different recording modes.}
 to use to determine what recorded HTTP interaction to replay. Defaults to
 \verb{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
 "path", "headers", "body" and "query"}
-
-\item{update_content_length_header}{(logical) Whether or
-not to overwrite the \code{Content-Length} header of the responses to
-match the length of the response body. Default: \code{FALSE}}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
