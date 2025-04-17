@@ -221,31 +221,17 @@ Cassette <- R6::R6Class(
         invisible(lapply(prev, stub_previous_request))
       }
 
-      tmp <- list(
-        self$name,
-        self$record,
-        self$serialize_with,
-        self$match_requests_on,
-        self$allow_playback_repeats,
-        self$preserve_exact_body_bytes
-      )
-      init_opts <- compact(
-        stats::setNames(
-          tmp,
-          c(
-            "name",
-            "record",
-            "serialize_with",
-            "match_requests_on",
-            "allow_playback_repeats",
-            "preserve_exact_body_bytes"
-          )
-        )
-      )
-      self$cassette_opts <- init_opts
+      self$cassette_opts <- compact(list(
+        name = self$name,
+        record = self$record,
+        serialize_with = self$serialize_with,
+        match_requests_on = self$match_requests_on,
+        allow_playback_repeats = self$allow_playback_repeats,
+        preserve_exact_body_bytes = self$preserve_exact_body_bytes
+      ))
       init_opts <- paste(
-        names(init_opts),
-        unname(init_opts),
+        names(self$cassette_opts),
+        unname(self$cassette_opts),
         sep = ": ",
         collapse = ", "
       )
