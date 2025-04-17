@@ -7,6 +7,10 @@ vcr (development version)
 * `as.cassette()` has been removed. It's not used, and not needed anymore.
 * `cassettes()` no longer has `on_disk` or `verb` arguments and now only ever lists currently active cassettes().
 
+## NEW FEATURES
+
+* `local_vcr_configure()` allows you to temporarily affect vcr configuration.
+
 vcr 1.7.0
 =========
 

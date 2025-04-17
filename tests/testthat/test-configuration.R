@@ -60,6 +60,17 @@ test_that("warnings are thrown for invalid parameters", {
   )
 })
 
+test_that("can temporarily change configuration", {
+  local_vcr_configure(dir = "a")
+
+  local({
+    local_vcr_configure(dir = "b")
+    expect_equal(cassette_path(), "b")
+  })
+
+  expect_equal(cassette_path(), "a")
+})
+
 test_that("all configuration params are documented", {
   rd_file <- "../../man/vcr_configure.Rd"
   skip_if_not(file.exists(rd_file), sprintf("Did not find: '%s'", rd_file))

@@ -198,6 +198,16 @@ vcr_configure <- function(...) {
 
 #' @export
 #' @rdname vcr_configure
+#' @inheritParams local_cassette
+local_vcr_configure <- function(..., .frame = parent.frame()) {
+  old <- vcr_configure(...)
+  withr::defer(vcr_configure(!!!old), envir = .frame)
+  invisible()
+}
+
+
+#' @export
+#' @rdname vcr_configure
 vcr_configure_reset <- function() vcr_c$reset()
 
 #' @export
