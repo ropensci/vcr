@@ -51,7 +51,6 @@ reference:
       - Cassette
       - HTTPInteraction
       - HTTPInteractionList
-      - Persisters
       - Request
       - RequestHandler
       - RequestHandlerCrul
@@ -68,16 +67,16 @@ reference:
       - str_splitter
 
 articles:
-- title: All vignettes
-  desc: ~
-  contents:
-  - '`vcr`'
-  - '`cassette-manual-editing`'
-  - '`configuration`'
-  - '`request_matching`'
-  - '`debugging`'
-  - '`write-to-disk`'
-  - '`record-modes`'
-  - '`lightswitch`'
-  - '`internals`'
-  - '`design`'
+  - title: All vignettes
+    desc: ~
+    contents:
+      - "`vcr`"
+      - "`cassette-manual-editing`"
+      - "`configuration`"
+      - "`request_matching`"
+      - "`debugging`"
+      - "`write-to-disk`"
+      - "`record-modes`"
+      - "`lightswitch`"
+      - "`internals`"
+      - "`design`"
