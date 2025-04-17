@@ -12,7 +12,7 @@ test_that("crul POST requests works", {
   expect_false(out$is_empty())
   expect_s3_class(x, "HttpResponse")
   expect_equal(x$status_code, 200)
-  str <- yaml::yaml.load_file(out$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$form, list(foo = "bar"))
 
@@ -23,7 +23,7 @@ test_that("crul POST requests works", {
   expect_false(out2$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out2$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out2$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   # FIXME: the body should be found in data slot, fix in crul
   expect_named(strj$form, "some string")
@@ -35,7 +35,7 @@ test_that("crul POST requests works", {
   expect_false(out3$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out3$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out3$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   # FIXME: the body should be found in data slot, fix in crul
   expect_named(strj$form, "some string")
@@ -52,7 +52,7 @@ test_that("crul POST requests works", {
   expect_false(out4$is_empty())
   expect_s3_class(b, "HttpResponse")
   expect_equal(b$status_code, 200)
-  str <- yaml::yaml.load_file(out4$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out4$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_match(strj$files$y, "hello world") # files not empty
   expect_false(nzchar(strj$data)) # data empty
@@ -66,7 +66,7 @@ test_that("crul POST requests works", {
   expect_false(out6$is_empty())
   expect_s3_class(d, "HttpResponse")
   expect_equal(d$status_code, 200)
-  str <- yaml::yaml.load_file(out6$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out6$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(length(strj$files), 0) # files empty
   expect_match(strj$data, "bibentry\\(") # data not empty
@@ -78,7 +78,7 @@ test_that("crul POST requests works", {
   expect_false(out5$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out5$manfile)$http_interactions
+  str <- yaml::yaml.load_file(out5$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")

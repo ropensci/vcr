@@ -23,8 +23,8 @@ Suggests:
 make_pkg <- function(frame = parent.frame()) {
   dir <- withr::local_tempdir(.local_envir = frame)
 
-  dir.create(file.path(dir, "man"), recursive = TRUE)
-  dir.create(file.path(dir, "R"), recursive = TRUE)
+  dir_create(file.path(dir, "man"))
+  dir_create(file.path(dir, "R"))
   cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
 
   dir
@@ -38,7 +38,7 @@ skip_if_localhost_8000_gone <- function() {
 }
 
 recorded_at <- function(x) {
-  yaml::yaml.load_file(x$manfile)$http_interactions[[1]]$recorded_at
+  yaml::yaml.load_file(x$file())$http_interactions[[1]]$recorded_at
 }
 
 extract_vcr_config_args <- function(rdfile) {

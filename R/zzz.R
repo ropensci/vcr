@@ -122,3 +122,7 @@ sup_mssg <- function(quiet, fun) sup_cond(quiet, fun)
 sup_warn <- function(quiet, fun) sup_cond(quiet, fun, suppressWarnings)
 
 dims <- function(x) length(dim(x))
+
+dir_create <- function(path) {
+  dir.create(path, showWarnings = FALSE, recursive = TRUE)
+}
