@@ -2,12 +2,15 @@
 % Please edit documentation in R/configuration.R
 \name{vcr_configure}
 \alias{vcr_configure}
+\alias{local_vcr_configure}
 \alias{vcr_configure_reset}
 \alias{vcr_configuration}
 \alias{vcr_config_defaults}
 \title{Global Configuration Options}
 \usage{
 vcr_configure(...)
+
+local_vcr_configure(..., .frame = parent.frame())
 
 vcr_configure_reset()
 
@@ -18,6 +21,11 @@ vcr_config_defaults()
 \arguments{
 \item{...}{configuration settings used to override defaults. See below for a
 complete list of valid arguments.}
+
+\item{.frame}{Attach exit handlers to this environment. Typically, this
+should be either the current environment or a parent frame (accessed
+through \code{\link[=parent.frame]{parent.frame()}}). See \code{vignette("withr", package = "withr")}
+for more details.}
 }
 \description{
 Configurable options that define vcr's default behavior.
