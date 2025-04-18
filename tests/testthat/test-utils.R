@@ -15,12 +15,6 @@ test_that("can_rawToChar", {
   expect_false(can_rawToChar(png_eg))
 })
 
-test_that("try_encoding", {
-  expect_error(try_encoding(), "'x' is missing")
-  expect_equal(try_encoding("foo"), "unknown")
-  expect_equal(try_encoding(charToRaw("foo")), "ASCII-8BIT")
-})
-
 test_that("is_base64", {
   not64 <- Cassette$new('notbase64')
   is64 <- Cassette$new('isbase64', preserve_exact_body_bytes = TRUE)

@@ -129,12 +129,3 @@ pkg_versions <- function() {
 get_body <- function(x) {
   if (is.null(x)) '' else x
 }
-
-encoding_guess <- function(x, bytes = FALSE, force_guess = FALSE) {
-  if (bytes && !force_guess) return("ASCII-8BIT")
-  enc <- try_encoding(x)
-  if (enc == "unknown") {
-    message("encoding couldn't be detected; assuming UTF-8")
-  }
-  return("UTF-8")
-}
