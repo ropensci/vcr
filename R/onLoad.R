@@ -5,9 +5,6 @@ request_ignorer <- NULL
 the <- NULL
 
 initialize_ivars <- function() {
-  vcr_c$cassettes <<- list()
-  vcr_c$linked_context <<- NULL
-
   request_matchers <<- RequestMatcherRegistry$new()
   request_ignorer <<- RequestIgnorer$new()
 }
@@ -21,6 +18,7 @@ initialize_ivars <- function() {
   the <<- new.env(parent = emptyenv())
   the$cassettes <- list()
   the$light_switch <- lightswitch_init()
+  the$last_error <- list()
   # lots of things
   initialize_ivars()
 } # nocov end
