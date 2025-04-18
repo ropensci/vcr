@@ -114,7 +114,6 @@ be recorded back to file}
 \item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
 \item \href{#method-Cassette-originally_recorded_at}{\code{Cassette$originally_recorded_at()}}
 \item \href{#method-Cassette-serializable_hash}{\code{Cassette$serializable_hash()}}
-\item \href{#method-Cassette-interactions_to_record}{\code{Cassette$interactions_to_record()}}
 \item \href{#method-Cassette-merged_interactions}{\code{Cassette$merged_interactions()}}
 \item \href{#method-Cassette-up_to_date_interactions}{\code{Cassette$up_to_date_interactions()}}
 \item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
@@ -296,19 +295,6 @@ POSIXct date
 Get a list of the http interactions to record + recorded_with
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$serializable_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-interactions_to_record"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-interactions_to_record}{}}}
-\subsection{Method \code{interactions_to_record()}}{
-Get the list of http interactions to record
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$interactions_to_record()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

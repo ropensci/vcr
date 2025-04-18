@@ -51,8 +51,6 @@ VcrResponse <- R6::R6Class(
     opts = NULL,
     #' @field adapter_metadata Additional metadata used by a specific VCR adapter
     adapter_metadata = NULL,
-    #' @field hash a list
-    hash = NULL,
     #' @field disk a boolean
     disk = NULL,
 
@@ -99,7 +97,7 @@ VcrResponse <- R6::R6Class(
     #' @description Create a hash
     #' @return a list
     to_hash = function() {
-      self$hash <- list(
+      list(
         status = self$status,
         headers = self$headers,
         body = serializable_body(
@@ -109,7 +107,6 @@ VcrResponse <- R6::R6Class(
         http_version = self$http_version,
         disk = self$disk
       )
-      return(self$hash)
     },
 
     #' @description Get a hash back to an R list

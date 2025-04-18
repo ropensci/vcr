@@ -111,7 +111,7 @@ Request <- R6::R6Class(
     #' @description Convert the request to a list
     #' @return list
     to_hash = function() {
-      self$hash <- list(
+      list(
         method = self$method,
         uri = self$uri,
         body = serializable_body(
@@ -121,7 +121,6 @@ Request <- R6::R6Class(
         headers = self$headers,
         disk = self$disk
       )
-      return(self$hash)
     },
 
     #' @description Convert the request to a list
@@ -158,19 +157,13 @@ Request <- R6::R6Class(
   )
 )
 
-serializable_body <- function(x, preserve_exact_body_bytes = FALSE) {
-  if (is.null(x)) return(x)
-  if (preserve_exact_body_bytes) {
-    if (can_charToRaw(x)) {
-      tmp <- jsonlite::base64_enc(charToRaw(x))
-      base64 <- TRUE
-    } else {
-      tmp <- x
-      base64 <- FALSE
-    }
-    structure(tmp, base64 = base64)
+serializable_body <- function(body, preserve_exact_body_bytes = FALSE) {
+  if (is.null(body)) {
+    NULL
+  } else if (preserve_exact_body_bytes) {
+    structure(jsonlite::base64_enc(charToRaw(body)), base64 = TRUE)
   } else {
-    x
+    body
   }
 }
 
