@@ -32,10 +32,10 @@
       . <- cl$eject()
     Condition
       Warning:
-      Empty cassette (test) deleted; consider the following:
-       - If an error occurred resolve that first, then check:
-       - vcr only supports crul, httr & httr2; requests w/ curl, download.file, etc. are not supported
-       - If you are using crul/httr/httr2, are you sure you made an HTTP request?
+      x "test" cassette ejected without recording any interactions.
+      i Did your request error?
+      i Did you use {curl}, `download.file()`, or other unsupported tool?
+      i If you are using crul/httr/httr2, are you sure you made an HTTP request?
 
 # cassette checks name
 

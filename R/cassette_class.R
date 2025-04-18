@@ -134,7 +134,7 @@ Cassette <- R6::R6Class(
       assert(preserve_exact_body_bytes, "logical")
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
         config$preserve_exact_body_bytes
-      
+
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
         config$clean_outdated_http_interactions
 
@@ -254,13 +254,20 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      on.exit(private$remove_empty_cassette())
       self$write_recorded_interactions_to_disk()
-      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
-      # disable webmockr
-      webmockr::disable(quiet = vcr_c$quiet)
-      # return self
-      return(self)
+
+      if (self$is_empty()) {
+        unlink(self$file(), force = TRUE)
+        if (vcr_c$warn_on_empty_cassette) {
+          cli::cli_warn(c(
+            x = "{.str {self$name}} cassette ejected without recording any interactions.",
+            i = "Did your request error?",
+            i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
+            i = "If you are using crul/httr/httr2, are you sure you made an HTTP request?"
+          ))
+        }
+      }
+      invisible(self)
     },
 
     #' @description print method for `Cassette` objects
@@ -683,26 +690,7 @@ Cassette <- R6::R6Class(
       webmockr::build_crul_response(req, resp)
     }
   ),
-
-  private = list(
-    remove_empty_cassette = function() {
-      if (!any(nzchar(readLines(self$file())))) {
-        unlink(self$file(), force = TRUE)
-        if (vcr_c$warn_on_empty_cassette)
-          warning(empty_cassette_message(self$name), call. = FALSE)
-      }
-    }
-  )
 )
-
-empty_cassette_message <- function(x) {
-  c(
-    sprintf("Empty cassette (%s) deleted; consider the following:\n", x),
-    " - If an error occurred resolve that first, then check:\n",
-    " - vcr only supports crul, httr & httr2; requests w/ curl, download.file, etc. are not supported\n",
-    " - If you are using crul/httr/httr2, are you sure you made an HTTP request?\n"
-  )
-}
 
 
 check_cassette_name <- function(x, call = caller_env()) {
