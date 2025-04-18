@@ -15,8 +15,10 @@ eject_cassette <- function() {
   }
 
   cassette <- cassette_pop()
+  if (!vcr_c$quiet) message("ejecting cassette: ", cassette$name)
   cassette$eject()
 
+  webmockr::disable(quiet = vcr_c$quiet)
   if (!cassette_active()) {
     suppressMessages(webmockr::webmockr_disable_net_connect())
   }
