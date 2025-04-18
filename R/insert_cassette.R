@@ -11,6 +11,7 @@
 #' @keywords internal
 insert_cassette <- function(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -36,6 +37,7 @@ insert_cassette <- function(
   # make cassette
   cassette <- Cassette$new(
     name,
+    dir = dir,
     record = record,
     match_requests_on = match_requests_on,
     allow_playback_repeats = allow_playback_repeats,

@@ -140,6 +140,7 @@ Create a new \code{Cassette} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$new(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -155,6 +156,8 @@ Create a new \code{Cassette} object
 \describe{
 \item{\code{name}}{The name of the cassette. vcr will sanitize this to ensure it
 is a valid file name.}
+
+\item{\code{dir}}{The directory where the cassette will be stored.}
 
 \item{\code{record}}{The record mode. Default: "once". In the future we'll support
 "once", "all", "none", "new_episodes". See \link{recording} for more information}

@@ -7,6 +7,7 @@
 \usage{
 insert_cassette(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -21,6 +22,9 @@ eject_cassette()
 \arguments{
 \item{name}{The name of the cassette. This is used to name a file on
 disk, so it must be valid file name.}
+
+\item{dir}{The directory where the cassette will be stored. Defaults
+to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
 
 \item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
 complete list of the different recording modes.}

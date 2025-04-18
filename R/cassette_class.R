@@ -86,6 +86,7 @@ Cassette <- R6::R6Class(
     cassette_opts = NULL,
 
     #' @description Create a new `Cassette` object
+    #' @param dir The directory where the cassette will be stored.
     #' @param name The name of the cassette. vcr will sanitize this to ensure it
     #' is a valid file name.
     #' @param record The record mode. Default: "once". In the future we'll support
@@ -111,6 +112,7 @@ Cassette <- R6::R6Class(
     #' @return A new `Cassette` object
     initialize = function(
       name,
+      dir = NULL,
       record = NULL,
       match_requests_on = NULL,
       allow_playback_repeats = FALSE,
@@ -123,6 +125,7 @@ Cassette <- R6::R6Class(
       config <- vcr_configuration()
 
       self$name <- name
+      self$root_dir <- dir %||% config$dir
       self$record <- check_record_mode(record %||% config$record)
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
         config$match_requests_on
@@ -134,11 +137,10 @@ Cassette <- R6::R6Class(
       assert(preserve_exact_body_bytes, "logical")
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
         config$preserve_exact_body_bytes
-      
+
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
         config$clean_outdated_http_interactions
 
-      self$root_dir <- config$dir
       self$serializer <- serializer_fetch(
         self$serialize_with,
         path = self$root_dir,
