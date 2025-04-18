@@ -2,11 +2,9 @@ vcr_c <- NULL # nocov start
 VCRHooks <- NULL
 request_matchers <- NULL
 request_ignorer <- NULL
-light_switch <- NULL
 the <- NULL
 
 initialize_ivars <- function() {
-  light_switch <<- list2env(lightswitch_init(), parent = emptyenv())
   vcr_c$cassettes <<- list()
   vcr_c$linked_context <<- NULL
 
@@ -22,6 +20,7 @@ initialize_ivars <- function() {
   # initialize bucket of cassettes in session
   the <<- new.env(parent = emptyenv())
   the$cassettes <- list()
+  the$light_switch <- lightswitch_init()
   # lots of things
   initialize_ivars()
 } # nocov end

@@ -25,7 +25,7 @@ insert_cassette <- function(
   check_cassette_name(name)
 
   if (!turned_on()) {
-    if (!light_switch$ignore_cassettes) {
+    if (!the$light_switch$ignore_cassettes) {
       message <- "vcr is turned off.  You must turn it on before you can insert a cassette.
         Or you can set ignore_cassettes=TRUE option to completely ignore cassette insertions."
       stop(message)
