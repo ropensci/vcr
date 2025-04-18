@@ -1,0 +1,182 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://www.google.com/
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.11.1 r-curl/6.2.3 crul/1.5.0
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      accept-ch: Sec-CH-Prefers-Color-Scheme
+      alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      cache-control: private, max-age=0
+      content-encoding: gzip
+      content-length: '7233'
+      content-security-policy-report-only: 'object-src ''none'';base-uri ''self'';script-src
+        ''nonce-Km8oCJuCZiWg1keV5GbN3Q'' ''strict-dynamic'' ''report-sample'' ''unsafe-eval''
+        ''unsafe-inline'' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp'
+      content-type: text/html; charset=ISO-8859-1
+      date: Fri, 18 Apr 2025 17:22:41 GMT
+      expires: '-1'
+      p3p: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+      server: gws
+      set-cookie:
+      - AEC=AVcja2fX-8H-oDmh5fD3VG7MRK0PTa1EZP47BSWPQDSKBZsdbwtgdiMrPlQ; expires=Wed,
+        15-Oct-2025 17:22:41 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax
+      - NID=523=q7Did7NDsl-Oc9Fo-jNmteTxai84NvU6xMUuFxpylORl_MUJYDS9WApCWLESKvZmUc6rTzswxyVbQsP1agivrEAyfgIrXKnVZjlYFKltGlrnmdk8DBImUgBBo4CQgJ2X4l1BRyyXfA-b4EmTSLwgQQWpaBM3MveeXhODeeOPDhMH6MmFjGpnEyeIB-tQjmP_a5ZuRI1U7BZ9rXPooX4B_XIa;
+        expires=Sat, 18-Oct-2025 17:22:41 GMT; path=/; domain=.google.com; HttpOnly
+      status: 'HTTP/2 200 '
+      x-frame-options: SAMEORIGIN
+      x-xss-protection: '0'
+    body:
+      encoding: ''
+      file: no
+      string: |-
+        <!doctype html><html itemscope="" itemtype="http://schema.org/WebPage" lang="en"><head><meta content="Search the world's information, including webpages, images, videos and more. Google has many special features to help you find exactly what you're looking for." name="description"><meta content="noodp, " name="robots"><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"><meta content="/images/branding/googleg/1x/googleg_standard_color_128dp.png" itemprop="image"><title>Google</title><script nonce="Km8oCJuCZiWg1keV5GbN3Q">(function(){var _g={kEI:'YYoCaJ2jKZHgwN4P34fz6Qw',kEXPI:'0,202791,3497476,172,510,435,538661,48791,46127,344796,247319,42725,5241681,108,85,36812450,25228681,11556,39640,5,72787,14280,14115,62507,2657,3437,3319,23879,9138,4600,328,6225,2949,31362,29854,1346,13703,8210,3286,4134,30380,28333,18505,5826,787,4127,19035,1827,4105,351,10702,8178,71,2,5799,950,958,1192,756,3851,7,5773,1202,3109,4665,6053,1623,10960,11937,226,2726,1635,3261,459,1639,892,28,7,1,1293,2126,2863,1,893,1598,2,311,78,2199,889,2969,1680,570,1791,459,4079,4855,354,658,609,3971,445,77,22,3505,924,3076,8713,1582,921,794,22,1733,7,1,2699,8,871,1452,4131,1119,10,93,505,1012,123,704,2,1417,58,4,1962,117,2,1,2,2,2,3,234,1110,537,637,93,370,13,1182,220,733,6580,300,322,32,4,431,156,3,9,300,1159,1,1242,238,31,329,771,1248,240,1412,2,99,560,408,627,549,208,794,246,225,202,180,213,623,1,17,6,1,620,107,749,172,2,61,612,1120,2,77,130,697,2,19,368,197,4,1,2,2,2,987,10,551,4,135,239,153,535,1,64,3,4,160,328,450,73,208,5,10,76,198,235,211,46,334,422,97,158,4,651,923,1020,907,1546,1,442,386,79,2,2034,334,2,2,2,918,307,15,43,188,502,2,3,2,2,2,83,10,278,102,11,215,476,330,46,708,22,18,54,66,4,81,29,304,2,1,2,604,54,13,93,594,3,1,543,200,1,1138,339,83,260,410,1233,295,89,55,104,1,6,192,189,633,169,11,190,1235,2061,21295709,18,2017,1717,806,8,5638,1183,5,2009,2340,473,980,4075,3,211,201,15,705,2,619,415,1037',kBL:'-jb-',kOPI:89978449};(function(){var a;((a=window.google)==null?0:a.stvsc)?google.kEI=_g.kEI:window.google=_g;}).call(this);})();(function(){google.sn='webhp';google.kHL='en';})();(function(){
+        var g=this||self;function k(){return window.google&&window.google.kOPI||null};var l,m=[];function n(a){for(var b;a&&(!a.getAttribute||!(b=a.getAttribute("eid")));)a=a.parentNode;return b||l}function p(a){for(var b=null;a&&(!a.getAttribute||!(b=a.getAttribute("leid")));)a=a.parentNode;return b}function q(a){/^http:/i.test(a)&&window.location.protocol==="https:"&&(google.ml&&google.ml(Error("a"),!1,{src:a,glmm:1}),a="");return a}
+        function r(a,b,d,c,h){var e="";b.search("&ei=")===-1&&(e="&ei="+n(c),b.search("&lei=")===-1&&(c=p(c))&&(e+="&lei="+c));var f=b.search("&cshid=")===-1&&a!=="slh";c="&zx="+Date.now().toString();g._cshid&&f&&(c+="&cshid="+g._cshid);(d=d())&&(c+="&opi="+d);return"/"+(h||"gen_204")+"?atyp=i&ct="+String(a)+"&cad="+(b+e+c)};l=google.kEI;google.getEI=n;google.getLEI=p;google.ml=function(){return null};google.log=function(a,b,d,c,h,e){e=e===void 0?k:e;d||(d=r(a,b,e,c,h));if(d=q(d)){a=new Image;var f=m.length;m[f]=a;a.onerror=a.onload=a.onabort=function(){delete m[f]};a.src=d}};google.logUrl=function(a,b){b=b===void 0?k:b;return r("",a,b)};}).call(this);(function(){google.y={};google.sy=[];var d;(d=google).x||(d.x=function(a,b){if(a)var c=a.id;else{do c=Math.random();while(google.y[c])}google.y[c]=[a,b];return!1});var e;(e=google).sx||(e.sx=function(a){google.sy.push(a)});google.lm=[];var f;(f=google).plm||(f.plm=function(a){google.lm.push.apply(google.lm,a)});google.lq=[];var g;(g=google).load||(g.load=function(a,b,c){google.lq.push([[a],b,c])});var h;(h=google).loadAll||(h.loadAll=function(a,b){google.lq.push([a,b])});google.bx=!1;var k;(k=google).lx||(k.lx=function(){});var l=[],m;(m=google).fce||(m.fce=function(a,b,c,n){l.push([a,b,c,n])});google.qce=l;}).call(this);google.f={};(function(){
+        document.documentElement.addEventListener("submit",function(b){var a;if(a=b.target){var c=a.getAttribute("data-submitfalse");a=c==="1"||c==="q"&&!a.elements.q.value?!0:!1}else a=!1;a&&(b.preventDefault(),b.stopPropagation())},!0);document.documentElement.addEventListener("click",function(b){var a;a:{for(a=b.target;a&&a!==document.documentElement;a=a.parentElement)if(a.tagName==="A"){a=a.getAttribute("data-nohref")==="1";break a}a=!1}a&&b.preventDefault()},!0);}).call(this);</script><style>#gbar,#guser{font-size:13px;padding-top:1px !important;}#gbar{height:22px}#guser{padding-bottom:7px !important;text-align:right}.gbh,.gbd{border-top:1px solid #c9d7f1;font-size:1px}.gbh{height:0;position:absolute;top:24px;width:100%}@media all{.gb1{height:22px;margin-right:.5em;vertical-align:top}#gbar{float:left}}a.gb1,a.gb4{text-decoration:underline !important}a.gb1,a.gb4{color:#00c !important}.gbi .gb4{color:#dd8e27 !important}.gbf .gb4{color:#900 !important}
+        </style><style>body,td,a,p,.h{font-family:sans-serif}body{margin:0;overflow-y:scroll}#gog{padding:3px 8px 0}td{line-height:.8em}.gac_m td{line-height:17px}form{margin-bottom:20px}.h{color:#1967d2}em{font-weight:bold;font-style:normal}.lst{height:25px;width:496px}.gsfi,.lst{font:18px sans-serif}.gsfs{font:17px sans-serif}.ds{display:inline-box;display:inline-block;margin:3px 0 4px;margin-left:4px}input{font-family:inherit}body{background:#fff;color:#000}a{color:#681da8;text-decoration:none}a:hover,a:active{text-decoration:underline}.fl a{color:#1967d2}a:visited{color:#681da8}.sblc{padding-top:5px}.sblc a{display:block;margin:2px 0;margin-left:13px;font-size:11px}.lsbb{background:#f8f9fa;border:solid 1px;border-color:#dadce0 #70757a #70757a #dadce0;height:30px}.lsbb{display:block}#WqQANb a{display:inline-block;margin:0 12px}.lsb{background:url(/images/nav_logo229.png) 0 -261px repeat-x;color:#000;border:none;cursor:pointer;height:30px;margin:0;outline:0;font:15px sans-serif;vertical-align:top}.lsb:active{background:#dadce0}.lst:focus{outline:none}</style><script nonce="Km8oCJuCZiWg1keV5GbN3Q">(function(){window.google.erd={jsr:1,bv:2204,de:true,dpf:'asOV1Bf_lUA9lYsGepyijHokZhpXwXccutCVZhTEIdA'};
+        var g=this||self;var k,l=(k=g.mei)!=null?k:1,m,p=(m=g.diel)!=null?m:0,q,r=(q=g.sdo)!=null?q:!0,t=0,u,w=google.erd,x=w.jsr;google.ml=function(a,b,d,n,e){e=e===void 0?2:e;b&&(u=a&&a.message);d===void 0&&(d={});d.cad="ple_"+google.ple+".aple_"+google.aple;if(google.dl)return google.dl(a,e,d,!0),null;b=d;if(x<0){window.console&&console.error(a,b);if(x===-2)throw a;b=!1}else b=!a||!a.message||a.message==="Error loading script"||t>=l&&!n?!1:!0;if(!b)return null;t++;d=d||{};b=encodeURIComponent;var c="/gen_204?atyp=i&ei="+b(google.kEI);google.kEXPI&&(c+="&jexpid="+b(google.kEXPI));c+="&srcpg="+b(google.sn)+"&jsr="+b(w.jsr)+
+        "&bver="+b(w.bv);w.dpf&&(c+="&dpf="+b(w.dpf));var f=a.lineNumber;f!==void 0&&(c+="&line="+f);var h=a.fileName;h&&(h.indexOf("-extension:/")>0&&(e=3),c+="&script="+b(h),f&&h===window.location.href&&(f=document.documentElement.outerHTML.split("\n")[f],c+="&cad="+b(f?f.substring(0,300):"No script found.")));google.ple&&google.ple===1&&(e=2);c+="&jsel="+e;for(var v in d)c+="&",c+=b(v),c+="=",c+=b(d[v]);c=c+"&emsg="+b(a.name+": "+a.message);c=c+"&jsst="+b(a.stack||"N/A");c.length>=12288&&(c=c.substr(0,12288));a=c;n||google.log(0,"",a);return a};window.onerror=function(a,b,d,n,e){u!==a&&(a=e instanceof Error?e:Error(a),d===void 0||"lineNumber"in a||(a.lineNumber=d),b===void 0||"fileName"in a||(a.fileName=b),google.ml(a,!1,void 0,!1,a.name==="SyntaxError"||a.message.substring(0,11)==="SyntaxError"||a.message.indexOf("Script error")!==-1?3:p));u=null;r&&t>=l&&(window.onerror=null)};})();</script></head><body bgcolor="#fff"><script nonce="Km8oCJuCZiWg1keV5GbN3Q">(function(){var src='/images/nav_logo229.png';var iesg=false;document.body.onload = function(){window.n && window.n();if (document.images){new Image().src=src;}
+        if (!iesg){document.f&&document.f.q.focus();document.gbqf&&document.gbqf.q.focus();}
+        }
+        })();</script><div id="mngb"><div id=gbar><nobr><b class=gb1>Search</b> <a class=gb1 href="https://www.google.com/imghp?hl=en&tab=wi">Images</a> <a class=gb1 href="https://maps.google.com/maps?hl=en&tab=wl">Maps</a> <a class=gb1 href="https://play.google.com/?hl=en&tab=w8">Play</a> <a class=gb1 href="https://www.youtube.com/?tab=w1">YouTube</a> <a class=gb1 href="https://news.google.com/?tab=wn">News</a> <a class=gb1 href="https://mail.google.com/mail/?tab=wm">Gmail</a> <a class=gb1 href="https://drive.google.com/?tab=wo">Drive</a> <a class=gb1 style="text-decoration:none" href="https://www.google.com/intl/en/about/products?tab=wh"><u>More</u> &raquo;</a></nobr></div><div id=guser width=100%><nobr><span id=gbn class=gbi></span><span id=gbf class=gbf></span><span id=gbe></span><a href="http://www.google.com/history/optout?hl=en" class=gb4>Web History</a> | <a  href="/preferences?hl=en" class=gb4>Settings</a> | <a target=_top id=gb_70 href="https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https://www.google.com/&ec=GAZAAQ" class=gb4>Sign in</a></nobr></div><div class=gbh style=left:0></div><div class=gbh style=right:0></div></div><center><br clear="all" id="lgpd"><div id="XjhHGf"><img alt="Google" height="92" src="/images/branding/googlelogo/1x/googlelogo_white_background_color_272x92dp.png" style="padding:28px 0 14px" width="272" id="hplogo"><br><br></div><form action="/search" name="f"><table cellpadding="0" cellspacing="0"><tr valign="top"><td width="25%">&nbsp;</td><td align="center" nowrap=""><input name="ie" value="ISO-8859-1" type="hidden"><input value="en" name="hl" type="hidden"><input name="source" type="hidden" value="hp"><input name="biw" type="hidden"><input name="bih" type="hidden"><div class="ds" style="height:32px;margin:4px 0"><input class="lst" style="margin:0;padding:5px 8px 0 6px;vertical-align:top;color:#000" autocomplete="off" value="" title="Google Search" maxlength="2048" name="q" size="57"></div><br style="line-height:0"><span class="ds"><span class="lsbb"><input class="lsb" value="Google Search" name="btnG" type="submit"></span></span><span class="ds"><span class="lsbb"><input class="lsb" id="tsuid_YYoCaJ2jKZHgwN4P34fz6Qw_1" value="I'm Feeling Lucky" name="btnI" type="submit"><script nonce="Km8oCJuCZiWg1keV5GbN3Q">(function(){var id='tsuid_YYoCaJ2jKZHgwN4P34fz6Qw_1';document.getElementById(id).onclick = function(){if (this.form.q.value){this.checked = 1;if (this.form.iflsig)this.form.iflsig.disabled = false;}
+        else top.location='/doodles/';};})();</script><input value="ACkRmUkAAAAAaAKYcdBbzQYp1pO66Z1HD7QU9N0jRb2J" name="iflsig" type="hidden"></span></span></td><td class="fl sblc" align="left" nowrap="" width="25%"><a href="/advanced_search?hl=en&amp;authuser=0">Advanced search</a></td></tr></table><input id="gbv" name="gbv" type="hidden" value="1"><script nonce="Km8oCJuCZiWg1keV5GbN3Q">(function(){var a,b="1";if(document&&document.getElementById)if(typeof XMLHttpRequest!="undefined")b="2";else if(typeof ActiveXObject!="undefined"){var c,d,e=["MSXML2.XMLHTTP.6.0","MSXML2.XMLHTTP.3.0","MSXML2.XMLHTTP","Microsoft.XMLHTTP"];for(c=0;d=e[c++];)try{new ActiveXObject(d),b="2"}catch(h){}}a=b;if(a=="2"&&location.search.indexOf("&gbv=2")==-1){var f=google.gbvu,g=document.getElementById("gbv");g&&(g.value=a);f&&window.setTimeout(function(){location.href=f},0)};}).call(this);</script></form><div style="font-size:83%;min-height:3.5em"><br></div><span id="footer"><div style="font-size:10pt"><div style="margin:19px auto;text-align:center" id="WqQANb"><a href="/intl/en/ads/">Advertising</a><a href="/services/">Business Solutions</a><a href="/intl/en/about.html">About Google</a></div></div><p style="font-size:8pt;color:#70757a">&copy; 2025 - <a href="/intl/en/policies/privacy/">Privacy</a> - <a href="/intl/en/policies/terms/">Terms</a></p></span></center><script nonce="Km8oCJuCZiWg1keV5GbN3Q">(function(){window.google.cdo={height:757,width:1440};(function(){var a=window.innerWidth,b=window.innerHeight;if(!a||!b){var c=window.document,d=c.compatMode=="CSS1Compat"?c.documentElement:c.body;a=d.clientWidth;b=d.clientHeight}if(a&&b&&(a!=google.cdo.width||b!=google.cdo.height)){var e=google,f=e.log,g="/client_204?&atyp=i&biw="+a+"&bih="+b+"&ei="+google.kEI,h="",k=window.google&&window.google.kOPI||null;k&&(h+="&opi="+k);f.call(e,"","",g+h)};}).call(this);})();(function(){google.xjs={basecomb:'/xjs/_/js/k\x3dxjs.hp.en.sdFlZYEggLc.es5.O/ck\x3dxjs.hp.J-XyjZff0h4.L.X.O/am\x3dAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAADAICgIAAABAAAAAAAAAAgAIIApARAHAAAgBIAAAQAAAAAAAAAAAAAAIAEAEAAAQAAAAADxHQEAAVgEAMAL/d\x3d1/ed\x3d1/dg\x3d0/ujg\x3d1/rs\x3dACT90oG-P2pInK7vAjrgdOT48bbQsVMbsA',basecss:'/xjs/_/ss/k\x3dxjs.hp.J-XyjZff0h4.L.X.O/am\x3dAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAADAIAgIAAABAAAAAAAAAAgAIIApABAAAAAgBIAAAQAAAAAAAAAAAAAAIAEAEAAAQA/rs\x3dACT90oG7DYyq6xkuQpPwU2ftUcO_NhmN2A',basejs:'/xjs/_/js/k\x3dxjs.hp.en.sdFlZYEggLc.es5.O/am\x3dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAgAAAAAAQAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADxHQEAAVgEAMAL/dg\x3d0/rs\x3dACT90oHP3YZZubVkqNO62yyIWlmEhOD6_A',excm:[]};})();(function(){var u='/xjs/_/js/k\x3dxjs.hp.en.sdFlZYEggLc.es5.O/am\x3dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAgAAAAAAQAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADxHQEAAVgEAMAL/d\x3d1/ed\x3d1/dg\x3d3/rs\x3dACT90oHP3YZZubVkqNO62yyIWlmEhOD6_A/m\x3dsb_he,d';var st=1;var amd=1000;var mmd=0;var pod=true;var pop=true;var povp=false;var fp='';
+        var e=this||self;function f(){var b,a,d;if(a=b=(a=window.google)==null?void 0:(d=a.ia)==null?void 0:d.r.B2Jtyd)a=b.m,a=a===1||a===5;return a&&b.cbfd!=null&&b.cbvi!=null?b:void 0};function g(){var b=[u];if(!google.dp){for(var a=0;a<b.length;a++){var d=b[a],c=document.createElement("link");c.as="script";c.href=d;c.rel="preload";document.body.appendChild(c)}google.dp=!0}};google.ps===void 0&&(google.ps=[]);function h(){var b=u,a=function(){};google.lx=google.stvsc?a:function(){k(b);google.lx=a};google.bx||google.lx()}function l(b,a){a&&(b.src=a);fp&&(b.fetchPriority=fp);var d=b.onload;b.onload=function(c){d&&d(c);google.ps=google.ps.filter(function(G){return b!==G})};google.ps.push(b);document.body.appendChild(b)}google.as=l;function k(b){google.timers&&google.timers.load&&google.tick&&google.tick("load","xjsls");var a=document.createElement("script");a.onerror=function(){google.ple=1};a.onload=function(){google.ple=0};google.xjsus=void 0;l(a,b);google.aple=-1;google.dp=!0};function m(b){var a=b.getAttribute("jscontroller");return(a==="UBXHI"||a==="R3fhkb"||a==="TSZEqd")&&b.hasAttribute("data-src")}function n(){for(var b=document.getElementsByTagName("img"),a=0,d=b.length;a<d;a++){var c=b[a];if(c.hasAttribute("data-lzy_")&&Number(c.getAttribute("data-atf"))&1&&!m(c))return!0}return!1}for(var p=document.getElementsByTagName("img"),q=0,r=p.length;q<r;++q){var t=p[q];Number(t.getAttribute("data-atf"))&1&&m(t)&&(t.src=t.getAttribute("data-src"))};var w,x,y,z,A,B,C,D,E,F;function H(){google.xjsu=u;e._F_jsUrl=u;A=function(){h()};w=!1;x=(st===1||st===3)&&!!google.caft&&!n();y=f();z=(st===2||st===3)&&!!y&&!n();B=pod;C=pop;D=povp;E=pop&&document.prerendering||povp&&document.hidden;F=D?"visibilitychange":"prerenderingchange"}function I(){w||x||z||E||(A(),w=!0)}
+        setTimeout(function(){google&&google.tick&&google.timers&&google.timers.load&&google.tick("load","xjspls");H();if(x||z||E){if(x){var b=function(){x=!1;I()};google.caft(b);window.setTimeout(b,amd)}z&&(b=function(){z=!1;I()},y.cbvi.push(b),window.setTimeout(b,mmd));if(E){var a=function(){(D?document.hidden:document.prerendering)||(E=!1,I(),document.removeEventListener(F,a))};document.addEventListener(F,a,{passive:!0})}if(B||C||D)w||g()}else A()},0);})();window._ = window._ || {};window._DumpException = _._DumpException = function(e){throw e;};window._s = window._s || {};_s._DumpException = _._DumpException;window._qs = window._qs || {};_qs._DumpException = _._DumpException;(function(){var t=[0,16384,0,0,0,0,0,34211888,65536,8192,11665408,174094720,5181441,1081344,4104,2112,0,75497472,302055424,4096,502333440,570687492,1006633029,2];window._F_toggles = window._xjs_toggles = t;})();window._F_installCss = window._F_installCss || function(css){};(function(){google.jl={bfl:0,dw:false,ine:false,injs:'none',injt:0,injth:0,injv2:false,ubm:false,uwp:true,vs:false};})();(function(){var pmc='{\x22d\x22:{},\x22sb_he\x22:{\x22client\x22:\x22heirloom-hp\x22,\x22dh\x22:true,\x22ds\x22:\x22\x22,\x22host\x22:\x22google.com\x22,\x22jsonp\x22:true,\x22msgs\x22:{\x22cibl\x22:\x22Clear Search\x22,\x22dym\x22:\x22Did you mean:\x22,\x22lcky\x22:\x22I\\u0026#39;m Feeling Lucky\x22,\x22lml\x22:\x22Learn more\x22,\x22psrc\x22:\x22This search was removed from your \\u003Ca href\x3d\\\x22/history\\\x22\\u003EWeb History\\u003C/a\\u003E\x22,\x22psrl\x22:\x22Remove\x22,\x22sbit\x22:\x22Search by image\x22,\x22srch\x22:\x22Google Search\x22},\x22ovr\x22:{},\x22pq\x22:\x22\x22,\x22rfs\x22:[],\x22stok\x22:\x229lwFYMS12hIqhvGfYAZjJgBY0bw\x22}}';google.pmc=JSON.parse(pmc);})();</script>       </body></html>
+  recorded_at: 2025-04-18 17:22:41 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+- request:
+    method: get
+    uri: https://scottchamberlain.info/
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.11.1 r-curl/6.2.3 crul/1.5.0
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: 'HTTP/2 200 '
+      accept-ranges: bytes
+      age: '19811'
+      cache-control: public,max-age=0,must-revalidate
+      cache-status: '"Netlify Edge"; hit'
+      content-encoding: gzip
+      content-type: text/html; charset=UTF-8
+      date: Fri, 18 Apr 2025 17:22:41 GMT
+      etag: '"089dd0f2f29b7ab7225f29c023f962dd-ssl-df"'
+      server: Netlify
+      strict-transport-security: max-age=31536000
+      vary: Accept-Encoding
+      x-nf-request-id: 01JS4YS3JM7RECHM55TYKGSC5J
+      content-length: '2695'
+    body:
+      encoding: ''
+      file: no
+      string: "<!doctype html>\n<!--\n  Minimal Mistakes Jekyll Theme 4.24.0 by Michael
+        Rose\n  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes\n
+        \ Free for personal and commercial use under the MIT license\n  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE\n-->\n<html
+        lang=\"en\" class=\"no-js\">\n  <head>\n    <meta charset=\"utf-8\">\n\n<!--
+        begin _includes/seo.html --><title>About me - Scott Chamberlain</title>\n<meta
+        name=\"description\" content=\"\">\n\n\n\n<meta property=\"og:type\" content=\"website\">\n<meta
+        property=\"og:locale\" content=\"en_US\">\n<meta property=\"og:site_name\"
+        content=\"Scott Chamberlain\">\n<meta property=\"og:title\" content=\"About
+        me\">\n<meta property=\"og:url\" content=\"http://localhost:4000/\">\n\n\n\n\n\n\n\n\n\n\n\n\n\n<link
+        rel=\"canonical\" href=\"http://localhost:4000/\">\n\n\n\n\n<script type=\"application/ld+json\">\n
+        \ {\n    \"@context\": \"https://schema.org\",\n    \n      \"@type\": \"Person\",\n
+        \     \"name\": null,\n      \"url\": \"http://localhost:4000/\"\n    \n  }\n</script>\n\n\n\n\n\n\n\n<!--
+        end _includes/seo.html -->\n\n\n\n  <link href=\"/feed.xml\" type=\"application/atom+xml\"
+        rel=\"alternate\" title=\"Scott Chamberlain Feed\">\n\n\n<!-- https://t.co/dKP3o1e
+        -->\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\n<script>\n
+        \ document.documentElement.className = document.documentElement.className.replace(/\\bno-js\\b/g,
+        '') + ' js ';\n</script>\n\n<!-- For all browsers -->\n<link rel=\"stylesheet\"
+        href=\"/assets/css/main.css\">\n<link rel=\"preload\" href=\"https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css\"
+        as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\">\n<noscript><link
+        rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css\"></noscript>\n\n\n\n
+        \   <head>\n  <!-- Icons -->\n  <link rel=\"apple-touch-icon-precomposed\"
+        sizes=\"144x144\" href=\"/public/apple-touch-icon-144-precomposed.png\">\n
+        \ <link href=\"//netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css\"
+        rel=\"stylesheet\">\n\n  <!-- mastodon verification -->\n  <a rel=\"me\" href=\"https://fosstodon.org/@sckottie\">&nbsp;</a>\n</head>\n\n
+        \ </head>\n\n  <body class=\"layout--home\">\n    <nav class=\"skip-links\">\n
+        \ <ul>\n    <li><a href=\"#site-nav\" class=\"screen-reader-shortcut\">Skip
+        to primary navigation</a></li>\n    <li><a href=\"#main\" class=\"screen-reader-shortcut\">Skip
+        to content</a></li>\n    <li><a href=\"#footer\" class=\"screen-reader-shortcut\">Skip
+        to footer</a></li>\n  </ul>\n</nav>\n\n    \n\n<div class=\"masthead\">\n
+        \ <div class=\"masthead__inner-wrap\">\n    <div class=\"masthead__menu\">\n
+        \     <nav id=\"site-nav\" class=\"greedy-nav\">\n        \n        <a class=\"site-title\"
+        href=\"/\">\n          Scott Chamberlain\n          \n        </a>\n        <ul
+        class=\"visible-links\"></ul>\n        \n        <button class=\"greedy-nav__toggle
+        hidden\" type=\"button\">\n          <span class=\"visually-hidden\">Toggle
+        menu</span>\n          <div class=\"navicon\"></div>\n        </button>\n
+        \       <ul class=\"hidden-links hidden\"></ul>\n      </nav>\n    </div>\n
+        \ </div>\n</div>\n\n\n    <div class=\"initial-content\">\n      \n\n\n\n<div
+        id=\"main\" role=\"main\">\n  \n  <div class=\"sidebar sticky\">\n  \n\n\n<div
+        itemscope itemtype=\"https://schema.org/Person\" class=\"h-card\">\n\n  \n
+        \   <div class=\"author__avatar\">\n      <!-- <a href=\"http://localhost:4000/\">
+        -->\n        <img src=\"/img/main-social-headshot.jpeg\" alt=\"\" itemprop=\"image\"
+        class=\"u-photo\">\n      <!-- </a> -->\n    </div>\n  \n\n  <div class=\"author__content\">\n
+        \   <h3 class=\"author__name p-name\" itemprop=\"name\">\n      <a class=\"u-url\"
+        rel=\"me\" href=\"http://localhost:4000/\" itemprop=\"url\"></a>\n    </h3>\n
+        \   \n  </div>\n\n  <div class=\"author__urls-wrapper\">\n    <!-- <button
+        class=\"btn btn--inverse\">Follow</button> -->\n    <ul class=\"author__urls
+        social-icons\">\n      \n\n      \n\n      \n\n      \n\n      \n\n      \n\n
+        \     \n\n      \n\n      \n\n      \n\n      \n\n      \n\n      \n\n      \n\n
+        \     \n\n      \n\n      \n\n      \n\n      \n\n      \n\n      \n\n      \n\n
+        \     \n\n      \n\n      \n\n      \n\n      <!--\n  <li>\n    <a href=\"http://link-to-whatever-social-network.com/user/\"
+        itemprop=\"sameAs\" rel=\"nofollow noopener noreferrer me\">\n      <i class=\"fas
+        fa-fw\" aria-hidden=\"true\"></i> Custom Social Profile Link\n    </a>\n  </li>\n-->\n
+        \   </ul>\n  </div>\n</div>\n\n  \n  </div>\n\n\n\n  <div class=\"archive\">\n
+        \   \n      <h1 id=\"page-title\" class=\"page__title\">About me</h1>\n    \n
+        \   <p>I’m a Software Engineer with the <a href=\"https://hutchdatascience.org/\"
+        target=\"_blank\">Fred Hutch Data Science Lab</a>. My last role was as a Senior
+        Data Engineer with <a href=\"https://welcome.deck.tools/\" target=\"_blank\">Deck</a>.
+        Prior to Deck I worked with  <a href=\"https://ourresearch.org/\" target=\"_blank\">OurResearch</a>
+        as the product owner/developer on <a href=\"https://unsub.org\" target=\"_blank\">Unsub</a>,
+        a web application helping research librarians unsubscribe from paywalled journals.
+        Before that, I was co-founder of <a href=\"https://ropensci.org/\" target=\"_blank\">rOpenSci</a>,
+        a non-profit creating open source tools in <a href=\"https://www.r-project.org/\"
+        target=\"_blank\">R</a>. My first professional role was as postdoctoral scholar
+        at <a href=\"https://www.sfu.ca/\" target=\"_blank\">Simon Fraser University</a>
+        in Canada.</p>\n\n<p>Previously, I received my M.A. &amp; Ph.D. at <a href=\"https://biosciences.rice.edu/\"
+        target=\"_blank\">Rice University</a>. There I studied a range of topics,
+        including: ant-plant interactions, pollination, population and community ecology,
+        species interaction networks, and evolutionary ecology.</p>\n\n<hr />\n\n<!--
+        [Software](/software) -->\n\n<p><a href=\"/software\" class=\"btn btn--info\">Software</a>\n<a
+        href=\"/webservices\" class=\"btn btn--info\">Web Services</a>\n<a href=\"/publications\"
+        class=\"btn btn--info\">Publications</a>\n<a href=\"/talks\" class=\"btn btn--info\">Talks</a>\n<a
+        href=\"/vita\" class=\"btn btn--info\">Vita</a>\n<a href=\"/books\" class=\"btn
+        btn--info\">Books</a>\n<a href=\"https://recology.info\" class=\"btn btn--info\">Blog
+        <i class=\"fa fa-external-link-square\" aria-hidden=\"true\"></i></a>\n<a
+        href=\"https://rforcats.net\" class=\"btn btn--info\">R for cats <i class=\"fa
+        fa-external-link-square\" aria-hidden=\"true\"></i></a></p>\n\n\n\n<h3 class=\"archive__subtitle\">Recent
+        Posts</h3>\n\n\n\n\n<div class=\"entries-list\">\n  \n</div>\n\n\n\n\n<style
+        type=\"text/css\">\n  .layout--home .archive__subtitle {\n    display: none;\n
+        \ }  \n  #footer wrap{\n    visibility : hidden;\n  }\n</style>\n\n  </div>\n</div>\n
+        \   </div>\n\n    \n\n    <div id=\"footer\" class=\"page__footer\">\n      <footer>\n
+        \       <!-- start custom footer snippets -->\n\n\n\n<!-- end custom footer
+        snippets -->\n\n        <div class=\"page__footer-follow\">\n  <ul class=\"social-icons\">\n
+        \   \n\n    \n\n    <!-- \n      <li><a href=\"/feed.xml\"><i class=\"fas
+        fa-fw fa-rss-square\" aria-hidden=\"true\"></i> Feed</a></li>\n     -->\n
+        \ </ul>\n</div>\n\n<div class=\"page__footer-copyright\">&copy; 2025 Scott
+        Chamberlain. Powered by <a href=\"https://jekyllrb.com\" rel=\"nofollow\">Jekyll</a>
+        &amp; <a href=\"https://mademistakes.com/work/minimal-mistakes-jekyll-theme/\"
+        rel=\"nofollow\">Minimal Mistakes</a>.</div>\n\n      </footer>\n    </div>\n\n
+        \   \n  <script src=\"/assets/js/main.min.js\"></script>\n\n\n\n\n\n\n\n\n\n\n
+        \ </body>\n</html>\n"
+  recorded_at: 2025-04-18 17:22:41 GMT
+  recorded_with: vcr/1.7.0.91, webmockr/2.0.0

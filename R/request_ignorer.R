@@ -23,24 +23,7 @@ RequestIgnorer <- R6::R6Class(
     #' @description Create a new `RequestIgnorer` object
     #' @return A new `RequestIgnorer` object
     initialize = function() {
-      private$ignored_hosts_init()
-      self$ignore_request()
-    },
-
-    #' @description Will ignore any request for which the given function
-    #' returns `TRUE`
-    #' @return no return; defines request ignorer hook
-    ignore_request = function() {
-      fun <- function(x) {
-        if (is.null(self$ignored_hosts$bucket)) return(FALSE)
-        host <- parseurl(x$uri)$domain %||% NULL
-        if (is.null(host)) return(FALSE)
-        # update ignored hosts if any found in configuration
-        if (!is.null(vcr_c$ignore_hosts)) self$ignore_hosts(vcr_c$ignore_hosts)
-        if (vcr_c$ignore_localhost) self$ignore_localhost()
-        self$ignored_hosts$includes(host)
-      }
-      VCRHooks$define_hook(hook_type = "ignore_request", fun = fun)
+      self$ignored_hosts <- EnvHash$new()
     },
 
     #' @description ignore all localhost values (localhost, 127.0.0.1, 0.0.0.0)
@@ -68,15 +51,15 @@ RequestIgnorer <- R6::R6Class(
     #' @param request request to ignore
     #' @return no return; defines request ignorer hook
     should_be_ignored = function(request) {
-      if (missing(request)) stop("'request' can not be missing")
-      VCRHooks$invoke_hook(hook_type = "ignore_request", args = request)
-    }
-  ),
+      if (is.null(self$ignored_hosts$bucket)) return(FALSE)
 
-  private = list(
-    # Initialize an empty ignored hosts object on package load
-    ignored_hosts_init = function() {
-      self$ignored_hosts <- EnvHash$new()
+      host <- parseurl(request$uri)$domain %||% NULL
+      if (is.null(host)) return(FALSE)
+      # update ignored hosts if any found in configuration
+      if (!is.null(vcr_c$ignore_hosts)) self$ignore_hosts(vcr_c$ignore_hosts)
+      if (vcr_c$ignore_localhost) self$ignore_localhost()
+
+      self$ignored_hosts$includes(host)
     }
   )
 )
