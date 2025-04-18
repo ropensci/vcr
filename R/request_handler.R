@@ -165,7 +165,7 @@ RequestHandler <- R6::R6Class(
     # request type helpers
     externally_stubbed = function() FALSE,
     should_ignore = function(request) {
-      request_ignorer$should_be_ignored(request)
+      should_be_ignored(request)
     },
     has_response_stub = function(request) {
       hi <- http_interactions()

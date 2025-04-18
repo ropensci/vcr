@@ -177,16 +177,6 @@ vcr_configure <- function(...) {
   }
 
   if (length(params) == 0) return(invisible(vcr_c$as_list()))
-
-  # TODO: Is this still the right place to change these settings?
-  ignore_hosts <- params$ignore_hosts
-  ignore_localhost <- params$ignore_localhost %||% FALSE
-  if (!is.null(ignore_hosts) || ignore_localhost) {
-    x <- RequestIgnorer$new()
-    if (!is.null(ignore_hosts)) x$ignore_hosts(hosts = ignore_hosts)
-    if (ignore_localhost) x$ignore_localhost()
-  }
-
   old <- vcr_c$as_list()[names(params)]
 
   for (i in seq_along(params)) {
