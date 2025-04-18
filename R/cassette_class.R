@@ -423,7 +423,7 @@ Cassette <- R6::R6Class(
           vcr_c$log_opts$date
         )
         return(FALSE)
-      } else if (has_internet()) {
+      } else if (curl::has_internet()) {
         vcr_log_info(sprintf("re-recording (%s).", info), vcr_c$log_opts$date)
         return(TRUE)
       } else {

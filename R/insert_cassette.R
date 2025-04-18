@@ -31,7 +31,7 @@ insert_cassette <- function(
   }
   # enable webmockr
   webmockr::enable(quiet = vcr_c$quiet)
-  sup_mssg(vcr_c$quiet, webmockr::webmockr_allow_net_connect())
+  suppressMessages(webmockr::webmockr_allow_net_connect())
 
   # make cassette
   cassette <- Cassette$new(

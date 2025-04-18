@@ -14,7 +14,7 @@ test_that("use_cassette w/ with images: httr", {
 
   expect_s3_class(out, "response")
   expect_type(out$content, "raw")
-  expect_equal(dims(httr::content(out)), 3)
+  expect_equal(dim(httr::content(out)), c(76, 100, 3))
 
   # works on 2nd request - using cassette
   use_cassette(
@@ -23,7 +23,7 @@ test_that("use_cassette w/ with images: httr", {
   )
   expect_s3_class(out2, "response")
   expect_type(out2$content, "raw")
-  expect_equal(dims(httr::content(out2)), 3)
+  expect_equal(dim(httr::content(out2)), c(76, 100, 3))
 
   expect_identical(httr::content(out), httr::content(out2))
 
@@ -39,7 +39,7 @@ test_that("use_cassette w/ with images: httr", {
 
   expect_s3_class(res1, "response")
   expect_type(res1$content, "raw")
-  expect_equal(dims(httr::content(res1)), 3)
+  expect_equal(dim(httr::content(res1)), c(76, 100, 3))
   expect_equal(length(res1$content), 4742)
 
   use_cassette(
@@ -52,7 +52,7 @@ test_that("use_cassette w/ with images: httr", {
 
   expect_s3_class(res2, "response")
   expect_type(res2$content, "raw")
-  expect_equal(dims(httr::content(res2)), 3)
+  expect_equal(dim(httr::content(res2)), c(76, 100, 3))
   expect_equal(length(res2$content), 4742)
 })
 
