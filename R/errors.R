@@ -90,10 +90,10 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @return a stop message
     construct_message = function() {
       # create formatted_suggestions for later use
-      vcr__env$last_error <- list()
-      vcr__env$last_error$request_description <- self$request_description()
-      vcr__env$last_error$cassettes_description <- self$cassettes_description()
-      vcr__env$last_error$formatted_suggestion <- self$formatted_suggestions()
+      the$last_error <- list()
+      the$last_error$request_description <- self$request_description()
+      the$last_error$cassettes_description <- self$cassettes_description()
+      the$last_error$formatted_suggestion <- self$formatted_suggestions()
       mssg <- paste0(
         c(
           "",
@@ -104,7 +104,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
           if (vcr_c$verbose_errors) self$cassettes_description() else
             self$cassettes_list(),
           if (vcr_c$verbose_errors)
-            vcr__env$last_error$formatted_suggestion else self$get_help(),
+            the$last_error$formatted_suggestion else self$get_help(),
           paste0(rep("=", 80), collapse = ""),
           "",
           ""
@@ -390,7 +390,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
 #' # vcr_last_error()
 #' }
 vcr_last_error <- function() {
-  if (is.null(vcr__env$last_error) || length(vcr__env$last_error) == 0) {
+  if (is.null(the$last_error) || length(the$last_error) == 0) {
     stop(
       "no error to report; either no cassette in use \n",
       "  or there's a problem with this package (i.e., open an issue)",
@@ -403,9 +403,9 @@ vcr_last_error <- function() {
         "",
         "",
         paste0(rep("=", 80), collapse = ""),
-        vcr__env$last_error$request_description,
-        vcr__env$last_error$cassettes_description,
-        vcr__env$last_error$formatted_suggestion,
+        the$last_error$request_description,
+        the$last_error$cassettes_description,
+        the$last_error$formatted_suggestion,
         paste0(rep("=", 80), collapse = ""),
         "",
         ""

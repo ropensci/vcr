@@ -1,5 +1,3 @@
-vcr__env <- new.env()
-
 #' Manually insert and eject a cassette
 #'
 #' Generally you should not need to use these functions, instead preferring
