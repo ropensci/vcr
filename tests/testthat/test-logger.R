@@ -1,62 +1,32 @@
-test_that("vcr_log_file fails well", {
-  # must pass a file name
-  expect_error(vcr_log_file(), "argument \"file\" is missing")
+test_that("can locally change logging settings", {
+  local_vcr_configure_log(file = "x")
 
-  # file name type
-  expect_error(
-    vcr_log_file(5),
-    "file must be of class character"
-  )
+  local({
+    local_vcr_configure_log(file = "y")
+    expect_equal(vcr_c$log_opts$file, "y")
+  })
 
-  # match_requests_on valid values
-  expect_error(
-    vcr_log_file("adsf", overwrite = 5),
-    "overwrite must be of class logical"
-  )
+  expect_equal(vcr_c$log_opts$file, "x")
 })
 
-test_that("vcr_log_file works as expected", {
-  withr::defer(unlink("adsf"))
-  expect_true(vcr_log_file("adsf"))
+test_that("logging is silent unless enabled", {
+  expect_silent(vcr_log_sprintf("log"))
+
+  local_vcr_configure_log(file = stdout())
+  capture.output(vcr_log_sprintf("log"))
 })
 
-test_that("vcr_log_file: console", {
-  aa <- vcr_log_file("console")
+test_that("vcr_log_sprintf() adds additional metadata", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
+  local_mocked_bindings(Sys.time = function() as.POSIXct("2024-01-01"))
 
-  expect_true(aa)
-  expect_type(vcr_log_env, "environment")
-  expect_equal(vcr_log_env$file, "console")
-})
+  local_vcr_configure_log(file = stdout(), include_date = FALSE)
+  expect_snapshot(vcr_log_sprintf("log"))
 
-test_that("vcr_log_write: console", {
-  local_vcr_configure(log = TRUE)
+  # Turn logging off and add a cassette
+  local_vcr_configure_log(log = FALSE)
+  local_cassette("testing")
 
-  aa <- vcr_log_file("console")
-  expect_true(aa)
-
-  expect_output(vcr_log_write("stuff"), "stuff")
-})
-
-test_that("vcr_log_info: console", {
-  local_vcr_configure(log = TRUE)
-  aa <- vcr_log_file("console")
-  expect_true(aa)
-
-  # with date time stamp
-  log_date <- capture.output(vcr_log_info("stuff"))
-
-  expect_match(log_date, "Cassette")
-  expect_match(log_date, "<none>")
-  expect_match(log_date, "stuff")
-  expect_match(log_date, as.character(format(Sys.Date(), "%Y")))
-  expect_match(log_date, "[0-9]{2}:[0-9]{2}:[0-9]{2}")
-
-  # w/o date time stamp
-  log_nodate <- capture.output(vcr_log_info("stuff", FALSE))
-
-  expect_match(log_nodate, "Cassette")
-  expect_match(log_nodate, "<none>")
-  expect_match(log_nodate, "stuff")
-  expect_false(grepl(as.character(format(Sys.Date(), "%Y")), log_nodate))
-  expect_false(grepl("[0-9]{2}:[0-9]{2}:[0-9]{2}", log_nodate))
+  local_vcr_configure_log(file = stdout(), include_date = TRUE)
+  expect_snapshot(vcr_log_sprintf("log"))
 })
