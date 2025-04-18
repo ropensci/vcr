@@ -42,9 +42,6 @@ test_that("is_base64", {
   # expect_false(is_base64("12345"))
   # # numbers as numbers are not base64
   # expect_false(is_base64(12345))
-
-  suppressWarnings(not64$eject())
-  suppressWarnings(is64$eject())
 })
 
 test_that("serializable_body", {

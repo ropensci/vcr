@@ -111,48 +111,52 @@ Cassette <- R6::R6Class(
     #' @return A new `Cassette` object
     initialize = function(
       name,
-      record,
-      serialize_with,
-      match_requests_on,
-      re_record_interval,
-      allow_playback_repeats,
-      preserve_exact_body_bytes,
-      clean_outdated_http_interactions
+      record = NULL,
+      match_requests_on = NULL,
+      allow_playback_repeats = FALSE,
+      serialize_with = NULL,
+      preserve_exact_body_bytes = NULL,
+      re_record_interval = NULL,
+      clean_outdated_http_interactions = NULL
     ) {
+      config <- vcr_configuration()
+
       self$name <- name
+      self$record <- check_record_mode(record %||% config$record)
+      self$match_requests_on <- check_request_matchers(match_requests_on) %||%
+        config$match_requests_on
+      self$serialize_with <- serialize_with %||% config$serialize_with
+      self$re_record_interval <- re_record_interval %||%
+        config$re_record_interval
+      self$allow_playback_repeats = allow_playback_repeats
 
-      self$root_dir <- vcr_configuration()$dir
-      if (!dir.exists(self$root_dir)) {
-        dir_create(self$root_dir)
-      }
+      assert(preserve_exact_body_bytes, "logical")
+      self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
+        config$preserve_exact_body_bytes
+      
+      self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
+        config$clean_outdated_http_interactions
 
-      self$serialize_with <- serialize_with %||% vcr_c$serialize_with
+      self$root_dir <- config$dir
       self$serializer <- serializer_fetch(
         self$serialize_with,
         path = self$root_dir,
         name = self$name
       )
-      if (!missing(record)) {
-        self$record <- check_record_mode(record)
+    },
+
+    #' @description insert the cassette
+    #' @return self
+    insert = function() {
+      if (!dir.exists(self$root_dir)) {
+        dir_create(self$root_dir)
       }
-      if (!file.exists(self$file())) cat("\n", file = self$file())
-      if (!missing(match_requests_on)) {
-        self$match_requests_on <- check_request_matchers(match_requests_on)
+      if (!file.exists(self$file())) {
+        cat("\n", file = self$file())
+        self$recorded_at <- Sys.time()
+      } else {
+        self$recorded_at <- file.mtime(self$file())
       }
-      if (!missing(re_record_interval))
-        self$re_record_interval <- re_record_interval
-      if (!missing(allow_playback_repeats)) {
-        assert(allow_playback_repeats, "logical")
-        self$allow_playback_repeats = allow_playback_repeats
-      }
-      if (!missing(preserve_exact_body_bytes)) {
-        assert(preserve_exact_body_bytes, "logical")
-        self$preserve_exact_body_bytes <- preserve_exact_body_bytes
-      }
-      if (!missing(clean_outdated_http_interactions)) {
-        self$clean_outdated_http_interactions <- clean_outdated_http_interactions
-      }
-      self$recorded_at <- file.info(self$file())$mtime
 
       # check for re-record
       if (self$should_re_record()) self$record <- "all"
@@ -246,6 +250,18 @@ Cassette <- R6::R6Class(
       if (!is.null(vcr_c$write_disk_path)) dir_create(vcr_c$write_disk_path)
     },
 
+    #' @description ejects the cassette
+    #' @return self
+    eject = function() {
+      on.exit(private$remove_empty_cassette())
+      self$write_recorded_interactions_to_disk()
+      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
+      # disable webmockr
+      webmockr::disable(quiet = vcr_c$quiet)
+      # return self
+      return(self)
+    },
+
     #' @description print method for `Cassette` objects
     #' @param x self
     #' @param ... ignored
@@ -273,18 +289,6 @@ Cassette <- R6::R6Class(
         sep = "\n"
       )
       invisible(self)
-    },
-
-    #' @description ejects the current cassette
-    #' @return self
-    eject = function() {
-      on.exit(private$remove_empty_cassette())
-      self$write_recorded_interactions_to_disk()
-      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
-      # disable webmockr
-      webmockr::disable(quiet = vcr_c$quiet)
-      # return self
-      return(self)
     },
 
     #' @description get the file path for the cassette
