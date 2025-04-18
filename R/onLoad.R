@@ -1,7 +1,6 @@
 vcr_c <- NULL # nocov start
 VCRHooks <- NULL
 request_matchers <- NULL
-request_ignorer <- NULL
 light_switch <- NULL
 the <- NULL
 
@@ -10,7 +9,6 @@ initialize_ivars <- function() {
   vcr_c$cassettes <<- list()
   vcr_c$linked_context <<- NULL
 
-  request_matchers <<- RequestMatcherRegistry$new()
   request_ignorer <<- RequestIgnorer$new()
 }
 
