@@ -49,15 +49,16 @@ insert_cassette <- function(
   # make cassette
   cassette <- Cassette$new(
     name,
-    record = record %||% vcr_c$record,
-    match_requests_on = match_requests_on %||% vcr_c$match_requests_on,
+    record = record,
+    match_requests_on = match_requests_on,
     allow_playback_repeats = allow_playback_repeats,
-    serialize_with = serialize_with %||% vcr_c$serialize_with,
-    preserve_exact_body_bytes = preserve_exact_body_bytes %||%
-      vcr_c$preserve_exact_body_bytes,
-    re_record_interval = re_record_interval %||% vcr_c$re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions %||%
-      vcr_c$clean_outdated_http_interactions
+    serialize_with = serialize_with,
+    preserve_exact_body_bytes = preserve_exact_body_bytes,
+    re_record_interval = re_record_interval,
+    clean_outdated_http_interactions = clean_outdated_http_interactions
   )
   cassette_push(cassette)
+  cassette$insert()
+
+  invisible(cassette)
 }
