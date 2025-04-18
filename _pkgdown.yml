@@ -56,7 +56,6 @@ reference:
       - RequestHandlerCrul
       - RequestHandlerHttr
       - RequestHandlerHttr2
-      - RequestMatcherRegistry
       - UnhandledHTTPRequestError
       - VcrResponse
       - request_summary
