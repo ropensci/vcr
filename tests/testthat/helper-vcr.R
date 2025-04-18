@@ -1,6 +1,6 @@
 local_light_switch <- function(frame = parent.frame()) {
-  old <- as.list(light_switch)
-  withr::defer(env_bind(light_switch, !!!old), envir = frame)
+  old <- the$light_switch
+  withr::defer(the$light_switch <- old, envir = frame)
 }
 
 desc_text <- "Package: %s

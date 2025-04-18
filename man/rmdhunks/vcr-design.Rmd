@@ -122,11 +122,6 @@ few items, including the current cassette in use, and the last vcr error.
 
 #### Lightswitch
 
-Another internal environment (`light_switch`) is used to keep track of users
-turning on and off `vcr`. See `?lightswitch`.
-
-
-
 [^1]: The first version of Ruby's vcr was released in February 2010
 https://rubygems.org/gems/vcr/versions/0.1.0. Ruby vcr source code:
 https://github.com/vcr/vcr/
