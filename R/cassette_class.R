@@ -331,25 +331,9 @@ Cassette <- R6::R6Class(
     #' @return list
     serializable_hash = function() {
       list(
-        http_interactions = self$interactions_to_record(),
+        http_interactions = self$merged_interactions(),
         recorded_with = utils::packageVersion("vcr")
       )
-    },
-
-    #' @description Get the list of http interactions to record
-    #' @return list
-    interactions_to_record = function() {
-      ## FIXME - gotta sort out defining and using hooks better
-      ## just returning exact same input
-      self$merged_interactions()
-
-      # FIXME: not sure what's going on here, so not using yet
-      #.       maybe we don't need this?
-      # "We dee-dupe the interactions by roundtripping them to/from a hash.
-      # This is necessary because `before_record` can mutate the interactions."
-      # lapply(self$merged_interactions(), function(z) {
-      #   VCRHooks$invoke_hook("before_record", z)
-      # })
     },
 
     #' @description Get interactions to record
@@ -365,19 +349,17 @@ Cassette <- R6::R6Class(
       })
 
       if (self$should_remove_matching_existing_interactions()) {
-        new_interaction_list <-
-          HTTPInteractionList$new(
-            self$new_recorded_interactions,
-            self$match_requests_on
-          )
-        old_interactions <-
-          Filter(
-            function(x) {
-              req <- Request$new()$from_hash(x$request)
-              !unlist(new_interaction_list$has_interaction_matching(req))
-            },
-            old_interactions
-          )
+        new_interaction_list <- HTTPInteractionList$new(
+          self$new_recorded_interactions,
+          self$match_requests_on
+        )
+        old_interactions <- Filter(
+          function(x) {
+            req <- Request$new()$from_hash(x$request)
+            !unlist(new_interaction_list$has_interaction_matching(req))
+          },
+          old_interactions
+        )
       }
 
       return(c(
@@ -480,34 +462,30 @@ Cassette <- R6::R6Class(
     #' @description get all previously recorded interactions
     #' @return list
     previously_recorded_interactions = function() {
-      if (nchar(self$raw_cassette_bytes()) > 0) {
-        tmp <- compact(
-          lapply(self$deserialized_hash()[["http_interactions"]], function(z) {
-            response <- VcrResponse$new(
-              z$response$status,
-              z$response$headers,
-              z$response$body$string %||% z$response$body$base64_string,
-              opts = self$cassette_opts,
-              disk = z$response$body$file
-            )
-            zz <- HTTPInteraction$new(
-              request = Request$new(
-                z$request$method,
-                z$request$uri,
-                z$request$body$string,
-                z$request$headers,
-                disk = z$response$body$file
-              ),
-              response = response
-            )
-            hash <- zz$to_hash()
-            if (should_be_ignored(hash$request)) NULL else hash
-          })
+      if (self$is_empty()) return(list())
+
+      interactions <- self$deserialized_hash()[["http_interactions"]]
+      compact(lapply(interactions, function(z) {
+        request <- Request$new(
+          z$request$method,
+          z$request$uri,
+          z$request$body$string,
+          z$request$headers,
+          disk = z$response$body$file
         )
-        return(tmp)
-      } else {
-        return(list())
-      }
+        if (should_be_ignored(request)) {
+          return(NULL)
+        }
+
+        response <- VcrResponse$new(
+          z$response$status,
+          z$response$headers,
+          z$response$body$string %||% z$response$body$base64_string,
+          opts = self$cassette_opts,
+          disk = z$response$body$file
+        )
+        HTTPInteraction$new(request = request, response = response)$to_hash()
+      }))
     },
 
     #' @description write recorded interactions to disk

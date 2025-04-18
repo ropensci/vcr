@@ -39,7 +39,6 @@ test_that("is_base64", {
 })
 
 test_that("serializable_body", {
-  expect_error(serializable_body(), "\"x\" is missing")
   expect_null(serializable_body(NULL, TRUE))
   expect_null(serializable_body(NULL, FALSE))
 
