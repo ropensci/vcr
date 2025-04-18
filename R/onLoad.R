@@ -7,8 +7,6 @@ the <- NULL
 
 initialize_ivars <- function() {
   light_switch <<- list2env(lightswitch_init(), parent = emptyenv())
-  vcr_c$cassettes <<- list()
-  vcr_c$linked_context <<- NULL
 
   request_matchers <<- RequestMatcherRegistry$new()
   request_ignorer <<- RequestIgnorer$new()
