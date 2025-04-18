@@ -37,3 +37,54 @@
        - vcr only supports crul, httr & httr2; requests w/ curl, download.file, etc. are not supported
        - If you are using crul/httr/httr2, are you sure you made an HTTP request?
 
+# cassette checks name
+
+    Code
+      Cassette$new("foo bar")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not contain spaces.
+    Code
+      Cassette$new("foo.yml")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not include an extension.
+    Code
+      Cassette$new("foo/bar")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not contain '/', '?', '<', '>', '\', ':', '*', '|', or '"'
+    Code
+      Cassette$new("foo\nbar")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not contain spaces.
+    Code
+      Cassette$new("foo\nbar.")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not contain spaces.
+    Code
+      Cassette$new("..")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not be '.', '..', etc.
+    Code
+      Cassette$new("con")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not contain reserved windows strings.
+    Code
+      Cassette$new(strrep("x", 400))
+    Condition
+      Error in `initialize()`:
+      ! `name` must be less than 256 characters.
+
+---
+
+    Code
+      Cassette$new("foo")
+    Condition
+      Error in `initialize()`:
+      ! `name` must not be the same as an existing cassette.
+

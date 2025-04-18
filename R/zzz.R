@@ -59,32 +59,7 @@ can_charToRaw <- function(x) {
 }
 
 stp <- function(...) stop(..., call. = FALSE)
-check_cassette_name <- function(x) {
-  if (length(x) != 1) stp("cassette name must be a single string")
 
-  if (grepl("\\s", x)) stp("no spaces allowed in cassette names")
-  if (grepl("\\.yml$|\\.yaml$", x))
-    stp("don't include a cassette path extension")
-  # the below adapted from fs::path_sanitize, which adapted
-  # from the npm package sanitize-filename
-  illegal <- "[/\\?<>\\:*|\":]"
-  control <- "[[:cntrl:]]"
-  reserved <- "^[.]+$"
-  windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
-  windows_trailing <- "[. ]+$"
-  if (grepl(illegal, x))
-    stp(
-      "none of the following characters allowed in cassette ",
-      "names: (/, ?, <, >, \\, :, *, |, and \")"
-    )
-  if (grepl(control, x)) stp("no control characters allowed in cassette names")
-  if (grepl(reserved, x)) stp("cassette names can not be simply ., .., etc.")
-  if (grepl(windows_reserved, x))
-    stp("cassette names can not have reserved windows strings")
-  if (grepl(windows_trailing, x))
-    stp("cassette names can not have a trailing .")
-  if (nchar(x) > 255) stp("cassette name can not be > 255 characters")
-}
 
 check_request_matchers <- function(x) {
   mro <- c("method", "uri", "headers", "host", "path", "body", "query")
