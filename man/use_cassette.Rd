@@ -8,6 +8,7 @@
 use_cassette(
   name,
   ...,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -19,6 +20,7 @@ use_cassette(
 
 local_cassette(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -36,6 +38,9 @@ disk, so it must be valid file name.}
 \item{...}{a block of code containing one or more requests (required). Use
 curly braces to encapsulate multi-line code blocks. If you can't pass a code
 block use \code{\link[=insert_cassette]{insert_cassette()}} instead.}
+
+\item{dir}{The directory where the cassette will be stored. Defaults
+to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
 
 \item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
 complete list of the different recording modes.}
