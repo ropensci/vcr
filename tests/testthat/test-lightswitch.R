@@ -58,20 +58,20 @@ test_that("default options set as expected", {
 
   expect_equal(
     lightswitch_init(),
-    list(turned_off = FALSE, ignore_cassettes = FALSE)
+    list(on = TRUE, ignore_cassettes = FALSE)
   )
 })
 
 test_that("lightswitch_init() respects env vars", {
   expect_equal(
     lightswitch_init(),
-    list(turned_off = FALSE, ignore_cassettes = FALSE)
+    list(on = TRUE, ignore_cassettes = FALSE)
   )
 
   withr::local_envvar(VCR_TURNED_OFF = TRUE, VCR_IGNORE_CASSETTES = FALSE)
   expect_equal(
     lightswitch_init(),
-    list(turned_off = TRUE, ignore_cassettes = FALSE)
+    list(on = FALSE, ignore_cassettes = FALSE)
   )
 
   withr::local_envvar(
@@ -81,16 +81,16 @@ test_that("lightswitch_init() respects env vars", {
   )
   expect_equal(
     lightswitch_init(),
-    list(turned_off = TRUE, ignore_cassettes = TRUE)
+    list(on = FALSE, ignore_cassettes = TRUE)
   )
 })
 
 test_that("lightswitch env var handles varying inputs", {
   withr::local_envvar(VCR_TURN_OFF = "true")
-  expect_equal(lightswitch_init()$turned_off, TRUE)
+  expect_equal(lightswitch_init()$on, FALSE)
 
   withr::local_envvar(VCR_TURN_OFF = "TRUE")
-  expect_equal(lightswitch_init()$turned_off, TRUE)
+  expect_equal(lightswitch_init()$on, FALSE)
 
   withr::local_envvar(VCR_TURN_OFF = "yes")
   expect_snapshot(lightswitch_init(), error = TRUE)

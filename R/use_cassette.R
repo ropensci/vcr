@@ -5,13 +5,8 @@
 #' for one test).
 #'
 #' @export
-#' @inherit check_cassette_names details
-#' @param name The name of the cassette. vcr will check this to ensure it
-#' is a valid file name. Not allowed: spaces, file extensions, control
-#' characters (e.g., `\n`), illegal characters ('/', '?', '<', '>', '\\', ':',
-#' '*', '|', and '\"'), dots alone (e.g., '.', '..'), Windows reserved
-#' words (e.g., 'com1'), trailing dots (can cause problems on Windows),
-#' names longer than 255 characters. See section "Cassette names"
+#' @param name The name of the cassette. This is used to name a file on
+#'   disk, so it must be valid file name.
 #' @param ... a block of code containing one or more requests (required). Use
 #' curly braces to encapsulate multi-line code blocks. If you can't pass a code
 #' block use [insert_cassette()] instead.

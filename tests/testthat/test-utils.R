@@ -42,9 +42,6 @@ test_that("is_base64", {
   # expect_false(is_base64("12345"))
   # # numbers as numbers are not base64
   # expect_false(is_base64(12345))
-
-  suppressWarnings(not64$eject())
-  suppressWarnings(is64$eject())
 })
 
 test_that("serializable_body", {
@@ -80,12 +77,4 @@ test_that("body_from", {
 
   dd <- body_from(charToRaw("foo"))
   expect_type(dd, "raw")
-})
-
-test_that("check cassette names well", {
-  # no spaces
-  expect_error(check_cassette_name("foo bar"), "no spaces")
-  # no file ext included - just checking yml/yaml for now
-  expect_error(check_cassette_name("foo.yml"), "extension")
-  expect_error(check_cassette_name("foo.yaml"), "extension")
 })

@@ -106,8 +106,9 @@ be recorded back to file}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Cassette-new}{\code{Cassette$new()}}
-\item \href{#method-Cassette-print}{\code{Cassette$print()}}
+\item \href{#method-Cassette-insert}{\code{Cassette$insert()}}
 \item \href{#method-Cassette-eject}{\code{Cassette$eject()}}
+\item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
 \item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
@@ -139,13 +140,13 @@ Create a new \code{Cassette} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$new(
   name,
-  record,
-  serialize_with,
-  match_requests_on,
-  re_record_interval,
-  allow_playback_repeats,
-  preserve_exact_body_bytes,
-  clean_outdated_http_interactions
+  record = NULL,
+  match_requests_on = NULL,
+  allow_playback_repeats = FALSE,
+  serialize_with = NULL,
+  preserve_exact_body_bytes = NULL,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -158,26 +159,26 @@ is a valid file name.}
 \item{\code{record}}{The record mode. Default: "once". In the future we'll support
 "once", "all", "none", "new_episodes". See \link{recording} for more information}
 
-\item{\code{serialize_with}}{(character) Which serializer to use.
-Valid values are "yaml" (default), the only one supported for now.}
-
 \item{\code{match_requests_on}}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
 \verb{["method", "uri"]}. The built-in matchers are "method", "uri",
 "headers" and "body" ("host" and "path" not supported yet, but should
 be in a future version)}
 
-\item{\code{re_record_interval}}{(numeric) When given, the cassette will be
-re-recorded at the given interval, in seconds.}
-
 \item{\code{allow_playback_repeats}}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
+
+\item{\code{serialize_with}}{(character) Which serializer to use.
+Valid values are "yaml" (default), the only one supported for now.}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
+
+\item{\code{re_record_interval}}{(numeric) When given, the cassette will be
+re-recorded at the given interval, in seconds.}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
@@ -186,6 +187,32 @@ be recorded back to file. Default: \code{FALSE}}
 }
 \subsection{Returns}{
 A new \code{Cassette} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Cassette-insert"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-insert}{}}}
+\subsection{Method \code{insert()}}{
+insert the cassette
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$insert()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+self
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Cassette-eject"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-eject}{}}}
+\subsection{Method \code{eject()}}{
+ejects the cassette
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$eject()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+self
 }
 }
 \if{html}{\out{<hr>}}
@@ -205,19 +232,6 @@ print method for \code{Cassette} objects
 \item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-eject"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-eject}{}}}
-\subsection{Method \code{eject()}}{
-ejects the current cassette
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$eject()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-self
 }
 }
 \if{html}{\out{<hr>}}
