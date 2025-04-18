@@ -38,9 +38,8 @@
 #' turn_on()
 #' }
 turn_on <- function() {
-  light_switch$turned_off <- FALSE
-
-  invisible(light_switch$turned_off)
+  the$light_switch$on <- TRUE
+  invisible()
 }
 
 #' @export
@@ -51,11 +50,11 @@ turn_off <- function(ignore_cassettes = FALSE) {
     cli::cli_abort("You must eject all cassettes before you can turn vcr off.")
   }
 
-  light_switch$ignore_cassettes <- ignore_cassettes
-  light_switch$turned_off <- TRUE
+  the$light_switch$ignore_cassettes <- ignore_cassettes
+  the$light_switch$on <- FALSE
   message("vcr turned off; see ?turn_on to turn vcr back on")
 
-  invisible(light_switch$turned_off)
+  invisible()
 }
 
 #' @rdname lightswitch
@@ -70,7 +69,7 @@ turned_off <- function(code, ignore_cassettes = FALSE) {
 #' @rdname lightswitch
 #' @export
 turned_on <- function() {
-  !light_switch$turned_off
+  the$light_switch$on
 }
 
 #' @rdname lightswitch
@@ -87,9 +86,9 @@ skip_if_vcr_off <- function() {
 
 lightswitch_init <- function() {
   list(
-    turned_off = get_envvar_lgl("VCR_TURNED_OFF") %||%
+    on = !(get_envvar_lgl("VCR_TURNED_OFF") %||%
       get_envvar_lgl("VCR_TURN_OFF") %||%
-      FALSE,
+      FALSE),
     ignore_cassettes = get_envvar_lgl("VCR_IGNORE_CASSETTES") %||%
       get_envvar_lgl("VCR_TURN_OFF") %||%
       FALSE

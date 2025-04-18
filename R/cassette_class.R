@@ -111,48 +111,53 @@ Cassette <- R6::R6Class(
     #' @return A new `Cassette` object
     initialize = function(
       name,
-      record,
-      serialize_with,
-      match_requests_on,
-      re_record_interval,
-      allow_playback_repeats,
-      preserve_exact_body_bytes,
-      clean_outdated_http_interactions
+      record = NULL,
+      match_requests_on = NULL,
+      allow_playback_repeats = FALSE,
+      serialize_with = NULL,
+      preserve_exact_body_bytes = NULL,
+      re_record_interval = NULL,
+      clean_outdated_http_interactions = NULL
     ) {
+      check_cassette_name(name)
+      config <- vcr_configuration()
+
       self$name <- name
+      self$record <- check_record_mode(record %||% config$record)
+      self$match_requests_on <- check_request_matchers(match_requests_on) %||%
+        config$match_requests_on
+      self$serialize_with <- serialize_with %||% config$serialize_with
+      self$re_record_interval <- re_record_interval %||%
+        config$re_record_interval
+      self$allow_playback_repeats = allow_playback_repeats
 
-      self$root_dir <- vcr_configuration()$dir
-      if (!dir.exists(self$root_dir)) {
-        dir_create(self$root_dir)
-      }
+      assert(preserve_exact_body_bytes, "logical")
+      self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
+        config$preserve_exact_body_bytes
+      
+      self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
+        config$clean_outdated_http_interactions
 
-      self$serialize_with <- serialize_with %||% vcr_c$serialize_with
+      self$root_dir <- config$dir
       self$serializer <- serializer_fetch(
         self$serialize_with,
         path = self$root_dir,
         name = self$name
       )
-      if (!missing(record)) {
-        self$record <- check_record_mode(record)
+    },
+
+    #' @description insert the cassette
+    #' @return self
+    insert = function() {
+      if (!dir.exists(self$root_dir)) {
+        dir_create(self$root_dir)
       }
-      if (!file.exists(self$file())) cat("\n", file = self$file())
-      if (!missing(match_requests_on)) {
-        self$match_requests_on <- check_request_matchers(match_requests_on)
+      if (!file.exists(self$file())) {
+        cat("\n", file = self$file())
+        self$recorded_at <- Sys.time()
+      } else {
+        self$recorded_at <- file.mtime(self$file())
       }
-      if (!missing(re_record_interval))
-        self$re_record_interval <- re_record_interval
-      if (!missing(allow_playback_repeats)) {
-        assert(allow_playback_repeats, "logical")
-        self$allow_playback_repeats = allow_playback_repeats
-      }
-      if (!missing(preserve_exact_body_bytes)) {
-        assert(preserve_exact_body_bytes, "logical")
-        self$preserve_exact_body_bytes <- preserve_exact_body_bytes
-      }
-      if (!missing(clean_outdated_http_interactions)) {
-        self$clean_outdated_http_interactions <- clean_outdated_http_interactions
-      }
-      self$recorded_at <- file.info(self$file())$mtime
 
       # check for re-record
       if (self$should_re_record()) self$record <- "all"
@@ -246,6 +251,18 @@ Cassette <- R6::R6Class(
       if (!is.null(vcr_c$write_disk_path)) dir_create(vcr_c$write_disk_path)
     },
 
+    #' @description ejects the cassette
+    #' @return self
+    eject = function() {
+      on.exit(private$remove_empty_cassette())
+      self$write_recorded_interactions_to_disk()
+      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
+      # disable webmockr
+      webmockr::disable(quiet = vcr_c$quiet)
+      # return self
+      return(self)
+    },
+
     #' @description print method for `Cassette` objects
     #' @param x self
     #' @param ... ignored
@@ -273,18 +290,6 @@ Cassette <- R6::R6Class(
         sep = "\n"
       )
       invisible(self)
-    },
-
-    #' @description ejects the current cassette
-    #' @return self
-    eject = function() {
-      on.exit(private$remove_empty_cassette())
-      self$write_recorded_interactions_to_disk()
-      if (!vcr_c$quiet) message("ejecting cassette: ", self$name)
-      # disable webmockr
-      webmockr::disable(quiet = vcr_c$quiet)
-      # return self
-      return(self)
     },
 
     #' @description get the file path for the cassette
@@ -697,4 +702,65 @@ empty_cassette_message <- function(x) {
     " - vcr only supports crul, httr & httr2; requests w/ curl, download.file, etc. are not supported\n",
     " - If you are using crul/httr/httr2, are you sure you made an HTTP request?\n"
   )
+}
+
+
+check_cassette_name <- function(x, call = caller_env()) {
+  if (length(x) != 1 || !is.character(x)) {
+    cli::cli_abort("{.arg name} must be a single string.", call = call)
+  }
+
+  if (any(x %in% names(the$cassettes))) {
+    cli::cli_abort(
+      "{.arg name} must not be the same as an existing cassette.",
+      call = call
+    )
+  }
+
+  if (grepl("\\s", x)) {
+    cli::cli_abort("{.arg name} must not contain spaces.", call = call)
+  }
+
+  if (grepl("\\.yml$|\\.yaml$", x)) {
+    cli::cli_abort("{.arg name} must not include an extension.", call = call)
+  }
+
+  # the below adapted from fs::path_sanitize, which adapted
+  # from the npm package sanitize-filename
+  illegal <- "[/\\?<>\\:*|\":]"
+  control <- "[[:cntrl:]]"
+  reserved <- "^[.]+$"
+  windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
+  windows_trailing <- "[. ]+$"
+  if (grepl(illegal, x))
+    cli::cli_abort(
+      "{.arg name} must not contain '/', '?', '<', '>', '\\', ':', '*', '|', or '\"'",
+      call = call
+    )
+  if (grepl(control, x)) {
+    cli::cli_abort(
+      "{.arg name} must not contain control characters.",
+      call = call
+    )
+  }
+  if (grepl(reserved, x)) {
+    cli::cli_abort(
+      "{.arg name} must not be '.', '..', etc.",
+      call = call
+    )
+  }
+  if (grepl(windows_reserved, x)) {
+    cli::cli_abort(
+      "{.arg name} must not contain reserved windows strings.",
+      call = call
+    )
+  }
+  if (grepl(windows_trailing, x)) {
+    cli::cli_abort("{.arg name} must not end in '.'.", call = call)
+  }
+  if (nchar(x) > 255) {
+    cli::cli_abort("{.arg name} must be less than 256 characters.", call = call)
+  }
+
+  invisible()
 }
