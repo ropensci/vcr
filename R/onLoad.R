@@ -20,6 +20,7 @@ initialize_ivars <- function() {
   # initialize bucket of cassettes in session
   the <<- new.env(parent = emptyenv())
   the$cassettes <- list()
+  the$last_error <- list()
   # lots of things
   initialize_ivars()
 } # nocov end

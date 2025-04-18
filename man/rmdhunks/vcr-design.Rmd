@@ -117,7 +117,7 @@ that need to write to the log file.
 
 #### A bit of housekeeping
 
-Another internal environment (`vcr__env`) is used to keep track of a
+Another internal environment (`the`) is used to keep track of a
 few items, including the current cassette in use, and the last vcr error.
 
 #### Lightswitch
