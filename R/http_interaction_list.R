@@ -127,14 +127,11 @@ HTTPInteractionList <- R6::R6Class(
         },
         ""
       )
-      vcr_log_info(
-        sprintf(
-          "Init. HTTPInteractionList w/ request matchers [%s] & %s interaction(s): { %s }",
-          paste0(self$request_matchers, collapse = ", "),
-          length(interactions),
-          paste0(interaction_summaries, collapse = ', ')
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "Init. HTTPInteractionList w/ request matchers [%s] & %s interaction(s): { %s }",
+        paste0(self$request_matchers, collapse = ", "),
+        length(interactions),
+        paste0(interaction_summaries, collapse = ', ')
       )
     },
 
@@ -155,14 +152,11 @@ HTTPInteractionList <- R6::R6Class(
           self$used_interactions,
           list(interaction)
         )
-        vcr_log_info(
-          sprintf(
-            "  Found matching interaction for %s at index %s: %s",
-            request_summary(Request$new()$from_hash(request)),
-            index,
-            response_summary(VcrResponse$new()$from_hash(interaction$response))
-          ),
-          vcr_c$log_opts$date
+        vcr_log_sprintf(
+          "Found matching interaction for %s at index %s: %s",
+          request_summary(Request$new()$from_hash(request)),
+          index,
+          response_summary(VcrResponse$new()$from_hash(interaction$response))
         )
         interaction$response
       } else {
@@ -208,7 +202,7 @@ HTTPInteractionList <- R6::R6Class(
           response_summary(x$response)
         )
       })
-      vcr_log_info(descriptions, vcr_c$log_opts$date)
+      vcr_log_sprintf(descriptions)
       stop(
         "There are unused HTTP interactions left in the cassette:\n",
         descriptions,
@@ -275,14 +269,11 @@ HTTPInteractionList <- R6::R6Class(
         bod,
         interaction$request$headers
       )
-      vcr_log_info(
-        sprintf(
-          "  Checking if {%s} matches {%s} using matchers: [%s]",
-          request_summary(req),
-          request_summary(intreq),
-          paste0(self$request_matchers, collapse = ", ")
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "Checking if {%s} matches {%s} using matchers: [%s]",
+        request_summary(req),
+        request_summary(intreq),
+        paste0(self$request_matchers, collapse = ", ")
       )
 
       all(unlist(lapply(self$request_matchers, function(y) {
@@ -291,15 +282,12 @@ HTTPInteractionList <- R6::R6Class(
         msg <- if (res) "matched" else "did not match"
         # cat(paste0("method: ", req$method), sep = "\n ")
         # cat(paste0("body: ", req$body), sep = "\n ")
-        vcr_log_info(
-          sprintf(
-            "    %s %s: current request [%s] vs [%s]",
-            y,
-            msg,
-            request_summary(req, self$request_matchers),
-            request_summary(intreq, self$request_matchers)
-          ),
-          vcr_c$log_opts$date
+        vcr_log_sprintf(
+          "%s %s: current request [%s] vs [%s]",
+          y,
+          msg,
+          request_summary(req, self$request_matchers),
+          request_summary(intreq, self$request_matchers)
         )
         return(res)
       })))
