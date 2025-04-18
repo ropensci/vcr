@@ -489,7 +489,7 @@ Cassette <- R6::R6Class(
               response = response
             )
             hash <- zz$to_hash()
-            if (the$request_ignorer$should_be_ignored(hash$request)) NULL else hash
+            if (should_be_ignored(hash$request)) NULL else hash
           })
         )
         return(tmp)

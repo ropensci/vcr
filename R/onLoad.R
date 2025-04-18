@@ -16,7 +16,6 @@ initialize_ivars <- function() {
   # initialize bucket of cassettes in session
   the <<- new.env(parent = emptyenv())
   the$cassettes <- list()
-  the$request_ignorer <<- RequestIgnorer$new()
   # lots of things
   initialize_ivars()
 } # nocov end
