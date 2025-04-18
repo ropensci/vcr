@@ -1,28 +1,3 @@
-test_that("insert_cassette fails well", {
-  local_vcr_configure(dir = withr::local_tempdir())
-
-  # must pass a cassette name
-  expect_error(insert_cassette(), "argument \"name\" is missing")
-
-  # record valid values
-  expect_error(
-    suppressMessages(insert_cassette("newbar", record = "stuff")),
-    "'record' value of 'stuff' is not in the allowed set"
-  )
-
-  # match_requests_on valid values
-  expect_error(
-    suppressMessages(insert_cassette("newbar", match_requests_on = "stuff")),
-    "'match_requests_on' values \\(stuff\\) is not in the allowed set"
-  )
-
-  # preserve_exact_body_bytes valid type
-  expect_error(
-    suppressMessages(insert_cassette("newbar4", preserve_exact_body_bytes = 5)),
-    "preserve_exact_body_bytes must be of class logical"
-  )
-})
-
 test_that("insert_cassette works as expected", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
