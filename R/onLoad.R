@@ -1,6 +1,5 @@
 vcr_c <- NULL # nocov start
 VCRHooks <- NULL
-light_switch <- NULL
 the <- NULL
 
 initialize_ivars <- function() {
