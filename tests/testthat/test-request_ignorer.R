@@ -1,35 +1,18 @@
 test_that("RequestIgnorer basic stuff", {
   aa <- RequestIgnorer$new()
-  expect_s3_class(aa, "R6")
-  expect_s3_class(aa, "RequestIgnorer")
-
-  # vars
-  expect_equal(aa$LOCALHOST_ALIASES, c('localhost', '127.0.0.1', '0.0.0.0'))
-  expect_s3_class(aa$ignored_hosts, "EnvHash")
-
-  # methods
-  expect_type(aa$ignore_localhost, "closure")
-  expect_type(aa$ignore_localhost_value, "closure")
-  expect_type(aa$ignore_hosts, "closure")
-  expect_type(aa$should_be_ignored, "closure")
+  expect_equal(aa$currently_ignored_hosts(), character())
 })
 
 test_that("RequestIgnorer usage", {
   x <- RequestIgnorer$new()
-  x$ignore_hosts(hosts = "google.com")
-  expect_equal(x$ignored_hosts$bucket, "google.com")
-  x$ignore_localhost()
-  expect_equal(x$ignored_hosts$bucket, c("google.com", x$LOCALHOST_ALIASES))
-
-  x <- RequestIgnorer$new()
-  x$ignore_localhost_value('127.0.0.1')
-  expect_equal(x$ignored_hosts$bucket, '127.0.0.1')
-
-  x <- RequestIgnorer$new()
-  expect_false(x$should_be_ignored(list(uri = "google.com")))
-  x$ignore_hosts(hosts = "google.com")
-  expect_true(x$should_be_ignored(list(uri = "google.com")))
   expect_false(x$should_be_ignored(list(uri = "foo.com")))
+
+  x$ignore_hosts(hosts = "google.com")
+  expect_equal(x$currently_ignored_hosts(), "google.com")
+  expect_true(x$should_be_ignored(list(uri = "google.com")))
+
+  x$ignore_localhost()
+  expect_equal(x$currently_ignored_hosts(), c("google.com", LOCALHOST_ALIASES))
 })
 
 test_that("RequestIgnorer usage: w/ real requests", {
@@ -101,11 +84,4 @@ test_that("RequestIgnorer usage: w/ vcr_configure() usage", {
   })
   cas <- read_cassette("test-3.yml")
   expect_equal(length(cas$http_interactions), 1)
-})
-
-test_that("RequestIgnorer fails well", {
-  expect_error(RequestIgnorer$new(a = 5), "unused argument")
-  z <- RequestIgnorer$new()
-  expect_error(z$ignore_hosts(), "missing")
-  expect_error(z$ignore_localhost_value(), "missing")
 })
