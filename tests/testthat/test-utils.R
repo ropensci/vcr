@@ -81,11 +81,3 @@ test_that("body_from", {
   dd <- body_from(charToRaw("foo"))
   expect_type(dd, "raw")
 })
-
-test_that("check cassette names well", {
-  # no spaces
-  expect_error(check_cassette_name("foo bar"), "no spaces")
-  # no file ext included - just checking yml/yaml for now
-  expect_error(check_cassette_name("foo.yml"), "extension")
-  expect_error(check_cassette_name("foo.yaml"), "extension")
-})

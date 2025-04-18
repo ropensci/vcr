@@ -1,5 +1,14 @@
 #' Check cassette names
 #'
+#' @description
+#' This function is meant to be run during your tests, from a
+#' [`helper-*.R` file](https://testthat.r-lib.org/reference/test_dir.html#special-files)
+#' inside the `tests/testthat` directory.
+#'
+#' It only checks that cassette names are not duplicated. Note that if you do
+#' need to have duplicated cassette names you can do so by using the
+#' `allowed_duplicates` parameter in `check_cassette_names()`.
+#'
 #' @export
 #' @param pattern (character) regex pattern for file paths to check.
 #' this is done inside of `tests/testthat/`. default: "test-"
@@ -8,7 +17,6 @@
 #' tests rather than you seeing it after tests have run (as would happen
 #' by default)
 #' @param allowed_duplicates (character) cassette names that can be duplicated
-#' @includeRmd man/rmdhunks/cassette-names.Rmd details
 
 check_cassette_names <- function(
   pattern = "test-",

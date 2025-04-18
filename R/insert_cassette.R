@@ -8,7 +8,6 @@ vcr__env <- new.env()
 #' @export
 #' @inheritParams use_cassette
 #' @inheritSection use_cassette Cassette options
-#' @inherit check_cassette_names details
 #' @return A [Cassette], invisibly.
 #' @order 1
 #' @keywords internal
@@ -22,8 +21,6 @@ insert_cassette <- function(
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL
 ) {
-  check_cassette_name(name)
-
   if (!turned_on()) {
     if (!light_switch$ignore_cassettes) {
       message <- "vcr is turned off.  You must turn it on before you can insert a cassette.
@@ -34,14 +31,6 @@ insert_cassette <- function(
       return(NULL)
     }
   }
-
-  if (any(name %in% names(the$cassettes))) {
-    stop(
-      sprintf("There is already a cassette with the same name: %s", name),
-      "\n  see ?eject_cassette"
-    )
-  }
-
   # enable webmockr
   webmockr::enable(quiet = vcr_c$quiet)
   sup_mssg(vcr_c$quiet, webmockr::webmockr_allow_net_connect())
