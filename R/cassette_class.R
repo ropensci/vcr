@@ -317,8 +317,7 @@ Cassette <- R6::R6Class(
     #' @description is the cassette on disk empty
     #' @return logical
     is_empty = function() {
-      size <- file.size(self$file())
-      is.na(size) || size == 0
+      !file.exists(self$file())
     },
 
     #' @description Get interactions to record
