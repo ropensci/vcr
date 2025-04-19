@@ -100,10 +100,7 @@ VcrResponse <- R6::R6Class(
       list(
         status = self$status,
         headers = self$headers,
-        body = serializable_body(
-          self$body,
-          self$opts$preserve_exact_body_bytes %||% FALSE
-        ),
+        body = self$body,
         http_version = self$http_version,
         disk = self$disk
       )
@@ -116,8 +113,7 @@ VcrResponse <- R6::R6Class(
       VcrResponse$new(
         hash[["status"]],
         hash[["headers"]],
-        # hash[["body"]],
-        body_from(hash[["body"]]),
+        hash[["body"]] %||% "",
         hash[["http_version"]],
         hash[["adapater_metadata"]],
         hash[["disk"]]
