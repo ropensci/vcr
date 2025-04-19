@@ -26,9 +26,8 @@
 #'
 #' res <- Cassette$new(name = "bob")
 #' res$file()
-#' res$originally_recorded_at()
+#' res$recorded_at
 #' res$recording()
-#' res$serializable_hash()
 #' res$eject()
 #' res$should_remove_matching_existing_interactions()
 #' res$storage_key()
@@ -155,7 +154,6 @@ Cassette <- R6::R6Class(
         dir_create(self$root_dir)
       }
       if (!file.exists(self$file())) {
-        cat("\n", file = self$file())
         self$recorded_at <- Sys.time()
       } else {
         self$recorded_at <- file.mtime(self$file())
@@ -259,7 +257,6 @@ Cassette <- R6::R6Class(
       self$write_recorded_interactions_to_disk()
 
       if (self$is_empty()) {
-        unlink(self$file(), force = TRUE)
         if (vcr_c$warn_on_empty_cassette) {
           cli::cli_warn(c(
             x = "{.str {self$name}} cassette ejected without recording any interactions.",
@@ -320,22 +317,8 @@ Cassette <- R6::R6Class(
     #' @description is the cassette on disk empty
     #' @return logical
     is_empty = function() {
-      nchar(self$raw_cassette_bytes()) < 1
-    },
-
-    #' @description timestamp the cassette was originally recorded at
-    #' @return POSIXct date
-    originally_recorded_at = function() {
-      as.POSIXct(self$recorded_at, tz = "GMT")
-    },
-
-    #' @description Get a list of the http interactions to record + recorded_with
-    #' @return list
-    serializable_hash = function() {
-      list(
-        http_interactions = self$merged_interactions(),
-        recorded_with = utils::packageVersion("vcr")
-      )
+      size <- file.size(self$file())
+      is.na(size) || size == 0
     },
 
     #' @description Get interactions to record
@@ -394,13 +377,11 @@ Cassette <- R6::R6Class(
     #' @return logical
     should_re_record = function() {
       if (is.null(self$re_record_interval)) return(FALSE)
-      if (is.null(self$originally_recorded_at())) return(FALSE)
       now <- as.POSIXct(Sys.time(), tz = "GMT")
-      time_comp <- (self$originally_recorded_at() + self$re_record_interval) <
-        now
+      time_comp <- (self$recorded_at + self$re_record_interval) < now
       info <- sprintf(
         "previously recorded at: '%s'; now: '%s'; interval: %s seconds",
-        self$originally_recorded_at(),
+        self$recorded_at,
         now,
         self$re_record_interval
       )
@@ -441,32 +422,13 @@ Cassette <- R6::R6Class(
       self$record == "all"
     },
 
-    #' @description Get character string of entire cassette; bytes is a misnomer
-    #' @return character
-    raw_cassette_bytes = function() {
-      file <- self$file()
-      if (is.null(file)) return("")
-      tmp <- readLines(file) %||% ""
-      paste0(tmp, collapse = "")
-    },
-
-    #' @description get http interactions from the cassette via the serializer
-    #' @return list
-    deserialized_hash = function() {
-      tmp <- self$serializer$deserialize(self)
-      if (inherits(tmp, "list")) {
-        return(tmp)
-      } else {
-        stop(tmp, " does not appear to be a valid cassette", call. = FALSE)
-      }
-    },
-
     #' @description get all previously recorded interactions
     #' @return list
     previously_recorded_interactions = function() {
       if (self$is_empty()) return(list())
 
-      interactions <- self$deserialized_hash()[["http_interactions"]]
+      interactions <- self$serializer$deserialize(self)$http_interactions
+
       compact(lapply(interactions, function(z) {
         request <- Request$new(
           z$request$method,
@@ -494,9 +456,10 @@ Cassette <- R6::R6Class(
     #' @return nothing returned
     write_recorded_interactions_to_disk = function() {
       if (!self$any_new_recorded_interactions()) return(NULL)
-      hash <- self$serializable_hash()
-      if (length(hash[["http_interactions"]]) == 0) return(NULL)
-      self$serializer$serialize(hash[[1]], self$preserve_exact_body_bytes)
+
+      interactions <- self$merged_interactions()
+      if (length(interactions) == 0) return(NULL)
+      self$serializer$serialize(interactions, self$preserve_exact_body_bytes)
     },
 
     #' @description record an http interaction (doesn't write to disk)
@@ -622,54 +585,8 @@ Cassette <- R6::R6Class(
         disk = is_disk
       )
       HTTPInteraction$new(request = request, response = response)
-    },
-
-    #' @description Make a crul response object
-    #' @return a crul response
-    serialize_to_crul = function() {
-      if (length(self$deserialized_hash()) != 0) {
-        intr <- self$deserialized_hash()[[1]][[1]]
-      } else {
-        intr <- tryCatch(
-          self$previously_recorded_interactions()[[1]],
-          error = function(e) e
-        )
-        if (inherits(intr, "error")) {
-          intr <- tryCatch(
-            self$new_recorded_interactions[[1]],
-            error = function(e) e
-          )
-          if (inherits(intr, "error")) {
-            stop("no requests found to construct a crul response")
-          }
-        }
-      }
-
-      # request
-      req <- webmockr::RequestSignature$new(
-        method = intr$request$method,
-        uri = intr$request$uri,
-        options = list(
-          body = intr$request$body %||% NULL,
-          headers = intr$request$headers %||% NULL,
-          proxies = NULL,
-          auth = NULL
-        )
-      )
-
-      # response
-      resp <- webmockr::Response$new()
-      resp$set_url(intr$request$uri)
-      bod <- intr$response$body
-      resp$set_body(if ("string" %in% names(bod)) bod$string else bod)
-      resp$set_request_headers(intr$request$headers)
-      resp$set_response_headers(intr$response$headers)
-      resp$set_status(status = intr$response$status$status_code %||% 200)
-
-      # generate crul response
-      webmockr::build_crul_response(req, resp)
     }
-  ),
+  )
 )
 
 
