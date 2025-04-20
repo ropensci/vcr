@@ -58,8 +58,6 @@ f <- tempfile()
 
 \item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
 
-\item{\code{hash}}{a list}
-
 \item{\code{disk}}{a boolean}
 }
 \if{html}{\out{</div>}}

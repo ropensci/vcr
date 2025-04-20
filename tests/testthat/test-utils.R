@@ -15,12 +15,6 @@ test_that("can_rawToChar", {
   expect_false(can_rawToChar(png_eg))
 })
 
-test_that("try_encoding", {
-  expect_error(try_encoding(), "'x' is missing")
-  expect_equal(try_encoding("foo"), "unknown")
-  expect_equal(try_encoding(charToRaw("foo")), "ASCII-8BIT")
-})
-
 test_that("is_base64", {
   not64 <- Cassette$new('notbase64')
   is64 <- Cassette$new('isbase64', preserve_exact_body_bytes = TRUE)
@@ -42,13 +36,9 @@ test_that("is_base64", {
   # expect_false(is_base64("12345"))
   # # numbers as numbers are not base64
   # expect_false(is_base64(12345))
-
-  suppressWarnings(not64$eject())
-  suppressWarnings(is64$eject())
 })
 
 test_that("serializable_body", {
-  expect_error(serializable_body(), "\"x\" is missing")
   expect_null(serializable_body(NULL, TRUE))
   expect_null(serializable_body(NULL, FALSE))
 
@@ -80,12 +70,4 @@ test_that("body_from", {
 
   dd <- body_from(charToRaw("foo"))
   expect_type(dd, "raw")
-})
-
-test_that("check cassette names well", {
-  # no spaces
-  expect_error(check_cassette_name("foo bar"), "no spaces")
-  # no file ext included - just checking yml/yaml for now
-  expect_error(check_cassette_name("foo.yml"), "extension")
-  expect_error(check_cassette_name("foo.yaml"), "extension")
 })

@@ -106,14 +106,14 @@ be recorded back to file}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Cassette-new}{\code{Cassette$new()}}
-\item \href{#method-Cassette-print}{\code{Cassette$print()}}
+\item \href{#method-Cassette-insert}{\code{Cassette$insert()}}
 \item \href{#method-Cassette-eject}{\code{Cassette$eject()}}
+\item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
 \item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
 \item \href{#method-Cassette-originally_recorded_at}{\code{Cassette$originally_recorded_at()}}
 \item \href{#method-Cassette-serializable_hash}{\code{Cassette$serializable_hash()}}
-\item \href{#method-Cassette-interactions_to_record}{\code{Cassette$interactions_to_record()}}
 \item \href{#method-Cassette-merged_interactions}{\code{Cassette$merged_interactions()}}
 \item \href{#method-Cassette-up_to_date_interactions}{\code{Cassette$up_to_date_interactions()}}
 \item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
@@ -139,13 +139,14 @@ Create a new \code{Cassette} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$new(
   name,
-  record,
-  serialize_with,
-  match_requests_on,
-  re_record_interval,
-  allow_playback_repeats,
-  preserve_exact_body_bytes,
-  clean_outdated_http_interactions
+  dir = NULL,
+  record = NULL,
+  match_requests_on = NULL,
+  allow_playback_repeats = FALSE,
+  serialize_with = NULL,
+  preserve_exact_body_bytes = NULL,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -155,11 +156,10 @@ Create a new \code{Cassette} object
 \item{\code{name}}{The name of the cassette. vcr will sanitize this to ensure it
 is a valid file name.}
 
+\item{\code{dir}}{The directory where the cassette will be stored.}
+
 \item{\code{record}}{The record mode. Default: "once". In the future we'll support
 "once", "all", "none", "new_episodes". See \link{recording} for more information}
-
-\item{\code{serialize_with}}{(character) Which serializer to use.
-Valid values are "yaml" (default), the only one supported for now.}
 
 \item{\code{match_requests_on}}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to
@@ -167,17 +167,20 @@ to use to determine what recorded HTTP interaction to replay. Defaults to
 "headers" and "body" ("host" and "path" not supported yet, but should
 be in a future version)}
 
-\item{\code{re_record_interval}}{(numeric) When given, the cassette will be
-re-recorded at the given interval, in seconds.}
-
 \item{\code{allow_playback_repeats}}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
+
+\item{\code{serialize_with}}{(character) Which serializer to use.
+Valid values are "yaml" (default), the only one supported for now.}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
 this cassette when serializing it. See also \code{preserve_exact_body_bytes}
 in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
+
+\item{\code{re_record_interval}}{(numeric) When given, the cassette will be
+re-recorded at the given interval, in seconds.}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
@@ -186,6 +189,32 @@ be recorded back to file. Default: \code{FALSE}}
 }
 \subsection{Returns}{
 A new \code{Cassette} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Cassette-insert"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-insert}{}}}
+\subsection{Method \code{insert()}}{
+insert the cassette
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$insert()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+self
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Cassette-eject"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-eject}{}}}
+\subsection{Method \code{eject()}}{
+ejects the cassette
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$eject()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+self
 }
 }
 \if{html}{\out{<hr>}}
@@ -205,19 +234,6 @@ print method for \code{Cassette} objects
 \item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-eject"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-eject}{}}}
-\subsection{Method \code{eject()}}{
-ejects the current cassette
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$eject()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-self
 }
 }
 \if{html}{\out{<hr>}}
@@ -279,19 +295,6 @@ POSIXct date
 Get a list of the http interactions to record + recorded_with
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$serializable_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-interactions_to_record"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-interactions_to_record}{}}}
-\subsection{Method \code{interactions_to_record()}}{
-Get the list of http interactions to record
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$interactions_to_record()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
