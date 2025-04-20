@@ -195,34 +195,10 @@ HTTPInteractionList <- R6::R6Class(
     #' @return integer
     remaining_unused_interaction_count = function() {
       length(self$interactions)
-    },
-
-    #' @description Checks if there are no unused interactions left.
-    #' @return various
-    assert_no_unused_interactions = function() {
-      if (!private$has_unused_interactions()) return(NULL)
-      descriptions <- lapply(self$interactions, function(x) {
-        sprintf(
-          "  - %s => %s",
-          request_summary(x$request, self$request_matchers),
-          response_summary(x$response)
-        )
-      })
-      vcr_log_info(descriptions, vcr_c$log_opts$date)
-      stop(
-        "There are unused HTTP interactions left in the cassette:\n",
-        descriptions,
-        call. = FALSE
-      )
     }
   ),
 
   private = list(
-    # return: logical
-    has_unused_interactions = function() {
-      length(self$interactions) > 0
-    },
-
     gather_match_checks = function(request) {
       out <- logical(0)
       iter <- 0

@@ -30,18 +30,10 @@ test_that("HttpInteraction", {
 
   # methods and objects
   expect_type(x$to_hash, "closure")
-  expect_type(x$from_hash, "closure")
   expect_s3_class(x$request, "Request")
   expect_s3_class(x$response, "VcrResponse")
 
   # to_hash method
   expect_type(x$to_hash(), "list")
   expect_named(x$to_hash(), c('request', 'response', 'recorded_at'))
-
-  # make an HTTPInteraction from a hash with the object already made
-  expect_s3_class(x$from_hash(x$to_hash()), "HTTPInteraction")
-
-  # Make an HTTPInteraction from a hash alone
-  my_hash <- x$to_hash()
-  expect_s3_class(HTTPInteraction$new()$from_hash(my_hash), "HTTPInteraction")
 })
