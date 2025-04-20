@@ -153,7 +153,7 @@ HTTPInteractionList <- R6::R6Class(
           list(interaction)
         )
         vcr_log_sprintf(
-          "Found matching interaction for %s at index %s: %s",
+          "  Found matching interaction for %s at index %s: %s",
           request_summary(Request$new()$from_hash(request)),
           index,
           response_summary(VcrResponse$new()$from_hash(interaction$response))
@@ -270,7 +270,7 @@ HTTPInteractionList <- R6::R6Class(
         interaction$request$headers
       )
       vcr_log_sprintf(
-        "Checking if {%s} matches {%s} using matchers: [%s]",
+        "  Checking if {%s} matches {%s} using matchers: [%s]",
         request_summary(req),
         request_summary(intreq),
         paste0(self$request_matchers, collapse = ", ")
@@ -283,7 +283,7 @@ HTTPInteractionList <- R6::R6Class(
         # cat(paste0("method: ", req$method), sep = "\n ")
         # cat(paste0("body: ", req$body), sep = "\n ")
         vcr_log_sprintf(
-          "%s %s: current request [%s] vs [%s]",
+          "    %s %s: current request [%s] vs [%s]",
           y,
           msg,
           request_summary(req, self$request_matchers),
