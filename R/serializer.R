@@ -36,17 +36,9 @@ decode_body <- function(body, preserve_bytes = FALSE) {
   if (has_name(body, "string") && preserve_bytes) {
     warning("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
   } else if (has_name(body, "base64_string")) {
-    new_body <- body$base64_string
-    new_body <- strip_newlines(new_body)
-    new_body <- jsonlite::base64_dec(new_body)
-    body$base64_string <- new_body
+    body$base64_string <- from_base64(body$base64_string)
   }
   body
-}
-
-strip_newlines <- function(x) {
-  if (!inherits(x, "character")) return(x)
-  gsub("[\r\n]", "", x)
 }
 
 serializer_fetch <- function(type, path, name) {

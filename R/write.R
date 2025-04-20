@@ -33,11 +33,6 @@ dedup_keys <- function(x) {
   return(x)
 }
 
-str_breaks <- function(x) {
-  z <- str_splitter(x, 80L)
-  paste0(z, collapse = "\n")
-}
-
 prep_interaction <- function(x, file, bytes) {
   list(
     list(
@@ -64,7 +59,7 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
   } else if (is.raw(body) || preserve_bytes) {
     compact(list(
       encoding = "",
-      base64_string = jsonlite::base64_enc(body %||% ""),
+      base64_string = to_base64(body),
       file = file
     ))
   } else {
