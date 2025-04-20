@@ -51,6 +51,18 @@ prep_interaction <- function(x, file, bytes) {
     get_body(x$response$body)
   }
   if (length(body) == 0 || !nzchar(body)) body <- ""
+
+  req_headers <- x$request$headers
+  req_headers <- dedup_keys(req_headers)
+  req_headers <- headers_remove(req_headers, vcr_c$filter_request_headers)
+  req_headers <- request_headers_redact(req_headers)
+  req_headers <- unclass(req_headers)
+
+  resp_headers <- x$response$headers
+  resp_headers <- dedup_keys(resp_headers)
+  resp_headers <- headers_remove(resp_headers, vcr_c$filter_response_headers)
+  resp_headers <- unclass(resp_headers)
+
   res = list(
     list(
       request = list(
@@ -60,11 +72,11 @@ prep_interaction <- function(x, file, bytes) {
           encoding = "",
           string = get_body(x$request$body)
         ),
-        headers = dedup_keys(x$request$headers)
+        headers = req_headers
       ),
       response = list(
         status = x$response$status,
-        headers = dedup_keys(x$response$headers),
+        headers = resp_headers,
         body = list(
           encoding = "",
           file = x$response$disk,
@@ -87,8 +99,6 @@ prep_interaction <- function(x, file, bytes) {
 # param bytes: logical, whether to preserve exact bytes or not
 write_interactions <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
-  z <- headers_remove(z)
-  z <- request_headers_redact(z)
   z <- query_params_remove(z)
   tmp <- yaml::as.yaml(z)
   tmp <- sensitive_remove(tmp)
@@ -97,9 +107,6 @@ write_interactions <- function(x, file, bytes) {
 
 write_interactions_json <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
-  z <- headers_remove(z)
-  z <- request_headers_redact(z)
-  z <- headers_unclass(z)
   z <- query_params_remove(z)
   # combine with existing data on same file, if any
   on_disk <- invisible(tryCatch(
