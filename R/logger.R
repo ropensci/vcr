@@ -11,10 +11,10 @@
 #'     that prefix, then the rest of the message.
 #' @examples
 #' # The default logs to stderr()
-#' vcr_log_configure()
+#' vcr_configure_log()
 #'
 #' # But you might want to log to a file
-#' vcr_log_configure(file = file.path(tempdir(), "vcr.log"))
+#' vcr_configure_log(file = file.path(tempdir(), "vcr.log"))
 vcr_configure_log <- function(
   log = TRUE,
   file = stderr(),

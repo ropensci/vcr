@@ -131,7 +131,7 @@ to toggle this setting (e.g.,
 
 \subsection{Logging}{
 
-See \code{\link[=vcr_log_configure]{vcr_log_configure()}}
+See \code{\link[=vcr_configure_log]{vcr_configure_log()}}
 }
 
 }

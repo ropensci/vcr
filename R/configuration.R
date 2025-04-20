@@ -98,7 +98,7 @@
 #'
 #' ### Logging
 #'
-#' See [vcr_log_configure()]
+#' See [vcr_configure_log()]
 #'
 #' ## Cassette Options
 #'
