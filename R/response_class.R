@@ -47,8 +47,6 @@ VcrResponse <- R6::R6Class(
     body = NULL,
     #' @field http_version the HTTP version
     http_version = NULL,
-    #' @field opts a list
-    opts = NULL,
     #' @field adapter_metadata Additional metadata used by a specific VCR adapter
     adapter_metadata = NULL,
     #' @field disk a boolean
@@ -59,7 +57,6 @@ VcrResponse <- R6::R6Class(
     #' @param headers the response headers
     #' @param body the response body
     #' @param http_version the HTTP version
-    #' @param opts a list
     #' @param adapter_metadata Additional metadata used by a specific VCR adapter
     #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
@@ -68,7 +65,6 @@ VcrResponse <- R6::R6Class(
       headers,
       body,
       http_version,
-      opts,
       adapter_metadata = NULL,
       disk
     ) {
@@ -84,7 +80,6 @@ VcrResponse <- R6::R6Class(
       if (!missing(http_version)) {
         self$http_version <- extract_http_version(http_version)
       }
-      if (!missing(opts)) self$opts <- opts
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
       if (!missing(disk)) self$disk <- disk
     },
@@ -115,7 +110,6 @@ VcrResponse <- R6::R6Class(
         hash[["headers"]],
         hash[["body"]] %||% "",
         hash[["http_version"]],
-        hash[["adapater_metadata"]],
         hash[["disk"]]
       )
     },
