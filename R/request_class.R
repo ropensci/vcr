@@ -128,24 +128,6 @@ Request <- R6::R6Class(
         disk = hash[['disk']]
       )
     }
-  ),
-  private = list(
-    without_standard_port = function(uri) {
-      if (is.null(uri)) return(uri)
-      u <- private$parsed_uri(uri)
-      if (
-        paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in%
-          c('http', 'https/443')
-      ) {
-        return(uri)
-      }
-      u$port <- NA
-      return(urltools::url_compose(u))
-    },
-
-    parsed_uri = function(uri) {
-      urltools::url_parse(uri)
-    }
   )
 )
 
