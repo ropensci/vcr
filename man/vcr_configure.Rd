@@ -166,8 +166,6 @@ to read? Or remove newlines to save disk space? default: FALSE
 re-recorded at the given interval, in seconds.
 \item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}
-\item \code{quiet} (logical) Suppress any messages from both vcr and webmockr.
-Default: \code{TRUE}
 \item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
 empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 way. This option only determines whether a warning is thrown or not.

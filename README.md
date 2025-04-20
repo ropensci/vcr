@@ -377,7 +377,6 @@ We set the following defaults:
  * filter_query_parameters = `NULL`
  * write_disk_path = `NULL`
  * verbose_errors = `FALSE`
- * quiet = `TRUE`
  * warn_on_empty_cassette = `TRUE`
 
 
