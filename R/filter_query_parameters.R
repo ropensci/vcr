@@ -1,33 +1,32 @@
 #' Remove or replace query parameters
 #' @noRd
-query_params_remove <- function(int) {
-  h <- vcr_c$filter_query_parameters
-  if (!is.null(h)) {
-    if (is.null(names(h))) toremove <- unlist(h)
-    if (!is.null(names(h))) toremove <- unname(unlist(h[!nzchar(names(h))]))
-    # remove zero length strings
-    toremove <- Filter(nzchar, toremove)
-    for (i in seq_along(toremove)) {
-      int <- lapply(int, function(b) {
-        b$request$uri <- drop_param(b$request$uri, toremove[i])
-        return(b)
-      })
-    }
+query_params_remove <- function(
+  uri,
+  filter = vcr_c$filter_query_parameters,
+  flip = FALSE
+) {
+  is_named <- names2(filter) != ""
 
-    toreplace <- h[nzchar(names(h))]
-    if (length(toreplace)) {
-      for (i in seq_along(toreplace)) {
-        int <- lapply(int, function(b) {
-          vals <- toreplace[[i]]
-          val <- if (length(vals) == 2) vals[2] else vals[1]
-          b$request$uri <-
-            replace_param(b$request$uri, names(toreplace)[i], val)
-          return(b)
-        })
+  to_remove <- filter[!is_named]
+  for (i in seq_along(to_remove)) {
+    uri <- drop_param(uri, to_remove[[i]])
+  }
+
+  to_replace <- filter[is_named]
+  for (i in seq_along(to_replace)) {
+    val <- to_replace[[i]]
+    if (length(val) == 2) {
+      if (flip) {
+        uri <- replace_param_with(uri, names(to_replace)[[i]], val[2], val[1])
+      } else {
+        uri <- replace_param_with(uri, names(to_replace)[[i]], val[1], val[2])
       }
+    } else {
+      uri <- replace_param(uri, names(to_replace)[[i]], val)
     }
   }
-  return(int)
+
+  uri
 }
 
 #' Put back query parameters
@@ -62,29 +61,6 @@ query_params_put_back <- function(int) {
   return(int)
 }
 
-query_params_remove_str <- function(uri) {
-  h <- vcr_c$filter_query_parameters
-  if (!is.null(h)) {
-    if (is.null(names(h))) toremove <- unlist(h)
-    if (!is.null(names(h))) toremove <- unname(unlist(h[!nzchar(names(h))]))
-    toremove <- Filter(nzchar, toremove)
-    for (i in seq_along(toremove)) uri <- drop_param(uri, toremove[i])
-
-    toreplace <- h[nzchar(names(h))]
-    if (length(toreplace)) {
-      for (i in seq_along(toreplace)) {
-        vals <- toreplace[[i]]
-        if (length(vals) == 2) {
-          uri <-
-            replace_param_with(uri, names(toreplace)[i], vals[2], vals[1])
-        } else {
-          uri <- replace_param(uri, names(toreplace)[i], vals)
-        }
-      }
-    }
-  }
-  return(uri)
-}
 list2str <- function(w) {
   paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
 }
