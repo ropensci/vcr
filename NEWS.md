@@ -3,6 +3,7 @@ vcr (development version)
 
 ### BREAKING CHANGES
 
+* `vcr_configuration(quiet = FALSE)` is no longer supported. If you need more information about what's happening, turn on logging.
 * `cassettes()` are now a stack. The most important consequence of this is that `eject_cassette()` can only remove the most recently inserted cassette.
 * `as.cassette()` has been removed. It's not used, and not needed anymore.
 * `cassettes()` no longer has `on_disk` or `verb` arguments and now only ever lists currently active cassettes().
