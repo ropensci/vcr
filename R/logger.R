@@ -9,6 +9,7 @@
 #' @param include_date (boolean) include date and time in each log entry?
 #' @param log_prefix "Cassette". We insert the cassette name after this prefix.
 #'     that prefix, then the rest of the message.
+#' @export
 #' @examples
 #' # The default logs to stderr()
 #' vcr_configure_log()
