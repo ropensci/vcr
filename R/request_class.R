@@ -39,8 +39,6 @@ Request <- R6::R6Class(
     body = NULL,
     #' @field headers (character) named list
     headers = NULL,
-    #' @field skip_port_stripping (logical) whether to strip the port
-    skip_port_stripping = FALSE,
     #' @field hash (character) a named list - internal use
     hash = NULL,
     #' @field opts (character) options - internal use
@@ -65,7 +63,6 @@ Request <- R6::R6Class(
     #' @param fields (various) post fields
     #' @param output (various) output details
     #' @param policies (various) http policies, used in httr2 only
-    #' @param skip_port_stripping (logical) whether to strip the port.
     #' default: `FALSE`
     #' @return A new `Request` object
     initialize = function(
@@ -77,8 +74,7 @@ Request <- R6::R6Class(
       disk,
       fields,
       output,
-      policies,
-      skip_port_stripping = FALSE
+      policies
     ) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
@@ -89,11 +85,7 @@ Request <- R6::R6Class(
       }
       if (!missing(headers)) self$headers <- headers
       if (!missing(uri)) {
-        if (!skip_port_stripping) {
-          self$uri <- private$without_standard_port(uri)
-        } else {
-          self$uri <- uri
-        }
+        self$uri <- uri
         # parse URI to get host and path
         tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
         self$scheme <- tmp$scheme

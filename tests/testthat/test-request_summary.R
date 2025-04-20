@@ -21,8 +21,8 @@ test_that("request_summary works", {
   expect_type(cc, "character")
   expect_type(dd, "character")
 
-  expect_match(aa, "post .+/")
-  expect_match(bb, "post .+/ foo=bar")
+  expect_match(aa, "post .+")
+  expect_match(bb, "post .+ foo=bar")
 
   expect_match(cc, "post")
   expect_match(cc, ".+")

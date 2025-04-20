@@ -572,8 +572,7 @@ Cassette <- R6::R6Class(
           x$request_headers
         },
         opts = self$cassette_opts,
-        disk = is_disk,
-        skip_port_stripping = TRUE
+        disk = is_disk
       )
 
       response <- VcrResponse$new(

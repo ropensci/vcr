@@ -13,7 +13,6 @@ test_that("Request basic stuff", {
   expect_null(aa$query)
   expect_null(aa$scheme)
   expect_null(aa$uri)
-  expect_false(aa$skip_port_stripping)
 
   # methods
   expect_type(aa$from_hash, "closure")
@@ -21,7 +20,7 @@ test_that("Request basic stuff", {
 })
 
 test_that("Request usage", {
-  url <- hb("/post")
+  url <- "http://127.0.0.1/post"
   body <- list(foo = "bar")
   headers <- list(
     `User-Agent` = "libcurl/7.54.0 r-curl/3.2 crul/0.5.2",
