@@ -28,8 +28,7 @@ resp_body <- "asdf jasljf asdfjlsaf"
 response <- VcrResponse$new(
   status,
   list(this_is_my = "response_header"),
-  resp_body,
-  "HTTP/1.1 200 OK"
+  resp_body
 )
 x <- HTTPInteraction$new(request = request, response = response)
 x <- x$to_hash()

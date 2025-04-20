@@ -19,7 +19,6 @@ url <- "https://google.com"
 x$body
 x$status
 x$headers
-x$http_version
 x$to_hash()
 x$from_hash(x$to_hash())
 
@@ -52,8 +51,6 @@ f <- tempfile()
 
 \item{\code{body}}{the response body}
 
-\item{\code{http_version}}{the HTTP version}
-
 \item{\code{opts}}{a list}
 
 \item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
@@ -83,15 +80,7 @@ f <- tempfile()
 \subsection{Method \code{new()}}{
 Create a new VcrResponse object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$new(
-  status,
-  headers,
-  body,
-  http_version,
-  opts,
-  adapter_metadata = NULL,
-  disk
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$new(status, headers, body, opts, adapter_metadata = NULL, disk)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -102,8 +91,6 @@ Create a new VcrResponse object
 \item{\code{headers}}{the response headers}
 
 \item{\code{body}}{the response body}
-
-\item{\code{http_version}}{the HTTP version}
 
 \item{\code{opts}}{a list}
 

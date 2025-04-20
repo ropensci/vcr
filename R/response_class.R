@@ -14,7 +14,6 @@
 #' x$body
 #' x$status
 #' x$headers
-#' x$http_version
 #' x$to_hash()
 #' x$from_hash(x$to_hash())
 #'
@@ -45,8 +44,6 @@ VcrResponse <- R6::R6Class(
     headers = NULL,
     #' @field body the response body
     body = NULL,
-    #' @field http_version the HTTP version
-    http_version = NULL,
     #' @field opts a list
     opts = NULL,
     #' @field adapter_metadata Additional metadata used by a specific VCR adapter
@@ -58,7 +55,6 @@ VcrResponse <- R6::R6Class(
     #' @param status the status of the response
     #' @param headers the response headers
     #' @param body the response body
-    #' @param http_version the HTTP version
     #' @param opts a list
     #' @param adapter_metadata Additional metadata used by a specific VCR adapter
     #' @param disk boolean, is body a file on disk
@@ -67,7 +63,6 @@ VcrResponse <- R6::R6Class(
       status,
       headers,
       body,
-      http_version,
       opts,
       adapter_metadata = NULL,
       disk
@@ -80,9 +75,6 @@ VcrResponse <- R6::R6Class(
         }
         # self$body <- if (is.character(body)) enc2utf8(body) else body
         self$body <- body
-      }
-      if (!missing(http_version)) {
-        self$http_version <- extract_http_version(http_version)
       }
       if (!missing(opts)) self$opts <- opts
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
@@ -104,7 +96,6 @@ VcrResponse <- R6::R6Class(
           self$body,
           self$opts$preserve_exact_body_bytes %||% FALSE
         ),
-        http_version = self$http_version,
         disk = self$disk
       )
     },
@@ -118,7 +109,6 @@ VcrResponse <- R6::R6Class(
         hash[["headers"]],
         # hash[["body"]],
         body_from(hash[["body"]]),
-        hash[["http_version"]],
         hash[["adapater_metadata"]],
         hash[["disk"]]
       )
@@ -159,12 +149,3 @@ VcrResponse <- R6::R6Class(
     }
   )
 )
-
-extract_http_version <- function(x) {
-  if (!is.character(x)) return(x)
-  if (grepl("HTTP/[0-9]\\.?", x)) {
-    strsplit(stract(x, "HTTP/[12]\\.?([0-9])?"), "/")[[1]][2] %||% ""
-  } else {
-    return(x)
-  }
-}

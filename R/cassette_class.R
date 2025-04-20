@@ -613,11 +613,6 @@ Cassette <- R6::R6Class(
             x$content
           }
         },
-        http_version = if (inherits(x, "response")) {
-          x$all_headers[[1]]$version
-        } else {
-          x$response_headers$status
-        },
         opts = self$cassette_opts,
         disk = is_disk
       )
