@@ -114,7 +114,3 @@ pkg_versions <- function() {
     sep = ", "
   )
 }
-
-get_body <- function(x) {
-  if (is.null(x)) '' else x
-}
