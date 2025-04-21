@@ -60,14 +60,6 @@ RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
   inherit = RequestHandler,
   private = list(
-    response_for = function(x) {
-      VcrResponse$new(
-        x$status_http(),
-        x$response_headers,
-        x$parse("UTF-8"),
-        x$response_headers$status
-      )
-    },
     on_ignored_request = function(request) {
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)
@@ -82,10 +74,11 @@ RequestHandlerCrul <- R6::R6Class(
     on_recordable_request = function(request) {
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)
-      self$vcr_response <- private$response_for(response)
-      cas <- tryCatch(current_cassette(), error = function(e) e)
-      if (inherits(cas, "error")) stop("no cassette in use")
-      cas$record_http_interaction(response)
+
+      if (!cassette_active()) {
+        cli::cli_abort("No cassette in use.")
+      }
+      current_cassette()$record_http_interaction(response)
       return(response)
     }
   )
