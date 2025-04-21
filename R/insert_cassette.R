@@ -47,6 +47,7 @@ insert_cassette <- function(
     clean_outdated_http_interactions = clean_outdated_http_interactions
   )
   cassette_push(cassette)
+  vcr_log_sprintf("Inserting")
   cassette$insert()
 
   invisible(cassette)
