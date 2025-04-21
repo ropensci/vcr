@@ -253,7 +253,7 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      vcr_log_info("Ejecting casette", vcr_c$log_opts$date)
+      # vcr_log_info("Ejecting casette", vcr_c$log_opts$date)
 
       self$write_recorded_interactions_to_disk()
 

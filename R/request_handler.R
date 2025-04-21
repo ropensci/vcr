@@ -76,12 +76,8 @@ RequestHandler <- R6::R6Class(
     request_original = NULL,
     #' @field request the request, after any modification
     request = NULL,
-    #' @field vcr_response holds [VcrResponse] object
-    vcr_response = NULL,
     #' @field stubbed_response the stubbed response
     stubbed_response = NULL,
-    #' @field cassette the cassette holder
-    cassette = NULL,
 
     #' @description Create a new `RequestHandler` object
     #' @param request The request from an object of class `HttpInteraction`
@@ -97,7 +93,6 @@ RequestHandler <- R6::R6Class(
           disk = !is.null(request$output$path)
         )
       }
-      self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
 
     #' @description Handle the request (`request` given in `$initialize()`)
@@ -124,14 +119,7 @@ RequestHandler <- R6::R6Class(
 
   private = list(
     request_summary = function(request) {
-      request_matchers <- if (
-        !inherits(self$cassette, "error") &&
-          !is.null(self$cassette)
-      ) {
-        self$cassette$match_requests_on
-      } else {
-        vcr_c$match_requests_on
-      }
+      request_matches <- current_casssette()$match_requests_on
       request_summary(Request$new()$from_hash(request), request_matchers)
     },
 
