@@ -122,8 +122,6 @@
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
-#' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
-#' Default: `TRUE`
 #' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an
 #' empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 #' way. This option only determines whether a warning is thrown or not.
@@ -221,7 +219,6 @@ VCRConfig <- R6::R6Class(
     .filter_query_parameters = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL,
-    .quiet = NULL,
     .warn_on_empty_cassette = NULL
   ),
 
@@ -343,10 +340,6 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.verbose_errors)
       private$.verbose_errors <- value
     },
-    quiet = function(value) {
-      if (missing(value)) return(private$.quiet)
-      private$.quiet <- assert(value, "logical")
-    },
     warn_on_empty_cassette = function(value) {
       if (missing(value)) return(private$.warn_on_empty_cassette)
       private$.warn_on_empty_cassette <- assert(value, "logical")
@@ -381,7 +374,6 @@ VCRConfig <- R6::R6Class(
       filter_query_parameters = NULL,
       write_disk_path = NULL,
       verbose_errors = get_envvar_lgl("VCR_VERBOSE_ERRORS", FALSE),
-      quiet = TRUE,
       warn_on_empty_cassette = TRUE
     ) {
       self$dir <- dir
@@ -410,7 +402,6 @@ VCRConfig <- R6::R6Class(
       self$filter_query_parameters = filter_query_parameters
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
-      self$quiet <- quiet
       self$warn_on_empty_cassette <- warn_on_empty_cassette
     },
 
