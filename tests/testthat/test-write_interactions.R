@@ -33,19 +33,6 @@ response <- VcrResponse$new(
 x <- HTTPInteraction$new(request = request, response = response)
 x <- x$to_hash()
 
-test_that("write_interactions fails well", {
-  # missing
-  expect_error(write_interactions(), "argument \"x\" is missing")
-  expect_error(write_interactions(bytes = TRUE), "argument \"x\" is missing")
-
-  # types
-  expect_error(write_interactions(5, bytes = TRUE), "x must be of class list")
-  expect_error(
-    write_interactions(x, 4, bytes = TRUE),
-    "file must be of class character"
-  )
-})
-
 test_that("write_interactions works as expected", {
   tfile <- withr::local_tempfile()
 

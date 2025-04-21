@@ -99,7 +99,6 @@ x$response_for(request)
 \item \href{#method-HTTPInteractionList-has_interaction_matching}{\code{HTTPInteractionList$has_interaction_matching()}}
 \item \href{#method-HTTPInteractionList-has_used_interaction_matching}{\code{HTTPInteractionList$has_used_interaction_matching()}}
 \item \href{#method-HTTPInteractionList-remaining_unused_interaction_count}{\code{HTTPInteractionList$remaining_unused_interaction_count()}}
-\item \href{#method-HTTPInteractionList-assert_no_unused_interactions}{\code{HTTPInteractionList$assert_no_unused_interactions()}}
 \item \href{#method-HTTPInteractionList-clone}{\code{HTTPInteractionList$clone()}}
 }
 }
@@ -208,19 +207,6 @@ Number of unused interactions
 
 \subsection{Returns}{
 integer
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-HTTPInteractionList-assert_no_unused_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-HTTPInteractionList-assert_no_unused_interactions}{}}}
-\subsection{Method \code{assert_no_unused_interactions()}}{
-Checks if there are no unused interactions left.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{HTTPInteractionList$assert_no_unused_interactions()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-various
 }
 }
 \if{html}{\out{<hr>}}

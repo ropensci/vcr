@@ -44,8 +44,6 @@ VcrResponse <- R6::R6Class(
     headers = NULL,
     #' @field body the response body
     body = NULL,
-    #' @field opts a list
-    opts = NULL,
     #' @field adapter_metadata Additional metadata used by a specific VCR adapter
     adapter_metadata = NULL,
     #' @field disk a boolean
@@ -55,7 +53,6 @@ VcrResponse <- R6::R6Class(
     #' @param status the status of the response
     #' @param headers the response headers
     #' @param body the response body
-    #' @param opts a list
     #' @param adapter_metadata Additional metadata used by a specific VCR adapter
     #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
@@ -63,7 +60,6 @@ VcrResponse <- R6::R6Class(
       status,
       headers,
       body,
-      opts,
       adapter_metadata = NULL,
       disk
     ) {
@@ -76,7 +72,6 @@ VcrResponse <- R6::R6Class(
         # self$body <- if (is.character(body)) enc2utf8(body) else body
         self$body <- body
       }
-      if (!missing(opts)) self$opts <- opts
       if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
       if (!missing(disk)) self$disk <- disk
     },
@@ -92,10 +87,7 @@ VcrResponse <- R6::R6Class(
       list(
         status = self$status,
         headers = self$headers,
-        body = serializable_body(
-          self$body,
-          self$opts$preserve_exact_body_bytes %||% FALSE
-        ),
+        body = self$body,
         disk = self$disk
       )
     },
@@ -107,45 +99,9 @@ VcrResponse <- R6::R6Class(
       VcrResponse$new(
         hash[["status"]],
         hash[["headers"]],
-        # hash[["body"]],
-        body_from(hash[["body"]]),
-        hash[["adapater_metadata"]],
+        hash[["body"]] %||% "",
         hash[["disk"]]
       )
-    },
-
-    #' @description Get a header by name
-    #' @param key (character) header name to get
-    #' @return the header value (if it exists)
-    get_header = function(key) {
-      self$headers[[key]]
-    },
-
-    #' @description Edit a header
-    #' @param key (character) header name to edit
-    #' @param value (character) new value to assign
-    #' @return no return; modifies the header in place
-    edit_header = function(key, value = NULL) {
-      self$headers[[key]] <- value
-    },
-
-    #' @description Delete a header
-    #' @param key (character) header name to delete
-    #' @return no return; the header is deleted if it exists
-    delete_header = function(key) {
-      self$headers[key] <- NULL
-    },
-
-    #' @description Get the content-encoding header value
-    #' @return (character) the content-encoding value
-    content_encoding = function() {
-      self$get_header("content-encoding")[1]
-    },
-
-    #' @description Checks if the encoding is one of "gzip" or "deflate"
-    #' @return logical
-    is_compressed = function() {
-      self$content_encoding() %in% c("gzip", "deflate")
     }
   )
 )
