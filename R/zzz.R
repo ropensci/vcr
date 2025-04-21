@@ -80,3 +80,26 @@ check_record_mode <- function(x) {
 dir_create <- function(path) {
   dir.create(path, showWarnings = FALSE, recursive = TRUE)
 }
+
+to_base64 <- function(x) {
+  x <- jsonlite::base64_enc(x)
+
+  # Split into lines of 80 characters
+  chunk_size <- 80
+  length <- nchar(x)
+  if (length < chunk_size) {
+    return(x)
+  }
+
+  num_chunks <- ceiling(length / 80)
+  start_positions <- seq(1, by = 80, length.out = num_chunks)
+  end_positions <- pmin(start_positions + chunk_size - 1, length)
+
+  lines <- substring(x, start_positions, end_positions)
+  paste0(lines, collapse = "\n")
+}
+
+from_base64 <- function(x) {
+  x <- gsub("[\r\n]", "", x)
+  jsonlite::base64_dec(x)
+}

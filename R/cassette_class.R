@@ -241,10 +241,7 @@ Cassette <- R6::R6Class(
         sep = ": ",
         collapse = ", "
       )
-      vcr_log_info(
-        sprintf("Initialized with options: {%s}", init_opts),
-        vcr_c$log_opts$date
-      )
+      vcr_log_sprintf("Initialized with options: {%s}", init_opts)
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
@@ -408,24 +405,18 @@ Cassette <- R6::R6Class(
       )
 
       if (!time_comp) {
-        vcr_log_info(
-          sprintf(
-            "Not re-recording since the interval has not elapsed (%s).",
-            info
-          ),
-          vcr_c$log_opts$date
+        vcr_log_sprintf(
+          "Not re-recording since the interval has not elapsed (%s).",
+          info
         )
         return(FALSE)
       } else if (curl::has_internet()) {
-        vcr_log_info(sprintf("re-recording (%s).", info), vcr_c$log_opts$date)
+        vcr_log_sprintf("re-recording (%s).", info)
         return(TRUE)
       } else {
-        vcr_log_info(
-          sprintf(
-            "Not re-recording because no internet connection is available (%s).",
-            info
-          ),
-          vcr_c$log_opts$date
+        vcr_log_sprintf(
+          "Not re-recording because no internet connection is available (%s).",
+          info
         )
         return(FALSE)
       }
@@ -485,7 +476,6 @@ Cassette <- R6::R6Class(
           z$response$status,
           z$response$headers,
           z$response$body$string %||% z$response$body$base64_string,
-          opts = self$cassette_opts,
           disk = z$response$body$file
         )
         HTTPInteraction$new(request = request, response = response)$to_hash()
@@ -507,13 +497,10 @@ Cassette <- R6::R6Class(
     record_http_interaction = function(x) {
       int <- self$make_http_interaction(x)
       self$http_interactions_$response_for(int$request)
-      vcr_log_info(
-        sprintf(
-          "   Recorded HTTP interaction: %s => %s",
-          request_summary(int$request),
-          response_summary(int$response)
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "Recorded HTTP interaction: %s => %s",
+        request_summary(int$request),
+        response_summary(int$response)
       )
       self$new_recorded_interactions <- c(self$new_recorded_interactions, int)
     },
@@ -620,7 +607,6 @@ Cassette <- R6::R6Class(
         } else {
           x$response_headers$status
         },
-        opts = self$cassette_opts,
         disk = is_disk
       )
       HTTPInteraction$new(request = request, response = response)

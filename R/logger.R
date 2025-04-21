@@ -1,103 +1,99 @@
-vcr_log_env <- new.env()
-
-#' vcr log file setup
+#' Configure vcr logging
 #'
+#' By default, logging is disabled, but you can easily enable for the
+#' entire session with `vcr_configure_log()` or for just one test with
+#' `local_vcr_configure_log()`.
+#'
+#' @param log Should we log important vcr things?
+#' @param file A path or connection to log to
+#' @param include_date (boolean) include date and time in each log entry?
+#' @param log_prefix "Cassette". We insert the cassette name after this prefix.
+#'     that prefix, then the rest of the message.
 #' @export
-#' @name vcr_logging
-#' @keywords internal
-#' @param file (character) a file path, required
-#' @param message (character) a message to log
-#' @param overwrite (logical) whether or not to overwrite the file at
-#' 'file' if it already exists. Default: `TRUE`
-#' @param include_date (logical) include date and time in each log entry.
-#' Default: `FALSE`
 #' @examples
-#' # user workflow
-#' vcr_configuration()
-#' logfile <- file.path(tempdir(), "vcr.log")
-#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = logfile))
+#' # The default logs to stderr()
+#' vcr_configure_log()
 #'
-#' readLines(logfile) # empty
-#'
-#' # log messages
-#' vcr_log_info("hello world!")
-#' readLines(logfile)
-#' vcr_log_info("foo bar")
-#' readLines(logfile)
-#' ## many messages
-#' vcr_log_info(c("brown cow", "blue horse"))
-#' readLines(logfile)
-#' vcr_log_info(c("brown cow", "blue horse", "green goat"))
-#' readLines(logfile)
-#'
-#' # standalone workflow
-#' # set a file to log to
-#' vcr_log_file((f <- tempfile()))
-#' readLines(f) # empty
-#'
-#' # log messages
-#' vcr_log_info("hello world!")
-#' readLines(logfile)
-#' vcr_log_info("foo bar")
-#' readLines(logfile)
-#'
-#' # cleanup
-#' unlink(f)
-#' unlink(logfile)
-
-# FIXME: add
-#    indentation = '  ' * indentation_level
-
-#' @export
-#' @rdname vcr_logging
-vcr_log_file <- function(file, overwrite = TRUE) {
-  assert(file, 'character')
-  assert(overwrite, 'logical')
-  if (file != "console") {
-    if (!file.exists(file)) {
-      file.create(file)
-    } else if (file.exists(file) && overwrite) {
-      file.remove(file)
-      file.create(file)
-    } else {
-      stop('file exists and overwrite=FALSE')
-    }
+#' # But you might want to log to a file
+#' vcr_configure_log(file = file.path(tempdir(), "vcr.log"))
+vcr_configure_log <- function(
+  log = TRUE,
+  file = stderr(),
+  include_date = NULL,
+  log_prefix = "Cassette"
+) {
+  # sink() works by redefining the values of stdout() and stderr()
+  # so we can not store those values
+  if (identical(file, stderr())) {
+    file <- function() stderr()
+    include_date <- include_date %||% FALSE
+  } else if (identical(file, stdout())) {
+    file <- function() stdout()
+    include_date <- include_date %||% FALSE
+  } else {
+    include_date <- include_date %||% TRUE
   }
-  # save file name
-  vcr_log_env$file <- file
-  return(TRUE)
+
+  vcr_configure(
+    log = log,
+    log_opts = list(
+      file = file,
+      include_date = include_date,
+      log_prefix = log_prefix
+    )
+  )
 }
 
 #' @export
-#' @rdname vcr_logging
-vcr_log_info <- function(message, include_date = TRUE) {
-  if (include_date) {
-    now <- format(Sys.time(), format = "%Y-%m-%d %H:%M:%S")
-    message <- paste(now, "-", message)
+#' @rdname vcr_configure_log
+#' @inheritParams local_vcr_configure
+local_vcr_configure_log <- function(
+  log = TRUE,
+  file = stderr(),
+  include_date = NULL,
+  log_prefix = "Cassette",
+  frame = parent.frame()
+) {
+  old <- vcr_configure_log(
+    log = log,
+    file = file,
+    include_date = include_date,
+    log_prefix = log_prefix
+  )
+  withr::defer(vcr_configure(!!!old), envir = frame)
+
+  invisible()
+}
+
+vcr_log_sprintf <- function(message, ...) {
+  if (!vcr_c$log) {
+    return(invisible())
   }
 
-  message <- paste(make_prefix(), "-", message)
-  vcr_log_write(message)
-}
+  message <- sprintf(message, ...)
 
-make_prefix <- function() {
-  cassette_name <- if (cassette_active()) current_cassette()$name else "<none>"
-  sprintf("[%s: '%s']", vcr_c$log_opts$log_prefix, cassette_name)
-}
-
-vcr_log_write <- function(message) {
-  if (vcr_c$log) {
-    if (is.null(vcr_log_env$file)) {
-      stop("no connection set up to write to, see ?vcr_logging")
-    }
-    if (vcr_log_env$file == "console") {
-      cat(message, sep = "\n", append = TRUE)
-    } else {
-      cat(message, sep = "\n", file = vcr_log_env$file, append = TRUE)
-    }
+  if (vcr_c$log_opts$include_date) {
+    date <- format(Sys.time(), format = "%Y-%m-%d %H:%M:%S")
+  } else {
+    date <- NULL
   }
+
+  if (cassette_active()) {
+    cassette_name <- paste0('"', current_cassette()$name, '"')
+  } else {
+    cassette_name <- "<none>"
+  }
+  prefix <- sprintf("[%s: %s]", vcr_c$log_opts$log_prefix, cassette_name)
+
+  message <- paste(c(date, prefix, message), collapse = " - ")
+
+  file <- vcr_c$log_opts$file
+  if (is.function(file)) {
+    file <- file()
+  }
+
+  cat(message, sep = "\n", file = file, append = TRUE)
 }
 
-trailing_newline <- function(str) {
-  if (grepl("\n$", str)) str else paste0(str, "\n")
-}
+# To allow mocking
+Sys.time <- NULL

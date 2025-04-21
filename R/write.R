@@ -33,53 +33,42 @@ dedup_keys <- function(x) {
   return(x)
 }
 
-str_breaks <- function(x) {
-  z <- str_splitter(x, 80L)
-  paste0(z, collapse = "\n")
-}
-
 prep_interaction <- function(x, file, bytes) {
-  assert(x, c("list", "HTTPInteraction"))
-  assert(file, "character")
-  if (is.raw(x$response$body)) bytes <- TRUE
-  body <- if (bytes || is.raw(x$response$body)) {
-    bd <- get_body(x$response$body)
-    if (!is.raw(bd)) bd <- charToRaw(bd)
-    tmp <- jsonlite::base64_enc(bd)
-    str_breaks(tmp)
-  } else {
-    get_body(x$response$body)
-  }
-  if (length(body) == 0 || !nzchar(body)) body <- ""
-  res = list(
+  list(
     list(
       request = list(
         method = x$request$method,
         uri = x$request$uri,
-        body = list(
-          encoding = "",
-          string = get_body(x$request$body)
-        ),
+        body = encode_body(x$request$body, NULL, bytes),
         headers = dedup_keys(x$request$headers)
       ),
       response = list(
         status = x$response$status,
         headers = dedup_keys(x$response$headers),
-        body = list(
-          encoding = "",
-          file = x$response$disk,
-          string = body
-        )
+        body = encode_body(x$response$body, x$response$disk, bytes)
       ),
       recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
       recorded_with = pkg_versions()
     )
   )
-  if (bytes) {
-    str_index <- which(grepl("string", names(res[[1]]$response$body)))
-    names(res[[1]]$response$body)[str_index] <- "base64_string"
+}
+
+encode_body <- function(body, file, preserve_bytes = FALSE) {
+  if (is.null(body)) {
+    list(encoding = "", string = "")
+  } else if (is.raw(body) || preserve_bytes) {
+    compact(list(
+      encoding = "",
+      base64_string = to_base64(body),
+      file = file
+    ))
+  } else {
+    compact(list(
+      encoding = "",
+      string = body %||% "",
+      file = file
+    ))
   }
-  return(res)
 }
 
 # param x: a list with "request" and "response" slots

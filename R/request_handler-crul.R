@@ -65,8 +65,7 @@ RequestHandlerCrul <- R6::R6Class(
         x$status_http(),
         x$response_headers,
         x$parse("UTF-8"),
-        x$response_headers$status,
-        super$cassette$cassette_opts
+        x$response_headers$status
       )
     },
     on_ignored_request = function(request) {

@@ -130,16 +130,8 @@ to toggle this setting (e.g.,
 }
 
 \subsection{Logging}{
-\itemize{
-\item \code{log} (logical) should we log important vcr things? Default: \code{FALSE}
-\item \code{log_opts} (list) Additional logging options:
-\itemize{
-\item 'file' either \code{"console"} or a file path to log to
-\item 'log_prefix' default: "Cassette". We insert the cassette name after
-that prefix, then the rest of the message.
-\item More to come...
-}
-}
+
+See \code{\link[=vcr_configure_log]{vcr_configure_log()}}
 }
 
 }
@@ -181,18 +173,6 @@ vcr_configuration()
 vcr_config_defaults()
 vcr_configure(dir = tempdir(), ignore_hosts = "google.com")
 vcr_configure(dir = tempdir(), ignore_localhost = TRUE)
-
-
-# logging
-vcr_configure(dir = tempdir(), log = TRUE,
-  log_opts = list(file = file.path(tempdir(), "vcr.log")))
-vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = "console"))
-vcr_configure(dir = tempdir(), log = TRUE,
- log_opts = list(
-   file = file.path(tempdir(), "vcr.log"),
-   log_prefix = "foobar"
-))
-vcr_configure(dir = tempdir(), log = FALSE)
 
 # filter sensitive data
 vcr_configure(dir = tempdir(),
