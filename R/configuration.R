@@ -98,12 +98,7 @@
 #'
 #' ### Logging
 #'
-#' - `log` (logical) should we log important vcr things? Default: `FALSE`
-#' - `log_opts` (list) Additional logging options:
-#'   - 'file' either `"console"` or a file path to log to
-#'   - 'log_prefix' default: "Cassette". We insert the cassette name after
-#'     that prefix, then the rest of the message.
-#'   - More to come...
+#' See [vcr_configure_log()]
 #'
 #' ## Cassette Options
 #'
@@ -141,18 +136,6 @@
 #' vcr_config_defaults()
 #' vcr_configure(dir = tempdir(), ignore_hosts = "google.com")
 #' vcr_configure(dir = tempdir(), ignore_localhost = TRUE)
-#'
-#'
-#' # logging
-#' vcr_configure(dir = tempdir(), log = TRUE,
-#'   log_opts = list(file = file.path(tempdir(), "vcr.log")))
-#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = "console"))
-#' vcr_configure(dir = tempdir(), log = TRUE,
-#'  log_opts = list(
-#'    file = file.path(tempdir(), "vcr.log"),
-#'    log_prefix = "foobar"
-#' ))
-#' vcr_configure(dir = tempdir(), log = FALSE)
 #'
 #' # filter sensitive data
 #' vcr_configure(dir = tempdir(),
@@ -318,22 +301,9 @@ VCRConfig <- R6::R6Class(
     },
     log_opts = function(value) {
       if (missing(value)) return(private$.log_opts)
-      log_opts <- assert(value, "list")
-      if (length(log_opts) > 0) {
-        if ("file" %in% names(log_opts)) {
-          assert(log_opts$file, "character")
-          if (private$.log) vcr_log_file(log_opts$file)
-        }
-        if ("log_prefix" %in% names(log_opts)) {
-          assert(log_opts$log_prefix, "character")
-        }
-        if ("date" %in% names(log_opts)) {
-          assert(log_opts$date, "logical")
-        }
-      }
       # add missing log options
       log_opts <- merge_list(
-        log_opts,
+        value,
         list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
       )
       private$.log_opts <- log_opts
