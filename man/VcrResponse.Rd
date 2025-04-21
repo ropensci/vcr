@@ -54,8 +54,6 @@ f <- tempfile()
 
 \item{\code{http_version}}{the HTTP version}
 
-\item{\code{opts}}{a list}
-
 \item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
 
 \item{\code{disk}}{a boolean}
@@ -83,7 +81,6 @@ Create a new VcrResponse object
   headers,
   body,
   http_version,
-  opts,
   adapter_metadata = NULL,
   disk
 )}\if{html}{\out{</div>}}
@@ -99,8 +96,6 @@ Create a new VcrResponse object
 \item{\code{body}}{the response body}
 
 \item{\code{http_version}}{the HTTP version}
-
-\item{\code{opts}}{a list}
 
 \item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
 

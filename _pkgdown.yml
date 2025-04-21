@@ -63,7 +63,6 @@ reference:
       - response_summary
       - vcr_log_file
       - crul_request
-      - str_splitter
 
 articles:
   - title: All vignettes

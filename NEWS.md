@@ -3,6 +3,7 @@ vcr (development version)
 
 ### BREAKING CHANGES
 
+* `str_splitter()` has been removed; it was accidentally exported as it's not part of the core vcrs API.
 * `cassettes()` are now a stack. The most important consequence of this is that `eject_cassette()` can only remove the most recently inserted cassette.
 * `as.cassette()` has been removed. It's not used, and not needed anymore.
 * `cassettes()` no longer has `on_disk` or `verb` arguments and now only ever lists currently active cassettes().

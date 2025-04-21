@@ -474,7 +474,6 @@ Cassette <- R6::R6Class(
           z$response$status,
           z$response$headers,
           z$response$body$string %||% z$response$body$base64_string,
-          opts = self$cassette_opts,
           disk = z$response$body$file
         )
         HTTPInteraction$new(request = request, response = response)$to_hash()
@@ -606,7 +605,6 @@ Cassette <- R6::R6Class(
         } else {
           x$response_headers$status
         },
-        opts = self$cassette_opts,
         disk = is_disk
       )
       HTTPInteraction$new(request = request, response = response)
