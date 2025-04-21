@@ -54,8 +54,6 @@ f <- tempfile()
 
 \item{\code{http_version}}{the HTTP version}
 
-\item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
-
 \item{\code{disk}}{a boolean}
 }
 \if{html}{\out{</div>}}
@@ -76,14 +74,7 @@ f <- tempfile()
 \subsection{Method \code{new()}}{
 Create a new VcrResponse object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$new(
-  status,
-  headers,
-  body,
-  http_version,
-  adapter_metadata = NULL,
-  disk
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$new(status, headers, body, http_version, disk)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -96,8 +87,6 @@ Create a new VcrResponse object
 \item{\code{body}}{the response body}
 
 \item{\code{http_version}}{the HTTP version}
-
-\item{\code{adapter_metadata}}{Additional metadata used by a specific VCR adapter}
 
 \item{\code{disk}}{boolean, is body a file on disk}
 }
