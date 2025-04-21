@@ -37,9 +37,8 @@ vcr_configure(dir = tempdir())
 
 res <- Cassette$new(name = "bob")
 res$file()
-res$originally_recorded_at()
+res$recorded_at
 res$recording()
-res$serializable_hash()
 res$eject()
 res$should_remove_matching_existing_interactions()
 res$storage_key()
@@ -112,23 +111,17 @@ be recorded back to file}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
 \item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
-\item \href{#method-Cassette-originally_recorded_at}{\code{Cassette$originally_recorded_at()}}
-\item \href{#method-Cassette-serializable_hash}{\code{Cassette$serializable_hash()}}
-\item \href{#method-Cassette-interactions_to_record}{\code{Cassette$interactions_to_record()}}
 \item \href{#method-Cassette-merged_interactions}{\code{Cassette$merged_interactions()}}
 \item \href{#method-Cassette-up_to_date_interactions}{\code{Cassette$up_to_date_interactions()}}
 \item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
 \item \href{#method-Cassette-should_stub_requests}{\code{Cassette$should_stub_requests()}}
 \item \href{#method-Cassette-should_remove_matching_existing_interactions}{\code{Cassette$should_remove_matching_existing_interactions()}}
-\item \href{#method-Cassette-raw_cassette_bytes}{\code{Cassette$raw_cassette_bytes()}}
-\item \href{#method-Cassette-deserialized_hash}{\code{Cassette$deserialized_hash()}}
 \item \href{#method-Cassette-previously_recorded_interactions}{\code{Cassette$previously_recorded_interactions()}}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
 \item \href{#method-Cassette-http_interactions}{\code{Cassette$http_interactions()}}
 \item \href{#method-Cassette-make_http_interaction}{\code{Cassette$make_http_interaction()}}
-\item \href{#method-Cassette-serialize_to_crul}{\code{Cassette$serialize_to_crul()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
 }
@@ -140,6 +133,7 @@ Create a new \code{Cassette} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$new(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -155,6 +149,8 @@ Create a new \code{Cassette} object
 \describe{
 \item{\code{name}}{The name of the cassette. vcr will sanitize this to ensure it
 is a valid file name.}
+
+\item{\code{dir}}{The directory where the cassette will be stored.}
 
 \item{\code{record}}{The record mode. Default: "once". In the future we'll support
 "once", "all", "none", "new_episodes". See \link{recording} for more information}
@@ -274,45 +270,6 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-originally_recorded_at"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-originally_recorded_at}{}}}
-\subsection{Method \code{originally_recorded_at()}}{
-timestamp the cassette was originally recorded at
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$originally_recorded_at()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-POSIXct date
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-serializable_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-serializable_hash}{}}}
-\subsection{Method \code{serializable_hash()}}{
-Get a list of the http interactions to record + recorded_with
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$serializable_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-interactions_to_record"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-interactions_to_record}{}}}
-\subsection{Method \code{interactions_to_record()}}{
-Get the list of http interactions to record
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$interactions_to_record()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-merged_interactions"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-merged_interactions}{}}}
 \subsection{Method \code{merged_interactions()}}{
@@ -383,32 +340,6 @@ Is record mode "all"?
 
 \subsection{Returns}{
 logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-raw_cassette_bytes"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-raw_cassette_bytes}{}}}
-\subsection{Method \code{raw_cassette_bytes()}}{
-Get character string of entire cassette; bytes is a misnomer
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$raw_cassette_bytes()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-character
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-deserialized_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-deserialized_hash}{}}}
-\subsection{Method \code{deserialized_hash()}}{
-get http interactions from the cassette via the serializer
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$deserialized_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
 }
 }
 \if{html}{\out{<hr>}}
@@ -501,19 +432,6 @@ Make an \code{HTTPInteraction} object
 }
 \subsection{Returns}{
 an object of class \link{HTTPInteraction}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-serialize_to_crul"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-serialize_to_crul}{}}}
-\subsection{Method \code{serialize_to_crul()}}{
-Make a crul response object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$serialize_to_crul()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-a crul response
 }
 }
 \if{html}{\out{<hr>}}

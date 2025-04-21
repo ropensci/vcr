@@ -3,7 +3,7 @@ test_that("vcr_last_error fails well", {
     dir = withr::local_tempdir(),
     warn_on_empty_cassette = FALSE
   )
-  vcr__env$last_error <- list()
+  the$last_error <- list()
 
   expect_error(vcr_last_error(), "no error to report")
 

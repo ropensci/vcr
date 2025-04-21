@@ -6,8 +6,6 @@ pluck <- function(x, name, type) {
   }
 }
 
-errmssg <- "use_cassette requires a block.\nIf you cannot wrap your code in a block, use\ninsert_cassette / eject_cassette instead."
-
 compact <- function(x) Filter(Negate(is.null), x)
 
 `%||%` <- function(x, y) {
@@ -41,14 +39,6 @@ merge_list <- function(x, y, ...) {
   x
 }
 
-has_internet <- function() {
-  z <- try(
-    suppressWarnings(readLines('https://www.google.com', n = 1)),
-    silent = TRUE
-  )
-  !inherits(z, "try-error")
-}
-
 can_rawToChar <- function(x) {
   z <- tryCatch(rawToChar(x), error = function(e) e)
   return(!inherits(z, "error"))
@@ -56,34 +46,6 @@ can_rawToChar <- function(x) {
 can_charToRaw <- function(x) {
   z <- tryCatch(charToRaw(x), error = function(e) e)
   return(!inherits(z, "error"))
-}
-
-stp <- function(...) stop(..., call. = FALSE)
-check_cassette_name <- function(x) {
-  if (length(x) != 1) stp("cassette name must be a single string")
-
-  if (grepl("\\s", x)) stp("no spaces allowed in cassette names")
-  if (grepl("\\.yml$|\\.yaml$", x))
-    stp("don't include a cassette path extension")
-  # the below adapted from fs::path_sanitize, which adapted
-  # from the npm package sanitize-filename
-  illegal <- "[/\\?<>\\:*|\":]"
-  control <- "[[:cntrl:]]"
-  reserved <- "^[.]+$"
-  windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
-  windows_trailing <- "[. ]+$"
-  if (grepl(illegal, x))
-    stp(
-      "none of the following characters allowed in cassette ",
-      "names: (/, ?, <, >, \\, :, *, |, and \")"
-    )
-  if (grepl(control, x)) stp("no control characters allowed in cassette names")
-  if (grepl(reserved, x)) stp("cassette names can not be simply ., .., etc.")
-  if (grepl(windows_reserved, x))
-    stp("cassette names can not have reserved windows strings")
-  if (grepl(windows_trailing, x))
-    stp("cassette names can not have a trailing .")
-  if (nchar(x) > 255) stp("cassette name can not be > 255 characters")
 }
 
 check_request_matchers <- function(x) {
@@ -115,14 +77,29 @@ check_record_mode <- function(x) {
   x
 }
 
-sup_cond <- function(quiet, fun, cond = suppressMessages) {
-  if (quiet) cond(fun) else force(fun)
-}
-sup_mssg <- function(quiet, fun) sup_cond(quiet, fun)
-sup_warn <- function(quiet, fun) sup_cond(quiet, fun, suppressWarnings)
-
-dims <- function(x) length(dim(x))
-
 dir_create <- function(path) {
   dir.create(path, showWarnings = FALSE, recursive = TRUE)
+}
+
+to_base64 <- function(x) {
+  x <- jsonlite::base64_enc(x)
+
+  # Split into lines of 80 characters
+  chunk_size <- 80
+  length <- nchar(x)
+  if (length < chunk_size) {
+    return(x)
+  }
+
+  num_chunks <- ceiling(length / 80)
+  start_positions <- seq(1, by = 80, length.out = num_chunks)
+  end_positions <- pmin(start_positions + chunk_size - 1, length)
+
+  lines <- substring(x, start_positions, end_positions)
+  paste0(lines, collapse = "\n")
+}
+
+from_base64 <- function(x) {
+  x <- gsub("[\r\n]", "", x)
+  jsonlite::base64_dec(x)
 }

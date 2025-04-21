@@ -5,16 +5,13 @@
 #' for one test).
 #'
 #' @export
-#' @inherit check_cassette_names details
-#' @param name The name of the cassette. vcr will check this to ensure it
-#' is a valid file name. Not allowed: spaces, file extensions, control
-#' characters (e.g., `\n`), illegal characters ('/', '?', '<', '>', '\\', ':',
-#' '*', '|', and '\"'), dots alone (e.g., '.', '..'), Windows reserved
-#' words (e.g., 'com1'), trailing dots (can cause problems on Windows),
-#' names longer than 255 characters. See section "Cassette names"
+#' @param name The name of the cassette. This is used to name a file on
+#'   disk, so it must be valid file name.
 #' @param ... a block of code containing one or more requests (required). Use
 #' curly braces to encapsulate multi-line code blocks. If you can't pass a code
 #' block use [insert_cassette()] instead.
+#' @param dir The directory where the cassette will be stored. Defaults
+#'   to the default configured by [vcr_configure()].
 #' @param record The record mode (default: `"once"`). See [recording] for a
 #' complete list of the different recording modes.
 #' @param match_requests_on List of request matchers
@@ -142,6 +139,7 @@
 use_cassette <- function(
   name,
   ...,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -160,6 +158,7 @@ use_cassette <- function(
 
   cassette <- local_cassette(
     name,
+    dir = dir,
     record = record,
     match_requests_on = match_requests_on,
     allow_playback_repeats = allow_playback_repeats,
@@ -183,6 +182,7 @@ use_cassette <- function(
 #'   for more details.
 local_cassette <- function(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -194,6 +194,7 @@ local_cassette <- function(
 ) {
   cassette <- insert_cassette(
     name,
+    dir = dir,
     record = record,
     match_requests_on = match_requests_on,
     allow_playback_repeats = allow_playback_repeats,

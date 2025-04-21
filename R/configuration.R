@@ -98,12 +98,7 @@
 #'
 #' ### Logging
 #'
-#' - `log` (logical) should we log important vcr things? Default: `FALSE`
-#' - `log_opts` (list) Additional logging options:
-#'   - 'file' either `"console"` or a file path to log to
-#'   - 'log_prefix' default: "Cassette". We insert the cassette name after
-#'     that prefix, then the rest of the message.
-#'   - More to come...
+#' See [vcr_configure_log()]
 #'
 #' ## Cassette Options
 #'
@@ -127,8 +122,6 @@
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
 #' be recorded back to file. Default: `FALSE`
-#' - `quiet` (logical) Suppress any messages from both vcr and webmockr.
-#' Default: `TRUE`
 #' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an
 #' empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 #' way. This option only determines whether a warning is thrown or not.
@@ -141,18 +134,6 @@
 #' vcr_config_defaults()
 #' vcr_configure(dir = tempdir(), ignore_hosts = "google.com")
 #' vcr_configure(dir = tempdir(), ignore_localhost = TRUE)
-#'
-#'
-#' # logging
-#' vcr_configure(dir = tempdir(), log = TRUE,
-#'   log_opts = list(file = file.path(tempdir(), "vcr.log")))
-#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = "console"))
-#' vcr_configure(dir = tempdir(), log = TRUE,
-#'  log_opts = list(
-#'    file = file.path(tempdir(), "vcr.log"),
-#'    log_prefix = "foobar"
-#' ))
-#' vcr_configure(dir = tempdir(), log = FALSE)
 #'
 #' # filter sensitive data
 #' vcr_configure(dir = tempdir(),
@@ -177,16 +158,6 @@ vcr_configure <- function(...) {
   }
 
   if (length(params) == 0) return(invisible(vcr_c$as_list()))
-
-  # TODO: Is this still the right place to change these settings?
-  ignore_hosts <- params$ignore_hosts
-  ignore_localhost <- params$ignore_localhost %||% FALSE
-  if (!is.null(ignore_hosts) || ignore_localhost) {
-    x <- RequestIgnorer$new()
-    if (!is.null(ignore_hosts)) x$ignore_hosts(hosts = ignore_hosts)
-    if (ignore_localhost) x$ignore_localhost()
-  }
-
   old <- vcr_c$as_list()[names(params)]
 
   for (i in seq_along(params)) {
@@ -248,7 +219,6 @@ VCRConfig <- R6::R6Class(
     .filter_query_parameters = NULL,
     .write_disk_path = NULL,
     .verbose_errors = NULL,
-    .quiet = NULL,
     .warn_on_empty_cassette = NULL
   ),
 
@@ -328,22 +298,9 @@ VCRConfig <- R6::R6Class(
     },
     log_opts = function(value) {
       if (missing(value)) return(private$.log_opts)
-      log_opts <- assert(value, "list")
-      if (length(log_opts) > 0) {
-        if ("file" %in% names(log_opts)) {
-          assert(log_opts$file, "character")
-          if (private$.log) vcr_log_file(log_opts$file)
-        }
-        if ("log_prefix" %in% names(log_opts)) {
-          assert(log_opts$log_prefix, "character")
-        }
-        if ("date" %in% names(log_opts)) {
-          assert(log_opts$date, "logical")
-        }
-      }
       # add missing log options
       log_opts <- merge_list(
-        log_opts,
+        value,
         list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
       )
       private$.log_opts <- log_opts
@@ -383,10 +340,6 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.verbose_errors)
       private$.verbose_errors <- value
     },
-    quiet = function(value) {
-      if (missing(value)) return(private$.quiet)
-      private$.quiet <- assert(value, "logical")
-    },
     warn_on_empty_cassette = function(value) {
       if (missing(value)) return(private$.warn_on_empty_cassette)
       private$.warn_on_empty_cassette <- assert(value, "logical")
@@ -421,7 +374,6 @@ VCRConfig <- R6::R6Class(
       filter_query_parameters = NULL,
       write_disk_path = NULL,
       verbose_errors = get_envvar_lgl("VCR_VERBOSE_ERRORS", FALSE),
-      quiet = TRUE,
       warn_on_empty_cassette = TRUE
     ) {
       self$dir <- dir
@@ -450,7 +402,6 @@ VCRConfig <- R6::R6Class(
       self$filter_query_parameters = filter_query_parameters
       self$write_disk_path <- write_disk_path
       self$verbose_errors <- verbose_errors
-      self$quiet <- quiet
       self$warn_on_empty_cassette <- warn_on_empty_cassette
     },
 

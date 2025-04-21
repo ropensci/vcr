@@ -76,12 +76,8 @@ RequestHandler <- R6::R6Class(
     request_original = NULL,
     #' @field request the request, after any modification
     request = NULL,
-    #' @field vcr_response holds [VcrResponse] object
-    vcr_response = NULL,
     #' @field stubbed_response the stubbed response
     stubbed_response = NULL,
-    #' @field cassette the cassette holder
-    cassette = NULL,
 
     #' @description Create a new `RequestHandler` object
     #' @param request The request from an object of class `HttpInteraction`
@@ -97,31 +93,24 @@ RequestHandler <- R6::R6Class(
           disk = !is.null(request$output$path)
         )
       }
-      self$cassette <- tryCatch(current_cassette(), error = function(e) e)
     },
 
     #' @description Handle the request (`request` given in `$initialize()`)
     #' @return handles a request, outcomes vary
     handle = function() {
-      vcr_log_info(
-        sprintf(
-          "Handling request: %s (disabled: %s)",
-          private$request_summary(self$request),
-          private$is_disabled()
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "Handling request: %s (disabled: %s)",
+        private$request_summary(self$request),
+        private$is_disabled()
       )
 
       req_type <- private$request_type()
       req_type_fun <- sprintf("private$on_%s_request", req_type)
 
-      vcr_log_info(
-        sprintf(
-          "Identified request type: (%s) for %s",
-          req_type,
-          private$request_summary(self$request)
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "Identified request type: (%s) for %s",
+        req_type,
+        private$request_summary(self$request)
       )
 
       eval(parse(text = req_type_fun))(self$request)
@@ -130,14 +119,7 @@ RequestHandler <- R6::R6Class(
 
   private = list(
     request_summary = function(request) {
-      request_matchers <- if (
-        !inherits(self$cassette, "error") &&
-          !is.null(self$cassette)
-      ) {
-        self$cassette$match_requests_on
-      } else {
-        vcr_c$match_requests_on
-      }
+      request_matches <- current_casssette()$match_requests_on
       request_summary(Request$new()$from_hash(request), request_matchers)
     },
 
@@ -165,7 +147,7 @@ RequestHandler <- R6::R6Class(
     # request type helpers
     externally_stubbed = function() FALSE,
     should_ignore = function(request) {
-      request_ignorer$should_be_ignored(request)
+      should_be_ignored(request)
     },
     has_response_stub = function(request) {
       hi <- http_interactions()

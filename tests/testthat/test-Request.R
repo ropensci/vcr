@@ -5,7 +5,6 @@ test_that("Request basic stuff", {
 
   # vars
   expect_null(aa$disk)
-  expect_null(aa$hash)
   expect_null(aa$headers)
   expect_null(aa$host)
   expect_null(aa$method)
@@ -41,8 +40,6 @@ test_that("Request usage", {
   expect_type(h, "list")
   zz <- aa$from_hash(h)
   expect_s3_class(zz, "Request")
-  # hash in aa is a list
-  aa$hash <- NULL
   # equal but not identical
   expect_equal(zz, aa)
 })

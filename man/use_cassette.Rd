@@ -8,6 +8,7 @@
 use_cassette(
   name,
   ...,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -19,6 +20,7 @@ use_cassette(
 
 local_cassette(
   name,
+  dir = NULL,
   record = NULL,
   match_requests_on = NULL,
   allow_playback_repeats = FALSE,
@@ -30,16 +32,15 @@ local_cassette(
 )
 }
 \arguments{
-\item{name}{The name of the cassette. vcr will check this to ensure it
-is a valid file name. Not allowed: spaces, file extensions, control
-characters (e.g., \verb{\\n}), illegal characters ('/', '?', '<', '>', '\\', ':',
-'*', '|', and '\"'), dots alone (e.g., '.', '..'), Windows reserved
-words (e.g., 'com1'), trailing dots (can cause problems on Windows),
-names longer than 255 characters. See section "Cassette names"}
+\item{name}{The name of the cassette. This is used to name a file on
+disk, so it must be valid file name.}
 
 \item{...}{a block of code containing one or more requests (required). Use
 curly braces to encapsulate multi-line code blocks. If you can't pass a code
 block use \code{\link[=insert_cassette]{insert_cassette()}} instead.}
+
+\item{dir}{The directory where the cassette will be stored. Defaults
+to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
 
 \item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
 complete list of the different recording modes.}
@@ -82,38 +83,6 @@ an object of class \code{Cassette}
 \code{use_cassette(...)} uses a cassette for the code in \code{...},
 \code{local_cassette()} uses a cassette for the current function scope (e.g.
 for one test).
-}
-\details{
-Cassette names:
-\itemize{
-\item Should be meaningful so that it is obvious to you what test/function
-they relate to. Meaningful names are important so that you can quickly
-determine to what test file or test block a cassette belongs. Note
-that vcr cannot check that your cassette names are meaningful.
-\item Should not be duplicated. Duplicated cassette names would lead to a
-test using the wrong cassette.
-\item Should not have spaces. Spaces can lead to problems in using file
-paths.
-\item Should not include a file extension. vcr handles file extensions for
-the user.
-\item Should not have illegal characters that can lead to problems in using
-file paths: \code{/}, \verb{?}, \code{<}, \code{>}, \verb{\\}, \code{:}, \code{*}, \code{|}, and \verb{\"}
-\item Should not have control characters, e.g., \verb{\n}
-\item Should not have just dots, e.g., \code{.} or \code{..}
-\item Should not have Windows reserved words, e.g., \code{com1}
-\item Should not have trailing dots
-\item Should not be longer than 255 characters
-}
-
-\code{vcr::check_cassette_names()} is meant to be run during your tests, from
-a \href{https://testthat.r-lib.org/reference/test_dir.html#special-files}{\verb{helper-*.R} file}
-inside the \code{tests/testthat} directory. It only checks that cassette
-names are not duplicated. Note that if you do need to have duplicated
-cassette names you can do so by using the \code{allowed_duplicates} parameter
-in \code{check_cassette_names()}. A helper function \code{check_cassette_names()}
-runs inside \code{\link[=insert_cassette]{insert_cassette()}} that checks that
-cassettes do not have: spaces, file extensions, unaccepted characters
-(slashes).
 }
 \section{Cassette options}{
 

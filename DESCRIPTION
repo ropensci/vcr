@@ -30,6 +30,7 @@ BugReports: https://github.com/ropensci/vcr/issues
 Imports:
     cli,
     crul (>= 0.8.4),
+    curl,
     jsonlite,
     R6,
     rlang,
@@ -40,7 +41,6 @@ Imports:
     yaml
 Suggests:
     crayon,
-    curl,
     desc,
     httr,
     httr2,

@@ -1,14 +1,3 @@
-test_that("RequestMatcherRegistry contains the right stuff", {
-  expect_s3_class(request_matchers, "RequestMatcherRegistry")
-  expect_type(request_matchers$default_matchers, "list")
-  expect_equal(request_matchers$default_matchers, list('method', 'uri'))
-  expect_type(request_matchers$register, "closure")
-  expect_type(request_matchers$register_built_ins, "closure")
-  expect_type(request_matchers$registry, "list")
-  expect_s3_class(request_matchers$registry[[1]], "Matcher")
-  expect_type(request_matchers$try_to_register_body_as_json, "closure")
-})
-
 test_that("RequestMatcherRegistry basic functionality works", {
   one <- list(
     method = "get",
@@ -47,64 +36,65 @@ test_that("RequestMatcherRegistry basic functionality works", {
   e <- Request$new()$from_hash(five)
 
   # method
-  expect_false(request_matchers$registry$method$matches(a, b))
-  expect_true(request_matchers$registry$method$matches(a, c))
-  expect_false(request_matchers$registry$method$matches(a, d))
-  expect_false(request_matchers$registry$method$matches(b, c))
-  expect_true(request_matchers$registry$method$matches(b, d))
+  rm <- RequestMatcherRegistry$new()
+  expect_false(rm$registry$method$matches(a, b))
+  expect_true(rm$registry$method$matches(a, c))
+  expect_false(rm$registry$method$matches(a, d))
+  expect_false(rm$registry$method$matches(b, c))
+  expect_true(rm$registry$method$matches(b, d))
 
   # uri
-  expect_false(request_matchers$registry$uri$matches(a, b))
-  expect_false(request_matchers$registry$uri$matches(a, c))
-  expect_false(request_matchers$registry$uri$matches(a, d))
-  expect_false(request_matchers$registry$uri$matches(b, c))
-  expect_false(request_matchers$registry$uri$matches(b, d))
-  expect_false(request_matchers$registry$uri$matches(c, d))
+  expect_false(rm$registry$uri$matches(a, b))
+  expect_false(rm$registry$uri$matches(a, c))
+  expect_false(rm$registry$uri$matches(a, d))
+  expect_false(rm$registry$uri$matches(b, c))
+  expect_false(rm$registry$uri$matches(b, d))
+  expect_false(rm$registry$uri$matches(c, d))
 
   # body
-  expect_true(request_matchers$registry$body$matches(a, b))
-  expect_false(request_matchers$registry$body$matches(a, c))
-  expect_false(request_matchers$registry$body$matches(a, d))
-  expect_false(request_matchers$registry$body$matches(b, c))
-  expect_false(request_matchers$registry$body$matches(b, d))
-  expect_true(request_matchers$registry$body$matches(c, d))
+  expect_true(rm$registry$body$matches(a, b))
+  expect_false(rm$registry$body$matches(a, c))
+  expect_false(rm$registry$body$matches(a, d))
+  expect_false(rm$registry$body$matches(b, c))
+  expect_false(rm$registry$body$matches(b, d))
+  expect_true(rm$registry$body$matches(c, d))
 
   # headers
-  expect_false(request_matchers$registry$headers$matches(a, b))
-  expect_false(request_matchers$registry$headers$matches(a, c))
-  expect_false(request_matchers$registry$headers$matches(a, d))
-  expect_true(request_matchers$registry$headers$matches(b, c))
-  expect_true(request_matchers$registry$headers$matches(b, d))
-  expect_true(request_matchers$registry$headers$matches(c, d))
+  expect_false(rm$registry$headers$matches(a, b))
+  expect_false(rm$registry$headers$matches(a, c))
+  expect_false(rm$registry$headers$matches(a, d))
+  expect_true(rm$registry$headers$matches(b, c))
+  expect_true(rm$registry$headers$matches(b, d))
+  expect_true(rm$registry$headers$matches(c, d))
 
   # host
-  expect_true(request_matchers$registry$host$matches(a, b))
-  expect_true(request_matchers$registry$host$matches(a, c))
-  expect_true(request_matchers$registry$host$matches(a, d))
-  expect_true(request_matchers$registry$host$matches(b, c))
-  expect_true(request_matchers$registry$host$matches(b, d))
-  expect_true(request_matchers$registry$host$matches(c, d))
+  expect_true(rm$registry$host$matches(a, b))
+  expect_true(rm$registry$host$matches(a, c))
+  expect_true(rm$registry$host$matches(a, d))
+  expect_true(rm$registry$host$matches(b, c))
+  expect_true(rm$registry$host$matches(b, d))
+  expect_true(rm$registry$host$matches(c, d))
 
   # path
-  expect_false(request_matchers$registry$path$matches(a, b))
-  expect_true(request_matchers$registry$path$matches(a, c))
-  expect_true(request_matchers$registry$path$matches(a, d))
-  expect_false(request_matchers$registry$path$matches(b, c))
-  expect_false(request_matchers$registry$path$matches(b, d))
-  expect_true(request_matchers$registry$path$matches(c, d))
-  expect_true(request_matchers$registry$path$matches(b, e))
+  expect_false(rm$registry$path$matches(a, b))
+  expect_true(rm$registry$path$matches(a, c))
+  expect_true(rm$registry$path$matches(a, d))
+  expect_false(rm$registry$path$matches(b, c))
+  expect_false(rm$registry$path$matches(b, d))
+  expect_true(rm$registry$path$matches(c, d))
+  expect_true(rm$registry$path$matches(b, e))
   ## trailing slash is removed
-  expect_true(request_matchers$registry$path$matches(
+  expect_true(rm$registry$path$matches(
     list(path = "foo"),
     list(path = "foo/")
   ))
 
   # query
-  expect_true(request_matchers$registry$body_as_json$matches(a, b))
-  expect_false(request_matchers$registry$body_as_json$matches(a, c))
-  expect_false(request_matchers$registry$body_as_json$matches(a, d))
-  expect_false(request_matchers$registry$body_as_json$matches(b, c))
-  expect_false(request_matchers$registry$body_as_json$matches(b, d))
-  expect_true(request_matchers$registry$body_as_json$matches(c, d))
-  expect_false(request_matchers$registry$body_as_json$matches(b, e))
+  expect_true(rm$registry$body_as_json$matches(a, b))
+  expect_false(rm$registry$body_as_json$matches(a, c))
+  expect_false(rm$registry$body_as_json$matches(a, d))
+  expect_false(rm$registry$body_as_json$matches(b, c))
+  expect_false(rm$registry$body_as_json$matches(b, d))
+  expect_true(rm$registry$body_as_json$matches(c, d))
+  expect_false(rm$registry$body_as_json$matches(b, e))
 })

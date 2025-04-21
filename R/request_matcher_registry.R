@@ -18,15 +18,12 @@ request_matches <- function(req1, req2, match_requests_on) {
       cli::cli_abort("Unsupported request matcher {.str {on}}.")
     )
 
-    vcr_log_info(
-      sprintf(
-        "    %s %s: current request [%s] vs [%s]",
-        y,
-        if (match) "matched" else "did not match",
-        request_summary(req, self$request_matchers),
-        request_summary(intreq, self$request_matchers)
-      ),
-      vcr_c$log_opts$date
+    vcr_log_sprintf(
+      "    %s %s: current request [%s] vs [%s]",
+      y,
+      if (match) "matched" else "did not match",
+      request_summary(req, self$request_matchers),
+      request_summary(intreq, self$request_matchers)
     )
 
     if (!match) {

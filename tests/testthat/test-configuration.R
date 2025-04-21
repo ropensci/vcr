@@ -76,7 +76,7 @@ test_that("all configuration params are documented", {
   skip_if_not(file.exists(rd_file), sprintf("Did not find: '%s'", rd_file))
 
   rd_args <- extract_vcr_config_args(rd_file)
-  fn_args <- names(VCRConfig$new()$as_list())
+  fn_args <- setdiff(names(VCRConfig$new()$as_list()), c("log", "log_opts"))
 
   expect_setequal(rd_args, fn_args)
 })

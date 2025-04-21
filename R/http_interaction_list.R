@@ -127,14 +127,11 @@ HTTPInteractionList <- R6::R6Class(
         },
         ""
       )
-      vcr_log_info(
-        sprintf(
-          "Init. HTTPInteractionList w/ request matchers [%s] & %s interaction(s): { %s }",
-          paste0(self$request_matchers, collapse = ", "),
-          length(interactions),
-          paste0(interaction_summaries, collapse = ', ')
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "Init. HTTPInteractionList w/ request matchers [%s] & %s interaction(s): { %s }",
+        paste0(self$request_matchers, collapse = ", "),
+        length(interactions),
+        paste0(interaction_summaries, collapse = ', ')
       )
     },
 
@@ -155,14 +152,11 @@ HTTPInteractionList <- R6::R6Class(
           self$used_interactions,
           list(interaction)
         )
-        vcr_log_info(
-          sprintf(
-            "  Found matching interaction for %s at index %s: %s",
-            request_summary(Request$new()$from_hash(request)),
-            index,
-            response_summary(VcrResponse$new()$from_hash(interaction$response))
-          ),
-          vcr_c$log_opts$date
+        vcr_log_sprintf(
+          "  Found matching interaction for %s at index %s: %s",
+          request_summary(Request$new()$from_hash(request)),
+          index,
+          response_summary(VcrResponse$new()$from_hash(interaction$response))
         )
         interaction$response
       } else {
@@ -195,34 +189,10 @@ HTTPInteractionList <- R6::R6Class(
     #' @return integer
     remaining_unused_interaction_count = function() {
       length(self$interactions)
-    },
-
-    #' @description Checks if there are no unused interactions left.
-    #' @return various
-    assert_no_unused_interactions = function() {
-      if (!private$has_unused_interactions()) return(NULL)
-      descriptions <- lapply(self$interactions, function(x) {
-        sprintf(
-          "  - %s => %s",
-          request_summary(x$request, self$request_matchers),
-          response_summary(x$response)
-        )
-      })
-      vcr_log_info(descriptions, vcr_c$log_opts$date)
-      stop(
-        "There are unused HTTP interactions left in the cassette:\n",
-        descriptions,
-        call. = FALSE
-      )
     }
   ),
 
   private = list(
-    # return: logical
-    has_unused_interactions = function() {
-      length(self$interactions) > 0
-    },
-
     gather_match_checks = function(request) {
       out <- logical(0)
       iter <- 0
@@ -275,14 +245,11 @@ HTTPInteractionList <- R6::R6Class(
         bod,
         interaction$request$headers
       )
-      vcr_log_info(
-        sprintf(
-          "  Checking if {%s} matches {%s} using matchers: [%s]",
-          request_summary(req),
-          request_summary(intreq),
-          paste0(self$request_matchers, collapse = ", ")
-        ),
-        vcr_c$log_opts$date
+      vcr_log_sprintf(
+        "  Checking if {%s} matches {%s} using matchers: [%s]",
+        request_summary(req),
+        request_summary(intreq),
+        paste0(self$request_matchers, collapse = ", ")
       )
 
       request_matches(req, intreq, self$request_matchers)
