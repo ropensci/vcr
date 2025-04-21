@@ -70,17 +70,6 @@ HTTPInteraction <- R6::R6Class(
         response = self$response$to_hash(),
         recorded_at = self$recorded_at
       )
-    },
-
-    #' @description Create a HTTPInteraction object from a hash
-    #' @param hash a named list
-    #' @return a new `HttpInteraction` object
-    from_hash = function(hash) {
-      HTTPInteraction$new(
-        Request$new()$from_hash(hash$request),
-        VcrResponse$new()$from_hash(hash$response),
-        hash$recorded_at
-      )
     }
   )
 )

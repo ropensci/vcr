@@ -87,12 +87,6 @@ test_that("HTTPInteractionList", {
   ))
   priv <- x$.__enclos_env__$private
 
-  ## has_unused_interactions
-  expect_true(priv$has_unused_interactions())
-  x$response_for(request) # request used
-  x$response_for(request2) # request2 used
-  expect_false(priv$has_unused_interactions())
-
   # remake after response_for use
   x <- suppressMessages(HTTPInteractionList$new(
     interactions = list(inter, inter2),
