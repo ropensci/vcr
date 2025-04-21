@@ -14,6 +14,7 @@ eject_cassette <- function() {
     cli::cli_abort("No cassette in use")
   }
 
+  vcr_log_sprintf("Ejecting casette")
   cassette <- cassette_pop()
   cassette$eject()
 
