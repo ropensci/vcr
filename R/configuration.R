@@ -29,11 +29,6 @@
 #' - `turned_off` (logical) VCR is turned on by default. Default:
 #' `FALSE`
 #' - `allow_unused_http_interactions` (logical) Default: `TRUE`
-#' - `allow_http_connections_when_no_cassette` (logical) Determines how vcr
-#' treats HTTP requests that are made when no vcr cassette is in use. When
-#' `TRUE`, requests made when there is no vcr cassette in use will be allowed.
-#' When `FALSE` (default), an [UnhandledHTTPRequestError] error will be raised
-#' for any HTTP request made when there is no cassette in use
 #'
 #' ### Filtering
 #'
@@ -207,7 +202,6 @@ VCRConfig <- R6::R6Class(
     .turned_off = NULL,
     .re_record_interval = NULL,
     .clean_outdated_http_interactions = NULL,
-    .allow_http_connections_when_no_cassette = NULL,
     .cassettes = NULL,
     .linked_context = NULL,
     .log = NULL,
@@ -278,11 +272,6 @@ VCRConfig <- R6::R6Class(
     clean_outdated_http_interactions = function(value) {
       if (missing(value)) return(private$.clean_outdated_http_interactions)
       private$.clean_outdated_http_interactions <- value
-    },
-    allow_http_connections_when_no_cassette = function(value) {
-      if (missing(value))
-        return(private$.allow_http_connections_when_no_cassette)
-      private$.allow_http_connections_when_no_cassette <- value
     },
     cassettes = function(value) {
       if (missing(value)) return(private$.cassettes)
@@ -362,7 +351,6 @@ VCRConfig <- R6::R6Class(
       turned_off = FALSE,
       re_record_interval = NULL,
       clean_outdated_http_interactions = FALSE,
-      allow_http_connections_when_no_cassette = FALSE,
       cassettes = list(),
       linked_context = NULL,
       log = FALSE,
@@ -390,7 +378,6 @@ VCRConfig <- R6::R6Class(
       self$turned_off <- turned_off
       self$re_record_interval <- re_record_interval
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions
-      self$allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
       self$cassettes <- cassettes
       self$linked_context <- linked_context
       self$log <- log
