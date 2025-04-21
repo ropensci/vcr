@@ -14,6 +14,7 @@ test_that("insert_cassette works as expected", {
 })
 
 test_that("inserting and ejecting is logged", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
   local_vcr_configure_log(file = stdout())
 
   expect_snapshot(. <- use_cassette("test", NULL))
