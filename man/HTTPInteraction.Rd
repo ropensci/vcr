@@ -65,7 +65,6 @@ HTTPInteraction$new()$from_hash(my_hash)
 \itemize{
 \item \href{#method-HTTPInteraction-new}{\code{HTTPInteraction$new()}}
 \item \href{#method-HTTPInteraction-to_hash}{\code{HTTPInteraction$to_hash()}}
-\item \href{#method-HTTPInteraction-from_hash}{\code{HTTPInteraction$from_hash()}}
 \item \href{#method-HTTPInteraction-clone}{\code{HTTPInteraction$clone()}}
 }
 }
@@ -104,26 +103,6 @@ Create a hash from the HTTPInteraction object
 
 \subsection{Returns}{
 a named list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-HTTPInteraction-from_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-HTTPInteraction-from_hash}{}}}
-\subsection{Method \code{from_hash()}}{
-Create a HTTPInteraction object from a hash
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{HTTPInteraction$from_hash(hash)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{hash}}{a named list}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a new \code{HttpInteraction} object
 }
 }
 \if{html}{\out{<hr>}}
