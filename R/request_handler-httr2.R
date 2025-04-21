@@ -64,8 +64,7 @@ RequestHandlerHttr2 <- R6::R6Class(
         ),
         x$headers,
         x$body,
-        "",
-        super$cassette$cassette_opts
+        ""
       )
     },
 

@@ -64,8 +64,7 @@ RequestHandlerHttr <- R6::R6Class(
         c(list(status_code = x$status_code), httr::http_status(x)),
         x$headers,
         httr::content(x, encoding = "UTF-8"),
-        x$all_headers[[1]]$version,
-        super$cassette$cassette_opts
+        x$all_headers[[1]]$version
       )
     },
 
