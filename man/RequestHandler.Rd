@@ -84,11 +84,7 @@ eject_cassette()
 
 \item{\code{request}}{the request, after any modification}
 
-\item{\code{vcr_response}}{holds \link{VcrResponse} object}
-
 \item{\code{stubbed_response}}{the stubbed response}
-
-\item{\code{cassette}}{the cassette holder}
 }
 \if{html}{\out{</div>}}
 }

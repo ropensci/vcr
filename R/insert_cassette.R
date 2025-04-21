@@ -31,7 +31,7 @@ insert_cassette <- function(
     }
   }
   # enable webmockr
-  webmockr::enable(quiet = vcr_c$quiet)
+  webmockr::enable(quiet = TRUE)
   suppressMessages(webmockr::webmockr_allow_net_connect())
 
   # make cassette
@@ -47,6 +47,7 @@ insert_cassette <- function(
     clean_outdated_http_interactions = clean_outdated_http_interactions
   )
   cassette_push(cassette)
+  vcr_log_sprintf("Inserting")
   cassette$insert()
 
   invisible(cassette)
