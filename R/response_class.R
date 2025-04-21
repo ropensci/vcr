@@ -122,40 +122,6 @@ VcrResponse <- R6::R6Class(
         hash[["adapater_metadata"]],
         hash[["disk"]]
       )
-    },
-
-    #' @description Get a header by name
-    #' @param key (character) header name to get
-    #' @return the header value (if it exists)
-    get_header = function(key) {
-      self$headers[[key]]
-    },
-
-    #' @description Edit a header
-    #' @param key (character) header name to edit
-    #' @param value (character) new value to assign
-    #' @return no return; modifies the header in place
-    edit_header = function(key, value = NULL) {
-      self$headers[[key]] <- value
-    },
-
-    #' @description Delete a header
-    #' @param key (character) header name to delete
-    #' @return no return; the header is deleted if it exists
-    delete_header = function(key) {
-      self$headers[key] <- NULL
-    },
-
-    #' @description Get the content-encoding header value
-    #' @return (character) the content-encoding value
-    content_encoding = function() {
-      self$get_header("content-encoding")[1]
-    },
-
-    #' @description Checks if the encoding is one of "gzip" or "deflate"
-    #' @return logical
-    is_compressed = function() {
-      self$content_encoding() %in% c("gzip", "deflate")
     }
   )
 )
