@@ -1,23 +1,5 @@
 request_matches <- function(req1, req2, match_requests_on) {
   for (matcher in match_requests_on) {
-    match <- switch(
-      matcher,
-      method = r1$method == r2$method,
-      uri = identical(
-        curl::curl_unescape(query_params_remove_str(r1$uri)),
-        curl::curl_unescape(r2$uri)
-      ),
-      body = identical(as.character(r1$body), as.character(r2$body)),
-      headers = identical(r1$headers, r2$headers),
-      host = identical(r1$host, r2$host),
-      path = identical(sub("/$", "", r1$path), sub("/$", "", r2$path)),
-      query = identical(
-        curl::curl_unescape(r1$query),
-        curl::curl_unescape(r2$query)
-      ),
-      cli::cli_abort("Unsupported request matcher {.str {on}}.")
-    )
-
     vcr_log_sprintf(
       "    %s %s: current request [%s] vs [%s]",
       y,
@@ -32,4 +14,24 @@ request_matches <- function(req1, req2, match_requests_on) {
   }
 
   TRUE
+}
+
+request_matches_one <- function(type, req1, req2) {
+  match <- switch(
+    type,
+    method = req1$method == req2$method,
+    uri = identical(
+      curl::curl_unescape(query_params_remove_str(req1$uri)),
+      curl::curl_unescape(req2$uri)
+    ),
+    body = identical(req1$body, req2$body),
+    headers = identical(req1$headers, req2$headers),
+    host = identical(req1$host, req2$host),
+    path = identical(sub("/$", "", req1$path), sub("/$", "", req2$path)),
+    query = identical(
+      curl::curl_unescape(req1$query),
+      curl::curl_unescape(req2$query)
+    ),
+    cli::cli_abort("Unsupported request matcher {.str {type}}.")
+  )
 }
