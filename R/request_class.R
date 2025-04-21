@@ -114,10 +114,7 @@ Request <- R6::R6Class(
       list(
         method = self$method,
         uri = self$uri,
-        body = serializable_body(
-          self$body,
-          self$opts$preserve_exact_body_bytes %||% FALSE
-        ),
+        body = self$body,
         headers = self$headers,
         disk = self$disk
       )
@@ -130,8 +127,7 @@ Request <- R6::R6Class(
       Request$new(
         method = hash[['method']],
         uri = hash[['uri']],
-        # body    = hash[['body']],
-        body = body_from(hash[['body']]),
+        body = hash[['body']] %||% "",
         headers = hash[['headers']],
         disk = hash[['disk']]
       )
@@ -156,57 +152,3 @@ Request <- R6::R6Class(
     }
   )
 )
-
-serializable_body <- function(body, preserve_exact_body_bytes = FALSE) {
-  if (is.null(body)) {
-    NULL
-  } else if (preserve_exact_body_bytes) {
-    structure(jsonlite::base64_enc(charToRaw(body)), base64 = TRUE)
-  } else {
-    body
-  }
-}
-
-body_from <- function(x) {
-  if (is.null(x)) x <- ""
-  if (
-    (!is.null(attr(x, "base64")) && attr(x, "base64"))
-    # (!is.null(attr(x, "base64")) && attr(x, "base64")) || all(is_base64(x))
-  ) {
-    b64dec <- jsonlite::base64_dec(x)
-    b64dec_r2c <- tryCatch(rawToChar(b64dec), error = function(e) e)
-    if (inherits(b64dec_r2c, "error")) {
-      # probably is binary (e.g., pdf), so can't be converted to char.
-      b64dec
-    } else {
-      # probably was originally character data, so
-      #  can convert to character from binary
-      b64dec_r2c
-    }
-  } else {
-    x
-    # try_encode_string(x, Encoding_safe(x))
-  }
-}
-
-is_base64 <- function(x, cassette) {
-  if (!is.list(x)) {
-    if ("base64" %in% names(attributes(x))) {
-      return(attr(x, 'base64'))
-    }
-    return(FALSE)
-  }
-
-  # new base64 setup where it is stored in "base64_string"
-  hasb64str <- "base64_string" %in% names(x)
-  if (hasb64str) return(TRUE)
-
-  if (cassette$preserve_exact_body_bytes && "string" %in% names(x)) {
-    # old base64 setup where it was stored in "string"
-    message("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
-    return(TRUE)
-  } else {
-    # not using base64
-    return(FALSE)
-  }
-}

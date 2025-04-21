@@ -12,3 +12,10 @@ test_that("insert_cassette works as expected", {
   expect_false(aa$allow_playback_repeats)
   expect_false(aa$any_new_recorded_interactions())
 })
+
+test_that("inserting and ejecting is logged", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
+  local_vcr_configure_log(file = stdout())
+
+  expect_snapshot(. <- use_cassette("test", NULL))
+})

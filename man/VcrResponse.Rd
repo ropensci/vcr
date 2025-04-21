@@ -54,8 +54,6 @@ f <- tempfile()
 
 \item{\code{http_version}}{the HTTP version}
 
-\item{\code{opts}}{a list}
-
 \item{\code{disk}}{a boolean}
 }
 \if{html}{\out{</div>}}
@@ -67,11 +65,6 @@ f <- tempfile()
 \item \href{#method-VcrResponse-print}{\code{VcrResponse$print()}}
 \item \href{#method-VcrResponse-to_hash}{\code{VcrResponse$to_hash()}}
 \item \href{#method-VcrResponse-from_hash}{\code{VcrResponse$from_hash()}}
-\item \href{#method-VcrResponse-get_header}{\code{VcrResponse$get_header()}}
-\item \href{#method-VcrResponse-edit_header}{\code{VcrResponse$edit_header()}}
-\item \href{#method-VcrResponse-delete_header}{\code{VcrResponse$delete_header()}}
-\item \href{#method-VcrResponse-content_encoding}{\code{VcrResponse$content_encoding()}}
-\item \href{#method-VcrResponse-is_compressed}{\code{VcrResponse$is_compressed()}}
 \item \href{#method-VcrResponse-clone}{\code{VcrResponse$clone()}}
 }
 }
@@ -81,7 +74,7 @@ f <- tempfile()
 \subsection{Method \code{new()}}{
 Create a new VcrResponse object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$new(status, headers, body, http_version, opts, disk)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$new(status, headers, body, http_version, disk)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -94,8 +87,6 @@ Create a new VcrResponse object
 \item{\code{body}}{the response body}
 
 \item{\code{http_version}}{the HTTP version}
-
-\item{\code{opts}}{a list}
 
 \item{\code{disk}}{boolean, is body a file on disk}
 }
@@ -155,94 +146,6 @@ Get a hash back to an R list
 }
 \subsection{Returns}{
 an \code{VcrResponse} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-get_header"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-get_header}{}}}
-\subsection{Method \code{get_header()}}{
-Get a header by name
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$get_header(key)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{key}}{(character) header name to get}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-the header value (if it exists)
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-edit_header"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-edit_header}{}}}
-\subsection{Method \code{edit_header()}}{
-Edit a header
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$edit_header(key, value = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{key}}{(character) header name to edit}
-
-\item{\code{value}}{(character) new value to assign}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-no return; modifies the header in place
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-delete_header"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-delete_header}{}}}
-\subsection{Method \code{delete_header()}}{
-Delete a header
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$delete_header(key)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{key}}{(character) header name to delete}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-no return; the header is deleted if it exists
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-content_encoding"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-content_encoding}{}}}
-\subsection{Method \code{content_encoding()}}{
-Get the content-encoding header value
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$content_encoding()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(character) the content-encoding value
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-is_compressed"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-is_compressed}{}}}
-\subsection{Method \code{is_compressed()}}{
-Checks if the encoding is one of "gzip" or "deflate"
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$is_compressed()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
 }
 }
 \if{html}{\out{<hr>}}
