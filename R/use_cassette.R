@@ -14,10 +14,20 @@
 #'   to the default configured by [vcr_configure()].
 #' @param record The record mode (default: `"once"`). See [recording] for a
 #' complete list of the different recording modes.
-#' @param match_requests_on List of request matchers
-#' to use to determine what recorded HTTP interaction to replay. Defaults to
-#' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
-#' "path", "headers", "body" and "query"
+#' @param match_requests_on Character vector of request matchers used to
+#'   determine which recorded HTTP interaction to replay. Possible values are:
+#'
+#'   * `method`: the HTTP method.
+#'   * `uri`: the complete request URI.
+#'   * `host`: the **host** component of the URI.
+#'   * `path`: the **path** component of the URI.
+#'   * `query`: the **query** component of the URI.
+#'   * `body`: the request body.
+#'   * `header`: all request headers.
+#'
+#'   If more than one is specified, all components must match in order for the
+#'   request to match. If not supplied, defaults to `c("method", "uri")`.
+#'
 #' @param allow_playback_repeats (logical) Whether or not to
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
