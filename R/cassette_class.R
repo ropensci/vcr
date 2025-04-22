@@ -562,11 +562,6 @@ Cassette <- R6::R6Class(
             x$content
           }
         },
-        http_version = if (inherits(x, "response")) {
-          x$all_headers[[1]]$version
-        } else {
-          x$response_headers$status
-        },
         disk = is_disk
       )
       HTTPInteraction$new(request = request, response = response)

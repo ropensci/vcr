@@ -14,7 +14,6 @@
 #' x$body
 #' x$status
 #' x$headers
-#' x$http_version
 #' x$to_hash()
 #' x$from_hash(x$to_hash())
 #'
@@ -45,8 +44,6 @@ VcrResponse <- R6::R6Class(
     headers = NULL,
     #' @field body the response body
     body = NULL,
-    #' @field http_version the HTTP version
-    http_version = NULL,
     #' @field disk a boolean
     disk = NULL,
 
@@ -54,14 +51,12 @@ VcrResponse <- R6::R6Class(
     #' @param status the status of the response
     #' @param headers the response headers
     #' @param body the response body
-    #' @param http_version the HTTP version
     #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
     initialize = function(
       status,
       headers,
       body,
-      http_version,
       disk
     ) {
       if (!missing(status)) self$status <- status
@@ -72,9 +67,6 @@ VcrResponse <- R6::R6Class(
         }
         # self$body <- if (is.character(body)) enc2utf8(body) else body
         self$body <- body
-      }
-      if (!missing(http_version)) {
-        self$http_version <- extract_http_version(http_version)
       }
       if (!missing(disk)) self$disk <- disk
     },
@@ -91,7 +83,6 @@ VcrResponse <- R6::R6Class(
         status = self$status,
         headers = self$headers,
         body = self$body,
-        http_version = self$http_version,
         disk = self$disk
       )
     },
@@ -104,18 +95,8 @@ VcrResponse <- R6::R6Class(
         hash[["status"]],
         hash[["headers"]],
         hash[["body"]] %||% "",
-        hash[["http_version"]],
         hash[["disk"]]
       )
     }
   )
 )
-
-extract_http_version <- function(x) {
-  if (!is.character(x)) return(x)
-  if (grepl("HTTP/[0-9]\\.?", x)) {
-    strsplit(stract(x, "HTTP/[12]\\.?([0-9])?"), "/")[[1]][2] %||% ""
-  } else {
-    return(x)
-  }
-}
