@@ -19,8 +19,6 @@ url <- "https://google.com"
 x$body
 x$status
 x$headers
-x$to_hash()
-x$from_hash(x$to_hash())
 
 # check if body is compressed
 url <- "https://fishbase.ropensci.org"
@@ -60,8 +58,6 @@ f <- tempfile()
 \itemize{
 \item \href{#method-VcrResponse-new}{\code{VcrResponse$new()}}
 \item \href{#method-VcrResponse-print}{\code{VcrResponse$print()}}
-\item \href{#method-VcrResponse-to_hash}{\code{VcrResponse$to_hash()}}
-\item \href{#method-VcrResponse-from_hash}{\code{VcrResponse$from_hash()}}
 \item \href{#method-VcrResponse-clone}{\code{VcrResponse$clone()}}
 }
 }
@@ -108,39 +104,6 @@ print method for the \code{VcrResponse} class
 \item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-to_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-to_hash}{}}}
-\subsection{Method \code{to_hash()}}{
-Create a hash
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$to_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-a list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-VcrResponse-from_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-VcrResponse-from_hash}{}}}
-\subsection{Method \code{from_hash()}}{
-Get a hash back to an R list
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VcrResponse$from_hash(hash)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{hash}}{a list}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-an \code{VcrResponse} object
 }
 }
 \if{html}{\out{<hr>}}

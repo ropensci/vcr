@@ -314,13 +314,6 @@ Cassette <- R6::R6Class(
     #' @return list
     merged_interactions = function() {
       old_interactions <- self$previously_recorded_interactions()
-      old_interactions <- lapply(old_interactions, function(x) {
-        HTTPInteraction$new(
-          request = x$request,
-          response = x$response,
-          recorded_at = x$recorded_at
-        )
-      })
 
       if (self$should_remove_matching_existing_interactions()) {
         new_interaction_list <- HTTPInteractionList$new(
@@ -329,8 +322,7 @@ Cassette <- R6::R6Class(
         )
         old_interactions <- Filter(
           function(x) {
-            req <- Request$new()$from_hash(x$request)
-            !unlist(new_interaction_list$has_interaction_matching(req))
+            !unlist(new_interaction_list$has_interaction_matching(x$request))
           },
           old_interactions
         )
@@ -430,7 +422,7 @@ Cassette <- R6::R6Class(
           z$response$body$string %||% z$response$body$base64_string,
           disk = z$response$body$file
         )
-        HTTPInteraction$new(request = request, response = response)$to_hash()
+        HTTPInteraction$new(request = request, response = response)
       }))
     },
 
@@ -467,16 +459,15 @@ Cassette <- R6::R6Class(
     #' @description make [HTTPInteractionList] object, assign to http_interactions_ var
     #' @return nothing returned
     http_interactions = function() {
+      if (self$should_stub_requests()) {
+        interactions <- self$previously_recorded_interactions()
+      } else {
+        interactions <- list()
+      }
+
       self$http_interactions_ <- HTTPInteractionList$new(
-        interactions = {
-          if (self$should_stub_requests()) {
-            self$previously_recorded_interactions()
-          } else {
-            list()
-          }
-        },
+        interactions = interactions,
         request_matchers = self$match_requests_on
-        # request_matchers = vcr_configuration()$match_requests_on
       )
     },
 

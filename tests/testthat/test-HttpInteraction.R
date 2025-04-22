@@ -28,11 +28,6 @@ test_that("HttpInteraction", {
   expect_type(x$recorded_at, 'double')
 
   # methods and objects
-  expect_type(x$to_hash, "closure")
   expect_s3_class(x$request, "Request")
   expect_s3_class(x$response, "VcrResponse")
-
-  # to_hash method
-  expect_type(x$to_hash(), "list")
-  expect_named(x$to_hash(), c('request', 'response', 'recorded_at'))
 })

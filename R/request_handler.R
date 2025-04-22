@@ -120,7 +120,7 @@ RequestHandler <- R6::R6Class(
   private = list(
     request_summary = function(request) {
       request_matches <- current_casssette()$match_requests_on
-      request_summary(Request$new()$from_hash(request), request_matchers)
+      request_summary(request, request_matchers)
     },
 
     request_type = function() {
