@@ -33,9 +33,8 @@ dedup_keys <- function(x) {
   return(x)
 }
 
-encode_interactions <- function(x, file, bytes) {
+encode_interactions <- function(x, bytes) {
   assert(x, c("list", "HTTPInteraction"))
-  assert(file, "character")
 
   list(
     list(
@@ -99,13 +98,13 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
 # param file: a file path
 # param bytes: logical, whether to preserve exact bytes or not
 write_interactions <- function(x, file, bytes) {
-  z <- encode_interactions(x, file, bytes)
+  z <- encode_interactions(x, bytes)
   tmp <- yaml::as.yaml(z)
   cat(tmp, file = file, append = TRUE)
 }
 
 write_interactions_json <- function(x, file, bytes) {
-  z <- encode_interactions(x, file, bytes)
+  z <- encode_interactions(x, bytes)
   # combine with existing data on same file, if any
   on_disk <- invisible(tryCatch(
     jsonlite::fromJSON(file, FALSE),
