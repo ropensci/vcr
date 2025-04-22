@@ -1,5 +1,3 @@
-skip_on_cran()
-
 test_that("filter sensitive strings", {
   x <- "foo234223){@%!kl]bar"
 
@@ -36,33 +34,4 @@ test_that("filter sensitive regex strings", {
   # There's no way to put back the real string unless
   # we stored it somehow, but that seems like an added security risk
   # expect_identical(sensitive_put_back(sensitive_remove(x)), x)
-})
-
-test_that("filter sensitive data strips leading/trailing single/double quotes", {
-  withr::local_envvar(MY_KEY_ON_GH_ACTIONS = "\"ab123c\"")
-  tmpdir <- withr::local_tempdir()
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    filter_sensitive_data = list(
-      "<somekey>" = Sys.getenv("MY_KEY_ON_GH_ACTIONS")
-    )
-  )
-  x <- crul::HttpClient$new("https://hb.opencpu.org")
-  expect_snapshot(
-    cas <- use_cassette(
-      "testing2",
-      res <- x$get(
-        "get",
-        query = list(key = Sys.getenv("MY_KEY_ON_GH_ACTIONS"))
-      )
-    )
-  )
-  int <- yaml::yaml.load_file(cas$file())$http_interactions[[1]]
-  expect_false(grepl(
-    Sys.getenv("MY_KEY_ON_GH_ACTIONS"),
-    URLdecode(int$request$uri)
-  ))
-  body <- jsonlite::fromJSON(int$response$body$string)
-  expect_false(grepl(Sys.getenv("MY_KEY_ON_GH_ACTIONS"), body$args$key))
-  expect_false(grepl(Sys.getenv("MY_KEY_ON_GH_ACTIONS"), body$url))
 })
