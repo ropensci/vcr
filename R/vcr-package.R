@@ -19,9 +19,6 @@
 #' @section Record modes:
 #' See [recording] for help on record modes.
 #'
-#' @section Request matching:
-#' See [request-matching] for help on the many request matching options.
-#'
 #' @section Async:
 #' As of \pkg{crul} v1.5, `vcr` will work for async http requests with
 #' \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}

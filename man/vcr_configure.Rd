@@ -146,7 +146,7 @@ defined locally for individual cassettes.
 \item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
 See \link{recording}
 \item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
-See \link{request-matching} for details.
+See \code{\link[=use_cassette]{use_cassette()}} for details.
 \item \code{serialize_with}: (character) "yaml" or "json". Note that you can have
 multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,
