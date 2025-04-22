@@ -110,7 +110,7 @@
 #' - `record` (character) One of 'all', 'none', 'new_episodes', or 'once'.
 #' See [recording]
 #' - `match_requests_on` vector of matchers. Default: (`method`, `uri`)
-#' See [request-matching] for details.
+#'   See [use_cassette()] for details.
 #' - `serialize_with`: (character) "yaml" or "json". Note that you can have
 #' multiple cassettes with the same name as long as they use different
 #' serializers; so if you only want one cassette for a given cassette name,
