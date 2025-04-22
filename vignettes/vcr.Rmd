@@ -81,11 +81,6 @@ library("vcr")
 ```{r child='../man/rmdhunks/configuration.Rmd', eval=TRUE} 
 ```
 
-## Matching/Matchers
-
-```{r child='../man/rmdhunks/matching.Rmd', eval=TRUE} 
-```
-
 ## Note about missing features
 
 ```{r child='../man/rmdhunks/missing-features.Rmd', eval=TRUE} 

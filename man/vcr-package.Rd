@@ -37,11 +37,6 @@ See it's manual file for help.
 See \link{recording} for help on record modes.
 }
 
-\section{Request matching}{
-
-See \link{request-matching} for help on the many request matching options.
-}
-
 \section{Async}{
 
 As of \pkg{crul} v1.5, \code{vcr} will work for async http requests with

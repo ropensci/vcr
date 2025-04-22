@@ -5,15 +5,6 @@
     Message
       vcr turned off; see ?turn_on to turn vcr back on
 
-# inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE
-
-    Code
-      insert_cassette("test")
-    Condition
-      Error in `insert_cassette()`:
-      ! vcr is turned off.  You must turn it on before you can insert a cassette.
-              Or you can set ignore_cassettes=TRUE option to completely ignore cassette insertions.
-
 # turned_off works iif no cassettes active
 
     Code

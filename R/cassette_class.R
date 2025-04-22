@@ -562,11 +562,6 @@ Cassette <- R6::R6Class(
             x$content
           }
         },
-        http_version = if (inherits(x, "response")) {
-          x$all_headers[[1]]$version
-        } else {
-          x$response_headers$status
-        },
         disk = is_disk
       )
       HTTPInteraction$new(request = request, response = response)
@@ -580,7 +575,7 @@ check_cassette_name <- function(x, call = caller_env()) {
     cli::cli_abort("{.arg name} must be a single string.", call = call)
   }
 
-  if (any(x %in% names(the$cassettes))) {
+  if (any(x %in% cassette_names())) {
     cli::cli_abort(
       "{.arg name} must not be the same as an existing cassette.",
       call = call

@@ -17,8 +17,7 @@ test_that("HttpInteraction", {
   response <- VcrResponse$new(
     res$status_http(),
     res$response_headers,
-    res$parse("UTF-8"),
-    res$response_headers$status
+    res$parse("UTF-8")
   )
 
   x <- HTTPInteraction$new(request = request, response = response)
