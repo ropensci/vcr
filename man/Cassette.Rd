@@ -97,8 +97,6 @@ be recorded back to file}
 
 \item{\code{to_return}}{(logical) internal use}
 
-\item{\code{cassette_opts}}{(list) various cassette options}
-
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
 }
 \if{html}{\out{</div>}}
