@@ -44,8 +44,6 @@ VcrResponse <- R6::R6Class(
     headers = NULL,
     #' @field body the response body
     body = NULL,
-    #' @field adapter_metadata Additional metadata used by a specific VCR adapter
-    adapter_metadata = NULL,
     #' @field disk a boolean
     disk = NULL,
 
@@ -53,14 +51,12 @@ VcrResponse <- R6::R6Class(
     #' @param status the status of the response
     #' @param headers the response headers
     #' @param body the response body
-    #' @param adapter_metadata Additional metadata used by a specific VCR adapter
     #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
     initialize = function(
       status,
       headers,
       body,
-      adapter_metadata = NULL,
       disk
     ) {
       if (!missing(status)) self$status <- status
@@ -72,7 +68,6 @@ VcrResponse <- R6::R6Class(
         # self$body <- if (is.character(body)) enc2utf8(body) else body
         self$body <- body
       }
-      if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
       if (!missing(disk)) self$disk <- disk
     },
 
