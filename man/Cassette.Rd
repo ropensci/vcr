@@ -96,8 +96,6 @@ bytes of the requests and responses}
 be recorded back to file}
 
 \item{\code{to_return}}{(logical) internal use}
-
-\item{\code{cassette_opts}}{(list) various cassette options}
 }
 \if{html}{\out{</div>}}
 }

@@ -43,8 +43,6 @@ Request <- R6::R6Class(
     skip_port_stripping = FALSE,
     #' @field hash (character) a named list - internal use
     hash = NULL,
-    #' @field opts (character) options - internal use
-    opts = NULL,
     #' @field disk (logical) xx
     disk = NULL,
     #' @field fields (various) request body details
@@ -60,7 +58,6 @@ Request <- R6::R6Class(
     #' @param uri (character) request URI
     #' @param body (character) request body
     #' @param headers (named list) request headers
-    #' @param opts (named list) options internal use
     #' @param disk (boolean), is body a file on disk
     #' @param fields (various) post fields
     #' @param output (various) output details
@@ -73,7 +70,6 @@ Request <- R6::R6Class(
       uri,
       body,
       headers,
-      opts,
       disk,
       fields,
       output,
@@ -101,7 +97,6 @@ Request <- R6::R6Class(
         self$path <- tmp$path
         self$query <- tmp$parameter
       }
-      if (!missing(opts)) self$opts <- opts
       if (!missing(disk)) self$disk <- disk
       if (!missing(fields)) self$fields <- fields
       if (!missing(output)) self$output <- output

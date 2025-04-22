@@ -81,8 +81,6 @@ Cassette <- R6::R6Class(
     clean_outdated_http_interactions = FALSE,
     #' @field to_return (logical) internal use
     to_return = NULL,
-    #' @field cassette_opts (list) various cassette options
-    cassette_opts = NULL,
 
     #' @description Create a new `Cassette` object
     #' @param dir The directory where the cassette will be stored.
@@ -225,7 +223,7 @@ Cassette <- R6::R6Class(
         invisible(lapply(prev, stub_previous_request))
       }
 
-      self$cassette_opts <- compact(list(
+      opts <- compact(list(
         name = self$name,
         record = self$record,
         serialize_with = self$serialize_with,
@@ -233,12 +231,7 @@ Cassette <- R6::R6Class(
         allow_playback_repeats = self$allow_playback_repeats,
         preserve_exact_body_bytes = self$preserve_exact_body_bytes
       ))
-      init_opts <- paste(
-        names(self$cassette_opts),
-        unname(self$cassette_opts),
-        sep = ": ",
-        collapse = ", "
-      )
+      init_opts <- paste(names(opts), unname(opts), sep = ": ", collapse = ", ")
       vcr_log_sprintf("Initialized with options: {%s}", init_opts)
 
       # create new env for recorded interactions
@@ -520,7 +513,6 @@ Cassette <- R6::R6Class(
         } else {
           x$request_headers
         },
-        opts = self$cassette_opts,
         disk = is_disk,
         skip_port_stripping = TRUE
       )
