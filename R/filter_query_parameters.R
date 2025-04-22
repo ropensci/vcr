@@ -85,15 +85,6 @@ query_params_remove_str <- function(uri) {
   }
   return(uri)
 }
-list2str <- function(w) {
-  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
-}
-buildurl <- function(x) {
-  x$parameter <- list2str(x$parameter)
-  url <- urltools::url_compose(x)
-  # trim trailing ?
-  sub("\\?$", "", url)
-}
 # drop_param(url="https://hb.opencpu.org/get?foo=bar&baz=3&z=4", name="z")
 # => "https://hb.opencpu.org/get?foo=bar&baz=3"
 drop_param <- function(url, name) {
@@ -129,4 +120,32 @@ replace_param_with <- function(url, name, fake, real) {
   if (is.null(z$parameter[[name]])) return(url)
   z$parameter[[name]] <- sub(fake, real, z$parameter[[name]])
   buildurl(z)
+}
+
+# Helpers ----------------------------------------------------------------------
+
+parseurl <- function(x) {
+  tmp <- urltools::url_parse(x)
+  tmp <- as.list(tmp)
+  if (!is.na(tmp$parameter)) {
+    tmp$parameter <- sapply(
+      strsplit(tmp$parameter, "&")[[1]],
+      function(z) {
+        zz <- strsplit(z, split = "=")[[1]]
+        as.list(stats::setNames(zz[2], zz[1]))
+      },
+      USE.NAMES = FALSE
+    )
+  }
+  tmp
+}
+
+list2str <- function(w) {
+  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
+}
+buildurl <- function(x) {
+  x$parameter <- list2str(x$parameter)
+  url <- urltools::url_compose(x)
+  # trim trailing ?
+  sub("\\?$", "", url)
 }
