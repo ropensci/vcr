@@ -37,34 +37,42 @@ prep_interaction <- function(x, file, bytes) {
   assert(x, c("list", "HTTPInteraction"))
   assert(file, "character")
 
-  req_headers <- x$request$headers
-  req_headers <- dedup_keys(req_headers)
-  req_headers <- headers_remove(req_headers, vcr_c$filter_request_headers)
-  req_headers <- request_headers_redact(req_headers)
-  req_headers <- unclass(req_headers)
-
-  resp_headers <- x$response$headers
-  resp_headers <- dedup_keys(resp_headers)
-  resp_headers <- headers_remove(resp_headers, vcr_c$filter_response_headers)
-  resp_headers <- unclass(resp_headers)
-
   list(
     list(
       request = list(
         method = x$request$method,
         uri = x$request$uri,
         body = encode_body(x$request$body, NULL, bytes),
-        headers = req_headers
+        headers = encode_headers(x$request$headers, "request")
       ),
       response = list(
         status = x$response$status,
-        headers = resp_headers,
+        headers = encode_headers(x$response$headers, "response"),
         body = encode_body(x$response$body, x$response$disk, bytes)
       ),
       recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
       recorded_with = pkg_versions()
     )
   )
+}
+
+encode_headers <- function(headers, type = c("request", "response")) {
+  type <- arg_match(type)
+
+  headers <- dedup_keys(headers)
+
+  headers <- switch(
+    type,
+    request = headers_remove(headers, vcr_c$filter_request_headers),
+    response = headers_remove(headers, vcr_c$filter_response_headers)
+  )
+
+  if (type == "request") {
+    headers <- request_headers_redact(headers)
+  }
+
+  headers <- unclass(headers)
+  headers
 }
 
 encode_body <- function(body, file, preserve_bytes = FALSE) {
