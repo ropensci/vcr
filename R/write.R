@@ -48,7 +48,7 @@ prep_interaction <- function(x, file, bytes) {
   resp_headers <- headers_remove(resp_headers, vcr_c$filter_response_headers)
   resp_headers <- unclass(resp_headers)
 
-  res = list(
+list(
     list(
       request = list(
         method = x$request$method,
