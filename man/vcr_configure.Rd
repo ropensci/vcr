@@ -55,11 +55,6 @@ you'll likely have to skip the associated tests as well).
 \item \code{turned_off} (logical) VCR is turned on by default. Default:
 \code{FALSE}
 \item \code{allow_unused_http_interactions} (logical) Default: \code{TRUE}
-\item \code{allow_http_connections_when_no_cassette} (logical) Determines how vcr
-treats HTTP requests that are made when no vcr cassette is in use. When
-\code{TRUE}, requests made when there is no vcr cassette in use will be allowed.
-When \code{FALSE} (default), an \link{UnhandledHTTPRequestError} error will be raised
-for any HTTP request made when there is no cassette in use
 }
 }
 

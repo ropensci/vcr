@@ -17,7 +17,6 @@ test_that("logging is silent unless enabled", {
 })
 
 test_that("vcr_log_sprintf() adds additional metadata", {
-  local_vcr_configure(warn_on_empty_cassette = FALSE)
   local_mocked_bindings(Sys.time = function() as.POSIXct("2024-01-01"))
 
   local_vcr_configure_log(file = stdout(), include_date = FALSE)
@@ -25,7 +24,7 @@ test_that("vcr_log_sprintf() adds additional metadata", {
 
   # Turn logging off and add a cassette
   local_vcr_configure_log(log = FALSE)
-  local_cassette("testing")
+  local_cassette("testing", warn_on_empty = FALSE)
 
   local_vcr_configure_log(file = stdout(), include_date = TRUE)
   expect_snapshot(vcr_log_sprintf("log"))

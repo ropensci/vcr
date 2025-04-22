@@ -83,6 +83,8 @@ Cassette <- R6::R6Class(
     to_return = NULL,
     #' @field cassette_opts (list) various cassette options
     cassette_opts = NULL,
+    #' @field warn_on_empty (logical) warn if no interactions recorded
+    warn_on_empty = TRUE,
 
     #' @description Create a new `Cassette` object
     #' @param dir The directory where the cassette will be stored.
@@ -108,6 +110,8 @@ Cassette <- R6::R6Class(
     #' in [vcr_configure()]. Default: `FALSE`
     #' @param clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file. Default: `FALSE`
+    #' @param warn_on_empty Warn when ejecting the cassette if no interactions
+    #'   have been recorded.
     #' @return A new `Cassette` object
     initialize = function(
       name,
@@ -118,7 +122,8 @@ Cassette <- R6::R6Class(
       serialize_with = NULL,
       preserve_exact_body_bytes = NULL,
       re_record_interval = NULL,
-      clean_outdated_http_interactions = NULL
+      clean_outdated_http_interactions = NULL,
+      warn_on_empty = NULL
     ) {
       check_cassette_name(name)
       config <- vcr_configuration()
@@ -139,6 +144,8 @@ Cassette <- R6::R6Class(
 
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
         config$clean_outdated_http_interactions
+
+      self$warn_on_empty <- warn_on_empty %||% config$warn_on_empty_cassette
 
       self$serializer <- serializer_fetch(
         self$serialize_with,
@@ -253,15 +260,13 @@ Cassette <- R6::R6Class(
     eject = function() {
       self$write_recorded_interactions_to_disk()
 
-      if (self$is_empty()) {
-        if (vcr_c$warn_on_empty_cassette) {
-          cli::cli_warn(c(
-            x = "{.str {self$name}} cassette ejected without recording any interactions.",
-            i = "Did your request error?",
-            i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
-            i = "If you are using crul/httr/httr2, are you sure you made an HTTP request?"
-          ))
-        }
+      if (self$is_empty() && self$warn_on_empty) {
+        cli::cli_warn(c(
+          x = "{.str {self$name}} cassette ejected without recording any interactions.",
+          i = "Did your request error?",
+          i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
+          i = "If you are using crul/httr/httr2, are you sure you made an HTTP request?"
+        ))
       }
       invisible(self)
     },

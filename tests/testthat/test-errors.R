@@ -1,8 +1,4 @@
 test_that("UnhandledHTTPRequestError fails well", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
   request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
 
   z <- UnhandledHTTPRequestError$new(request)
@@ -11,10 +7,7 @@ test_that("UnhandledHTTPRequestError fails well", {
     "There is currently no cassette in use"
   )
 
-  # insert a cassette
-  cas <- insert_cassette("asdsfd")
-  withr::defer(eject_cassette())
-
+  local_cassette("asdsfd", warn_on_empty = FALSE)
   # # types
   expect_error(
     UnhandledHTTPRequestError$new(5),
@@ -23,13 +16,8 @@ test_that("UnhandledHTTPRequestError fails well", {
 })
 
 test_that("UnhandledHTTPRequestError works as expected", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
   request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
-  cas <- insert_cassette("turtle")
-  withr::defer(eject_cassette())
+  local_cassette("turtle", warn_on_empty = FALSE)
 
   a <- UnhandledHTTPRequestError$new(request)
 
@@ -51,12 +39,10 @@ test_that("UnhandledHTTPRequestError works as expected", {
     HELLO_WORLD = "asdfadfasfsfs239823n23"
   )
   local_vcr_configure(
-    dir = withr::local_tempdir(),
     filter_sensitive_data = list(
       "<<foo_bar_key>>" = Sys.getenv("FOO_BAR"),
       "<<hello_world_key>>" = Sys.getenv("HELLO_WORLD")
-    ),
-    warn_on_empty_cassette = FALSE
+    )
   )
   url <- paste0(
     hb("/get?api_key="),
@@ -65,8 +51,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
     Sys.getenv("HELLO_WORLD")
   )
   request <- Request$new("get", url, "")
-  cas <- insert_cassette("bunny")
-  withr::defer(eject_cassette())
+  local_cassette("bunny", warn_on_empty = FALSE)
 
   a <- UnhandledHTTPRequestError$new(request)
 
@@ -95,15 +80,14 @@ test_that("UnhandledHTTPRequestError works as expected", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
     filter_sensitive_data = list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
-    warn_on_empty_cassette = FALSE
   )
   url <- hb("/get")
   request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
-  cas <- insert_cassette(
+  local_cassette(
     "frog",
-    match_requests_on = c("method", "uri", "headers")
+    match_requests_on = c("method", "uri", "headers"),
+    warn_on_empty = FALSE
   )
-  withr::defer(eject_cassette())
 
   a <- UnhandledHTTPRequestError$new(request)
 
@@ -126,17 +110,14 @@ test_that("UnhandledHTTPRequestError works as expected", {
   ## API key not found or empty (i.e., "")
   withr::local_envvar(HELLO_MARS = "asdfadfasfsfs239823n23")
   local_vcr_configure(
-    dir = withr::local_tempdir(),
     filter_sensitive_data = list(
       "<<bar_foo_key>>" = Sys.getenv("BAR_FOO"),
       "<<hello_mars_key>>" = Sys.getenv("HELLO_MARS")
-    ),
-    warn_on_empty_cassette = FALSE
+    )
   )
   url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
   request <- Request$new("get", url, "")
-  cas <- insert_cassette("bunny2")
-  withr::defer(eject_cassette())
+  local_cassette("bunny2", warn_on_empty = FALSE)
 
   a <- UnhandledHTTPRequestError$new(request)
 

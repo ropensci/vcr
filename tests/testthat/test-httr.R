@@ -15,22 +15,16 @@ test_that("httr status code works", {
   expect_error(x$handle())
 
   # do request
-  insert_cassette("greencow")
-  response <- x$handle()
-
+  use_cassette("greencow", response <- x$handle())
   expect_s3_class(response, "response")
   # status code is correct
   expect_equal(response$status_code, 404)
-  eject_cassette()
 
   # call again
-  insert_cassette("greencow")
-  response2 <- x$handle()
-
+  use_cassette("greencow", response2 <- x$handle())
   expect_s3_class(response2, "response")
   # status code is correct
   expect_equal(response2$status_code, 404)
-  eject_cassette()
 })
 
 test_that("httr use_cassette works", {

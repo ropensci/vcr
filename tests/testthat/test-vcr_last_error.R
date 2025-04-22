@@ -1,21 +1,13 @@
 test_that("vcr_last_error fails well", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
   the$last_error <- list()
-
   expect_error(vcr_last_error(), "no error to report")
 
   # insert  a cassette - same result
-  cas <- suppressMessages(insert_cassette("rabbit"))
-  withr::defer(eject_cassette())
+  local_cassette("rabbit", warn_on_empty = FALSE)
   expect_error(vcr_last_error(), "no error to report")
 })
 
 test_that("vcr_last_error works: no casssette in use yet", {
-  local_vcr_configure(dir = withr::local_tempdir())
-
   request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
   err <- UnhandledHTTPRequestError$new(request)
   expect_error(err$construct_message())
@@ -25,10 +17,9 @@ test_that("vcr_last_error works: no casssette in use yet", {
 })
 
 test_that("vcr_last_error works: casssette in use", {
-  local_vcr_configure(dir = withr::local_tempdir())
   request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
 
-  cas <- insert_cassette("bunny")
+  local_cassette("bunny", warn_on_empty = FALSE)
   err <- UnhandledHTTPRequestError$new(request)
   expect_error(err$construct_message())
   expect_message(

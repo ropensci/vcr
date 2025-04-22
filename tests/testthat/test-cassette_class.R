@@ -91,10 +91,7 @@ test_that("cassette checks name", {
     Cassette$new(strrep("x", 400))
   })
 
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
   local_cassette("foo")
   expect_snapshot(Cassette$new("foo"), error = TRUE)
 })
