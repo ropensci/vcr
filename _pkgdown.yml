@@ -60,7 +60,6 @@ reference:
       - VcrResponse
       - request_summary
       - response_summary
-      - vcr_log_file
       - crul_request
 
 articles:
