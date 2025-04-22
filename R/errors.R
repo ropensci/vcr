@@ -316,7 +316,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       x <- c(
         "try_debug_logger",
         "use_a_cassette",
-        "allow_http_connections_when_no_cassette",
         "ignore_request"
       )
       lapply(x, self$suggestion_for)
