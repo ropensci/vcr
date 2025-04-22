@@ -44,7 +44,6 @@ NULL
 #' \pkg{crul} as normal. Used in examples/tests.
 #'
 #' @format A list
-#' @name crul_request
 #' @docType data
 #' @keywords data
 NULL

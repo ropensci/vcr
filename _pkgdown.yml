@@ -60,7 +60,6 @@ reference:
       - VcrResponse
       - request_summary
       - response_summary
-      - crul_request
 
 articles:
   - title: All vignettes
