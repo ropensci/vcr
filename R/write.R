@@ -52,7 +52,7 @@ prep_interaction <- function(x, file, bytes) {
     list(
       request = list(
         method = x$request$method,
-        uri = x$request$uri,
+        uri = query_params_remove(x$request$uri),
         body = encode_body(x$request$body, NULL, bytes),
         headers = req_headers
       ),
@@ -90,7 +90,6 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
 # param bytes: logical, whether to preserve exact bytes or not
 write_interactions <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
-  z <- query_params_remove(z)
   tmp <- yaml::as.yaml(z)
   tmp <- sensitive_remove(tmp)
   cat(tmp, file = file, append = TRUE)
@@ -98,7 +97,6 @@ write_interactions <- function(x, file, bytes) {
 
 write_interactions_json <- function(x, file, bytes) {
   z <- prep_interaction(x, file, bytes)
-  z <- query_params_remove(z)
   # combine with existing data on same file, if any
   on_disk <- invisible(tryCatch(
     jsonlite::fromJSON(file, FALSE),

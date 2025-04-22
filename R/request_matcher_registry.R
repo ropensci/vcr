@@ -53,7 +53,7 @@ RequestMatcherRegistry <- R6::R6Class(
         "uri",
         function(r1, r2)
           identical(
-            curl::curl_unescape(query_params_remove_str(r1$uri)),
+            curl::curl_unescape(query_params_remove(r1$uri, flip = TRUE)),
             curl::curl_unescape(r2$uri)
           )
       )
