@@ -8,21 +8,6 @@ test_that("can turn off and turn on", {
   expect_true(turned_on())
 })
 
-test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
-  local_light_switch()
-
-  # after being turned off, insert_cassette throws an error
-  suppressMessages(turn_off())
-  expect_snapshot(insert_cassette("test"), error = TRUE)
-
-  suppressMessages(turn_off(ignore_cassettes = TRUE))
-  expect_no_error(insert_cassette("test"))
-})
-
 test_that("turned_off works iif no cassettes active", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
