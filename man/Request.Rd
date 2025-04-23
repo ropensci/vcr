@@ -2,7 +2,7 @@
 % Please edit documentation in R/request_class.R
 \name{Request}
 \alias{Request}
-\title{The request of an HTTPInteraction}
+\title{A request object}
 \description{
 object that handled all aspects of a request
 }

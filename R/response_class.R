@@ -1,4 +1,4 @@
-#' @title The response of an HTTPInteraction
+#' @title A response object
 #' @description Custom vcr http response object
 #' @export
 #' @keywords internal

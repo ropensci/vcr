@@ -34,7 +34,7 @@ dedup_keys <- function(x) {
 }
 
 encode_interactions <- function(x, bytes) {
-  assert(x, c("list", "HTTPInteraction"))
+  assert(x, "list")
 
   list(
     list(

@@ -30,7 +30,7 @@ response <- VcrResponse$new(
   list(this_is_my = "response_header"),
   resp_body
 )
-x <- HTTPInteraction$new(request = request, response = response)
+x <- list(request = request, response = response)
 
 test_that("write_interactions works as expected", {
   tfile <- withr::local_tempfile()

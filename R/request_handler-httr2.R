@@ -1,7 +1,7 @@
 #' @title RequestHandlerHttr2
 #' @description Methods for the httr2 package, building on [RequestHandler]
 #' @export
-#' @param request The request from an object of class `HttpInteraction`
+#' @param request The request from.
 #' @examples \dontrun{
 #' # GET request
 #' library(httr2)
@@ -29,7 +29,7 @@ RequestHandlerHttr2 <- R6::R6Class(
 
   public = list(
     #' @description Create a new `RequestHandlerHttr2` object
-    #' @param request The request from an object of class `HttpInteraction`
+    #' @param request The request
     #' @return A new `RequestHandlerHttr2` object
     initialize = function(request) {
       if (!length(request$method)) {

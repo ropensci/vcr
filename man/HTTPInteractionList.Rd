@@ -4,7 +4,7 @@
 \alias{HTTPInteractionList}
 \title{HTTPInteractionList class}
 \description{
-keeps track of all \link{HTTPInteraction} objects
+keeps track of all request-response pairs
 }
 \details{
 \strong{Private Methods}
@@ -27,50 +27,6 @@ Get a request summary (character)
 \item{\code{response_summary(z)}}{
 Get a response summary (character)
 }
-}
-}
-\examples{
-\dontrun{
-vcr_configure(
- dir = tempdir(),
- record = "once"
-)
-
-# make interactions
-## make the request
-### turn off mocking
-crul::mock(FALSE)
-url <- "https://hb.opencpu.org/post"
-cli <- crul::HttpClient$new(url = url)
-res <- cli$post(body = list(a = 5))
-
-## request
-(request <- Request$new("POST", url, list(a = 5), res$headers))
-## response
-(response <- VcrResponse$new(
-   res$status_http(),
-   res$response_headers,
-   res$parse("UTF-8"),
-   res$response_headers$status))
-## make an interaction
-(inter <- HTTPInteraction$new(request = request, response = response))
-
-# make an interactionlist
-(x <- HTTPInteractionList$new(
-   interactions = list(inter),
-   request_matchers = vcr_configuration()$match_requests_on
-))
-x$interactions
-x$request_matchers
-x$parent_list
-x$parent_list$response_for()
-x$parent_list$has_interaction_matching()
-x$parent_list$has_used_interaction_matching()
-x$parent_list$remaining_unused_interaction_count()
-x$used_interactions
-x$allow_playback_repeats
-x$interactions
-x$response_for(request)
 }
 }
 \section{Public fields}{
@@ -148,7 +104,7 @@ response object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{The request from an object of class \code{HTTPInteraction}}
+\item{\code{request}}{A request object}
 }
 \if{html}{\out{</div>}}
 }
@@ -165,7 +121,7 @@ Check if has a matching interaction
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{The request from an object of class \code{HTTPInteraction}}
+\item{\code{request}}{A request object}
 }
 \if{html}{\out{</div>}}
 }
@@ -185,7 +141,7 @@ check if has used interactions matching a given request
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{The request from an object of class \code{HTTPInteraction}}
+\item{\code{request}}{A request object}
 }
 \if{html}{\out{</div>}}
 }

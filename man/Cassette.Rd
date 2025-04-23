@@ -299,7 +299,7 @@ re_record_interval and clean_outdated_http_interactions settings
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{interactions}}{list of http interactions, of class \link{HTTPInteraction}}
+\item{\code{interactions}}{List of http interactions}
 }
 \if{html}{\out{</div>}}
 }
@@ -422,7 +422,7 @@ nothing returned
 \if{html}{\out{<a id="method-Cassette-make_http_interaction"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-make_http_interaction}{}}}
 \subsection{Method \code{make_http_interaction()}}{
-Make an \code{HTTPInteraction} object
+Make a request-response pairs
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$make_http_interaction(x)}\if{html}{\out{</div>}}
 }
@@ -435,7 +435,7 @@ Make an \code{HTTPInteraction} object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-an object of class \link{HTTPInteraction}
+A list with request and response.
 }
 }
 \if{html}{\out{<hr>}}
