@@ -341,7 +341,7 @@ Cassette <- R6::R6Class(
 
     #' @description Cleans out any old interactions based on the
     #' re_record_interval and clean_outdated_http_interactions settings
-    #' @param interactions list of http interactions, of class [HTTPInteraction]
+    #' @param interactions List of http interactions
     #' @return list of interactions to record
     up_to_date_interactions = function(interactions) {
       if (
@@ -427,7 +427,7 @@ Cassette <- R6::R6Class(
           z$response$body$string %||% z$response$body$base64_string,
           disk = z$response$body$file
         )
-        HTTPInteraction$new(request = request, response = response)
+        list(request = request, response = response)
       }))
     },
 
@@ -452,7 +452,10 @@ Cassette <- R6::R6Class(
         request_summary(int$request),
         response_summary(int$response)
       )
-      self$new_recorded_interactions <- c(self$new_recorded_interactions, int)
+      self$new_recorded_interactions <- c(
+        self$new_recorded_interactions,
+        list(int)
+      )
     },
 
     #' @description Are there any new recorded interactions?
@@ -476,9 +479,9 @@ Cassette <- R6::R6Class(
       )
     },
 
-    #' @description Make an `HTTPInteraction` object
+    #' @description Make a request-response pairs
     #' @param x A crul, httr, or httr2 response object, with the request at `$request`
-    #' @return an object of class [HTTPInteraction]
+    #' @return A list with request and response.
     make_http_interaction = function(x) {
       # for httr2, duplicate `body` slot in `content`
       if (inherits(x, "httr2_response")) x$content <- x$body
@@ -552,7 +555,7 @@ Cassette <- R6::R6Class(
         },
         disk = is_disk
       )
-      HTTPInteraction$new(request = request, response = response)
+      list(request = request, response = response)
     }
   )
 )

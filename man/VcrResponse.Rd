@@ -2,7 +2,7 @@
 % Please edit documentation in R/response_class.R
 \name{VcrResponse}
 \alias{VcrResponse}
-\title{The response of an HTTPInteraction}
+\title{A response object}
 \description{
 Custom vcr http response object
 }

@@ -52,9 +52,8 @@ test_that("HTTPInteractionList", {
     res2$response_headers$status
   )
 
-  # make HTTPInteraction object
-  inter <- HTTPInteraction$new(request = request, response = response)
-  inter2 <- HTTPInteraction$new(request = request2, response = response2)
+  inter <- list(request = request, response = response)
+  inter2 <- list(request = request2, response = response2)
 
   # make HTTPInteractionList object
   x <- suppressMessages(HTTPInteractionList$new(
@@ -75,8 +74,8 @@ test_that("HTTPInteractionList", {
   expect_type(x$used_interactions, "list")
   expect_false(x$allow_playback_repeats)
   expect_type(x$interactions, "list")
-  expect_s3_class(x$interactions[[1]], "HTTPInteraction")
-  expect_type(x$response_for, "closure")
+  expect_s3_class(x$interactions[[1]]$request, "Request")
+  expect_s3_class(x$interactions[[1]]$response, "VcrResponse")
   expect_s3_class(suppressWarnings(x$response_for(request)), "VcrResponse")
 
   # private methods
@@ -123,8 +122,8 @@ test_that("HTTPInteractionList", {
   priv <- x$.__enclos_env__$private
   expect_false(priv$matching_used_interaction_for(request))
   x$response_for(request) # request used
-  expect_s3_class(
-    priv$matching_used_interaction_for(request),
-    "HTTPInteraction"
-  )
+
+  interaction <- priv$matching_used_interaction_for(request)
+  expect_s3_class(interaction$request, "Request")
+  expect_s3_class(interaction$response, "VcrResponse")
 })

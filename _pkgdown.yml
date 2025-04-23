@@ -48,7 +48,6 @@ reference:
       You shouldn't need to use these directly
     contents:
       - Cassette
-      - HTTPInteraction
       - HTTPInteractionList
       - Request
       - RequestHandler

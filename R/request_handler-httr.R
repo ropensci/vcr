@@ -1,7 +1,7 @@
 #' @title RequestHandlerHttr
 #' @description Methods for the httr package, building on [RequestHandler]
 #' @export
-#' @param request The request from an object of class `HttpInteraction`
+#' @param request A request object
 #' @examples \dontrun{
 #' vcr_configure(
 #'  dir = tempdir(),
@@ -39,7 +39,7 @@ RequestHandlerHttr <- R6::R6Class(
 
   public = list(
     #' @description Create a new `RequestHandlerHttr` object
-    #' @param request The request from an object of class `HttpInteraction`
+    #' @param request A request object
     #' @return A new `RequestHandlerHttr` object
     initialize = function(request) {
       self$request_original <- request

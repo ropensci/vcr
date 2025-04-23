@@ -1,4 +1,4 @@
-#' @title The request of an HTTPInteraction
+#' @title A request object
 #' @description object that handled all aspects of a request
 #' @export
 #' @keywords internal

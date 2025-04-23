@@ -49,7 +49,7 @@ RequestHandler <- R6::R6Class(
     stubbed_response = NULL,
 
     #' @description Create a new `RequestHandler` object
-    #' @param request The request from an object of class `HttpInteraction`
+    #' @param request A request
     #' @return A new `RequestHandler` object
     initialize = function(request) {
       self$request_original <- request
