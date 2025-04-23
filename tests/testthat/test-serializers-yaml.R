@@ -9,14 +9,14 @@ test_that("generates expected yaml", {
     pkg_versions = function() "<package_versions>"
   )
 
-  request <- Request$new("GET", uri = "http://example.com")
-  response <- VcrResponse$new(200, list(name = "value"), body)
-  interaction <- list(request = request, respnse = response)
+  request <- Request$new(method = "GET", uri = "http://example.com")
+  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
+  interaction <- list(request = request, response = response)
 
   ser <- YAML$new(withr::local_tempdir(), "serialize")
   ser$serialize(list(interaction))
 
-  expect_snapshot_file(ser$path)
+  expect_snapshot(writeLines(readLines(ser$path)))
 })
 
 test_that("YAML usage", {
