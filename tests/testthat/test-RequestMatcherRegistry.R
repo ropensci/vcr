@@ -1,39 +1,34 @@
 test_that("RequestMatcherRegistry basic functionality works", {
-  one <- list(
+  a <- Request$new(
     method = "get",
     uri = "http://foo.bar",
     body = '{"key": "value"}',
     headers = list(a = 5, b = 6)
   )
-  two <- list(
+  b <- Request$new(
     method = "post",
     uri = "http://foo.bar/world",
     body = '{"key": "value"}',
     headers = list(a = 5, c = 7)
   )
-  three <- list(
+  c <- Request$new(
     method = "get",
     uri = "http://foo.bar?stuff=things",
     body = '{"key": "another-value"}',
     headers = list(a = 5, c = 7)
   )
-  four <- list(
+  d <- Request$new(
     method = "post",
     uri = "http://foo.bar?stuff=things7",
     body = '{"key": "another-value"}',
     headers = list(a = 5, c = 7)
   )
-  five <- list(
+  e <- Request$new(
     method = "post",
     uri = "http://foo.bar/world?stuff=things7",
     body = '{"key": "another-value"}',
     headers = list(a = 5, c = 7)
   )
-  a <- Request$new()$from_hash(one)
-  b <- Request$new()$from_hash(two)
-  c <- Request$new()$from_hash(three)
-  d <- Request$new()$from_hash(four)
-  e <- Request$new()$from_hash(five)
 
   # method
   rm <- RequestMatcherRegistry$new()

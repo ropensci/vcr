@@ -29,9 +29,6 @@ NullList <- R6::R6Class(
 #'     \item{\code{interaction_matches_request(request, interaction)}}{
 #'       Check if a request matches an interaction (logical)
 #'     }
-#'     \item{\code{from_hash()}}{
-#'       Get a hash back.
-#'     }
 #'     \item{\code{request_summary(z)}}{
 #'       Get a request summary (character)
 #'     }
@@ -121,8 +118,8 @@ HTTPInteractionList <- R6::R6Class(
         function(x) {
           sprintf(
             "%s => %s",
-            request_summary(Request$new()$from_hash(x$request)),
-            response_summary(VcrResponse$new()$from_hash(x$response))
+            request_summary(x$request),
+            response_summary(x$response)
           )
         },
         ""
@@ -154,9 +151,9 @@ HTTPInteractionList <- R6::R6Class(
         )
         vcr_log_sprintf(
           "  Found matching interaction for %s at index %s: %s",
-          request_summary(Request$new()$from_hash(request)),
+          request_summary(request),
           index,
-          response_summary(VcrResponse$new()$from_hash(interaction$response))
+          response_summary(interaction$response)
         )
         interaction$response
       } else {
