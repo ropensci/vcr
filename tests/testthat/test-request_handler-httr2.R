@@ -10,10 +10,7 @@ test_that("httr2 status code works", {
   expect_s3_class(httr2_obj, "httr2_request")
 
   x <- RequestHandlerHttr2$new(httr2_obj)
-
   expect_s3_class(x, "RequestHandlerHttr2")
-  expect_type(x$handle, "closure")
-  expect_error(x$handle())
 
   # do request
   insert_cassette("bluecow")

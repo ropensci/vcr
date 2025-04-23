@@ -58,7 +58,7 @@ RequestHandlerHttr <- R6::R6Class(
 
   private = list(
     # these will replace those in
-    on_ignored_request = function(request) {
+    on_ignored_request = function() {
       # perform and return REAL http response
       # * make real request
       # * give back real response
@@ -66,23 +66,23 @@ RequestHandlerHttr <- R6::R6Class(
       # real request
       webmockr::httr_mock(FALSE)
       on.exit(webmockr::httr_mock(TRUE), add = TRUE)
-      tmp2 <- eval(parse(text = paste0("httr::", request$method)))(
-        request$url,
-        body = take_body(request),
-        do.call(httr::config, request$options),
-        httr::add_headers(request$headers)
+      tmp2 <- eval(parse(text = paste0("httr::", self$request$method)))(
+        self$request$url,
+        body = take_body(self$request),
+        do.call(httr::config, self$request$options),
+        httr::add_headers(self$request$headers)
       )
 
       # return real response
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function(request) {
+    on_stubbed_by_vcr_request = function() {
       # return stubbed vcr response - no real response to do
-      serialize_to_httr(request, super$get_stubbed_response(request))
+      serialize_to_httr(self$request, super$get_stubbed_response(self$request))
     },
 
-    on_recordable_request = function(request) {
+    on_recordable_request = function() {
       # do real request - then stub response - then return stubbed vcr response
       # - this may need to be called from webmockr httradapter?
 

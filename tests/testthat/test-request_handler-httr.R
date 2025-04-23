@@ -9,10 +9,7 @@ test_that("httr status code works", {
   expect_s3_class(httr_obj, "request")
 
   x <- RequestHandlerHttr$new(httr_obj)
-
   expect_s3_class(x, "RequestHandlerHttr")
-  expect_type(x$handle, "closure")
-  expect_error(x$handle())
 
   # do request
   use_cassette("greencow", response <- x$handle())
