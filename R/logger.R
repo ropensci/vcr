@@ -73,7 +73,7 @@ vcr_log_sprintf <- function(message, ...) {
   message <- sprintf(message, ...)
 
   if (vcr_c$log_opts$include_date) {
-    date <- format(Sys.time(), format = "%Y-%m-%d %H:%M:%S")
+    date <- cur_time()
   } else {
     date <- NULL
   }

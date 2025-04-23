@@ -6,7 +6,7 @@ test_that("generates correct path", {
 test_that("generates expected yaml", {
   local_vcr_configure(json_pretty = TRUE)
   local_mocked_bindings(
-    Sys.time = function() as.POSIXct("2024-01-01"),
+    Sys.time = function() as.POSIXct("2024-01-01", tz = "UTC"),
     pkg_versions = function() "<package_versions>"
   )
 

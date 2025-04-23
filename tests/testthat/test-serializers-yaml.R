@@ -5,7 +5,7 @@ test_that("correctly computes path", {
 
 test_that("generates expected yaml", {
   local_mocked_bindings(
-    Sys.time = function() as.POSIXct("2024-01-01"),
+    Sys.time = function() as.POSIXct("2024-01-01", tz = "UTC"),
     pkg_versions = function() "<package_versions>"
   )
 

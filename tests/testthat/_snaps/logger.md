@@ -10,5 +10,5 @@
     Code
       vcr_log_sprintf("log")
     Output
-      2024-01-01 00:00:00 - [Cassette: "testing"] - log
+      2023-12-31 18:00:00 - [Cassette: "testing"] - log
 
