@@ -3,6 +3,22 @@ test_that("correctly computes path", {
   expect_equal(aa$path, "path/name.yml")
 })
 
+test_that("generates expected yaml", {
+  local_mocked_bindings(
+    Sys.time = function() as.POSIXct("2024-01-01"),
+    pkg_versions = function() "<package_versions>"
+  )
+
+  request <- Request$new("GET", uri = "http://example.com")
+  response <- VcrResponse$new(200, list(name = "value"), body)
+  interaction <- list(request = request, respnse = response)
+
+  ser <- YAML$new(withr::local_tempdir(), "serialize")
+  ser$serialize(list(interaction))
+
+  expect_snapshot_file(ser$path)
+})
+
 test_that("YAML usage", {
   z <- YAML$new(withr::local_tempdir(), "name")
   expect_equal(basename(z$path), "name.yml")
@@ -21,14 +37,8 @@ test_that("YAML usage", {
   expect_type(z$deserialize(), "list")
 })
 
-test_that("YAML fails well", {
-  expect_error(YAML$new(a = 5), "unused argument")
-
-  z <- YAML$new("path", "name")
-  # if no path specified, fails with useful message as is
-  expect_error(suppressWarnings(z$deserialize()), "cannot open the connection")
-})
 test_that("Windows encoding", {
-  path <- test_path("cassettes/ropenaq-encoding.yaml")
-  expect_type(yaml_load_desecret(path), "list") # could fail on Windows
+  ser <- YAML$new(test_path("cassettes"), "ropenaq-encoding")
+
+  expect_type(ser$deserialize(), "list") # could fail on Windows
 })

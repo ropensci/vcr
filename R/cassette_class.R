@@ -148,7 +148,8 @@ Cassette <- R6::R6Class(
       self$serializer <- serializer_fetch(
         self$serialize_with,
         path = self$root_dir,
-        name = self$name
+        name = self$name,
+        preserve_bytes = self$preserve_exact_body_bytes
       )
     },
 
@@ -415,7 +416,7 @@ Cassette <- R6::R6Class(
     previously_recorded_interactions = function() {
       if (self$is_empty()) return(list())
 
-      interactions <- self$serializer$deserialize(self)$http_interactions
+      interactions <- self$serializer$deserialize()$http_interactions
 
       compact(lapply(interactions, function(z) {
         request <- Request$new(
@@ -446,7 +447,7 @@ Cassette <- R6::R6Class(
 
       interactions <- self$merged_interactions()
       if (length(interactions) == 0) return(NULL)
-      self$serializer$serialize(interactions, self$preserve_exact_body_bytes)
+      self$serializer$serialize(interactions)
     },
 
     #' @description record an http interaction (doesn't write to disk)

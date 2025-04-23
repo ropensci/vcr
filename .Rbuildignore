@@ -8,7 +8,6 @@ man-roxygen
 ^cran-comments\.md$
 ^README\.Rmd$
 ^README\.md$
-^.*\.yml
 ^.*\.log
 Makefile
 scott_notes.md
