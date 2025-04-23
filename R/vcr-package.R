@@ -36,14 +36,3 @@
 #' @importFrom urltools url_parse url_compose
 ## usethis namespace: end
 NULL
-
-#' An HTTP request as prepared by the \pkg{crul} package
-#'
-#' The object is a list, and is the object that is passed on to
-#' \pkg{webmockr} and \pkg{vcr} instead of routing through
-#' \pkg{crul} as normal. Used in examples/tests.
-#'
-#' @format A list
-#' @docType data
-#' @keywords data
-NULL

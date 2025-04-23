@@ -14,8 +14,6 @@
 #' x$body
 #' x$status
 #' x$headers
-#' x$to_hash()
-#' x$from_hash(x$to_hash())
 #'
 #' # check if body is compressed
 #' url <- "https://fishbase.ropensci.org"
@@ -74,29 +72,6 @@ VcrResponse <- R6::R6Class(
     #' @description print method for the `VcrResponse` class
     #' @param x self
     #' @param ... ignored
-    print = function(x, ...) cat("<VcrResponse> ", sep = "\n"),
-
-    #' @description Create a hash
-    #' @return a list
-    to_hash = function() {
-      list(
-        status = self$status,
-        headers = self$headers,
-        body = self$body,
-        disk = self$disk
-      )
-    },
-
-    #' @description Get a hash back to an R list
-    #' @param hash a list
-    #' @return an `VcrResponse` object
-    from_hash = function(hash) {
-      VcrResponse$new(
-        hash[["status"]],
-        hash[["headers"]],
-        hash[["body"]] %||% "",
-        hash[["disk"]]
-      )
-    }
+    print = function(x, ...) cat("<VcrResponse> ", sep = "\n")
   )
 )

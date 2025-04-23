@@ -18,8 +18,6 @@
 #' x$host
 #' x$path
 #' x$headers
-#' h <- x$to_hash()
-#' x$from_hash(h)
 Request <- R6::R6Class(
   'Request',
   public = list(
@@ -101,31 +99,6 @@ Request <- R6::R6Class(
       if (!missing(fields)) self$fields <- fields
       if (!missing(output)) self$output <- output
       if (!missing(policies)) self$policies <- policies
-    },
-
-    #' @description Convert the request to a list
-    #' @return list
-    to_hash = function() {
-      list(
-        method = self$method,
-        uri = self$uri,
-        body = self$body,
-        headers = self$headers,
-        disk = self$disk
-      )
-    },
-
-    #' @description Convert the request to a list
-    #' @param hash a list
-    #' @return a new `Request` object
-    from_hash = function(hash) {
-      Request$new(
-        method = hash[['method']],
-        uri = hash[['uri']],
-        body = hash[['body']] %||% "",
-        headers = hash[['headers']],
-        disk = hash[['disk']]
-      )
     }
   ),
   private = list(

@@ -44,5 +44,4 @@ test_that("request_summary works", {
 
 test_that("request_summary fails well", {
   expect_error(request_summary(), "\"request\" is missing")
-  expect_error(request_summary(5), "is not TRUE")
 })

@@ -21,9 +21,6 @@ asdfadfs
 \item{\code{interaction_matches_request(request, interaction)}}{
 Check if a request matches an interaction (logical)
 }
-\item{\code{from_hash()}}{
-Get a hash back.
-}
 \item{\code{request_summary(z)}}{
 Get a request summary (character)
 }

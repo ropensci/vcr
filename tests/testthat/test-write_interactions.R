@@ -31,7 +31,6 @@ response <- VcrResponse$new(
   resp_body
 )
 x <- HTTPInteraction$new(request = request, response = response)
-x <- x$to_hash()
 
 test_that("write_interactions works as expected", {
   tfile <- withr::local_tempfile()

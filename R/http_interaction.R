@@ -1,16 +1,6 @@
 #' @title HTTPInteraction class
 #' @description object holds request and response objects
 #' @export
-#' @details
-#' \strong{Methods}
-#'   \describe{
-#'     \item{\code{to_hash()}}{
-#'       Create a hash from the HTTPInteraction object
-#'     }
-#'     \item{\code{from_hash(hash)}}{
-#'       Create a HTTPInteraction object from a hash
-#'     }
-#'   }
 #' @examples \dontrun{
 #' # make the request
 #' library(vcr)
@@ -32,14 +22,6 @@
 #' # make HTTPInteraction object
 #' (x <- HTTPInteraction$new(request = request, response = response))
 #' x$recorded_at
-#' x$to_hash()
-#'
-#' # make an HTTPInteraction from a hash with the object already made
-#' x$from_hash(x$to_hash())
-#'
-#' # Make an HTTPInteraction from a hash alone
-#' my_hash <- x$to_hash()
-#' HTTPInteraction$new()$from_hash(my_hash)
 #' }
 HTTPInteraction <- R6::R6Class(
   'HTTPInteraction',
@@ -60,16 +42,6 @@ HTTPInteraction <- R6::R6Class(
       if (!missing(request)) self$request <- request
       if (!missing(response)) self$response <- response
       self$recorded_at <- Sys.time()
-    },
-
-    #' @description Create a hash from the HTTPInteraction object
-    #' @return a named list
-    to_hash = function() {
-      list(
-        request = self$request$to_hash(),
-        response = self$response$to_hash(),
-        recorded_at = self$recorded_at
-      )
     }
   )
 )
