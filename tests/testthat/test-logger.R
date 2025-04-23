@@ -18,7 +18,7 @@ test_that("logging is silent unless enabled", {
 
 test_that("vcr_log_sprintf() adds additional metadata", {
   local_mocked_bindings(
-    Sys.time = function() as.POSIXct("2024-01-01", tz = "UTC")
+    cur_time = function(tz) "2024-01-01 12:00:00"
   )
 
   local_vcr_configure_log(file = stdout(), include_date = FALSE)

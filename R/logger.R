@@ -94,6 +94,3 @@ vcr_log_sprintf <- function(message, ...) {
 
   cat(message, sep = "\n", file = file, append = TRUE)
 }
-
-# To allow mocking
-Sys.time <- NULL
