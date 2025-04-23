@@ -16,10 +16,7 @@ test_that("RequestHandlerHttr: httr", {
 
   load("httr_obj.rda")
   x <- RequestHandlerHttr$new(httr_obj)
-
   expect_s3_class(x, "RequestHandlerHttr")
-  expect_type(x$handle, "closure")
-  expect_error(x$handle())
 
   # do request
   local_cassette("greencow", warn_on_empty = FALSE)

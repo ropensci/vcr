@@ -5,18 +5,18 @@ RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
   inherit = RequestHandler,
   private = list(
-    on_ignored_request = function(request) {
+    on_ignored_request = function() {
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function(request) {
+    on_stubbed_by_vcr_request = function() {
       # return stubbed vcr response - no real response to do
-      serialize_to_crul(request, super$get_stubbed_response(request))
+      serialize_to_crul(self$request, super$get_stubbed_response(self$request))
     },
 
-    on_recordable_request = function(request) {
+    on_recordable_request = function() {
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)
 
