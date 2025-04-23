@@ -33,15 +33,14 @@ dedup_keys <- function(x) {
   return(x)
 }
 
-prep_interaction <- function(x, file, bytes) {
+encode_interactions <- function(x, bytes) {
   assert(x, c("list", "HTTPInteraction"))
-  assert(file, "character")
 
   list(
     list(
       request = list(
         method = x$request$method,
-        uri = query_params_remove(x$request$uri),
+        uri = encode_uri(x$request$uri),
         body = encode_body(x$request$body, NULL, bytes),
         headers = encode_headers(x$request$headers, "request")
       ),
@@ -71,6 +70,8 @@ encode_headers <- function(headers, type = c("request", "response")) {
     headers <- request_headers_redact(headers)
   }
 
+  headers <- sensitive_remove(headers)
+
   headers <- unclass(headers)
   headers
 }
@@ -87,7 +88,7 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
   } else {
     compact(list(
       encoding = "",
-      string = body %||% "",
+      string = sensitive_remove(body) %||% "",
       file = file
     ))
   }
@@ -97,14 +98,13 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
 # param file: a file path
 # param bytes: logical, whether to preserve exact bytes or not
 write_interactions <- function(x, file, bytes) {
-  z <- prep_interaction(x, file, bytes)
+  z <- encode_interactions(x, bytes)
   tmp <- yaml::as.yaml(z)
-  tmp <- sensitive_remove(tmp)
   cat(tmp, file = file, append = TRUE)
 }
 
 write_interactions_json <- function(x, file, bytes) {
-  z <- prep_interaction(x, file, bytes)
+  z <- encode_interactions(x, bytes)
   # combine with existing data on same file, if any
   on_disk <- invisible(tryCatch(
     jsonlite::fromJSON(file, FALSE),
@@ -118,7 +118,6 @@ write_interactions_json <- function(x, file, bytes) {
     auto_unbox = TRUE,
     pretty = vcr_c$json_pretty
   )
-  tmp <- sensitive_remove(tmp)
   cat(paste0(tmp, "\n"), file = file)
 }
 

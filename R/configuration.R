@@ -296,7 +296,11 @@ VCRConfig <- R6::R6Class(
     },
     filter_sensitive_data = function(value) {
       if (missing(value)) return(private$.filter_sensitive_data)
-      private$.filter_sensitive_data <- assert(value, "list")
+      assert(value, "list")
+      for (i in seq_along(value)) {
+        value[[i]] <- trimquotes(value[[i]], names(value)[i])
+      }
+      private$.filter_sensitive_data <- value
     },
     filter_sensitive_data_regex = function(value) {
       if (missing(value)) return(private$.filter_sensitive_data_regex)

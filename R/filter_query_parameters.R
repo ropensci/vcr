@@ -1,6 +1,6 @@
 #' Remove or replace query parameters
 #' @noRd
-query_params_remove <- function(
+encode_uri <- function(
   uri,
   filter = vcr_c$filter_query_parameters,
   flip = FALSE
@@ -25,6 +25,8 @@ query_params_remove <- function(
       uri <- replace_param(uri, names(to_replace)[[i]], val)
     }
   }
+
+  uri <- sensitive_remove(uri)
 
   uri
 }
