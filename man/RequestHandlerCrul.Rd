@@ -6,63 +6,6 @@
 \description{
 Methods for the crul package, building on \link{RequestHandler}
 }
-\examples{
-\dontrun{
-vcr_configure(
- dir = tempdir(),
- record = "once"
-)
-
-data(crul_request)
-crul_request$url$handle <- curl::new_handle()
-crul_request
-x <- RequestHandlerCrul$new(crul_request)
-# x$handle()
-
-# body matching
-library(vcr)
-library(crul)
-vcr_configure(dir = tempdir(), log = TRUE,
- log_opts = list(file = file.path(tempdir(), "vcr.log")))
-cli <- HttpClient$new(url = "https://hb.opencpu.org")
-
-## testing, same uri and method, changed body in 2nd block
-use_cassette(name = "apple7", {
-  resp <- cli$post("post", body = list(foo = "bar"))
-}, match_requests_on = c("method", "uri", "body"))
-## should error, b/c record="once"
-if (interactive()) {
-  use_cassette(name = "apple7", {
-    resp <- cli$post("post", body = list(foo = "bar"))
-    resp2 <- cli$post("post", body = list(hello = "world"))
-  }, match_requests_on = c("method", "uri", "body"))
-}
-cas <- insert_cassette(name = "apple7",
-  match_requests_on = c("method", "uri", "body"))
-resp2 <- cli$post("post", body = list(foo = "bar"))
-eject_cassette()
-
-## testing, same body, changed method in 2nd block
-if (interactive()) {
-use_cassette(name = "apple8", {
-  x <- cli$post("post", body = list(hello = "world"))
-}, match_requests_on = c("method", "body"))
-use_cassette(name = "apple8", {
-  x <- cli$get("post", body = list(hello = "world"))
-}, match_requests_on = c("method", "body"))
-}
-
-## testing, same body, changed uri in 2nd block
-# use_cassette(name = "apple9", {
-#   x <- cli$post("post", body = list(hello = "world"))
-#   w <- cli$post("get", body = list(hello = "world"))
-# }, match_requests_on = c("method", "body"))
-# use_cassette(name = "apple9", {
-#   NOTHING HERE
-# }, match_requests_on = c("method", "body"))
-# unlink(file.path(vcr_configuration()$dir, "apple9.yml"))
-}
-}
 \section{Super class}{
 \code{\link[vcr:RequestHandler]{vcr::RequestHandler}} -> \code{RequestHandlerCrul}
 }
