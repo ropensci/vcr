@@ -35,8 +35,6 @@ x$headers
 
 \item{\code{headers}}{(character) named list}
 
-\item{\code{hash}}{(character) a named list - internal use}
-
 \item{\code{disk}}{(logical) xx}
 
 \item{\code{fields}}{(various) request body details}
