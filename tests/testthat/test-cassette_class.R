@@ -8,6 +8,10 @@ test_that("checks constructor args", {
   })
 })
 
+test_that("has nice print method", {
+  expect_snapshot(Cassette$new("test"))
+})
+
 test_that("cassette warns if ejected with no interactions", {
   cl <- Cassette$new("test")
   cl$insert()
