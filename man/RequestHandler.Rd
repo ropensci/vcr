@@ -10,9 +10,6 @@ request is stubbed, to be ignored, recordable, or unhandled
 \details{
 \strong{Private Methods}
 \describe{
-\item{\code{request_type(request)}}{
-Get the request type
-}
 \item{\code{externally_stubbed()}}{
 just returns FALSE
 }
