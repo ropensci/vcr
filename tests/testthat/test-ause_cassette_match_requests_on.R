@@ -182,13 +182,21 @@ test_that("use_cassette: match_requests_on - body works w/ httr", {
   # run it
   aa <- use_cassette(
     "testing4",
-    res <- httr::POST(hb("/post"), query = list(a = 5), body = list(foo = "bar")),
+    res <- httr::POST(
+      hb("/post"),
+      query = list(a = 5),
+      body = list(foo = "bar")
+    ),
     match_requests_on = c("method", "body")
   )
   # run it again
   bb <- use_cassette(
     "testing4",
-    res <- httr::POST(hb("/post"), query = list(b = 2), body = list(foo = "bar")),
+    res <- httr::POST(
+      hb("/post"),
+      query = list(b = 2),
+      body = list(foo = "bar")
+    ),
     match_requests_on = c("method", "body")
   )
   # the recorded_at time doesn't change
