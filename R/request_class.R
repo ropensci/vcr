@@ -25,22 +25,10 @@ Request <- R6::R6Class(
     method = NULL,
     #' @field uri (character) a uri
     uri = NULL,
-    #' @field scheme (character) scheme (http or https)
-    scheme = NULL,
-    #' @field host (character) host (e.g., stuff.org)
-    host = NULL,
-    #' @field path (character) path (e.g., foo/bar)
-    path = NULL,
-    #' @field query (character) query params, named list
-    query = NULL,
     #' @field body (character) named list
     body = NULL,
     #' @field headers (character) named list
     headers = NULL,
-    #' @field skip_port_stripping (logical) whether to strip the port
-    skip_port_stripping = FALSE,
-    #' @field hash (character) a named list - internal use
-    hash = NULL,
     #' @field disk (logical) xx
     disk = NULL,
     #' @field fields (various) request body details
@@ -60,8 +48,6 @@ Request <- R6::R6Class(
     #' @param fields (various) post fields
     #' @param output (various) output details
     #' @param policies (various) http policies, used in httr2 only
-    #' @param skip_port_stripping (logical) whether to strip the port.
-    #' default: `FALSE`
     #' @return A new `Request` object
     initialize = function(
       method,
@@ -71,8 +57,7 @@ Request <- R6::R6Class(
       disk,
       fields,
       output,
-      policies,
-      skip_port_stripping = FALSE
+      policies
     ) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
@@ -82,41 +67,11 @@ Request <- R6::R6Class(
         self$body <- body
       }
       if (!missing(headers)) self$headers <- headers
-      if (!missing(uri)) {
-        if (!skip_port_stripping) {
-          self$uri <- private$without_standard_port(uri)
-        } else {
-          self$uri <- uri
-        }
-        # parse URI to get host and path
-        tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
-        self$scheme <- tmp$scheme
-        self$host <- tmp$domain
-        self$path <- tmp$path
-        self$query <- tmp$parameter
-      }
+      if (!missing(uri)) self$uri <- uri
       if (!missing(disk)) self$disk <- disk
       if (!missing(fields)) self$fields <- fields
       if (!missing(output)) self$output <- output
       if (!missing(policies)) self$policies <- policies
-    }
-  ),
-  private = list(
-    without_standard_port = function(uri) {
-      if (is.null(uri)) return(uri)
-      u <- private$parsed_uri(uri)
-      if (
-        paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in%
-          c('http', 'https/443')
-      ) {
-        return(uri)
-      }
-      u$port <- NA
-      return(urltools::url_compose(u))
-    },
-
-    parsed_uri = function(uri) {
-      urltools::url_parse(uri)
     }
   )
 )

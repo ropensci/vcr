@@ -31,19 +31,9 @@ x$headers
 
 \item{\code{uri}}{(character) a uri}
 
-\item{\code{scheme}}{(character) scheme (http or https)}
-
-\item{\code{host}}{(character) host (e.g., stuff.org)}
-
-\item{\code{path}}{(character) path (e.g., foo/bar)}
-
-\item{\code{query}}{(character) query params, named list}
-
 \item{\code{body}}{(character) named list}
 
 \item{\code{headers}}{(character) named list}
-
-\item{\code{skip_port_stripping}}{(logical) whether to strip the port}
 
 \item{\code{hash}}{(character) a named list - internal use}
 
@@ -70,17 +60,7 @@ x$headers
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(
-  method,
-  uri,
-  body,
-  headers,
-  disk,
-  fields,
-  output,
-  policies,
-  skip_port_stripping = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, disk, fields, output, policies)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -102,9 +82,6 @@ post, put, patch or delete)}
 \item{\code{output}}{(various) output details}
 
 \item{\code{policies}}{(various) http policies, used in httr2 only}
-
-\item{\code{skip_port_stripping}}{(logical) whether to strip the port.
-default: \code{FALSE}}
 }
 \if{html}{\out{</div>}}
 }

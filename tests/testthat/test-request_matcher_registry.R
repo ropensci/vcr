@@ -37,6 +37,19 @@ test_that("can match by url", {
   ))
 })
 
+test_that("default uri matched ignores port", {
+  expect_true(request_matches_one(
+    "uri",
+    list(uri = "http://a.com:123"),
+    list(uri = "http://a.com:345")
+  ))
+  expect_false(request_matches_one(
+    "uri_with_port",
+    list(uri = "http://a.com:123"),
+    list(uri = "http://a.com:345")
+  ))
+})
+
 test_that("can match by host", {
   expect_true(request_matches_one(
     "host",
