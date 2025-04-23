@@ -1,5 +1,6 @@
 request_matches <- function(req1, req2, match_requests_on) {
   for (matcher in match_requests_on) {
+    match <- request_matches_one(matcher, req1, req2)
     vcr_log_sprintf(
       "    %s %s: current request [%s] vs [%s]",
       y,
