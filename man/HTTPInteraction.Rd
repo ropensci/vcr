@@ -6,17 +6,6 @@
 \description{
 object holds request and response objects
 }
-\details{
-\strong{Methods}
-\describe{
-\item{\code{to_hash()}}{
-Create a hash from the HTTPInteraction object
-}
-\item{\code{from_hash(hash)}}{
-Create a HTTPInteraction object from a hash
-}
-}
-}
 \examples{
 \dontrun{
 # make the request
@@ -39,14 +28,6 @@ res <- cli$post(body = body)
 # make HTTPInteraction object
 (x <- HTTPInteraction$new(request = request, response = response))
 x$recorded_at
-x$to_hash()
-
-# make an HTTPInteraction from a hash with the object already made
-x$from_hash(x$to_hash())
-
-# Make an HTTPInteraction from a hash alone
-my_hash <- x$to_hash()
-HTTPInteraction$new()$from_hash(my_hash)
 }
 }
 \section{Public fields}{
@@ -64,7 +45,6 @@ HTTPInteraction$new()$from_hash(my_hash)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-HTTPInteraction-new}{\code{HTTPInteraction$new()}}
-\item \href{#method-HTTPInteraction-to_hash}{\code{HTTPInteraction$to_hash()}}
 \item \href{#method-HTTPInteraction-clone}{\code{HTTPInteraction$clone()}}
 }
 }
@@ -90,19 +70,6 @@ Create a new \code{HTTPInteraction} object
 }
 \subsection{Returns}{
 A new \code{HTTPInteraction} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-HTTPInteraction-to_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-HTTPInteraction-to_hash}{}}}
-\subsection{Method \code{to_hash()}}{
-Create a hash from the HTTPInteraction object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{HTTPInteraction$to_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-a named list
 }
 }
 \if{html}{\out{<hr>}}

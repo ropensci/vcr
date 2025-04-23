@@ -22,8 +22,6 @@ x$uri
 x$host
 x$path
 x$headers
-h <- x$to_hash()
-x$from_hash(h)
 }
 \keyword{internal}
 \section{Public fields}{
@@ -63,8 +61,6 @@ x$from_hash(h)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Request-new}{\code{Request$new()}}
-\item \href{#method-Request-to_hash}{\code{Request$to_hash()}}
-\item \href{#method-Request-from_hash}{\code{Request$from_hash()}}
 \item \href{#method-Request-clone}{\code{Request$clone()}}
 }
 }
@@ -114,39 +110,6 @@ default: \code{FALSE}}
 }
 \subsection{Returns}{
 A new \code{Request} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Request-to_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-Request-to_hash}{}}}
-\subsection{Method \code{to_hash()}}{
-Convert the request to a list
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$to_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Request-from_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-Request-from_hash}{}}}
-\subsection{Method \code{from_hash()}}{
-Convert the request to a list
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$from_hash(hash)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{hash}}{a list}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a new \code{Request} object
 }
 }
 \if{html}{\out{<hr>}}
