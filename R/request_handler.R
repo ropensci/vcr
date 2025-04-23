@@ -55,8 +55,7 @@ RequestHandler <- R6::R6Class(
           request$method,
           request$url$url %||% request$url,
           take_body(request) %||% "",
-          request$headers,
-          disk = !is.null(request$output$path)
+          request$headers
         )
       }
     },
