@@ -50,54 +50,27 @@ RequestHandlerHttr2 <- R6::R6Class(
   ),
 
   private = list(
-    # these will replace those in
     on_ignored_request = function() {
-      # perform and return REAL http response
-      # * make real request
-      # * give back real response
-
-      # real request
-      webmockr::httr2_mock(FALSE)
-      on.exit(webmockr::httr2_mock(TRUE), add = TRUE)
-      response <- httr2::req_perform(self$request)
-
-      # return real response
-      return(response)
+      httr2::local_mocked_responses(NULL)
+      httr2::req_perform(self$request_original)
     },
 
     on_stubbed_by_vcr_request = function() {
-      # print("------- on_stubbed_by_vcr_request -------")
-      # return stubbed vcr response - no real response to do
       serialize_to_httr2(self$request, super$get_stubbed_response(self$request))
     },
 
     on_recordable_request = function() {
-      # print("------- on_recordable_request -------")
-      # do real request - then stub response - then return stubbed vcr response
-      # real request
-      webmockr::httr2_mock(FALSE)
-      on.exit(webmockr::httr2_mock(TRUE), add = TRUE)
-      xx <- httr2::req_error(
-        self$request_original,
-        is_error = function(resp) FALSE
-      )
-      # print(xx)
-      tryCatch(httr2::req_perform(xx), error = function(e) e)
-      tmp2 <- httr2::last_response()
-      # print("------- after the req_perform -------")
+      httr2::local_mocked_responses(NULL)
 
-      response <- webmockr::build_httr2_response(self$request_original, tmp2)
+      req <- self$request_original
+      req <- httr2::req_error(req, is_error = \(resp) FALSE)
+      resp <- httr2::req_perform(req)
 
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      response$request <- self$request_original
-      response$request$method <- webmockr:::req_method_get_w(response$request)
-      current_cassette()$record_http_interaction(response)
-
-      # return real response
-      # print("------- before return -------")
-      return(response)
+      current_cassette()$record_http_interaction(resp)
+      resp
     }
   )
 )
@@ -130,7 +103,9 @@ serialize_to_httr2 <- function(request, response) {
   resp$set_status(status = response$status$status_code %||% 200)
 
   # generate httr2 response
-  webmockr::build_httr2_response(as_httr2_request(req), resp)
+  resp <- webmockr::build_httr2_response(as_httr2_request(req), resp)
+  attr(resp$headers, "redact") <- character()
+  resp
 }
 
 as_httr2_request <- function(x) {
@@ -145,5 +120,30 @@ as_httr2_request <- function(x) {
       policies = x$policies
     ),
     class = "httr2_request"
+  )
+}
+
+#' @note adapted from httr2:::req_body_get
+#' @keywords internal
+take_body.httr2_request <- function(x) {
+  if (is.null(x$body)) {
+    return("")
+  }
+  switch(
+    x$body$type,
+    raw = {
+      # httr2::req_body_raw allows raw or string
+      if (is_raw(x$body$data)) rawToChar(x$body$data) else x$body$data
+    },
+    form = {
+      data <- x$body$data # need to put back unobfuscate?
+      httr2_url_build(data)
+    },
+    json = rlang::exec(jsonlite::toJSON, x$body$data, !!!x$body$params),
+    # FIXME: for now take the file path - would be good to get what would
+    # be sent in a real request
+    "raw-file" = x$body$data,
+    multipart = x$body$data,
+    cli::cli_abort("Unsupported request body type {.str {x$body$type}}.")
   )
 }
