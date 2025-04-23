@@ -34,15 +34,6 @@ error_suggestions <- list(
     url = "https://books.ropensci.org/http-testing/intro"
   ),
 
-  allow_http_connections_when_no_cassette = list(
-    text = c(
-      "If you only want vcr to handle requests made while a cassette is in use,",
-      "configure `allow_http_connections_when_no_cassette = TRUE`. vcr will",
-      "ignore this request since it is made when there is no cassette"
-    ),
-    url = "https://books.ropensci.org/http-testing/vcr-configuration#allow-http-connections-when-no-cassette"
-  ),
-
   ignore_request = list(
     text = c(
       "If you want vcr to ignore this request (and others like it), you can",

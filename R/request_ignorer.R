@@ -1,5 +1,5 @@
 should_be_ignored <- function(request) {
-  host <- parseurl(request$uri)$domain
+  host <- curl::curl_parse_url(request$uri)$host
 
   ignored_hosts <- vcr_c$ignore_hosts
   if (isTRUE(vcr_c$ignore_localhost)) {

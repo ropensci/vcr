@@ -1,4 +1,4 @@
-#' @title The response of an HTTPInteraction
+#' @title A response object
 #' @description Custom vcr http response object
 #' @export
 #' @keywords internal
@@ -14,9 +14,6 @@
 #' x$body
 #' x$status
 #' x$headers
-#' x$http_version
-#' x$to_hash()
-#' x$from_hash(x$to_hash())
 #'
 #' # check if body is compressed
 #' url <- "https://fishbase.ropensci.org"
@@ -45,10 +42,6 @@ VcrResponse <- R6::R6Class(
     headers = NULL,
     #' @field body the response body
     body = NULL,
-    #' @field http_version the HTTP version
-    http_version = NULL,
-    #' @field adapter_metadata Additional metadata used by a specific VCR adapter
-    adapter_metadata = NULL,
     #' @field disk a boolean
     disk = NULL,
 
@@ -56,16 +49,12 @@ VcrResponse <- R6::R6Class(
     #' @param status the status of the response
     #' @param headers the response headers
     #' @param body the response body
-    #' @param http_version the HTTP version
-    #' @param adapter_metadata Additional metadata used by a specific VCR adapter
     #' @param disk boolean, is body a file on disk
     #' @return A new `VcrResponse` object
     initialize = function(
       status,
       headers,
       body,
-      http_version,
-      adapter_metadata = NULL,
       disk
     ) {
       if (!missing(status)) self$status <- status
@@ -77,50 +66,12 @@ VcrResponse <- R6::R6Class(
         # self$body <- if (is.character(body)) enc2utf8(body) else body
         self$body <- body
       }
-      if (!missing(http_version)) {
-        self$http_version <- extract_http_version(http_version)
-      }
-      if (!missing(adapter_metadata)) self$adapter_metadata <- adapter_metadata
       if (!missing(disk)) self$disk <- disk
     },
 
     #' @description print method for the `VcrResponse` class
     #' @param x self
     #' @param ... ignored
-    print = function(x, ...) cat("<VcrResponse> ", sep = "\n"),
-
-    #' @description Create a hash
-    #' @return a list
-    to_hash = function() {
-      list(
-        status = self$status,
-        headers = self$headers,
-        body = self$body,
-        http_version = self$http_version,
-        disk = self$disk
-      )
-    },
-
-    #' @description Get a hash back to an R list
-    #' @param hash a list
-    #' @return an `VcrResponse` object
-    from_hash = function(hash) {
-      VcrResponse$new(
-        hash[["status"]],
-        hash[["headers"]],
-        hash[["body"]] %||% "",
-        hash[["http_version"]],
-        hash[["disk"]]
-      )
-    }
+    print = function(x, ...) cat("<VcrResponse> ", sep = "\n")
   )
 )
-
-extract_http_version <- function(x) {
-  if (!is.character(x)) return(x)
-  if (grepl("HTTP/[0-9]\\.?", x)) {
-    strsplit(stract(x, "HTTP/[12]\\.?([0-9])?"), "/")[[1]][2] %||% ""
-  } else {
-    return(x)
-  }
-}

@@ -1,3 +1,89 @@
+#' Manually insert and eject a cassette
+#'
+#' Generally you should not need to use these functions, instead preferring
+#' [use_cassette()] or [local_cassette()]
+#'
+#' @export
+#' @inheritParams use_cassette
+#' @inheritSection use_cassette Cassette options
+#' @return A [Cassette], invisibly.
+#' @keywords internal
+#' @examples
+#' vcr_configure(dir = tempdir())
+#'
+#' insert_cassette("hello")
+#' current_cassette()
+#'
+#' eject_cassette()
+#' current_cassette()
+insert_cassette <- function(
+  name,
+  dir = NULL,
+  record = NULL,
+  match_requests_on = NULL,
+  allow_playback_repeats = FALSE,
+  serialize_with = NULL,
+  preserve_exact_body_bytes = NULL,
+  re_record_interval = NULL,
+  clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL
+) {
+  if (!turned_on()) {
+    if (!the$light_switch$ignore_cassettes) {
+      cli::cli_abort(c(
+        "vcr is turned off.",
+        i = "Use {.fun turn_on} to turn it back on.",
+        i = "Or use {.code turn_off(ignore_cassettes = TRUE)} to cassettes completely."
+      ))
+    } else {
+      # vcr is turned off and `ignore_cassettes=TRUE`, returns NULL
+      return(NULL)
+    }
+  }
+  # enable webmockr
+  webmockr::enable(quiet = TRUE)
+  suppressMessages(webmockr::webmockr_allow_net_connect())
+
+  # make cassette
+  cassette <- Cassette$new(
+    name,
+    dir = dir,
+    record = record,
+    match_requests_on = match_requests_on,
+    allow_playback_repeats = allow_playback_repeats,
+    serialize_with = serialize_with,
+    preserve_exact_body_bytes = preserve_exact_body_bytes,
+    re_record_interval = re_record_interval,
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    warn_on_empty = warn_on_empty
+  )
+  cassette_push(cassette)
+  vcr_log_sprintf("Inserting")
+  cassette$insert()
+
+  invisible(cassette)
+}
+
+#' @export
+#' @rdname insert_cassette
+eject_cassette <- function() {
+  if (!cassette_active()) {
+    cli::cli_abort("No cassette in use.")
+  }
+
+  vcr_log_sprintf("Ejecting")
+  cassette <- cassette_pop()
+  cassette$eject()
+
+  webmockr::disable(quiet = TRUE)
+  if (!cassette_active()) {
+    suppressMessages(webmockr::webmockr_disable_net_connect())
+  }
+
+  invisible(cassette)
+}
+
+
 #' List cassettes, get current cassette, etc.
 #'
 #' @export
@@ -35,9 +121,12 @@ cassettes <- function() {
   if (cassette_active()) {
     the$cassettes
   } else {
-    # Consistently return a named list
-    set_names(list())
+    list()
   }
+}
+
+cassette_names <- function() {
+  vapply(cassettes(), function(x) x$name, character(1))
 }
 
 #' @export
@@ -56,7 +145,8 @@ current_cassette <- function() {
 cassette_path <- function() vcr_c$dir
 
 cassette_push <- function(cassette) {
-  the$cassettes[[cassette$name]] <- cassette
+  n <- length(the$cassettes)
+  the$cassettes[[n + 1]] <- cassette
   invisible(cassette)
 }
 cassette_pop <- function() {

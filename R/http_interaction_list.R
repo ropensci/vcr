@@ -11,9 +11,9 @@ NullList <- R6::R6Class(
 
 
 #' @title HTTPInteractionList class
-#' @description keeps track of all [HTTPInteraction] objects
+#' @description keeps track of all request-response pairs
 #' @export
-#' @param request The request from an object of class `HTTPInteraction`
+#' @param request A request object
 #' @details
 #' \strong{Private Methods}
 #'  \describe{
@@ -29,9 +29,6 @@ NullList <- R6::R6Class(
 #'     \item{\code{interaction_matches_request(request, interaction)}}{
 #'       Check if a request matches an interaction (logical)
 #'     }
-#'     \item{\code{from_hash()}}{
-#'       Get a hash back.
-#'     }
 #'     \item{\code{request_summary(z)}}{
 #'       Get a request summary (character)
 #'     }
@@ -39,48 +36,6 @@ NullList <- R6::R6Class(
 #'       Get a response summary (character)
 #'     }
 #'   }
-#' @examples \dontrun{
-#' vcr_configure(
-#'  dir = tempdir(),
-#'  record = "once"
-#' )
-#'
-#' # make interactions
-#' ## make the request
-#' ### turn off mocking
-#' crul::mock(FALSE)
-#' url <- "https://hb.opencpu.org/post"
-#' cli <- crul::HttpClient$new(url = url)
-#' res <- cli$post(body = list(a = 5))
-#'
-#' ## request
-#' (request <- Request$new("POST", url, list(a = 5), res$headers))
-#' ## response
-#' (response <- VcrResponse$new(
-#'    res$status_http(),
-#'    res$response_headers,
-#'    res$parse("UTF-8"),
-#'    res$response_headers$status))
-#' ## make an interaction
-#' (inter <- HTTPInteraction$new(request = request, response = response))
-#'
-#' # make an interactionlist
-#' (x <- HTTPInteractionList$new(
-#'    interactions = list(inter),
-#'    request_matchers = vcr_configuration()$match_requests_on
-#' ))
-#' x$interactions
-#' x$request_matchers
-#' x$parent_list
-#' x$parent_list$response_for()
-#' x$parent_list$has_interaction_matching()
-#' x$parent_list$has_used_interaction_matching()
-#' x$parent_list$remaining_unused_interaction_count()
-#' x$used_interactions
-#' x$allow_playback_repeats
-#' x$interactions
-#' x$response_for(request)
-#' }
 HTTPInteractionList <- R6::R6Class(
   'HTTPInteractionList',
   public = list(
@@ -121,8 +76,8 @@ HTTPInteractionList <- R6::R6Class(
         function(x) {
           sprintf(
             "%s => %s",
-            request_summary(Request$new()$from_hash(x$request)),
-            response_summary(VcrResponse$new()$from_hash(x$response))
+            request_summary(x$request),
+            response_summary(x$response)
           )
         },
         ""
@@ -148,15 +103,15 @@ HTTPInteractionList <- R6::R6Class(
         interaction <- self$interactions[[index]]
         self$interactions <- delete_at(self$interactions, index)
         # put `interaction` at front of list with `unshift`
-        self$used_interactions <- unshift(
-          self$used_interactions,
-          list(interaction)
+        self$used_interactions <- c(
+          list(interaction),
+          self$used_interactions
         )
         vcr_log_sprintf(
           "  Found matching interaction for %s at index %s: %s",
-          request_summary(Request$new()$from_hash(request)),
+          request_summary(request),
           index,
-          response_summary(VcrResponse$new()$from_hash(interaction$response))
+          response_summary(interaction$response)
         )
         interaction$response
       } else {
@@ -278,14 +233,4 @@ delete_at <- function(x, y) {
   stopifnot(is.list(x))
   stopifnot(is.numeric(y))
   x[-y]
-}
-
-# makes a copy - does not modify in place
-# x: a list with objects of class `HTTPInteraction`
-# y: a list with an object of class `HTTPInteraction`
-unshift <- function(x, y) {
-  stopifnot(inherits(x, "list"))
-  stopifnot(inherits(y, "list"))
-  # stopifnot(inherits(y[[1]], "HTTPInteraction"))
-  c(y, x)
 }

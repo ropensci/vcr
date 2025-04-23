@@ -1,4 +1,4 @@
-#' @title The request of an HTTPInteraction
+#' @title A request object
 #' @description object that handled all aspects of a request
 #' @export
 #' @keywords internal
@@ -18,8 +18,6 @@
 #' x$host
 #' x$path
 #' x$headers
-#' h <- x$to_hash()
-#' x$from_hash(h)
 Request <- R6::R6Class(
   'Request',
   public = list(
@@ -43,8 +41,6 @@ Request <- R6::R6Class(
     skip_port_stripping = FALSE,
     #' @field hash (character) a named list - internal use
     hash = NULL,
-    #' @field opts (character) options - internal use
-    opts = NULL,
     #' @field disk (logical) xx
     disk = NULL,
     #' @field fields (various) request body details
@@ -60,7 +56,6 @@ Request <- R6::R6Class(
     #' @param uri (character) request URI
     #' @param body (character) request body
     #' @param headers (named list) request headers
-    #' @param opts (named list) options internal use
     #' @param disk (boolean), is body a file on disk
     #' @param fields (various) post fields
     #' @param output (various) output details
@@ -73,7 +68,6 @@ Request <- R6::R6Class(
       uri,
       body,
       headers,
-      opts,
       disk,
       fields,
       output,
@@ -101,36 +95,10 @@ Request <- R6::R6Class(
         self$path <- tmp$path
         self$query <- tmp$parameter
       }
-      if (!missing(opts)) self$opts <- opts
       if (!missing(disk)) self$disk <- disk
       if (!missing(fields)) self$fields <- fields
       if (!missing(output)) self$output <- output
       if (!missing(policies)) self$policies <- policies
-    },
-
-    #' @description Convert the request to a list
-    #' @return list
-    to_hash = function() {
-      list(
-        method = self$method,
-        uri = self$uri,
-        body = self$body,
-        headers = self$headers,
-        disk = self$disk
-      )
-    },
-
-    #' @description Convert the request to a list
-    #' @param hash a list
-    #' @return a new `Request` object
-    from_hash = function(hash) {
-      Request$new(
-        method = hash[['method']],
-        uri = hash[['uri']],
-        body = hash[['body']] %||% "",
-        headers = hash[['headers']],
-        disk = hash[['disk']]
-      )
     }
   ),
   private = list(

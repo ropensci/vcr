@@ -5,9 +5,6 @@
 #' @details
 #' \strong{Private Methods}
 #'   \describe{
-#'     \item{\code{request_type(request)}}{
-#'       Get the request type
-#'     }
 #'     \item{\code{externally_stubbed()}}{
 #'       just returns FALSE
 #'     }
@@ -38,37 +35,6 @@
 #'       on unhandled request, run UnhandledHTTPRequestError
 #'     }
 #'   }
-#' @examples \dontrun{
-#' # record mode: once
-#' vcr_configure(
-#'  dir = tempdir(),
-#'  record = "once"
-#' )
-#'
-#' data(crul_request)
-#' crul_request$url$handle <- curl::new_handle()
-#' crul_request
-#' x <- RequestHandler$new(crul_request)
-#' # x$handle()
-#'
-#' # record mode: none
-#' vcr_configure(
-#'  dir = tempdir(),
-#'  record = "none"
-#' )
-#' data(crul_request)
-#' crul_request$url$handle <- curl::new_handle()
-#' crul_request
-#' insert_cassette("testing_record_mode_none", record = "none")
-#' #file.path(vcr_c$dir, "testing_record_mode_none.yml")
-#' x <- RequestHandlerCrul$new(crul_request)
-#' # x$handle()
-#' crul_request$url$url <- "https://api.crossref.org/works/10.1039/c8sm90002g/"
-#' crul_request$url$handle <- curl::new_handle()
-#' z <- RequestHandlerCrul$new(crul_request)
-#' # z$handle()
-#' eject_cassette()
-#' }
 RequestHandler <- R6::R6Class(
   'RequestHandler',
   public = list(
@@ -80,7 +46,7 @@ RequestHandler <- R6::R6Class(
     stubbed_response = NULL,
 
     #' @description Create a new `RequestHandler` object
-    #' @param request The request from an object of class `HttpInteraction`
+    #' @param request A request
     #' @return A new `RequestHandler` object
     initialize = function(request) {
       self$request_original <- request
@@ -104,44 +70,31 @@ RequestHandler <- R6::R6Class(
         private$is_disabled()
       )
 
-      req_type <- private$request_type()
-      req_type_fun <- sprintf("private$on_%s_request", req_type)
-
-      vcr_log_sprintf(
-        "Identified request type: (%s) for %s",
-        req_type,
-        private$request_summary(self$request)
-      )
-
-      eval(parse(text = req_type_fun))(self$request)
+      if (private$externally_stubbed()) {
+        # FIXME: not quite sure what externally_stubbed is meant for
+        #   perhaps we can get rid of it here if only applicable in Ruby
+        vcr_log_sprintf("- externally stubbed")
+        private$on_externally_stubbed_request()
+      } else if (private$should_ignore(self$request)) {
+        vcr_log_sprintf("- ignored")
+        private$on_ignored_request()
+      } else if (private$has_response_stub(self$request)) {
+        vcr_log_sprintf("- stubbed by vcr")
+        private$on_stubbed_by_vcr_request()
+      } else if (real_http_connections_allowed()) {
+        vcr_log_sprintf("- recordable")
+        private$on_recordable_request()
+      } else {
+        vcr_log_sprintf("- unhandled")
+        private$on_unhandled_request()
+      }
     }
   ),
 
   private = list(
     request_summary = function(request) {
       request_matches <- current_casssette()$match_requests_on
-      request_summary(Request$new()$from_hash(request), request_matchers)
-    },
-
-    request_type = function() {
-      if (private$externally_stubbed()) {
-        # FIXME: not quite sure what externally_stubbed is meant for
-        #   perhaps we can get rid of it here if only applicable in Ruby
-        # cat("request_type: is externally stubbed", "\n")
-        "externally_stubbed"
-      } else if (private$should_ignore(self$request)) {
-        # cat("request_type: is ignored", "\n")
-        "ignored"
-      } else if (private$has_response_stub(self$request)) {
-        # cat("request_type: is stubbed_by_vcr", "\n")
-        "stubbed_by_vcr"
-      } else if (real_http_connections_allowed()) {
-        # cat("request_type: is recordable", "\n")
-        "recordable"
-      } else {
-        # cat("request_type: is unhandled", "\n")
-        "unhandled"
-      }
+      request_summary(request, request_matchers)
     },
 
     # request type helpers
@@ -169,22 +122,22 @@ RequestHandler <- R6::R6Class(
     ##### so we can "monkey patch" these in each HTTP client adapter by
     #####   reassigning some of these functions with ones specific to the HTTP client
 
-    on_externally_stubbed_request = function(request) NULL,
-    on_ignored_request = function(request) {
+    on_externally_stubbed_request = function() NULL,
+    on_ignored_request = function() {
       # perform and return REAL http response
       # reassign per adapter
     },
-    on_stubbed_by_vcr_request = function(request) {
+    on_stubbed_by_vcr_request = function() {
       # return stubbed vcr response - no real response to do
       # reassign per adapter
     },
-    on_recordable_request = function(request) {
+    on_recordable_request = function() {
       # do real request - then stub response - then return stubbed vcr response
       # - this may need to be called from webmockr cruladapter?
       # reassign per adapter
     },
-    on_unhandled_request = function(request) {
-      err <- UnhandledHTTPRequestError$new(request)
+    on_unhandled_request = function() {
+      err <- UnhandledHTTPRequestError$new(self$request)
       err$run()
     }
   )

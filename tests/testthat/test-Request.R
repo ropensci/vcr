@@ -14,10 +14,6 @@ test_that("Request basic stuff", {
   expect_null(aa$scheme)
   expect_null(aa$uri)
   expect_false(aa$skip_port_stripping)
-
-  # methods
-  expect_type(aa$from_hash, "closure")
-  expect_type(aa$to_hash, "closure")
 })
 
 test_that("Request usage", {
@@ -36,12 +32,6 @@ test_that("Request usage", {
   expect_equal(aa$path, "post")
   expect_type(aa$headers, "list")
   expect_true("User-Agent" %in% names(aa$headers))
-  h <- aa$to_hash()
-  expect_type(h, "list")
-  zz <- aa$from_hash(h)
-  expect_s3_class(zz, "Request")
-  # equal but not identical
-  expect_equal(zz, aa)
 })
 
 test_that("Request fails well", {
@@ -49,6 +39,4 @@ test_that("Request fails well", {
 
   z <- Request$new()
   expect_error(z$foo(), "attempt to apply non-function")
-  expect_error(z$from_hash(), "missing")
-  expect_error(z$to_hash(4), "unused argument")
 })

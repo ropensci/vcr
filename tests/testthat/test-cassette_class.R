@@ -8,6 +8,10 @@ test_that("checks constructor args", {
   })
 })
 
+test_that("has nice print method", {
+  expect_snapshot(Cassette$new("test"))
+})
+
 test_that("cassette warns if ejected with no interactions", {
   cl <- Cassette$new("test")
   cl$insert()
@@ -35,7 +39,6 @@ test_that("make_http_interaction works as expected", {
   # $response$body should be class `character`
   load("crul_resp1.rda")
   aa <- zz$make_http_interaction(crul_resp1)
-  expect_s3_class(aa, "HTTPInteraction")
   expect_s3_class(aa$request, "Request")
   expect_s3_class(aa$response, "VcrResponse")
   expect_type(aa$response$body, "character")
@@ -44,7 +47,6 @@ test_that("make_http_interaction works as expected", {
   # $response$body should be class `raw`
   load("crul_resp2.rda")
   bb <- zz$make_http_interaction(crul_resp2)
-  expect_s3_class(bb, "HTTPInteraction")
   expect_s3_class(bb$request, "Request")
   expect_s3_class(bb$response, "VcrResponse")
   expect_type(bb$response$body, "raw")
@@ -91,10 +93,7 @@ test_that("cassette checks name", {
     Cassette$new(strrep("x", 400))
   })
 
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
   local_cassette("foo")
   expect_snapshot(Cassette$new("foo"), error = TRUE)
 })

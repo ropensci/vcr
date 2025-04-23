@@ -2,7 +2,7 @@
 % Please edit documentation in R/request_class.R
 \name{Request}
 \alias{Request}
-\title{The request of an HTTPInteraction}
+\title{A request object}
 \description{
 object that handled all aspects of a request
 }
@@ -22,8 +22,6 @@ x$uri
 x$host
 x$path
 x$headers
-h <- x$to_hash()
-x$from_hash(h)
 }
 \keyword{internal}
 \section{Public fields}{
@@ -49,8 +47,6 @@ x$from_hash(h)
 
 \item{\code{hash}}{(character) a named list - internal use}
 
-\item{\code{opts}}{(character) options - internal use}
-
 \item{\code{disk}}{(logical) xx}
 
 \item{\code{fields}}{(various) request body details}
@@ -65,8 +61,6 @@ x$from_hash(h)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Request-new}{\code{Request$new()}}
-\item \href{#method-Request-to_hash}{\code{Request$to_hash()}}
-\item \href{#method-Request-from_hash}{\code{Request$from_hash()}}
 \item \href{#method-Request-clone}{\code{Request$clone()}}
 }
 }
@@ -81,7 +75,6 @@ Create a new \code{Request} object
   uri,
   body,
   headers,
-  opts,
   disk,
   fields,
   output,
@@ -102,8 +95,6 @@ post, put, patch or delete)}
 
 \item{\code{headers}}{(named list) request headers}
 
-\item{\code{opts}}{(named list) options internal use}
-
 \item{\code{disk}}{(boolean), is body a file on disk}
 
 \item{\code{fields}}{(various) post fields}
@@ -119,39 +110,6 @@ default: \code{FALSE}}
 }
 \subsection{Returns}{
 A new \code{Request} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Request-to_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-Request-to_hash}{}}}
-\subsection{Method \code{to_hash()}}{
-Convert the request to a list
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$to_hash()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Request-from_hash"></a>}}
-\if{latex}{\out{\hypertarget{method-Request-from_hash}{}}}
-\subsection{Method \code{from_hash()}}{
-Convert the request to a list
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$from_hash(hash)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{hash}}{a list}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a new \code{Request} object
 }
 }
 \if{html}{\out{<hr>}}

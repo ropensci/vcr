@@ -4,7 +4,7 @@
 \alias{take_body}
 \title{Extract request body}
 \usage{
-take_body(x, ...)
+take_body(x)
 }
 \description{
 Extract request body

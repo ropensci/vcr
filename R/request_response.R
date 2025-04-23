@@ -57,7 +57,6 @@
 #' # (x <- VcrResponse$new(status, headers, png_eg, "HTTP/1.1 200 OK"))
 #' # response_summary(x)
 request_summary <- function(request, request_matchers = "") {
-  stopifnot(inherits(request, "Request"))
   stopifnot(inherits(request_matchers, "character"))
   atts <- c(request$method, request$uri)
   if ("body" %in% request_matchers) {
@@ -82,7 +81,13 @@ response_summary <- function(response) {
   }
 
   # if body is raw, state that it's raw
-  resp <- if (is.raw(response$body)) "<raw>" else response$body
+  if (is.null(response$body)) {
+    resp <- ""
+  } else if (is.raw(response$body)) {
+    resp <- "<raw>"
+  } else {
+    resp <- response$body
+  }
 
   # construct summary
   # note: gsub changes a string to UTF-8, useBytes seems to avoid doing this

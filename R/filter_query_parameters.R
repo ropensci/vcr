@@ -1,33 +1,34 @@
 #' Remove or replace query parameters
 #' @noRd
-query_params_remove <- function(int) {
-  h <- vcr_c$filter_query_parameters
-  if (!is.null(h)) {
-    if (is.null(names(h))) toremove <- unlist(h)
-    if (!is.null(names(h))) toremove <- unname(unlist(h[!nzchar(names(h))]))
-    # remove zero length strings
-    toremove <- Filter(nzchar, toremove)
-    for (i in seq_along(toremove)) {
-      int <- lapply(int, function(b) {
-        b$request$uri <- drop_param(b$request$uri, toremove[i])
-        return(b)
-      })
-    }
+encode_uri <- function(
+  uri,
+  filter = vcr_c$filter_query_parameters,
+  flip = FALSE
+) {
+  is_named <- names2(filter) != ""
 
-    toreplace <- h[nzchar(names(h))]
-    if (length(toreplace)) {
-      for (i in seq_along(toreplace)) {
-        int <- lapply(int, function(b) {
-          vals <- toreplace[[i]]
-          val <- if (length(vals) == 2) vals[2] else vals[1]
-          b$request$uri <-
-            replace_param(b$request$uri, names(toreplace)[i], val)
-          return(b)
-        })
+  to_remove <- filter[!is_named]
+  for (i in seq_along(to_remove)) {
+    uri <- drop_param(uri, to_remove[[i]])
+  }
+
+  to_replace <- filter[is_named]
+  for (i in seq_along(to_replace)) {
+    val <- to_replace[[i]]
+    if (length(val) == 2) {
+      if (flip) {
+        uri <- replace_param_with(uri, names(to_replace)[[i]], val[2], val[1])
+      } else {
+        uri <- replace_param_with(uri, names(to_replace)[[i]], val[1], val[2])
       }
+    } else {
+      uri <- replace_param(uri, names(to_replace)[[i]], val)
     }
   }
-  return(int)
+
+  uri <- sensitive_remove(uri)
+
+  uri
 }
 
 #' Put back query parameters
@@ -62,38 +63,6 @@ query_params_put_back <- function(int) {
   return(int)
 }
 
-query_params_remove_str <- function(uri) {
-  h <- vcr_c$filter_query_parameters
-  if (!is.null(h)) {
-    if (is.null(names(h))) toremove <- unlist(h)
-    if (!is.null(names(h))) toremove <- unname(unlist(h[!nzchar(names(h))]))
-    toremove <- Filter(nzchar, toremove)
-    for (i in seq_along(toremove)) uri <- drop_param(uri, toremove[i])
-
-    toreplace <- h[nzchar(names(h))]
-    if (length(toreplace)) {
-      for (i in seq_along(toreplace)) {
-        vals <- toreplace[[i]]
-        if (length(vals) == 2) {
-          uri <-
-            replace_param_with(uri, names(toreplace)[i], vals[2], vals[1])
-        } else {
-          uri <- replace_param(uri, names(toreplace)[i], vals)
-        }
-      }
-    }
-  }
-  return(uri)
-}
-list2str <- function(w) {
-  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
-}
-buildurl <- function(x) {
-  x$parameter <- list2str(x$parameter)
-  url <- urltools::url_compose(x)
-  # trim trailing ?
-  sub("\\?$", "", url)
-}
 # drop_param(url="https://hb.opencpu.org/get?foo=bar&baz=3&z=4", name="z")
 # => "https://hb.opencpu.org/get?foo=bar&baz=3"
 drop_param <- function(url, name) {
@@ -129,4 +98,32 @@ replace_param_with <- function(url, name, fake, real) {
   if (is.null(z$parameter[[name]])) return(url)
   z$parameter[[name]] <- sub(fake, real, z$parameter[[name]])
   buildurl(z)
+}
+
+# Helpers ----------------------------------------------------------------------
+
+parseurl <- function(x) {
+  tmp <- urltools::url_parse(x)
+  tmp <- as.list(tmp)
+  if (!is.na(tmp$parameter)) {
+    tmp$parameter <- sapply(
+      strsplit(tmp$parameter, "&")[[1]],
+      function(z) {
+        zz <- strsplit(z, split = "=")[[1]]
+        as.list(stats::setNames(zz[2], zz[1]))
+      },
+      USE.NAMES = FALSE
+    )
+  }
+  tmp
+}
+
+list2str <- function(w) {
+  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
+}
+buildurl <- function(x) {
+  x$parameter <- list2str(x$parameter)
+  url <- urltools::url_compose(x)
+  # trim trailing ?
+  sub("\\?$", "", url)
 }

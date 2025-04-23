@@ -26,6 +26,19 @@
       Error:
       ! preserve_exact_body_bytes must be of class logical
 
+# has nice print method
+
+    Code
+      Cassette$new("test")
+    Output
+      <vcr - Cassette> test
+        Record method: once
+        Serialize with: yaml
+        Re-record interval (s): 
+        Clean outdated interactions?: FALSE
+        allow_playback_repeats: FALSE
+        preserve_exact_body_bytes: FALSE
+
 # cassette warns if ejected with no interactions
 
     Code

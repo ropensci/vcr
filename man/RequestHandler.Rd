@@ -10,9 +10,6 @@ request is stubbed, to be ignored, recordable, or unhandled
 \details{
 \strong{Private Methods}
 \describe{
-\item{\code{request_type(request)}}{
-Get the request type
-}
 \item{\code{externally_stubbed()}}{
 just returns FALSE
 }
@@ -42,39 +39,6 @@ on recordable request, record the request
 \item{\code{on_unhandled_request(request)}}{
 on unhandled request, run UnhandledHTTPRequestError
 }
-}
-}
-\examples{
-\dontrun{
-# record mode: once
-vcr_configure(
- dir = tempdir(),
- record = "once"
-)
-
-data(crul_request)
-crul_request$url$handle <- curl::new_handle()
-crul_request
-x <- RequestHandler$new(crul_request)
-# x$handle()
-
-# record mode: none
-vcr_configure(
- dir = tempdir(),
- record = "none"
-)
-data(crul_request)
-crul_request$url$handle <- curl::new_handle()
-crul_request
-insert_cassette("testing_record_mode_none", record = "none")
-#file.path(vcr_c$dir, "testing_record_mode_none.yml")
-x <- RequestHandlerCrul$new(crul_request)
-# x$handle()
-crul_request$url$url <- "https://api.crossref.org/works/10.1039/c8sm90002g/"
-crul_request$url$handle <- curl::new_handle()
-z <- RequestHandlerCrul$new(crul_request)
-# z$handle()
-eject_cassette()
 }
 }
 \section{Public fields}{
@@ -108,7 +72,7 @@ Create a new \code{RequestHandler} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{The request from an object of class \code{HttpInteraction}}
+\item{\code{request}}{A request}
 }
 \if{html}{\out{</div>}}
 }

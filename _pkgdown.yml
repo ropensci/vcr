@@ -21,7 +21,6 @@ reference:
       Details on recording and request matching options
     contents:
       - recording
-      - request-matching
   - title: "vcr in tests"
     desc: >
       Functions for more custom workflows
@@ -49,7 +48,6 @@ reference:
       You shouldn't need to use these directly
     contents:
       - Cassette
-      - HTTPInteraction
       - HTTPInteractionList
       - Request
       - RequestHandler
@@ -60,8 +58,6 @@ reference:
       - VcrResponse
       - request_summary
       - response_summary
-      - vcr_log_file
-      - crul_request
 
 articles:
   - title: All vignettes
@@ -70,7 +66,6 @@ articles:
       - "`vcr`"
       - "`cassette-manual-editing`"
       - "`configuration`"
-      - "`request_matching`"
       - "`debugging`"
       - "`write-to-disk`"
       - "`record-modes`"

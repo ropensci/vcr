@@ -14,10 +14,20 @@
 #'   to the default configured by [vcr_configure()].
 #' @param record The record mode (default: `"once"`). See [recording] for a
 #' complete list of the different recording modes.
-#' @param match_requests_on List of request matchers
-#' to use to determine what recorded HTTP interaction to replay. Defaults to
-#' `["method", "uri"]`. The built-in matchers are "method", "uri", "host",
-#' "path", "headers", "body" and "query"
+#' @param match_requests_on Character vector of request matchers used to
+#'   determine which recorded HTTP interaction to replay. Possible values are:
+#'
+#'   * `method`: the HTTP method.
+#'   * `uri`: the complete request URI.
+#'   * `host`: the **host** component of the URI.
+#'   * `path`: the **path** component of the URI.
+#'   * `query`: the **query** component of the URI.
+#'   * `body`: the request body.
+#'   * `header`: all request headers.
+#'
+#'   If more than one is specified, all components must match in order for the
+#'   request to match. If not supplied, defaults to `c("method", "uri")`.
+#'
 #' @param allow_playback_repeats (logical) Whether or not to
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
@@ -34,6 +44,8 @@
 #' cassette should be re-recorded. default: `NULL` (not re-recorded)
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file? default: `FALSE`
+#' @param warn_on_empty Warn if the cassette is ejected but no interactions
+#'   have been recorded?
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
 #'   functions.
 #' @section Cassette options:
@@ -146,7 +158,8 @@ use_cassette <- function(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL
 ) {
   check_required(name)
   if (missing(...)) {
@@ -165,7 +178,8 @@ use_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    warn_on_empty = warn_on_empty
   )
 
   # force all arguments
@@ -190,6 +204,7 @@ local_cassette <- function(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL,
   frame = parent.frame()
 ) {
   cassette <- insert_cassette(
@@ -201,7 +216,8 @@ local_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {
     withr::defer(eject_cassette(), envir = frame)

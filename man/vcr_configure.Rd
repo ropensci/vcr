@@ -55,11 +55,6 @@ you'll likely have to skip the associated tests as well).
 \item \code{turned_off} (logical) VCR is turned on by default. Default:
 \code{FALSE}
 \item \code{allow_unused_http_interactions} (logical) Default: \code{TRUE}
-\item \code{allow_http_connections_when_no_cassette} (logical) Determines how vcr
-treats HTTP requests that are made when no vcr cassette is in use. When
-\code{TRUE}, requests made when there is no vcr cassette in use will be allowed.
-When \code{FALSE} (default), an \link{UnhandledHTTPRequestError} error will be raised
-for any HTTP request made when there is no cassette in use
 }
 }
 
@@ -146,7 +141,7 @@ defined locally for individual cassettes.
 \item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
 See \link{recording}
 \item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
-See \link{request-matching} for details.
+See \code{\link[=use_cassette]{use_cassette()}} for details.
 \item \code{serialize_with}: (character) "yaml" or "json". Note that you can have
 multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,

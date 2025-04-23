@@ -19,9 +19,6 @@
 #' @section Record modes:
 #' See [recording] for help on record modes.
 #'
-#' @section Request matching:
-#' See [request-matching] for help on the many request matching options.
-#'
 #' @section Async:
 #' As of \pkg{crul} v1.5, `vcr` will work for async http requests with
 #' \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
@@ -38,16 +35,4 @@
 #' @importFrom yaml yaml.load yaml.load_file as.yaml
 #' @importFrom urltools url_parse url_compose
 ## usethis namespace: end
-NULL
-
-#' An HTTP request as prepared by the \pkg{crul} package
-#'
-#' The object is a list, and is the object that is passed on to
-#' \pkg{webmockr} and \pkg{vcr} instead of routing through
-#' \pkg{crul} as normal. Used in examples/tests.
-#'
-#' @format A list
-#' @name crul_request
-#' @docType data
-#' @keywords data
 NULL

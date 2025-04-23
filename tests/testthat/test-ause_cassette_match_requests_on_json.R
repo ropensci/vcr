@@ -91,7 +91,11 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   expect_error(
     use_cassette(
       "testing2",
-      res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
+      res <- httr::POST(
+        hb("/post"),
+        body = list(foo = "bar1"),
+        encode = "json"
+      ),
       match_requests_on = "body"
     ),
     "An HTTP request has been made that vcr does not know how to handle"

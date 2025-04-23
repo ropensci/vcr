@@ -1,38 +1,64 @@
-test_that("cassettes works", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
+test_that("can insert and eject a cassette", {
+  expect_false(cassette_active())
+  expect_equal(current_cassette(), NULL)
 
-  expect_equal(cassettes(), set_names(list()))
+  cassette <- insert_cassette("test", warn_on_empty = FALSE)
+  expect_s3_class(cassette, "Cassette")
+  expect_true(cassette_active())
+  expect_equal(current_cassette(), cassette)
 
-  x <- insert_cassette("x")
-  withr::defer(eject_cassette())
-  expect_equal(cassettes(), list(x = x))
+  expect_equal(eject_cassette(), cassette)
+
+  expect_false(cassette_active())
+  expect_equal(current_cassette(), NULL)
 })
 
-# FIXME: add tests for on_disk and verb params
+test_that("ejecting errors if no cassettes", {
+  expect_snapshot(eject_cassette(), error = TRUE)
+})
+
+test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
+  local_light_switch()
+
+  # after being turned off, insert_cassette throws an error
+  suppressMessages(turn_off())
+  expect_snapshot(insert_cassette("test"), error = TRUE)
+
+  suppressMessages(turn_off(ignore_cassettes = TRUE))
+  expect_no_error(insert_cassette("test", warn_on_empty = FALSE))
+})
+
+test_that("inserting and ejecting is logged", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
+  local_vcr_configure_log(file = stdout())
+
+  expect_snapshot(. <- use_cassette("test", NULL))
+})
 
 test_that("cassettes are a stack", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
+  expect_equal(current_cassette(), NULL)
+  expect_equal(cassettes(), list())
+  expect_equal(cassette_names(), character(0))
 
-  aa <- current_cassette()
-  expect_equal(aa, NULL)
+  cassette_a <- insert_cassette("aaa", warn_on_empty = FALSE)
+  expect_equal(current_cassette(), cassette_a)
+  expect_equal(cassettes(), list(cassette_a))
+  expect_equal(cassette_names(), "aaa")
 
-  insert_cassette("aaa")
-  expect_equal(current_cassette()$name, "aaa")
-
-  insert_cassette("bbb")
-  expect_equal(current_cassette()$name, "bbb")
+  cassette_b <- insert_cassette("bbb", warn_on_empty = FALSE)
+  expect_equal(current_cassette(), cassette_b)
+  expect_equal(cassettes(), list(cassette_a, cassette_b))
+  expect_equal(cassette_names(), c("aaa", "bbb"))
 
   eject_cassette()
-  expect_equal(current_cassette()$name, "aaa")
+  expect_equal(current_cassette(), cassette_a)
+  expect_equal(cassettes(), list(cassette_a))
+  expect_equal(cassette_names(), "aaa")
 
   eject_cassette()
   expect_equal(current_cassette(), NULL)
+  expect_equal(cassettes(), list())
 })
 
 test_that("cassette_path works", {

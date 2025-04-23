@@ -23,9 +23,3 @@ test_that("pkg_versions", {
   expect_match(pkg_versions(), "vcr/")
   expect_match(pkg_versions(), "webmockr/")
 })
-
-test_that("get_body", {
-  expect_equal(get_body(NULL), "")
-  expect_equal(get_body(""), "")
-  expect_equal(get_body("adsf"), "adsf")
-})

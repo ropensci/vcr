@@ -3,17 +3,14 @@ skip_on_cran()
 test_that("httr2 status code works", {
   local_vcr_configure(dir = withr::local_tempdir())
 
-  # httr2_obj <- request(hb("/getttttt"))
+  httr2_obj <- httr2::request(hb("/getttttt"))
   # save(httr2_obj, file="tests/testthat/httr2_obj.rda", version = 2L)
-  load("httr2_obj.rda")
+  # load("httr2_obj.rda")
 
   expect_s3_class(httr2_obj, "httr2_request")
 
   x <- RequestHandlerHttr2$new(httr2_obj)
-
   expect_s3_class(x, "RequestHandlerHttr2")
-  expect_type(x$handle, "closure")
-  expect_error(x$handle())
 
   # do request
   insert_cassette("bluecow")

@@ -71,6 +71,13 @@ test_that("can temporarily change configuration", {
   expect_equal(cassette_path(), "a")
 })
 
+test_that("filter_sensitive data strips quotes with message", {
+  local_vcr_configure()
+
+  expect_snapshot(vcr_configure(filter_sensitive_data = list("key" = '"val"')))
+  expect_equal(vcr_configuration()$filter_sensitive_data, list("key" = "val"))
+})
+
 test_that("all configuration params are documented", {
   rd_file <- "../../man/vcr_configure.Rd"
   skip_if_not(file.exists(rd_file), sprintf("Did not find: '%s'", rd_file))

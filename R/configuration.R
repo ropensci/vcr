@@ -29,11 +29,6 @@
 #' - `turned_off` (logical) VCR is turned on by default. Default:
 #' `FALSE`
 #' - `allow_unused_http_interactions` (logical) Default: `TRUE`
-#' - `allow_http_connections_when_no_cassette` (logical) Determines how vcr
-#' treats HTTP requests that are made when no vcr cassette is in use. When
-#' `TRUE`, requests made when there is no vcr cassette in use will be allowed.
-#' When `FALSE` (default), an [UnhandledHTTPRequestError] error will be raised
-#' for any HTTP request made when there is no cassette in use
 #'
 #' ### Filtering
 #'
@@ -110,7 +105,7 @@
 #' - `record` (character) One of 'all', 'none', 'new_episodes', or 'once'.
 #' See [recording]
 #' - `match_requests_on` vector of matchers. Default: (`method`, `uri`)
-#' See [request-matching] for details.
+#'   See [use_cassette()] for details.
 #' - `serialize_with`: (character) "yaml" or "json". Note that you can have
 #' multiple cassettes with the same name as long as they use different
 #' serializers; so if you only want one cassette for a given cassette name,
@@ -207,7 +202,6 @@ VCRConfig <- R6::R6Class(
     .turned_off = NULL,
     .re_record_interval = NULL,
     .clean_outdated_http_interactions = NULL,
-    .allow_http_connections_when_no_cassette = NULL,
     .cassettes = NULL,
     .linked_context = NULL,
     .log = NULL,
@@ -279,11 +273,6 @@ VCRConfig <- R6::R6Class(
       if (missing(value)) return(private$.clean_outdated_http_interactions)
       private$.clean_outdated_http_interactions <- value
     },
-    allow_http_connections_when_no_cassette = function(value) {
-      if (missing(value))
-        return(private$.allow_http_connections_when_no_cassette)
-      private$.allow_http_connections_when_no_cassette <- value
-    },
     cassettes = function(value) {
       if (missing(value)) return(private$.cassettes)
       private$.cassettes <- value
@@ -307,7 +296,11 @@ VCRConfig <- R6::R6Class(
     },
     filter_sensitive_data = function(value) {
       if (missing(value)) return(private$.filter_sensitive_data)
-      private$.filter_sensitive_data <- assert(value, "list")
+      assert(value, "list")
+      for (i in seq_along(value)) {
+        value[[i]] <- trimquotes(value[[i]], names(value)[i])
+      }
+      private$.filter_sensitive_data <- value
     },
     filter_sensitive_data_regex = function(value) {
       if (missing(value)) return(private$.filter_sensitive_data_regex)
@@ -362,7 +355,6 @@ VCRConfig <- R6::R6Class(
       turned_off = FALSE,
       re_record_interval = NULL,
       clean_outdated_http_interactions = FALSE,
-      allow_http_connections_when_no_cassette = FALSE,
       cassettes = list(),
       linked_context = NULL,
       log = FALSE,
@@ -390,7 +382,6 @@ VCRConfig <- R6::R6Class(
       self$turned_off <- turned_off
       self$re_record_interval <- re_record_interval
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions
-      self$allow_http_connections_when_no_cassette <- allow_http_connections_when_no_cassette
       self$cassettes <- cassettes
       self$linked_context <- linked_context
       self$log <- log

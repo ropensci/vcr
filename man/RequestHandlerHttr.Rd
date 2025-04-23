@@ -68,7 +68,7 @@ Create a new \code{RequestHandlerHttr} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{The request from an object of class \code{HttpInteraction}}
+\item{\code{request}}{A request object}
 }
 \if{html}{\out{</div>}}
 }

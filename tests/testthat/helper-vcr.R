@@ -108,6 +108,7 @@ testthat::set_state_inspector(\() {
 
   list(
     temp_files = temp_files,
+    wd_files = dir(),
     vcr_config = vcr_c$as_list()
   )
 })

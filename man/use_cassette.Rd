@@ -15,7 +15,8 @@ use_cassette(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL
 )
 
 local_cassette(
@@ -28,6 +29,7 @@ local_cassette(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL,
   frame = parent.frame()
 )
 }
@@ -45,10 +47,20 @@ to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
 \item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
 complete list of the different recording modes.}
 
-\item{match_requests_on}{List of request matchers
-to use to determine what recorded HTTP interaction to replay. Defaults to
-\verb{["method", "uri"]}. The built-in matchers are "method", "uri", "host",
-"path", "headers", "body" and "query"}
+\item{match_requests_on}{Character vector of request matchers used to
+determine which recorded HTTP interaction to replay. Possible values are:
+\itemize{
+\item \code{method}: the HTTP method.
+\item \code{uri}: the complete request URI.
+\item \code{host}: the \strong{host} component of the URI.
+\item \code{path}: the \strong{path} component of the URI.
+\item \code{query}: the \strong{query} component of the URI.
+\item \code{body}: the request body.
+\item \code{header}: all request headers.
+}
+
+If more than one is specified, all components must match in order for the
+request to match. If not supplied, defaults to \code{c("method", "uri")}.}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
@@ -70,6 +82,9 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
+
+\item{warn_on_empty}{Warn if the cassette is ejected but no interactions
+have been recorded?}
 
 \item{frame}{Attach exit handlers to this environment. Typically, this
 should be either the current environment or a parent frame (accessed
