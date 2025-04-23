@@ -1,13 +1,8 @@
 test_that("can insert and eject a cassette", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
-
   expect_false(cassette_active())
   expect_equal(current_cassette(), NULL)
 
-  cassette <- insert_cassette("test")
+  cassette <- insert_cassette("test", warn_on_empty = FALSE)
   expect_s3_class(cassette, "Cassette")
   expect_true(cassette_active())
   expect_equal(current_cassette(), cassette)
@@ -23,10 +18,7 @@ test_that("ejecting errors if no cassettes", {
 })
 
 test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
   local_light_switch()
 
   # after being turned off, insert_cassette throws an error
@@ -34,7 +26,7 @@ test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=
   expect_snapshot(insert_cassette("test"), error = TRUE)
 
   suppressMessages(turn_off(ignore_cassettes = TRUE))
-  expect_no_error(insert_cassette("test"))
+  expect_no_error(insert_cassette("test", warn_on_empty = FALSE))
 })
 
 test_that("inserting and ejecting is logged", {
@@ -45,21 +37,16 @@ test_that("inserting and ejecting is logged", {
 })
 
 test_that("cassettes are a stack", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
-
   expect_equal(current_cassette(), NULL)
   expect_equal(cassettes(), list())
   expect_equal(cassette_names(), character(0))
 
-  cassette_a <- insert_cassette("aaa")
+  cassette_a <- insert_cassette("aaa", warn_on_empty = FALSE)
   expect_equal(current_cassette(), cassette_a)
   expect_equal(cassettes(), list(cassette_a))
   expect_equal(cassette_names(), "aaa")
 
-  cassette_b <- insert_cassette("bbb")
+  cassette_b <- insert_cassette("bbb", warn_on_empty = FALSE)
   expect_equal(current_cassette(), cassette_b)
   expect_equal(cassettes(), list(cassette_a, cassette_b))
   expect_equal(cassette_names(), c("aaa", "bbb"))

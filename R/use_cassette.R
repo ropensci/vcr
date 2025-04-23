@@ -44,6 +44,8 @@
 #' cassette should be re-recorded. default: `NULL` (not re-recorded)
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file? default: `FALSE`
+#' @param warn_on_empty Warn if the cassette is ejected but no interactions
+#'   have been recorded?
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
 #'   functions.
 #' @section Cassette options:
@@ -156,7 +158,8 @@ use_cassette <- function(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL
 ) {
   check_required(name)
   if (missing(...)) {
@@ -175,7 +178,8 @@ use_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    warn_on_empty = warn_on_empty
   )
 
   # force all arguments
@@ -200,6 +204,7 @@ local_cassette <- function(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL,
   frame = parent.frame()
 ) {
   cassette <- insert_cassette(
@@ -211,7 +216,8 @@ local_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    clean_outdated_http_interactions = clean_outdated_http_interactions,
+    warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {
     withr::defer(eject_cassette(), envir = frame)

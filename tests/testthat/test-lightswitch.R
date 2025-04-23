@@ -9,12 +9,7 @@ test_that("can turn off and turn on", {
 })
 
 test_that("turned_off works iif no cassettes active", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
-
-  insert_cassette("test")
+  insert_cassette("test", warn_on_empty = FALSE)
   expect_snapshot(turned_off(5 + 5), error = TRUE)
   eject_cassette()
 

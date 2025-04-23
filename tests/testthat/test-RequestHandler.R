@@ -22,12 +22,10 @@ test_that("RequestHandlerHttr: httr", {
   expect_error(x$handle())
 
   # do request
-  insert_cassette("greencow")
+  local_cassette("greencow", warn_on_empty = FALSE)
   response <- x$handle()
 
   expect_s3_class(response, "response")
   # status code is correct
   expect_equal(response$status_code, 404)
-
-  eject_cassette()
 })

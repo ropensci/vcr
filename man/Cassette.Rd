@@ -96,6 +96,8 @@ bytes of the requests and responses}
 be recorded back to file}
 
 \item{\code{to_return}}{(logical) internal use}
+
+\item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
 }
 \if{html}{\out{</div>}}
 }
@@ -138,7 +140,8 @@ Create a new \code{Cassette} object
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -176,6 +179,9 @@ re-recorded at the given interval, in seconds.}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file. Default: \code{FALSE}}
+
+\item{\code{warn_on_empty}}{Warn when ejecting the cassette if no interactions
+have been recorded.}
 }
 \if{html}{\out{</div>}}
 }

@@ -15,7 +15,8 @@ use_cassette(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL
 )
 
 local_cassette(
@@ -28,6 +29,7 @@ local_cassette(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
   clean_outdated_http_interactions = NULL,
+  warn_on_empty = NULL,
   frame = parent.frame()
 )
 }
@@ -80,6 +82,9 @@ cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? default: \code{FALSE}}
+
+\item{warn_on_empty}{Warn if the cassette is ejected but no interactions
+have been recorded?}
 
 \item{frame}{Attach exit handlers to this environment. Typically, this
 should be either the current environment or a parent frame (accessed
