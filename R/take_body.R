@@ -5,7 +5,7 @@
 #' - list: `crul`
 #' - httr2_request: `httr2`
 #' @keywords internal
-take_body <- function(x, ...) {
+take_body <- function(x) {
   UseMethod("take_body")
 }
 
