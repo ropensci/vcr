@@ -20,6 +20,10 @@ sensitive_put_back <- function(x) {
   return(x)
 }
 sensitive_remove <- function(x) {
+  if (is.null(x)) {
+    return()
+  }
+
   fsd <- vcr_c$filter_sensitive_data
   for (i in seq_along(fsd)) {
     if (nchar(fsd[[i]]) > 0) {

@@ -14,7 +14,7 @@ RequestHandlerCrul <- R6::R6Class(
         Request$new(
           request$method,
           request$url$url %||% request$url,
-          take_body(request) %||% "",
+          take_body(request),
           request$headers
         )
       }
