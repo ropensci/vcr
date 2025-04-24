@@ -416,7 +416,6 @@ Cassette <- R6::R6Class(
           z$request$uri,
           z$request$body$string,
           z$request$headers,
-          disk = z$response$body$file
         )
         if (should_be_ignored(request)) {
           return(NULL)
@@ -513,7 +512,6 @@ Cassette <- R6::R6Class(
         } else {
           x$request_headers
         },
-        disk = is_disk,
         skip_port_stripping = TRUE
       )
 

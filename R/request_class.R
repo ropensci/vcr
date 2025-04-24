@@ -56,10 +56,6 @@ Request <- R6::R6Class(
     #' @param uri (character) request URI
     #' @param body (character) request body
     #' @param headers (named list) request headers
-    #' @param disk (boolean), is body a file on disk
-    #' @param fields (various) post fields
-    #' @param output (various) output details
-    #' @param policies (various) http policies, used in httr2 only
     #' @param skip_port_stripping (logical) whether to strip the port.
     #' default: `FALSE`
     #' @return A new `Request` object
@@ -68,10 +64,6 @@ Request <- R6::R6Class(
       uri,
       body,
       headers,
-      disk,
-      fields,
-      output,
-      policies,
       skip_port_stripping = FALSE
     ) {
       if (!missing(method)) self$method <- tolower(method)
@@ -95,10 +87,6 @@ Request <- R6::R6Class(
         self$path <- tmp$path
         self$query <- tmp$parameter
       }
-      if (!missing(disk)) self$disk <- disk
-      if (!missing(fields)) self$fields <- fields
-      if (!missing(output)) self$output <- output
-      if (!missing(policies)) self$policies <- policies
     }
   ),
   private = list(
