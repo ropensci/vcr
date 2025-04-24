@@ -105,7 +105,7 @@ RequestHandler <- R6::R6Class(
       if (!cassette_active()) {
         return(FALSE)
       }
-      interactions <- current_cassette()$http_interactions_
+      interactions <- current_cassette()$http_interactions
       interactions$has_interaction_matching(request)
     },
     is_disabled = function(adapter = "crul") !webmockr::enabled(adapter),
@@ -115,7 +115,7 @@ RequestHandler <- R6::R6Class(
       if (!cassette_active()) {
         return(NULL)
       }
-      interactions <- current_cassette()$http_interactions_
+      interactions <- current_cassette()$http_interactions
       self$stubbed_response <- interactions$response_for(request)
 
       self$stubbed_response

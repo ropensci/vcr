@@ -310,8 +310,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
       any(vapply(
         the$cassettes,
         function(z) {
-          z$http_interactions()
-          z$http_interactions_$has_used_interaction_matching(self$request) %||%
+          z$http_interactions$has_used_interaction_matching(self$request) %||%
             FALSE
         },
         logical(1)
@@ -324,8 +323,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
       num_remaining_interactions <- sum(vapply(
         the$cassettes,
         function(z) {
-          z$http_interactions()
-          z$http_interactions_$remaining_unused_interaction_count()
+          z$http_interactions$remaining_unused_interaction_count()
         },
         numeric(1)
       ))
