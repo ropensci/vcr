@@ -36,30 +36,6 @@ take_body.request <- function(x) {
 #' @keywords internal
 take_body.list <- take_body.request
 
-#' @note adapted from httr2:::req_body_get
-#' @keywords internal
-take_body.httr2_request <- function(x) {
-  if (is.null(x$body)) {
-    return("")
-  }
-  switch(
-    x$body$type,
-    raw = {
-      # httr2::req_body_raw allows raw or string
-      if (is_raw(x$body$data)) rawToChar(x$body$data) else x$body$data
-    },
-    form = {
-      data <- x$body$data # need to put back unobfuscate?
-      httr2_url_build(data)
-    },
-    json = rlang::exec(jsonlite::toJSON, x$body$data, !!!x$body$params),
-    # FIXME: for now take the file path - would be good to get what would
-    # be sent in a real request
-    "raw-file" = x$body$data,
-    multipart = x$body$data,
-    cli::cli_abort("Unsupported request body type {.str {x$body$type}}.")
-  )
-}
 
 httr2_url_build <- function(data) {
   replace_me <- "http://x"
