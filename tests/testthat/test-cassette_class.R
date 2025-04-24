@@ -38,7 +38,7 @@ test_that("make_http_interaction works as expected", {
   # crul, with non-image response body
   # $response$body should be class `character`
   load("crul_resp1.rda")
-  aa <- zz$make_http_interaction(crul_resp1)
+  aa <- zz$record_http_interaction(crul_resp1, Request$new())
   expect_s3_class(aa$request, "Request")
   expect_s3_class(aa$response, "VcrResponse")
   expect_type(aa$response$body, "character")
@@ -46,7 +46,7 @@ test_that("make_http_interaction works as expected", {
   # crul, with image response body
   # $response$body should be class `raw`
   load("crul_resp2.rda")
-  bb <- zz$make_http_interaction(crul_resp2)
+  bb <- zz$record_http_interaction(crul_resp2, Request$new())
   expect_s3_class(bb$request, "Request")
   expect_s3_class(bb$response, "VcrResponse")
   expect_type(bb$response$body, "raw")

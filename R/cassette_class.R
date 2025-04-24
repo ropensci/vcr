@@ -360,9 +360,70 @@ Cassette <- R6::R6Class(
     #' @description record an http interaction (doesn't write to disk)
     #' @param x a crul, httr, or httr2 response object, with the request at `$request`
     #' @return nothing returned
-    record_http_interaction = function(x) {
-      int <- self$make_http_interaction(x)
-      self$http_interactions_$response_for(int$request)
+    record_http_interaction = function(response, request) {
+      # for httr2, duplicate `body` slot in `content`
+      if (inherits(response, "httr2_response"))
+        response$content <- response$body
+
+      # content must be raw or character
+      assert(unclass(response$content), c('raw', 'character'))
+      new_file_path <- ""
+      is_disk <- FALSE
+      if (is.character(response$content)) {
+        if (file.exists(response$content)) {
+          is_disk <- TRUE
+          write_disk_path <- vcr_c$write_disk_path
+          if (is.null(write_disk_path))
+            stop(
+              "if writing to disk, write_disk_path must be given; ",
+              "see ?vcr_configure"
+            )
+          new_file_path <- file.path(
+            write_disk_path,
+            basename(response$content)
+          )
+        }
+      }
+
+      response <- VcrResponse$new(
+        status = if (inherits(response, "response")) {
+          c(
+            list(status_code = response$status_code),
+            httr::http_status(response)
+          )
+        } else if (inherits(response, "httr2_response")) {
+          list(
+            status_code = response$status_code,
+            message = httr2::resp_status_desc(response)
+          )
+        } else {
+          unclass(response$status_http())
+        },
+        headers = if (inherits(response, c("response", "httr2_response"))) {
+          response$headers
+        } else {
+          response$response_headers
+        },
+        body = if (is.raw(response$content) || is.null(response$content)) {
+          if (can_rawToChar(response$content)) rawToChar(response$content) else
+            response$content
+        } else {
+          stopifnot(inherits(unclass(response$content), "character"))
+          if (file.exists(response$content)) {
+            # calculate new file path in fixtures/
+            # copy file into fixtures/file_cache/
+            # don't move b/c don't want to screw up first use before using
+            # cached request
+            file.copy(response$content, write_disk_path, overwrite = TRUE) # copy the file
+            new_file_path
+          } else {
+            response$content
+          }
+        },
+        disk = is_disk
+      )
+      int <- list(request = request, response = response)
+
       vcr_log_sprintf(
         "Recorded HTTP interaction: %s => %s",
         request_summary(int$request),
@@ -372,6 +433,7 @@ Cassette <- R6::R6Class(
         self$new_recorded_interactions,
         list(int)
       )
+      int
     },
 
     #' @description Are there any new recorded interactions?
@@ -393,83 +455,6 @@ Cassette <- R6::R6Class(
         interactions = interactions,
         request_matchers = self$match_requests_on
       )
-    },
-
-    #' @description Make a request-response pairs
-    #' @param x A crul, httr, or httr2 response object, with the request at `$request`
-    #' @return A list with request and response.
-    make_http_interaction = function(x) {
-      # for httr2, duplicate `body` slot in `content`
-      if (inherits(x, "httr2_response")) x$content <- x$body
-
-      # content must be raw or character
-      assert(unclass(x$content), c('raw', 'character'))
-      new_file_path <- ""
-      is_disk <- FALSE
-      if (is.character(x$content)) {
-        if (file.exists(x$content)) {
-          is_disk <- TRUE
-          write_disk_path <- vcr_c$write_disk_path
-          if (is.null(write_disk_path))
-            stop(
-              "if writing to disk, write_disk_path must be given; ",
-              "see ?vcr_configure"
-            )
-          new_file_path <- file.path(write_disk_path, basename(x$content))
-        }
-      }
-
-      request <- Request$new(
-        method = x$request$method,
-        uri = x$url,
-        body = take_body(x$request),
-        headers = if (inherits(x, c("response", "httr2_response"))) {
-          as.list(x$request$headers)
-        } else {
-          x$request_headers
-        }
-      )
-
-      response <- VcrResponse$new(
-        status = if (inherits(x, "response")) {
-          c(list(status_code = x$status_code), httr::http_status(x))
-        } else if (inherits(x, "httr2_response")) {
-          list(
-            status_code = x$status_code,
-            message = httr2::resp_status_desc(x)
-          )
-        } else {
-          unclass(x$status_http())
-        },
-        headers = if (inherits(x, c("response", "httr2_response"))) {
-          x$headers
-        } else {
-          x$response_headers
-        },
-        body = if (is.raw(x$content) || is.null(x$content)) {
-          if (can_rawToChar(x$content)) rawToChar(x$content) else x$content
-        } else {
-          stopifnot(inherits(unclass(x$content), "character"))
-          if (file.exists(x$content)) {
-            # calculate new file path in fixtures/
-            # copy file into fixtures/file_cache/
-            # don't move b/c don't want to screw up first use before using
-            # cached request
-            file.copy(
-              x$content,
-              write_disk_path,
-              overwrite = TRUE,
-              recursive = TRUE
-            ) # copy the file
-            new_file_path
-            # raw(0)
-          } else {
-            x$content
-          }
-        },
-        disk = is_disk
-      )
-      list(request = request, response = response)
     }
   )
 )
