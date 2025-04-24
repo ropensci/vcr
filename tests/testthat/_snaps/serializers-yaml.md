@@ -19,5 +19,5 @@
             encoding: ''
             string: body
         recorded_at: 2024-01-01 12:00:00 GMT
-        recorded_with: <package_versions>
+      recorded_with: <package_versions>
 

@@ -1,16 +1,3 @@
-write_yaml <- function(x, file, bytes) {
-  write_header(file)
-  lapply(x, write_interactions, file = file, bytes = bytes)
-}
-
-write_json <- function(x, file, bytes) {
-  lapply(x, write_interactions_json, file = file, bytes = bytes)
-}
-
-write_header <- function(file) {
-  cat("http_interactions:", sep = "\n", file = file)
-}
-
 # dedup header keys so we have unique yaml keys
 # (x <- list(b = "foo", c = list(a = 5, a = 6)))
 # (x <- list(b = "foo", a = 5))
@@ -33,25 +20,28 @@ dedup_keys <- function(x) {
   return(x)
 }
 
-encode_interactions <- function(x, bytes) {
-  assert(x, "list")
-
+encode_interactions <- function(x, preserve_bytes = FALSE) {
+  interactions <- lapply(x, encode_interaction, preserve_bytes)
   list(
-    list(
-      request = list(
-        method = x$request$method,
-        uri = encode_uri(x$request$uri),
-        body = encode_body(x$request$body, NULL, bytes),
-        headers = encode_headers(x$request$headers, "request")
-      ),
-      response = list(
-        status = x$response$status,
-        headers = encode_headers(x$response$headers, "response"),
-        body = encode_body(x$response$body, x$response$disk, bytes)
-      ),
-      recorded_at = paste0(cur_time(tz = "GMT"), " GMT"),
-      recorded_with = pkg_versions()
-    )
+    http_interactions = interactions,
+    recorded_with = pkg_versions()
+  )
+}
+
+encode_interaction <- function(x, preserve_bytes) {
+  list(
+    request = list(
+      method = x$request$method,
+      uri = encode_uri(x$request$uri),
+      body = encode_body(x$request$body, NULL, preserve_bytes),
+      headers = encode_headers(x$request$headers, "request")
+    ),
+    response = list(
+      status = x$response$status,
+      headers = encode_headers(x$response$headers, "response"),
+      body = encode_body(x$response$body, x$response$disk, preserve_bytes)
+    ),
+    recorded_at = paste0(cur_time(tz = "GMT"), " GMT")
   )
 }
 
@@ -92,33 +82,6 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
       file = file
     ))
   }
-}
-
-# param x: a list with "request" and "response" slots
-# param file: a file path
-# param bytes: logical, whether to preserve exact bytes or not
-write_interactions <- function(x, file, bytes) {
-  z <- encode_interactions(x, bytes)
-  tmp <- yaml::as.yaml(z)
-  cat(tmp, file = file, append = TRUE)
-}
-
-write_interactions_json <- function(x, file, bytes) {
-  z <- encode_interactions(x, bytes)
-  # combine with existing data on same file, if any
-  on_disk <- invisible(tryCatch(
-    jsonlite::fromJSON(file, FALSE),
-    error = function(e) e
-  ))
-  if (!inherits(on_disk, "error") && is.list(on_disk)) {
-    z <- c(on_disk$http_interactions, z)
-  }
-  tmp <- jsonlite::toJSON(
-    list(http_interactions = z),
-    auto_unbox = TRUE,
-    pretty = vcr_c$json_pretty
-  )
-  cat(paste0(tmp, "\n"), file = file)
 }
 
 pkg_versions <- function() {
