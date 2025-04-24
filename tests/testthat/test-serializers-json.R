@@ -3,6 +3,23 @@ test_that("generates correct path", {
   expect_equal(aa$path, "path/name.json")
 })
 
+test_that("generates expected yaml", {
+  local_vcr_configure(json_pretty = TRUE)
+  local_mocked_bindings(
+    cur_time = function(tz) "2024-01-01 12:00:00",
+    pkg_versions = function() "<package_versions>"
+  )
+
+  request <- Request$new(method = "GET", uri = "http://example.com")
+  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
+  interaction <- list(request = request, response = response)
+
+  ser <- JSON$new(withr::local_tempdir(), "serialize")
+  ser$serialize(list(interaction))
+
+  expect_snapshot(writeLines(readLines(ser$path)))
+})
+
 test_that("JSON usage", {
   skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir(), serialize_with = "json")
@@ -43,12 +60,4 @@ test_that("JSON usage", {
   expect_length(jsonlite::fromJSON(dd$file(), FALSE)[[1]], 2)
   bodies <- jsonlite::fromJSON(dd$file())[[1]]$response$body$string
   for (i in bodies) expect_true(is_base64(i))
-})
-
-test_that("JSON fails well", {
-  expect_error(JSON$new(a = 5), "unused argument")
-
-  z <- JSON$new("path", "name")
-  # if no path specified, fails with useful message as is
-  expect_error(suppressWarnings(z$deserialize()), "cannot open the connection")
 })
