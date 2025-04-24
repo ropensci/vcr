@@ -190,20 +190,6 @@ HTTPInteractionList <- R6::R6Class(
       )
 
       request_matches(req, intreq, self$request_matchers)
-    },
-
-    # return: character
-    request_summary = function(z) {
-      paste(z$method, z$uri)
-    },
-
-    # return: character
-    response_summary = function(z) {
-      paste(
-        z$status$status_code,
-        sprintf("['%s ...'", substring(gsub("\n", " ", z$body), 1, 50)),
-        "]"
-      )
     }
   )
 )
