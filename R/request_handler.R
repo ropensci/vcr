@@ -93,8 +93,8 @@ RequestHandler <- R6::R6Class(
 
   private = list(
     request_summary = function(request) {
-      request_matches <- current_casssette()$match_requests_on
-      request_summary(request, request_matchers)
+      request_matches <- current_cassette()$match_requests_on
+      request_summary(request, request_matches)
     },
 
     # request type helpers
