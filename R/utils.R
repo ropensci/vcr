@@ -84,3 +84,12 @@ dir_create <- function(path) {
 cur_time <- function(tz = "") {
   format(Sys.time(), format = "%Y-%m-%d %H:%M:%S", tz = tz)
 }
+
+
+pkg_versions <- function() {
+  paste(
+    paste0("vcr/", utils::packageVersion("vcr")),
+    paste0("webmockr/", utils::packageVersion("webmockr")),
+    sep = ", "
+  )
+}

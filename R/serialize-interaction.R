@@ -1,3 +1,4 @@
+# Interactions -----------------------------------------------------------------
 
 encode_interactions <- function(x, preserve_bytes = FALSE) {
   interactions <- lapply(x, encode_interaction, preserve_bytes)
@@ -6,6 +7,19 @@ encode_interactions <- function(x, preserve_bytes = FALSE) {
     recorded_with = pkg_versions()
   )
 }
+
+decode_interactions <- function(x, preserve_bytes = FALSE) {
+  if (is.null(x)) return(list())
+
+  x$http_interactions <- lapply(
+    x$http_interactions,
+    decode_interaction,
+    preserve_bytes = preserve_bytes
+  )
+  x
+}
+
+# Interaction ------------------------------------------------------------------
 
 encode_interaction <- function(x, preserve_bytes) {
   list(
@@ -24,10 +38,8 @@ encode_interaction <- function(x, preserve_bytes) {
   )
 }
 
-pkg_versions <- function() {
-  paste(
-    paste0("vcr/", utils::packageVersion("vcr")),
-    paste0("webmockr/", utils::packageVersion("webmockr")),
-    sep = ", "
-  )
+decode_interaction <- function(x, preserve_bytes) {
+  x$request$body <- decode_body(x$request$body)
+  x$response$body <- decode_body(x$response$body, preserve_bytes)
+  x
 }

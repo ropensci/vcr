@@ -14,3 +14,8 @@ test_that("can_rawToChar", {
   expect_type(png_eg, "raw")
   expect_false(can_rawToChar(png_eg))
 })
+
+test_that("pkg_versions", {
+  expect_match(pkg_versions(), "vcr/")
+  expect_match(pkg_versions(), "webmockr/")
+})
