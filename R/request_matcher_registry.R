@@ -18,7 +18,7 @@ request_matches <- function(req1, req2, match_requests_on) {
 }
 
 request_matches_one <- function(type, req1, req2) {
-  match <- switch(
+  switch(
     type,
     method = req1$method == req2$method,
     uri = identical(
