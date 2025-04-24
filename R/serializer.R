@@ -1,3 +1,13 @@
+serializer_fetch <- function(type, path, name, preserve_bytes = FALSE) {
+  switch(
+    type,
+    json = JSON$new(path, name, preserve_bytes = preserve_bytes),
+    yaml = YAML$new(path, name, preserve_bytes = preserve_bytes),
+    cli::cli_abort("Unsupported cassette serializer {.str {type}}.")
+  )
+}
+
+
 Serializer <- R6::R6Class(
   "Serializer",
   public = list(
@@ -15,32 +25,53 @@ Serializer <- R6::R6Class(
   )
 )
 
-decode_interactions <- function(x, preserve_bytes = FALSE) {
-  if (is.null(x)) return(list())
+JSON <- R6::R6Class(
+  "JSON",
+  inherit = Serializer,
+  public = list(
+    initialize = function(path, name, preserve_bytes = FALSE) {
+      super$initialize(path, name, ".json", preserve_bytes = preserve_bytes)
+    },
 
-  x$http_interactions <- lapply(x$http_interactions, function(z) {
-    z$request$body <- decode_body(z$request$body)
-    z$response$body <- decode_body(z$response$body, preserve_bytes)
-    z
-  })
+    serialize = function(data) {
+      out <- encode_interactions(data, self$preserve_bytes)
+      jsonlite::write_json(
+        out,
+        self$path,
+        auto_unbox = TRUE,
+        pretty = vcr_c$json_pretty
+      )
+    },
 
-  x
-}
-
-decode_body <- function(body, preserve_bytes = FALSE) {
-  if (has_name(body, "string") && preserve_bytes) {
-    warning("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
-  } else if (has_name(body, "base64_string")) {
-    body$base64_string <- from_base64(body$base64_string)
-  }
-  body
-}
-
-serializer_fetch <- function(type, path, name, preserve_bytes = FALSE) {
-  switch(
-    type,
-    json = JSON$new(path, name, preserve_bytes = preserve_bytes),
-    yaml = YAML$new(path, name, preserve_bytes = preserve_bytes),
-    cli::cli_abort("Unsupported cassette serializer {.str {type}}.")
+    deserialize = function() {
+      str <- sensitive_put_back(readLines(self$path))
+      interactions <- jsonlite::fromJSON(str, FALSE)
+      interactions <- query_params_put_back(interactions)
+      interactions <- decode_interactions(interactions, self$preserve_bytes)
+      interactions
+    }
   )
-}
+)
+
+YAML <- R6::R6Class(
+  "YAML",
+  inherit = Serializer,
+  public = list(
+    initialize = function(path, name, preserve_bytes = FALSE) {
+      super$initialize(path, name, ".yml", preserve_bytes = preserve_bytes)
+    },
+
+    serialize = function(data) {
+      out <- encode_interactions(data, self$preserve_bytes)
+      yaml::write_yaml(out, self$path)
+    },
+
+    deserialize = function() {
+      str <- sensitive_put_back(readLines(self$path, encoding = "UTF-8"))
+      interactions <- yaml::yaml.load(str)
+      interactions <- query_params_put_back(interactions)
+      interactions <- decode_interactions(interactions, self$preserve_bytes)
+      interactions
+    }
+  )
+)

@@ -155,3 +155,116 @@ test_that("use_cassette w/ with images: crul", {
 
   expect_identical(res1$content, res2$content)
 })
+
+# JSON -------------------------------------------------------------------------
+
+test_that("generates correct path", {
+  aa <- JSON$new("path", "name")
+  expect_equal(aa$path, "path/name.json")
+})
+
+test_that("generates expected yaml", {
+  local_vcr_configure(json_pretty = TRUE)
+  local_mocked_bindings(
+    cur_time = function(tz) "2024-01-01 12:00:00",
+    pkg_versions = function() "<package_versions>"
+  )
+
+  request <- Request$new(method = "GET", uri = "http://example.com")
+  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
+  interaction <- list(request = request, response = response)
+
+  ser <- JSON$new(withr::local_tempdir(), "serialize")
+  ser$serialize(list(interaction))
+
+  expect_snapshot(writeLines(readLines(ser$path)))
+})
+
+test_that("JSON usage", {
+  skip_on_cran()
+  local_vcr_configure(dir = withr::local_tempdir(), serialize_with = "json")
+
+  # does one request work?
+  aa <- use_cassette(
+    "testing2",
+    res <- crul::HttpClient$new(hb("/get"))$get()
+  )
+  expect_s3_class(aa, "Cassette")
+  expect_s3_class(res, "HttpResponse")
+  expect_length(jsonlite::fromJSON(aa$file(), FALSE)[[1]], 1)
+
+  # do two requests work?
+  cc <- use_cassette("testing4", {
+    ref <- crul::HttpClient$new(hb("/get"))$get()
+    the <- crul::HttpClient$new(hb("/post"))$post(body = "fafaa")
+  })
+  expect_s3_class(ref, "HttpResponse")
+  expect_s3_class(the, "HttpResponse")
+  expect_length(jsonlite::fromJSON(cc$file(), FALSE)[[1]], 2)
+
+  # preserve exact body bytes
+  dd <- use_cassette(
+    "testing5",
+    {
+      raf <- crul::HttpClient$new(hb("/get"))$get(
+        query = list(cheese = "string")
+      )
+      raz <- crul::HttpClient$new(hb("/post"))$post(
+        body = list(foo = "bar", baz = "ball")
+      )
+    },
+    preserve_exact_body_bytes = TRUE
+  )
+  expect_s3_class(raf, "HttpResponse")
+  expect_s3_class(raz, "HttpResponse")
+  expect_length(jsonlite::fromJSON(dd$file(), FALSE)[[1]], 2)
+  bodies <- jsonlite::fromJSON(dd$file())[[1]]$response$body$string
+  for (i in bodies) expect_true(is_base64(i))
+})
+
+# YAML -------------------------------------------------------------------------
+
+test_that("correctly computes path", {
+  aa <- YAML$new("path", "name")
+  expect_equal(aa$path, "path/name.yml")
+})
+
+test_that("generates expected yaml", {
+  local_mocked_bindings(
+    cur_time = function(tz) "2024-01-01 12:00:00",
+    pkg_versions = function() "<package_versions>"
+  )
+
+  request <- Request$new(method = "GET", uri = "http://example.com")
+  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
+  interaction <- list(request = request, response = response)
+
+  ser <- YAML$new(withr::local_tempdir(), "serialize")
+  ser$serialize(list(interaction))
+
+  expect_snapshot(writeLines(readLines(ser$path)))
+})
+
+test_that("YAML usage", {
+  z <- YAML$new(withr::local_tempdir(), "name")
+  expect_equal(basename(z$path), "name.yml")
+
+  # before file exists:
+  expect_error(suppressWarnings(z$deserialize()), "cannot open")
+
+  # after file exists, before any yaml in it:
+  file.create(z$path)
+  expect_equal(z$deserialize(), list())
+  # after file exists, with yaml in it, with incomplete final line:
+  cat("foo: 123\nbar: 456", file = z$path)
+  expect_warning(z$deserialize(), "incomplete final line")
+  # after file exists, with yaml in it, without incomplete final line:
+  cat("foo: 123\nbar: 456\n", file = z$path)
+  expect_type(z$deserialize(), "list")
+})
+
+test_that("Windows encoding", {
+  ser <- YAML$new(test_path("cassettes"), "ropenaq-encoding")
+
+  expect_type(ser$deserialize(), "list") # could fail on Windows
+})

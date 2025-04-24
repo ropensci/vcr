@@ -299,3 +299,18 @@ test_that("filter_headers/request/remove/json", {
     jsonlite::fromJSON(cas2$file(), FALSE)
   )
 })
+
+test_that("dedup_keys", {
+  # no modification
+  x <- list(b = "foo", a = 5)
+  expect_equal(dedup_keys(x), x)
+
+  # modification: group the a keys
+  x <- list(b = "foo", a = 5, a = 6)
+  expect_equal(dedup_keys(x), list(a = c(5, 6), b = "foo"))
+
+  # FIXME: doesn't yet work for nested duplicates. not sure if
+  # we need it to work for this case or not?
+  x <- list(b = "foo", c = list(a = 5, a = 6))
+  expect_equal(dedup_keys(x), x)
+})
