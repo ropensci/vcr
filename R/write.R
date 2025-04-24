@@ -49,7 +49,7 @@ encode_interactions <- function(x, bytes) {
         headers = encode_headers(x$response$headers, "response"),
         body = encode_body(x$response$body, x$response$disk, bytes)
       ),
-      recorded_at = paste0(format(Sys.time(), tz = "GMT"), " GMT"),
+      recorded_at = paste0(cur_time(tz = "GMT"), " GMT"),
       recorded_with = pkg_versions()
     )
   )

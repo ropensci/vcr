@@ -58,7 +58,7 @@ x$headers
 \subsection{Method \code{new()}}{
 Create a new \code{Request} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers, disk, fields, output, policies)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Request$new(method, uri, body, headers)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -72,14 +72,6 @@ post, put, patch or delete)}
 \item{\code{body}}{(character) request body}
 
 \item{\code{headers}}{(named list) request headers}
-
-\item{\code{disk}}{(boolean), is body a file on disk}
-
-\item{\code{fields}}{(various) post fields}
-
-\item{\code{output}}{(various) output details}
-
-\item{\code{policies}}{(various) http policies, used in httr2 only}
 }
 \if{html}{\out{</div>}}
 }

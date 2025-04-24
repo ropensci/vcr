@@ -2,37 +2,6 @@
 #' @description Custom vcr http response object
 #' @export
 #' @keywords internal
-#' @examples \dontrun{
-#' vcr_configure(dir = tempdir())
-#'
-#' # basic example of VcrResponse use
-#' url <- "https://google.com"
-#' (cli <- crul::HttpClient$new(url = url))
-#' (res <- cli$get("get", query = list(q = "stuff")))
-#' (x <- VcrResponse$new(res$status_http(), res$response_headers,
-#'    res$parse("UTF-8"), res$response_headers$status))
-#' x$body
-#' x$status
-#' x$headers
-#'
-#' # check if body is compressed
-#' url <- "https://fishbase.ropensci.org"
-#' (cli <- crul::HttpClient$new(url = url))
-#' (res <- cli$get("species/3"))
-#' res$response_headers
-#' (x <- VcrResponse$new(res$status_http(), res$response_headers,
-#'    res$parse("UTF-8"), res$response_headers$status))
-#' x$content_encoding()
-#' x$is_compressed()
-#'
-#' # with disk
-#' url <- "https://google.com"
-#' (cli <- crul::HttpClient$new(url = url))
-#' f <- tempfile()
-#' (res <- cli$get("get", query = list(q = "stuff"), disk = f))
-#' (x <- VcrResponse$new(res$status_http(), res$response_headers,
-#'    f, res$response_headers$status, disk = TRUE))
-#' }
 VcrResponse <- R6::R6Class(
   "VcrResponse",
   public = list(

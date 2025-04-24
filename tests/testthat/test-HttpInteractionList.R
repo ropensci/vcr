@@ -64,12 +64,6 @@ test_that("HTTPInteractionList", {
   # objects and methods
   expect_type(x$request_matchers, "character")
   expect_equal(x$request_matchers, c('method', 'uri'))
-  ## parent list
-  expect_s3_class(x$parent_list, "NullList")
-  expect_null(x$parent_list$response_for())
-  expect_false(x$parent_list$has_interaction_matching())
-  expect_false(x$parent_list$has_used_interaction_matching())
-  expect_equal(x$parent_list$remaining_unused_interaction_count(), 0)
 
   expect_type(x$used_interactions, "list")
   expect_false(x$allow_playback_repeats)

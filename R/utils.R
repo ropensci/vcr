@@ -103,3 +103,7 @@ from_base64 <- function(x) {
   x <- gsub("[\r\n]", "", x)
   jsonlite::base64_dec(x)
 }
+
+cur_time <- function(tz = "") {
+  format(Sys.time(), format = "%Y-%m-%d %H:%M:%S", tz = tz)
+}

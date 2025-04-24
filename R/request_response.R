@@ -87,14 +87,11 @@ response_summary <- function(response) {
     resp <- "<raw>"
   } else {
     resp <- response$body
+    # note: gsub changes a string to UTF-8, useBytes seems to avoid doing this
+    #  & avoids multibyte string errors
+    resp <- gsub("\n", " ", resp, useBytes = TRUE)
+    resp <- substring(resp, 1, 80)
   }
 
-  # construct summary
-  # note: gsub changes a string to UTF-8, useBytes seems to avoid doing this
-  #  & avoids multibyte string errors
-  sprintf(
-    "%s %s",
-    ss %||% '???',
-    substring(gsub("\n", " ", resp, useBytes = TRUE), 1, 80)
-  )
+  paste(ss %||% '???', resp)
 }

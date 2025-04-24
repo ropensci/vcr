@@ -42,7 +42,6 @@ reference:
       - cassettes
       - current_cassette
       - check_cassette_names
-      - http_interactions
   - title: "Internals"
     desc: >
       You shouldn't need to use these directly

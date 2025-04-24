@@ -1,15 +1,3 @@
-# Null list, an empty HTTPInteractionList object
-NullList <- R6::R6Class(
-  'NullList',
-  public = list(
-    response_for = function() NULL,
-    has_interaction_matching = function() FALSE,
-    has_used_interaction_matching = function() FALSE,
-    remaining_unused_interaction_count = function() 0
-  )
-)
-
-
 #' @title HTTPInteractionList class
 #' @description keeps track of all request-response pairs
 #' @export
@@ -45,8 +33,6 @@ HTTPInteractionList <- R6::R6Class(
     request_matchers = NULL,
     #' @field allow_playback_repeats whether to allow playback repeats
     allow_playback_repeats = FALSE,
-    #' @field parent_list A list for empty objects, see `NullList`
-    parent_list = NullList$new(),
     #' @field used_interactions (list) Interactions that have been used
     used_interactions = list(),
 
@@ -54,7 +40,6 @@ HTTPInteractionList <- R6::R6Class(
     #' @param interactions (list) list of interaction class objects
     #' @param request_matchers (character) vector of request matchers
     #' @param allow_playback_repeats whether to allow playback repeats or not
-    #' @param parent_list A list for empty objects, see `NullList`
     #' @param used_interactions (list) Interactions that have been used. That is,
     #' interactions that are on disk in the current cassette, and a
     #' request has been made that matches that interaction
@@ -63,13 +48,11 @@ HTTPInteractionList <- R6::R6Class(
       interactions,
       request_matchers,
       allow_playback_repeats = FALSE,
-      parent_list = NullList$new(),
       used_interactions = list()
     ) {
       self$interactions <- interactions
       self$request_matchers <- request_matchers
       self$allow_playback_repeats <- allow_playback_repeats
-      self$parent_list <- parent_list
       self$used_interactions <- used_interactions
       interaction_summaries <- vapply(
         interactions,
@@ -119,7 +102,7 @@ HTTPInteractionList <- R6::R6Class(
         if (tmp) {
           tmp$response
         } else {
-          self$parent_list$response_for()
+          NULL
         }
       }
     },
@@ -128,8 +111,7 @@ HTTPInteractionList <- R6::R6Class(
     #' @return logical
     has_interaction_matching = function(request) {
       private$matching_interaction_bool(request) ||
-        private$matching_used_interaction_for(request) ||
-        self$parent_list$has_interaction_matching()
+        private$matching_used_interaction_for(request)
     },
 
     #' @description check if has used interactions matching a given request

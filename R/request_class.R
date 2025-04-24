@@ -44,20 +44,12 @@ Request <- R6::R6Class(
     #' @param uri (character) request URI
     #' @param body (character) request body
     #' @param headers (named list) request headers
-    #' @param disk (boolean), is body a file on disk
-    #' @param fields (various) post fields
-    #' @param output (various) output details
-    #' @param policies (various) http policies, used in httr2 only
     #' @return A new `Request` object
     initialize = function(
       method,
       uri,
       body,
-      headers,
-      disk,
-      fields,
-      output,
-      policies
+      headers
     ) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
@@ -68,10 +60,6 @@ Request <- R6::R6Class(
       }
       if (!missing(headers)) self$headers <- headers
       if (!missing(uri)) self$uri <- uri
-      if (!missing(disk)) self$disk <- disk
-      if (!missing(fields)) self$fields <- fields
-      if (!missing(output)) self$output <- output
-      if (!missing(policies)) self$policies <- policies
     }
   )
 )

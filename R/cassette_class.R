@@ -20,32 +20,6 @@
 #' [webmockr::Response] are used to build a request and response,
 #' respectively, then passed to [webmockr::build_crul_response()]
 #' to make a complete `crul` HTTP response object
-#' @examples \dontrun{
-#' library(vcr)
-#' vcr_configure(dir = tempdir())
-#'
-#' res <- Cassette$new(name = "bob")
-#' res$file()
-#' res$recorded_at
-#' res$recording()
-#' res$eject()
-#' res$should_remove_matching_existing_interactions()
-#' res$storage_key()
-#' res$match_requests_on
-#'
-#' # record all requests
-#' res <- Cassette$new("foobar", record = "all")
-#' res$eject()
-#'
-#' # cleanup
-#' unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
-#'
-#' library(vcr)
-#' vcr_configure(dir = tempdir())
-#' res <- Cassette$new(name = "jane")
-#' library(crul)
-#' # HttpClient$new("https://hb.opencpu.org")$get("get")
-#' }
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
@@ -148,7 +122,8 @@ Cassette <- R6::R6Class(
       self$serializer <- serializer_fetch(
         self$serialize_with,
         path = self$root_dir,
-        name = self$name
+        name = self$name,
+        preserve_bytes = self$preserve_exact_body_bytes
       )
     },
 
@@ -407,15 +382,14 @@ Cassette <- R6::R6Class(
     previously_recorded_interactions = function() {
       if (self$is_empty()) return(list())
 
-      interactions <- self$serializer$deserialize(self)$http_interactions
+      interactions <- self$serializer$deserialize()$http_interactions
 
       compact(lapply(interactions, function(z) {
         request <- Request$new(
           z$request$method,
           z$request$uri,
           z$request$body$string,
-          z$request$headers,
-          disk = z$response$body$file
+          z$request$headers
         )
         if (should_be_ignored(request)) {
           return(NULL)
@@ -438,7 +412,7 @@ Cassette <- R6::R6Class(
 
       interactions <- self$merged_interactions()
       if (length(interactions) == 0) return(NULL)
-      self$serializer$serialize(interactions, self$preserve_exact_body_bytes)
+      self$serializer$serialize(interactions)
     },
 
     #' @description record an http interaction (doesn't write to disk)
@@ -511,8 +485,7 @@ Cassette <- R6::R6Class(
           as.list(x$request$headers)
         } else {
           x$request_headers
-        },
-        disk = is_disk
+        }
       )
 
       response <- VcrResponse$new(
