@@ -25,22 +25,10 @@ Request <- R6::R6Class(
     method = NULL,
     #' @field uri (character) a uri
     uri = NULL,
-    #' @field scheme (character) scheme (http or https)
-    scheme = NULL,
-    #' @field host (character) host (e.g., stuff.org)
-    host = NULL,
-    #' @field path (character) path (e.g., foo/bar)
-    path = NULL,
-    #' @field query (character) query params, named list
-    query = NULL,
     #' @field body (character) named list
     body = NULL,
     #' @field headers (character) named list
     headers = NULL,
-    #' @field skip_port_stripping (logical) whether to strip the port
-    skip_port_stripping = FALSE,
-    #' @field hash (character) a named list - internal use
-    hash = NULL,
     #' @field disk (logical) xx
     disk = NULL,
     #' @field fields (various) request body details
@@ -56,15 +44,12 @@ Request <- R6::R6Class(
     #' @param uri (character) request URI
     #' @param body (character) request body
     #' @param headers (named list) request headers
-    #' @param skip_port_stripping (logical) whether to strip the port.
-    #' default: `FALSE`
     #' @return A new `Request` object
     initialize = function(
       method,
       uri,
       body,
-      headers,
-      skip_port_stripping = FALSE
+      headers
     ) {
       if (!missing(method)) self$method <- tolower(method)
       if (!missing(body)) {
@@ -74,37 +59,7 @@ Request <- R6::R6Class(
         self$body <- body
       }
       if (!missing(headers)) self$headers <- headers
-      if (!missing(uri)) {
-        if (!skip_port_stripping) {
-          self$uri <- private$without_standard_port(uri)
-        } else {
-          self$uri <- uri
-        }
-        # parse URI to get host and path
-        tmp <- eval(parse(text = vcr_c$uri_parser))(self$uri)
-        self$scheme <- tmp$scheme
-        self$host <- tmp$domain
-        self$path <- tmp$path
-        self$query <- tmp$parameter
-      }
-    }
-  ),
-  private = list(
-    without_standard_port = function(uri) {
-      if (is.null(uri)) return(uri)
-      u <- private$parsed_uri(uri)
-      if (
-        paste0(u$scheme, if (is.na(u$port)) NULL else u$port) %in%
-          c('http', 'https/443')
-      ) {
-        return(uri)
-      }
-      u$port <- NA
-      return(urltools::url_compose(u))
-    },
-
-    parsed_uri = function(uri) {
-      urltools::url_parse(uri)
+      if (!missing(uri)) self$uri <- uri
     }
   )
 )

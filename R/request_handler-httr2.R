@@ -84,10 +84,14 @@ take_body.httr2_request <- function(x) {
       data <- x$body$data # need to put back unobfuscate?
       httr2_url_build(data)
     },
-    json = rlang::exec(jsonlite::toJSON, x$body$data, !!!x$body$params),
+    json = unclass(rlang::exec(
+      jsonlite::toJSON,
+      x$body$data,
+      !!!x$body$params
+    )),
     # FIXME: for now take the file path - would be good to get what would
     # be sent in a real request
-    "raw-file" = x$body$data,
+    "raw-file" = unclass(x$body$data),
     multipart = x$body$data,
     cli::cli_abort("Unsupported request body type {.str {x$body$type}}.")
   )

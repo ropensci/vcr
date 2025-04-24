@@ -189,21 +189,7 @@ HTTPInteractionList <- R6::R6Class(
         paste0(self$request_matchers, collapse = ", ")
       )
 
-      all(unlist(lapply(self$request_matchers, function(y) {
-        matcher <- RequestMatcherRegistry$new()$registry[[y]]
-        res <- matcher$matches(req, intreq)
-        msg <- if (res) "matched" else "did not match"
-        # cat(paste0("method: ", req$method), sep = "\n ")
-        # cat(paste0("body: ", req$body), sep = "\n ")
-        vcr_log_sprintf(
-          "    %s %s: current request [%s] vs [%s]",
-          y,
-          msg,
-          request_summary(req, self$request_matchers),
-          request_summary(intreq, self$request_matchers)
-        )
-        return(res)
-      })))
+      request_matches(req, intreq, self$request_matchers)
     },
 
     # return: character

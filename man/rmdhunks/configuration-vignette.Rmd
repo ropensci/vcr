@@ -129,17 +129,6 @@ The request to httpbin.org will be handled by `vcr`, a cassette created for the 
 
 Note: ignoring requests only works for the `crul` package for now; it should work for `httr` and `httr2` in a later `vcr` version.
 
-### uri_parse
-
-Which uri parser to use
-
-By default we use `crul::url_parse`, but you can use a different one. Remember
-to pass in the function quoted, and namespaced.
-
-```{r}
-vcr_configure(uri_parser = "urltools::url_parse")
-```
-
 ### preserve_exact_body_bytes
 
 Some HTTP servers are not well-behaved and respond with invalid data. Set

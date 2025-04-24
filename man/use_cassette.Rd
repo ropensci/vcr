@@ -51,7 +51,8 @@ complete list of the different recording modes.}
 determine which recorded HTTP interaction to replay. Possible values are:
 \itemize{
 \item \code{method}: the HTTP method.
-\item \code{uri}: the complete request URI.
+\item \code{uri}: the complete request URI, excluding the port.
+\item \code{uri_with_port}: the complete request URI, including the port.
 \item \code{host}: the \strong{host} component of the URI.
 \item \code{path}: the \strong{path} component of the URI.
 \item \code{query}: the \strong{query} component of the URI.

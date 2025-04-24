@@ -18,7 +18,8 @@
 #'   determine which recorded HTTP interaction to replay. Possible values are:
 #'
 #'   * `method`: the HTTP method.
-#'   * `uri`: the complete request URI.
+#'   * `uri`: the complete request URI, excluding the port.
+#'   * `uri_with_port`: the complete request URI, including the port.
 #'   * `host`: the **host** component of the URI.
 #'   * `path`: the **path** component of the URI.
 #'   * `query`: the **query** component of the URI.
