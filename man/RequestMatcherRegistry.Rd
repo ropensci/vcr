@@ -9,13 +9,6 @@ handles request matchers
 \note{
 r1=from new request; r2=from recorded interaction
 }
-\examples{
-\dontrun{
-(x <- RequestMatcherRegistry$new())
-x$default_matchers
-x$registry
-}
-}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

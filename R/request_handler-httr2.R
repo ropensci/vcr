@@ -2,27 +2,6 @@
 #' @description Methods for the httr2 package, building on [RequestHandler]
 #' @export
 #' @param request The request from.
-#' @examples \dontrun{
-#' # GET request
-#' library(httr2)
-#' req <- request("https://hb.opencpu.org/post") %>%
-#'    req_body_json(list(foo = "bar"))
-#' x <- RequestHandlerHttr2$new(req)
-#' # x$handle()
-#'
-#' # POST request
-#' library(httr2)
-#' mydir <- file.path(tempdir(), "testing_httr2")
-#' invisible(vcr_configure(dir = mydir))
-#' req <- request("https://hb.opencpu.org/post") %>%
-#'   req_body_json(list(foo = "bar"))
-#' use_cassette(name = "testing3", {
-#'   response <- req_perform(req)
-#' }, match_requests_on = c("method", "uri", "body"))
-#' use_cassette(name = "testing3", {
-#'   response2 <- req_perform(req)
-#' }, match_requests_on = c("method", "uri", "body"))
-#' }
 RequestHandlerHttr2 <- R6::R6Class(
   "RequestHandlerHttr2",
   inherit = RequestHandler,

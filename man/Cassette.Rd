@@ -30,34 +30,6 @@ to make a complete \code{crul} HTTP response object
 }
 }
 
-\examples{
-\dontrun{
-library(vcr)
-vcr_configure(dir = tempdir())
-
-res <- Cassette$new(name = "bob")
-res$file()
-res$recorded_at
-res$recording()
-res$eject()
-res$should_remove_matching_existing_interactions()
-res$storage_key()
-res$match_requests_on
-
-# record all requests
-res <- Cassette$new("foobar", record = "all")
-res$eject()
-
-# cleanup
-unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
-
-library(vcr)
-vcr_configure(dir = tempdir())
-res <- Cassette$new(name = "jane")
-library(crul)
-# HttpClient$new("https://hb.opencpu.org")$get("get")
-}
-}
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
 }

@@ -6,39 +6,6 @@
 \description{
 Methods for the httr package, building on \link{RequestHandler}
 }
-\examples{
-\dontrun{
-vcr_configure(
- dir = tempdir(),
- record = "once"
-)
-
-# GET request
-library(httr)
-load("~/httr_req.rda")
-req
-x <- RequestHandlerHttr$new(req)
-# x$handle()
-
-# POST request
-library(httr)
-webmockr::httr_mock()
-mydir <- file.path(tempdir(), "testing_httr")
-invisible(vcr_configure(dir = mydir))
-use_cassette(name = "testing2", {
-  res <- POST("https://hb.opencpu.org/post", body = list(foo = "bar"))
-}, match_requests_on = c("method", "uri", "body"))
-
-load("~/httr_req_post.rda")
-insert_cassette("testing3")
-httr_req_post
-x <- RequestHandlerHttr$new(httr_req_post)
-x
-# x$handle()
-self=x
-
-}
-}
 \section{Super class}{
 \code{\link[vcr:RequestHandler]{vcr::RequestHandler}} -> \code{RequestHandlerHttr}
 }

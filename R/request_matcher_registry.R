@@ -1,11 +1,6 @@
 #' @title RequestMatcherRegistry
 #' @description handles request matchers
 #' @export
-#' @examples \dontrun{
-#' (x <- RequestMatcherRegistry$new())
-#' x$default_matchers
-#' x$registry
-#' }
 RequestMatcherRegistry <- R6::R6Class(
   'RequestMatcherRegistry',
   public = list(
