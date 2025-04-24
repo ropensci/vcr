@@ -40,12 +40,11 @@ test_that("warns if you reload string with preserve_exact_body_bytes", {
 
   use_cassette("test", httr::GET(hb("/get")))
 
-  # TODO: make it warn only once
-  expect_warning(expect_warning(use_cassette(
+  expect_warning(use_cassette(
     "test",
     httr::GET(hb("/get")),
     preserve_exact_body_bytes = TRUE
-  )))
+  ))
 })
 
 test_that("use_cassette w/ with images: httr", {
