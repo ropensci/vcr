@@ -24,24 +24,6 @@ encode_interaction <- function(x, preserve_bytes) {
   )
 }
 
-encode_body <- function(body, file, preserve_bytes = FALSE) {
-  if (is.null(body)) {
-    list(encoding = "", string = "")
-  } else if (is.raw(body) || preserve_bytes) {
-    compact(list(
-      encoding = "",
-      base64_string = to_base64(body),
-      file = file
-    ))
-  } else {
-    compact(list(
-      encoding = "",
-      string = sensitive_remove(body) %||% "",
-      file = file
-    ))
-  }
-}
-
 pkg_versions <- function() {
   paste(
     paste0("vcr/", utils::packageVersion("vcr")),

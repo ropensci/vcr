@@ -27,15 +27,6 @@ decode_interactions <- function(x, preserve_bytes = FALSE) {
   x
 }
 
-decode_body <- function(body, preserve_bytes = FALSE) {
-  if (has_name(body, "string") && preserve_bytes) {
-    warning("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
-  } else if (has_name(body, "base64_string")) {
-    body$base64_string <- from_base64(body$base64_string)
-  }
-  body
-}
-
 serializer_fetch <- function(type, path, name, preserve_bytes = FALSE) {
   switch(
     type,
