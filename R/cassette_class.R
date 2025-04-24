@@ -146,64 +146,6 @@ Cassette <- R6::R6Class(
       ## if none pass, if some found, make webmockr stubs
       #### first, get previously recorded interactions into `http_interactions_` var
       self$http_interactions()
-      # then do the rest
-
-      prev <- self$previously_recorded_interactions()
-      if (length(prev) > 0) {
-        stub_previous_request <- function(previous_interaction) {
-          req <- previous_interaction$request
-          res <- previous_interaction$response
-          uripp <- crul::url_parse(req$uri)
-          m <- self$match_requests_on
-
-          .stub_request_with <- function(match_parameters, request) {
-            .check_match_parameters <- function(mp) {
-              vmp <- c("method", "uri", "body", "headers", "query")
-              mp[mp %in% vmp]
-            }
-
-            mp <- .check_match_parameters(match_parameters)
-
-            stub_method <- ifelse("method" %in% mp, req$method, "any")
-
-            stub_uri <- ifelse(
-              identical(mp, c("body")),
-              ".+",
-              ifelse("uri" %in% mp, req$uri, ".")
-            )
-
-            if (stub_uri %in% c(".", ".+")) {
-              sr <- webmockr::stub_request(
-                method = stub_method,
-                uri_regex = stub_uri
-              )
-            } else {
-              sr <- webmockr::stub_request(method = stub_method, uri = stub_uri)
-            }
-
-            with_list <- list()
-
-            if ("query" %in% mp) {
-              with_list[["query"]] <- uripp$parameter
-            }
-
-            if ("headers" %in% mp) {
-              with_list[["headers"]] <- req$headers
-            }
-
-            if ("body" %in% mp) {
-              with_list[["body"]] <- req$body
-            }
-
-            # if list is empty, skip wi_th
-            if (length(with_list) != 0) webmockr::wi_th(sr, .list = with_list)
-          }
-
-          .stub_request_with(m, req)
-        }
-
-        invisible(lapply(prev, stub_previous_request))
-      }
 
       opts <- compact(list(
         name = self$name,

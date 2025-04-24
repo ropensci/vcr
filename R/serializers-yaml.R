@@ -7,7 +7,8 @@ YAML <- R6::R6Class(
     },
 
     serialize = function(data) {
-      write_yaml(data, self$path, self$preserve_bytes)
+      out <- encode_interactions(data, self$preserve_bytes)
+      yaml::write_yaml(out, self$path)
     },
 
     deserialize = function() {

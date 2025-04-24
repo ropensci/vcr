@@ -7,7 +7,13 @@ JSON <- R6::R6Class(
     },
 
     serialize = function(data) {
-      write_json(data, self$path, self$preserve_bytes)
+      out <- encode_interactions(data, self$preserve_bytes)
+      jsonlite::write_json(
+        out,
+        self$path,
+        auto_unbox = TRUE,
+        pretty = vcr_c$json_pretty
+      )
     },
 
     deserialize = function() {
