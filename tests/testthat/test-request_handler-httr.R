@@ -24,6 +24,15 @@ test_that("httr status code works", {
   expect_equal(response2$status_code, 404)
 })
 
+test_that('issue 249 is correctly handled.', {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  use_cassette('get_401', {
+    res <- httr::GET(hb_remote('/status/401'))
+  })
+  expect_true(res$status_code == 401)
+})
+
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
   local_vcr_configure(dir = withr::local_tempdir())
