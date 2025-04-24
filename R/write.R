@@ -1,24 +1,3 @@
-# dedup header keys so we have unique yaml keys
-# (x <- list(b = "foo", c = list(a = 5, a = 6)))
-# (x <- list(b = "foo", a = 5))
-# (x <- list(b = "foo", a = 5, a = 6))
-# dedup_keys(x)
-dedup_keys <- function(x) {
-  if (length(x) == 0 || is.null(x)) return(x)
-  nms <- names(x)
-  # if repeats, collapse dups under single name
-  if (length(unique(nms)) != length(nms)) {
-    x <- split(x, nms)
-    for (i in seq_along(x)) {
-      if (length(x[[i]]) > 1) {
-        x[[i]] <- unlist(unname(x[[i]]))
-      } else {
-        x[[i]] <- unlist(unname(x[[i]]))
-      }
-    }
-  }
-  return(x)
-}
 
 encode_interactions <- function(x, preserve_bytes = FALSE) {
   interactions <- lapply(x, encode_interaction, preserve_bytes)
@@ -43,27 +22,6 @@ encode_interaction <- function(x, preserve_bytes) {
     ),
     recorded_at = paste0(cur_time(tz = "GMT"), " GMT")
   )
-}
-
-encode_headers <- function(headers, type = c("request", "response")) {
-  type <- arg_match(type)
-
-  headers <- dedup_keys(headers)
-
-  headers <- switch(
-    type,
-    request = headers_remove(headers, vcr_c$filter_request_headers),
-    response = headers_remove(headers, vcr_c$filter_response_headers)
-  )
-
-  if (type == "request") {
-    headers <- request_headers_redact(headers)
-  }
-
-  headers <- sensitive_remove(headers)
-
-  headers <- unclass(headers)
-  headers
 }
 
 encode_body <- function(body, file, preserve_bytes = FALSE) {
