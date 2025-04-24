@@ -38,8 +38,6 @@ Get a response summary (character)
 
 \item{\code{allow_playback_repeats}}{whether to allow playback repeats}
 
-\item{\code{parent_list}}{A list for empty objects, see \code{NullList}}
-
 \item{\code{used_interactions}}{(list) Interactions that have been used}
 }
 \if{html}{\out{</div>}}
@@ -65,7 +63,6 @@ Create a new \code{HTTPInteractionList} object
   interactions,
   request_matchers,
   allow_playback_repeats = FALSE,
-  parent_list = NullList$new(),
   used_interactions = list()
 )}\if{html}{\out{</div>}}
 }
@@ -78,8 +75,6 @@ Create a new \code{HTTPInteractionList} object
 \item{\code{request_matchers}}{(character) vector of request matchers}
 
 \item{\code{allow_playback_repeats}}{whether to allow playback repeats or not}
-
-\item{\code{parent_list}}{A list for empty objects, see \code{NullList}}
 
 \item{\code{used_interactions}}{(list) Interactions that have been used. That is,
 interactions that are on disk in the current cassette, and a

@@ -103,15 +103,22 @@ RequestHandler <- R6::R6Class(
       should_be_ignored(request)
     },
     has_response_stub = function(request) {
-      hi <- http_interactions()
-      if (length(hi$interactions) == 0) return(FALSE)
-      hi$has_interaction_matching(request)
+      if (!cassette_active()) {
+        return(FALSE)
+      }
+      interactions <- current_cassette()$http_interactions_
+      interactions$has_interaction_matching(request)
     },
     is_disabled = function(adapter = "crul") !webmockr::enabled(adapter),
 
     # get stubbed response
     get_stubbed_response = function(request) {
-      self$stubbed_response <- http_interactions()$response_for(request)
+      if (!cassette_active()) {
+        return(NULL)
+      }
+      interactions <- current_cassette()$http_interactions_
+      self$stubbed_response <- interactions$response_for(request)
+
       self$stubbed_response
     },
 
