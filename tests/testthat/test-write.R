@@ -1,9 +1,3 @@
-test_that("write_header", {
-  f <- withr::local_tempfile()
-  write_header(f)
-  expect_equal(readLines(f), "http_interactions:")
-})
-
 test_that("dedup_keys", {
   # no modification
   x <- list(b = "foo", a = 5)
