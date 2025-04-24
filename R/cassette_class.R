@@ -32,7 +32,7 @@ Cassette <- R6::R6Class(
     #' @field serialize_with (character) serializer to use (yaml|json)
     serialize_with = "yaml",
     #' @field serializer (character) serializer to use (yaml|json)
-    serializer = NA,
+  serializer = NA,
     #' @field match_requests_on (character) matchers to use
     #' default: method & uri
     match_requests_on = c("method", "uri"),
