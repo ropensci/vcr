@@ -364,8 +364,9 @@ Cassette <- R6::R6Class(
     },
 
     #' @description record an http interaction (doesn't write to disk)
-    #' @param x a crul, httr, or httr2 response object, with the request at `$request`
-    #' @return nothing returned
+    #' @param response a crul, httr, or httr2 response object
+    #' @param request a `Request` object
+    #' @return an interaction as a list with request and response slots
     record_http_interaction = function(response, request) {
       # for httr2, duplicate `body` slot in `content`
       if (inherits(response, "httr2_response"))
