@@ -46,8 +46,8 @@ Cassette <- R6::R6Class(
     #' @field preserve_exact_body_bytes (logical) Whether to base64 encode the
     #' bytes of the requests and responses
     preserve_exact_body_bytes = FALSE,
-    #' @field http_interactions_ (list) internal use
-    http_interactions_ = NULL,
+    #' @field http_interactions (list) internal use
+    http_interactions = NULL,
     #' @field new_recorded_interactions (list) internal use
     new_recorded_interactions = NULL,
     #' @field clean_outdated_http_interactions (logical) Should outdated interactions
@@ -125,14 +125,7 @@ Cassette <- R6::R6Class(
         name = self$name,
         preserve_bytes = self$preserve_exact_body_bytes
       )
-    },
 
-    #' @description insert the cassette
-    #' @return self
-    insert = function() {
-      if (!dir.exists(self$root_dir)) {
-        dir_create(self$root_dir)
-      }
       if (!file.exists(self$file())) {
         self$recorded_at <- Sys.time()
       } else {
@@ -141,11 +134,24 @@ Cassette <- R6::R6Class(
 
       # check for re-record
       if (self$should_re_record()) self$record <- "all"
+    },
 
-      # get previously recorded interactions
-      ## if none pass, if some found, make webmockr stubs
-      #### first, get previously recorded interactions into `http_interactions_` var
-      self$http_interactions()
+    #' @description insert the cassette
+    #' @return self
+    insert = function() {
+      if (!dir.exists(self$root_dir)) {
+        dir_create(self$root_dir)
+      }
+
+      if (self$should_stub_requests()) {
+        interactions <- self$previously_recorded_interactions()
+      } else {
+        interactions <- list()
+      }
+      self$http_interactions <- HTTPInteractionList$new(
+        interactions = interactions,
+        request_matchers = self$match_requests_on
+      )
 
       opts <- compact(list(
         name = self$name,
@@ -343,7 +349,6 @@ Cassette <- R6::R6Class(
     #' @return nothing returned
     record_http_interaction = function(x) {
       int <- self$make_http_interaction(x)
-      self$http_interactions_$response_for(int$request)
       vcr_log_sprintf(
         "Recorded HTTP interaction: %s => %s",
         request_summary(int$request),
@@ -359,21 +364,6 @@ Cassette <- R6::R6Class(
     #' @return logical
     any_new_recorded_interactions = function() {
       length(self$new_recorded_interactions) != 0
-    },
-
-    #' @description make [HTTPInteractionList] object, assign to http_interactions_ var
-    #' @return nothing returned
-    http_interactions = function() {
-      if (self$should_stub_requests()) {
-        interactions <- self$previously_recorded_interactions()
-      } else {
-        interactions <- list()
-      }
-
-      self$http_interactions_ <- HTTPInteractionList$new(
-        interactions = interactions,
-        request_matchers = self$match_requests_on
-      )
     },
 
     #' @description Make a request-response pairs

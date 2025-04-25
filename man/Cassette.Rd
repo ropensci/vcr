@@ -60,7 +60,7 @@ interaction to be played back multiple times}
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
 
-\item{\code{http_interactions_}}{(list) internal use}
+\item{\code{http_interactions}}{(list) internal use}
 
 \item{\code{new_recorded_interactions}}{(list) internal use}
 
@@ -92,7 +92,6 @@ be recorded back to file}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
-\item \href{#method-Cassette-http_interactions}{\code{Cassette$http_interactions()}}
 \item \href{#method-Cassette-make_http_interaction}{\code{Cassette$make_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
@@ -375,19 +374,6 @@ Are there any new recorded interactions?
 
 \subsection{Returns}{
 logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-http_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-http_interactions}{}}}
-\subsection{Method \code{http_interactions()}}{
-make \link{HTTPInteractionList} object, assign to http_interactions_ var
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$http_interactions()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
 }
 }
 \if{html}{\out{<hr>}}
