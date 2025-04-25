@@ -57,13 +57,13 @@ RequestHandlerHttr2 <- R6::R6Class(
 
       req <- self$request_original
       req <- httr2::req_error(req, is_error = \(resp) FALSE)
-      resp <- httr2::req_perform(req)
+      response <- httr2::req_perform(req)
 
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(resp, self$request)
-      resp
+      current_cassette()$record_http_interaction(self$request, response)
+      response
     }
   )
 )

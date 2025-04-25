@@ -41,7 +41,7 @@ RequestHandlerCrul <- R6::R6Class(
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(response, self$request)
+      current_cassette()$record_http_interaction(self$request, response)
       return(response)
     }
   )
