@@ -37,6 +37,7 @@ Imports:
     rprojroot,
     urltools,
     webmockr (>= 0.8.0),
+    waldo,
     withr,
     yaml
 Suggests:

@@ -172,12 +172,6 @@ HTTPInteractionList <- R6::R6Class(
 
     # return: interactions list
     interaction_matches_request = function(req, interaction) {
-      vcr_log_sprintf(
-        "  Checking if {%s} matches {%s} using matchers: [%s]",
-        request_summary(req),
-        request_summary(interaction$request),
-        paste0(self$request_matchers, collapse = ", ")
-      )
       request_matches(req, interaction$request, self$request_matchers)
     }
   )
