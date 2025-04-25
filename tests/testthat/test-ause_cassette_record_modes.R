@@ -26,8 +26,8 @@ test_that("use_cassette record mode: once", {
     record = "once"
   )
   expect_s3_class(two, "Cassette")
-  expect_equal(length(one$http_interactions_$used_interactions), 0)
-  expect_equal(length(two$http_interactions_$used_interactions), 1)
+  expect_equal(length(one$http_interactions$used_interactions), 0)
+  expect_equal(length(two$http_interactions$used_interactions), 1)
   expect_equal(length(one$new_recorded_interactions), 1)
   expect_equal(length(two$new_recorded_interactions), 0)
   expect_identical(res$content, res2$content)
