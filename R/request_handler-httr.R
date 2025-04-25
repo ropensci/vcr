@@ -17,7 +17,7 @@ RequestHandlerHttr <- R6::R6Class(
           request$method,
           request$url,
           take_body(request),
-          request$headers
+          as.list(request$headers)
         )
       }
     }
@@ -72,9 +72,7 @@ RequestHandlerHttr <- R6::R6Class(
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(response)
-
-      # return real response
+      current_cassette()$record_http_interaction(self$request, response)
       return(response)
     }
   )

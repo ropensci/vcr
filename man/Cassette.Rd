@@ -92,7 +92,6 @@ be recorded back to file}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
-\item \href{#method-Cassette-make_http_interaction}{\code{Cassette$make_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
 }
@@ -349,18 +348,20 @@ nothing returned
 \subsection{Method \code{record_http_interaction()}}{
 record an http interaction (doesn't write to disk)
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$record_http_interaction(x)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$record_http_interaction(request, response)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{a crul, httr, or httr2 response object, with the request at \verb{$request}}
+\item{\code{request}}{a \code{Request} object}
+
+\item{\code{response}}{a crul, httr, or httr2 response object}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing returned
+an interaction as a list with request and response slots
 }
 }
 \if{html}{\out{<hr>}}
@@ -374,26 +375,6 @@ Are there any new recorded interactions?
 
 \subsection{Returns}{
 logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-make_http_interaction"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-make_http_interaction}{}}}
-\subsection{Method \code{make_http_interaction()}}{
-Make a request-response pairs
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$make_http_interaction(x)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{x}}{A crul, httr, or httr2 response object, with the request at \verb{$request}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A list with request and response.
 }
 }
 \if{html}{\out{<hr>}}
