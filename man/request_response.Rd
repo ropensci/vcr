@@ -11,12 +11,12 @@ request_summary(request, request_matchers = "")
 response_summary(response)
 }
 \arguments{
-\item{request}{a \link{Request} object}
+\item{request}{A \code{vcr_request} object}
 
 \item{request_matchers}{(character) a vector of matchers.
 Default: \code{""}}
 
-\item{response}{a \link{VcrResponse} object}
+\item{response}{A \code{vcr_response} object}
 }
 \value{
 character string, of either request or response
@@ -37,42 +37,5 @@ max of 80 characters
 In \code{response_summary()} we use \link{gsub} with \code{useBytes=TRUE} to avoid
 problems sometimes seen with multibyte strings - this shouldn't affect
 your data/etc. as this is only for printing a summary of the response
-}
-\examples{
-# request
-url <- "https://hb.opencpu.org"
-body <- list(foo = "bar")
-headers <- list(
-  `User-Agent` = "r-curl/3.2",
-  `Accept-Encoding` = "gzip, deflate",
-  Accept = "application/json"
-)
-
-(x <- Request$new("POST", url, body, headers))
-request_summary(request = x)
-request_summary(request = x, c('method', 'uri'))
-request_summary(request = x, c('method', 'uri', 'body'))
-request_summary(request = x, c('method', 'uri', 'headers'))
-request_summary(request = x, c('method', 'uri', 'body', 'headers'))
-
-# response
-status <- list(status_code = 200, message = "OK",
-  explanation = "Request fulfilled, document follows")
-headers <- list(
-  status = "HTTP/1.1 200 OK",
-  connection = "keep-alive",
-  date = "Tue, 24 Apr 2018 04:46:56 GMT"
-)
-response_body <-
-"{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"text/html\"}}\n"
-(x <- VcrResponse$new(status, headers,
-   response_body, "HTTP/1.1 200 OK"))
-response_summary(x)
-
-## with binary body
-# path <- "tests/testthat/png_eg.rda"
-# load(path)
-# (x <- VcrResponse$new(status, headers, png_eg, "HTTP/1.1 200 OK"))
-# response_summary(x)
 }
 \keyword{internal}

@@ -1,5 +1,5 @@
 test_that("UnhandledHTTPRequestError fails well", {
-  request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
+  request <- vcr_request("post", hb("/post?a=5"), "", list(foo = "bar"))
 
   z <- UnhandledHTTPRequestError$new(request)
   expect_error(
@@ -9,14 +9,11 @@ test_that("UnhandledHTTPRequestError fails well", {
 
   local_cassette("asdsfd", warn_on_empty = FALSE)
   # # types
-  expect_error(
-    UnhandledHTTPRequestError$new(5),
-    "request must be of class Request"
-  )
+  expect_snapshot(UnhandledHTTPRequestError$new(5), error = TRUE)
 })
 
 test_that("UnhandledHTTPRequestError works as expected", {
-  request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
+  request <- vcr_request("post", hb("/post?a=5"), "", list(foo = "bar"))
   local_cassette("turtle", warn_on_empty = FALSE)
 
   a <- UnhandledHTTPRequestError$new(request)
@@ -50,7 +47,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
     "&other_secret=",
     Sys.getenv("HELLO_WORLD")
   )
-  request <- Request$new("get", url, "")
+  request <- vcr_request("get", url, "")
   local_cassette("bunny", warn_on_empty = FALSE)
 
   a <- UnhandledHTTPRequestError$new(request)
@@ -82,7 +79,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
     filter_sensitive_data = list("<<foo_bar_key>>" = Sys.getenv("FOO_BAR")),
   )
   url <- hb("/get")
-  request <- Request$new("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
+  request <- vcr_request("get", url, "", list(api_key = Sys.getenv("FOO_BAR")))
   local_cassette(
     "frog",
     match_requests_on = c("method", "uri", "headers"),
@@ -116,7 +113,7 @@ test_that("UnhandledHTTPRequestError works as expected", {
     )
   )
   url <- paste0(hb("/get?api_key="), Sys.getenv("HELLO_MARS"))
-  request <- Request$new("get", url, "")
+  request <- vcr_request("get", url, "")
   local_cassette("bunny2", warn_on_empty = FALSE)
 
   a <- UnhandledHTTPRequestError$new(request)

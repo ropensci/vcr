@@ -169,8 +169,8 @@ test_that("generates expected yaml", {
     pkg_versions = function() "<package_versions>"
   )
 
-  request <- Request$new(method = "GET", uri = "http://example.com")
-  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
+  request <- vcr_request(method = "GET", uri = "http://example.com")
+  response <- vcr_response(status = 200L, list(name = "val"), body = "body")
   interaction <- list(request = request, response = response)
 
   ser <- JSON$new(withr::local_tempdir(), "serialize")
@@ -234,8 +234,8 @@ test_that("generates expected yaml", {
     pkg_versions = function() "<package_versions>"
   )
 
-  request <- Request$new(method = "GET", uri = "http://example.com")
-  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
+  request <- vcr_request(method = "GET", uri = "http://example.com")
+  response <- vcr_response(status = 200L, list(name = "val"), body = "body")
   interaction <- list(request = request, response = response)
 
   ser <- YAML$new(withr::local_tempdir(), "serialize")

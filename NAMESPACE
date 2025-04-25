@@ -2,13 +2,11 @@
 
 export(Cassette)
 export(HTTPInteractionList)
-export(Request)
 export(RequestHandler)
 export(RequestHandlerCrul)
 export(RequestHandlerHttr)
 export(RequestHandlerHttr2)
 export(UnhandledHTTPRequestError)
-export(VcrResponse)
 export(cassette_path)
 export(cassettes)
 export(check_cassette_names)

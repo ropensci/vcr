@@ -48,13 +48,11 @@ reference:
     contents:
       - Cassette
       - HTTPInteractionList
-      - Request
       - RequestHandler
       - RequestHandlerCrul
       - RequestHandlerHttr
       - RequestHandlerHttr2
       - UnhandledHTTPRequestError
-      - VcrResponse
       - request_summary
       - response_summary
 

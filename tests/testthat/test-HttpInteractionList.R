@@ -12,40 +12,40 @@ test_that("HTTPInteractionList", {
   res3 <- crul::HttpClient$new(url = url3)$get()
 
   # requests
-  request <- Request$new(
+  request <- vcr_request(
     "POST",
     uri = url,
     body = body,
     headers = res$response_headers
   )
-  request2 <- Request$new(
+  request2 <- vcr_request(
     "GET",
     uri = url2,
     body = body,
     headers = res2$response_headers
   )
-  request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
-  request <- Request$new(
+  request3 <- vcr_request("GET", uri = url3, headers = res3$response_headers)
+  request <- vcr_request(
     "POST",
     uri = url,
     body = body,
     headers = res$response_headers
   )
-  request2 <- Request$new(
+  request2 <- vcr_request(
     "GET",
     uri = url2,
     body = body,
     headers = res2$response_headers
   )
-  request3 <- Request$new("GET", uri = url3, headers = res3$response_headers)
+  request3 <- vcr_request("GET", uri = url3, headers = res3$response_headers)
   # response
-  response <- VcrResponse$new(
+  response <- vcr_response(
     res$status_http(),
     res$response_headers,
     res$parse("UTF-8"),
     res$response_headers$status
   )
-  response2 <- VcrResponse$new(
+  response2 <- vcr_response(
     res2$status_http(),
     res2$response_headers,
     res2$parse("UTF-8"),
@@ -68,9 +68,9 @@ test_that("HTTPInteractionList", {
   expect_type(x$used_interactions, "list")
   expect_false(x$allow_playback_repeats)
   expect_type(x$interactions, "list")
-  expect_s3_class(x$interactions[[1]]$request, "Request")
-  expect_s3_class(x$interactions[[1]]$response, "VcrResponse")
-  expect_s3_class(suppressWarnings(x$response_for(request)), "VcrResponse")
+  expect_s3_class(x$interactions[[1]]$request, "vcr_request")
+  expect_s3_class(x$interactions[[1]]$response, "vcr_response")
+  expect_s3_class(suppressWarnings(x$response_for(request)), "vcr_response")
 
   # private methods
   ### need to remake the HTTPInteractionList object b/c response_for alters it
@@ -118,6 +118,6 @@ test_that("HTTPInteractionList", {
   x$response_for(request) # request used
 
   interaction <- priv$matching_used_interaction_for(request)
-  expect_s3_class(interaction$request, "Request")
-  expect_s3_class(interaction$response, "VcrResponse")
+  expect_s3_class(interaction$request, "vcr_request")
+  expect_s3_class(interaction$response, "vcr_response")
 })

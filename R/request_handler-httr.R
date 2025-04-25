@@ -12,14 +12,12 @@ RequestHandlerHttr <- R6::R6Class(
     #' @return A new `RequestHandlerHttr` object
     initialize = function(request) {
       self$request_original <- request
-      self$request <- {
-        Request$new(
-          request$method,
-          request$url,
-          take_body(request),
-          request$headers
-        )
-      }
+      self$request <- vcr_request(
+        request$method,
+        request$url,
+        take_body(request),
+        request$headers
+      )
     }
   ),
 

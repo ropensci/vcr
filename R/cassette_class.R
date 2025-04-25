@@ -390,7 +390,7 @@ Cassette <- R6::R6Class(
         }
       }
 
-      request <- Request$new(
+      request <- vcr_request(
         method = x$request$method,
         uri = x$url,
         body = take_body(x$request),
@@ -401,7 +401,7 @@ Cassette <- R6::R6Class(
         }
       )
 
-      response <- VcrResponse$new(
+      response <- vcr_response(
         status = if (inherits(x, "response")) {
           c(list(status_code = x$status_code), httr::http_status(x))
         } else if (inherits(x, "httr2_response")) {

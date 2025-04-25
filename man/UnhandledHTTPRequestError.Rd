@@ -48,7 +48,7 @@ error with UnhandledHTTPRequestError
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{request}}{a \link{Request} object}
+\item{\code{request}}{a `vcr_request`` object}
 
 \item{\code{cassette}}{a cassette name}
 }
@@ -92,7 +92,7 @@ Create a new \code{UnhandledHTTPRequestError} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{(Request) a \link{Request} object}
+\item{\code{request}}{A \code{vcr_request} object}
 }
 \if{html}{\out{</div>}}
 }
