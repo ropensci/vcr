@@ -134,8 +134,6 @@ Cassette <- R6::R6Class(
 
       # check for re-record
       if (self$should_re_record()) self$record <- "all"
-
-      # get previously recorded interactions
     },
 
     #' @description insert the cassette
@@ -154,7 +152,7 @@ Cassette <- R6::R6Class(
         interactions = interactions,
         request_matchers = self$match_requests_on
       )
-      
+
       opts <- compact(list(
         name = self$name,
         record = self$record,
