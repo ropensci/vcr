@@ -87,7 +87,7 @@ RequestHandler <- R6::R6Class(
         return(FALSE)
       }
       interactions <- current_cassette()$http_interactions
-      interactions$has_interaction_matching(request)
+      interactions$has_interaction(request)
     },
 
     get_stubbed_response = function(request) {

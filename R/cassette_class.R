@@ -145,6 +145,10 @@ Cassette <- R6::R6Class(
 
       if (self$should_stub_requests()) {
         interactions <- self$previously_recorded_interactions()
+        vcr_log_sprintf(
+          "Loading %d previously recorded interactions",
+          length(interactions)
+        )
       } else {
         interactions <- list()
       }
@@ -250,7 +254,7 @@ Cassette <- R6::R6Class(
         )
         old_interactions <- Filter(
           function(x) {
-            !unlist(new_interaction_list$has_interaction_matching(x$request))
+            !unlist(new_interaction_list$has_interaction(x$request))
           },
           old_interactions
         )
