@@ -3,10 +3,10 @@ serializer_fetch <- function(type, path, name, preserve_bytes = FALSE) {
     type,
     json = JSON$new(path, name, preserve_bytes = preserve_bytes),
     yaml = YAML$new(path, name, preserve_bytes = preserve_bytes),
+    compressed = Compressed$new(path, name, preserve_bytes = preserve_bytes),
     cli::cli_abort("Unsupported cassette serializer {.str {type}}.")
   )
 }
-
 
 Serializer <- R6::R6Class(
   "Serializer",
@@ -69,6 +69,32 @@ YAML <- R6::R6Class(
     deserialize = function() {
       str <- sensitive_put_back(readLines(self$path, encoding = "UTF-8"))
       interactions <- yaml::yaml.load(str)
+      interactions <- query_params_put_back(interactions)
+      interactions <- decode_interactions(interactions, self$preserve_bytes)
+      interactions
+    }
+  )
+)
+
+Compressed <- R6::R6Class(
+  "Compressed",
+  inherit = Serializer,
+  public = list(
+    initialize = function(path, name, preserve_bytes = FALSE) {
+      check_installed("qs2")
+      super$initialize(path, name, ".qs2", preserve_bytes = preserve_bytes)
+    },
+
+    serialize = function(data) {
+      out <- encode_interactions(data, self$preserve_bytes)
+      json <- as.character(jsonlite::toJSON(out, auto_unbox = TRUE))
+      qs2::qs_save(object = json, file = self$path)
+    },
+
+    deserialize = function() {
+      str <- qs2::qs_read(file = self$path)
+      str <- sensitive_put_back(str)
+      interactions <- jsonlite::fromJSON(str, FALSE)
       interactions <- query_params_put_back(interactions)
       interactions <- decode_interactions(interactions, self$preserve_bytes)
       interactions

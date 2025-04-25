@@ -29,9 +29,9 @@ Cassette <- R6::R6Class(
     record = "all",
     #' @field recorded_at (character) date/time recorded at
     recorded_at = NA,
-    #' @field serialize_with (character) serializer to use (yaml|json)
+    #' @field serialize_with (character) serializer (yaml|json|compressed)
     serialize_with = "yaml",
-    #' @field serializer (character) serializer to use (yaml|json)
+    #' @field serializer (Serializer) serializer (YAML|JSON|Compressed)
     serializer = NA,
     #' @field match_requests_on (character) matchers to use
     #' default: method & uri
@@ -65,7 +65,7 @@ Cassette <- R6::R6Class(
     #' @param record The record mode. Default: "once". In the future we'll support
     #' "once", "all", "none", "new_episodes". See [recording] for more information
     #' @param serialize_with (character) Which serializer to use.
-    #'  Valid values are "yaml" (default), the only one supported for now.
+    #' Valid values are "yaml" (default), "json", and "compressed".
     #' @param match_requests_on List of request matchers
     #' to use to determine what recorded HTTP interaction to replay. Defaults to
     #' `["method", "uri"]`. The built-in matchers are "method", "uri",
