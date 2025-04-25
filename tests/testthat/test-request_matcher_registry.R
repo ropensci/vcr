@@ -73,3 +73,17 @@ test_that("query params are normalized", {
     list(query = c(foo = "\u00b5"))
   )
 })
+
+test_that("query params are filtered", {
+  local_vcr_configure(filter_query_parameters = "foo")
+
+  expect_equal(
+    make_comparison("query", list(uri = "http://a.com/")),
+    set_names(list())
+  )
+
+  expect_equal(
+    make_comparison("query", list(uri = "http://a.com/?foo=x")),
+    set_names(list())
+  )
+})

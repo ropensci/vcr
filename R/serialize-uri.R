@@ -69,6 +69,8 @@ drop_param <- function(url, name) {
   assert(name, "character")
   stopifnot("can only drop one name at a time" = length(name) == 1)
   z <- parseurl(url)
+  if (!is.list(z$parameter)) return(url)
+
   z$parameter[[name]] <- NULL
   buildurl(z)
 }
