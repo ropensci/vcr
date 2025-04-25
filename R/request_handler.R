@@ -86,7 +86,7 @@ RequestHandler <- R6::R6Class(
       if (!cassette_active()) {
         return(FALSE)
       }
-      interactions <- current_cassette()$http_interactions_
+      interactions <- current_cassette()$http_interactions
       interactions$has_interaction_matching(request)
     },
 
@@ -94,7 +94,7 @@ RequestHandler <- R6::R6Class(
       if (!cassette_active()) {
         return(NULL)
       }
-      interactions <- current_cassette()$http_interactions_
+      interactions <- current_cassette()$http_interactions
       interactions$response_for(request)
     },
 

@@ -84,7 +84,7 @@ HTTPInteractionList <- R6::R6Class(
         index <- index[1]
         # delete the http interaction at <index>, and capture it into `interaction`
         interaction <- self$interactions[[index]]
-        self$interactions <- delete_at(self$interactions, index)
+        self$interactions[[index]] <- NULL
         # put `interaction` at front of list with `unshift`
         self$used_interactions <- c(
           list(interaction),
@@ -190,29 +190,6 @@ HTTPInteractionList <- R6::R6Class(
       )
 
       request_matches(req, intreq, self$request_matchers)
-    },
-
-    # return: character
-    request_summary = function(z) {
-      paste(z$method, z$uri)
-    },
-
-    # return: character
-    response_summary = function(z) {
-      paste(
-        z$status$status_code,
-        sprintf("['%s ...'", substring(gsub("\n", " ", z$body), 1, 50)),
-        "]"
-      )
     }
   )
 )
-
-# makes a copy - does not modify in place
-# x: must be a list
-# y: must be numeric; ignores values out of range
-delete_at <- function(x, y) {
-  stopifnot(is.list(x))
-  stopifnot(is.numeric(y))
-  x[-y]
-}
