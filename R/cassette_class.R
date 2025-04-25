@@ -331,26 +331,7 @@ Cassette <- R6::R6Class(
       if (self$is_empty()) return(list())
 
       interactions <- self$serializer$deserialize()$http_interactions
-
-      compact(lapply(interactions, function(z) {
-        request <- Request$new(
-          z$request$method,
-          z$request$uri,
-          z$request$body$string,
-          z$request$headers
-        )
-        if (should_be_ignored(request)) {
-          return(NULL)
-        }
-
-        response <- VcrResponse$new(
-          z$response$status,
-          z$response$headers,
-          z$response$body$string %||% z$response$body$base64_string,
-          disk = z$response$body$file
-        )
-        list(request = request, response = response)
-      }))
+      Filter(\(x) !should_be_ignored(x$request), interactions)
     },
 
     #' @description write recorded interactions to disk

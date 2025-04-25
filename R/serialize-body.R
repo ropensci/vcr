@@ -1,16 +1,12 @@
 encode_body <- function(body, file, preserve_bytes = FALSE) {
-  if (is.null(body)) {
-    list(encoding = "", string = "")
-  } else if (is.raw(body) || preserve_bytes) {
+  if (is.raw(body) || preserve_bytes) {
     compact(list(
-      encoding = "",
       base64_string = to_base64(body),
       file = file
     ))
   } else {
     compact(list(
-      encoding = "",
-      string = sensitive_remove(body) %||% "",
+      string = sensitive_remove(body),
       file = file
     ))
   }
@@ -19,10 +15,15 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
 decode_body <- function(body, preserve_bytes = FALSE) {
   if (has_name(body, "string") && preserve_bytes) {
     warning("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
-  } else if (has_name(body, "base64_string")) {
-    body$base64_string <- from_base64(body$base64_string)
   }
-  body
+
+  if (has_name(body, "base64_string")) {
+    data <- from_base64(body$base64_string)
+  } else {
+    data <- body$string
+  }
+
+  list(data = data, file = body$file)
 }
 
 # Helpers --------------------------------------------------------------------
@@ -33,6 +34,10 @@ from_base64 <- function(x) {
 }
 
 to_base64 <- function(x) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+
   x <- jsonlite::base64_enc(x)
 
   # Split into lines of 80 characters

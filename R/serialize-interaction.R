@@ -39,7 +39,21 @@ encode_interaction <- function(x, preserve_bytes) {
 }
 
 decode_interaction <- function(x, preserve_bytes) {
-  x$request$body <- decode_body(x$request$body)
-  x$response$body <- decode_body(x$response$body, preserve_bytes)
-  x
+  request_body <- decode_body(x$request$body, preserve_bytes = preserve_bytes)
+  response_body <- decode_body(x$response$body, preserve_bytes = preserve_bytes)
+
+  list(
+    request = Request$new(
+      method = x$request$method,
+      uri = x$request$uri,
+      body = request_body$data,
+      headers = x$request$headers
+    ),
+    response = VcrResponse$new(
+      status = x$response$status,
+      headers = x$response$headers,
+      body = response_body$data,
+      disk = response_body$file
+    )
+  )
 }

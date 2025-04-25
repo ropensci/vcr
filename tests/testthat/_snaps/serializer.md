@@ -6,6 +6,14 @@
       Error in `serializer_fetch()`:
       ! Unsupported cassette serializer "foo".
 
+# warns if you reload string with preserve_exact_body_bytes
+
+    Code
+      use_cassette("test", httr::GET(hb("/get")), preserve_exact_body_bytes = TRUE)
+    Condition
+      Warning in `decode_body()`:
+      re-record cassettes using 'preserve_exact_body_bytes = TRUE'
+
 # generates expected yaml
 
     Code
@@ -17,10 +25,7 @@
             "request": {
               "method": "get",
               "uri": "http://example.com",
-              "body": {
-                "encoding": "",
-                "string": ""
-              },
+              "body": {},
               "headers": []
             },
             "response": {
@@ -29,7 +34,6 @@
                 "name": "val"
               },
               "body": {
-                "encoding": "",
                 "string": "body"
               }
             },
@@ -48,16 +52,13 @@
       - request:
           method: get
           uri: http://example.com
-          body:
-            encoding: ''
-            string: ''
+          body: {}
           headers: []
         response:
           status: 200
           headers:
             name: val
           body:
-            encoding: ''
             string: body
         recorded_at: 2024-01-01 12:00:00 GMT
       recorded_with: <package_versions>
