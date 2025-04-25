@@ -47,9 +47,8 @@ RequestHandler <- R6::R6Class(
     #' @return handles a request, outcomes vary
     handle = function() {
       vcr_log_sprintf(
-        "Handling request: %s (%s)",
-        private$request_summary(self$request),
-        if (webmockr::enabled(adapter)) "enabled" else "disabled"
+        "Handling request: %s",
+        private$request_summary(self$request)
       )
 
       if (private$externally_stubbed()) {
