@@ -4,6 +4,22 @@
 RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
   inherit = RequestHandler,
+  public = list(
+    #' @description Create a new `RequestHandler` object
+    #' @param request A request
+    #' @return A new `RequestHandler` object
+    initialize = function(request) {
+      self$request_original <- request
+      self$request <- {
+        Request$new(
+          request$method,
+          request$url$url %||% request$url,
+          take_body(request) %||% "",
+          request$headers
+        )
+      }
+    }
+  ),
   private = list(
     on_ignored_request = function() {
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)

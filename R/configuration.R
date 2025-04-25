@@ -89,7 +89,6 @@
 #'
 #' - `cassettes` (list) don't use
 #' - `linked_context` (logical) linked context
-#' - `uri_parser` the uri parser, default: `crul::url_parse()`
 #'
 #' ### Logging
 #'
@@ -197,7 +196,6 @@ VCRConfig <- R6::R6Class(
     .ignore_hosts = NULL,
     .ignore_localhost = NULL,
     .ignore_request = NULL,
-    .uri_parser = NULL,
     .preserve_exact_body_bytes = NULL,
     .turned_off = NULL,
     .re_record_interval = NULL,
@@ -252,10 +250,6 @@ VCRConfig <- R6::R6Class(
     ignore_request = function(value) {
       if (missing(value)) return(private$.ignore_request)
       private$.ignore_request <- value
-    },
-    uri_parser = function(value) {
-      if (missing(value)) return(private$.uri_parser)
-      private$.uri_parser <- value
     },
     preserve_exact_body_bytes = function(value) {
       if (missing(value)) return(private$.preserve_exact_body_bytes)
@@ -350,7 +344,6 @@ VCRConfig <- R6::R6Class(
       ignore_hosts = NULL,
       ignore_localhost = FALSE,
       ignore_request = NULL,
-      uri_parser = "crul::url_parse",
       preserve_exact_body_bytes = FALSE,
       turned_off = FALSE,
       re_record_interval = NULL,
@@ -377,7 +370,6 @@ VCRConfig <- R6::R6Class(
       self$ignore_hosts <- ignore_hosts
       self$ignore_localhost <- ignore_localhost
       self$ignore_request <- ignore_request
-      self$uri_parser <- uri_parser
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes
       self$turned_off <- turned_off
       self$re_record_interval <- re_record_interval
@@ -412,7 +404,6 @@ VCRConfig <- R6::R6Class(
       cat(paste0("  Cassette Dir: ", private$.dir), sep = "\n")
       cat(paste0("  Record: ", private$.record), sep = "\n")
       cat(paste0("  Serialize with: ", private$.serialize_with), sep = "\n")
-      cat(paste0("  URI Parser: ", private$.uri_parser), sep = "\n")
       cat(
         paste0("  Match Requests on: ", pastec(private$.match_requests_on)),
         sep = "\n"

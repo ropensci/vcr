@@ -339,7 +339,7 @@ Cassette <- R6::R6Class(
           z$request$method,
           z$request$uri,
           z$request$body$string,
-          z$request$headers,
+          z$request$headers
         )
         if (should_be_ignored(request)) {
           return(NULL)
@@ -419,8 +419,7 @@ Cassette <- R6::R6Class(
           as.list(x$request$headers)
         } else {
           x$request_headers
-        },
-        skip_port_stripping = TRUE
+        }
       )
 
       response <- VcrResponse$new(

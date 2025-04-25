@@ -15,13 +15,7 @@ test_that("can_rawToChar", {
   expect_false(can_rawToChar(png_eg))
 })
 
-test_that("to_base64 and from_base64 are idempotent", {
-  string <- ""
-  expect_equal(from_base64(to_base64(string)), charToRaw(string))
-
-  string <- strrep("a", 100)
-  expect_equal(from_base64(to_base64(string)), charToRaw(string))
-
-  string <- strrep("x", 1000)
-  expect_equal(from_base64(to_base64(string)), charToRaw(string))
+test_that("pkg_versions", {
+  expect_match(pkg_versions(), "vcr/")
+  expect_match(pkg_versions(), "webmockr/")
 })

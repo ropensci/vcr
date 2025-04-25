@@ -3,6 +3,7 @@ vcr (development version)
 
 ### BREAKING CHANGES
 
+* The `uri_parser` option is no longer supported.
 * `vcr_configuration(allow_http_connections_when_no_cassette)` is no longer supported. It hasn't worked for a while.
 * `vcr_configuration(quiet = FALSE)` is no longer supported. If you need more information about what's happening, turn on logging.
 * `str_splitter()` has been removed; it was accidentally exported as it's not part of the core vcrs API.

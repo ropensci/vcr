@@ -12,6 +12,7 @@ Methods for the crul package, building on \link{RequestHandler}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-RequestHandlerCrul-new}{\code{RequestHandlerCrul$new()}}
 \item \href{#method-RequestHandlerCrul-clone}{\code{RequestHandlerCrul$clone()}}
 }
 }
@@ -19,10 +20,29 @@ Methods for the crul package, building on \link{RequestHandler}
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="handle"><a href='../../vcr/html/RequestHandler.html#method-RequestHandler-handle'><code>vcr::RequestHandler$handle()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="initialize"><a href='../../vcr/html/RequestHandler.html#method-RequestHandler-initialize'><code>vcr::RequestHandler$initialize()</code></a></span></li>
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RequestHandlerCrul-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RequestHandlerCrul-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new \code{RequestHandler} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RequestHandlerCrul$new(request)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{request}}{A request}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new \code{RequestHandler} object
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RequestHandlerCrul-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-RequestHandlerCrul-clone}{}}}
