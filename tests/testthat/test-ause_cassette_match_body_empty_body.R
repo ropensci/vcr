@@ -34,7 +34,7 @@ test_that("use_cassette: match on body w/ empty body", {
 
   # the request body in the cassette is an empty string
   cas <- read_cassette("testing9.yml")
-  expect_equal(cas$http_interactions[[1]]$request$body$string, "")
+  expect_equal(cas$http_interactions[[1]]$request$body$string, NULL)
 
   # NOTE: internally, the NULL in the request body gets turned into
   # an empty string, so we end up comparing an empty string to an empty
