@@ -16,7 +16,7 @@ RequestHandlerHttr <- R6::R6Class(
         Request$new(
           request$method,
           request$url,
-          take_body(request),
+          curl_body(request),
           as.list(request$headers)
         )
       }
@@ -35,7 +35,7 @@ RequestHandlerHttr <- R6::R6Class(
       on.exit(webmockr::httr_mock(TRUE), add = TRUE)
       tmp2 <- eval(parse(text = paste0("httr::", self$request$method)))(
         self$request$url,
-        body = take_body(self$request),
+        body = curl_body(self$request),
         do.call(httr::config, self$request$options),
         httr::add_headers(self$request$headers)
       )
@@ -60,7 +60,7 @@ RequestHandlerHttr <- R6::R6Class(
         text = paste0("httr::", self$request_original$method)
       ))(
         self$request_original$url,
-        body = take_body(self$request_original),
+        body = curl_body(self$request_original),
         do.call(httr::config, self$request_original$options),
         httr::add_headers(self$request_original$headers),
         if (!is.null(self$request_original$output$path))
@@ -147,4 +147,33 @@ as_httr_request <- function(x) {
     ),
     class = "request"
   )
+}
+
+
+curl_body <- function(x) {
+  if (is_body_empty(x)) {
+    return(NULL)
+  }
+
+  if (!is.null(x$fields)) {
+    # multipart body
+    tmp <- x$fields
+  } else if (!is.null(x$options$postfields) && is.raw(x$options$postfields)) {
+    # json/raw-encoded body
+    tmp <- rawToChar(x$options$postfields)
+  } else if (!is.null(x$options$postfieldsize_large)) {
+    # upload not in a list
+    # seems like we can't get the file path anyway from the request
+    # in both crul and httr - so may be stuck with this
+    tmp <- paste0("upload, file size: ", x$options$postfieldsize_large)
+  } else {
+    # unknown, fail out
+    cli::cli_abort("couldn't fetch request body; please file an issue")
+  }
+  if (inherits(tmp, "raw")) rawToChar(tmp) else tmp
+}
+
+is_body_empty <- function(x) {
+  is.null(x$fields) &&
+    (is.null(x$options$postfieldsize) || x$options$postfieldsize == 0L)
 }

@@ -19,7 +19,7 @@ RequestHandlerHttr2 <- R6::R6Class(
         Request$new(
           request$method,
           request$url,
-          take_body(request),
+          httr2_body(request),
           request$headers
         )
       }
@@ -68,9 +68,7 @@ RequestHandlerHttr2 <- R6::R6Class(
   )
 )
 
-#' @note adapted from httr2:::req_body_get
-#' @keywords internal
-take_body.httr2_request <- function(x) {
+httr2_body <- function(x) {
   if (is.null(x$body)) {
     return("")
   }
@@ -82,7 +80,7 @@ take_body.httr2_request <- function(x) {
     },
     form = {
       data <- x$body$data # need to put back unobfuscate?
-      httr2_url_build(data)
+      list2str(data)
     },
     json = unclass(rlang::exec(
       jsonlite::toJSON,
