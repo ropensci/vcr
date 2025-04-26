@@ -1,8 +1,5 @@
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
   skip_on_cran()
-  skip_on_ci()
-
-  webmockr::webmockr_reset()
   local_vcr_configure(dir = withr::local_tempdir())
 
   cli <- crul::HttpClient$new(url = hb())
@@ -62,7 +59,6 @@ test_that("use_cassette: match_requests_on - JSON-encoded body w/ crul", {
 
 test_that("use_cassette: match_requests_on - JSON-encoded body w/ httr", {
   skip_on_cran()
-  skip_on_ci()
   local_vcr_configure(dir = withr::local_tempdir())
 
   ### matchers: method, uri, body
