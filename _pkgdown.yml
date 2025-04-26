@@ -64,7 +64,6 @@ articles:
       - "`configuration`"
       - "`debugging`"
       - "`write-to-disk`"
-      - "`record-modes`"
       - "`lightswitch`"
       - "`internals`"
       - "`design`"

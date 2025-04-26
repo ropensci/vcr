@@ -138,7 +138,7 @@ settings are applied to \emph{all} cassettes but are overridden by settings
 defined locally for individual cassettes.
 \itemize{
 \item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
-See \link{recording}
+See \code{\link[=use_cassette]{use_cassette()}} for details.
 \item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
 See \code{\link[=use_cassette]{use_cassette()}} for details.
 \item \code{serialize_with}: (character) "yaml" or "json". Note that you can have

@@ -16,9 +16,6 @@
 #' [vcr_configure] is the function to use to set R session wide settings.
 #' See it's manual file for help.
 #'
-#' @section Record modes:
-#' See [recording] for help on record modes.
-#'
 #' @section Async:
 #' As of \pkg{crul} v1.5, `vcr` will work for async http requests with
 #' \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
