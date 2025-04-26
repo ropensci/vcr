@@ -8,14 +8,6 @@
 #'     \item{\code{externally_stubbed()}}{
 #'       just returns FALSE
 #'     }
-#'     \item{\code{should_ignore()}}{
-#'       should we ignore the request, depends on request ignorer
-#'       infrastructure that's not working yet
-#'     }
-#'     \item{\code{has_response_stub()}}{
-#'       Check if there is a matching response stub in the
-#'       http interaction list
-#'     }
 #'     \item{\code{get_stubbed_response()}}{
 #'       Check for a response and get it
 #'     }
@@ -59,10 +51,10 @@ RequestHandler <- R6::R6Class(
       } else if (should_be_ignored(self$request)) {
         vcr_log_sprintf("- ignored")
         private$on_ignored_request()
-      } else if (private$has_response_stub(self$request)) {
+      } else if (cassette_has_response(self$request)) {
         vcr_log_sprintf("- stubbed by vcr")
         private$on_stubbed_by_vcr_request()
-      } else if (real_http_connections_allowed()) {
+      } else if (cassette_is_recording()) {
         vcr_log_sprintf("- recordable")
         private$on_recordable_request()
       } else {
@@ -80,14 +72,6 @@ RequestHandler <- R6::R6Class(
 
     # request type helpers
     externally_stubbed = function() FALSE,
-
-    has_response_stub = function(request) {
-      if (!cassette_active()) {
-        return(FALSE)
-      }
-      interactions <- current_cassette()$http_interactions
-      interactions$has_interaction(request)
-    },
 
     get_stubbed_response = function(request) {
       if (!cassette_active()) {
@@ -125,3 +109,20 @@ RequestHandler <- R6::R6Class(
     }
   )
 )
+
+cassette_is_recording <- function() {
+  if (cassette_active()) {
+    current_cassette()$recording()
+  } else {
+    FALSE
+  }
+}
+
+cassette_has_response <- function(request) {
+  if (cassette_active()) {
+    interactions <- current_cassette()$http_interactions
+    interactions$has_interaction(request)
+  } else {
+    FALSE
+  }
+}
