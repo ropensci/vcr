@@ -10,8 +10,7 @@ HTTPInteractionList <- R6::R6Class(
     initialize = function(
       interactions,
       request_matchers = c("method", "uri"),
-      allow_playback_repeats = FALSE,
-      used_interactions = list()
+      allow_playback_repeats = FALSE
     ) {
       self$interactions <- interactions
       self$used <- rep(FALSE, length(interactions))
