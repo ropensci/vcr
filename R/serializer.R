@@ -85,6 +85,7 @@ Compressed <- R6::R6Class(
       super$initialize(path, name, ".qs2", preserve_bytes = preserve_bytes)
     },
 
+    # FIXME: save the R object directly requires changes to decode_interactions
     serialize = function(data) {
       out <- encode_interactions(data, self$preserve_bytes)
       json <- as.character(jsonlite::toJSON(out, auto_unbox = TRUE))
