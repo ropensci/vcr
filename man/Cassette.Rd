@@ -21,8 +21,6 @@ stubs are cleaned up.
 \item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
 eject to disable webmock so that webmockr does not affect any HTTP
 requests that happen afterwards
-\item \code{make_http_interaction()} method: \code{\link[=take_body]{take_body()}} utility
-function is used to pull the request body out of the HTTP request
 \item \code{serialize_to_crul()} method: method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
 \link[webmockr:Response]{webmockr::Response} are used to build a request and response,
 respectively, then passed to \code{\link[webmockr:build_crul_response]{webmockr::build_crul_response()}}
