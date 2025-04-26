@@ -60,8 +60,7 @@ Cassette <- R6::R6Class(
     #' @param dir The directory where the cassette will be stored.
     #' @param name The name of the cassette. vcr will sanitize this to ensure it
     #' is a valid file name.
-    #' @param record The record mode. Default: "once". In the future we'll support
-    #' "once", "all", "none", "new_episodes". See [recording] for more information
+    #' @param record The record mode. Default: "once".
     #' @param serialize_with (character) Which serializer to use.
     #'  Valid values are "yaml" (default), the only one supported for now.
     #' @param match_requests_on List of request matchers
