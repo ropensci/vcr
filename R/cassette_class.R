@@ -375,7 +375,7 @@ Cassette <- R6::R6Class(
         }
       }
 
-      response <- VcrResponse$new(
+      response <- vcr_response(
         status = if (inherits(response, "response")) {
           c(
             list(status_code = response$status_code),

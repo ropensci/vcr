@@ -1,8 +1,8 @@
 test_that("can find matching interations", {
-  req1 <- Request$new("GET", "http://a.com")
-  req2 <- Request$new("GET", "http://b.com")
-  resp1 <- VcrResponse$new(body = "a")
-  resp2 <- VcrResponse$new(body = "b")
+  req1 <- vcr_request("GET", "http://a.com")
+  req2 <- vcr_request("GET", "http://b.com")
+  resp1 <- vcr_response("200", body = "a")
+  resp2 <- vcr_response("200", body = "b")
   interactions <- HTTPInteractionList$new(list(
     list(request = req1, response = resp1),
     list(request = req2, response = resp2)
@@ -16,16 +16,16 @@ test_that("can find matching interations", {
 })
 
 test_that("handles non-matches", {
-  req1 <- Request$new("GET", "http://a.com")
-  req2 <- Request$new("GET", "http://b.com")
-  resp1 <- VcrResponse$new(body = "a")
-  resp2 <- VcrResponse$new(body = "b")
+  req1 <- vcr_request("GET", "http://a.com")
+  req2 <- vcr_request("GET", "http://b.com")
+  resp1 <- vcr_response("200", body = "a")
+  resp2 <- vcr_response("200", body = "b")
 
   interactions <- HTTPInteractionList$new(list(
     list(request = req1, response = resp1),
     list(request = req2, response = resp2)
   ))
-  req3 <- Request$new("GET", "http://c.com")
+  req3 <- vcr_request("GET", "http://c.com")
 
   expect_false(interactions$has_interaction(req3))
   expect_false(interactions$has_used_interaction(req3))
@@ -34,10 +34,10 @@ test_that("handles non-matches", {
 })
 
 test_that("response_for marks as used", {
-  req1 <- Request$new("GET", "http://a.com")
-  req2 <- Request$new("GET", "http://b.com")
-  resp1 <- VcrResponse$new(body = "a")
-  resp2 <- VcrResponse$new(body = "b")
+  req1 <- vcr_request("GET", "http://a.com")
+  req2 <- vcr_request("GET", "http://b.com")
+  resp1 <- vcr_response("200", body = "a")
+  resp2 <- vcr_response("200", body = "b")
   interactions <- HTTPInteractionList$new(list(
     list(request = req1, response = resp1),
     list(request = req2, response = resp2)
@@ -55,10 +55,10 @@ test_that("response_for marks as used", {
 })
 
 test_that("can optionally replay", {
-  req1 <- Request$new("GET", "http://a.com")
-  req2 <- Request$new("GET", "http://b.com")
-  resp1 <- VcrResponse$new(body = "a")
-  resp2 <- VcrResponse$new(body = "b")
+  req1 <- vcr_request("GET", "http://a.com")
+  req2 <- vcr_request("GET", "http://b.com")
+  resp1 <- vcr_response("200", body = "a")
+  resp2 <- vcr_response("200", body = "b")
   interactions <- HTTPInteractionList$new(
     list(
       list(request = req1, response = resp1),

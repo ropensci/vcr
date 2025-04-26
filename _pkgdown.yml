@@ -47,13 +47,11 @@ reference:
       You shouldn't need to use these directly
     contents:
       - Cassette
-      - Request
       - RequestHandler
       - RequestHandlerCrul
       - RequestHandlerHttr
       - RequestHandlerHttr2
       - UnhandledHTTPRequestError
-      - VcrResponse
       - request_summary
       - response_summary
 
