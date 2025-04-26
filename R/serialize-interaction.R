@@ -45,13 +45,13 @@ decode_interaction <- function(x, preserve_bytes) {
   list(
     request = Request$new(
       method = x$request$method,
-      uri = x$request$uri,
+      uri = decode_uri(x$request$uri),
       body = request_body$data,
-      headers = x$request$headers
+      headers = decode_headers(x$request$headers)
     ),
     response = VcrResponse$new(
       status = x$response$status,
-      headers = x$response$headers,
+      headers = decode_headers(x$response$headers),
       body = response_body$data,
       disk = response_body$file
     )

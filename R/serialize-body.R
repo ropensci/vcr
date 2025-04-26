@@ -20,7 +20,7 @@ decode_body <- function(body, preserve_bytes = FALSE) {
   if (has_name(body, "base64_string")) {
     data <- from_base64(body$base64_string)
   } else {
-    data <- body$string
+    data <- decode_sensitive(body$string)
   }
 
   list(data = data, file = body$file)

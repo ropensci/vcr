@@ -22,11 +22,11 @@ request_matches_one <- function(type, req1, req2) {
     type,
     method = req1$method == req2$method,
     uri = identical(
-      url_without_port(encode_uri(req1$uri, flip = TRUE)),
+      url_without_port(decode_uri(req1$uri)),
       url_without_port(req2$uri)
     ),
     uri_with_port = identical(
-      curl::curl_unescape(encode_uri(req1$uri, flip = TRUE)),
+      curl::curl_unescape(decode_uri(req1$uri)),
       curl::curl_unescape(req2$uri)
     ),
     body = identical(req1$body, req2$body),

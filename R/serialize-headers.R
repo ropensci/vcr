@@ -19,6 +19,10 @@ encode_headers <- function(headers, type = c("request", "response")) {
   headers
 }
 
+decode_headers <- function(headers) {
+  decode_sensitive(headers)
+}
+
 headers_remove <- function(headers, filter) {
   is_named <- names2(filter) != ""
 
