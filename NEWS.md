@@ -15,6 +15,7 @@ vcr (development version)
 ## NEW FEATURES
 
 * `local_vcr_configure()` allows you to temporarily affect vcr configuration.
+* New serializer option `compressed`, using the `qs2` package, generating compressed binary cassette files
 
 vcr 1.7.0
 =========
