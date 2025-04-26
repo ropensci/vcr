@@ -30,9 +30,11 @@
 
 ## usethis namespace: start
 #' @import rlang
-#' @importFrom R6 R6Class
-#' @importFrom utils getParseData
-#' @importFrom yaml yaml.load yaml.load_file as.yaml
-#' @importFrom urltools url_parse url_compose
 ## usethis namespace: end
 NULL
+
+# Silence R CMD check NOTE
+imports <- function() {
+  yaml::read_yaml
+  R6::R6Class
+}
