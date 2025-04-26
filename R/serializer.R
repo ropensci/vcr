@@ -3,7 +3,7 @@ serializer_fetch <- function(type, path, name, preserve_bytes = FALSE) {
     type,
     json = JSON$new(path, name, preserve_bytes = preserve_bytes),
     yaml = YAML$new(path, name, preserve_bytes = preserve_bytes),
-    compressed = Compressed$new(path, name, preserve_bytes = preserve_bytes),
+    qs2 = QS2$new(path, name, preserve_bytes = preserve_bytes),
     cli::cli_abort("Unsupported cassette serializer {.str {type}}.")
   )
 }
@@ -76,8 +76,8 @@ YAML <- R6::R6Class(
   )
 )
 
-Compressed <- R6::R6Class(
-  "Compressed",
+QS2 <- R6::R6Class(
+  "QS2",
   inherit = Serializer,
   public = list(
     initialize = function(path, name, preserve_bytes = FALSE) {

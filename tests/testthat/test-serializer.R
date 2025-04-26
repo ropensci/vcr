@@ -268,18 +268,18 @@ test_that("Windows encoding", {
   expect_type(ser$deserialize(), "list") # could fail on Windows
 })
 
-# Compressed -------------------------------------------------------------------
+# QS2 -------------------------------------------------------------------
 
 test_that("generates correct path", {
-  aa <- Compressed$new("path", "name")
+  aa <- QS2$new("path", "name")
   expect_equal(aa$path, "path/name.qs2")
 })
 
-test_that("Compressed usage", {
+test_that("QS2 usage", {
   skip_on_cran()
   local_vcr_configure(
     dir = withr::local_tempdir(),
-    serialize_with = "compressed"
+    serialize_with = "qs2"
   )
 
   # does one request work?

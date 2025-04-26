@@ -41,9 +41,9 @@ to make a complete \code{crul} HTTP response object
 
 \item{\code{recorded_at}}{(character) date/time recorded at}
 
-\item{\code{serialize_with}}{(character) serializer (yaml|json|compressed)}
+\item{\code{serialize_with}}{(character) serializer (yaml|json|qs2)}
 
-\item{\code{serializer}}{(Serializer) serializer (YAML|JSON|Compressed)}
+\item{\code{serializer}}{(Serializer) serializer (YAML|JSON|QS2)}
 
 \item{\code{match_requests_on}}{(character) matchers to use
 default: method & uri}
@@ -135,7 +135,7 @@ allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
 \item{\code{serialize_with}}{(character) Which serializer to use.
-Valid values are "yaml" (default), "json", and "compressed".}
+Valid values are "yaml" (default), "json", and "qs2".}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for

@@ -68,7 +68,7 @@ allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
 \item{serialize_with}{(character) Which serializer to use.
-Valid values are "yaml" (default) "json", and "compressed". Note that you
+Valid values are "yaml" (default) "json", and "qs2". Note that you
 can have multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.}
