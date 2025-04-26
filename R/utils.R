@@ -1,9 +1,5 @@
 compact <- function(x) Filter(Negate(is.null), x)
 
-`%||%` <- function(x, y) {
-  if (missing(x) || is.null(x) || all(nchar(x) == 0) || length(x) == 0) y else x
-}
-
 assert <- function(x, y) {
   if (!is.null(x)) {
     if (!inherits(x, y)) {
