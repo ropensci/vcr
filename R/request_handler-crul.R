@@ -12,14 +12,12 @@ RequestHandlerCrul <- R6::R6Class(
       self$request_original <- request
 
       fake_resp <- webmockr::build_crul_response(request, NULL)
-      self$request <- {
-        Request$new(
-          request$method,
-          request$url$url,
-          curl_body(request),
-          as.list(fake_resp$request_headers)
-        )
-      }
+      self$request <- vcr_request(
+        request$method,
+        request$url$url,
+        curl_body(request),
+        as.list(fake_resp$request_headers)
+      )
     }
   ),
   private = list(

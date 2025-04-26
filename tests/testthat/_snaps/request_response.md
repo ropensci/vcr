@@ -3,19 +3,19 @@
     Code
       cat(request_summary(request, c("method", "uri")))
     Output
-      post http://example.com
+      POST http://example.com
     Code
       cat(request_summary(request, c("method", "uri", "body")))
     Output
-      post http://example.com body
+      POST http://example.com body
     Code
       cat(request_summary(request, c("method", "uri", "headers")))
     Output
-      post http://example.com 1 2
+      POST http://example.com 1 2
     Code
       cat(request_summary(request, c("method", "uri", "body", "headers")))
     Output
-      post http://example.com body 1 2
+      POST http://example.com body 1 2
 
 # response_summary works
 

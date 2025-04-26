@@ -34,21 +34,22 @@ test_that("make_http_interaction works as expected", {
   # save(httr_resp2, file = "tests/testthat/httr_resp2.rda", version = 2)
 
   zz <- Cassette$new("test")
+  req <- vcr_request("GET", "http://example.com")
 
   # crul, with non-image response body
   # $response$body should be class `character`
   load("crul_resp1.rda")
-  aa <- zz$record_http_interaction(Request$new(), crul_resp1)
-  expect_s3_class(aa$request, "Request")
-  expect_s3_class(aa$response, "VcrResponse")
+  aa <- zz$record_http_interaction(req, crul_resp1)
+  expect_s3_class(aa$request, "vcr_request")
+  expect_s3_class(aa$response, "vcr_response")
   expect_type(aa$response$body, "character")
 
   # crul, with image response body
   # $response$body should be class `raw`
   load("crul_resp2.rda")
-  bb <- zz$record_http_interaction(Request$new(), crul_resp2)
-  expect_s3_class(bb$request, "Request")
-  expect_s3_class(bb$response, "VcrResponse")
+  bb <- zz$record_http_interaction(req, crul_resp2)
+  expect_s3_class(bb$request, "vcr_request")
+  expect_s3_class(bb$response, "vcr_response")
   expect_type(bb$response$body, "raw")
 })
 

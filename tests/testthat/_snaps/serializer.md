@@ -23,7 +23,7 @@
         "http_interactions": [
           {
             "request": {
-              "method": "get",
+              "method": "GET",
               "uri": "http://example.com",
               "body": {},
               "headers": []
@@ -50,7 +50,7 @@
     Output
       http_interactions:
       - request:
-          method: get
+          method: GET
           uri: http://example.com
           body: {}
           headers: []
