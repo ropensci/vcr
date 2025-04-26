@@ -282,9 +282,9 @@ VCRConfig <- R6::R6Class(
     log_opts = function(value) {
       if (missing(value)) return(private$.log_opts)
       # add missing log options
-      log_opts <- merge_list(
-        value,
-        list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
+      log_opts <- utils::modifyList(
+        list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
+        value
       )
       private$.log_opts <- log_opts
     },
