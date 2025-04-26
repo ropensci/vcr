@@ -80,10 +80,15 @@ vcr_configure(allow_unused_http_interactions = FALSE)
 
 ### serialize_with
 
-Which serializer to use: "yaml" or "json". Note that you can have
-multiple cassettes with the same name as long as they use different
-serializers; so if you only want one cassette for a given cassette name,
-make sure to not switch serializers, or clean up files you no longer need.
+Which serializer to use: "yaml", "json", or "compressed". The "compressed"
+option is a binary file format that saves disk space compared to "yaml" or
+"json". "compressed" will have the greatest proportional disk space savings
+as cassettes have more data in them.
+
+Note that you can have multiple cassettes with the same name as long as
+they use different serializers; so if you only want one cassette for a given
+cassette name, make sure to not switch serializers, or clean up files you
+no longer need.
 
 ```{r}
 vcr_configure(serialize_with = "yaml")
