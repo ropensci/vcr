@@ -13,14 +13,6 @@ request is stubbed, to be ignored, recordable, or unhandled
 \item{\code{externally_stubbed()}}{
 just returns FALSE
 }
-\item{\code{should_ignore()}}{
-should we ignore the request, depends on request ignorer
-infrastructure that's not working yet
-}
-\item{\code{has_response_stub()}}{
-Check if there is a matching response stub in the
-http interaction list
-}
 \item{\code{get_stubbed_response()}}{
 Check for a response and get it
 }
