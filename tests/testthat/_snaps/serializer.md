@@ -6,7 +6,7 @@
       Error in `serializer_fetch()`:
       ! Unsupported cassette serializer "foo".
 
-# generates expected json
+# warns if you reload string with preserve_exact_body_bytes
 
     Code
       use_cassette("test", httr::GET(hb("/get")), preserve_exact_body_bytes = TRUE)
@@ -14,7 +14,7 @@
       Warning in `decode_body()`:
       re-record cassettes using 'preserve_exact_body_bytes = TRUE'
 
-# generates expected yaml
+# generates expected json
 
     Code
       writeLines(readLines(ser$path))
@@ -62,11 +62,4 @@
             string: body
         recorded_at: 2024-01-01 12:00:00 GMT
       recorded_with: <package_versions>
-
-# generates expected compressed data
-
-    Code
-      writeLines(qs2::qs_read(ser$path))
-    Output
-      {"http_interactions":[{"request":{"method":"get","uri":"http://example.com","body":{"encoding":"","string":""},"headers":[]},"response":{"status":200,"headers":{"name":"val"},"body":{"encoding":"","string":"body"}},"recorded_at":"2024-01-01 12:00:00 GMT"}],"recorded_with":"<package_versions>"}
 

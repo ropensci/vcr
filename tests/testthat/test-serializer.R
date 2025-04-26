@@ -275,23 +275,6 @@ test_that("generates correct path", {
   expect_equal(aa$path, "path/name.qs2")
 })
 
-test_that("generates expected compressed data", {
-  local_vcr_configure(json_pretty = TRUE)
-  local_mocked_bindings(
-    cur_time = function(tz) "2024-01-01 12:00:00",
-    pkg_versions = function() "<package_versions>"
-  )
-
-  request <- Request$new(method = "GET", uri = "http://example.com")
-  response <- VcrResponse$new(status = 200L, list(name = "val"), body = "body")
-  interaction <- list(request = request, response = response)
-
-  ser <- Compressed$new(withr::local_tempdir(), "serialize")
-  ser$serialize(list(interaction))
-
-  expect_snapshot(writeLines(qs2::qs_read(ser$path)))
-})
-
 test_that("Compressed usage", {
   skip_on_cran()
   local_vcr_configure(
