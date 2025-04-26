@@ -16,20 +16,12 @@ reference:
       Probably the only functions you'll need
     contents:
       - use_cassette
-  - title: "Recording and matching"
-    desc: >
-      Details on recording and request matching options
-    contents:
-      - recording
   - title: "vcr in tests"
     desc: >
       Functions for more custom workflows
     contents:
       - skip_if_vcr_off
       - vcr_test_path
-  - title: "Check current recording state"
-    contents:
-      - real_http_connections_allowed
   - title: "Enable/Disable vcr"
     contents:
       - turn_off
