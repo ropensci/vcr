@@ -1,4 +1,4 @@
-vcr_request <- function(method = "GET", uri, body = NULL, headers = list()) {
+vcr_request <- function(method, uri, body = NULL, headers = list()) {
   if (is.list(body)) {
     body <- paste(names(body), body, sep = "=", collapse = ",")
   }
