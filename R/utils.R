@@ -1,18 +1,8 @@
-pluck <- function(x, name, type) {
-  if (missing(type)) {
-    lapply(x, "[[", name)
-  } else {
-    vapply(x, "[[", name, FUN.VALUE = type)
-  }
-}
-
 compact <- function(x) Filter(Negate(is.null), x)
 
 `%||%` <- function(x, y) {
   if (missing(x) || is.null(x) || all(nchar(x) == 0) || length(x) == 0) y else x
 }
-
-stract <- function(str, pattern) regmatches(str, regexpr(pattern, str))
 
 assert <- function(x, y) {
   if (!is.null(x)) {
@@ -28,23 +18,8 @@ assert <- function(x, y) {
   invisible(x)
 }
 
-merge_list <- function(x, y, ...) {
-  if (length(x) == 0) return(y)
-  if (length(y) == 0) return(x)
-  z <- match(names(y), names(x))
-  z <- is.na(z)
-  if (any(z)) {
-    x[names(y)[which(z)]] = y[which(z)]
-  }
-  x
-}
-
 can_rawToChar <- function(x) {
   z <- tryCatch(rawToChar(x), error = function(e) e)
-  return(!inherits(z, "error"))
-}
-can_charToRaw <- function(x) {
-  z <- tryCatch(charToRaw(x), error = function(e) e)
   return(!inherits(z, "error"))
 }
 
@@ -84,7 +59,6 @@ dir_create <- function(path) {
 cur_time <- function(tz = "") {
   format(Sys.time(), format = "%Y-%m-%d %H:%M:%S", tz = tz)
 }
-
 
 pkg_versions <- function() {
   paste(
