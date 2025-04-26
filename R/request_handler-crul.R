@@ -10,12 +10,14 @@ RequestHandlerCrul <- R6::R6Class(
     #' @return A new `RequestHandler` object
     initialize = function(request) {
       self$request_original <- request
+
+      fake_resp <- webmockr::build_crul_response(request, NULL)
       self$request <- {
         Request$new(
           request$method,
-          request$url$url %||% request$url,
-          take_body(request) %||% "",
-          request$headers
+          request$url$url,
+          curl_body(request),
+          as.list(fake_resp$request_headers)
         )
       }
     }
@@ -39,7 +41,7 @@ RequestHandlerCrul <- R6::R6Class(
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(response)
+      current_cassette()$record_http_interaction(self$request, response)
       return(response)
     }
   )
