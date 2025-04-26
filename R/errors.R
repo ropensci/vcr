@@ -273,8 +273,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
       tmp <- c("try_debug_logger", "use_new_episodes", "ignore_request")
       tmp <- c(tmp, self$record_mode_suggestion())
-      if (self$has_used_interaction_matching())
-        tmp <- c(tmp, "allow_playback_repeats")
+      if (self$has_used_interaction()) tmp <- c(tmp, "allow_playback_repeats")
       tmp <- lapply(tmp, self$suggestion_for)
       compact(c(tmp, list(self$match_requests_on_suggestion())))
     },
@@ -306,11 +305,11 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
     #' @description are there any used interactions
     #' @return logical
-    has_used_interaction_matching = function() {
+    has_used_interaction = function() {
       any(vapply(
         the$cassettes,
         function(z) {
-          z$http_interactions$has_used_interaction_matching(self$request) %||%
+          z$http_interactions$has_used_interaction(self$request) %||%
             FALSE
         },
         logical(1)

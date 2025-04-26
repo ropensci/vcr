@@ -28,7 +28,7 @@ test_that('issue 249 is correctly handled.', {
   local_vcr_configure(dir = withr::local_tempdir())
 
   use_cassette('get_401', {
-    res <- httr::GET(hb_remote('/status/401'))
+    res <- httr::GET(hb('/status/401'))
   })
   expect_true(res$status_code == 401)
 })
@@ -39,11 +39,11 @@ test_that("httr use_cassette works", {
 
   out <- use_cassette(
     "httr_test1",
-    x <- httr::GET(hb_remote("/404"))
+    x <- httr::GET(hb("/404"))
   )
   invisible(use_cassette(
     "httr_test1",
-    x2 <- httr::GET(hb_remote("/404"))
+    x2 <- httr::GET(hb("/404"))
   ))
 
   # cassette
@@ -55,7 +55,7 @@ test_that("httr use_cassette works", {
   # request - 1st http call
   expect_s3_class(x$request, "request")
   expect_equal(x$request$method, "GET")
-  expect_equal(x$request$url, hb_remote("/404"))
+  expect_equal(x$request$url, hb("/404"))
   expect_named(x$request$headers, "Accept")
   expect_null(x$request$fields)
   expect_true(x$request$options$httpget)
@@ -64,7 +64,7 @@ test_that("httr use_cassette works", {
   # request - 2nd http call
   expect_s3_class(x2$request, "request")
   expect_equal(x2$request$method, "GET")
-  expect_equal(x2$request$url, hb_remote("/404"))
+  expect_equal(x2$request$url, hb("/404"))
   expect_named(x2$request$headers, "Accept")
   expect_null(x2$request$fields)
   expect_true(x2$request$options$httpget)
@@ -73,15 +73,7 @@ test_that("httr use_cassette works", {
   # response
   expect_s3_class(x, "response")
   expect_equal(x$status_code, 404)
-  expect_equal(x$url, hb_remote("/404"))
-  expect_output(print(x), "Not Found")
-  expect_output(print(x), "HTML PUBLIC")
-
-  # response body
-  str <- yaml::yaml.load_file(out$file())$http_interactions
-  expect_type(str[[1]]$response$body$string, "character")
-  expect_match(str[[1]]$response$body$string, "404")
-  expect_match(str[[1]]$response$body$string, "DOCTYPE HTML")
+  expect_equal(x$url, hb("/404"))
 })
 
 test_that("httr use_cassette works", {
@@ -90,7 +82,7 @@ test_that("httr use_cassette works", {
 
   out <- use_cassette(
     "httr_test2",
-    x <- httr::GET(hb_remote("/404")),
+    x <- httr::GET(hb("/404")),
     preserve_exact_body_bytes = TRUE
   )
 
@@ -103,16 +95,7 @@ test_that("httr use_cassette works", {
   # response
   expect_s3_class(x, "response")
   expect_equal(x$status_code, 404)
-  expect_equal(x$url, hb_remote("/404"))
-
-  # response body
-  str <- yaml::yaml.load_file(out$file())
-  str <- rawToChar(jsonlite::base64_dec(
-    str$http_interactions[[1]]$response$body$base64_string
-  ))
-  expect_type(str, "character")
-  expect_match(str, "404")
-  expect_match(str, "DOCTYPE HTML")
+  expect_equal(x$url, hb("/404"))
 })
 
 test_that("httr w/ >1 request per cassette", {

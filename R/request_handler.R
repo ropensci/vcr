@@ -47,9 +47,8 @@ RequestHandler <- R6::R6Class(
     #' @return handles a request, outcomes vary
     handle = function() {
       vcr_log_sprintf(
-        "Handling request: %s (%s)",
-        private$request_summary(self$request),
-        if (webmockr::enabled(adapter)) "enabled" else "disabled"
+        "Handling request: %s",
+        private$request_summary(self$request)
       )
 
       if (private$externally_stubbed()) {
@@ -87,7 +86,7 @@ RequestHandler <- R6::R6Class(
         return(FALSE)
       }
       interactions <- current_cassette()$http_interactions
-      interactions$has_interaction_matching(request)
+      interactions$has_interaction(request)
     },
 
     get_stubbed_response = function(request) {

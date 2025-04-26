@@ -18,7 +18,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       self$request <- vcr_request(
         request$method,
         request$url,
-        take_body(request),
+        httr2_body(request),
         request$headers
       )
     }
@@ -55,20 +55,18 @@ RequestHandlerHttr2 <- R6::R6Class(
 
       req <- self$request_original
       req <- httr2::req_error(req, is_error = \(resp) FALSE)
-      resp <- httr2::req_perform(req)
+      response <- httr2::req_perform(req)
 
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(resp)
-      resp
+      current_cassette()$record_http_interaction(self$request, response)
+      response
     }
   )
 )
 
-#' @note adapted from httr2:::req_body_get
-#' @keywords internal
-take_body.httr2_request <- function(x) {
+httr2_body <- function(x) {
   if (is.null(x$body)) {
     return("")
   }
@@ -80,7 +78,7 @@ take_body.httr2_request <- function(x) {
     },
     form = {
       data <- x$body$data # need to put back unobfuscate?
-      httr2_url_build(data)
+      list2str(data)
     },
     json = unclass(rlang::exec(
       jsonlite::toJSON,

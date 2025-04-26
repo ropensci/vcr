@@ -75,7 +75,7 @@ error with UnhandledHTTPRequestError
 \item \href{#method-UnhandledHTTPRequestError-suggestions}{\code{UnhandledHTTPRequestError$suggestions()}}
 \item \href{#method-UnhandledHTTPRequestError-no_cassette_suggestions}{\code{UnhandledHTTPRequestError$no_cassette_suggestions()}}
 \item \href{#method-UnhandledHTTPRequestError-record_mode_suggestion}{\code{UnhandledHTTPRequestError$record_mode_suggestion()}}
-\item \href{#method-UnhandledHTTPRequestError-has_used_interaction_matching}{\code{UnhandledHTTPRequestError$has_used_interaction_matching()}}
+\item \href{#method-UnhandledHTTPRequestError-has_used_interaction}{\code{UnhandledHTTPRequestError$has_used_interaction()}}
 \item \href{#method-UnhandledHTTPRequestError-match_requests_on_suggestion}{\code{UnhandledHTTPRequestError$match_requests_on_suggestion()}}
 \item \href{#method-UnhandledHTTPRequestError-clone}{\code{UnhandledHTTPRequestError$clone()}}
 }
@@ -347,12 +347,12 @@ character
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UnhandledHTTPRequestError-has_used_interaction_matching"></a>}}
-\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-has_used_interaction_matching}{}}}
-\subsection{Method \code{has_used_interaction_matching()}}{
+\if{html}{\out{<a id="method-UnhandledHTTPRequestError-has_used_interaction"></a>}}
+\if{latex}{\out{\hypertarget{method-UnhandledHTTPRequestError-has_used_interaction}{}}}
+\subsection{Method \code{has_used_interaction()}}{
 are there any used interactions
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UnhandledHTTPRequestError$has_used_interaction_matching()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{UnhandledHTTPRequestError$has_used_interaction()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
