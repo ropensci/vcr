@@ -26,7 +26,7 @@ encode_uri <- function(
     }
   }
 
-  uri <- sensitive_remove(uri)
+  uri <- encode_sensitive(uri)
 
   uri
 }

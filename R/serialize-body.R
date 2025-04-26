@@ -6,7 +6,7 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
     ))
   } else {
     compact(list(
-      string = sensitive_remove(body),
+      string = encode_sensitive(body),
       file = file
     ))
   }

@@ -13,7 +13,7 @@ encode_headers <- function(headers, type = c("request", "response")) {
     headers <- request_headers_redact(headers)
   }
 
-  headers <- sensitive_remove(headers)
+  headers <- encode_sensitive(headers)
 
   headers <- unclass(headers)
   headers
