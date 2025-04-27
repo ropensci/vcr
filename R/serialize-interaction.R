@@ -59,7 +59,7 @@ decode_interaction <- function(x, preserve_bytes) {
       status = status,
       headers = x$response$headers,
       body = response_body$data,
-      disk = response_body$file
+      disk = response_body$on_disk
     )
   )
 }

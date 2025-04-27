@@ -1,14 +1,18 @@
 encode_body <- function(body, file, preserve_bytes = FALSE) {
-  if (is.raw(body) || preserve_bytes) {
-    compact(list(
-      base64_string = to_base64(body),
-      file = file
-    ))
+  if (isTRUE(file)) {
+    list(on_disk = body)
   } else {
-    compact(list(
-      string = sensitive_remove(body),
-      file = file
-    ))
+    if (is.null(body)) {
+      set_names(list())
+    } else if (is.list(body)) {
+      list(fields = body)
+    } else if (is.raw(body) || preserve_bytes) {
+      list(base64_string = to_base64(body))
+    } else if (is_string(body)) {
+      list(string = sensitive_remove(body))
+    } else {
+      cli::cli_abort("Unsupported body type", .internal = TRUE)
+    }
   }
 }
 
@@ -17,13 +21,17 @@ decode_body <- function(body, preserve_bytes = FALSE) {
     warning("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
   }
 
-  if (has_name(body, "base64_string")) {
-    data <- from_base64(body$base64_string)
+  if (has_name(body, "fields")) {
+    list(data = body$fields, on_disk = FALSE)
+  } else if (has_name(body, "on_disk")) {
+    list(data = body$on_disk, on_disk = TRUE)
+  } else if (has_name(body, "base64_string")) {
+    list(data = from_base64(body$base64_string), on_disk = FALSE)
   } else {
-    data <- body$string
+    # In v1, on_disk bodies were recorded with `file = TRUE` and
+    # a `string` body giving the path.
+    list(data = body$string, on_disk = body$file %||% FALSE)
   }
-
-  list(data = data, file = body$file)
 }
 
 # Helpers --------------------------------------------------------------------
