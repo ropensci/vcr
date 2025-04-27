@@ -1,15 +1,8 @@
-#' @title RequestHandlerHttr
-#' @description Methods for the httr package, building on [RequestHandler]
-#' @export
-#' @param request A request object
 RequestHandlerHttr <- R6::R6Class(
   "RequestHandlerHttr",
   inherit = RequestHandler,
 
   public = list(
-    #' @description Create a new `RequestHandlerHttr` object
-    #' @param request A request object
-    #' @return A new `RequestHandlerHttr` object
     initialize = function(request) {
       self$request_original <- request
       self$request <- vcr_request(

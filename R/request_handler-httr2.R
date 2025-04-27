@@ -1,15 +1,8 @@
-#' @title RequestHandlerHttr2
-#' @description Methods for the httr2 package, building on [RequestHandler]
-#' @export
-#' @param request The request from.
 RequestHandlerHttr2 <- R6::R6Class(
   "RequestHandlerHttr2",
   inherit = RequestHandler,
 
   public = list(
-    #' @description Create a new `RequestHandlerHttr2` object
-    #' @param request The request
-    #' @return A new `RequestHandlerHttr2` object
     initialize = function(request) {
       if (!length(request$method)) {
         request$method <- webmockr:::req_method_get_w(request)
