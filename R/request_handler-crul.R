@@ -71,7 +71,7 @@ serialize_to_crul <- function(request, response) {
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)
   # resp$set_status(status = response$status %||% 200)
-  resp$set_status(status = response$status$status_code %||% 200)
+  resp$set_status(status = response$status)
 
   # generate crul response
   webmockr::build_crul_response(req, resp)

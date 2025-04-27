@@ -34,7 +34,7 @@ Imports:
     curl,
     jsonlite,
     R6,
-    rlang,
+    rlang (>= 1.1.0),
     rprojroot,
     urltools,
     webmockr (>= 0.8.0),

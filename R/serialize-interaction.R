@@ -42,6 +42,12 @@ decode_interaction <- function(x, preserve_bytes) {
   request_body <- decode_body(x$request$body, preserve_bytes = preserve_bytes)
   response_body <- decode_body(x$response$body, preserve_bytes = preserve_bytes)
 
+  # status codes were previously written as a list
+  status <- x$response$status
+  if (is.list(status)) {
+    status <- as.numeric(status$status_code)
+  }
+
   list(
     request = vcr_request(
       method = x$request$method,
@@ -50,7 +56,7 @@ decode_interaction <- function(x, preserve_bytes) {
       headers = x$request$headers
     ),
     response = vcr_response(
-      status = x$response$status,
+      status = status,
       headers = x$response$headers,
       body = response_body$data,
       disk = response_body$file

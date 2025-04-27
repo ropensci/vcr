@@ -115,7 +115,7 @@ serialize_to_httr <- function(request, response) {
   resp$set_body(response_body, response$disk %||% FALSE)
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)
-  resp$set_status(status = response$status$status_code %||% 200)
+  resp$set_status(status = response$status)
 
   # generate httr response
   webmockr::build_httr_response(as_httr_request(req), resp)

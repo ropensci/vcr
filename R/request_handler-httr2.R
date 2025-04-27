@@ -42,7 +42,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       }
 
       httr2::response(
-        status_code = vcr_response$status$status_code %||% 200,
+        status_code = vcr_response$status,
         url = self$request_original$url,
         method = webmockr:::req_method_get_w(self$request_original),
         headers = vcr_response$headers,
