@@ -13,3 +13,5 @@ inst/doc
 inst/ignore
 notes-redirects.R
 CLAUDE.md
+
+/.quarto/
