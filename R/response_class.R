@@ -1,4 +1,4 @@
-vcr_response <- function(status, headers = list(), body = NULL, disk = NULL) {
+vcr_response <- function(status, headers = list(), body = NULL, disk = FALSE) {
   check_number_whole(status)
   if (!is.list(headers)) {
     stop_input_type(headers, "a list")
@@ -6,7 +6,7 @@ vcr_response <- function(status, headers = list(), body = NULL, disk = NULL) {
   if (!is_string(body) && !is.raw(body) && !is.null(body)) {
     stop_input_type(body, "a string, raw vector, or NULL")
   }
-  check_bool(disk, allow_null = TRUE)
+  check_bool(disk)
 
   structure(
     list(
