@@ -4,12 +4,15 @@ test_that("UnhandledHTTPRequestError fails well", {
 })
 
 test_that("informative error if no cassette active", {
+  withr::local_options(rlang_interactive = TRUE)
+
   request <- vcr_request("post", "http://example.com")
   err <- UnhandledHTTPRequestError$new(request)
   expect_snapshot(err$construct_message(), error = TRUE)
 })
 
 test_that("UnhandledHTTPRequestError works as expected", {
+  withr::local_options(rlang_interactive = TRUE)
   local_cassette("turtle", warn_on_empty = FALSE)
 
   request <- vcr_request("post", "http://example.com")
@@ -22,7 +25,7 @@ test_that("sensitive data is redacted in url", {
 
   foo <- "abc"
   local_vcr_configure(filter_sensitive_data = list("<<foo>" = foo))
-  url <- paste0("http://example.com/?foo=", foo, "&bar=", bar)
+  url <- paste0("http://example.com/?foo=", foo)
   request <- vcr_request("get", url)
 
   err <- UnhandledHTTPRequestError$new(request)

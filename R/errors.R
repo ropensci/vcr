@@ -187,7 +187,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description get help message for non-verbose error
     #' @return character
     get_help = function() {
-      vm <- if (interactive()) "Run `vcr::vcr_last_error()`" else
+      vm <- if (is_interactive()) "Run `vcr::vcr_last_error()`" else
         "Set `VCR_VERBOSE_ERRORS=TRUE`"
       c(
         paste0(vm, " for more verbose errors"),
