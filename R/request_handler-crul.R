@@ -1,3 +1,4 @@
+#' @export
 RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
   inherit = RequestHandler,

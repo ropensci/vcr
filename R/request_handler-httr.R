@@ -1,3 +1,4 @@
+#' @export
 RequestHandlerHttr <- R6::R6Class(
   "RequestHandlerHttr",
   inherit = RequestHandler,

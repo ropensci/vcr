@@ -1,9 +1,18 @@
+#' Request handlers
+#'
+#' This are internal classes that should not be used by users.
+#'
+#' @keywords internal
+#' @aliases RequestHandlerHttr2 RequestHandlerHttr RequestHandlerCrul
+#' @name RequestHandler
+NULL
+
 RequestHandler <- R6::R6Class(
   'RequestHandler',
   public = list(
-    # Request from the HTTP package.
+    # request_original Request from the HTTP package.
     request_original = NULL,
-    # VCR request
+    # request A `vcr_request` object
     request = NULL,
 
     handle = function() {
