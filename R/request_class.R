@@ -10,7 +10,7 @@ vcr_request <- function(method, uri, body = NULL, headers = list()) {
 
   structure(
     list(
-      method = method,
+      method = toupper(method),
       uri = uri,
       body = body,
       headers = headers
