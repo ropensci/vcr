@@ -1,6 +1,3 @@
-# filter_sensitive_data replacement
-# FIXME: eventually move to higher level so that this happens
-#   regardless of serializer
 decode_sensitive <- function(x) {
   if (!is.null(vcr_c$filter_sensitive_data)) {
     fsd <- vcr_c$filter_sensitive_data
