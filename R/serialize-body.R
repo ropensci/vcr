@@ -9,7 +9,7 @@ encode_body <- function(body, file, preserve_bytes = FALSE) {
     } else if (is.raw(body) || preserve_bytes) {
       list(base64_string = to_base64(body))
     } else if (is_string(body)) {
-      list(string = sensitive_remove(body))
+      list(string = encode_sensitive(body))
     } else {
       cli::cli_abort("Unsupported body type", .internal = TRUE)
     }
@@ -30,7 +30,7 @@ decode_body <- function(body, preserve_bytes = FALSE) {
   } else {
     # In v1, on_disk bodies were recorded with `file = TRUE` and
     # a `string` body giving the path.
-    list(data = body$string, on_disk = body$file %||% FALSE)
+    list(data = decode_sensitive(body$string), on_disk = FALSE)
   }
 }
 

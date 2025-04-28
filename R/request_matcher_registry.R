@@ -45,7 +45,7 @@ normalize_uri <- function(x, drop_port = TRUE) {
     return(NULL)
   }
 
-  x <- encode_uri(x, flip = TRUE)
+  x <- decode_uri(x)
 
   parsed <- curl::curl_parse_url(x)
   parsed$url <- NULL

@@ -44,11 +44,8 @@ JSON <- R6::R6Class(
     },
 
     deserialize = function() {
-      str <- sensitive_put_back(readLines(self$path))
-      interactions <- jsonlite::fromJSON(str, FALSE)
-      interactions <- query_params_put_back(interactions)
-      interactions <- decode_interactions(interactions, self$preserve_bytes)
-      interactions
+      input <- jsonlite::read_json(self$path)
+      decode_interactions(input, self$preserve_bytes)
     }
   )
 )
@@ -67,11 +64,8 @@ YAML <- R6::R6Class(
     },
 
     deserialize = function() {
-      str <- sensitive_put_back(readLines(self$path, encoding = "UTF-8"))
-      interactions <- yaml::yaml.load(str)
-      interactions <- query_params_put_back(interactions)
-      interactions <- decode_interactions(interactions, self$preserve_bytes)
-      interactions
+      input <- yaml::read_yaml(self$path)
+      decode_interactions(input, self$preserve_bytes)
     }
   )
 )

@@ -430,3 +430,12 @@ VCRConfig <- R6::R6Class(
 )
 
 pastec <- function(x) paste0(x, collapse = ", ")
+
+trimquotes <- function(x, y) {
+  pattern <- "^\"|\"$|^'|'$"
+  if (grepl(pattern, x)) {
+    msg <- "filter_sensitive_data: leading & trailing quotes trimmed from '"
+    warning(paste0(msg, y, "'"), call. = FALSE)
+  }
+  gsub(pattern, "", x)
+}
