@@ -180,7 +180,6 @@ Cassette <- R6::R6Class(
       if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
           x = "{.str {self$name}} cassette ejected without recording any interactions.",
-          i = "Did your request error?",
           i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
           i = "If you are using crul/httr/httr2, are you sure you made an HTTP request?"
         ))
