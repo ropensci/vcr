@@ -1,13 +1,8 @@
-#' @title RequestHandlerCrul
-#' @description Methods for the crul package, building on [RequestHandler]
 #' @export
 RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
   inherit = RequestHandler,
   public = list(
-    #' @description Create a new `RequestHandler` object
-    #' @param request A request
-    #' @return A new `RequestHandler` object
     initialize = function(request) {
       self$request_original <- request
 

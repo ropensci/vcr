@@ -39,10 +39,6 @@ reference:
       You shouldn't need to use these directly
     contents:
       - Cassette
-      - RequestHandler
-      - RequestHandlerCrul
-      - RequestHandlerHttr
-      - RequestHandlerHttr2
       - UnhandledHTTPRequestError
       - request_summary
       - response_summary
