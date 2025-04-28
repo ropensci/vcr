@@ -32,6 +32,7 @@ make_comparison <- function(matches, req) {
   compact(list(
     method = if ("method" %in% matches) req$method,
     body = if ("body" %in% matches) req$body,
+    body_json = if ("body_json" %in% matches) try_json(req$body_json),
     headers = if ("headers" %in% matches) req$headers,
     uri = if (needs_uri) uri,
     host = if ("host" %in% matches) uri$host,
@@ -61,4 +62,8 @@ normalize_uri <- function(x, drop_port = TRUE) {
     parsed$params <- NULL
   }
   compact(parsed)
+}
+
+try_json <- function(x) {
+  tryCatch(jsonlite::parse_json(x), error = function(e) x)
 }
