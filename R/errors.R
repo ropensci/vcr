@@ -26,16 +26,16 @@
 UnhandledHTTPRequestError <- R6::R6Class(
   "UnhandledHTTPRequestError",
   public = list(
-    #' @field request a [Request] object
+    #' @field request a `vcr_request`` object
     request = NULL,
     #' @field cassette a cassette name
     cassette = NULL,
 
     #' @description Create a new `UnhandledHTTPRequestError` object
-    #' @param request (Request) a [Request] object
+    #' @param request A `vcr_request` object
     #' @return A new `UnhandledHTTPRequestError` object
     initialize = function(request) {
-      assert(request, "Request")
+      assert(request, "vcr_request")
       self$request <- request
       self$cassette <- current_cassette()
     },

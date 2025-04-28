@@ -32,11 +32,6 @@ to use \link{eject_cassette}.
 See it's manual file for help.
 }
 
-\section{Record modes}{
-
-See \link{recording} for help on record modes.
-}
-
 \section{Async}{
 
 As of \pkg{crul} v1.5, \code{vcr} will work for async http requests with

@@ -102,7 +102,7 @@
 #' defined locally for individual cassettes.
 #'
 #' - `record` (character) One of 'all', 'none', 'new_episodes', or 'once'.
-#' See [recording]
+#'   See [use_cassette()] for details.
 #' - `match_requests_on` vector of matchers. Default: (`method`, `uri`)
 #'   See [use_cassette()] for details.
 #' - `serialize_with`: (character) "yaml" or "json". Note that you can have
@@ -282,9 +282,9 @@ VCRConfig <- R6::R6Class(
     log_opts = function(value) {
       if (missing(value)) return(private$.log_opts)
       # add missing log options
-      log_opts <- merge_list(
-        value,
-        list(file = "vcr.log", log_prefix = "Cassette", date = TRUE)
+      log_opts <- utils::modifyList(
+        list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
+        value
       )
       private$.log_opts <- log_opts
     },

@@ -8,7 +8,7 @@ test_that("vcr_last_error fails well", {
 })
 
 test_that("vcr_last_error works: no casssette in use yet", {
-  request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
+  request <- vcr_request("post", hb("/post?a=5"), "", list(foo = "bar"))
   err <- UnhandledHTTPRequestError$new(request)
   expect_error(err$construct_message())
   expect_message(vcr_last_error(), "There is currently no cassette in use")
@@ -17,7 +17,7 @@ test_that("vcr_last_error works: no casssette in use yet", {
 })
 
 test_that("vcr_last_error works: casssette in use", {
-  request <- Request$new("post", hb("/post?a=5"), "", list(foo = "bar"))
+  request <- vcr_request("post", hb("/post?a=5"), "", list(foo = "bar"))
 
   local_cassette("bunny", warn_on_empty = FALSE)
   err <- UnhandledHTTPRequestError$new(request)

@@ -1,55 +1,64 @@
-request_matches <- function(req1, req2, match_requests_on) {
-  for (matcher in match_requests_on) {
-    match <- request_matches_one(matcher, req1, req2)
-    vcr_log_sprintf(
-      "    %s %s: current request [%s] vs [%s]",
-      matcher,
-      if (match) "matched" else "did not match",
-      request_summary(req1, match_requests_on),
-      request_summary(req2, match_requests_on)
-    )
+request_matches <- function(
+  req1,
+  req2,
+  match_requests_on = c("method", "uri")
+) {
+  match_1 <- make_comparison(match_requests_on, req1)
+  match_2 <- make_comparison(match_requests_on, req2)
+  compare <- waldo::compare(
+    match_1,
+    match_2,
+    x_arg = "playing",
+    y_arg = "recorded"
+  )
 
-    if (!match) {
-      return(FALSE)
-    }
+  if (length(compare) == 0) {
+    vcr_log_sprintf("{%s} matches", request_summary(req1))
+    TRUE
+  } else {
+    vcr_log_sprintf(
+      "{%s} doesn't match:\n%s",
+      request_summary(req1),
+      paste0(compare, collapse = "\n")
+    )
+    FALSE
+  }
+}
+
+make_comparison <- function(matches, req) {
+  uri <- normalize_uri(req$uri, drop_port = "uri" %in% matches)
+  needs_uri <- "uri" %in% matches || "uri_with_port" %in% matches
+
+  compact(list(
+    method = if ("method" %in% matches) req$method,
+    body = if ("body" %in% matches) req$body,
+    headers = if ("headers" %in% matches) req$headers,
+    uri = if (needs_uri) uri,
+    host = if ("host" %in% matches) uri$host,
+    path = if ("path" %in% matches) uri$path,
+    query = if ("query" %in% matches) uri$params
+  ))
+}
+
+normalize_uri <- function(x, drop_port = TRUE) {
+  if (is.null(x)) {
+    return(NULL)
   }
 
-  TRUE
-}
+  x <- decode_uri(x)
 
-request_matches_one <- function(type, req1, req2) {
-  switch(
-    type,
-    method = req1$method == req2$method,
-    uri = identical(
-      url_without_port(decode_uri(req1$uri)),
-      url_without_port(req2$uri)
-    ),
-    uri_with_port = identical(
-      curl::curl_unescape(decode_uri(req1$uri)),
-      curl::curl_unescape(req2$uri)
-    ),
-    body = identical(req1$body, req2$body),
-    headers = identical(req1$headers, req2$headers),
-    host = identical(url_host(req1$uri), url_host(req2$uri)),
-    path = identical(url_path(req1$uri), url_path(req2$uri)),
-    query = identical(url_query(req1$uri), url_query(req2$uri)),
-    cli::cli_abort("Unsupported request matcher {.str {type}}.")
-  )
-}
+  parsed <- curl::curl_parse_url(x)
+  parsed$url <- NULL
+  parsed$query <- NULL
 
-url_path <- function(x) {
-  sub("/$", "", curl::curl_parse_url(x)$path)
-}
-url_query <- function(x) {
-  curl::curl_parse_url(x)$query
-}
-url_host <- function(x) {
-  curl::curl_parse_url(x)$host
-}
-url_without_port <- function(x) {
-  url <- curl::curl_parse_url(x)
-  url$port <- NULL
-  url$url <- NULL
-  url
+  parsed$path <- sub("/$", "", parsed$path)
+
+  if (drop_port) {
+    parsed$port <- NULL
+  }
+
+  if (length(parsed$params) == 0) {
+    parsed$params <- NULL
+  }
+  compact(parsed)
 }

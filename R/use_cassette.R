@@ -12,8 +12,17 @@
 #' block use [insert_cassette()] instead.
 #' @param dir The directory where the cassette will be stored. Defaults
 #'   to the default configured by [vcr_configure()].
-#' @param record The record mode (default: `"once"`). See [recording] for a
-#' complete list of the different recording modes.
+#' @param record Record mode that dictates how HTTP requests/responses are
+#'   recorded. Possible values are:
+#'
+#'   * **once**, the default: Replays recorded interactions, records new ones
+#'     if no cassette exists, and errors on new requests if cassette exists.
+#'   * **none**: Replays recorded interactions, and errors on any new requests.
+#'     Guarnants that no HTTP requests occur.
+#'   * **new_episodes**: Replays recorded interactions and always records new
+#'     ones, even if similar interactions exist.
+#'   * **all**: Never replays recorded interactions, always recording new.
+#'     Useful for re-recording outdated responses or logging all HTTP requests.
 #' @param match_requests_on Character vector of request matchers used to
 #'   determine which recorded HTTP interaction to replay. Possible values are:
 #'
