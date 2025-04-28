@@ -192,7 +192,7 @@ test_that("can capture body: multipart", {
   )
 
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, "a=x,b=y")
+  expect_equal(interaction$request$body$fields, list(a = "x", b = "y"))
 })
 
 test_that("can capture body: file", {

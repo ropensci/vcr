@@ -31,6 +31,6 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   # google_response <- rawToChar(res$content)
   # save(google_response, file = "tests/testthat/google_response.rda", version = 2L)
   load("google_response.rda")
-  response <- vcr_response(200, google_response)
+  response <- vcr_response(200, as.list(google_response))
   expect_snapshot(response_summary(response))
 })

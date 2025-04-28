@@ -376,17 +376,11 @@ Cassette <- R6::R6Class(
 
       response <- vcr_response(
         status = if (inherits(response, "response")) {
-          c(
-            list(status_code = response$status_code),
-            httr::http_status(response)
-          )
+          response$status_code
         } else if (inherits(response, "httr2_response")) {
-          list(
-            status_code = response$status_code,
-            message = httr2::resp_status_desc(response)
-          )
+          status_code = response$status_code
         } else {
-          unclass(response$status_http())
+          as.integer(response$status_http()$status_code)
         },
         headers = if (inherits(response, c("response", "httr2_response"))) {
           response$headers
