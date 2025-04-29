@@ -3,10 +3,10 @@ serializer_fetch <- function(type, path, name, preserve_bytes = FALSE) {
     type,
     json = JSON$new(path, name, preserve_bytes = preserve_bytes),
     yaml = YAML$new(path, name, preserve_bytes = preserve_bytes),
+    qs2 = QS2$new(path, name, preserve_bytes = preserve_bytes),
     cli::cli_abort("Unsupported cassette serializer {.str {type}}.")
   )
 }
-
 
 Serializer <- R6::R6Class(
   "Serializer",
@@ -65,6 +65,27 @@ YAML <- R6::R6Class(
 
     deserialize = function() {
       input <- yaml::read_yaml(self$path)
+      decode_interactions(input, self$preserve_bytes)
+    }
+  )
+)
+
+QS2 <- R6::R6Class(
+  "QS2",
+  inherit = Serializer,
+  public = list(
+    initialize = function(path, name, preserve_bytes = FALSE) {
+      check_installed("qs2")
+      super$initialize(path, name, ".qs2", preserve_bytes = preserve_bytes)
+    },
+
+    serialize = function(data) {
+      out <- encode_interactions(data, self$preserve_bytes)
+      qs2::qs_save(object = out, file = self$path)
+    },
+
+    deserialize = function() {
+      input <- qs2::qs_read(file = self$path)
       decode_interactions(input, self$preserve_bytes)
     }
   )

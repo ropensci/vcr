@@ -14,7 +14,7 @@
       Warning in `decode_body()`:
       re-record cassettes using 'preserve_exact_body_bytes = TRUE'
 
-# generates expected yaml
+# generates expected json
 
     Code
       writeLines(readLines(ser$path))
@@ -43,7 +43,7 @@
         "recorded_with": "<package_versions>"
       }
 
----
+# generates expected yaml
 
     Code
       writeLines(readLines(ser$path))
