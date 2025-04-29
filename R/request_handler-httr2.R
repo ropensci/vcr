@@ -43,16 +43,31 @@ RequestHandlerHttr2 <- R6::R6Class(
     },
 
     on_recordable_request = function() {
+      if (!cassette_active()) {
+        cli::cli_abort("No cassette in use.")
+      }
       httr2::local_mocked_responses(NULL)
 
       req <- self$request_original
       req <- httr2::req_error(req, is_error = \(resp) FALSE)
       response <- httr2::req_perform(req)
 
-      if (!cassette_active()) {
-        cli::cli_abort("No cassette in use.")
+      if (!httr2::resp_has_body(response)) {
+        body <- NULL
+      } else if (has_binary_content(response$headers)) {
+        body <- httr2::resp_body_raw(response)
+      } else {
+        body <- httr2::resp_body_string(response)
       }
-      current_cassette()$record_http_interaction(self$request, response)
+      vcr_response <- vcr_response(
+        status = response$status_code,
+        headers = response$headers,
+        body = body,
+        # Saving body in separate file not currently supported for httr2
+        disk = FALSE
+      )
+
+      current_cassette()$record_http_interaction(self$request, vcr_response)
       response
     }
   )

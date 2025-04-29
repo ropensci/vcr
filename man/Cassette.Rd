@@ -337,9 +337,9 @@ record an http interaction (doesn't write to disk)
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{request}}{a \code{Request} object}
+\item{\code{request}}{A \code{vcr_request}.}
 
-\item{\code{response}}{a crul, httr, or httr2 response object}
+\item{\code{response}}{A \code{vcr_response}.}
 }
 \if{html}{\out{</div>}}
 }

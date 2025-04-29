@@ -42,8 +42,9 @@ RequestHandlerHttr <- R6::R6Class(
     },
 
     on_recordable_request = function() {
-      # do real request - then stub response - then return stubbed vcr response
-      # - this may need to be called from webmockr httradapter?
+      if (!cassette_active()) {
+        cli::cli_abort("No cassette in use.")
+      }
 
       # real request
       webmockr::httr_mock(FALSE)
@@ -60,15 +61,41 @@ RequestHandlerHttr <- R6::R6Class(
       )
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 
+      body <- vcr_body(response$content, response$headers)
+      vcr_response <- vcr_response(
+        status = response$status_code,
+        headers = response$headers,
+        body = body$body,
+        disk = body$is_disk
+      )
+
       # make vcr response | then record interaction
-      if (!cassette_active()) {
-        cli::cli_abort("No cassette in use.")
-      }
-      current_cassette()$record_http_interaction(self$request, response)
+      current_cassette()$record_http_interaction(self$request, vcr_response)
       return(response)
     }
   )
 )
+
+vcr_body <- function(body, headers) {
+  if (is.null(body)) {
+    body <- NULL
+    is_disk <- FALSE
+  } else if (is.raw(body)) {
+    if (has_binary_content(headers)) {
+      body <- body
+    } else {
+      body <- rawToChar(body)
+    }
+    is_disk <- FALSE
+  } else if (inherits(body, "path") || (is_string(body) && file.exists(body))) {
+    body <- save_file(body)
+    is_disk <- TRUE
+  } else {
+    cli::cli_abort("Unrecognized response content type.", .internal = TRUE)
+  }
+
+  list(body = body, is_disk = is_disk)
+}
 
 # generate actual httr response
 serialize_to_httr <- function(request, response) {
@@ -133,7 +160,8 @@ as_httr_request <- function(x) {
 
 
 curl_body <- function(x) {
-  if (is_body_empty(x)) {
+  no_post <- (is.null(x$options$postfieldsize) || x$options$postfieldsize == 0L)
+  if (is.null(x$fields) && no_post) {
     return(NULL)
   }
 
@@ -158,4 +186,17 @@ curl_body <- function(x) {
 is_body_empty <- function(x) {
   is.null(x$fields) &&
     (is.null(x$options$postfieldsize) || x$options$postfieldsize == 0L)
+}
+
+save_file <- function(path) {
+  if (is.null(vcr_c$write_disk_path)) {
+    cli::cli_abort(c(
+      "`write_disk_path` must be set when writing to disk.",
+      i = "See ?vcr_configure for details."
+    ))
+  }
+  out_path <- file.path(vcr_c$write_disk_path, basename(path))
+
+  file.copy(path, out_path, overwrite = TRUE)
+  out_path
 }
