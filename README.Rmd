@@ -24,9 +24,9 @@ knitr::opts_chunk$set(
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
 
-{vcr} records and replay HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. {vcr} works with {crul}, {httr} and {httr2}.
+{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. {vcr} works with {crul}, {httr} and {httr2}.
 
-{vcr} is an R port of the Ruby's [vcr](https://github.com/vcr/vcr).
+{vcr} draws inspiration from Ruby's [vcr](https://github.com/vcr/vcr).
 
 ## Installation
 
