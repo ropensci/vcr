@@ -289,8 +289,8 @@ test_that("QS2 usage", {
   )
   expect_s3_class(aa, "Cassette")
   expect_s3_class(res, "HttpResponse")
-  str <- qs2::qs_read(aa$file())
-  expect_length(jsonlite::fromJSON(str, FALSE)[[1]], 1)
+  interactions <- qs2::qs_read(aa$file())
+  expect_length(interactions$http_interactions, 1)
 
   # do two requests work?
   cc <- use_cassette("testing4", {
@@ -299,8 +299,8 @@ test_that("QS2 usage", {
   })
   expect_s3_class(ref, "HttpResponse")
   expect_s3_class(the, "HttpResponse")
-  str <- qs2::qs_read(cc$file())
-  expect_length(jsonlite::fromJSON(str, FALSE)[[1]], 2)
+  interactions <- qs2::qs_read(cc$file())
+  expect_length(interactions$http_interactions, 2)
 
   # preserve exact body bytes
   dd <- use_cassette(
@@ -317,8 +317,8 @@ test_that("QS2 usage", {
   )
   expect_s3_class(raf, "HttpResponse")
   expect_s3_class(raz, "HttpResponse")
-  str <- qs2::qs_read(dd$file())
-  expect_length(jsonlite::fromJSON(str, FALSE)[[1]], 2)
-  bodies <- jsonlite::fromJSON(str)[[1]]$response$body$string
+  interactions <- qs2::qs_read(dd$file())
+  expect_length(interactions$http_interactions, 2)
+  bodies <- interactions$http_interactions[[1]]$response$body$string
   for (i in bodies) expect_true(is_base64(i))
 })

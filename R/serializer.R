@@ -79,20 +79,14 @@ QS2 <- R6::R6Class(
       super$initialize(path, name, ".qs2", preserve_bytes = preserve_bytes)
     },
 
-    # FIXME: save the R object directly requires changes to decode_interactions
     serialize = function(data) {
       out <- encode_interactions(data, self$preserve_bytes)
-      json <- as.character(jsonlite::toJSON(out, auto_unbox = TRUE))
-      qs2::qs_save(object = json, file = self$path)
+      qs2::qs_save(object = out, file = self$path)
     },
 
     deserialize = function() {
-      str <- qs2::qs_read(file = self$path)
-      str <- sensitive_put_back(str)
-      interactions <- jsonlite::fromJSON(str, FALSE)
-      interactions <- query_params_put_back(interactions)
-      interactions <- decode_interactions(interactions, self$preserve_bytes)
-      interactions
+      input <- qs2::qs_read(file = self$path)
+      decode_interactions(input, self$preserve_bytes)
     }
   )
 )
