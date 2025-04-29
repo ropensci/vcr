@@ -99,7 +99,7 @@ Cassette <- R6::R6Class(
 
       self$name <- name
       self$root_dir <- dir %||% config$dir
-      self$record <- check_record_mode(record %||% config$record)
+      self$record <- check_record_mode(record) %||% config$record
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
         config$match_requests_on
       self$serialize_with <- serialize_with %||% config$serialize_with
@@ -428,10 +428,6 @@ Cassette <- R6::R6Class(
 
 
 check_cassette_name <- function(x, call = caller_env()) {
-  if (length(x) != 1 || !is.character(x)) {
-    cli::cli_abort("{.arg name} must be a single string.", call = call)
-  }
-
   if (any(x %in% cassette_names())) {
     cli::cli_abort(
       "{.arg name} must not be the same as an existing cassette.",

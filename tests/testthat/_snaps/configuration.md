@@ -1,3 +1,16 @@
+# config checks inputs
+
+    Code
+      vcr_configure(record = "asdfadfs")
+    Condition
+      Error:
+      ! `value` must be one of "none", "once", "new_episodes", or "all", not "asdfadfs".
+    Code
+      vcr_configure(match_requests_on = "x")
+    Condition
+      Error:
+      ! `value` must be one of "method", "uri", "headers", "host", "path", "body", or "query", not "x".
+
 # filter_sensitive data strips quotes with message
 
     Code

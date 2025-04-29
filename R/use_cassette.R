@@ -217,6 +217,15 @@ local_cassette <- function(
   warn_on_empty = NULL,
   frame = parent.frame()
 ) {
+  check_string(name, allow_empty = FALSE)
+  check_cassette_name(name)
+  check_string(dir, allow_null = TRUE)
+  check_record_mode(record)
+  check_request_matchers(match_requests_on)
+  check_bool(allow_playback_repeats, allow_null = TRUE)
+  check_bool(clean_outdated_http_interactions, allow_null = TRUE)
+  check_bool(warn_on_empty, allow_null = TRUE)
+
   cassette <- insert_cassette(
     name,
     dir = dir,
