@@ -176,16 +176,8 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      interactions <- self$merged_interactions()
-      if (self$any_new_recorded_interactions() && length(interactions) > 0) {
-        vcr_log_sprintf(
-          "Ejecting: writing %i interactions",
-          length(interactions)
-        )
-        self$serializer$serialize(interactions)
-      } else {
-        vcr_log_sprintf("Ejecting: writing 0 interactions")
-      }
+      n <- self$write_recorded_interactions_to_disk()
+      vcr_log_sprintf("Ejecting: writing %i interactions", n)
 
       if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
@@ -195,6 +187,17 @@ Cassette <- R6::R6Class(
         ))
       }
       invisible(self)
+    },
+
+    #' @description write recorded interactions to disk
+    #' @return nothing returned
+    write_recorded_interactions_to_disk = function() {
+      if (!self$any_new_recorded_interactions()) return(0)
+
+      interactions <- self$merged_interactions()
+      if (length(interactions) == 0) return(0)
+      self$serializer$serialize(interactions)
+      length(interactions)
     },
 
     #' @description print method for `Cassette` objects
