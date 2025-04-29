@@ -1,5 +1,3 @@
-#' Remove or replace query parameters
-#' @noRd
 encode_uri <- function(
   uri,
   filter = vcr_c$filter_query_parameters,
@@ -26,41 +24,13 @@ encode_uri <- function(
     }
   }
 
-  uri <- sensitive_remove(uri)
+  uri <- encode_sensitive(uri)
 
   uri
 }
 
-#' Put back query parameters
-#' @details Ignore character strings as we can't put back completely removed
-#' query parameters
-#' @noRd
-query_params_put_back <- function(int) {
-  h <- vcr_c$filter_query_parameters
-  if (!is.null(h)) {
-    toputback <- h[nzchar(names(h))]
-    if (length(toputback)) {
-      for (i in seq_along(toputback)) {
-        int$http_interactions <- lapply(int$http_interactions, function(b) {
-          vals <- toputback[[i]]
-          if (length(vals) == 2) {
-            b$request$uri <-
-              replace_param_with(
-                b$request$uri,
-                names(toputback)[i],
-                vals[2],
-                vals[1]
-              )
-          } else {
-            b$request$uri <-
-              replace_param(b$request$uri, names(toputback)[i], vals)
-          }
-          return(b)
-        })
-      }
-    }
-  }
-  return(int)
+decode_uri <- function(uri, filter = vcr_c$filter_query_parameters) {
+  encode_uri(uri, filter, flip = TRUE)
 }
 
 # drop_param(url="https://hb.opencpu.org/get?foo=bar&baz=3&z=4", name="z")
@@ -69,6 +39,7 @@ drop_param <- function(url, name) {
   assert(name, "character")
   stopifnot("can only drop one name at a time" = length(name) == 1)
   z <- parseurl(url)
+  if (!is.list(z$parameter)) return(url)
   z$parameter[[name]] <- NULL
   buildurl(z)
 }

@@ -46,7 +46,6 @@
     Condition
       Warning:
       x "test" cassette ejected without recording any interactions.
-      i Did your request error?
       i Did you use {curl}, `download.file()`, or other unsupported tool?
       i If you are using crul/httr/httr2, are you sure you made an HTTP request?
 

@@ -3,6 +3,9 @@ vcr (development version)
 
 ### BREAKING CHANGES
 
+* `RequestHandler` and its subclasses are no longer exported.
+* Internal `real_http_connections_allowed()` is no longer exported and has been removed.
+* Internal `Request` and `VcrResponse` classes are no longer exported and have been removed.
 * `HTTPInteractionList` is no longer exported; it's an internal implementation detail.
 * The `uri_parser` option is no longer supported.
 * `vcr_configuration(allow_http_connections_when_no_cassette)` is no longer supported. It hasn't worked for a while.

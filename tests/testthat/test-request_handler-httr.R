@@ -152,7 +152,7 @@ test_that("httr works with simple auth and hides auth details", {
 })
 
 test_that("httr POST requests works", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
   # body type: named list
   out <- use_cassette(

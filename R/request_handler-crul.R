@@ -1,25 +1,18 @@
-#' @title RequestHandlerCrul
-#' @description Methods for the crul package, building on [RequestHandler]
 #' @export
 RequestHandlerCrul <- R6::R6Class(
   'RequestHandlerCrul',
   inherit = RequestHandler,
   public = list(
-    #' @description Create a new `RequestHandler` object
-    #' @param request A request
-    #' @return A new `RequestHandler` object
     initialize = function(request) {
       self$request_original <- request
 
       fake_resp <- webmockr::build_crul_response(request, NULL)
-      self$request <- {
-        Request$new(
-          request$method,
-          request$url$url,
-          curl_body(request),
-          as.list(fake_resp$request_headers)
-        )
-      }
+      self$request <- vcr_request(
+        request$method,
+        request$url$url,
+        curl_body(request),
+        as.list(fake_resp$request_headers)
+      )
     }
   ),
   private = list(
@@ -65,15 +58,11 @@ serialize_to_crul <- function(request, response) {
   # response
   resp <- webmockr::Response$new()
   resp$set_url(request$uri)
-  bod <- response$body
-  resp$set_body(
-    if ("string" %in% names(bod)) bod$string else bod,
-    response$disk %||% FALSE
-  )
+  resp$set_body(response$body, response$disk)
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)
   # resp$set_status(status = response$status %||% 200)
-  resp$set_status(status = response$status$status_code %||% 200)
+  resp$set_status(status = response$status)
 
   # generate crul response
   webmockr::build_crul_response(req, resp)

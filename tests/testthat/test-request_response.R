@@ -1,5 +1,5 @@
 test_that("request_summary works", {
-  request <- Request$new(
+  request <- vcr_request(
     "POST",
     "http://example.com",
     "body",
@@ -15,12 +15,12 @@ test_that("request_summary works", {
 })
 
 test_that("response_summary works", {
-  response <- VcrResponse$new(200, list(), strrep("body", 100))
+  response <- vcr_response(200, body = strrep("body", 100))
   expect_snapshot(response_summary(response))
 })
 
 test_that("response_summary works with raw body", {
-  response <- VcrResponse$new(200, list(), charToRaw("body"))
+  response <- vcr_response(200, body = charToRaw("body"))
   expect_snapshot(response_summary(response))
 })
 
@@ -31,6 +31,6 @@ test_that("response_summary - handles bad multibyte characters by changing encod
   # google_response <- rawToChar(res$content)
   # save(google_response, file = "tests/testthat/google_response.rda", version = 2L)
   load("google_response.rda")
-  response <- VcrResponse$new(200, google_response)
+  response <- vcr_response(200, as.list(google_response))
   expect_snapshot(response_summary(response))
 })

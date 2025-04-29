@@ -12,9 +12,15 @@ test_that("can generate all three types of response", {
   local_vcr_configure(ignore_localhost = TRUE)
   use_cassette("test", resp_ignore <- httr2::req_perform(req))
 
-  compare <- setdiff(names(resp_record), c("request", "cache", "url"))
-  expect_equal(resp_replay[compare], resp_record[compare])
-  expect_equal(resp_ignore[compare], resp_record[compare])
+  compare <- function(resp) {
+    resp$request <- NULL
+    resp$cache <- NULL
+    resp$url <- NULL
+    resp$headers["Date"] <- NULL
+    resp
+  }
+  expect_equal(compare(resp_replay), compare(resp_record))
+  expect_equal(compare(resp_ignore), compare(resp_record))
 })
 
 test_that("can capture & replay raw body", {
@@ -186,7 +192,7 @@ test_that("can capture body: multipart", {
   )
 
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, "a=x,b=y")
+  expect_equal(interaction$request$body$fields, list(a = "x", b = "y"))
 })
 
 test_that("can capture body: file", {

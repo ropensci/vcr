@@ -60,8 +60,7 @@ Cassette <- R6::R6Class(
     #' @param dir The directory where the cassette will be stored.
     #' @param name The name of the cassette. vcr will sanitize this to ensure it
     #' is a valid file name.
-    #' @param record The record mode. Default: "once". In the future we'll support
-    #' "once", "all", "none", "new_episodes". See [recording] for more information
+    #' @param record The record mode. Default: "once".
     #' @param serialize_with (character) Which serializer to use.
     #' Valid values are "yaml" (default), "json", and "qs2".
     #' @param match_requests_on List of request matchers
@@ -181,7 +180,6 @@ Cassette <- R6::R6Class(
       if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
           x = "{.str {self$name}} cassette ejected without recording any interactions.",
-          i = "Did your request error?",
           i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
           i = "If you are using crul/httr/httr2, are you sure you made an HTTP request?"
         ))
@@ -375,19 +373,13 @@ Cassette <- R6::R6Class(
         }
       }
 
-      response <- VcrResponse$new(
+      response <- vcr_response(
         status = if (inherits(response, "response")) {
-          c(
-            list(status_code = response$status_code),
-            httr::http_status(response)
-          )
+          response$status_code
         } else if (inherits(response, "httr2_response")) {
-          list(
-            status_code = response$status_code,
-            message = httr2::resp_status_desc(response)
-          )
+          status_code = response$status_code
         } else {
-          unclass(response$status_http())
+          as.integer(response$status_http()$status_code)
         },
         headers = if (inherits(response, c("response", "httr2_response"))) {
           response$headers

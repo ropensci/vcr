@@ -16,9 +16,6 @@
 #' [vcr_configure] is the function to use to set R session wide settings.
 #' See it's manual file for help.
 #'
-#' @section Record modes:
-#' See [recording] for help on record modes.
-#'
 #' @section Async:
 #' As of \pkg{crul} v1.5, `vcr` will work for async http requests with
 #' \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
@@ -30,9 +27,11 @@
 
 ## usethis namespace: start
 #' @import rlang
-#' @importFrom R6 R6Class
-#' @importFrom utils getParseData
-#' @importFrom yaml yaml.load yaml.load_file as.yaml
-#' @importFrom urltools url_parse url_compose
 ## usethis namespace: end
 NULL
+
+# https://r-pkgs.org/dependencies-in-practice.html#how-to-not-use-a-package-in-imports
+ignore_unused_imports <- function() {
+  yaml::read_yaml
+  R6::R6Class
+}

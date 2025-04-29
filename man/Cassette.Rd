@@ -121,8 +121,7 @@ is a valid file name.}
 
 \item{\code{dir}}{The directory where the cassette will be stored.}
 
-\item{\code{record}}{The record mode. Default: "once". In the future we'll support
-"once", "all", "none", "new_episodes". See \link{recording} for more information}
+\item{\code{record}}{The record mode. Default: "once".}
 
 \item{\code{match_requests_on}}{List of request matchers
 to use to determine what recorded HTTP interaction to replay. Defaults to

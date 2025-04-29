@@ -44,8 +44,18 @@ block use \code{\link[=insert_cassette]{insert_cassette()}} instead.}
 \item{dir}{The directory where the cassette will be stored. Defaults
 to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
 
-\item{record}{The record mode (default: \code{"once"}). See \link{recording} for a
-complete list of the different recording modes.}
+\item{record}{Record mode that dictates how HTTP requests/responses are
+recorded. Possible values are:
+\itemize{
+\item \strong{once}, the default: Replays recorded interactions, records new ones
+if no cassette exists, and errors on new requests if cassette exists.
+\item \strong{none}: Replays recorded interactions, and errors on any new requests.
+Guarnants that no HTTP requests occur.
+\item \strong{new_episodes}: Replays recorded interactions and always records new
+ones, even if similar interactions exist.
+\item \strong{all}: Never replays recorded interactions, always recording new.
+Useful for re-recording outdated responses or logging all HTTP requests.
+}}
 
 \item{match_requests_on}{Character vector of request matchers used to
 determine which recorded HTTP interaction to replay. Possible values are:

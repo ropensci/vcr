@@ -26,16 +26,16 @@
 UnhandledHTTPRequestError <- R6::R6Class(
   "UnhandledHTTPRequestError",
   public = list(
-    #' @field request a [Request] object
+    #' @field request a `vcr_request`` object
     request = NULL,
     #' @field cassette a cassette name
     cassette = NULL,
 
     #' @description Create a new `UnhandledHTTPRequestError` object
-    #' @param request (Request) a [Request] object
+    #' @param request A `vcr_request` object
     #' @return A new `UnhandledHTTPRequestError` object
     initialize = function(request) {
-      assert(request, "Request")
+      assert(request, "vcr_request")
       self$request <- request
       self$cassette <- current_cassette()
     },
@@ -65,8 +65,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       the$last_error$formatted_suggestion <- self$formatted_suggestions()
       mssg <- paste0(
         c(
-          "",
-          "",
           paste0(rep("=", 80), collapse = ""),
           "An HTTP request has been made that vcr does not know how to handle:",
           self$request_description(),
@@ -74,15 +72,10 @@ UnhandledHTTPRequestError <- R6::R6Class(
             self$cassettes_list(),
           if (vcr_c$verbose_errors) the$last_error$formatted_suggestion else
             self$get_help(),
-          paste0(rep("=", 80), collapse = ""),
-          "",
-          ""
+          paste0(rep("=", 80), collapse = "")
         ),
         collapse = "\n"
       )
-      orig_warn_len <- getOption("warning.length")
-      on.exit(options(warning.length = orig_warn_len))
-      options(warning.length = 2000)
       stop(mssg, call. = FALSE)
     },
 
@@ -94,14 +87,14 @@ UnhandledHTTPRequestError <- R6::R6Class(
         lines,
         paste(
           toupper(self$request$method),
-          sensitive_remove(self$request$uri), # remove sensitive data
+          encode_sensitive(self$request$uri), # remove sensitive data
           sep = " "
         )
       )
       if (self$match_request_on_headers()) {
         lines <- c(
           lines,
-          sprintf("  Headers:\n%s", sensitive_remove(self$formatted_headers()))
+          sprintf("  Headers:\n%s", encode_sensitive(self$formatted_headers()))
         )
       }
       if (self$match_request_on_body()) {
@@ -161,13 +154,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         )
         c(tmp, tmp2)
       } else {
-        paste0(
-          c(
-            "There is currently no cassette in use. There are a few ways",
-            "you can configure vcr to handle this request:\n"
-          ),
-          collapse = "\n"
-        )
+        "There is currently no cassette in use."
       }
     },
 
@@ -193,20 +180,14 @@ UnhandledHTTPRequestError <- R6::R6Class(
         )
         paste0(c(lines, zz), collapse = "\n")
       } else {
-        paste0(
-          c(
-            "There is currently no cassette in use. There are a few ways",
-            "you can configure vcr to handle this request:\n"
-          ),
-          collapse = "\n"
-        )
+        "There is currently no cassette in use.\n"
       }
     },
 
     #' @description get help message for non-verbose error
     #' @return character
     get_help = function() {
-      vm <- if (interactive()) "Run `vcr::vcr_last_error()`" else
+      vm <- if (is_interactive()) "Run `vcr::vcr_last_error()`" else
         "Set `VCR_VERBOSE_ERRORS=TRUE`"
       c(
         paste0(vm, " for more verbose errors"),
