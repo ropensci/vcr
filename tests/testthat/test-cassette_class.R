@@ -70,8 +70,8 @@ test_that("important interactions are logged", {
 
   expect_snapshot(
     {
-      use_cassette("test", httr::GET(hb("/get")))
-      use_cassette("test", httr::GET(hb("/get")))
+      use_cassette("test", httr::GET(hb("/html")))
+      use_cassette("test", httr::GET(hb("/html")))
     },
     transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE)
   )
