@@ -404,7 +404,7 @@ Cassette <- R6::R6Class(
         },
         disk = is_disk
       )
-      int <- list(request = request, response = response)
+      int <- vcr_interaction(request, response)
 
       vcr_log_sprintf(
         "Recorded HTTP interaction: %s => %s",

@@ -4,8 +4,8 @@ test_that("can find matching interations", {
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
   interactions <- HTTPInteractionList$new(list(
-    list(request = req1, response = resp1),
-    list(request = req2, response = resp2)
+    vcr_interaction(req1, resp1),
+    vcr_interaction(req2, resp2)
   ))
 
   expect_equal(interactions$find_request(req1), 1)
@@ -22,8 +22,8 @@ test_that("handles non-matches", {
   resp2 <- vcr_response(200, body = "b")
 
   interactions <- HTTPInteractionList$new(list(
-    list(request = req1, response = resp1),
-    list(request = req2, response = resp2)
+    vcr_interaction(req1, resp1),
+    vcr_interaction(req2, resp2)
   ))
   req3 <- vcr_request("GET", "http://c.com")
 
@@ -39,8 +39,8 @@ test_that("response_for marks as used", {
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
   interactions <- HTTPInteractionList$new(list(
-    list(request = req1, response = resp1),
-    list(request = req2, response = resp2)
+    vcr_interaction(req1, resp1),
+    vcr_interaction(req2, resp2)
   ))
 
   expect_equal(interactions$used, c(FALSE, FALSE))
@@ -61,8 +61,8 @@ test_that("can optionally replay", {
   resp2 <- vcr_response(200, body = "b")
   interactions <- HTTPInteractionList$new(
     list(
-      list(request = req1, response = resp1),
-      list(request = req2, response = resp2)
+      vcr_interaction(req1, resp1),
+      vcr_interaction(req2, resp2)
     ),
     allow_playback_repeats = TRUE
   )

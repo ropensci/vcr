@@ -35,7 +35,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @param request A `vcr_request` object
     #' @return A new `UnhandledHTTPRequestError` object
     initialize = function(request) {
-      assert(request, "vcr_request")
+      check_vcr_request(request)
       self$request <- request
       self$cassette <- current_cassette()
     },
