@@ -195,6 +195,7 @@ save_file <- function(path) {
       i = "See ?vcr_configure for details."
     ))
   }
+  dir_create(vcr_c$write_disk_path)
   out_path <- file.path(vcr_c$write_disk_path, basename(path))
 
   file.copy(path, out_path, overwrite = TRUE)
