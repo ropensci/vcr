@@ -143,10 +143,11 @@ Cassette <- R6::R6Class(
       if (self$should_stub_requests()) {
         interactions <- self$previously_recorded_interactions()
         vcr_log_sprintf(
-          "Loading %d previously recorded interactions",
+          "Inserting: loading %d interactions from disk",
           length(interactions)
         )
       } else {
+        vcr_log_sprintf("Inserting: not stubbing interaction")
         interactions <- list()
       }
       self$http_interactions <- HTTPInteractionList$new(
@@ -154,16 +155,16 @@ Cassette <- R6::R6Class(
         request_matchers = self$match_requests_on
       )
 
-      opts <- compact(list(
-        name = self$name,
-        record = self$record,
-        serialize_with = self$serialize_with,
-        match_requests_on = self$match_requests_on,
-        allow_playback_repeats = self$allow_playback_repeats,
-        preserve_exact_body_bytes = self$preserve_exact_body_bytes
-      ))
-      init_opts <- paste(names(opts), unname(opts), sep = ": ", collapse = ", ")
-      vcr_log_sprintf("Initialized with options: {%s}", init_opts)
+      vcr_log_sprintf("  record: %s", self$record)
+      vcr_log_sprintf("  serialize_with: %s", self$serialize_with)
+      vcr_log_sprintf(
+        "  allow_playback_repeats: %s",
+        self$allow_playback_repeats
+      )
+      vcr_log_sprintf(
+        "  preserve_exact_body_bytes: %s",
+        self$preserve_exact_body_bytes
+      )
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
@@ -175,7 +176,16 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      self$write_recorded_interactions_to_disk()
+      interactions <- self$merged_interactions()
+      if (self$any_new_recorded_interactions() && length(interactions) > 0) {
+        vcr_log_sprintf(
+          "Ejecting: writing %i interactions",
+          length(interactions)
+        )
+        self$serializer$serialize(interactions)
+      } else {
+        vcr_log_sprintf("Ejecting: writing 0 interactions")
+      }
 
       if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
@@ -332,16 +342,6 @@ Cassette <- R6::R6Class(
 
       interactions <- self$serializer$deserialize()$http_interactions
       Filter(\(x) !should_be_ignored(x$request), interactions)
-    },
-
-    #' @description write recorded interactions to disk
-    #' @return nothing returned
-    write_recorded_interactions_to_disk = function() {
-      if (!self$any_new_recorded_interactions()) return(NULL)
-
-      interactions <- self$merged_interactions()
-      if (length(interactions) == 0) return(NULL)
-      self$serializer$serialize(interactions)
     },
 
     #' @description record an http interaction (doesn't write to disk)
