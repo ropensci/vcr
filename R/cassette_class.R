@@ -46,8 +46,8 @@ Cassette <- R6::R6Class(
     preserve_exact_body_bytes = FALSE,
     #' @field http_interactions (list) internal use
     http_interactions = NULL,
-    #' @field new_recorded_interactions (list) internal use
-    new_recorded_interactions = NULL,
+    #' @field new_interactions (boolean) Have any interactions been recorded?
+    new_interactions = FALSE,
     #' @field clean_outdated_http_interactions (logical) Should outdated interactions
     #' be recorded back to file
     clean_outdated_http_interactions = FALSE,
@@ -140,18 +140,23 @@ Cassette <- R6::R6Class(
         dir_create(self$root_dir)
       }
 
-      if (self$should_stub_requests()) {
-        interactions <- self$previously_recorded_interactions()
-        vcr_log_sprintf(
-          "Loading %d previously recorded interactions",
-          length(interactions)
-        )
-      } else {
+      if (self$is_empty()) {
         interactions <- list()
+      } else {
+        interactions <- self$serializer$deserialize()$http_interactions
+        interactions <- Filter(\(x) !should_be_ignored(x$request), interactions)
+
+        if (self$clean_outdated_http_interactions) {
+          if (!is.null(self$re_record_interval)) {
+            threshold <- Sys.time() - self$re_record_interval
+            interactions <- Filter(\(x) x$recorded_at > threshold, interactions)
+          }
+        }
       }
       self$http_interactions <- HTTPInteractionList$new(
         interactions = interactions,
-        request_matchers = self$match_requests_on
+        request_matchers = self$match_requests_on,
+        replayable = self$record != "all"
       )
 
       opts <- compact(list(
@@ -164,9 +169,6 @@ Cassette <- R6::R6Class(
       ))
       init_opts <- paste(names(opts), unname(opts), sep = ": ", collapse = ", ")
       vcr_log_sprintf("Initialized with options: {%s}", init_opts)
-
-      # create new env for recorded interactions
-      self$new_recorded_interactions <- list()
 
       # check on write to disk path
       if (!is.null(vcr_c$write_disk_path)) dir_create(vcr_c$write_disk_path)
@@ -238,50 +240,6 @@ Cassette <- R6::R6Class(
       !file.exists(self$file())
     },
 
-    #' @description Get interactions to record
-    #' @return list
-    merged_interactions = function() {
-      old_interactions <- self$previously_recorded_interactions()
-
-      if (self$should_remove_matching_existing_interactions()) {
-        new_interaction_list <- HTTPInteractionList$new(
-          self$new_recorded_interactions,
-          self$match_requests_on
-        )
-        old_interactions <- Filter(
-          function(x) {
-            !unlist(new_interaction_list$has_interaction(x$request))
-          },
-          old_interactions
-        )
-      }
-
-      return(c(
-        self$up_to_date_interactions(old_interactions),
-        self$new_recorded_interactions
-      ))
-    },
-
-    #' @description Cleans out any old interactions based on the
-    #' re_record_interval and clean_outdated_http_interactions settings
-    #' @param interactions List of http interactions
-    #' @return list of interactions to record
-    up_to_date_interactions = function(interactions) {
-      if (
-        !self$clean_outdated_http_interactions &&
-          is.null(self$re_record_interval)
-      ) {
-        return(interactions)
-      }
-      Filter(
-        function(z) {
-          as.POSIXct(z$recorded_at, tz = "GMT") >
-            (as.POSIXct(Sys.time(), tz = "GMT") - self$re_record_interval)
-        },
-        interactions
-      )
-    },
-
     #' @description Should re-record interactions?
     #' @return logical
     should_re_record = function() {
@@ -313,34 +271,14 @@ Cassette <- R6::R6Class(
       }
     },
 
-    #' @description Is record mode NOT "all"?
-    #' @return logical
-    should_stub_requests = function() {
-      self$record != "all"
-    },
-
-    #' @description Is record mode "all"?
-    #' @return logical
-    should_remove_matching_existing_interactions = function() {
-      self$record == "all"
-    },
-
-    #' @description get all previously recorded interactions
-    #' @return list
-    previously_recorded_interactions = function() {
-      if (self$is_empty()) return(list())
-
-      interactions <- self$serializer$deserialize()$http_interactions
-      Filter(\(x) !should_be_ignored(x$request), interactions)
-    },
-
     #' @description write recorded interactions to disk
     #' @return nothing returned
     write_recorded_interactions_to_disk = function() {
-      if (!self$any_new_recorded_interactions()) return(NULL)
+      if (!self$new_interactions) return(NULL)
 
-      interactions <- self$merged_interactions()
+      interactions <- self$http_interactions$interactions
       if (length(interactions) == 0) return(NULL)
+
       self$serializer$serialize(interactions)
     },
 
@@ -355,18 +293,12 @@ Cassette <- R6::R6Class(
         response_summary(response)
       )
 
-      interaction <- list(request = request, response = response)
-      self$new_recorded_interactions <- c(
-        self$new_recorded_interactions,
-        list(interaction)
+      self$new_interactions <- TRUE
+      self$http_interactions$add(
+        request = request,
+        response = response,
+        overwrite = self$record != "all"
       )
-      interaction
-    },
-
-    #' @description Are there any new recorded interactions?
-    #' @return logical
-    any_new_recorded_interactions = function() {
-      length(self$new_recorded_interactions) != 0
     }
   )
 )

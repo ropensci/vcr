@@ -70,3 +70,32 @@ test_that("can optionally replay", {
   interactions$response_for(req2)
   expect_equal(interactions$response_for(req2), resp2)
 })
+
+test_that("can add interactions", {
+  req1 <- vcr_request("GET", "http://a.com")
+  resp1 <- vcr_response(200, body = "a")
+  resp2 <- vcr_response(200, body = "b")
+
+  interactions <- HTTPInteractionList$new()
+
+  interactions$add(req1, resp1)
+  expect_equal(
+    interactions$interactions[[1]],
+    list(request = req1, response = resp1)
+  )
+  expect_equal(interactions$used, TRUE)
+
+  # By default, will replace existing interactions
+  interactions$add(req1, resp2)
+  expect_equal(
+    interactions$interactions[[1]],
+    list(request = req1, response = resp2)
+  )
+
+  # But can request to append
+  interactions$add(req2, resp2, overwrite = FALSE)
+  expect_equal(
+    interactions$interactions[[2]],
+    list(request = req2, response = resp2)
+  )
+})
