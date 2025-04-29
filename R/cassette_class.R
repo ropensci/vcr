@@ -345,8 +345,8 @@ Cassette <- R6::R6Class(
     },
 
     #' @description record an http interaction (doesn't write to disk)
-    #' @param request a `Request` object
-    #' @param response a crul, httr, or httr2 response object
+    #' @param request A `vcr_request`.
+    #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
       vcr_log_sprintf(

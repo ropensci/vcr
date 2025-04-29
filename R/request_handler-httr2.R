@@ -65,7 +65,7 @@ RequestHandlerHttr2 <- R6::R6Class(
         status = response$status_code,
         headers = response$headers,
         body = body,
-        # Saving body in separate file currently supported for httr2
+        # Saving body in separate file not currently supported for httr2
         disk = FALSE
       )
 
