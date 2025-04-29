@@ -111,7 +111,8 @@
       [Cassette: "test"]   allow_playback_repeats: FALSE
       [Cassette: "test"]   preserve_exact_body_bytes: FALSE
       [Cassette: "test"] Handling request: GET {httpbin}/get
-      [Cassette: "test"]   looking for matches
+      [Cassette: "test"]   looking for existing requests
+      [Cassette: "test"]   no matching requests
       [Cassette: "test"]   recording response: 200 with 314 bytes of application/json data
       [Cassette: "test"] Ejecting: writing 1 interactions
     Code
@@ -123,7 +124,7 @@
       [Cassette: "test"]   allow_playback_repeats: FALSE
       [Cassette: "test"]   preserve_exact_body_bytes: FALSE
       [Cassette: "test"] Handling request: GET {httpbin}/get
-      [Cassette: "test"]   looking for matches
+      [Cassette: "test"]   looking for existing requests
       [Cassette: "test"]   method/uri match: GET {httpbin}/get
       [Cassette: "test"]   matched response 1
       [Cassette: "test"] Ejecting: writing 0 interactions

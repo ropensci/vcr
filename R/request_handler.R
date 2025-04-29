@@ -34,13 +34,15 @@ RequestHandler <- R6::R6Class(
       }
 
       if (cassette_active()) {
-        vcr_log_sprintf("  looking for matches")
+        vcr_log_sprintf("  looking for existing requests")
         interactions <- current_cassette()$http_interactions
         idx <- interactions$find_request(self$request)
         if (!is.na(idx)) {
           vcr_response <- interactions$response_for(idx)
           vcr_log_sprintf("  matched response %i", idx)
           return(private$on_stubbed_by_vcr_request(vcr_response))
+        } else {
+          vcr_log_sprintf("  no matching requests")
         }
       }
 
