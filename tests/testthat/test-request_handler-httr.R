@@ -262,7 +262,7 @@ test_that("can write files to disk", {
 
   # First request uses httr path
   use_cassette("test", out <- download_image())
-  expect_equal(out$content, structure(path, class = "path"))
+  expect_equal(normalizePath(out$content), normalizePath(path))
 
   # First seconds uses vcr path
   use_cassette("test", out2 <- download_image())
