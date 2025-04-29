@@ -13,16 +13,11 @@ request_matches <- function(
   )
 
   if (length(compare) == 0) {
-    vcr_log_sprintf(
-      "  %s match: %s",
-      paste0(match_requests_on, collapse = "/"),
-      request_summary(req1)
-    )
+    vcr_log_sprintf("  match: %s", request_summary(req1))
     TRUE
   } else {
     vcr_log_sprintf(
-      "  no %s match {%s}:\n%s",
-      paste0(match_requests_on, collapse = "/"),
+      "  no match: %s\n%s",
       request_summary(req1),
       paste0(compare, collapse = "\n")
     )

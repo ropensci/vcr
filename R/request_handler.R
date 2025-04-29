@@ -34,8 +34,11 @@ RequestHandler <- R6::R6Class(
       }
 
       if (cassette_active()) {
-        vcr_log_sprintf("  looking for existing requests")
         interactions <- current_cassette()$http_interactions
+        vcr_log_sprintf(
+          "  looking for existing requests using %s",
+          paste0(interactions$request_matchers, collapse = "/")
+        )
         idx <- interactions$find_request(self$request)
         if (!is.na(idx)) {
           vcr_response <- interactions$response_for(idx)
