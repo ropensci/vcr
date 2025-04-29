@@ -98,7 +98,7 @@ Cassette <- R6::R6Class(
       config <- vcr_configuration()
 
       self$name <- name
-      self$root_dir <- dir %||% config$dir
+      self$root_dir <- dir %||% config$dir %||% testthat::test_path("_vcr")
       self$record <- check_record_mode(record %||% config$record)
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
         config$match_requests_on
@@ -136,10 +136,6 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      if (!dir.exists(self$root_dir)) {
-        dir_create(self$root_dir)
-      }
-
       if (self$should_stub_requests()) {
         interactions <- self$previously_recorded_interactions()
         vcr_log_sprintf(
@@ -341,6 +337,8 @@ Cassette <- R6::R6Class(
 
       interactions <- self$merged_interactions()
       if (length(interactions) == 0) return(NULL)
+
+      dir_create(self$root_dir)
       self$serializer$serialize(interactions)
     },
 

@@ -32,7 +32,7 @@
       An HTTP request has been made that vcr does not know how to handle:
       POST http://example.com
       vcr is currently using the following cassette:
-        - ./turtle.yml
+        - _vcr/turtle.yml
           - record_mode: once
           - match_requests_on: method, uri
       Run `vcr::vcr_last_error()` for more verbose errors

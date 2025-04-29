@@ -335,7 +335,7 @@ VCRConfig <- R6::R6Class(
 
   public = list(
     initialize = function(
-      dir = ".",
+      dir = NULL,
       record = "once",
       match_requests_on = c("method", "uri"),
       allow_unused_http_interactions = TRUE,
