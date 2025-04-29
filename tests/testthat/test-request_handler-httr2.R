@@ -137,6 +137,18 @@ test_that("can capture body: raw", {
   expect_equal(interaction$request$body$string, "body")
 })
 
+test_that("binary body uses base64 encoding", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  path <- file.path(withr::local_tempdir(), "test.png")
+
+  req <- httr2::request(hb("/image"))
+  req <- httr2::req_headers(req, "Accept" = "image/png")
+
+  use_cassette("test", httr2::req_perform(req))
+  interaction <- read_cassette("test.yml")$http_interactions[[1]]
+  expect_named(interaction$response$body, "base64_string")
+})
+
 test_that("can capture body: json", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
@@ -155,7 +167,6 @@ test_that("can capture body: json", {
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
   expect_equal(interaction$request$body$string, "{\"foo\":\"bar\"}")
 })
-
 
 test_that("can capture body: form", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")

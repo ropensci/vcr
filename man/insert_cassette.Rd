@@ -66,10 +66,11 @@ multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.}
 
-\item{preserve_exact_body_bytes}{(logical) Whether or not
-to base64 encode the bytes of the requests and responses for
-this cassette when serializing it. See also \code{preserve_exact_body_bytes}
-in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
+\item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
+representation of the request and response bondies? By default, vcr
+will look at the \code{Content-Type} header to determine if this is necessary,
+but if it doesn't work you can set \code{prevsere_exact_body_bytes = TRUE} to
+force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
 cassette should be re-recorded. default: \code{NULL} (not re-recorded)}

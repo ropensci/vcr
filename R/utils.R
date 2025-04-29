@@ -14,11 +14,6 @@ assert <- function(x, y) {
   invisible(x)
 }
 
-can_rawToChar <- function(x) {
-  z <- tryCatch(rawToChar(x), error = function(e) e)
-  return(!inherits(z, "error"))
-}
-
 check_request_matchers <- function(x) {
   mro <- c("method", "uri", "headers", "host", "path", "body", "query")
   if (!all(x %in% mro)) {
