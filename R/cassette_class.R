@@ -410,8 +410,7 @@ Cassette <- R6::R6Class(
       int <- list(request = request, response = response)
 
       vcr_log_sprintf(
-        "Recorded HTTP interaction: %s => %s",
-        request_summary(int$request),
+        "  recording response: %s",
         response_summary(int$response)
       )
       self$new_recorded_interactions <- c(

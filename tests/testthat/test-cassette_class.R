@@ -98,3 +98,16 @@ test_that("cassette checks name", {
   local_cassette("foo")
   expect_snapshot(Cassette$new("foo"), error = TRUE)
 })
+
+test_that("important interactions are logged", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure_log(file = stdout())
+
+  expect_snapshot(
+    {
+      use_cassette("test", httr::GET(hb("/get")))
+      use_cassette("test", httr::GET(hb("/get")))
+    },
+    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE)
+  )
+})

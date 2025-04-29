@@ -24,9 +24,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::req_perform(self$request_original)
     },
 
-    on_stubbed_by_vcr_request = function() {
-      vcr_response <- super$get_stubbed_response(self$request)
-
+    on_stubbed_by_vcr_request = function(vcr_response) {
       if (is.null(vcr_response$body)) {
         body <- NULL
       } else if (is.raw(vcr_response$body)) {

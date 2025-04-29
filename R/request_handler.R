@@ -24,21 +24,32 @@ RequestHandler <- R6::R6Class(
       if (private$externally_stubbed()) {
         # FIXME: not quite sure what externally_stubbed is meant for
         #   perhaps we can get rid of it here if only applicable in Ruby
-        vcr_log_sprintf("- externally stubbed")
-        private$on_externally_stubbed_request()
-      } else if (should_be_ignored(self$request)) {
-        vcr_log_sprintf("- ignored")
-        private$on_ignored_request()
-      } else if (cassette_has_response(self$request)) {
-        vcr_log_sprintf("- stubbed by vcr")
-        private$on_stubbed_by_vcr_request()
-      } else if (cassette_is_recording()) {
-        vcr_log_sprintf("- recordable")
-        private$on_recordable_request()
-      } else {
-        vcr_log_sprintf("- unhandled")
-        private$on_unhandled_request()
+        vcr_log_sprintf("  externally stubbed")
+        return(private$on_externally_stubbed_request())
       }
+
+      if (should_be_ignored(self$request)) {
+        vcr_log_sprintf("  ignored")
+        return(private$on_ignored_request())
+      }
+
+      if (cassette_active()) {
+        vcr_log_sprintf("  looking for matches")
+        interactions <- current_cassette()$http_interactions
+        idx <- interactions$find_request(self$request)
+        if (!is.na(idx)) {
+          vcr_response <- interactions$response_for(idx)
+          vcr_log_sprintf("  matched response %i", idx)
+          return(private$on_stubbed_by_vcr_request(vcr_response))
+        }
+      }
+
+      if (cassette_is_recording()) {
+        return(private$on_recordable_request())
+      }
+
+      vcr_log_sprintf("- unhandled")
+      private$on_unhandled_request()
     }
   ),
 

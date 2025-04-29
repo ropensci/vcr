@@ -100,3 +100,31 @@
       Error in `initialize()`:
       ! `name` must not be the same as an existing cassette.
 
+# important interactions are logged
+
+    Code
+      use_cassette("test", httr::GET(hb("/get")))
+    Output
+      [Cassette: "test"] Inserting: loading 0 interactions from disk
+      [Cassette: "test"]   record: once
+      [Cassette: "test"]   serialize_with: yaml
+      [Cassette: "test"]   allow_playback_repeats: FALSE
+      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
+      [Cassette: "test"] Handling request: GET {httpbin}/get
+      [Cassette: "test"]   looking for matches
+      [Cassette: "test"]   recording response: 200 with 314 bytes of application/json data
+      [Cassette: "test"] Ejecting: writing 1 interactions
+    Code
+      use_cassette("test", httr::GET(hb("/get")))
+    Output
+      [Cassette: "test"] Inserting: loading 1 interactions from disk
+      [Cassette: "test"]   record: once
+      [Cassette: "test"]   serialize_with: yaml
+      [Cassette: "test"]   allow_playback_repeats: FALSE
+      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
+      [Cassette: "test"] Handling request: GET {httpbin}/get
+      [Cassette: "test"]   looking for matches
+      [Cassette: "test"]   method/uri match: GET {httpbin}/get
+      [Cassette: "test"]   matched response 1
+      [Cassette: "test"] Ejecting: writing 0 interactions
+

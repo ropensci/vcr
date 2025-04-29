@@ -22,9 +22,9 @@ RequestHandlerCrul <- R6::R6Class(
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function() {
+    on_stubbed_by_vcr_request = function(vcr_response) {
       # return stubbed vcr response - no real response to do
-      serialize_to_crul(self$request, super$get_stubbed_response(self$request))
+      serialize_to_crul(self$request, vcr_response)
     },
 
     on_recordable_request = function() {
