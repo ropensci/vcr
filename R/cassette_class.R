@@ -355,7 +355,7 @@ Cassette <- R6::R6Class(
         response_summary(response)
       )
 
-      interaction <- list(request = request, response = response)
+      interaction <- vcr_interaction(request, response)
       self$new_recorded_interactions <- c(
         self$new_recorded_interactions,
         list(interaction)
