@@ -47,7 +47,6 @@ test_that("warns if you reload string with preserve_exact_body_bytes", {
 })
 
 test_that("use_cassette w/ with images: httr", {
-  skip_on_cran()
   skip_if_not_installed("jpeg")
   local_vcr_configure(dir = withr::local_tempdir())
 
@@ -105,7 +104,6 @@ test_that("use_cassette w/ with images: httr", {
 })
 
 test_that("use_cassette w/ with images: crul", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   url <- hb("/image/jpeg")
@@ -180,7 +178,6 @@ test_that("generates expected yaml", {
 })
 
 test_that("JSON usage", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir(), serialize_with = "json")
 
   # does one request work?

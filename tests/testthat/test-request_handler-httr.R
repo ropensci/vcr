@@ -262,7 +262,6 @@ test_that("binary body uses bsae64 encoding", {
 })
 
 test_that("can write files to disk", {
-  skip_on_cran()
   write_path <- withr::local_tempdir()
   local_vcr_configure(
     dir = withr::local_tempdir(),
@@ -293,7 +292,6 @@ test_that("can write files to disk", {
 })
 
 test_that("fails well if write_disk_path not set", {
-  skip_on_cran()
   local_vcr_configure(
     dir = withr::local_tempdir(),
     warn_on_empty_cassette = FALSE

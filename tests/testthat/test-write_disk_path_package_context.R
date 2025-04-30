@@ -1,5 +1,4 @@
 test_that("use_cassette w/ request that writes to disk: crul", {
-  skip_on_cran()
   local_vcr_configure()
 
   dir <- make_pkg()

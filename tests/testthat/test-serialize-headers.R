@@ -10,7 +10,6 @@ test_that("by default, headers left unchanged", {
 })
 
 test_that("filter_headers/request/remove", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # request headers: remove only
@@ -76,7 +75,6 @@ test_that("filter_headers/request/remove", {
 })
 
 test_that("filter_headers/request/replace", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # request headers: replace only
@@ -126,8 +124,6 @@ test_that("filter_headers/request/replace", {
 })
 
 test_that("filter_headers doesn't add a header that doesn't exist", {
-  skip_on_cran()
-
   mydir <- file.path(tempdir(), "filter_headers_doesnt_add_header")
   local_vcr_configure(
     dir = withr::local_tempdir(),

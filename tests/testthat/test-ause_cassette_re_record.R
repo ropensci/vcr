@@ -1,7 +1,6 @@
 conn <- crul::HttpClient$new(hb())
 
 test_that("use_cassette options: re_record_interval", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # first use

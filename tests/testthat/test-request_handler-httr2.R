@@ -1,5 +1,3 @@
-skip_on_cran()
-
 test_that("can generate all three types of response", {
   local_vcr_configure(dir = withr::local_tempdir())
 
