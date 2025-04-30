@@ -37,7 +37,7 @@ HTTPInteractionList <- R6::R6Class(
       return(NA_integer_)
     },
 
-    add = function(request, response, overwrite = TRUE) {
+    add = function(request, response) {
       idx <- self$find_request(request, allow_playback = TRUE)
       if (is.na(idx)) {
         idx <- length(self$interactions) + 1
