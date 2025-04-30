@@ -78,6 +78,10 @@ HTTPInteractionList <- R6::R6Class(
 
     remaining_unused_interaction_count = function() {
       sum(!self$used)
+    },
+
+    length = function() {
+      length(self$interactions)
     }
   )
 )

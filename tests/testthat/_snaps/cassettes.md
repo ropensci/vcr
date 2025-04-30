@@ -22,7 +22,6 @@
       . <- use_cassette("test", NULL)
     Output
       [Cassette: "test"] - Inserting
-      [Cassette: "test"] - Loading 0 previously recorded interactions
       [Cassette: "test"] - Initialized with options: {name: test, record: once, serialize_with: yaml, match_requests_on: c("method", "uri"), allow_playback_repeats: FALSE, preserve_exact_body_bytes: FALSE}
       [Cassette: "test"] - Ejecting
 
