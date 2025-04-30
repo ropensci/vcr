@@ -1,5 +1,22 @@
 skip_on_cran()
 
+test_that("RequestHandlerHttr: httr", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  skip_if_not_installed("xml2")
+
+  load("httr_obj.rda")
+  x <- RequestHandlerHttr$new(httr_obj)
+  expect_s3_class(x, "RequestHandlerHttr")
+
+  # do request
+  local_cassette("greencow", warn_on_empty = FALSE)
+  response <- x$handle()
+
+  expect_s3_class(response, "response")
+  # status code is correct
+  expect_equal(response$status_code, 404)
+})
+
 test_that("httr status code works", {
   local_vcr_configure(dir = withr::local_tempdir())
   skip_if_not_installed("xml2")
