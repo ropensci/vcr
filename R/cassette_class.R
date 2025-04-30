@@ -175,18 +175,20 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      interactions <- self$http_interactions$interactions
-      n <- length(interactions)
-
       if (self$new_interactions) {
         dir_create(self$root_dir)
+
+        interactions <- self$http_interactions$interactions
         self$serializer$serialize(interactions)
-        vcr_log_sprintf("Ejecting: writing %i interactions", n)
+        vcr_log_sprintf(
+          "Ejecting: writing %i interactions",
+          length(interactions)
+        )
       } else {
         vcr_log_sprintf("Ejecting")
       }
 
-      if (n == 0 && self$warn_on_empty) {
+      if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
           x = "{.str {self$name}} cassette ejected without recording any interactions.",
           i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
