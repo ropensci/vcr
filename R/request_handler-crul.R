@@ -22,19 +22,28 @@ RequestHandlerCrul <- R6::R6Class(
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function() {
+    on_stubbed_by_vcr_request = function(vcr_response) {
       # return stubbed vcr response - no real response to do
-      serialize_to_crul(self$request, super$get_stubbed_response(self$request))
+      serialize_to_crul(self$request, vcr_response)
     },
 
     on_recordable_request = function() {
-      tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
-      response <- webmockr::build_crul_response(self$request_original, tmp2)
-
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(self$request, response)
+
+      tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
+      response <- webmockr::build_crul_response(self$request_original, tmp2)
+
+      body <- vcr_body(response$content, response$response_headers)
+      vcr_response <- vcr_response(
+        status = as.integer(response$status_http()$status_code),
+        headers = response$response_headers,
+        body = body$body,
+        disk = body$is_disk
+      )
+
+      current_cassette()$record_http_interaction(self$request, vcr_response)
       return(response)
     }
   )
@@ -58,15 +67,11 @@ serialize_to_crul <- function(request, response) {
   # response
   resp <- webmockr::Response$new()
   resp$set_url(request$uri)
-  bod <- response$body
-  resp$set_body(
-    if ("string" %in% names(bod)) bod$string else bod,
-    response$disk %||% FALSE
-  )
+  resp$set_body(response$body, response$disk)
   resp$set_request_headers(request$headers, capitalize = FALSE)
   resp$set_response_headers(response$headers, capitalize = FALSE)
   # resp$set_status(status = response$status %||% 200)
-  resp$set_status(status = response$status$status_code %||% 200)
+  resp$set_status(status = response$status)
 
   # generate crul response
   webmockr::build_crul_response(req, resp)

@@ -39,7 +39,7 @@ encode_interaction <- function(interaction, preserve_bytes) {
       headers = encode_headers(response$headers, "response"),
       body = encode_body(response$body, response$disk, preserve_bytes)
     ),
-    recorded_at = paste0(cur_time(tz = "GMT"), " GMT")
+    recorded_at = format_time(interaction$recorded_at)
   )
 }
 
@@ -50,18 +50,25 @@ decode_interaction <- function(interaction, preserve_bytes) {
   request_body <- decode_body(request$body, preserve_bytes = preserve_bytes)
   response_body <- decode_body(response$body, preserve_bytes = preserve_bytes)
 
-  list(
-    request = vcr_request(
+  # status codes were previously written as a list
+  status <- response$status
+  if (is.list(status)) {
+    status <- as.numeric(status$status_code)
+  }
+
+  vcr_interaction(
+    vcr_request(
       method = request$method,
       uri = decode_uri(request$uri),
       body = request_body$data,
       headers = decode_headers(request$headers)
     ),
-    response = vcr_response(
-      status = response$status,
+    vcr_response(
+      status = status,
       headers = decode_headers(response$headers),
       body = response_body$data,
-      disk = response_body$file
-    )
+      disk = response_body$on_disk
+    ),
+    as.POSIXct(interaction$recorded_at, tz = "UTC")
   )
 }

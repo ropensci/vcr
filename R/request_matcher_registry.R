@@ -8,19 +8,17 @@ request_matches <- function(
   compare <- waldo::compare(
     match_1,
     match_2,
-    x_arg = "playing",
+    x_arg = "matching",
     y_arg = "recorded"
   )
 
   if (length(compare) == 0) {
-    vcr_log_sprintf("{%s} matches", request_summary(req1))
+    vcr_log_sprintf("  match: %s", request_summary(req1))
     TRUE
   } else {
-    vcr_log_sprintf(
-      "{%s} doesn't match:\n%s",
-      request_summary(req1),
-      paste0(compare, collapse = "\n")
-    )
+    vcr_log_sprintf("  no match: %s", request_summary(req1))
+    lines <- strsplit(paste0(compare, collapse = "\n"), "\n")[[1]]
+    lapply(lines, \(line) vcr_log_sprintf("  %s", line))
     FALSE
   }
 }

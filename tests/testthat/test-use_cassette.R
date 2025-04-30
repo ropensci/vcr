@@ -3,6 +3,11 @@ test_that("use_cassette returns a cassette", {
   expect_s3_class(cassette, "Cassette")
 })
 
+test_that("defaults to _vcr directory", {
+  cassette <- use_cassette("test", NULL, warn_on_empty = FALSE)
+  expect_equal(cassette$root_dir, test_path("_vcr"))
+})
+
 test_that("use_cassette() checks its inputs", {
   expect_snapshot(error = TRUE, {
     use_cassette()

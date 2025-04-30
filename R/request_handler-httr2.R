@@ -24,9 +24,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::req_perform(self$request_original)
     },
 
-    on_stubbed_by_vcr_request = function() {
-      vcr_response <- super$get_stubbed_response(self$request)
-
+    on_stubbed_by_vcr_request = function(vcr_response) {
       if (is.null(vcr_response$body)) {
         body <- NULL
       } else if (is.raw(vcr_response$body)) {
@@ -36,7 +34,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       }
 
       httr2::response(
-        status_code = vcr_response$status$status_code %||% 200,
+        status_code = vcr_response$status,
         url = self$request_original$url,
         method = webmockr:::req_method_get_w(self$request_original),
         headers = vcr_response$headers,
@@ -45,16 +43,31 @@ RequestHandlerHttr2 <- R6::R6Class(
     },
 
     on_recordable_request = function() {
+      if (!cassette_active()) {
+        cli::cli_abort("No cassette in use.")
+      }
       httr2::local_mocked_responses(NULL)
 
       req <- self$request_original
       req <- httr2::req_error(req, is_error = \(resp) FALSE)
       response <- httr2::req_perform(req)
 
-      if (!cassette_active()) {
-        cli::cli_abort("No cassette in use.")
+      if (!httr2::resp_has_body(response)) {
+        body <- NULL
+      } else if (has_binary_content(response$headers)) {
+        body <- httr2::resp_body_raw(response)
+      } else {
+        body <- httr2::resp_body_string(response)
       }
-      current_cassette()$record_http_interaction(self$request, response)
+      vcr_response <- vcr_response(
+        status = response$status_code,
+        headers = response$headers,
+        body = body,
+        # Saving body in separate file not currently supported for httr2
+        disk = FALSE
+      )
+
+      current_cassette()$record_http_interaction(self$request, vcr_response)
       response
     }
   )

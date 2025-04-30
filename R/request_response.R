@@ -36,26 +36,21 @@ request_summary <- function(request, request_matchers = "") {
 #' @rdname request_response
 response_summary <- function(response) {
   stopifnot(inherits(response, "vcr_response"))
-  if (inherits(response$status, c("list", "http_code"))) {
-    ss <- response$status$status_code
-  } else if (inherits(response$status, c("character", "integer", "numeric"))) {
-    ss <- response$status
-  } else {
-    ss <- NULL
-  }
 
   # if body is raw, state that it's raw
   if (is.null(response$body)) {
-    resp <- ""
+    body <- ""
   } else if (is.raw(response$body)) {
-    resp <- "<raw>"
+    body <- sprintf("%d bytes of binary data", length(response$body))
   } else {
-    resp <- response$body
-    # note: gsub changes a string to UTF-8, useBytes seems to avoid doing this
-    #  & avoids multibyte string errors
-    resp <- gsub("\n", " ", resp, useBytes = TRUE)
-    resp <- substring(resp, 1, 80)
+    idx <- match("content-type", tolower(names(response$headers)))
+    size <- nchar(response$body, "bytes")
+    if (is.na(idx)) {
+      body <- sprintf("%d bytes of text data", size)
+    } else {
+      body <- sprintf("%d bytes of %s data", size, response$headers[[idx]])
+    }
   }
 
-  paste(ss %||% '???', resp)
+  paste0(response$status, " with ", body)
 }

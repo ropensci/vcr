@@ -98,7 +98,7 @@ Cassette <- R6::R6Class(
       config <- vcr_configuration()
 
       self$name <- name
-      self$root_dir <- dir %||% config$dir
+      self$root_dir <- dir %||% config$dir %||% testthat::test_path("_vcr")
       self$record <- check_record_mode(record %||% config$record)
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
         config$match_requests_on
@@ -136,17 +136,14 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      if (!dir.exists(self$root_dir)) {
-        dir_create(self$root_dir)
-      }
-
       if (self$should_stub_requests()) {
         interactions <- self$previously_recorded_interactions()
         vcr_log_sprintf(
-          "Loading %d previously recorded interactions",
+          "Inserting: loading %d interactions from disk",
           length(interactions)
         )
       } else {
+        vcr_log_sprintf("Inserting: not stubbing interaction")
         interactions <- list()
       }
       self$http_interactions <- HTTPInteractionList$new(
@@ -154,38 +151,48 @@ Cassette <- R6::R6Class(
         request_matchers = self$match_requests_on
       )
 
-      opts <- compact(list(
-        name = self$name,
-        record = self$record,
-        serialize_with = self$serialize_with,
-        match_requests_on = self$match_requests_on,
-        allow_playback_repeats = self$allow_playback_repeats,
-        preserve_exact_body_bytes = self$preserve_exact_body_bytes
-      ))
-      init_opts <- paste(names(opts), unname(opts), sep = ": ", collapse = ", ")
-      vcr_log_sprintf("Initialized with options: {%s}", init_opts)
+      vcr_log_sprintf("  record: %s", self$record)
+      vcr_log_sprintf("  serialize_with: %s", self$serialize_with)
+      vcr_log_sprintf(
+        "  allow_playback_repeats: %s",
+        self$allow_playback_repeats
+      )
+      vcr_log_sprintf(
+        "  preserve_exact_body_bytes: %s",
+        self$preserve_exact_body_bytes
+      )
 
       # create new env for recorded interactions
       self$new_recorded_interactions <- list()
-
-      # check on write to disk path
-      if (!is.null(vcr_c$write_disk_path)) dir_create(vcr_c$write_disk_path)
     },
 
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      self$write_recorded_interactions_to_disk()
+      n <- self$write_recorded_interactions_to_disk()
+      vcr_log_sprintf("Ejecting: writing %i interactions", n)
 
       if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
           x = "{.str {self$name}} cassette ejected without recording any interactions.",
-          i = "Did your request error?",
           i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
           i = "If you are using crul/httr/httr2, are you sure you made an HTTP request?"
         ))
       }
       invisible(self)
+    },
+
+    #' @description write recorded interactions to disk
+    #' @return nothing returned
+    write_recorded_interactions_to_disk = function() {
+      if (!self$any_new_recorded_interactions()) return(0)
+
+      interactions <- self$merged_interactions()
+      if (length(interactions) == 0) return(0)
+
+      dir_create(self$root_dir)
+      self$serializer$serialize(interactions)
+      length(interactions)
     },
 
     #' @description print method for `Cassette` objects
@@ -335,94 +342,19 @@ Cassette <- R6::R6Class(
       Filter(\(x) !should_be_ignored(x$request), interactions)
     },
 
-    #' @description write recorded interactions to disk
-    #' @return nothing returned
-    write_recorded_interactions_to_disk = function() {
-      if (!self$any_new_recorded_interactions()) return(NULL)
-
-      interactions <- self$merged_interactions()
-      if (length(interactions) == 0) return(NULL)
-      self$serializer$serialize(interactions)
-    },
-
     #' @description record an http interaction (doesn't write to disk)
-    #' @param request a `Request` object
-    #' @param response a crul, httr, or httr2 response object
+    #' @param request A `vcr_request`.
+    #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
-      # for httr2, duplicate `body` slot in `content`
-      if (inherits(response, "httr2_response"))
-        response$content <- response$body
+      vcr_log_sprintf("  recording response: %s", response_summary(response))
 
-      # content must be raw or character
-      assert(unclass(response$content), c('raw', 'character'))
-      new_file_path <- ""
-      is_disk <- FALSE
-      if (is.character(response$content)) {
-        if (file.exists(response$content)) {
-          is_disk <- TRUE
-          write_disk_path <- vcr_c$write_disk_path
-          if (is.null(write_disk_path))
-            stop(
-              "if writing to disk, write_disk_path must be given; ",
-              "see ?vcr_configure"
-            )
-          new_file_path <- file.path(
-            write_disk_path,
-            basename(response$content)
-          )
-        }
-      }
-
-      response <- vcr_response(
-        status = if (inherits(response, "response")) {
-          c(
-            list(status_code = response$status_code),
-            httr::http_status(response)
-          )
-        } else if (inherits(response, "httr2_response")) {
-          list(
-            status_code = response$status_code,
-            message = httr2::resp_status_desc(response)
-          )
-        } else {
-          unclass(response$status_http())
-        },
-        headers = if (inherits(response, c("response", "httr2_response"))) {
-          response$headers
-        } else {
-          response$response_headers
-        },
-        body = if (is.raw(response$content) || is.null(response$content)) {
-          if (can_rawToChar(response$content)) rawToChar(response$content) else
-            response$content
-        } else {
-          stopifnot(inherits(unclass(response$content), "character"))
-          if (file.exists(response$content)) {
-            # calculate new file path in fixtures/
-            # copy file into fixtures/file_cache/
-            # don't move b/c don't want to screw up first use before using
-            # cached request
-            file.copy(response$content, write_disk_path, overwrite = TRUE) # copy the file
-            new_file_path
-          } else {
-            response$content
-          }
-        },
-        disk = is_disk
-      )
-      int <- list(request = request, response = response)
-
-      vcr_log_sprintf(
-        "Recorded HTTP interaction: %s => %s",
-        request_summary(int$request),
-        response_summary(int$response)
-      )
+      interaction <- vcr_interaction(request, response)
       self$new_recorded_interactions <- c(
         self$new_recorded_interactions,
-        list(int)
+        list(interaction)
       )
-      int
+      interaction
     },
 
     #' @description Are there any new recorded interactions?

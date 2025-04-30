@@ -58,7 +58,6 @@ insert_cassette <- function(
     warn_on_empty = warn_on_empty
   )
   cassette_push(cassette)
-  vcr_log_sprintf("Inserting")
   cassette$insert()
 
   invisible(cassette)
@@ -71,9 +70,8 @@ eject_cassette <- function() {
     cli::cli_abort("No cassette in use.")
   }
 
-  vcr_log_sprintf("Ejecting")
+  cassette_peek()$eject()
   cassette <- cassette_pop()
-  cassette$eject()
 
   webmockr::disable(quiet = TRUE)
   if (!cassette_active()) {
@@ -155,6 +153,10 @@ cassette_pop <- function() {
   the$cassettes <- the$cassettes[-n]
 
   cassette
+}
+cassette_peek <- function() {
+  n <- length(the$cassettes)
+  the$cassettes[[n]]
 }
 cassette_active <- function() {
   length(the$cassettes) > 0

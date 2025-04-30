@@ -1,5 +1,22 @@
 skip_on_cran()
 
+test_that("RequestHandlerHttr: httr", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  skip_if_not_installed("xml2")
+
+  load("httr_obj.rda")
+  x <- RequestHandlerHttr$new(httr_obj)
+  expect_s3_class(x, "RequestHandlerHttr")
+
+  # do request
+  local_cassette("greencow", warn_on_empty = FALSE)
+  response <- x$handle()
+
+  expect_s3_class(response, "response")
+  # status code is correct
+  expect_equal(response$status_code, 404)
+})
+
 test_that("httr status code works", {
   local_vcr_configure(dir = withr::local_tempdir())
   skip_if_not_installed("xml2")
@@ -152,7 +169,7 @@ test_that("httr works with simple auth and hides auth details", {
 })
 
 test_that("httr POST requests works", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
   # body type: named list
   out <- use_cassette(
@@ -230,4 +247,59 @@ test_that("httr POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")
+})
+
+test_that("binary body uses bsae64 encoding", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  path <- file.path(withr::local_tempdir(), "test.png")
+
+  use_cassette(
+    "test",
+    httr::GET(hb("/image"), httr::add_headers("Accept" = "image/png"))
+  )
+  interaction <- read_cassette("test.yml")$http_interactions[[1]]
+  expect_named(interaction$response$body, "base64_string")
+})
+
+test_that("can write files to disk", {
+  write_path <- withr::local_tempdir()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = write_path
+  )
+  path <- file.path(withr::local_tempdir(), "test.png")
+  download_image <- function() {
+    httr::GET(
+      hb("/image"),
+      httr::add_headers("Accept" = "image/png"),
+      httr::write_disk(path, TRUE)
+    )
+  }
+
+  # First request uses httr path
+  use_cassette("test", out <- download_image())
+  expect_equal(normalizePath(out$content), normalizePath(path))
+
+  # First seconds uses vcr path
+  use_cassette("test", out2 <- download_image())
+  expect_equal(
+    out2$content,
+    structure(file.path(write_path, "test.png"), class = "path")
+  )
+
+  # Content is the same
+  expect_equal(httr::content(out, "raw"), httr::content(out2, "raw"))
+})
+
+test_that("fails well if write_disk_path not set", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    warn_on_empty_cassette = FALSE
+  )
+
+  path <- withr::local_tempfile()
+  expect_snapshot(
+    use_cassette("test", httr::GET(hb("/get"), httr::write_disk(path, TRUE))),
+    error = TRUE
+  )
 })

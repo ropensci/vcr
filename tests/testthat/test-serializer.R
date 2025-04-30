@@ -47,7 +47,6 @@ test_that("warns if you reload string with preserve_exact_body_bytes", {
 })
 
 test_that("use_cassette w/ with images: httr", {
-  skip_on_cran()
   skip_if_not_installed("jpeg")
   local_vcr_configure(dir = withr::local_tempdir())
 
@@ -105,7 +104,6 @@ test_that("use_cassette w/ with images: httr", {
 })
 
 test_that("use_cassette w/ with images: crul", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   url <- hb("/image/jpeg")
@@ -165,14 +163,14 @@ test_that("generates correct path", {
 test_that("generates expected yaml", {
   local_vcr_configure(json_pretty = TRUE)
   local_mocked_bindings(
-    cur_time = function(tz) "2024-01-01 12:00:00",
+    Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC"),
     pkg_versions = function() "<package_versions>"
   )
 
-  request <- vcr_request(method = "GET", uri = "http://example.com")
-  response <- vcr_response(status = 200L, list(name = "val"), body = "body")
-  interaction <- list(request = request, response = response)
-
+  interaction <- vcr_interaction(
+    vcr_request(method = "GET", uri = "http://example.com"),
+    vcr_response(status = 200L, list(name = "val"), body = "body")
+  )
   ser <- JSON$new(withr::local_tempdir(), "serialize")
   ser$serialize(list(interaction))
 
@@ -180,7 +178,6 @@ test_that("generates expected yaml", {
 })
 
 test_that("JSON usage", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir(), serialize_with = "json")
 
   # does one request work?
@@ -230,14 +227,14 @@ test_that("correctly computes path", {
 
 test_that("generates expected yaml", {
   local_mocked_bindings(
-    cur_time = function(tz) "2024-01-01 12:00:00",
+    Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC"),
     pkg_versions = function() "<package_versions>"
   )
 
-  request <- vcr_request(method = "GET", uri = "http://example.com")
-  response <- vcr_response(status = 200L, list(name = "val"), body = "body")
-  interaction <- list(request = request, response = response)
-
+  interaction <- vcr_interaction(
+    vcr_request(method = "GET", uri = "http://example.com"),
+    vcr_response(status = 200L, list(name = "val"), body = "body")
+  )
   ser <- YAML$new(withr::local_tempdir(), "serialize")
   ser$serialize(list(interaction))
 

@@ -1,6 +1,3 @@
-skip_on_cran()
-
-
 test_that("crul POST requests works", {
   withr::local_options(warnPartialMatchDollar = FALSE)
   local_vcr_configure(dir = withr::local_tempdir())
@@ -82,4 +79,24 @@ test_that("crul POST requests works", {
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
   expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")
+})
+
+test_that("can write files to disk", {
+  write_path <- withr::local_tempdir()
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    write_disk_path = write_path
+  )
+  path <- file.path(withr::local_tempdir(), "test.png")
+  download_image <- \() crul::HttpClient$new(hb("/image"))$get(disk = path)
+
+  # Both requests use vcr path
+  use_cassette("test", out <- download_image())
+  expect_equal(out$content, file.path(write_path, "test.png"))
+
+  use_cassette("test", out2 <- download_image())
+  expect_equal(out2$content, file.path(write_path, "test.png"))
+
+  # Content is the same
+  expect_equal(out$parse(), out2$parse())
 })

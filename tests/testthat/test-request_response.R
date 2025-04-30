@@ -15,22 +15,17 @@ test_that("request_summary works", {
 })
 
 test_that("response_summary works", {
-  response <- vcr_response(200, body = strrep("body", 100))
-  expect_snapshot(response_summary(response))
-})
+  response_raw <- vcr_response(200, body = charToRaw("body"))
+  response_unknown <- vcr_response(200, body = strrep("body", 100))
+  response_json <- vcr_response(
+    200,
+    body = strrep("body", 100),
+    headers = list(`content-type` = "application/json")
+  )
 
-test_that("response_summary works with raw body", {
-  response <- vcr_response(200, body = charToRaw("body"))
-  expect_snapshot(response_summary(response))
-})
-
-test_that("response_summary - handles bad multibyte characters by changing encoding", {
-  skip_on_cran()
-
-  # res <- crul::HttpClient$new("https://google.com")$get()
-  # google_response <- rawToChar(res$content)
-  # save(google_response, file = "tests/testthat/google_response.rda", version = 2L)
-  load("google_response.rda")
-  response <- vcr_response(200, google_response)
-  expect_snapshot(response_summary(response))
+  expect_snapshot({
+    response_summary(response_raw)
+    response_summary(response_unknown)
+    response_summary(response_json)
+  })
 })

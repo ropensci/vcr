@@ -14,11 +14,6 @@ assert <- function(x, y) {
   invisible(x)
 }
 
-can_rawToChar <- function(x) {
-  z <- tryCatch(rawToChar(x), error = function(e) e)
-  return(!inherits(z, "error"))
-}
-
 check_request_matchers <- function(x) {
   mro <- c(
     "method",
@@ -62,8 +57,13 @@ dir_create <- function(path) {
 }
 
 cur_time <- function(tz = "") {
-  format(Sys.time(), format = "%Y-%m-%d %H:%M:%S", tz = tz)
+  format_time(Sys.time(), tz = tz)
 }
+
+format_time <- function(x, tz = "UTC") {
+  format(x, format = "%Y-%m-%d %H:%M:%S", tz = tz)
+}
+
 
 pkg_versions <- function() {
   paste(
@@ -71,4 +71,17 @@ pkg_versions <- function() {
     paste0("webmockr/", utils::packageVersion("webmockr")),
     sep = ", "
   )
+}
+
+# for mocking
+Sys.time <- NULL
+
+parse_http_date <- function(x) {
+  check_string(x)
+
+  withr::local_locale(LC_TIME = "C")
+  # https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.1.1
+  out <- as.POSIXct(strptime(x, "%a, %d %b %Y %H:%M:%S", tz = "UTC"))
+  attr(out, "tzone") <- NULL
+  out
 }
