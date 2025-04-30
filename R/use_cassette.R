@@ -10,8 +10,8 @@
 #' @param ... a block of code containing one or more requests (required). Use
 #' curly braces to encapsulate multi-line code blocks. If you can't pass a code
 #' block use [insert_cassette()] instead.
-#' @param dir The directory where the cassette will be stored. Defaults
-#'   to the default configured by [vcr_configure()].
+#' @param dir The directory where the cassette will be stored. If unspecified,
+#'   (and hasn't been set in [vcr_configure()]) will use `test_path("_vcr")`.
 #' @param record Record mode that dictates how HTTP requests/responses are
 #'   recorded. Possible values are:
 #'
