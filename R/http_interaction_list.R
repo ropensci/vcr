@@ -48,7 +48,7 @@ HTTPInteractionList <- R6::R6Class(
         idx <- n + 1
       }
 
-      interaction <- list(request = request, response = response)
+      interaction <- vcr_interaction(request, response)
       self$interactions[[idx]] <- interaction
       self$used[[idx]] <- TRUE # don't allow playback for new interactions
 

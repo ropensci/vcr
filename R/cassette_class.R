@@ -169,9 +169,6 @@ Cassette <- R6::R6Class(
       ))
       init_opts <- paste(names(opts), unname(opts), sep = ": ", collapse = ", ")
       vcr_log_sprintf("Initialized with options: {%s}", init_opts)
-
-      # check on write to disk path
-      if (!is.null(vcr_c$write_disk_path)) dir_create(vcr_c$write_disk_path)
     },
 
     #' @description ejects the cassette
