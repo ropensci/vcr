@@ -43,6 +43,9 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description Run unhandled request handling
     #' @return various
     run = function() {
+      # Don't trigger any logging while figuring out the error message
+      local_vcr_configure_log(log = FALSE)
+
       any_errors <- FALSE
       if (!is.null(self$cassette)) {
         if (self$cassette$record %in% c("once", "none")) {
@@ -254,7 +257,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
       tmp <- c("try_debug_logger", "use_new_episodes", "ignore_request")
       tmp <- c(tmp, self$record_mode_suggestion())
-      # if (self$has_used_interaction()) tmp <- c(tmp, "allow_playback_repeats")
+      if (self$has_used_interaction()) tmp <- c(tmp, "allow_playback_repeats")
       tmp <- lapply(tmp, self$suggestion_for)
       compact(c(tmp, list(self$match_requests_on_suggestion())))
     },
