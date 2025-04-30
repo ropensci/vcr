@@ -87,7 +87,6 @@ be recorded back to file}
 \item \href{#method-Cassette-should_stub_requests}{\code{Cassette$should_stub_requests()}}
 \item \href{#method-Cassette-should_remove_matching_existing_interactions}{\code{Cassette$should_remove_matching_existing_interactions()}}
 \item \href{#method-Cassette-previously_recorded_interactions}{\code{Cassette$previously_recorded_interactions()}}
-\item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
@@ -324,19 +323,6 @@ get all previously recorded interactions
 
 \subsection{Returns}{
 list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-write_recorded_interactions_to_disk"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-write_recorded_interactions_to_disk}{}}}
-\subsection{Method \code{write_recorded_interactions_to_disk()}}{
-write recorded interactions to disk
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$write_recorded_interactions_to_disk()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
 }
 }
 \if{html}{\out{<hr>}}

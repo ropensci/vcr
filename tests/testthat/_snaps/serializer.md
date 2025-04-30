@@ -37,7 +37,7 @@
                 "string": "body"
               }
             },
-            "recorded_at": "2024-01-01 12:00:00 GMT"
+            "recorded_at": "2024-01-01 12:00:00"
           }
         ],
         "recorded_with": "<package_versions>"
@@ -60,6 +60,6 @@
             name: val
           body:
             string: body
-        recorded_at: 2024-01-01 12:00:00 GMT
+        recorded_at: 2024-01-01 12:00:00
       recorded_with: <package_versions>
 

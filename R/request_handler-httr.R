@@ -36,9 +36,9 @@ RequestHandlerHttr <- R6::R6Class(
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function() {
+    on_stubbed_by_vcr_request = function(vcr_response) {
       # return stubbed vcr response - no real response to do
-      serialize_to_httr(self$request, super$get_stubbed_response(self$request))
+      serialize_to_httr(self$request, vcr_response)
     },
 
     on_recordable_request = function() {
@@ -195,6 +195,7 @@ save_file <- function(path) {
       i = "See ?vcr_configure for details."
     ))
   }
+  dir_create(vcr_c$write_disk_path)
   out_path <- file.path(vcr_c$write_disk_path, basename(path))
 
   file.copy(path, out_path, overwrite = TRUE)

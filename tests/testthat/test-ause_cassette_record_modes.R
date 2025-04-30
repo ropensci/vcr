@@ -159,48 +159,28 @@ test_that("use_cassette record mode: all", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record first interaction
-  one <- use_cassette(
-    "all",
-    res <- conn$get("get"),
-    record = "all"
-  )
-  one_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "all.yml"))
-  expect_equal(length(one_yml$http_interactions), 1)
+  all_1 <- use_cassette("all", conn$get("get"), record = "all")
+  interactions_1 <- all_1$merged_interactions()
+  expect_length(interactions_1, 1)
 
   # sleep for a bit to make sure times are at least a second apart
   Sys.sleep(1)
 
   # previously recorded interactions do not playback
   # - recorded time and response header time have changed
-  two <- use_cassette(
-    "all",
-    res2 <- conn$get("get"),
-    record = "all"
-  )
-  two_yml <- yaml::yaml.load_file(file.path(vcr_c$dir, "all.yml"))
-  expect_equal(length(two_yml$http_interactions), 1)
+  all_2 <- use_cassette("all", conn$get("get"), record = "all")
+  interactions_2 <- all_2$merged_interactions()
+  expect_length(interactions_2, 1)
 
-  ### recorded_at
-  expect_false(
-    identical(
-      one_yml$http_interactions[[1]]$recorded_at,
-      two_yml$http_interactions[[1]]$recorded_at
-    )
+  ## recorded time is updated
+  expect_lt(
+    interactions_1[[1]]$recorded_at,
+    interactions_2[[1]]$recorded_at
   )
-  expect_true(
-    two_yml$http_interactions[[1]]$recorded_at >
-      one_yml$http_interactions[[1]]$recorded_at
-  )
-  ### response headers date
-  expect_false(
-    identical(
-      one_yml$http_interactions[[1]]$response$headers$date,
-      two_yml$http_interactions[[1]]$response$headers$date
-    )
-  )
-  expect_true(
-    two_yml$http_interactions[[1]]$response$headers$date >
-      one_yml$http_interactions[[1]]$response$headers$date
+  # and request is re-perf
+  expect_lt(
+    parse_http_date(interactions_1[[1]]$response$headers$date),
+    parse_http_date(interactions_2[[1]]$response$headers$date)
   )
 
   # new interactions are recorded

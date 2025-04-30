@@ -3,8 +3,8 @@
     Code
       UnhandledHTTPRequestError$new(5)
     Condition
-      Error:
-      ! request must be of class vcr_request
+      Error in `check_vcr_request()`:
+      ! `request` must be a <vcr_request>, not the number 5.
 
 # informative error if no cassette active
 
