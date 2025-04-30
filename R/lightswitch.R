@@ -1,5 +1,7 @@
 #' Turn vcr on and off
 #'
+#' @description
+#'
 #' * `turn_on()` and `turn_off()` turn on and off for the whole session.
 #' * `turned_off(code)` temporarily turns off while `code` is running.
 #' * `turned_on()` reports on if vcr is turned on or not.
@@ -8,6 +10,8 @@
 #'   request, or if the real request would return differents values (e.g.
 #'   you're testing date parsing and the request returns the current date).
 #'
+#' Learn more in `vignette("lightswitch")`.
+#'
 #' @export
 #' @name lightswitch
 #' @param code Any block of code to run, presumably an http request
@@ -15,7 +19,6 @@
 #' inserted while vcr is turned off. If `TRUE` is passed, the cassette
 #' insertion will be ignored; otherwise an error will be raised.
 #' Default: `FALSE`
-#' @includeRmd man/rmdhunks/lightswitch.Rmd
 #' @examples \dontrun{
 #' vcr_configure(dir = tempdir())
 #'
