@@ -179,10 +179,17 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      n <- self$write_recorded_interactions_to_disk()
-      vcr_log_sprintf("Ejecting: writing %i interactions", n)
+      interactions <- self$http_interactions$interactions
+      n <- length(interactions)
 
-      if (self$is_empty() && self$warn_on_empty) {
+      if (self$new_interactions) {
+        self$serializer$serialize(interactions)
+        vcr_log_sprintf("Ejecting: writing %i interactions", n)
+      } else {
+        vcr_log_sprintf("Ejecting")
+      }
+
+      if (n == 0 && self$warn_on_empty) {
         cli::cli_warn(c(
           x = "{.str {self$name}} cassette ejected without recording any interactions.",
           i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
@@ -190,18 +197,6 @@ Cassette <- R6::R6Class(
         ))
       }
       invisible(self)
-    },
-
-    #' @description write recorded interactions to disk
-    #' @return nothing returned
-    write_recorded_interactions_to_disk = function() {
-      if (!self$new_interactions) return(0)
-
-      interactions <- self$http_interactions$interactions
-      if (length(interactions) == 0) return(0)
-
-      self$serializer$serialize(interactions)
-      length(interactions)
     },
 
     #' @description print method for `Cassette` objects
