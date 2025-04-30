@@ -189,6 +189,8 @@ Cassette <- R6::R6Class(
 
       interactions <- self$merged_interactions()
       if (length(interactions) == 0) return(0)
+
+      dir_create(self$root_dir)
       self$serializer$serialize(interactions)
       length(interactions)
     },
