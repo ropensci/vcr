@@ -60,7 +60,7 @@ bytes of the requests and responses}
 
 \item{\code{http_interactions}}{(list) internal use}
 
-\item{\code{new_recorded_interactions}}{(list) internal use}
+\item{\code{new_interactions}}{(boolean) Have any interactions been recorded?}
 
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file}
@@ -81,15 +81,9 @@ be recorded back to file}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
 \item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
-\item \href{#method-Cassette-merged_interactions}{\code{Cassette$merged_interactions()}}
-\item \href{#method-Cassette-up_to_date_interactions}{\code{Cassette$up_to_date_interactions()}}
 \item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
-\item \href{#method-Cassette-should_stub_requests}{\code{Cassette$should_stub_requests()}}
-\item \href{#method-Cassette-should_remove_matching_existing_interactions}{\code{Cassette$should_remove_matching_existing_interactions()}}
-\item \href{#method-Cassette-previously_recorded_interactions}{\code{Cassette$previously_recorded_interactions()}}
 \item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
-\item \href{#method-Cassette-any_new_recorded_interactions}{\code{Cassette$any_new_recorded_interactions()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
 }
@@ -241,40 +235,6 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-merged_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-merged_interactions}{}}}
-\subsection{Method \code{merged_interactions()}}{
-Get interactions to record
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$merged_interactions()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-up_to_date_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-up_to_date_interactions}{}}}
-\subsection{Method \code{up_to_date_interactions()}}{
-Cleans out any old interactions based on the
-re_record_interval and clean_outdated_http_interactions settings
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$up_to_date_interactions(interactions)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{interactions}}{List of http interactions}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-list of interactions to record
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-should_re_record"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-should_re_record}{}}}
 \subsection{Method \code{should_re_record()}}{
@@ -285,45 +245,6 @@ Should re-record interactions?
 
 \subsection{Returns}{
 logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-should_stub_requests"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-should_stub_requests}{}}}
-\subsection{Method \code{should_stub_requests()}}{
-Is record mode NOT "all"?
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$should_stub_requests()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-should_remove_matching_existing_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-should_remove_matching_existing_interactions}{}}}
-\subsection{Method \code{should_remove_matching_existing_interactions()}}{
-Is record mode "all"?
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$should_remove_matching_existing_interactions()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-previously_recorded_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-previously_recorded_interactions}{}}}
-\subsection{Method \code{previously_recorded_interactions()}}{
-get all previously recorded interactions
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$previously_recorded_interactions()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-list
 }
 }
 \if{html}{\out{<hr>}}
@@ -359,19 +280,6 @@ record an http interaction (doesn't write to disk)
 }
 \subsection{Returns}{
 an interaction as a list with request and response slots
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-any_new_recorded_interactions"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-any_new_recorded_interactions}{}}}
-\subsection{Method \code{any_new_recorded_interactions()}}{
-Are there any new recorded interactions?
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$any_new_recorded_interactions()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
 }
 }
 \if{html}{\out{<hr>}}

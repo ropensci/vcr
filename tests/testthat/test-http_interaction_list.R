@@ -79,15 +79,11 @@ test_that("can add interactions", {
   interactions <- HTTPInteractionList$new()
 
   interactions$add(req1, resp1)
+  expect_equal(interactions$interactions[[1]]$request, req1)
   expect_equal(interactions$interactions[[1]]$response, resp1)
   expect_equal(interactions$used, TRUE)
 
-  # By default, will replace existing interactions
+  # same request replaces response
   interactions$add(req1, resp2)
   expect_equal(interactions$interactions[[1]]$response, resp2)
-
-  # But can request to append
-  interactions$add(req1, resp2, overwrite = FALSE)
-  expect_equal(interactions$interactions[[2]]$request, req1)
-  expect_equal(interactions$interactions[[2]]$response, resp2)
 })

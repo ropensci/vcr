@@ -108,7 +108,7 @@ test_that("record mode: all", {
   two <- use_cassette("test", res2 <- conn$get("get"))
   expect_equal(two$new_interactions, TRUE)
   expect_equal(two$http_interactions$length(), 1)
-  interactions_2 <- one$http_interactions$interactions
+  interactions_2 <- two$http_interactions$interactions
 
   ## recorded time is updated
   expect_lt(interactions_1[[1]]$recorded_at, interactions_2[[1]]$recorded_at)
@@ -120,6 +120,6 @@ test_that("record mode: all", {
 
   # new interactions are recorded
   three <- use_cassette("test", res3 <- conn$get("get", query = list(x = "a")))
-  expect_equal(two$new_interactions, TRUE)
-  expect_equal(two$http_interactions$length(), 2)
+  expect_equal(three$new_interactions, TRUE)
+  expect_equal(three$http_interactions$length(), 2)
 })

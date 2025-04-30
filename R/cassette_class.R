@@ -153,6 +153,7 @@ Cassette <- R6::R6Class(
           }
         }
       }
+
       self$http_interactions <- HTTPInteractionList$new(
         interactions = interactions,
         request_matchers = self$match_requests_on,
@@ -291,15 +292,10 @@ Cassette <- R6::R6Class(
       )
 
       self$new_interactions <- TRUE
-      self$http_interactions$add(
-        request = request,
-        response = response,
-        overwrite = self$record != "all"
-      )
+      self$http_interactions$add(request, response)
     }
   )
 )
-
 
 check_cassette_name <- function(x, call = caller_env()) {
   if (length(x) != 1 || !is.character(x)) {

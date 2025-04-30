@@ -38,14 +38,9 @@ HTTPInteractionList <- R6::R6Class(
     },
 
     add = function(request, response, overwrite = TRUE) {
-      n <- length(self$interactions)
-      if (overwrite) {
-        idx <- self$find_request(request, allow_playback = TRUE)
-        if (is.na(idx)) {
-          idx <- n + 1
-        }
-      } else {
-        idx <- n + 1
+      idx <- self$find_request(request, allow_playback = TRUE)
+      if (is.na(idx)) {
+        idx <- length(self$interactions) + 1
       }
 
       interaction <- vcr_interaction(request, response)
@@ -67,7 +62,7 @@ HTTPInteractionList <- R6::R6Class(
     },
 
     has_interaction = function(request) {
-      i <- self$find_request(request, allow_playback = TRUE)
+      i <- self$find_request(request)
       !is.na(i)
     },
 
