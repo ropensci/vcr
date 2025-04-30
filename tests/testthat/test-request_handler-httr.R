@@ -258,7 +258,7 @@ test_that("binary body uses bsae64 encoding", {
     httr::GET(hb("/image"), httr::add_headers("Accept" = "image/png"))
   )
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "base64_string")
+  expect_named(interaction$response$body, "raw_gzip")
 })
 
 test_that("can write files to disk", {
