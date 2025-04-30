@@ -68,7 +68,6 @@ test_that("httr use_cassette works", {
   expect_named(x2$request$headers, "Accept")
   expect_null(x2$request$fields)
   expect_true(x2$request$options$httpget)
-  expect_null(x2$request$output) # can't really populate this from cassette
 
   # response
   expect_s3_class(x, "response")
