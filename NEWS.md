@@ -17,6 +17,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* The default path is now `tests/testthat/_vcr`. This should not affect existing packages that used `use_vcr()` because these set up a helper that sets the default directory with `vcr_configure()` (#395).
 * `local_vcr_configure()` allows you to temporarily affect vcr configuration.
 
 vcr 1.7.0
