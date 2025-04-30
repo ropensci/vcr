@@ -29,13 +29,6 @@ test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=
   expect_no_error(insert_cassette("test", warn_on_empty = FALSE))
 })
 
-test_that("inserting and ejecting is logged", {
-  local_vcr_configure(warn_on_empty_cassette = FALSE)
-  local_vcr_configure_log(file = stdout())
-
-  expect_snapshot(. <- use_cassette("test", NULL))
-})
-
 test_that("cassettes are a stack", {
   expect_equal(current_cassette(), NULL)
   expect_equal(cassettes(), list())

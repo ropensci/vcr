@@ -85,7 +85,7 @@ vcr_log_sprintf <- function(message, ...) {
   }
   prefix <- sprintf("[%s: %s]", vcr_c$log_opts$log_prefix, cassette_name)
 
-  message <- paste(c(date, prefix, message), collapse = " - ")
+  message <- paste(c(date, prefix, message), collapse = " ")
 
   file <- vcr_c$log_opts$file
   if (is.function(file)) {

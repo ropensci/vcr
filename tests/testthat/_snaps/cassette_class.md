@@ -100,3 +100,47 @@
       Error in `initialize()`:
       ! `name` must not be the same as an existing cassette.
 
+# important interactions are logged
+
+    Code
+      use_cassette("test", httr::GET(hb("/html")))
+    Output
+      [Cassette: "test"] Inserting: loading 0 interactions from disk
+      [Cassette: "test"]   record: once
+      [Cassette: "test"]   serialize_with: yaml
+      [Cassette: "test"]   allow_playback_repeats: FALSE
+      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
+      [Cassette: "test"] Handling request: GET {httpbin}/html
+      [Cassette: "test"]   looking for existing requests using method/uri
+      [Cassette: "test"]   no matching requests
+      [Cassette: "test"]   recording response: 200 with 1443 bytes of text/html data
+      [Cassette: "test"] Ejecting: writing 1 interactions
+    Code
+      use_cassette("test", httr::GET(hb("/html")))
+    Output
+      [Cassette: "test"] Inserting: loading 1 interactions from disk
+      [Cassette: "test"]   record: once
+      [Cassette: "test"]   serialize_with: yaml
+      [Cassette: "test"]   allow_playback_repeats: FALSE
+      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
+      [Cassette: "test"] Handling request: GET {httpbin}/html
+      [Cassette: "test"]   looking for existing requests using method/uri
+      [Cassette: "test"]   match: GET {httpbin}/html
+      [Cassette: "test"]   matched response 1
+      [Cassette: "test"] Ejecting: writing 0 interactions
+    Code
+      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
+    Output
+      [Cassette: "test"] Inserting: loading 1 interactions from disk
+      [Cassette: "test"]   record: once
+      [Cassette: "test"]   serialize_with: yaml
+      [Cassette: "test"]   allow_playback_repeats: FALSE
+      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
+      [Cassette: "test"] Handling request: GET {httpbin}/404
+      [Cassette: "test"]   looking for existing requests using method/uri
+      [Cassette: "test"]   no match: GET {httpbin}/404
+      [Cassette: "test"]   `matching$uri$path`: "/404" 
+      [Cassette: "test"]   `recorded$uri$path`: "/html"
+      [Cassette: "test"]   no matching requests
+      [Cassette: "test"] Ejecting: writing 0 interactions
+

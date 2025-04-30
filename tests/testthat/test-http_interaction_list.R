@@ -12,7 +12,6 @@ test_that("can find matching interations", {
   expect_equal(interactions$find_request(req2), 2)
   expect_equal(interactions$has_interaction(req2), TRUE)
   expect_equal(interactions$has_used_interaction(req1), FALSE)
-  expect_equal(interactions$response_for(req2), resp2)
 })
 
 test_that("handles non-matches", {
@@ -30,7 +29,6 @@ test_that("handles non-matches", {
   expect_false(interactions$has_interaction(req3))
   expect_false(interactions$has_used_interaction(req3))
   expect_equal(interactions$find_request(req3), NA_integer_)
-  expect_equal(interactions$response_for(req3), NULL)
 })
 
 test_that("response_for marks as used", {
@@ -46,12 +44,13 @@ test_that("response_for marks as used", {
   expect_equal(interactions$used, c(FALSE, FALSE))
   expect_equal(interactions$remaining_unused_interaction_count(), 2)
   expect_false(interactions$has_used_interaction(req2))
+  expect_equal(interactions$find_request(req2), 2)
 
-  interactions$response_for(req2)
+  interactions$response_for(2)
   expect_equal(interactions$used, c(FALSE, TRUE))
   expect_equal(interactions$remaining_unused_interaction_count(), 1)
   expect_true(interactions$has_used_interaction(req2))
-  expect_equal(interactions$response_for(req2), NULL)
+  expect_equal(interactions$find_request(req2), NA_integer_)
 })
 
 test_that("can optionally replay", {
@@ -67,6 +66,7 @@ test_that("can optionally replay", {
     allow_playback_repeats = TRUE
   )
 
-  interactions$response_for(req2)
-  expect_equal(interactions$response_for(req2), resp2)
+  expect_equal(interactions$find_request(req2), 2)
+  interactions$response_for(2)
+  expect_equal(interactions$find_request(req2), 2)
 })
