@@ -72,7 +72,8 @@ test_that("important interactions are logged", {
     {
       use_cassette("test", httr::GET(hb("/html")))
       use_cassette("test", httr::GET(hb("/html")))
+      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
     },
-    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE)
+    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
   )
 })

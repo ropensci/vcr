@@ -16,11 +16,9 @@ request_matches <- function(
     vcr_log_sprintf("  match: %s", request_summary(req1))
     TRUE
   } else {
-    vcr_log_sprintf(
-      "  no match: %s\n%s",
-      request_summary(req1),
-      paste0(compare, collapse = "\n")
-    )
+    vcr_log_sprintf("  no match: %s", request_summary(req1))
+    lines <- strsplit(paste0(compare, collapse = "\n"), "\n")[[1]]
+    lapply(lines, \(line) vcr_log_sprintf("  %s", line))
     FALSE
   }
 }

@@ -53,8 +53,8 @@ RequestHandler <- R6::R6Class(
         return(private$on_recordable_request())
       }
 
-      vcr_log_sprintf("- unhandled")
-      private$on_unhandled_request()
+      err <- UnhandledHTTPRequestError$new(self$request)
+      err$run()
     }
   ),
 
@@ -96,10 +96,6 @@ RequestHandler <- R6::R6Class(
       # do real request - then stub response - then return stubbed vcr response
       # - this may need to be called from webmockr cruladapter?
       # reassign per adapter
-    },
-    on_unhandled_request = function() {
-      err <- UnhandledHTTPRequestError$new(self$request)
-      err$run()
     }
   )
 )

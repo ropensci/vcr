@@ -128,4 +128,19 @@
       [Cassette: "test"]   match: GET {httpbin}/html
       [Cassette: "test"]   matched response 1
       [Cassette: "test"] Ejecting: writing 0 interactions
+    Code
+      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
+    Output
+      [Cassette: "test"] Inserting: loading 1 interactions from disk
+      [Cassette: "test"]   record: once
+      [Cassette: "test"]   serialize_with: yaml
+      [Cassette: "test"]   allow_playback_repeats: FALSE
+      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
+      [Cassette: "test"] Handling request: GET {httpbin}/404
+      [Cassette: "test"]   looking for existing requests using method/uri
+      [Cassette: "test"]   no match: GET {httpbin}/404
+      [Cassette: "test"]   `playing$uri$path`:  "/404" 
+      [Cassette: "test"]   `recorded$uri$path`: "/html"
+      [Cassette: "test"]   no matching requests
+      [Cassette: "test"] Ejecting: writing 0 interactions
 

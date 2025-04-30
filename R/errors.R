@@ -254,7 +254,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
 
       tmp <- c("try_debug_logger", "use_new_episodes", "ignore_request")
       tmp <- c(tmp, self$record_mode_suggestion())
-      if (self$has_used_interaction()) tmp <- c(tmp, "allow_playback_repeats")
+      # if (self$has_used_interaction()) tmp <- c(tmp, "allow_playback_repeats")
       tmp <- lapply(tmp, self$suggestion_for)
       compact(c(tmp, list(self$match_requests_on_suggestion())))
     },
