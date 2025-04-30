@@ -192,6 +192,18 @@ Cassette <- R6::R6Class(
       invisible(self)
     },
 
+    #' @description write recorded interactions to disk
+    #' @return nothing returned
+    write_recorded_interactions_to_disk = function() {
+      if (!self$new_interactions) return(0)
+
+      interactions <- self$http_interactions$interactions
+      if (length(interactions) == 0) return(0)
+
+      self$serializer$serialize(interactions)
+      length(interactions)
+    },
+
     #' @description print method for `Cassette` objects
     #' @param x self
     #' @param ... ignored
@@ -272,18 +284,6 @@ Cassette <- R6::R6Class(
         )
         return(FALSE)
       }
-    },
-
-    #' @description write recorded interactions to disk
-    #' @return nothing returned
-    write_recorded_interactions_to_disk = function() {
-      if (!self$new_interactions) return(0)
-
-      interactions <- self$http_interactions$interactions
-      if (length(interactions) == 0) return(0)
-
-      self$serializer$serialize(interactions)
-      length(interactions)
     },
 
     #' @description record an http interaction (doesn't write to disk)
