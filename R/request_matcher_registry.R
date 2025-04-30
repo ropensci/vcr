@@ -8,7 +8,7 @@ request_matches <- function(
   compare <- waldo::compare(
     match_1,
     match_2,
-    x_arg = "playing",
+    x_arg = "matching",
     y_arg = "recorded"
   )
 

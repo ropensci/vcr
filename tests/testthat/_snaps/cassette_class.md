@@ -139,7 +139,7 @@
       [Cassette: "test"] Handling request: GET {httpbin}/404
       [Cassette: "test"]   looking for existing requests using method/uri
       [Cassette: "test"]   no match: GET {httpbin}/404
-      [Cassette: "test"]   `playing$uri$path`:  "/404" 
+      [Cassette: "test"]   `matching$uri$path`: "/404" 
       [Cassette: "test"]   `recorded$uri$path`: "/html"
       [Cassette: "test"]   no matching requests
       [Cassette: "test"] Ejecting: writing 0 interactions
