@@ -25,8 +25,6 @@ test_that("response_summary works with raw body", {
 })
 
 test_that("response_summary - handles bad multibyte characters by changing encoding", {
-  skip_on_cran()
-
   # res <- crul::HttpClient$new("https://google.com")$get()
   # google_response <- rawToChar(res$content)
   # save(google_response, file = "tests/testthat/google_response.rda", version = 2L)

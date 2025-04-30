@@ -1,6 +1,4 @@
 test_that("use_cassette: match on body w/ empty body", {
-  skip_on_cran()
-
   local_vcr_configure(dir = withr::local_tempdir())
   cli <- crul::HttpClient$new(url = hb())
 

@@ -5,7 +5,6 @@ test_that("use_cassette record mode: once", {
   # - Replay previously recorded interactions.
   # - Record new interactions if there is no cassette file.
   # - Cause an error to be raised for new requests if there is a cassette file.
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record interaction
@@ -59,7 +58,6 @@ test_that("use_cassette record mode: none", {
   # record mode `none`:
   # - Replay previously recorded interactions.
   # - Cause an error to be raised for any new requests.
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record first with another record mode to make the cassette
@@ -94,7 +92,6 @@ test_that("use_cassette record mode: new_episodes", {
   # record mode `new_episodes`:
   # - Record new interactions.
   # - Replay previously recorded interactions.
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record first interaction
@@ -155,7 +152,6 @@ test_that("use_cassette record mode: all", {
   # record mode `all`:
   # - Record new interactions.
   # - Never replay previously recorded interactions.
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # record first interaction

@@ -1,6 +1,4 @@
 test_that("check_cassette_names", {
-  skip_on_cran()
-
   dir <- make_pkg()
 
   res <- use_vcr(dir, verbose = FALSE)

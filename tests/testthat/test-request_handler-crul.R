@@ -1,6 +1,3 @@
-skip_on_cran()
-
-
 test_that("crul POST requests works", {
   withr::local_options(warnPartialMatchDollar = FALSE)
   local_vcr_configure(dir = withr::local_tempdir())
