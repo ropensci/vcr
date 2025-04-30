@@ -37,12 +37,7 @@ HTTPInteractionList <- R6::R6Class(
     },
 
     # Returns response
-    response_for = function(request) {
-      i <- self$find_request(request)
-      if (is.na(i)) {
-        return(NULL)
-      }
-
+    response_for = function(i) {
       self$used[[i]] <- TRUE
       self$interactions[[i]]$response
     },
