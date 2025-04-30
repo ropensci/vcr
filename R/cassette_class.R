@@ -153,6 +153,10 @@ Cassette <- R6::R6Class(
           }
         }
       }
+      vcr_log_sprintf(
+        "Inserting: loading %d interactions from disk",
+        length(interactions)
+      )
 
       self$http_interactions <- HTTPInteractionList$new(
         interactions = interactions,
@@ -160,22 +164,23 @@ Cassette <- R6::R6Class(
         replayable = self$record != "all"
       )
 
-      opts <- compact(list(
-        name = self$name,
-        record = self$record,
-        serialize_with = self$serialize_with,
-        match_requests_on = self$match_requests_on,
-        allow_playback_repeats = self$allow_playback_repeats,
-        preserve_exact_body_bytes = self$preserve_exact_body_bytes
-      ))
-      init_opts <- paste(names(opts), unname(opts), sep = ": ", collapse = ", ")
-      vcr_log_sprintf("Initialized with options: {%s}", init_opts)
+      vcr_log_sprintf("  record: %s", self$record)
+      vcr_log_sprintf("  serialize_with: %s", self$serialize_with)
+      vcr_log_sprintf(
+        "  allow_playback_repeats: %s",
+        self$allow_playback_repeats
+      )
+      vcr_log_sprintf(
+        "  preserve_exact_body_bytes: %s",
+        self$preserve_exact_body_bytes
+      )
     },
 
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      self$write_recorded_interactions_to_disk()
+      n <- self$write_recorded_interactions_to_disk()
+      vcr_log_sprintf("Ejecting: writing %i interactions", n)
 
       if (self$is_empty() && self$warn_on_empty) {
         cli::cli_warn(c(
@@ -272,12 +277,13 @@ Cassette <- R6::R6Class(
     #' @description write recorded interactions to disk
     #' @return nothing returned
     write_recorded_interactions_to_disk = function() {
-      if (!self$new_interactions) return(NULL)
+      if (!self$new_interactions) return(0)
 
       interactions <- self$http_interactions$interactions
-      if (length(interactions) == 0) return(NULL)
+      if (length(interactions) == 0) return(0)
 
       self$serializer$serialize(interactions)
+      length(interactions)
     },
 
     #' @description record an http interaction (doesn't write to disk)
@@ -285,11 +291,7 @@ Cassette <- R6::R6Class(
     #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
-      vcr_log_sprintf(
-        "Recorded HTTP interaction: %s => %s",
-        request_summary(request),
-        response_summary(response)
-      )
+      vcr_log_sprintf("  recording response: %s", response_summary(response))
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)

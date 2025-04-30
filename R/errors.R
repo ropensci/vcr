@@ -43,6 +43,9 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description Run unhandled request handling
     #' @return various
     run = function() {
+      # Don't trigger any logging while figuring out the error message
+      local_vcr_configure_log(log = FALSE)
+
       any_errors <- FALSE
       if (!is.null(self$cassette)) {
         if (self$cassette$record %in% c("once", "none")) {
