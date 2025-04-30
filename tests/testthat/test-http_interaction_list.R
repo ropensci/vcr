@@ -43,12 +43,12 @@ test_that("response_for marks as used", {
     vcr_interaction(req2, resp2)
   ))
 
-  expect_equal(interactions$used, c(FALSE, FALSE))
+  expect_equal(interactions$replayable, c(TRUE, TRUE))
   expect_equal(interactions$remaining_unused_interaction_count(), 2)
   expect_false(interactions$has_used_interaction(req2))
 
   interactions$response_for(req2)
-  expect_equal(interactions$used, c(FALSE, TRUE))
+  expect_equal(interactions$replayable, c(TRUE, FALSE))
   expect_equal(interactions$remaining_unused_interaction_count(), 1)
   expect_true(interactions$has_used_interaction(req2))
   expect_equal(interactions$response_for(req2), NULL)
@@ -81,7 +81,8 @@ test_that("can add interactions", {
   interactions$add(req1, resp1)
   expect_equal(interactions$interactions[[1]]$request, req1)
   expect_equal(interactions$interactions[[1]]$response, resp1)
-  expect_equal(interactions$used, TRUE)
+  # newly added interactions can not be replayed
+  expect_equal(interactions$replayable, FALSE)
 
   # same request replaces response
   interactions$add(req1, resp2)

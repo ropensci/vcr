@@ -2,7 +2,7 @@ HTTPInteractionList <- R6::R6Class(
   'HTTPInteractionList',
   public = list(
     interactions = NULL,
-    used = logical(),
+    replayable = logical(),
 
     request_matchers = NULL,
     allow_playback_repeats = FALSE,
@@ -14,7 +14,7 @@ HTTPInteractionList <- R6::R6Class(
       replayable = TRUE
     ) {
       self$interactions <- interactions
-      self$used <- rep(!replayable, length(interactions))
+      self$replayable <- rep(replayable, length(interactions))
 
       self$request_matchers <- request_matchers
       self$allow_playback_repeats <- allow_playback_repeats
@@ -25,7 +25,7 @@ HTTPInteractionList <- R6::R6Class(
       allow_playback <- allow_playback %||% self$allow_playback_repeats
 
       for (i in seq_along(self$interactions)) {
-        if (self$used[[i]] && !allow_playback) {
+        if (!self$replayable[[i]] && !allow_playback) {
           next
         }
 
@@ -45,7 +45,7 @@ HTTPInteractionList <- R6::R6Class(
 
       interaction <- vcr_interaction(request, response)
       self$interactions[[idx]] <- interaction
-      self$used[[idx]] <- TRUE # don't allow playback for new interactions
+      self$replayable[[idx]] <- FALSE # don't allow playback for new interactions
 
       interaction
     },
@@ -57,7 +57,7 @@ HTTPInteractionList <- R6::R6Class(
         return(NULL)
       }
 
-      self$used[[i]] <- TRUE
+      self$replayable[[i]] <- FALSE
       self$interactions[[i]]$response
     },
 
@@ -68,11 +68,11 @@ HTTPInteractionList <- R6::R6Class(
 
     has_used_interaction = function(request) {
       i <- self$find_request(request, allow_playback = TRUE)
-      !is.na(i) && self$used[[i]]
+      !is.na(i) && !self$replayable[[i]]
     },
 
     remaining_unused_interaction_count = function() {
-      sum(!self$used)
+      sum(self$replayable)
     },
 
     length = function() {
