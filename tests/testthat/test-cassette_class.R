@@ -65,7 +65,8 @@ test_that("cassette checks name", {
 })
 
 test_that("important interactions are logged", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  dir <- withr::local_tempdir()
+  local_vcr_configure(dir = dir)
   local_vcr_configure_log(file = stdout())
 
   expect_snapshot(
@@ -74,6 +75,9 @@ test_that("important interactions are logged", {
       use_cassette("test", httr::GET(hb("/html")))
       try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
     },
-    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
+    transform = \(x)
+      x |>
+        gsub(hb(), "{httpbin}", x = _, fixed = TRUE) |>
+        gsub(dir, "{dir}", x = _, fixed = TRUE)
   )
 })

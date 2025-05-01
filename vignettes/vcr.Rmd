@@ -156,6 +156,7 @@ For tweaking things to your needs, make sure to read the docs about [configurati
 * _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
 * _eject cassette_: eject the cassette (no longer recording to that cassette)
 * _replay_: refers to using a cached result of an http request that was recorded earlier
+* _interaction_`: a HTTP request and HTTP response pair. When a request is replayed, vcr finds a matching request on disk, and uses that save response.
 
 ## Missing features
 

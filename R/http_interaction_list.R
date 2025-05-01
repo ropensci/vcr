@@ -30,7 +30,7 @@ HTTPInteractionList <- R6::R6Class(
         }
 
         request_i <- self$interactions[[i]]$request
-        if (request_matches(request, request_i, self$request_matchers)) {
+        if (request_matches(request, request_i, self$request_matchers, i)) {
           return(i)
         }
       }
@@ -66,7 +66,7 @@ HTTPInteractionList <- R6::R6Class(
       !is.na(idx) && !self$replayable[[idx]]
     },
 
-    remaining_unused_interaction_count = function() {
+    n_replayable = function() {
       sum(self$replayable)
     },
 
