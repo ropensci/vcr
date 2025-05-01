@@ -45,5 +45,4 @@ articles:
       - debugging
       - write-to-disk
       - lightswitch
-      - internals
       - design
