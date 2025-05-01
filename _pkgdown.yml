@@ -47,11 +47,11 @@ articles:
   - title: All vignettes
     desc: ~
     contents:
-      - "`vcr`"
-      - "`cassette-manual-editing`"
-      - "`configuration`"
-      - "`debugging`"
-      - "`write-to-disk`"
-      - "`lightswitch`"
-      - "`internals`"
-      - "`design`"
+      - secrets
+      - cassette-manual-editing
+      - configuration
+      - debugging
+      - write-to-disk
+      - lightswitch
+      - internals
+      - design

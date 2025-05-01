@@ -22,19 +22,28 @@ RequestHandlerCrul <- R6::R6Class(
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function() {
+    on_stubbed_by_vcr_request = function(vcr_response) {
       # return stubbed vcr response - no real response to do
-      serialize_to_crul(self$request, super$get_stubbed_response(self$request))
+      serialize_to_crul(self$request, vcr_response)
     },
 
     on_recordable_request = function() {
-      tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
-      response <- webmockr::build_crul_response(self$request_original, tmp2)
-
       if (!cassette_active()) {
         cli::cli_abort("No cassette in use.")
       }
-      current_cassette()$record_http_interaction(self$request, response)
+
+      tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
+      response <- webmockr::build_crul_response(self$request_original, tmp2)
+
+      body <- vcr_body(response$content, response$response_headers)
+      vcr_response <- vcr_response(
+        status = as.integer(response$status_http()$status_code),
+        headers = response$response_headers,
+        body = body$body,
+        disk = body$is_disk
+      )
+
+      current_cassette()$record_http_interaction(self$request, vcr_response)
       return(response)
     }
   )

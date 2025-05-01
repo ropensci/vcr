@@ -1,6 +1,4 @@
 test_that("vcr_test_path works with testthat", {
-  skip_on_cran()
-
   # setup
   dir <- withr::local_tempdir()
   dir_create(file.path(dir, "tests", "testthat"))
@@ -18,8 +16,6 @@ test_that("vcr_test_path works with testthat", {
 })
 
 test_that("vcr_test_path works with testthat in a dir that isn't `tests`", {
-  skip_on_cran()
-
   # setup
   dir <- withr::local_tempdir()
   dir_create(file.path(dir, "testthat"))
@@ -37,8 +33,6 @@ test_that("vcr_test_path works with testthat in a dir that isn't `tests`", {
 })
 
 test_that("vcr_test_path errors with wrongly specified paths", {
-  skip_on_cran()
-
   ## Paths may not be empty strings
   expect_error(vcr_test_path("", "a"), "non empty", fixed = TRUE)
   ## User must provide a dir name

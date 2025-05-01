@@ -17,6 +17,8 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* Raw bodies are now automatically gzipped before being converted to base64 (#343).
+* The default path is now `tests/testthat/_vcr`. This should not affect existing packages that used `use_vcr()` because these set up a helper that sets the default directory with `vcr_configure()` (#395).
 * `local_vcr_configure()` allows you to temporarily affect vcr configuration.
 
 vcr 1.7.0

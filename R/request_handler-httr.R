@@ -36,14 +36,15 @@ RequestHandlerHttr <- R6::R6Class(
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function() {
+    on_stubbed_by_vcr_request = function(vcr_response) {
       # return stubbed vcr response - no real response to do
-      serialize_to_httr(self$request, super$get_stubbed_response(self$request))
+      serialize_to_httr(self$request, vcr_response)
     },
 
     on_recordable_request = function() {
-      # do real request - then stub response - then return stubbed vcr response
-      # - this may need to be called from webmockr httradapter?
+      if (!cassette_active()) {
+        cli::cli_abort("No cassette in use.")
+      }
 
       # real request
       webmockr::httr_mock(FALSE)
@@ -60,15 +61,41 @@ RequestHandlerHttr <- R6::R6Class(
       )
       response <- webmockr::build_httr_response(self$request_original, tmp2)
 
+      body <- vcr_body(response$content, response$headers)
+      vcr_response <- vcr_response(
+        status = response$status_code,
+        headers = response$headers,
+        body = body$body,
+        disk = body$is_disk
+      )
+
       # make vcr response | then record interaction
-      if (!cassette_active()) {
-        cli::cli_abort("No cassette in use.")
-      }
-      current_cassette()$record_http_interaction(self$request, response)
+      current_cassette()$record_http_interaction(self$request, vcr_response)
       return(response)
     }
   )
 )
+
+vcr_body <- function(body, headers) {
+  if (is.null(body)) {
+    body <- NULL
+    is_disk <- FALSE
+  } else if (is.raw(body)) {
+    if (has_binary_content(headers)) {
+      body <- body
+    } else {
+      body <- rawToChar(body)
+    }
+    is_disk <- FALSE
+  } else if (inherits(body, "path") || (is_string(body) && file.exists(body))) {
+    body <- save_file(body)
+    is_disk <- TRUE
+  } else {
+    cli::cli_abort("Unrecognized response content type.", .internal = TRUE)
+  }
+
+  list(body = body, is_disk = is_disk)
+}
 
 # generate actual httr response
 serialize_to_httr <- function(request, response) {
@@ -133,29 +160,43 @@ as_httr_request <- function(x) {
 
 
 curl_body <- function(x) {
-  if (is_body_empty(x)) {
+  no_post <- (is.null(x$options$postfieldsize) || x$options$postfieldsize == 0L)
+  if (is.null(x$fields) && no_post) {
     return(NULL)
   }
 
   if (!is.null(x$fields)) {
     # multipart body
-    tmp <- x$fields
+    x$fields
   } else if (!is.null(x$options$postfields) && is.raw(x$options$postfields)) {
     # json/raw-encoded body
-    tmp <- rawToChar(x$options$postfields)
+    rawToChar(x$options$postfields)
   } else if (!is.null(x$options$postfieldsize_large)) {
     # upload not in a list
     # seems like we can't get the file path anyway from the request
     # in both crul and httr - so may be stuck with this
-    tmp <- paste0("upload, file size: ", x$options$postfieldsize_large)
+    paste0("upload, file size: ", x$options$postfieldsize_large)
   } else {
     # unknown, fail out
     cli::cli_abort("couldn't fetch request body; please file an issue")
   }
-  if (inherits(tmp, "raw")) rawToChar(tmp) else tmp
 }
 
 is_body_empty <- function(x) {
   is.null(x$fields) &&
     (is.null(x$options$postfieldsize) || x$options$postfieldsize == 0L)
+}
+
+save_file <- function(path) {
+  if (is.null(vcr_c$write_disk_path)) {
+    cli::cli_abort(c(
+      "`write_disk_path` must be set when writing to disk.",
+      i = "See ?vcr_configure for details."
+    ))
+  }
+  dir_create(vcr_c$write_disk_path)
+  out_path <- file.path(vcr_c$write_disk_path, basename(path))
+
+  file.copy(path, out_path, overwrite = TRUE)
+  out_path
 }

@@ -35,7 +35,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @param request A `vcr_request` object
     #' @return A new `UnhandledHTTPRequestError` object
     initialize = function(request) {
-      assert(request, "vcr_request")
+      check_vcr_request(request)
       self$request <- request
       self$cassette <- current_cassette()
     },
@@ -43,6 +43,9 @@ UnhandledHTTPRequestError <- R6::R6Class(
     #' @description Run unhandled request handling
     #' @return various
     run = function() {
+      # Don't trigger any logging while figuring out the error message
+      local_vcr_configure_log(log = FALSE)
+
       any_errors <- FALSE
       if (!is.null(self$cassette)) {
         if (self$cassette$record %in% c("once", "none")) {

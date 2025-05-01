@@ -65,6 +65,8 @@ hb <- function(x = NULL) {
 }
 
 hb_remote <- function(x = NULL) {
+  skip_on_cran()
+
   base_url <- getOption("vcr::httpbin_server")
   if (is.null(base_url)) {
     base_url <- find_httpbin_server()
