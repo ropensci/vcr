@@ -25,8 +25,7 @@
             "request": {
               "method": "GET",
               "uri": "http://example.com",
-              "body": {},
-              "headers": []
+              "body": {}
             },
             "response": {
               "status": 200,
@@ -53,7 +52,6 @@
           method: GET
           uri: http://example.com
           body: {}
-          headers: []
         response:
           status: 200
           headers:

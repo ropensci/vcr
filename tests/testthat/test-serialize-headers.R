@@ -10,7 +10,10 @@ test_that("by default, headers left unchanged", {
 })
 
 test_that("filter_headers/request/remove", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    match_requests_on = c("uri", "headers")
+  )
 
   # request headers: remove only
   # no header filtering to compare below stuff to
@@ -75,7 +78,10 @@ test_that("filter_headers/request/remove", {
 })
 
 test_that("filter_headers/request/replace", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    match_requests_on = c("method", "uri", "headers")
+  )
 
   # request headers: replace only
   # no header filtering to compare below stuff to

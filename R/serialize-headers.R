@@ -20,7 +20,11 @@ encode_headers <- function(headers, type = c("request", "response")) {
 }
 
 decode_headers <- function(headers) {
-  decode_sensitive(headers)
+  if (is.null(headers)) {
+    list()
+  } else {
+    decode_sensitive(headers)
+  }
 }
 
 headers_remove <- function(headers, filter) {
