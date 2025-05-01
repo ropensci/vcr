@@ -100,7 +100,7 @@ find_httpbin_server <- function() {
 }
 
 read_cassette <- function(name) {
-  yaml::yaml.load_file(file.path(vcr_c$dir, name))
+  yaml::yaml.load_file(file.path(the$config$dir, name))
 }
 
 testthat::set_state_inspector(\() {
@@ -111,6 +111,6 @@ testthat::set_state_inspector(\() {
   list(
     temp_files = temp_files,
     wd_files = dir(),
-    vcr_config = vcr_c$as_list()
+    vcr_config = the$config
   )
 })

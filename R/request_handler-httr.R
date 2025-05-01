@@ -188,14 +188,14 @@ is_body_empty <- function(x) {
 }
 
 save_file <- function(path) {
-  if (is.null(vcr_c$write_disk_path)) {
+  if (is.null(the$config$write_disk_path)) {
     cli::cli_abort(c(
       "`write_disk_path` must be set when writing to disk.",
       i = "See ?vcr_configure for details."
     ))
   }
-  dir_create(vcr_c$write_disk_path)
-  out_path <- file.path(vcr_c$write_disk_path, basename(path))
+  dir_create(the$config$write_disk_path)
+  out_path <- file.path(the$config$write_disk_path, basename(path))
 
   file.copy(path, out_path, overwrite = TRUE)
   out_path
