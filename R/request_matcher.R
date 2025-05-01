@@ -38,7 +38,7 @@ make_comparison <- function(matches, req) {
   ))
 }
 
-normalize_body <- function(x) {
+normalize_body <- function(body) {
   if (!is.list(body)) {
     return(body)
   }
