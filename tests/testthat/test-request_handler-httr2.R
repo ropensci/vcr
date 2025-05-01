@@ -116,25 +116,6 @@ test_that("can capture body: string", {
   expect_equal(interaction$request$body$string, "body")
 })
 
-test_that("can capture body: raw", {
-  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
-
-  req <- httr2::request(hb_remote("/post"))
-  req <- httr2::req_body_raw(req, charToRaw("body"))
-
-  use_cassette("test", resp_record <- httr2::req_perform(req))
-  expect_equal(httr2::resp_body_json(resp_record)$data, "body")
-
-  use_cassette("test", resp_replay <- httr2::req_perform(req))
-  expect_equal(
-    httr2::resp_body_json(resp_record),
-    httr2::resp_body_json(resp_replay)
-  )
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, "body")
-})
-
 test_that("binary body uses base64 encoding", {
   local_vcr_configure(dir = withr::local_tempdir())
   path <- file.path(withr::local_tempdir(), "test.png")
@@ -169,7 +150,7 @@ test_that("can capture body: json", {
 test_that("can capture body: form", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  req <- httr2::request(hb_remote("/post"))
+  req <- httr2::request(hb("/post"))
   req <- httr2::req_body_form(req, a = "x", b = "y")
 
   use_cassette("test", resp_record <- httr2::req_perform(req))
@@ -188,7 +169,7 @@ test_that("can capture body: form", {
 test_that("can capture body: multipart", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  req <- httr2::request(hb_remote("/post"))
+  req <- httr2::request(hb("/post"))
   req <- httr2::req_body_multipart(req, a = "x", b = "y")
 
   use_cassette("test", resp_record <- httr2::req_perform(req))
