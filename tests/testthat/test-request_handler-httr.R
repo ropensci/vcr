@@ -168,85 +168,56 @@ test_that("httr works with simple auth and hides auth details", {
   )
 })
 
-test_that("httr POST requests works", {
+test_that("string body works", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  # body type: named list
-  out <- use_cassette(
-    "httr_post_named_list",
-    x <- httr::POST(hb_remote("/post"), body = list(foo = "bar"))
-  )
-  expect_false(out$is_empty())
-  expect_s3_class(x, "response")
-  expect_equal(x$status_code, 200)
-  str <- yaml::yaml.load_file(out$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$form, list(foo = "bar"))
+  body <- "thisisastring"
 
-  # body type: character
-  out2 <- use_cassette(
-    "httr_post_string",
-    z <- httr::POST(hb_remote("/post"), body = "some string")
-  )
-  expect_false(out2$is_empty())
-  expect_s3_class(z, "response")
-  expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out2$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "some string")
+  # Check that we make the request correctly
+  use_cassette("test", res1 <- httr::POST(hb_remote("/post"), body = body))
+  content1 <- httr::content(res1, "parsed")
+  expect_equal(content1$data, body)
 
-  # body type: raw
-  out3 <- use_cassette(
-    "httr_post_raw",
-    z <- httr::POST(hb_remote("/post"), body = charToRaw("some string"))
-  )
-  expect_false(out3$is_empty())
-  expect_s3_class(z, "response")
-  expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out3$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "some string")
+  # Check that we can replay the request and get the same response
+  use_cassette("test", res2 <- httr::POST(hb("/post"), body = body))
+  content2 <- httr::content(res2, "parsed")
+  expect_equal(content2, content1)
+})
 
-  # body type: upload_file
-  ff <- withr::local_tempfile(fileext = ".txt")
-  cat("hello world\n", file = ff)
-  out4 <- use_cassette(
-    "httr_post_upload_file",
-    b <- httr::POST(hb_remote("/post"), body = list(y = httr::upload_file(ff)))
-  )
-  expect_false(out4$is_empty())
-  expect_s3_class(b, "response")
-  expect_equal(b$status_code, 200)
-  str <- yaml::yaml.load_file(out4$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_match(strj$files$y, "hello world") # files not empty
-  expect_false(nzchar(strj$data)) # data empty
+test_that("multipart body works", {
+  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  ## upload_file not in a list
-  # out6 <- use_cassette("httr_post_upload_file_no_list", {
-  #   d <- POST(hb_remote("/post"),
-  #     body = httr::upload_file(system.file("CITATION")))
-  # })
-  # expect_false(out6$is_empty())
-  # expect_s3_class(d, "response")
-  # expect_equal(d$status_code, 200)
-  # str <- yaml::yaml.load_file(out6$file())$http_interactions
-  # strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  # expect_equal(length(strj$files), 0) # files empty
-  # expect_match(strj$data, "bibentry\\(") # data not empty
+  tempfile <- withr::local_tempfile(lines = "hello world")
+  body <- list(x = "1", y = httr::upload_file(tempfile))
 
-  # body type: NULL
-  out5 <- use_cassette(
-    "httr_post_null",
-    m <- httr::POST(hb_remote("/post"), body = NULL)
-  )
-  expect_false(out5$is_empty())
-  expect_s3_class(m, "response")
-  expect_equal(m$status_code, 200)
-  str <- yaml::yaml.load_file(out5$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "")
-  expect_equal(strj$headers$`Content-Length`, "0")
+  # Check that we make the request correctly
+  use_cassette("test", res1 <- httr::POST(hb("/post"), body = body))
+  content1 <- httr::content(res1, "parsed")
+  expect_equal(content1$form$x, "1")
+  expect_equal(content1$files$y$filename, basename(tempfile))
+
+  # Check that we can replay the request and get the same response
+  use_cassette("test", res2 <- httr::POST(hb("/post"), body = body))
+  content2 <- httr::content(res2, "parsed")
+  expect_equal(content2, content1)
+})
+
+test_that("empty body works", {
+  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
+
+  body <- NULL
+
+  # Check that we make the request correctly
+  use_cassette("test", res1 <- httr::POST(hb("/post"), body = body))
+  content1 <- httr::content(res1, "parsed")
+  expect_length(content1$data, 0)
+  expect_length(content1$files, 0)
+  expect_length(content1$form, 0)
+
+  # Check that we can replay the request and get the same response
+  use_cassette("test", res2 <- httr::POST(hb("/post"), body = body))
+  content2 <- httr::content(res2, "parsed")
+  expect_equal(content2, content1)
 })
 
 test_that("binary body uses bsae64 encoding", {
