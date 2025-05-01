@@ -213,9 +213,8 @@ test_that("JSON usage", {
   )
   expect_s3_class(raf, "HttpResponse")
   expect_s3_class(raz, "HttpResponse")
-  expect_length(jsonlite::fromJSON(dd$file(), FALSE)[[1]], 2)
-  bodies <- jsonlite::fromJSON(dd$file())[[1]]$response$body$string
-  for (i in bodies) expect_true(is_base64(i))
+  expect_length(jsonlite::read_json(dd$file())[[1]], 2)
+  expect_named(jsonlite::fromJSON(dd$file())[[1]]$response$body, "raw_gzip")
 })
 
 # YAML -------------------------------------------------------------------------
