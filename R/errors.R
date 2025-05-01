@@ -1,47 +1,16 @@
-#' @title UnhandledHTTPRequestError
-#' @description Handle http request errors
-#' @export
-#' @details How this error class is used:
-#' If `record="once"` we trigger this.
-#'
-#' Users can use vcr in the context of both [use_cassette()]
-#' and [insert_cassette()]
-#'
-#' For the former, all requests go through the call_block
-#' But for the latter, requests go through webmockr.
-#'
-#' Where is one place where we can put UnhandledHTTPRequestError
-#' that will handle both use_cassette and insert_cassette?
-#'
-#' @section Error situations where this is invoked:
-#'
-#' - `record=once` AND there's a new request that doesn't match
-#' the one in the cassette on disk
-#'   - in webmockr: if no stub found and there are recorded
-#'    interactions on the cassette, and record = once, then
-#'    error with UnhandledHTTPRequestError
-#'     - but if record != once, then allow it, unless record == none
-#' - others?
-#'
 UnhandledHTTPRequestError <- R6::R6Class(
   "UnhandledHTTPRequestError",
   public = list(
-    #' @field request a `vcr_request`` object
+    # a `vcr_request` object
     request = NULL,
-    #' @field cassette a cassette name
     cassette = NULL,
 
-    #' @description Create a new `UnhandledHTTPRequestError` object
-    #' @param request A `vcr_request` object
-    #' @return A new `UnhandledHTTPRequestError` object
     initialize = function(request) {
       check_vcr_request(request)
       self$request <- request
       self$cassette <- current_cassette()
     },
 
-    #' @description Run unhandled request handling
-    #' @return various
     run = function() {
       # Don't trigger any logging while figuring out the error message
       local_vcr_configure_log(log = FALSE)
@@ -58,8 +27,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       return(invisible())
     },
 
-    #' @description Construct and execute stop message for why request failed
-    #' @return a stop message
     construct_message = function() {
       # create formatted_suggestions for later use
       the$last_error <- list()
@@ -82,8 +49,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       stop(mssg, call. = FALSE)
     },
 
-    #' @description construct request description
-    #' @return character
     request_description = function() {
       lines <- c()
       lines <- c(
@@ -106,8 +71,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       paste0(lines, collapse = "\n")
     },
 
-    #' @description get current request matchers
-    #' @return character
     current_matchers = function() {
       if (cassette_active()) {
         current_cassette()$match_requests_on
@@ -116,20 +79,14 @@ UnhandledHTTPRequestError <- R6::R6Class(
       }
     },
 
-    #' @description are headers included in current matchers?
-    #' @return logical
     match_request_on_headers = function() {
       "headers" %in% self$current_matchers()
     },
 
-    #' @description is body includled in current matchers?
-    #' @return logical
     match_request_on_body = function() {
       "body" %in% self$current_matchers()
     },
 
-    #' @description get request headers
-    #' @return character
     formatted_headers = function() {
       tmp <- Map(
         function(a, b) {
@@ -141,8 +98,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       paste0(tmp, collapse = "\n")
     },
 
-    #' @description construct description of current or lack thereof cassettes
-    #' @return character
     cassettes_description = function() {
       if (cassette_active()) {
         tmp <- self$cassettes_list()
@@ -161,8 +116,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       }
     },
 
-    #' @description cassette details
-    #' @return character
     cassettes_list = function() {
       if (cassette_active()) {
         lines <- c()
@@ -187,8 +140,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       }
     },
 
-    #' @description get help message for non-verbose error
-    #' @return character
     get_help = function() {
       vm <- if (is_interactive()) "Run `vcr::vcr_last_error()`" else
         "Set `VCR_VERBOSE_ERRORS=TRUE`"
@@ -199,8 +150,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       )
     },
 
-    #' @description make suggestions for what to do
-    #' @return character
     formatted_suggestions = function() {
       formatted_points <- c()
       sugs <- self$suggestions()
@@ -220,10 +169,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       )
     },
 
-    #' @description add bullet point to beginning of a line
-    #' @param lines (character) vector of strings
-    #' @param index (integer) a number
-    #' @return character
     format_bullet_point = function(lines, index) {
       lines[1] <- paste0("  * ", lines[1])
       lines[length(lines)] <- paste(
@@ -233,23 +178,14 @@ UnhandledHTTPRequestError <- R6::R6Class(
       paste0(lines, collapse = "\n    ")
     },
 
-    #' @description make a foot note
-    #' @param url (character) a url
-    #' @param index (integer) a number
-    #' @return character
     format_foot_note = function(url, index) {
       sprintf("[%s] %s", index + 1, url)
     },
 
-    #' @description get a suggestion by key
-    #' @param key (character) a character string
-    #' @return character
     suggestion_for = function(key) {
       error_suggestions[[key]]
     },
 
-    #' @description get all suggestions
-    #' @return list
     suggestions = function() {
       if (!cassette_active()) {
         return(self$no_cassette_suggestions())
@@ -262,8 +198,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       compact(c(tmp, list(self$match_requests_on_suggestion())))
     },
 
-    #' @description get all no cassette suggestions
-    #' @return list
     no_cassette_suggestions = function() {
       x <- c(
         "try_debug_logger",
@@ -273,8 +207,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       lapply(x, self$suggestion_for)
     },
 
-    #' @description get the appropriate record mode suggestion
-    #' @return character
     record_mode_suggestion = function() {
       record_modes <- unlist(lapply(the$cassettes, function(z) z$record))
 
@@ -287,8 +219,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       }
     },
 
-    #' @description are there any used interactions
-    #' @return logical
     has_used_interaction = function() {
       any(vapply(
         the$cassettes,
@@ -300,8 +230,6 @@ UnhandledHTTPRequestError <- R6::R6Class(
       ))
     },
 
-    #' @description match requests on suggestion
-    #' @return list
     match_requests_on_suggestion = function() {
       num_remaining_interactions <- sum(vapply(
         the$cassettes,

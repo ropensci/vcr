@@ -34,14 +34,6 @@ reference:
       - cassettes
       - current_cassette
       - check_cassette_names
-  - title: "Internals"
-    desc: >
-      You shouldn't need to use these directly
-    contents:
-      - Cassette
-      - UnhandledHTTPRequestError
-      - request_summary
-      - response_summary
 
 articles:
   - title: All vignettes
