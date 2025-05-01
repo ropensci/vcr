@@ -168,86 +168,106 @@ test_that("httr works with simple auth and hides auth details", {
   )
 })
 
-test_that("httr POST requests works", {
+test_that("string body works", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  # body type: named list
-  out <- use_cassette(
-    "httr_post_named_list",
-    x <- httr::POST(hb_remote("/post"), body = list(foo = "bar"))
-  )
-  expect_false(out$is_empty())
-  expect_s3_class(x, "response")
-  expect_equal(x$status_code, 200)
-  str <- yaml::yaml.load_file(out$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$form, list(foo = "bar"))
+  body <- "thisisastring"
 
-  # body type: character
-  out2 <- use_cassette(
-    "httr_post_string",
-    z <- httr::POST(hb_remote("/post"), body = "some string")
-  )
-  expect_false(out2$is_empty())
-  expect_s3_class(z, "response")
-  expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out2$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "some string")
+  # Check that we make the request correctly
+  use_cassette("test", res1 <- httr::POST(hb_remote("/post"), body = body))
+  content1 <- httr::content(res1, "parsed")
+  expect_equal(content1$data, body)
 
-  # body type: raw
-  out3 <- use_cassette(
-    "httr_post_raw",
-    z <- httr::POST(hb_remote("/post"), body = charToRaw("some string"))
-  )
-  expect_false(out3$is_empty())
-  expect_s3_class(z, "response")
-  expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out3$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "some string")
-
-  # body type: upload_file
-  ff <- withr::local_tempfile(fileext = ".txt")
-  cat("hello world\n", file = ff)
-  out4 <- use_cassette(
-    "httr_post_upload_file",
-    b <- httr::POST(hb_remote("/post"), body = list(y = httr::upload_file(ff)))
-  )
-  expect_false(out4$is_empty())
-  expect_s3_class(b, "response")
-  expect_equal(b$status_code, 200)
-  str <- yaml::yaml.load_file(out4$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_match(strj$files$y, "hello world") # files not empty
-  expect_false(nzchar(strj$data)) # data empty
-
-  ## upload_file not in a list
-  # out6 <- use_cassette("httr_post_upload_file_no_list", {
-  #   d <- POST(hb_remote("/post"),
-  #     body = httr::upload_file(system.file("CITATION")))
-  # })
-  # expect_false(out6$is_empty())
-  # expect_s3_class(d, "response")
-  # expect_equal(d$status_code, 200)
-  # str <- yaml::yaml.load_file(out6$file())$http_interactions
-  # strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  # expect_equal(length(strj$files), 0) # files empty
-  # expect_match(strj$data, "bibentry\\(") # data not empty
-
-  # body type: NULL
-  out5 <- use_cassette(
-    "httr_post_null",
-    m <- httr::POST(hb_remote("/post"), body = NULL)
-  )
-  expect_false(out5$is_empty())
-  expect_s3_class(m, "response")
-  expect_equal(m$status_code, 200)
-  str <- yaml::yaml.load_file(out5$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "")
-  expect_equal(strj$headers$`Content-Length`, "0")
+  # Check that we can replay the request and get the same response
+  use_cassette("test", res2 <- httr::POST(hb("/post"), body = body))
+  content2 <- httr::content(res2, "parsed")
+  expect_equal(content2, content1)
 })
+
+test_that("multipart body works", {
+  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
+
+  tempfile <- withr::local_tempfile(lines = "hello world")
+  body <- list(x = "1", y = httr::upload_file(tempfile))
+
+  # Check that we make the request correctly
+  use_cassette("test", res1 <- httr::POST(hb("/post"), body = body))
+  content1 <- httr::content(res1, "parsed")
+  expect_equal(content1$form$x, "1")
+  expect_equal(content1$files$y$filename, basename(tempfile))
+
+  # Check that we can replay the request and get the same response
+  use_cassette("test", res2 <- httr::POST(hb("/post"), body = body))
+  content2 <- httr::content(res2, "parsed")
+  expect_equal(content2, content1)
+})
+
+test_that("empty body works", {
+  local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
+
+  body <- NULL
+
+  # Check that we make the request correctly
+  use_cassette("test", res1 <- httr::POST(hb("/post"), body = body))
+  content1 <- httr::content(res1, "parsed")
+  expect_length(content1$data, 0)
+  expect_length(content1$files, 0)
+  expect_length(content1$form, 0)
+
+  # Check that we can replay the request and get the same response
+  use_cassette("test", res2 <- httr::POST(hb("/post"), body = body))
+  content2 <- httr::content(res2, "parsed")
+  expect_equal(content2, content1)
+})
+
+test_that("JSON-encoded body", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  ### matchers: method, uri, body
+  # run it
+  aa <- use_cassette(
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing2")
+  expect_equal(aa$match_requests_on, c("method", "uri", "body"))
+
+  # matching fails when the body changes
+  expect_error(
+    use_cassette(
+      "testing2",
+      res <- httr::POST(
+        hb("/post"),
+        body = list(foo = "bar1"),
+        encode = "json"
+      ),
+      match_requests_on = "body"
+    ),
+    "An HTTP request has been made that vcr does not know how to handle"
+  )
+
+  # matching succeeds when the changed body is ignored
+  cc <- use_cassette(
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
+    match_requests_on = c("uri", "method")
+  )
+  expect_identical(recorded_at(aa), recorded_at(cc))
+})
+
 
 test_that("binary body uses bsae64 encoding", {
   local_vcr_configure(dir = withr::local_tempdir())
@@ -258,11 +278,10 @@ test_that("binary body uses bsae64 encoding", {
     httr::GET(hb("/image"), httr::add_headers("Accept" = "image/png"))
   )
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "base64_string")
+  expect_named(interaction$response$body, "raw_gzip")
 })
 
 test_that("can write files to disk", {
-  skip_on_cran()
   write_path <- withr::local_tempdir()
   local_vcr_configure(
     dir = withr::local_tempdir(),
@@ -293,7 +312,6 @@ test_that("can write files to disk", {
 })
 
 test_that("fails well if write_disk_path not set", {
-  skip_on_cran()
   local_vcr_configure(
     dir = withr::local_tempdir(),
     warn_on_empty_cassette = FALSE
@@ -304,4 +322,113 @@ test_that("fails well if write_disk_path not set", {
     use_cassette("test", httr::GET(hb("/get"), httr::write_disk(path, TRUE))),
     error = TRUE
   )
+})
+
+
+test_that("match_requests_on - body", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  ### matchers: method, uri, body
+  # run it
+  aa <- use_cassette(
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar")),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing2",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar")),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing2")
+  expect_equal(aa$match_requests_on, c("method", "uri", "body"))
+
+  ### matchers: method, body (uri ignored essentially)
+  # run it
+  aa <- use_cassette(
+    "testing4",
+    res <- httr::POST(
+      hb("/post"),
+      query = list(a = 5),
+      body = list(foo = "bar")
+    ),
+    match_requests_on = c("method", "body")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing4",
+    res <- httr::POST(
+      hb("/post"),
+      query = list(b = 2),
+      body = list(foo = "bar")
+    ),
+    match_requests_on = c("method", "body")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing4")
+  expect_equal(aa$match_requests_on, c("method", "body"))
+
+  ### matchers: body only
+  # run it
+  aa <- use_cassette(
+    "testing5",
+    res <- httr::POST(hb("/post"), body = list(foo = "bar")),
+    match_requests_on = "body"
+  )
+  # run it again, method and uri changed
+  bb <- use_cassette(
+    "testing5",
+    res <- httr::PUT(hb("/put"), body = list(foo = "bar")),
+    match_requests_on = "body"
+  )
+  # run it again, method and uri changed again
+  cc <- use_cassette(
+    "testing5",
+    res <- httr::PATCH(hb("/patch"), body = list(foo = "bar")),
+    match_requests_on = "body"
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_identical(recorded_at(bb), recorded_at(cc))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing5")
+  expect_equal(aa$match_requests_on, "body")
+  expect_equal(bb$match_requests_on, "body")
+
+  ### matchers: host and path only (notice how HTTP method and query are ignored)
+  # run it
+  aa <- use_cassette(
+    "testing_httr_host_path",
+    res <- httr::GET("https://ropensci.org/about", query = list(b = 99999)),
+    match_requests_on = c("host", "path")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing_httr_host_path",
+    res2 <- httr::POST("https://ropensci.org/about", query = list(a = 5)),
+    match_requests_on = c("host", "path")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing_httr_host_path")
+  expect_equal(aa$match_requests_on, c("host", "path"))
 })

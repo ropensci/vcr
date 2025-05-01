@@ -1,9 +1,0 @@
-* _vcr_: the name comes from the idea that we want to record something and play it back later, like a vcr
-* _cassette_: A _thing_ to record HTTP interactions to. Right now the only option is the file system (writing to files), but in the future could be other things, e.g. a key-value store like Redis
-* _fixture_: A fixture is something used to consistently test a piece of software. In this case, a cassette (just defined above) is a fixture - used in unit tests. If you use our setup function `vcr_setup()` the default directory created to hold cassettes is called `fixtures/` as a signal as to what the folder contains.
-* Persisters: how to save requests - currently only option is the file system
-* _serialize_: translating data into a format that can be stored; here, translate HTTP request and response data into a representation on disk to read back later
-* Serializers: how to serialize the HTTP response - currently only option is YAML; other options in the future could include e.g. JSON
-* _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
-* _eject cassette_: eject the cassette (no longer recording to that cassette)
-* _replay_: refers to using a cached result of an http request that was recorded earlier

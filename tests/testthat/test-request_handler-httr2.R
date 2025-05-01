@@ -1,5 +1,3 @@
-skip_on_cran()
-
 test_that("can generate all three types of response", {
   local_vcr_configure(dir = withr::local_tempdir())
 
@@ -146,7 +144,7 @@ test_that("binary body uses base64 encoding", {
 
   use_cassette("test", httr2::req_perform(req))
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "base64_string")
+  expect_named(interaction$response$body, "raw_gzip")
 })
 
 test_that("can capture body: json", {
@@ -224,4 +222,20 @@ test_that("can capture body: file", {
 
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
   expect_equal(interaction$request$body$string, path)
+})
+
+test_that("redacted headers handled appropriately", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  use_cassette("redacted_httr2", {
+    httr2::request(hb("/get")) %>%
+      httr2::req_headers(NotASecret = "NotHidden") %>%
+      httr2::req_headers_redacted(SecretHeader = "Hidden") %>%
+      httr2::req_perform()
+  })
+
+  cas <- read_cassette("redacted_httr2.yml")
+  headers <- cas$http_interactions[[1]]$request$headers
+  expect_equal(headers$NotASecret, "NotHidden")
+  expect_equal(headers$SecretHeader, "<redacted>")
 })

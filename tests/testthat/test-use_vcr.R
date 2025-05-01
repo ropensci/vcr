@@ -1,6 +1,4 @@
 test_that("use_vcr works", {
-  skip_on_cran()
-
   expect_type(use_vcr, "closure")
 
   dir <- make_pkg()
