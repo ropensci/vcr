@@ -81,6 +81,64 @@ test_that("crul POST requests works", {
   expect_equal(strj$headers$`Content-Length`, "0")
 })
 
+test_that("JSON-encoded body", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  cli <- crul::HttpClient$new(url = hb())
+
+  ### matchers: method, uri, body
+  # run it
+  aa <- use_cassette(
+    "testing1",
+    res <- cli$post("post", body = list(foo = "bar"), encode = "json"),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing1",
+    res <- cli$post("post", body = list(foo = "bar"), encode = "json"),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing1")
+  expect_equal(aa$match_requests_on, c("method", "uri", "body"))
+
+  # matching fails when comparing multipart- and json-encoded bodies
+  expect_error(
+    # fails when comparing multipart- and json-encoded bodies
+    use_cassette(
+      "testing1",
+      cli$post("post", body = list(foo = "bar")),
+      match_requests_on = c("method", "uri", "body")
+    ),
+    "An HTTP request has been made that vcr does not know how to handle"
+  )
+
+  # matching fails when the body changes
+  expect_error(
+    use_cassette(
+      "testing1",
+      res <- cli$post("post", body = list(foo = "baz"), encode = "json"),
+      match_requests_on = "body"
+    ),
+    "An HTTP request has been made that vcr does not know how to handle"
+  )
+
+  # matching succeeds when the changed body is ignored
+  cc <- use_cassette(
+    "testing1",
+    res <- cli$post("post", body = list(foo = "baz"), encode = "json"),
+    match_requests_on = c("uri", "method")
+  )
+  expect_identical(recorded_at(aa), recorded_at(cc))
+})
+
+
 test_that("can write files to disk", {
   write_path <- withr::local_tempdir()
   local_vcr_configure(
@@ -99,4 +157,155 @@ test_that("can write files to disk", {
 
   # Content is the same
   expect_equal(out$parse(), out2$parse())
+})
+
+test_that("match_requests_on - body works", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  cli <- crul::HttpClient$new(url = hb())
+
+  ### matchers: method, uri, body
+  # run it
+  aa <- use_cassette(
+    "testing1",
+    res <- cli$post("post", body = list(foo = "bar")),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing1",
+    res <- cli$post("post", body = list(foo = "bar")),
+    match_requests_on = c("method", "uri", "body")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing1")
+  expect_equal(aa$match_requests_on, c("method", "uri", "body"))
+
+  ### matchers: method, body (uri ignored essentially)
+  # run it
+  aa <- use_cassette(
+    "testing2",
+    res <- cli$post("post", query = list(a = 5), body = list(foo = "bar")),
+    match_requests_on = c("method", "body")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing2",
+    res <- cli$post("post", query = list(b = 2), body = list(foo = "bar")),
+    match_requests_on = c("method", "body")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing2")
+  expect_equal(aa$match_requests_on, c("method", "body"))
+
+  ### matchers: body only
+  # run it
+  # FIXME: still not quite working
+  cli2 <- crul::HttpClient$new(url = "https://stuff.com")
+  aa <- use_cassette(
+    "testing3",
+    res <- cli$put("put", body = list(foo = "bar")),
+    match_requests_on = "body"
+  )
+  # run it again, method and uri changed
+  bb <- use_cassette(
+    "testing3",
+    res2 <- cli$post("post", body = list(foo = "bar")),
+    match_requests_on = "body"
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing3")
+  expect_equal(aa$match_requests_on, "body")
+
+  ### matchers: host only (note how query is ignored)
+  # run it
+  aa <- use_cassette(
+    "testing_host1",
+    res <- crul::HttpClient$new(url = hb())$get(query = list(b = 99999)),
+    match_requests_on = "host"
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing_host1",
+    res2 <- crul::HttpClient$new(url = hb())$get(query = list(a = 5)),
+    match_requests_on = "host"
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing_host1")
+  expect_equal(aa$match_requests_on, "host")
+
+  ### matchers: path only (note how host and query differences are ignored)
+  # run it
+  aa <- use_cassette(
+    "testing_path1",
+    res <- crul::HttpClient$new("https://scottchamberlain.info")$get(
+      "about",
+      query = list(b = 99999)
+    ),
+    match_requests_on = "path"
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing_path1",
+    res2 <- crul::HttpClient$new("https://ropensci.org")$get(
+      "about",
+      query = list(a = 5)
+    ),
+    match_requests_on = "path"
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing_path1")
+  expect_equal(aa$match_requests_on, "path")
+
+  ### matchers: host and path only (notice how HTTP method and query are ignored)
+  # run it
+  aa <- use_cassette(
+    "testing_host_path",
+    res <- crul::HttpClient$new(url = "https://ropensci.org")$get(
+      "about",
+      query = list(b = 99999)
+    ),
+    match_requests_on = c("host", "path")
+  )
+  # run it again
+  bb <- use_cassette(
+    "testing_host_path",
+    res2 <- crul::HttpClient$new(url = "https://ropensci.org")$post(
+      "about",
+      query = list(a = 5)
+    ),
+    match_requests_on = c("host", "path")
+  )
+  # the recorded_at time doesn't change
+  # - that is, the request matched and the recorded response in aa
+  # - was used
+  expect_identical(recorded_at(aa), recorded_at(bb))
+  expect_s3_class(aa, "Cassette")
+  expect_type(aa$name, "character")
+  expect_equal(aa$name, "testing_host_path")
+  expect_equal(aa$match_requests_on, c("host", "path"))
 })
