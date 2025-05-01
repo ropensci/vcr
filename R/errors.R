@@ -79,7 +79,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
         ),
         collapse = "\n"
       )
-      stop(mssg, call. = FALSE)
+      abort(mssg, class = "vcr_unhandled", call = NULL)
     },
 
     #' @description construct request description
