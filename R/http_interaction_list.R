@@ -57,13 +57,13 @@ HTTPInteractionList <- R6::R6Class(
     },
 
     has_interaction = function(request) {
-      i <- self$find_request(request)
-      !is.na(i)
+      idx <- self$find_request(request)
+      !is.na(idx)
     },
 
     has_used_interaction = function(request) {
-      i <- self$find_request(request, allow_playback = TRUE)
-      !is.na(i) && !self$replayable[[i]]
+      idx <- self$find_request(request, allow_playback = TRUE)
+      !is.na(idx) && !self$replayable[[idx]]
     },
 
     remaining_unused_interaction_count = function() {
