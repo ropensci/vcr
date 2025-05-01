@@ -123,7 +123,7 @@
       [Cassette: "test"]   Replaying response 1
       [Cassette: "test"] Ejecting
     Code
-      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
+      use_cassette("test", httr::GET(hb("/404")))
     Output
       [Cassette: "test"] Inserting: loading 1 interactions from {dir}/test.yml
       [Cassette: "test"]   recording: FALSE
@@ -134,5 +134,7 @@
       [Cassette: "test"]       `matching$uri$path`: "/404" 
       [Cassette: "test"]       `recorded$uri$path`: "/html"
       [Cassette: "test"]   No matching requests
-      [Cassette: "test"] Ejecting
+    Condition
+      Error:
+      ! Failed to match request.
 
