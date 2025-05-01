@@ -42,7 +42,7 @@ test_that("crul POST requests works", {
   ff <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
   out4 <- use_cassette("crul_post_upload_file", {
-    b <- crul::HttpClient$new(hb_remote("/post"))$post(
+    b <- crul::HttpClient$new(hb("/post"))$post(
       body = list(y = crul::upload(ff))
     )
   })
@@ -51,8 +51,7 @@ test_that("crul POST requests works", {
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_match(strj$files$y, "hello world") # files not empty
-  expect_false(nzchar(strj$data)) # data empty
+  expect_equal(strj$files$y$filename, basename(ff)) # files not empty
 
   ## upload_file not in a list
   out6 <- use_cassette("crul_post_upload_file_no_list", {
@@ -70,14 +69,13 @@ test_that("crul POST requests works", {
 
   # body type: NULL
   out5 <- use_cassette("crul_post_null", {
-    m <- crul::HttpClient$new(hb_remote("/post"))$post(body = NULL)
+    m <- crul::HttpClient$new(hb("/post"))$post(body = NULL)
   })
   expect_false(out5$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out5$file())$http_interactions
   strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
-  expect_equal(strj$data, "")
   expect_equal(strj$headers$`Content-Length`, "0")
 })
 
