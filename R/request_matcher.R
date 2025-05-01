@@ -29,7 +29,7 @@ make_comparison <- function(matches, req) {
 
   compact(list(
     method = if ("method" %in% matches) req$method,
-    body = if ("body" %in% matches) req$body,
+    body = if ("body" %in% matches) normalize_body(req$body),
     body = if ("body_json" %in% matches) try_json(req$body),
     headers = if ("headers" %in% matches) req$headers,
     uri = if (needs_uri) uri,
@@ -37,6 +37,20 @@ make_comparison <- function(matches, req) {
     path = if ("path" %in% matches) uri$path,
     query = if ("query" %in% matches) uri$params
   ))
+}
+
+try_json <- function(x) {
+  tryCatch(jsonlite::parse_json(x), error = function(e) x)
+}
+
+normalize_body <- function(body) {
+  if (!is.list(body)) {
+    return(body)
+  }
+
+  is_file <- vapply(body, \(f) inherits(f, "form_file"), logical(1))
+  body[is_file] <- lapply(body[is_file], unclass)
+  body
 }
 
 normalize_uri <- function(x, drop_port = TRUE) {
@@ -60,8 +74,4 @@ normalize_uri <- function(x, drop_port = TRUE) {
     parsed$params <- NULL
   }
   compact(parsed)
-}
-
-try_json <- function(x) {
-  tryCatch(jsonlite::parse_json(x), error = function(e) x)
 }

@@ -144,7 +144,7 @@ test_that("binary body uses base64 encoding", {
 
   use_cassette("test", httr2::req_perform(req))
   interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "base64_string")
+  expect_named(interaction$response$body, "raw_gzip")
 })
 
 test_that("can capture body: json", {

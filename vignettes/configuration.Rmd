@@ -28,9 +28,145 @@ vcr configuration
 library("vcr")
 ```
 
-```{r child='../man/rmdhunks/configuration-vignette.Rmd', eval=TRUE} 
+
+```{r}
+library("vcr")
 ```
 
-## More documentation
+You can also get the default configuration variables via `vcr_config_defaults()`
 
-Check out the [http testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`
+```{r}
+vcr_config_defaults()
+```
+
+These defaults are set when you load `vcr` - you can override any of them as described below.
+
+## Set configuration variables
+
+Use `vcr_configure()` to set configuration variables.
+
+For example, set a single variable:
+
+```{r}
+vcr_configure(
+  dir = "foobar/vcr_cassettes"
+)
+```
+
+Or many at once:
+
+```{r}
+vcr_configure(
+  dir = "foobar/vcr_cassettes",
+  record = "all"
+)
+```
+
+## Re-set to defaults
+
+```{r}
+vcr_configure_reset()
+```
+
+## Details on some of the config options
+
+### dir
+
+Directory where cassettes are stored
+
+```{r}
+vcr_configure(dir = "new/path")
+```
+
+### record
+
+The record mode
+
+One of: 'all', 'none', 'new_episodes', 'once'. See `?recording` for info on the options
+
+```{r}
+vcr_configure(record = "new_episodes")
+```
+
+### match_requests_on
+
+Customize how `vcr` matches requests
+
+```{r}
+vcr_configure(match_requests_on = c('query', 'headers'))
+```
+
+### allow_unused_http_interactions
+
+Allow HTTP connections when no cassette
+
+Default is `TRUE`, and thus does not error when http interactions are unused. You
+can set to `FALSE` in which case vcr errors when a cassette is ejected and
+not all http interactions have been used.
+
+```{r}
+vcr_configure(allow_unused_http_interactions = FALSE)
+```
+
+### serialize_with
+
+Which serializer to use: "yaml" or "json". Note that you can have
+multiple cassettes with the same name as long as they use different
+serializers; so if you only want one cassette for a given cassette name,
+make sure to not switch serializers, or clean up files you no longer need.
+
+```{r}
+vcr_configure(serialize_with = "yaml")
+```
+
+### ignoring some requests
+
+**ignore_hosts**
+
+Specify particular hosts to ignore. By ignore, we mean that
+real HTTP requests to the ignored host will be allowed to occur, while
+all others will not.
+
+```{r}
+vcr_configure(ignore_hosts = "google.com")
+```
+
+**ignore_localhost**
+
+Ignore all localhost requests
+
+```{r}
+vcr_configure(ignore_localhost = TRUE)
+```
+
+**ignore_request**
+
+THIS DOESN'T WORK YET
+
+**How to ignore requests**
+
+For ignoring requests, you can for example, have real http requests go through (ignored by `vcr`) while other requests are handled by `vcr`. For example, let's say you want requests to `google.com` to be ignored:
+
+```{r eval=FALSE}
+vcr_configure(ignore_hosts = "google.com")
+use_cassette("foo_bar", {
+  crul::HttpClient$new("https://httpbin.org/get")$get()
+  crul::HttpClient$new("https://google.com")$get()
+})
+```
+
+The request to httpbin.org will be handled by `vcr`, a cassette created for the request/response to that url, while the google.com request will be ignored and not cached at all.
+
+Note: ignoring requests only works for the `crul` package for now; it should work for `httr` and `httr2` in a later `vcr` version.
+
+### preserve_exact_body_bytes
+
+Some HTTP servers are not well-behaved and respond with invalid data. Set
+`preserve_exact_body_bytes` to `TRUE` to base64 encode the result body in
+order to preserve the bytes exactly as-is. `vcr` does not do this by
+default, since base64-encoding the string removes the human readability
+of the cassette.
+
+```{r}
+vcr_configure(preserve_exact_body_bytes = TRUE)
+```
