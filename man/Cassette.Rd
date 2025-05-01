@@ -77,7 +77,6 @@ be recorded back to file}
 \item \href{#method-Cassette-new}{\code{Cassette$new()}}
 \item \href{#method-Cassette-insert}{\code{Cassette$insert()}}
 \item \href{#method-Cassette-eject}{\code{Cassette$eject()}}
-\item \href{#method-Cassette-write_recorded_interactions_to_disk}{\code{Cassette$write_recorded_interactions_to_disk()}}
 \item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
@@ -174,19 +173,6 @@ ejects the cassette
 
 \subsection{Returns}{
 self
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-write_recorded_interactions_to_disk"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-write_recorded_interactions_to_disk}{}}}
-\subsection{Method \code{write_recorded_interactions_to_disk()}}{
-write recorded interactions to disk
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$write_recorded_interactions_to_disk()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing returned
 }
 }
 \if{html}{\out{<hr>}}
