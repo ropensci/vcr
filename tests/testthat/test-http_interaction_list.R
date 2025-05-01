@@ -88,21 +88,3 @@ test_that("can add interactions", {
   interactions$add(req1, resp2)
   expect_equal(interactions$interactions[[1]]$response, resp2)
 })
-
-test_that("can add interactions", {
-  req1 <- vcr_request("GET", "http://a.com")
-  resp1 <- vcr_response(200, body = "a")
-  resp2 <- vcr_response(200, body = "b")
-
-  interactions <- HTTPInteractionList$new()
-
-  interactions$add(req1, resp1)
-  expect_equal(interactions$interactions[[1]]$request, req1)
-  expect_equal(interactions$interactions[[1]]$response, resp1)
-  # newly added interactions can not be replayed
-  expect_equal(interactions$replayable, FALSE)
-
-  # same request replaces response
-  interactions$add(req1, resp2)
-  expect_equal(interactions$interactions[[1]]$response, resp2)
-})
