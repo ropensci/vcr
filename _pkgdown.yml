@@ -6,10 +6,7 @@ reference:
       - vcr
       - vcr-package
   - title: "Configuration"
-    desc: >
-      Use use_vcr to get started
     contents:
-      - use_vcr
       - starts_with("vcr_config")
   - title: "Main functions"
     desc: >
