@@ -40,9 +40,7 @@ articles:
     desc: ~
     contents:
       - secrets
-      - cassette-manual-editing
       - configuration
       - debugging
-      - write-to-disk
       - internals
       - design
