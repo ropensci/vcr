@@ -21,7 +21,7 @@
       Error in `insert_cassette()`:
       ! vcr is turned off.
       i Use `turn_on()` to turn it back on.
-      i Or use `turn_off(ignore_cassettes = TRUE)` to cassettes completely.
+      i Or use `turn_off(ignore_cassettes = TRUE)` to ignore cassettes completely.
 
 # lightswitch env var handles varying inputs
 
