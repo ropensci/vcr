@@ -26,27 +26,21 @@
 #' inserted while vcr is turned off. If `TRUE` is passed, the cassette
 #' insertion will be ignored; otherwise an error will be raised.
 #' Default: `FALSE`
-#' @examples \dontrun{
-#' vcr_configure(dir = tempdir())
-#'
-#' turn_on()
+#' @examples
+#' # By default, vcr is turned on
 #' turned_on()
-#' turn_off()
 #'
-#' # turn off for duration of a block
-#' library(crul)
-#' turned_off({
-#'  res <- HttpClient$new(url = "https://hb.opencpu.org/get")$get()
-#' })
-#' res
-#'
-#' # turn completely off
+#' # you can turn off for the rest of the session
 #' turn_off()
-#' library(webmockr)
-#' crul::mock()
-#' # HttpClient$new(url = "https://hb.opencpu.org/get")$get(verbose = TRUE)
+#' turned_on()
+#' # turn on again
 #' turn_on()
-#' }
+#'
+#' # or just turn it on turn off temporarily
+#' turned_off({
+#'   # some HTTP requets here
+#'   turned_on()
+#' })
 turn_on <- function() {
   the$light_switch$on <- TRUE
   invisible()
