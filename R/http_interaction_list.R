@@ -67,7 +67,11 @@ HTTPInteractionList <- R6::R6Class(
     },
 
     n_replayable = function() {
-      sum(self$replayable)
+      if (self$allow_playback_repeats) {
+        self$length()
+      } else {
+        sum(self$replayable)
+      }
     },
 
     length = function() {

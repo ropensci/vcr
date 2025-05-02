@@ -165,6 +165,7 @@ Cassette <- R6::R6Class(
       self$http_interactions <- HTTPInteractionList$new(
         interactions = interactions,
         request_matchers = self$match_requests_on,
+        allow_playback_repeats = self$allow_playback_repeats,
         replayable = self$record != "all"
       )
 

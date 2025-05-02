@@ -82,3 +82,27 @@ test_that("important interactions are logged", {
         gsub(dir, "{dir}", x = _, fixed = TRUE)
   )
 })
+
+test_that("can allow for repeated playback", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  use_cassette("test", httr::GET(hb("/html")))
+
+  expect_error(
+    use_cassette("test", {
+      resp1 <- httr::GET(hb("/html"))
+      resp2 <- httr::GET(hb("/html"))
+    }),
+    class = "vcr_unhandled"
+  )
+
+  use_cassette(
+    "test",
+    {
+      resp1 <- httr::GET(hb("/html"))
+      resp2 <- httr::GET(hb("/html"))
+    },
+    allow_playback_repeats = TRUE
+  )
+  expect_equal(resp1, resp2)
+})
