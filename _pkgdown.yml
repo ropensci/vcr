@@ -40,7 +40,6 @@ articles:
     desc: ~
     contents:
       - secrets
-      - cassette-manual-editing
       - configuration
       - debugging
       - lightswitch
