@@ -24,8 +24,8 @@ re we'll use httr2 for generating the requests. The same principles apply if you
 
 ```{r setup}
 library(vcr)
-library(httr2)
 library(testthat)
+library(httr2, warn.conflicts = FALSE)
 
 httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 httpbin$url()
@@ -89,6 +89,7 @@ Sometimes it also makes sense to manually edit the cassettes. Manually editing i
 
 ### Request matching
  
+By default, looks for matching requests using just the HTTP method and the uri. If you are submitting data in the body, you will also want to match on that. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will pass the body as JSON 
 
 ### Writing to disk
 
