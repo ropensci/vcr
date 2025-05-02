@@ -39,8 +39,6 @@ to make a complete \code{crul} HTTP response object
 
 \item{\code{record}}{(character) record mode}
 
-\item{\code{recorded_at}}{(character) date/time recorded at}
-
 \item{\code{serialize_with}}{(character) serializer to use (yaml|json)}
 
 \item{\code{serializer}}{(character) serializer to use (yaml|json)}
@@ -81,7 +79,7 @@ be recorded back to file}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
 \item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
-\item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
+\item \href{#method-Cassette-remove_outdated_interactions}{\code{Cassette$remove_outdated_interactions()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
@@ -234,12 +232,12 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-should_re_record"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-should_re_record}{}}}
-\subsection{Method \code{should_re_record()}}{
+\if{html}{\out{<a id="method-Cassette-remove_outdated_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-remove_outdated_interactions}{}}}
+\subsection{Method \code{remove_outdated_interactions()}}{
 Should re-record interactions?
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$should_re_record()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$remove_outdated_interactions()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
