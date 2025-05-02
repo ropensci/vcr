@@ -102,7 +102,7 @@ vcr_turned_off <- function(error_call = caller_env()) {
       c(
         "vcr is turned off.",
         i = "Use {.fun turn_on} to turn it back on.",
-        i = "Or use {.code turn_off(ignore_cassettes = TRUE)} to cassettes completely."
+        i = "Or use {.code turn_off(ignore_cassettes = TRUE)} to ignore cassettes completely."
       ),
       call = error_call
     )
