@@ -33,6 +33,7 @@
 #'   * `path`: the **path** component of the URI.
 #'   * `query`: the **query** component of the URI.
 #'   * `body`: the request body.
+#'   * `body_json`: the request body, parsed as JSON.
 #'   * `header`: all request headers.
 #'
 #'   If more than one is specified, all components must match in order for the

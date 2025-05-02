@@ -15,7 +15,7 @@
       local_cassette("test", NULL, match_requests_on = "xxx")
     Condition
       Error in `local_cassette()`:
-      ! `match_requests_on` must be one of "method", "uri", "headers", "host", "path", "body", or "query", not "xxx".
+      ! `match_requests_on` must be one of "method", "uri", "headers", "host", "path", "body", "body_json", or "query", not "xxx".
     Code
       local_cassette("text", NULL, preserve_exact_body_bytes = "xxx")
     Condition

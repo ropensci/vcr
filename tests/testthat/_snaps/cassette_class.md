@@ -48,7 +48,7 @@
       [Cassette: "test"]   looking for existing requests using method/uri
       [Cassette: "test"]   match: GET {httpbin}/html
       [Cassette: "test"]   matched response 1
-      [Cassette: "test"] Ejecting: writing 0 interactions
+      [Cassette: "test"] Ejecting
     Code
       try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
     Output
@@ -63,5 +63,5 @@
       [Cassette: "test"]   `matching$uri$path`: "/404" 
       [Cassette: "test"]   `recorded$uri$path`: "/html"
       [Cassette: "test"]   no matching requests
-      [Cassette: "test"] Ejecting: writing 0 interactions
+      [Cassette: "test"] Ejecting
 

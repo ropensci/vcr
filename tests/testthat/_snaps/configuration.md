@@ -9,7 +9,7 @@
       vcr_configure(match_requests_on = "x")
     Condition
       Error:
-      ! `value` must be one of "method", "uri", "headers", "host", "path", "body", or "query", not "x".
+      ! `value` must be one of "method", "uri", "headers", "host", "path", "body", "body_json", or "query", not "x".
 
 # filter_sensitive data strips quotes with message
 

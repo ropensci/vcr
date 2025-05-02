@@ -22,7 +22,16 @@ check_request_matchers <- function(
   if (is.null(x)) {
     return()
   }
-  vals <- c("method", "uri", "headers", "host", "path", "body", "query")
+  vals <- c(
+    "method",
+    "uri",
+    "headers",
+    "host",
+    "path",
+    "body",
+    "body_json",
+    "query"
+  )
   arg_match(
     x,
     vals,
