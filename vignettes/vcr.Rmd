@@ -1,10 +1,8 @@
 ---
-title: "Introduction to vcr"
-author: "Scott Chamberlain"
-date: "`r Sys.Date()`"
+title: "Getting started with vcr"
 output: html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to vcr}
+  %\VignetteIndexEntry{Getting started with vcr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,55 +10,85 @@ vignette: >
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
 	comment = "#>",
-	collapse = TRUE,
-	warning = FALSE,
-	message = FALSE,
-  eval = FALSE
+	collapse = TRUE
 )
 ```
-
 
 {vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr} and {httr2}. 
 
 The central metaphor of vcr is a video **cassette**. This is what records your HTTP **interactions**, the pairs of HTTP request and response. You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done.
 
-
 This vignette will introduce you to the basics of vcr. If you have bigger questions remaining after reading it, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on vcr, webmockr, crul, and more.
 
-## vcr in tests
+re we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
+
+```{r setup}
+library(vcr)
+library(httr2)
+library(testthat)
+
+httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
+httpbin$url()
+```
+
+```{r}
+#| include: false
+vcr_configure(dir = "_vcr")
+```
+
+## Tests
+
+We'll first discuss how to use vcr in tests, because this is the most common application. 
 
 ### Getting started
 
 To use vcr in a test, include a call to `vcr::local_cassette()`:
 
-```r
+```{r}
 test_that("my test", {
-  vcr::local_cassette("rl_citation")
-  aa <- rl_citation()
+  vcr::local_cassette("get")
+  
+  req <- request(httpbin$url("/get"))
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
 
-  expect_type(aa, "character")
-  expect_match(aa, "IUCN")
-  expect_match(aa, "www.iucnredlist.org")
+  expect_named(json, c("args", "headers", "origin", "path", "url"))
 })
 ```
 
 The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`. Then in the second and subsequent runs, it will replay those responses, meaning that you test will now run independently of the internet, making it both faster and more realiable.
 
-You can see exactly what's happening in a test by using `local_vcr_configure_log()`. Learn more in `vignette("debugging")`.
+You can see exactly what's happening in a test by using `local_vcr_configure_log()`. In this case, since it's the second run of the test you can see that it loads the previously saved interaction and replay its.
+
+```{r}
+test_that("my test", {
+  vcr::local_vcr_configure_log(file = stdout())
+  vcr::local_cassette("get")
+  
+  req <- request(httpbin$url("/get"))
+  resp <- req_perform(req)
+  json <- resp_body_json(resp)
+
+  expect_named(json, c("args", "headers", "origin", "path", "url"))
+})
+```
+
+You can learn more about logging and how to use it to debug cases where vcr behaves unexpectedly in `vignette("debugging")`.
 
 ### Cassette files
 
-It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. 
+It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. Here's the cassette we created above:
 
-And helps you identify if you're leaking any private information.
+```{r}
+writeLines(readLines("_vcr/get.yml"))
+```
 
-TODO: insert YAML here.
+You can see that it records all components of the request and response, as well as when the request was made. The first time you use vcr with your package, it's a really good idea to closely look at this file to make sure that you aren't accidentally leaking any private information. Learn more about what vcr does by default and how you can customise in `vignette("secrets")`.
 
-It will also come in handy if you ever need to edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
+Sometimes it also makes sense to manually edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
 
 ### Request matching
-
-How does it work?
+ 
 
 ### Writing to disk
 
@@ -95,42 +123,6 @@ out$parse()
 
 This also works with `httr`. The only difference is that you write to disk
 with a function `httr::write_disk(path)` rather than a parameter.
-
-Note that when you write to disk when using `vcr`, the cassette is slightly
-changed. Instead of holding the http response body itself, the cassette
-has the file path with the response body.
-
-```yaml
-http_interactions:
-- request:
-    method: get
-    uri: https://httpbin.org/get
-  response:
-    headers:
-      status: HTTP/1.1 200 OK
-      access-control-allow-credentials: 'true'
-    body:
-      encoding: UTF-8
-      file: yes
-      string: /private/var/folders/fc/n7g_vrvn0sx_st0p8lxb3ts40000gn/T/Rtmp5W4olr/files/file177e2e5d97ec.json
-```
-
-And the file has the response body that otherwise would have been in the `string`
-yaml field above:
-
-```json
-{
-  "args": {}, 
-  "headers": {
-    "Accept": "application/json, text/xml, application/xml, */*", 
-    "Accept-Encoding": "gzip, deflate", 
-    "Host": "httpbin.org", 
-    "User-Agent": "libcurl/7.54.0 r-curl/4.3 crul/0.9.0"
-  }, 
-  "origin": "24.21.229.59, 24.21.229.59", 
-  "url": "https://httpbin.org/get"
-}
-```
 
 ## Vignettes
 
