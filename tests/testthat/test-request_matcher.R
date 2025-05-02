@@ -88,6 +88,18 @@ test_that("query params are filtered", {
   )
 })
 
+test_that("json_body ignores representation", {
+  req1 <- list(body = '{"foo": "bar"}')
+  req2 <- list(body = '{"foo":     "bar"}')
+
+  expect_equal(
+    make_comparison("body_json", req1),
+    list(body = list(foo = "bar"))
+  )
+
+  expect_true(request_matches(req1, req2, "body_json"))
+})
+
 # End to end tests -------------------------------------------------------------
 
 test_that("can match empty bodies", {

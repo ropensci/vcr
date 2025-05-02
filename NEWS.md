@@ -17,6 +17,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* New `body_json` request matcher that compares the parsed JSON. This both ignores differences in the textual representation of the JSON and gives more informative messages when requests don't match. (#421)
 * Raw bodies are now automatically gzipped before being converted to base64 (#343).
 * The default path is now `tests/testthat/_vcr`. This should not affect existing packages that used `use_vcr()` because these set up a helper that sets the default directory with `vcr_configure()` (#395).
 * `local_vcr_configure()` allows you to temporarily affect vcr configuration.
