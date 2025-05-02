@@ -14,7 +14,7 @@
       Cassette$new("test", match_requests_on = "x")
     Condition
       Error:
-      ! 1 or more 'match_requests_on' values (x) is not in the allowed set: method, uri, headers, host, path, body, query
+      ! 1 or more 'match_requests_on' values (x) is not in the allowed set: method, uri, headers, host, path, body, body_json, query
     Code
       Cassette$new("test", serialize_with = "howdy")
     Condition

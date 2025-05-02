@@ -15,7 +15,16 @@ assert <- function(x, y) {
 }
 
 check_request_matchers <- function(x) {
-  mro <- c("method", "uri", "headers", "host", "path", "body", "query")
+  mro <- c(
+    "method",
+    "uri",
+    "headers",
+    "host",
+    "path",
+    "body",
+    "body_json",
+    "query"
+  )
   if (!all(x %in% mro)) {
     stop(
       "1 or more 'match_requests_on' values (",
