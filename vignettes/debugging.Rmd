@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 vcr::vcr_configure(dir = ".")
+
+setHook("rmarkdown.onKnitCompleted", \(...) unlink(dir(pattern = "\\.yml$")))
 ```
 
 This vignette helps you debug the vcr error that you're most likely to encounter: "An HTTP request has been made that vcr does not know how to handle". If you're lucky the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂. Otherwise, you'll need to do some debugging.
@@ -111,8 +113,89 @@ local({
 })
 ```
 
+You'll notice that this is substantially more complicated to understand, and you can imagine it only gets harder the more requests you have. That's a good reason to keep your tests small and simple, and limited to only a couple of requests.
+
+## Solutions
+
+Now that you understand how to use logging to see exactly what vcr is doing, we can talk about some solutions to common problems.
+
+### Replaying requests
+
+What happens if you make the same request multiple times in a single cassette?
+
 ```{r}
-#| include: false
-unlink("debugging-1.yml")
-unlink("debugging-2.yml")
+local({
+  local_cassette("debugging-3")
+
+  resp1 <- req_perform(request(httpbin$url("/get")))
+  resp2 <- req_perform(request(httpbin$url("/get")))
+})
 ```
+
+On replay, the second request will fail because my default, vcr does not allow you to replay the same request multiple times:
+
+```{r}
+#| error: true
+local({
+  local_vcr_configure_log(file = stdout())
+  local_cassette("debugging-3")
+
+  resp1 <- req_perform(request(httpbin$url("/get")))
+  resp2 <- req_perform(request(httpbin$url("/get")))
+})
+```
+
+You can resolve that problem by setting `allow_playback_repeats = TRUE`;
+```{r}
+#| error: true
+local({
+  local_vcr_configure_log(file = stdout())
+  local_cassette("debugging-3", allow_playback_repeats = TRUE)
+
+  resp1 <- req_perform(request(httpbin$url("/get")))
+  resp2 <- req_perform(request(httpbin$url("/get")))
+})
+```
+
+### Non-determinstic requests
+
+Sometimes it's not possible to make the same request again and again. For example, in some cases an API will require a "nonce", a random string used to ensure that every request is unique:
+
+```{r}
+#| error: true
+make_request <- function() {
+  nonce <- paste0(sample(letters, 10, replace = TRUE), collapse = "")
+
+  req <- request(httpbin$url("/get")) 
+  req <- req_url_query(req, nonce = nonce)
+  req_perform(req)
+}
+
+local({ 
+  local_cassette("nondeterministic")
+  
+  resp <- make_request()
+})
+
+local({ 
+  local_vcr_configure_log(file = stdout())
+  local_cassette("nondeterministic")
+  
+  resp <- make_request()
+})
+```
+
+You can solve this problem by trimming that component from the query string using the `filter_query_parameters` option. This will remove the specific query parameter names from the uri being matched.
+
+```{r}
+local({ 
+  local_vcr_configure_log(file = stdout())
+  local_vcr_configure(filter_query_parameters = "nonce")
+  local_cassette("nondeterministic")
+  
+  resp <- make_request()
+})
+```
+
+In the less common case where you're matching on headers, you can use the `filter_request_headers` configuration to achieve the same effect.
+
