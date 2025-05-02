@@ -114,7 +114,7 @@
       [Cassette: "test"]   looking for existing requests using method/uri
       [Cassette: "test"]   no matching requests
       [Cassette: "test"]   recording response: 200 with 1443 bytes of text/html data
-      [Cassette: "test"] Ejecting: writing 1 interactions
+      [Cassette: "test"] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output

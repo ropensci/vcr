@@ -8,7 +8,11 @@ test_that("can generate all three types of response", {
 
   use_cassette("test", resp_replay <- httr2::req_perform(req))
   local_vcr_configure(ignore_localhost = TRUE)
-  use_cassette("test", resp_ignore <- httr2::req_perform(req))
+  use_cassette(
+    "test",
+    resp_ignore <- httr2::req_perform(req),
+    warn_on_empty = FALSE
+  )
 
   compare <- function(resp) {
     resp$request <- NULL
