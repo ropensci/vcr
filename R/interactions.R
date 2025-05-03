@@ -1,5 +1,5 @@
-HTTPInteractionList <- R6::R6Class(
-  'HTTPInteractionList',
+Interactions <- R6::R6Class(
+  'Interactions',
   public = list(
     interactions = NULL,
     replayable = logical(),
