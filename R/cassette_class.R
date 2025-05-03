@@ -136,7 +136,7 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      if (self$is_empty()) {
+    if (self$is_empty()) {
         interactions <- list()
       } else {
         interactions <- self$serializer$deserialize()$http_interactions
