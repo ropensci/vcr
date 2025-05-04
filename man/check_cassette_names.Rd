@@ -22,11 +22,9 @@ by default)}
 \item{allowed_duplicates}{(character) cassette names that can be duplicated}
 }
 \description{
-This function is meant to be run during your tests, from a
-\href{https://testthat.r-lib.org/reference/test_dir.html#special-files}{\verb{helper-*.R} file}
-inside the \code{tests/testthat} directory.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-It only checks that cassette names are not duplicated. Note that if you do
-need to have duplicated cassette names you can do so by using the
-\code{allowed_duplicates} parameter in \code{check_cassette_names()}.
+This function has been deprecated because it's not possible for it to
+detect re-used cassette names 100\% correctly and the problem of duplicated
+cassette names relatively easy to debug by hand.
 }

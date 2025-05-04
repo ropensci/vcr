@@ -2,7 +2,6 @@ test_that("use_cassette w/ request that writes to disk: crul", {
   local_vcr_configure()
 
   dir <- make_pkg()
-  res <- use_vcr(dir, verbose = FALSE)
   dir_create(file.path(dir, "tests/fixtures"))
   dir_create(file.path(dir, "tests/files"))
   strg <- 'ffff <- function() {
@@ -21,8 +20,7 @@ test_that("use_cassette w/ request that writes to disk: crul", {
 invisible(vcr_configure(
   dir = "../fixtures",
   write_disk_path = "../files"
-))
-vcr::check_cassette_names()'
+))'
   cat(z, file = file.path(dir, "tests/testthat/helper-rabbit.R"))
 
   file_string <- '{

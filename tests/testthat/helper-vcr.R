@@ -20,6 +20,7 @@ make_pkg <- function(frame = parent.frame()) {
 
   dir_create(file.path(dir, "man"))
   dir_create(file.path(dir, "R"))
+  dir_create(file.path(dir, "tests", "testthat"))
   cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
 
   dir

@@ -40,7 +40,8 @@ Imports:
     webmockr (>= 0.8.0),
     waldo,
     withr,
-    yaml
+    yaml,
+    lifecycle
 Suggests:
     crayon,
     crul (>= 0.8.4),

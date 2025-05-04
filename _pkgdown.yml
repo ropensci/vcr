@@ -33,7 +33,6 @@ reference:
       - cassette_path
       - cassettes
       - current_cassette
-      - check_cassette_names
 
 articles:
   - title: All vignettes
