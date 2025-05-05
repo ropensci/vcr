@@ -79,7 +79,7 @@ vcr_log_sprintf <- function(message, ...) {
   }
 
   if (cassette_active()) {
-    cassette_name <- paste0('"', current_cassette()$name, '"')
+    cassette_name <- current_cassette()$name
   } else {
     cassette_name <- "<none>"
   }
