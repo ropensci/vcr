@@ -188,15 +188,13 @@ is_body_empty <- function(x) {
 }
 
 save_file <- function(path) {
-  if (is.null(vcr_c$write_disk_path)) {
-    cli::cli_abort(c(
-      "`write_disk_path` must be set when writing to disk.",
-      i = "See ?vcr_configure for details."
-    ))
+  basepath <- vcr_c$write_disk_path
+  if (is.null(basepath)) {
+    basepath <- file.path(vcr_c$dir, paste0(current_cassette()$name, "-files"))
   }
-  dir_create(vcr_c$write_disk_path)
-  out_path <- file.path(vcr_c$write_disk_path, basename(path))
+  dir_create(basepath)
 
+  out_path <- file.path(basepath, basename(path))
   file.copy(path, out_path, overwrite = TRUE)
   out_path
 }

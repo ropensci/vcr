@@ -67,6 +67,7 @@ determine which recorded HTTP interaction to replay. Possible values are:
 \item \code{path}: the \strong{path} component of the URI.
 \item \code{query}: the \strong{query} component of the URI.
 \item \code{body}: the request body.
+\item \code{body_json}: the request body, parsed as JSON.
 \item \code{header}: all request headers.
 }
 

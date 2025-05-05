@@ -1,19 +1,20 @@
-HTTPInteractionList <- R6::R6Class(
-  'HTTPInteractionList',
+Interactions <- R6::R6Class(
+  'Interactions',
   public = list(
     interactions = NULL,
-    used = logical(),
+    replayable = logical(),
 
     request_matchers = NULL,
     allow_playback_repeats = FALSE,
 
     initialize = function(
-      interactions,
+      interactions = list(),
       request_matchers = c("method", "uri"),
-      allow_playback_repeats = FALSE
+      allow_playback_repeats = FALSE,
+      replayable = TRUE
     ) {
       self$interactions <- interactions
-      self$used <- rep(FALSE, length(interactions))
+      self$replayable <- rep(replayable, length(interactions))
 
       self$request_matchers <- request_matchers
       self$allow_playback_repeats <- allow_playback_repeats
@@ -24,7 +25,7 @@ HTTPInteractionList <- R6::R6Class(
       allow_playback <- allow_playback %||% self$allow_playback_repeats
 
       for (i in seq_along(self$interactions)) {
-        if (self$used[[i]] && !allow_playback) {
+        if (!self$replayable[[i]] && !allow_playback) {
           next
         }
 
@@ -36,24 +37,41 @@ HTTPInteractionList <- R6::R6Class(
       return(NA_integer_)
     },
 
+    add = function(request, response) {
+      idx <- self$find_request(request, allow_playback = TRUE)
+      if (is.na(idx)) {
+        idx <- length(self$interactions) + 1
+      }
+
+      interaction <- vcr_interaction(request, response)
+      self$interactions[[idx]] <- interaction
+      self$replayable[[idx]] <- FALSE # don't allow playback for new interactions
+
+      interaction
+    },
+
     # Returns response
     response_for = function(i) {
-      self$used[[i]] <- TRUE
+      self$replayable[[i]] <- FALSE
       self$interactions[[i]]$response
     },
 
     has_interaction = function(request) {
-      i <- self$find_request(request, allow_playback = TRUE)
-      !is.na(i)
+      idx <- self$find_request(request)
+      !is.na(idx)
     },
 
     has_used_interaction = function(request) {
-      i <- self$find_request(request, allow_playback = TRUE)
-      !is.na(i) && self$used[[i]]
+      idx <- self$find_request(request, allow_playback = TRUE)
+      !is.na(idx) && !self$replayable[[idx]]
     },
 
     remaining_unused_interaction_count = function() {
-      sum(!self$used)
+      sum(self$replayable)
+    },
+
+    length = function() {
+      length(self$interactions)
     }
   )
 )

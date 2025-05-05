@@ -20,7 +20,7 @@
       use_cassette("test", NULL, match_requests_on = "xxx")
     Condition
       Error:
-      ! 1 or more 'match_requests_on' values (xxx) is not in the allowed set: method, uri, headers, host, path, body, query
+      ! 1 or more 'match_requests_on' values (xxx) is not in the allowed set: method, uri, headers, host, path, body, body_json, query
     Code
       use_cassette("text", NULL, preserve_exact_body_bytes = "xxx")
     Condition

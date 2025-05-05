@@ -14,7 +14,7 @@
       Cassette$new("test", match_requests_on = "x")
     Condition
       Error:
-      ! 1 or more 'match_requests_on' values (x) is not in the allowed set: method, uri, headers, host, path, body, query
+      ! 1 or more 'match_requests_on' values (x) is not in the allowed set: method, uri, headers, host, path, body, body_json, query
     Code
       Cassette$new("test", serialize_with = "howdy")
     Condition
@@ -114,7 +114,7 @@
       [Cassette: "test"]   looking for existing requests using method/uri
       [Cassette: "test"]   no matching requests
       [Cassette: "test"]   recording response: 200 with 1443 bytes of text/html data
-      [Cassette: "test"] Ejecting: writing 1 interactions
+      [Cassette: "test"] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output
@@ -127,7 +127,7 @@
       [Cassette: "test"]   looking for existing requests using method/uri
       [Cassette: "test"]   match: GET {httpbin}/html
       [Cassette: "test"]   matched response 1
-      [Cassette: "test"] Ejecting: writing 0 interactions
+      [Cassette: "test"] Ejecting
     Code
       try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
     Output
@@ -142,5 +142,5 @@
       [Cassette: "test"]   `matching$uri$path`: "/404" 
       [Cassette: "test"]   `recorded$uri$path`: "/html"
       [Cassette: "test"]   no matching requests
-      [Cassette: "test"] Ejecting: writing 0 interactions
+      [Cassette: "test"] Ejecting
 
