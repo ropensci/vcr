@@ -49,7 +49,13 @@ insert_cassette <- function(
     warn_on_empty = warn_on_empty
   )
   cassette_push(cassette)
-  cassette$insert()
+  # $insert() might error if there's a bug in the decoder, so we need to
+  # make sure to unload it. We can't call `cassette_push()` after `$insert()`
+  # because it the active casssette name is used for logging.
+  withCallingHandlers(
+    cassette$insert(),
+    error = function(e) cassette_pop()
+  )
 
   invisible(cassette)
 }
