@@ -1,0 +1,31 @@
+http_interactions:
+- request:
+    method: GET
+    uri: http://127.0.0.1:60189/get
+    body:
+      string: ''
+    headers: []
+  response:
+    status: 200
+    headers:
+      Connection: close
+      Date: Mon, 05 May 2025 15:17:40 GMT
+      Content-Type: application/json
+      Content-Length: '270'
+      ETag: '"1c550832"'
+    body:
+      string: |-
+        {
+          "args": {},
+          "headers": {
+            "Host": "127.0.0.1:60189",
+            "User-Agent": "httr2/1.1.2 r-curl/6.2.2 libcurl/8.11.1",
+            "Accept": "*/*",
+            "Accept-Encoding": "deflate, gzip"
+          },
+          "origin": "127.0.0.1",
+          "path": "/get",
+          "url": "http://127.0.0.1:60189/get"
+        }
+  recorded_at: 2025-05-05 15:17:40
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

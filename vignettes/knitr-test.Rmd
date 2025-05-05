@@ -1,0 +1,30 @@
+---
+title: "cassette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cassette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(vcr)
+library(httr2)
+httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
+
+# Set record = "none" so that this vignette will fail if it doesn't replay
+# from the casssette
+vcr::register_chunk_hook(record = "none")
+```
+
+```{r}
+#| cassette: test
+req <- request(httpbin$url("/get"))
+req_perform(req)
+```
