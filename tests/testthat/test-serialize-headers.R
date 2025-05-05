@@ -9,124 +9,40 @@ test_that("by default, headers left unchanged", {
   expect_equal(encode_headers(headers, "response"), headers)
 })
 
-test_that("filter_headers/request/remove", {
+test_that("can remove headers on disk", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
-    match_requests_on = c("uri", "headers")
+    match_requests_on = c("method", "uri", "headers"),
+    filter_request_headers = "x"
   )
 
-  # request headers: remove only
-  # no header filtering to compare below stuff to
-  con <- crul::HttpClient$new(hb("/get"), headers = list(Foo = "bar"))
-  cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
-    res_nofilters <- con$get()
-  })
+  con <- crul::HttpClient$new(hb("/get"), headers = list(x = "live"))
+  use_cassette("test", res1 <- con$get())
+  expect_equal(res1$request_headers$x, "live")
 
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    filter_request_headers = c("Foo", "Accept")
-  )
-  con <- crul::HttpClient$new(hb("/get"), headers = list(Foo = "bar"))
-  cas1 <- use_cassette(name = "filterheaders_remove", {
-    res1 <- con$get()
-  })
-  cas2 <- use_cassette(name = "filterheaders_remove", {
-    res2 <- con$get()
-  })
+  interaction <- read_cassette("test.yml")$http_interactions[[1]]
+  expect_equal(interaction$request$headers$x, NULL)
 
-  # with no filtering, request headers have Foo
-  expect_true("Foo" %in% names(res_nofilters$request_headers))
-  # with filtering, request headers clearly have Foo on first request
-  expect_true("Foo" %in% names(res1$request_headers))
-  # with filtering, request headers have Foo on subsequent requests b/c
-  # header is being sent in request, so not filtered out of http
-  # response object
-  expect_true("Foo" %in% names(res2$request_headers))
-
-  # compare cassettes
-  yaml1 <- yaml::yaml.load_file(cas1$file())
-  yaml_no_filter <- yaml::yaml.load_file(cas_nofilters$file())
-  # Foo found in cassette w/o filtering
-  expect_true(
-    "Foo" %in% names(yaml_no_filter$http_interactions[[1]]$request$headers)
-  )
-  # User-Agent in cassette
-  expect_true(
-    "User-Agent" %in% names(yaml1$http_interactions[[1]]$request$headers)
-  )
-  # Accept in no filtered cassette
-  expect_false(
-    "Accept" %in% names(yaml1$http_interactions[[1]]$request$headers)
-  )
-  # Accept not in cassette w/o filters
-  expect_true(
-    "Accept" %in% names(yaml_no_filter$http_interactions[[1]]$request$headers)
-  )
-  # Accept-Encoding in both, not filtered in either
-  expect_true(
-    "Accept-Encoding" %in% names(yaml1$http_interactions[[1]]$request$headers)
-  )
-  expect_true(
-    "Accept-Encoding" %in%
-      names(yaml_no_filter$http_interactions[[1]]$request$headers)
-  )
-  # casette objects from both requests identical
-  expect_identical(
-    yaml::yaml.load_file(cas1$file()),
-    yaml::yaml.load_file(cas2$file())
-  )
+  use_cassette("test", res2 <- con$get())
+  expect_equal(res2$request_headers$x, "live")
 })
 
-test_that("filter_headers/request/replace", {
+test_that("can replace headers on disk", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
-    match_requests_on = c("method", "uri", "headers")
+    match_requests_on = c("method", "uri", "headers"),
+    filter_request_headers = list(x = "ondisk")
   )
 
-  # request headers: replace only
-  # no header filtering to compare below stuff to
-  con1 <- crul::HttpClient$new(
-    hb("/get"),
-    headers = list(Authorization = "mysecret")
-  )
-  cas_nofilters <- use_cassette(name = "filterheaders_no_filtering", {
-    res_nofilters <- con1$get()
-  })
-  # Do filtering
+  con <- crul::HttpClient$new(hb("/get"), headers = list(x = "live"))
+  use_cassette("test", res1 <- con$get())
+  expect_equal(res1$request_headers$x, "live")
 
-  local_vcr_configure(
-    filter_request_headers = list("Authorization" = "XXXXXXX")
-  )
-  cas_rep1 <- use_cassette(name = "filterheaders_replace", {
-    res <- con1$get()
-  })
-  cas_rep2 <- use_cassette(name = "filterheaders_replace", {
-    res2 <- con1$get()
-  })
+  interaction <- read_cassette("test.yml")$http_interactions[[1]]
+  expect_equal(interaction$request$headers$x, "ondisk")
 
-  # with or w/o filtering, request headers have Authorization="mysecret"
-  invisible(lapply(list(res_nofilters, res, res2), function(z) {
-    expect_equal(z$request_headers$Authorization, "mysecret")
-  }))
-
-  # compare cassettes
-  yaml1 <- yaml::yaml.load_file(cas_rep1$file())
-  yaml_no_filter <- yaml::yaml.load_file(cas_nofilters$file())
-  # "mysecret" found in cassette W/O filtering
-  expect_equal(
-    yaml_no_filter$http_interactions[[1]]$request$headers$Authorization,
-    "mysecret"
-  )
-  # "XXXXXXX" found in cassette WITH filtering
-  expect_equal(
-    yaml1$http_interactions[[1]]$request$headers$Authorization,
-    "XXXXXXX"
-  )
-  # casette objects from both requests identical
-  expect_identical(
-    yaml::yaml.load_file(cas_rep1$file()),
-    yaml::yaml.load_file(cas_rep2$file())
-  )
+  use_cassette("test", res2 <- con$get())
+  expect_equal(res2$request_headers$x, "live")
 })
 
 test_that("filter_headers doesn't add a header that doesn't exist", {
@@ -210,4 +126,18 @@ test_that("dedup_keys", {
   # we need it to work for this case or not?
   x <- list(b = "foo", c = list(a = 5, a = 6))
   expect_equal(dedup_keys(x), x)
+})
+
+
+test_that("Authorization is always redacted", {
+  expect_equal(
+    encode_headers(list(Authorization = "mysecret")),
+    list(Authorization = "<redacted>")
+  )
+
+  # And it's case insensitive
+  expect_equal(
+    encode_headers(list(AUTHORIZATION = "mysecret")),
+    list(AUTHORIZATION = "<redacted>")
+  )
 })
