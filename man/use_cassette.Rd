@@ -72,7 +72,11 @@ determine which recorded HTTP interaction to replay. Possible values are:
 }
 
 If more than one is specified, all components must match in order for the
-request to match. If not supplied, defaults to \code{c("method", "uri")}.}
+request to match. If not supplied, defaults to \code{c("method", "uri")}.
+
+Note that the request header and body will only be included in the
+cassette if  \code{match_requests_on} includes "header" or "body" respectively.
+This keeps the recorded request as lightweight as possible.}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.

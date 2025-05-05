@@ -60,6 +60,8 @@ bytes of the requests and responses}
 
 \item{\code{http_interactions}}{(list) internal use}
 
+\item{\code{new_interactions}}{(boolean) Have any interactions been recorded?}
+
 \item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
 be recorded back to file}
 
