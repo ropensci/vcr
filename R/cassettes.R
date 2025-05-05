@@ -28,17 +28,8 @@ insert_cassette <- function(
   clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 ) {
-  if (!turned_on()) {
-    if (!the$light_switch$ignore_cassettes) {
-      cli::cli_abort(c(
-        "vcr is turned off.",
-        i = "Use {.fun turn_on} to turn it back on.",
-        i = "Or use {.code turn_off(ignore_cassettes = TRUE)} to cassettes completely."
-      ))
-    } else {
-      # vcr is turned off and `ignore_cassettes=TRUE`, returns NULL
-      return(NULL)
-    }
+  if (vcr_turned_off()) {
+    return(invisible())
   }
   # enable webmockr
   webmockr::enable(quiet = TRUE)
