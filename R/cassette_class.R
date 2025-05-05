@@ -139,19 +139,14 @@ Cassette <- R6::R6Class(
     #' @return self
     insert = function() {
       if (!file.exists(self$file())) {
-        vcr_log_sprintf("Inserting: blank cassette")
-
+        vcr_log_sprintf("Inserting %s (new cassette)", self$file())
         self$new_cassette <- TRUE
         interactions <- list()
       } else {
         self$new_cassette <- FALSE
         interactions <- self$serializer$deserialize()$http_interactions
         n <- length(interactions)
-        vcr_log_sprintf(
-          "Inserting: loading %d interactions from %s",
-          n,
-          self$file()
-        )
+        vcr_log_sprintf("Inserting %s (%d interactions)", self$file(), n)
         interactions <- Filter(\(x) !should_be_ignored(x$request), interactions)
 
         if (self$clean_outdated_http_interactions) {
@@ -276,7 +271,7 @@ Cassette <- R6::R6Class(
     #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
-      vcr_log_sprintf("  recording response: %s", response_summary(response))
+      vcr_log_sprintf("  Recording response: %s", response_summary(response))
       local_vcr_configure_log(log = FALSE)
 
       self$new_interactions <- TRUE

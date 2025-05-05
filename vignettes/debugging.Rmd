@@ -1,6 +1,5 @@
 ---
 title: "Debugging your tests that use vcr"
-date: "`r Sys.Date()`"
 output: html_vignette
 vignette: >
   %\VignetteIndexEntry{4. vcr tests debugging}
@@ -14,16 +13,14 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 vcr::vcr_configure(dir = ".")
-
 setHook("rmarkdown.onKnitCompleted", \(...) unlink(dir(pattern = "\\.yml$")))
 ```
 
-This vignette helps you debug the vcr error that you're most likely to encounter: "An HTTP request has been made that vcr does not know how to handle". If you're lucky the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂. Otherwise, you'll need to do some debugging.
+This vignette helps you debug the vcr error that you're most likely to encounter: "An HTTP request has been made that vcr does not know how to handle". If you're lucky the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂. Otherwise, you'll need to do some debugging. 
 
-* The request has genuinely changed, and you need to re-record the cassette.
-* A new request doesn't match the previous request and you need to figure out why.
+This vignette will teach you how to identify and resolve the most common issues you'll encounter with vcr. First we'll talk about logging, and how you can use it to better understand vcr's request matching process. Then we'll work through the most common problems and identify their solutions.
 
-Here we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
+In this vignette, we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. We'll also start up a local httpbin server using {webfakes}: this will let us make some practice requests to a local server.
 
 ```{r setup}
 library(vcr)
@@ -32,17 +29,24 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 httpbin$url()
 ```
 
+```{r}
+#| include: false
+
+# Override default logging output so we don't need to explain the difference
+# between logging in vignettes and tests, and the reader can just copy and 
+# paste code
+local_vcr_configure_log <- function(..., frame = parent.frame()) {
+  vcr::local_vcr_configure_log(..., file = stdout(), frame = frame)
+}
+```
+
 ## Logging basics
 
-The best tool to understand why your request isn't match is vcr's logging. Here we'll introduce you to the basics, so you understand what's going on in simple cases. You can turn logging on for a single test with `local_vcr_configure_log()`. Normally that's all you need, but since we're inside a vignette here, we also need to set `file = stdout()`.
-
-### The first request
-
-Now lets look at what happens the first time you make a request:
+The best tool to understand why your request isn't matching is logging. You can turn logging on for a single test with `local_vcr_configure_log()`. Now lets look at what happens the first time you make a request:
 
 ```{r}
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-1")
 
   req <- request(httpbin$url("/get"))
@@ -50,7 +54,7 @@ local({
 })
 ```
 
-We can see a new cassettte gets inserted, and it will record new requests. Then it handles a request, recording it to disk. Finally the cassette is ejected.
+We can see a new cassettte gets inserted with recording turned on. Then it handles a request, recording it to disk. Finally the cassette is ejected.
 
 ### Second and subsequent requests
 
@@ -58,7 +62,7 @@ If we run that code another time, the flow is slightly different:
 
 ```{r}
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-1")
 
   req <- request(httpbin$url("/get"))
@@ -66,7 +70,7 @@ local({
 })
 ```
 
-It now loads the previous interactions from disk and it's no longer recording new requests. This time it matches the request to one that was saved earlier and replays the response.
+This time it loads one interaction from disk and it's no longer recording new requests. This time it matches the request to one that was saved earlier and replays the response.
 
 ### A match failure
 
@@ -74,9 +78,8 @@ We can now deliberately make a different request to see what happens. We'll leav
 
 ```{r}
 #| error: true
-
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-1")
 
   req <- request(httpbin$url("/get")) |> req_method("POST")
@@ -86,13 +89,29 @@ local({
 
 This time you can see vcr didn't find any matches because there was only one request, and that request (`recorded`) had a different method to the request we were trying to match.
 
+Or we could change the URL by adding a parameter:
+
+```{r}
+#| error: true
+local({
+  local_vcr_configure_log()
+  local_cassette("debugging-1")
+
+  req <- request(httpbin$url("/get?x=1"))
+  resp <- req_perform(req)
+})
+```
+
+vcr uses {waldo} to generate 
+
+
 ### Multiple requests
 
 Before we move on to specific scenarios, lets look at a case where we record multiple requests:
 
 ```{r}
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-2")
 
   resp1 <- req_perform(request(httpbin$url("/get?x=1")))
@@ -106,7 +125,7 @@ Now if we deliberately change the url, you can see that it looks at all three pr
 ```{r}
 #| error: true
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-2")
 
   resp4 <- req_perform(request(httpbin$url("/get?x=4")))
@@ -137,7 +156,7 @@ On replay, the second request will fail because my default, vcr does not allow y
 ```{r}
 #| error: true
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-3")
 
   resp1 <- req_perform(request(httpbin$url("/get")))
@@ -149,7 +168,7 @@ You can resolve that problem by setting `allow_playback_repeats = TRUE`;
 ```{r}
 #| error: true
 local({
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("debugging-3", allow_playback_repeats = TRUE)
 
   resp1 <- req_perform(request(httpbin$url("/get")))
@@ -178,7 +197,7 @@ local({
 })
 
 local({ 
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_cassette("nondeterministic")
   
   resp <- make_request()
@@ -189,7 +208,7 @@ You can solve this problem by trimming that component from the query string usin
 
 ```{r}
 local({ 
-  local_vcr_configure_log(file = stdout())
+  local_vcr_configure_log()
   local_vcr_configure(filter_query_parameters = "nonce")
   local_cassette("nondeterministic")
   
@@ -198,4 +217,3 @@ local({
 ```
 
 In the less common case where you're matching on headers, you can use the `filter_request_headers` configuration to achieve the same effect.
-

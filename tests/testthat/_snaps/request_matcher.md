@@ -24,4 +24,14 @@
       [Cassette: <none>]       `recorded$method`: "POST"
       [Cassette: <none>]       `matching$uri$path`: ""    
       [Cassette: <none>]       `recorded$uri$path`: "/foo"
+    Code
+      . <- request_matches(req1, req5)
+    Output
+      [Cassette: <none>]     Request 1: NO MATCH
+      [Cassette: <none>]       `matching$uri$params` is length 0
+      [Cassette: <none>]       `recorded$uri$params` is length 1
+      [Cassette: <none>]       `names(matching$uri$params)`:    
+      [Cassette: <none>]       `names(recorded$uri$params)`: "x"
+      [Cassette: <none>]       `matching$uri$params$x` is absent
+      [Cassette: <none>]       `recorded$uri$params$x` is a character vector ('1')
 
