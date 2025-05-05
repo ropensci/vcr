@@ -23,6 +23,7 @@ reference:
 articles:
   - title: All vignettes
     desc: ~
+    navbar: ~
     contents:
       - secrets
       - configuration
