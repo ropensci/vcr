@@ -17,6 +17,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
 * Writing files to disk now works with out any additional config. Files are saved in a directory called `{cassette-name}-files` inside of the casssette directory. You can override this default with `vrc_configure(write_disk_path)`.
 * New `body_json` request matcher that compares the parsed JSON. This both ignores differences in the textual representation of the JSON and gives more informative messages when requests don't match. (#421)
 * Raw bodies are now automatically gzipped before being converted to base64 (#343).

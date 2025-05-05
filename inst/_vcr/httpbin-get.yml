@@ -1,0 +1,24 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://httpbin.org/get
+    body:
+      string: ''
+    headers: []
+  response:
+    status: 200
+    headers:
+      date: Mon, 05 May 2025 21:52:58 GMT
+      content-type: application/json
+      content-length: '323'
+      server: gunicorn/19.9.0
+      access-control-allow-origin: '*'
+      access-control-allow-credentials: 'true'
+    body:
+      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"*/*\", \n
+        \   \"Accept-Encoding\": \"deflate, gzip\", \n    \"Host\": \"httpbin.org\",
+        \n    \"User-Agent\": \"httr2/1.1.2 r-curl/6.2.2 libcurl/8.11.1\", \n    \"X-Amzn-Trace-Id\":
+        \"Root=1-6819333a-3d833c165a5870126d63b4c0\"\n  }, \n  \"origin\": \"99.64.56.135\",
+        \n  \"url\": \"https://httpbin.org/get\"\n}\n"
+  recorded_at: 2025-05-05 21:52:58
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0
