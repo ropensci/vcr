@@ -110,7 +110,7 @@
       [Cassette: "test"]   allow_playback_repeats: FALSE
       [Cassette: "test"] Handling request: GET {httpbin}/html
       [Cassette: "test"]   recording response: 200 with 1443 bytes of text/html data
-      [Cassette: "test"] Ejecting: writing 1 interactions
+      [Cassette: "test"] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output

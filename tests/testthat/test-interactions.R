@@ -3,7 +3,7 @@ test_that("can find matching interations", {
   req2 <- vcr_request("GET", "http://b.com")
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
-  interactions <- HTTPInteractionList$new(list(
+  interactions <- Interactions$new(list(
     vcr_interaction(req1, resp1),
     vcr_interaction(req2, resp2)
   ))
@@ -20,7 +20,7 @@ test_that("handles non-matches", {
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
 
-  interactions <- HTTPInteractionList$new(list(
+  interactions <- Interactions$new(list(
     vcr_interaction(req1, resp1),
     vcr_interaction(req2, resp2)
   ))
@@ -36,7 +36,7 @@ test_that("response_for marks as used", {
   req2 <- vcr_request("GET", "http://b.com")
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
-  interactions <- HTTPInteractionList$new(list(
+  interactions <- Interactions$new(list(
     vcr_interaction(req1, resp1),
     vcr_interaction(req2, resp2)
   ))
@@ -58,7 +58,7 @@ test_that("can optionally replay", {
   req2 <- vcr_request("GET", "http://b.com")
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
-  interactions <- HTTPInteractionList$new(
+  interactions <- Interactions$new(
     list(
       vcr_interaction(req1, resp1),
       vcr_interaction(req2, resp2)
@@ -76,7 +76,7 @@ test_that("can add interactions", {
   resp1 <- vcr_response(200, body = "a")
   resp2 <- vcr_response(200, body = "b")
 
-  interactions <- HTTPInteractionList$new()
+  interactions <- Interactions$new()
 
   interactions$add(req1, resp1)
   expect_equal(interactions$interactions[[1]]$request, req1)

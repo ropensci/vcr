@@ -27,7 +27,20 @@ test_that("can decode v1 bodies", {
   )
 
   expect_equal(
+    decode_body(list(string = FALSE, file = FALSE)),
+    list(data = NULL, on_disk = FALSE)
+  )
+
+  expect_equal(
     decode_body(list(base64_string = "YWJjZGVm")),
     list(data = charToRaw("abcdef"), on_disk = FALSE)
   )
+})
+
+test_that("warns about v1 bodies with a string that's base64", {
+  local_cassette("test", warn_on_empty = FALSE)
+
+  body <- list(string = to_base64("hello world"), file = FALSE)
+  expect_snapshot(out <- decode_body(body, preserve_bytes = TRUE))
+  expect_equal(out$data, charToRaw("hello world"))
 })

@@ -1,5 +1,5 @@
-HTTPInteractionList <- R6::R6Class(
-  'HTTPInteractionList',
+Interactions <- R6::R6Class(
+  'Interactions',
   public = list(
     interactions = NULL,
     replayable = logical(),
@@ -30,7 +30,7 @@ HTTPInteractionList <- R6::R6Class(
         }
 
         request_i <- self$interactions[[i]]$request
-        if (request_matches(request, request_i, self$request_matchers, i)) {
+        if (request_matches(request, request_i, self$request_matchers)) {
           return(i)
         }
       }
@@ -68,7 +68,7 @@ HTTPInteractionList <- R6::R6Class(
 
     n_replayable = function() {
       if (self$allow_playback_repeats) {
-        self$length()
+        length(self$interactions)
       } else {
         sum(self$replayable)
       }

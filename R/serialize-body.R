@@ -19,7 +19,11 @@ encode_body <- function(body, file = FALSE, preserve_bytes = FALSE) {
 
 decode_body <- function(body, preserve_bytes = FALSE) {
   if (has_name(body, "string") && preserve_bytes) {
-    warning("re-record cassettes using 'preserve_exact_body_bytes = TRUE'")
+    name <- current_cassette()$name
+    cli::cli_warn(
+      "{.str {name}} cassette uses outdated encoding. Please rerecord it."
+    )
+    body$string <- from_base64(body$string)
   }
 
   if (has_name(body, "on_disk")) {
@@ -29,7 +33,12 @@ decode_body <- function(body, preserve_bytes = FALSE) {
     # a `string` body giving the path.
     list(data = body$string, on_disk = TRUE)
   } else if (has_name(body, "string")) {
-    list(data = decode_sensitive(body$string), on_disk = FALSE)
+    if (isFALSE(body$string)) {
+      # v1 encoding
+      list(data = NULL, on_disk = FALSE)
+    } else {
+      list(data = decode_sensitive(body$string), on_disk = FALSE)
+    }
   } else if (length(body) == 0) {
     list(data = NULL, on_disk = FALSE)
   } else if (has_name(body, "fields")) {

@@ -42,6 +42,4 @@ articles:
       - secrets
       - configuration
       - debugging
-      - lightswitch
-      - internals
       - design
