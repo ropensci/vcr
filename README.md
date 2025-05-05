@@ -26,8 +26,14 @@ your package. {vcr} works with {crul}, {httr} and {httr2}.
 ## Installation
 
 ``` r
-# Instal the latest version from CRAN
+# Install the latest version from CRAN
 install.packages("vcr")
+
+# Or from R-universe
+install.packages(
+  "vcr",
+  repos = c("https://ropensci.r-universe.dev", "https://cloud.r-project.org")
+)
 
 # Or the get development version from GitHub:
 # install.packages("pak")
@@ -49,7 +55,7 @@ test_that("can retrieve current version", {
 })
 ```
 
-The first argument to `local_casette()` is the cassette name: it’s used
+The first argument to `local_cassette()` is the cassette name: it’s used
 to name the cassette file so needs to be unique across tests. In this
 case, running the above test will generate
 `tests/testthat/_vcr/rl_version.yaml` which looks something like this:
