@@ -66,7 +66,6 @@ test_that("httr use_cassette works", {
   # cassette
   expect_s3_class(out, "Cassette")
   expect_match(out$file(), "httr_test1")
-  expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
   # request - 1st http call
@@ -106,7 +105,6 @@ test_that("httr use_cassette works", {
   # cassette
   expect_s3_class(out, "Cassette")
   expect_match(out$file(), "httr_test2")
-  expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
@@ -132,7 +130,6 @@ test_that("httr w/ >1 request per cassette", {
   # cassette
   expect_s3_class(out, "Cassette")
   expect_match(out$file(), "multiple_queries_httr_record_once")
-  expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
   # response

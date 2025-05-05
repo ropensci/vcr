@@ -55,6 +55,8 @@ Cassette <- R6::R6Class(
     to_return = NULL,
     #' @field warn_on_empty (logical) warn if no interactions recorded
     warn_on_empty = TRUE,
+    #' @field new_cassette is this a new cassette?
+    new_cassette = TRUE,
 
     #' @description Create a new `Cassette` object
     #' @param dir The directory where the cassette will be stored.
@@ -136,9 +138,13 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      if (self$is_empty()) {
+      dir_create(self$root_dir)
+
+      if (!file.exists(self$file())) {
+        self$new_cassette <- TRUE
         interactions <- list()
       } else {
+        self$new_cassette <- FALSE
         interactions <- self$serializer$deserialize()$http_interactions
         interactions <- Filter(\(x) !should_be_ignored(x$request), interactions)
 
@@ -175,20 +181,9 @@ Cassette <- R6::R6Class(
     #' @description ejects the cassette
     #' @return self
     eject = function() {
-      if (self$new_interactions) {
-        dir_create(self$root_dir)
+      vcr_log_sprintf("Ejecting")
 
-        interactions <- self$http_interactions$interactions
-        self$serializer$serialize(interactions)
-        vcr_log_sprintf(
-          "Ejecting: writing %i interactions",
-          length(interactions)
-        )
-      } else {
-        vcr_log_sprintf("Ejecting")
-      }
-
-      if (self$is_empty() && self$warn_on_empty) {
+      if (self$http_interactions$length() == 0 && self$warn_on_empty) {
         cli::cli_warn(c(
           x = "{.str {self$name}} cassette ejected without recording any interactions.",
           i = "Did you use {{curl}}, `download.file()`, or other unsupported tool?",
@@ -235,18 +230,12 @@ Cassette <- R6::R6Class(
     #' @return logical
     recording = function() {
       if (self$record == "none") {
-        return(FALSE)
+        FALSE
       } else if (self$record == "once") {
-        return(self$is_empty())
+        self$new_cassette
       } else {
-        return(TRUE)
+        TRUE
       }
-    },
-
-    #' @description is the cassette on disk empty
-    #' @return logical
-    is_empty = function() {
-      !file.exists(self$file())
     },
 
     #' @description Should re-record interactions?
@@ -289,6 +278,7 @@ Cassette <- R6::R6Class(
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)
+      self$serializer$serialize(self$http_interactions$interactions)
     }
   )
 )
