@@ -21,7 +21,7 @@
 #'
 #' @export
 #' @name lightswitch
-#' @param code Any block of code to run, presumably an http request
+#' @param code Any block of code to run, presumably an HTTP request.
 #' @param ignore_cassettes (logical) Controls what happens when a cassette is
 #' inserted while vcr is turned off. If `TRUE` is passed, the cassette
 #' insertion will be ignored; otherwise an error will be raised.

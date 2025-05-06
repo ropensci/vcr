@@ -56,7 +56,7 @@ for any requests that write responses to disk. By default this will be
 google.com. These hosts are ignored and real HTTP requests are allowed to go
 through.
 \item \code{ignore_localhost} (logical) Default: \code{FALSE}
-\item \code{ignore_request} List of requests to ignore. NOT USED RIGHT NOW, sorry
+\item \code{ignore_request} List of requests to ignore (feature not implemented yet).
 \item \code{filter_sensitive_data} named list of values to replace. Format is:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(thing_to_replace_it_with = thing_to_replace)
@@ -80,12 +80,12 @@ recorded to disk. Alternatively, a named list similar to
 real value of the request header. Note that for the \code{httr2} package only
 we redact request headers automatically that are marked (via attributes)
 as redacted.
-\item \code{filter_response_headers} (named list) \strong{response} headers to filter.
+\item \code{filter_response_headers} (character/list) \strong{response} headers to filter.
 A character vector of response headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to
 \code{filter_sensitive_data} instructing vcr with what value to replace the
 real value of the response header.
-\item \code{filter_query_parameters} (named list) query parameters to filter.
+\item \code{filter_query_parameters} (character/list) query parameters to filter.
 A character vector of query parameters to remove - the query parameters
 will not be recorded to disk. Alternatively, a named list similar to
 \code{filter_sensitive_data} instructing vcr with what value to replace the
@@ -97,21 +97,20 @@ real value of the query parameter.
 
 \subsection{Errors}{
 \itemize{
-\item \code{verbose_errors} Do you want more verbose errors or less verbose
-errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
-less verbose errors. If \code{TRUE}, error messages will include more details
-about what went wrong and suggest possible solutions. For testing
-in an interactive R session, if \code{verbose_errors=FALSE}, you can run
-\code{vcr_last_error()} to get the full error. If in non-interactive mode,
-which most users will be in when running the entire test suite for a
-package, you can set an environment variable (\code{VCR_VERBOSE_ERRORS})
+\item \code{verbose_errors} (logical) Controls verbosity of errors when cassette
+recording/usage fails. Default is \code{FALSE} (less verbose errors). If \code{TRUE},
+error messages will include more details about what went wrong and suggest
+possible solutions. For testing in an interactive R session, if
+\code{verbose_errors=FALSE}, you can run \code{vcr_last_error()} to get the full error.
+If in non-interactive mode, which most users will be in when running the entire
+test suite for a package, you can set an environment variable (\code{VCR_VERBOSE_ERRORS})
 to toggle this setting (e.g.,
-\verb{Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()})
+\verb{Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()}).
 }
 \subsection{Internals}{
 \itemize{
-\item \code{cassettes} (list) don't use
-\item \code{linked_context} (logical) linked context
+\item \code{cassettes} (list) Internal use only.
+\item \code{linked_context} (logical) Linked context. \if{html}{\out{<FIXME>}}
 }
 }
 
@@ -137,18 +136,19 @@ See \code{\link[=use_cassette]{use_cassette()}} for details.
 multiple cassettes with the same name as long as they use different
 serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.
-\item \code{json_pretty}: (logical) want JSON to be newline separated to be easier
-to read? Or remove newlines to save disk space? default: FALSE
-\item \code{preserve_exact_body_bytes} (logical) preserve exact body bytes for
-binary content.
+\item \code{json_pretty}: (logical) Should JSON be newline separated to be easier
+to read? If \code{FALSE}, remove newlines to save disk space. Default: \code{FALSE}.
+\item \code{preserve_exact_body_bytes} (logical) Force a binary (base64) representation
+of the request and response bodies for binary content. By default, vcr will
+look at the Content-Type header to determine if this is necessary.
 \item \code{re_record_interval} (numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.
 \item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
-be recorded back to file. Default: \code{FALSE}
+be recorded back to file? Default: \code{FALSE}.
 \item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
 empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 way. This option only determines whether a warning is thrown or not.
-Default: \code{FALSE}
+Default: \code{FALSE}.
 }
 }
 }

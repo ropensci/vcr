@@ -53,11 +53,11 @@
 #'   but if it doesn't work you can set `preserve_exact_body_bytes = TRUE` to
 #'   force it.
 #' @param re_record_interval (integer) How frequently (in seconds) the
-#' cassette should be re-recorded. default: `NULL` (not re-recorded)
+#' cassette should be re-recorded. Default: `NULL` (not re-recorded).
 #' @param clean_outdated_http_interactions (logical) Should outdated
 #' interactions be recorded back to file? Default: `FALSE`.
-#' @param warn_on_empty Warn if the cassette is ejected but no interactions
-#'   have been recorded?
+#' @param warn_on_empty (logical) Warn if the cassette is ejected but no interactions
+#'   have been recorded. Default: `NULL` (inherits from global configuration).
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
 #'   functions.
 #' @section Cassette options:

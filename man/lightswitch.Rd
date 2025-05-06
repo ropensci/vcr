@@ -25,7 +25,7 @@ inserted while vcr is turned off. If \code{TRUE} is passed, the cassette
 insertion will be ignored; otherwise an error will be raised.
 Default: \code{FALSE}}
 
-\item{code}{Any block of code to run, presumably an http request}
+\item{code}{Any block of code to run, presumably an HTTP request.}
 }
 \description{
 \itemize{

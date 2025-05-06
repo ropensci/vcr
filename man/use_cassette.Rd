@@ -91,13 +91,13 @@ but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
 force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
-cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
 interactions be recorded back to file? Default: \code{FALSE}.}
 
-\item{warn_on_empty}{Warn if the cassette is ejected but no interactions
-have been recorded?}
+\item{warn_on_empty}{(logical) Warn if the cassette is ejected but no interactions
+have been recorded. Default: \code{NULL} (inherits from global configuration).}
 
 \item{frame}{Attach exit handlers to this environment. Typically, this
 should be either the current environment or a parent frame (accessed

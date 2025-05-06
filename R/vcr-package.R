@@ -5,15 +5,15 @@
 #' how the canonical version works.
 #'
 #' @section Main functions:
-#' The [use_cassette] function is most likely what you'll want to use. It
+#' The [use_cassette()] function is most likely what you'll want to use. It
 #' sets the cassette you want to record to, inserts the cassette, and then
 #' ejects the cassette, recording the interactions to the cassette.
 #'
-#' Instead, you can use [insert_cassette], but then you have to make sure
-#' to use [eject_cassette].
+#' Alternatively, you can use [insert_cassette()] for more control, but then
+#' you have to make sure to use [eject_cassette()].
 #'
 #' @section vcr configuration:
-#' [vcr_configure] is the function to use to set R session wide settings.
+#' [vcr_configure()] is the function to use to set R session-wide settings.
 #' See its manual file for help.
 #'
 #' @section Async:
