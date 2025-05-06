@@ -6,16 +6,8 @@
 #' @param dir Cassette directory
 #' @param log,log_opts See [vcr_configure_log()].
 #' @param write_disk_path (character) path to write files to
-#'   for any requests that write responses to disk. by default this parameter
-#'   is `NULL`. For testing a package, you'll probably want this path to
-#'   be in your `tests/` directory, perhaps next to your cassettes
-#'   directory, e.g., where your cassettes are in `tests/fixtures`, your
-#'   files from requests that write to disk are in `tests/files`.
-#'   If you want to ignore these files in your installed package,
-#'   add them to `.Rinstignore`. If you want these files ignored on build
-#'   then add them to `.Rbuildignore` (though if you do, tests that depend
-#'   on these files probably will not work because they won't be found; so
-#'   you'll likely have to skip the associated tests as well).
+#'   for any requests that write responses to disk.  By default this will be
+#'   `{cassette-name}-files/` inside the cassette directory.
 #' @param turned_off (logical) VCR is turned on by default. Default:
 #'   `FALSE`.
 #' @param allow_unused_http_interactions (logical) Default: `TRUE`.

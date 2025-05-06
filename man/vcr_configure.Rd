@@ -68,6 +68,7 @@ determine which recorded HTTP interaction to replay. Possible values are:
 \item \code{path}: the \strong{path} component of the URI.
 \item \code{query}: the \strong{query} component of the URI.
 \item \code{body}: the request body.
+\item \code{body_json}: the request body, parsed as JSON.
 \item \code{header}: all request headers.
 }
 
@@ -133,16 +134,8 @@ A character vector of query parameters to remove - the query parameters
 will not be recorded to disk. Alternatively, a named list similar to}
 
 \item{write_disk_path}{(character) path to write files to
-for any requests that write responses to disk. by default this parameter
-is \code{NULL}. For testing a package, you'll probably want this path to
-be in your \verb{tests/} directory, perhaps next to your cassettes
-directory, e.g., where your cassettes are in \code{tests/fixtures}, your
-files from requests that write to disk are in \code{tests/files}.
-If you want to ignore these files in your installed package,
-add them to \code{.Rinstignore}. If you want these files ignored on build
-then add them to \code{.Rbuildignore} (though if you do, tests that depend
-on these files probably will not work because they won't be found; so
-you'll likely have to skip the associated tests as well).}
+for any requests that write responses to disk.  By default this will be
+\verb{\{cassette-name\}-files/} inside the cassette directory.}
 
 \item{verbose_errors}{Do you want more verbose errors or less verbose
 errors when cassette recording/usage fails? Default is \code{FALSE}, that is,

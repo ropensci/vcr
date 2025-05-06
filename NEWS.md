@@ -17,6 +17,8 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* Writing files to disk now works with out any additional config. Files are saved in a directory called `{cassette-name}-files` inside of the casssette directory. You can override this default with `vrc_configure(write_disk_path)`.
+* New `body_json` request matcher that compares the parsed JSON. This both ignores differences in the textual representation of the JSON and gives more informative messages when requests don't match. (#421)
 * Raw bodies are now automatically gzipped before being converted to base64 (#343).
 * The default path is now `tests/testthat/_vcr`. This should not affect existing packages that used `use_vcr()` because these set up a helper that sets the default directory with `vcr_configure()` (#395).
 * `local_vcr_configure()` allows you to temporarily affect vcr configuration.
@@ -240,7 +242,7 @@ vcr 0.3.0
 ### NEW FEATURES
 
 * new internal method `up_to_date_interactions` in `cassette_class` now allows filtering cassettes by user specified date (#96) (#104)
-* re-recording now works - see new `use_casette()` parameters `re_record_interval` and `clean_outdated_http_interactions`; you can now set a re-record interval (in seconds) so that you can for example always re-record cassettes if you don't want cassettes to be more than X days old; depends on new internal method `up_to_date_interactions` (#104) (#105)
+* re-recording now works - see new `use_cassette()` parameters `re_record_interval` and `clean_outdated_http_interactions`; you can now set a re-record interval (in seconds) so that you can for example always re-record cassettes if you don't want cassettes to be more than X days old; depends on new internal method `up_to_date_interactions` (#104) (#105)
 
 ### MINOR IMPROVEMENTS
 

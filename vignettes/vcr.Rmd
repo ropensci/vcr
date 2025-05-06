@@ -70,6 +70,10 @@ The first time you run the tests, a "cassette" i.e. a file with recorded HTTP in
 The times after that, the cassette will be used.
 If you change your code and more HTTP interactions are needed in the code wrapped by `vcr::use_cassette("rl_citation"`, delete `tests/fixtures/rl_citation.yml` and run the tests again for re-recording the cassette.
 
+### Manual editing
+
+It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. It will also come in handy if you ever need to edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
+
 ### Outside of tests
 
 If you want to get a feel for how vcr works, although you don't need too.
@@ -140,7 +144,6 @@ http_interactions:
 ```
 
 All components of both the request and response are preserved, so that the HTTP client (in this case `crul`) can reconstruct its own response just as it would if it wasn't using `vcr`.
-
 
 ### Less basic usage
 

@@ -8,13 +8,13 @@
     Code
       vcr_configure(record = "asdfadfs")
     Condition
-      Error:
-      ! 'record' value of 'asdfadfs' is not in the allowed set: none, once, new_episodes, all
+      Error in `vcr_configure()`:
+      ! `record` must be one of "none", "once", "new_episodes", or "all", not "asdfadfs".
     Code
       vcr_configure(match_requests_on = "x")
     Condition
-      Error:
-      ! 1 or more 'match_requests_on' values (x) is not in the allowed set: method, uri, headers, host, path, body, query
+      Error in `vcr_configure()`:
+      ! `match_requests_on` must be one of "method", "uri", "headers", "host", "path", "body", "body_json", or "query", not "x".
 
 # filter_sensitive data strips quotes with message
 
