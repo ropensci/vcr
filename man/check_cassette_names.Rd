@@ -12,14 +12,14 @@ check_cassette_names(
 }
 \arguments{
 \item{pattern}{(character) regex pattern for file paths to check.
-this is done inside of \verb{tests/testthat/}. default: "test-"}
+This is done inside of \verb{tests/testthat/}. Default: "test-".}
 
-\item{behavior}{(character) "stop" (default) or "warning". if "warning",
+\item{behavior}{(character) "stop" (default) or "warning". If "warning",
 we use \code{immediate.=TRUE} so the warning happens at the top of your
 tests rather than you seeing it after tests have run (as would happen
-by default)}
+by default).}
 
-\item{allowed_duplicates}{(character) cassette names that can be duplicated}
+\item{allowed_duplicates}{(character) Cassette names that can be duplicated.}
 }
 \description{
 This function is meant to be run during your tests, from a

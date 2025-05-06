@@ -50,7 +50,7 @@ recorded. Possible values are:
 \item \strong{once}, the default: Replays recorded interactions, records new ones
 if no cassette exists, and errors on new requests if cassette exists.
 \item \strong{none}: Replays recorded interactions, and errors on any new requests.
-Guarnants that no HTTP requests occur.
+Guarantees that no HTTP requests occur.
 \item \strong{new_episodes}: Replays recorded interactions and always records new
 ones, even if similar interactions exist.
 \item \strong{all}: Never replays recorded interactions, always recording new.
@@ -89,19 +89,19 @@ serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
-representation of the request and response bondies? By default, vcr
+representation of the request and response bodies? By default, vcr
 will look at the \code{Content-Type} header to determine if this is necessary,
-but if it doesn't work you can set \code{prevsere_exact_body_bytes = TRUE} to
+but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
 force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
-cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? default: \code{FALSE}}
+interactions be recorded back to file? Default: \code{FALSE}.}
 
-\item{warn_on_empty}{Warn if the cassette is ejected but no interactions
-have been recorded?}
+\item{warn_on_empty}{(logical) Warn if the cassette is ejected but no interactions
+have been recorded. Default: \code{NULL} (inherits from global configuration).}
 
 \item{frame}{Attach exit handlers to this environment. Typically, this
 should be either the current environment or a parent frame (accessed
@@ -219,7 +219,7 @@ conn <- crul::HttpClient$new("https://eu.httpbin.org")
 ## first use record mode 'once' to record to a cassette
 one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
 one; res
-## then use record mode 'none' to see it's behavior
+## then use record mode 'none' to see its behavior
 two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
 two; res2
 }
