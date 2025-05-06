@@ -140,7 +140,7 @@ Cassette <- R6::R6Class(
     insert = function() {
       dir_create(self$root_dir)
 
-      if (!file.exists(self$file())) {
+      if (!file.exists(self$file()) || self$record == "all") {
         self$new_cassette <- TRUE
         interactions <- list()
       } else {
