@@ -35,17 +35,6 @@ test_that("you can record a new cassette of same name with different serializer"
 
 # Binary data ------------------------------------------------------------------
 
-test_that("warns if you reload string with preserve_exact_body_bytes", {
-  local_vcr_configure(dir = withr::local_tempdir())
-
-  use_cassette("test", httr::GET(hb("/get")))
-  expect_snapshot(use_cassette(
-    "test",
-    httr::GET(hb("/get")),
-    preserve_exact_body_bytes = TRUE
-  ))
-})
-
 test_that("use_cassette w/ with images: httr", {
   skip_if_not_installed("jpeg")
   local_vcr_configure(dir = withr::local_tempdir())

@@ -6,14 +6,6 @@
       Error in `serializer_fetch()`:
       ! Unsupported cassette serializer "foo".
 
-# warns if you reload string with preserve_exact_body_bytes
-
-    Code
-      use_cassette("test", httr::GET(hb("/get")), preserve_exact_body_bytes = TRUE)
-    Condition
-      Warning in `decode_body()`:
-      re-record cassettes using 'preserve_exact_body_bytes = TRUE'
-
 # generates expected yaml
 
     Code

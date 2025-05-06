@@ -5,6 +5,7 @@ test_that("check_cassette_names is deprecated", {
 
 test_that("check_cassette_names", {
   withr::local_options(lifecycle_verbosity = "quiet")
+
   dir <- make_pkg()
 
   res <- use_vcr(dir, verbose = FALSE)
