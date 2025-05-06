@@ -43,7 +43,7 @@ insert_example_cassette <- function(
   }
 
   if (is.null(record)) {
-    record <- if (is_dev_package(package)) "all" else "none"
+    record <- if (is_dev_package(package) && !in_pkgdown()) "all" else "none"
   }
 
   insert_cassette(
@@ -57,6 +57,10 @@ insert_example_cassette <- function(
     re_record_interval = re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions
   )
+}
+
+in_pkgdown <- function() {
+  identical(Sys.getenv("IN_PKGDOWN"), "true")
 }
 
 example_cassette_path <- function(package) {
