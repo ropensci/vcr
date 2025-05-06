@@ -6,27 +6,29 @@ test_that("check_cassette_names is deprecated", {
 test_that("check_cassette_names", {
   withr::local_options(lifecycle_verbosity = "quiet")
 
-  dir <- make_pkg()
-
-  res <- use_vcr(dir, verbose = FALSE)
-  strg_dup <- 'test_that("bar", {\n  vcr::use_cassette("testing", cat("bar"))\n  vcr::use_cassette("testing", cat("bar"))\n})'
-  cat(strg_dup, file = file.path(dir, "tests/testthat/test-catbar.R"))
-  strg_single <- 'test_that("bar", {\n  expect_true(TRUE)\n  vcr::use_cassette("testing", cat("bar"))\n})'
-  cat(strg_single, file = file.path(dir, "tests/testthat/test-single.R"))
-  strg_not_used <- 'hi'
-  cat(strg_not_used, file = file.path(dir, "tests/testthat/cat.R"))
-
-  withr::local_dir(file.path(dir, "tests/testthat"))
-  expect_error(
-    check_cassette_names(),
-    "you should not have duplicated cassette names",
-    class = "error"
+  test_path <- file.path(make_pkg(), "tests/testthat")
+  writeLines(
+    c(
+      'test_that("bar", {',
+      '  vcr::use_cassette("testing", cat("bar"))',
+      '  vcr::use_cassette("testing", cat("bar"))',
+      '})'
+    ),
+    file.path(test_path, "test-catbar.R")
   )
-  mssg <- tryCatch(check_cassette_names(), error = function(e) e)
-  expect_match(mssg$message, "you should not have duplicated cassette names")
-  expect_match(mssg$message, "testing \\(found in ")
-  expect_match(mssg$message, "test-catbar.R, test-single.R, test-vcr_example.R")
+  writeLines(
+    c(
+      'test_that("bar", {',
+      '  vcr::use_cassette("testing", cat("bar"))',
+      '})'
+    ),
+    file.path(test_path, "test-single.R")
+  )
+  writeLines("hi", con = file.path(test_path, "cat.R"))
+
+  withr::local_dir(test_path)
+  expect_snapshot(check_cassette_names(), error = TRUE)
 
   # can allow duplicated names via the allowed_duplicates param
-  expect_error(check_cassette_names(allowed_duplicates = "testing"), NA)
+  expect_no_error(check_cassette_names(allowed_duplicates = "testing"))
 })
