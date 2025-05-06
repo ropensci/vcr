@@ -30,7 +30,8 @@ Default: \code{FALSE}}
 \description{
 \itemize{
 \item \code{turn_on()} and \code{turn_off()} turn on and off for the whole session.
-\item \code{turned_off(code)} temporarily turns off while \code{code} is running.
+\item \code{turned_off(code)} temporarily turns off while \code{code} is running,
+guaranteeing that you make a real HTTP request.
 \item \code{turned_on()} reports on if vcr is turned on or not.
 \item \code{skip_if_vcr_off()} skips a test if vcr is turned off. This is
 occassionally useful if you're using a cassette to simulate a faked
@@ -38,28 +39,28 @@ request, or if the real request would return differents values (e.g.
 you're testing date parsing and the request returns the current date).
 }
 
-Learn more in \code{vignette("lightswitch")}.
+You can also control the default behaviour in a new session by setting the
+following environment variables before R starts:
+\itemize{
+\item Use \code{VCR_TURN_OFF=true} to suppress all vcr usage, ignoring all
+casssettes. This is useful for CI/CD workflows where you want to ensure
+the test suite is run against the live API.
+\item Set \code{VCR_TURNED_OFF=true} to turn off vcr, but still use cassettes.
+}
 }
 \examples{
-\dontrun{
-vcr_configure(dir = tempdir())
-
-turn_on()
+# By default, vcr is turned on
 turned_on()
-turn_off()
 
-# turn off for duration of a block
-library(crul)
-turned_off({
- res <- HttpClient$new(url = "https://hb.opencpu.org/get")$get()
-})
-res
-
-# turn completely off
+# you can turn off for the rest of the session
 turn_off()
-library(webmockr)
-crul::mock()
-# HttpClient$new(url = "https://hb.opencpu.org/get")$get(verbose = TRUE)
+turned_on()
+# turn on again
 turn_on()
-}
+
+# or just turn it on turn off temporarily
+turned_off({
+  # some HTTP requets here
+  turned_on()
+})
 }

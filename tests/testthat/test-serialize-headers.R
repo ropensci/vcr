@@ -67,7 +67,7 @@ test_that("filter_headers/request/remove", {
     "Accept-Encoding" %in%
       names(yaml_no_filter$http_interactions[[1]]$request$headers)
   )
-  # casette objects from both requests identical
+  # cassette objects from both requests identical
   expect_identical(
     yaml::yaml.load_file(cas1$file()),
     yaml::yaml.load_file(cas2$file())

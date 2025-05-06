@@ -66,6 +66,8 @@ be recorded back to file}
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
+
+\item{\code{new_cassette}}{is this a new cassette?}
 }
 \if{html}{\out{</div>}}
 }
@@ -78,7 +80,6 @@ be recorded back to file}
 \item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
-\item \href{#method-Cassette-is_empty}{\code{Cassette$is_empty()}}
 \item \href{#method-Cassette-remove_outdated_interactions}{\code{Cassette$remove_outdated_interactions()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
@@ -219,30 +220,14 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-is_empty"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-is_empty}{}}}
-\subsection{Method \code{is_empty()}}{
-is the cassette on disk empty
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$is_empty()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-remove_outdated_interactions"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-remove_outdated_interactions}{}}}
 \subsection{Method \code{remove_outdated_interactions()}}{
-Should re-record interactions?
+Remove outdated interactions
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$remove_outdated_interactions()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-logical
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-record_http_interaction"></a>}}

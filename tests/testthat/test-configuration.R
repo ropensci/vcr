@@ -4,18 +4,11 @@ test_that("VCRConfig", {
   expect_s3_class(cl, "VCRConfig")
 })
 
-test_that("config fails well with invalid record mode", {
-  expect_error(
-    vcr_configure(record = "asdfadfs"),
-    "'record' value of 'asdfadfs' is not in the allowed set"
-  )
-})
-
-test_that("config fails well with invalid request matchers", {
-  expect_error(
-    vcr_configure(match_requests_on = "x"),
-    "1 or more 'match_requests_on' values \\(x\\) is not in the allowed set"
-  )
+test_that("config checks inputs", {
+  expect_snapshot(error = TRUE, {
+    vcr_configure(record = "asdfadfs")
+    vcr_configure(match_requests_on = "x")
+  })
 })
 
 test_that("returns previous values", {
