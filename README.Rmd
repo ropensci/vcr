@@ -66,25 +66,21 @@ http_interactions:
 - request:
     method: GET
     uri: https://api.iucnredlist.org/api/v4/information/red_list_version
-    body: ~
-    headers:
-      Authorization: tVirteB2iZjthFGoZCQYfCCFXinYjk8nD7Ww
-      User-Agent: r-curl/6.2.2 crul/1.5.0 rOpenSci(rredlist/1.0.0)
   response:
     status: 200
     headers:
+      status: 'HTTP/2 200 '
       cache-control: max-age=0, private, must-revalidate
       content-type: application/json
       etag: W/"1694e95e54c5590a355e5922b47c7cd9"
-      date: Sun, 27 Apr 2025 21:48:05 GMT
+      date: Tue, 06 May 2025 20:52:22 GMT
     body:
       string: '{"red_list_version":"2025-1"}'
-      file: no
-  recorded_at: 2025-04-27 21:48:05 GMT
+  recorded_at: 2025-05-06 20:52:21
 recorded_with: vcr/1.7.0.91, webmockr/2.0.0
 ```
 
-If you look carefully at this file, you'll spot a big problem! It includes the `Authorization` header meaning that we've accidentally embedded a copy of our credentials in the package. To avoid this problem, make sure to read `vignette("secrets")` before continuing.
+If you look carefully at this file, you'll notice an `Authorization` header is not recorded in the request headers despite it being used in the actual HTTP request. Read more about protecting secrets in the vignette `vignette("secrets")`.
 
 ## Learn more
 

@@ -122,7 +122,8 @@ Cassette <- R6::R6Class(
         self$serialize_with,
         path = self$root_dir,
         name = self$name,
-        preserve_bytes = self$preserve_exact_body_bytes
+        preserve_bytes = self$preserve_exact_body_bytes,
+        matchers = self$match_requests_on
       )
 
       if (!file.exists(self$file())) {
