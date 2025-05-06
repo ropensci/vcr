@@ -25,7 +25,7 @@ local_vcr_configure_log(
 
 \item{file}{A path or connection to log to}
 
-\item{include_date}{(boolean) include date and time in each log entry?}
+\item{include_date}{(boolean) Include date and time in each log entry?}
 
 \item{log_prefix}{"Cassette". We insert the cassette name after this prefix,
 followed by the rest of the message.}

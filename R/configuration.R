@@ -25,8 +25,8 @@
 #' ### Filtering
 #'
 #' - `ignore_hosts` (character) Vector of hosts to ignore. e.g., localhost, or
-#' google.com. These hosts are ignored and real HTTP requests allowed to go
-#' through
+#' google.com. These hosts are ignored and real HTTP requests are allowed to go
+#' through.
 #' - `ignore_localhost` (logical) Default: `FALSE`
 #' - `ignore_request` List of requests to ignore. NOT USED RIGHT NOW, sorry
 #' - `filter_sensitive_data` named list of values to replace. Format is:

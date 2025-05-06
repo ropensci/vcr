@@ -77,7 +77,7 @@ force it.}
 cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? default: \code{FALSE}}
+interactions be recorded back to file? Default: \code{FALSE}.}
 
 \item{warn_on_empty}{Warn if the cassette is ejected but no interactions
 have been recorded?}

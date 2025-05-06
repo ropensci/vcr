@@ -6,7 +6,7 @@
 #'
 #' @param log Should we log important vcr things?
 #' @param file A path or connection to log to
-#' @param include_date (boolean) include date and time in each log entry?
+#' @param include_date (boolean) Include date and time in each log entry?
 #' @param log_prefix "Cassette". We insert the cassette name after this prefix,
 #'     followed by the rest of the message.
 #' @export

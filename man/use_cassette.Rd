@@ -94,7 +94,7 @@ force it.}
 cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? default: \code{FALSE}}
+interactions be recorded back to file? Default: \code{FALSE}.}
 
 \item{warn_on_empty}{Warn if the cassette is ejected but no interactions
 have been recorded?}
@@ -215,7 +215,7 @@ conn <- crul::HttpClient$new("https://eu.httpbin.org")
 ## first use record mode 'once' to record to a cassette
 one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
 one; res
-## then use record mode 'none' to see it's behavior
+## then use record mode 'none' to see its behavior
 two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
 two; res2
 }
