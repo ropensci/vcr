@@ -1,5 +1,5 @@
 test_that("check_cassette_names", {
-  skip_on_cran()
+  withr::local_options(lifecycle_verbosity = "quiet")
 
   dir <- make_pkg()
 

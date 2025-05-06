@@ -27,6 +27,19 @@ test_that("skip_if_vcr_off works", {
   expect_condition(skip_if_vcr_off(), class = "skip")
 })
 
+test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE", {
+  local_vcr_configure(warn_on_empty_cassette = FALSE)
+  local_light_switch()
+
+  # after being turned off, insert_cassette throws an error
+  suppressMessages(turn_off())
+  expect_snapshot(insert_cassette("test"), error = TRUE)
+
+  suppressMessages(turn_off(ignore_cassettes = TRUE))
+  expect_no_error(insert_cassette("test", warn_on_empty = FALSE))
+})
+
+
 # env vars ---------------------------------------------------------------------
 
 test_that("default options set as expected", {

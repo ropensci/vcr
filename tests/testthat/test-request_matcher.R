@@ -87,3 +87,47 @@ test_that("query params are filtered", {
     set_names(list())
   )
 })
+
+test_that("json_body ignores representation", {
+  req1 <- list(body = '{"foo": "bar"}')
+  req2 <- list(body = '{"foo":     "bar"}')
+
+  expect_equal(
+    make_comparison("body_json", req1),
+    list(body = list(foo = "bar"))
+  )
+
+  expect_true(request_matches(req1, req2, "body_json"))
+})
+
+# End to end tests -------------------------------------------------------------
+
+test_that("can match empty bodies", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    match_requests_on = c("method", "uri", "body")
+  )
+  cli <- crul::HttpClient$new(url = hb())
+
+  use_cassette("test", res1 <- cli$post("post"))
+  expect_null(res1$request$body)
+  use_cassette("test", res1_replay <- cli$post("post"))
+  expect_null(res1_replay$request$body)
+
+  # the request body in the cassette is empty
+  cas <- read_cassette("test.yml")
+  expect_equal(cas$http_interactions[[1]]$request$body, set_names(list()))
+})
+
+test_that('request matching is not sensitive to escaping special characters', {
+  local_vcr_configure(dir = withr::local_tempdir())
+  url <- hb("/get?update=2022-01-01T00:00:00&p2=ok")
+
+  # curl does not escape
+  aa <- use_cassette('test', res <- crul::HttpClient$new(url)$get())
+  expect_true(res$status_code == 200)
+
+  # httr does escape
+  bb <- use_cassette('test', res <- httr::GET(url))
+  expect_true(res$status_code == 200)
+})

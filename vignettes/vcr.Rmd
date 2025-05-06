@@ -4,7 +4,7 @@ author: "Scott Chamberlain"
 date: "`r Sys.Date()`"
 output: html_vignette
 vignette: >
-  %\VignetteIndexEntry{1. vcr introduction}
+  %\VignetteIndexEntry{Introduction to vcr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,9 +19,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-vcr introduction
-================
-
 `vcr` is an R port of the Ruby gem [VCR](https://github.com/vcr/vcr) (i.e., a translation, there's no Ruby here :))
 
 `vcr` helps you stub and record HTTP requests so you don't have to repeat HTTP requests.
@@ -32,56 +29,139 @@ The main use case is for unit tests, but you can use it outside of the unit test
 
 Check out the [HTTP testing book](https://books.ropensci.org/http-testing/) for a lot more documentation on `vcr`, `webmockr`, and `crul`, and other packages.
 
-## Elevator pitch
-
-```{r child='../man/rmdhunks/elevator-pitch.Rmd', eval=TRUE} 
-```
-
-## Installation
-
-CRAN
-
-```{r eval=FALSE}
-install.packages("vcr")
-```
-
-Development version
-
-```{r eval=FALSE}
-remotes::install_github("ropensci/vcr")
-```
-
-```{r}
-library("vcr")
-```
-
-## Getting Started
-
-```{r child='../man/rmdhunks/setup.Rmd', eval=TRUE} 
-```
-
 ## Basic usage
 
-```{r child='../man/rmdhunks/basic-usage.Rmd', eval=TRUE} 
+### In tests
+
+In your tests, for whichever tests you want to use `vcr`, wrap them in a `vcr::use_cassette()` call like:
+
+```r
+library(testthat)
+vcr::use_cassette("rl_citation", {
+  test_that("my test", {
+    aa <- rl_citation()
+
+    expect_type(aa, "character")
+    expect_match(aa, "IUCN")
+    expect_match(aa, "www.iucnredlist.org")
+  })
+})
 ```
 
+OR put the `vcr::use_cassette()` block on the inside, but put `testthat` expectations outside of
+the `vcr::use_cassette()` block:
+
+```r
+library(testthat)
+test_that("my test", {
+  vcr::use_cassette("rl_citation", {
+    aa <- rl_citation()
+  })
+
+  expect_type(aa, "character")
+  expect_match(aa, "IUCN")
+  expect_match(aa, "www.iucnredlist.org")
+})
+```
+
+Don't wrap the `use_cassette()` block inside your  `test_that()` block with `testthat` expectations inside the `use_cassette()` block, as you'll only get the line number that the `use_cassette()` block starts on on failures.
+
+The first time you run the tests, a "cassette" i.e. a file with recorded HTTP interactions, is created at `tests/fixtures/rl_citation.yml`.
+The times after that, the cassette will be used.
+If you change your code and more HTTP interactions are needed in the code wrapped by `vcr::use_cassette("rl_citation"`, delete `tests/fixtures/rl_citation.yml` and run the tests again for re-recording the cassette.
+
+### Manual editing
+
+It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. It will also come in handy if you ever need to edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
+
+### Outside of tests
+
+If you want to get a feel for how vcr works, although you don't need too.
+
+```{r echo=FALSE, results='hide', eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+suppressPackageStartupMessages(require(vcr, quietly = TRUE))
+unlink(file.path(cassette_path(), "helloworld.yml"))
+vcr_configure(dir = tempdir())
+```
+
+```{r, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+library(vcr)
+library(crul)
+
+cli <- crul::HttpClient$new(url = "https://eu.httpbin.org")
+system.time(
+  use_cassette(name = "helloworld", {
+    cli$get("get")
+  })
+)
+```
+
+The request gets recorded, and all subsequent requests of the same form used the cached HTTP response, and so are much faster
+
+```{r, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+system.time(
+  use_cassette(name = "helloworld", {
+    cli$get("get")
+  })
+)
+```
+
+```{r echo=FALSE, eval=identical(Sys.getenv("IN_PKGDOWN"), "true")}
+unlink(file.path(cassette_path(), "helloworld.yml"))
+```
+
+Importantly, your unit test deals with the same inputs and the same outputs - but behind the scenes you use a cached HTTP response - thus, your tests run faster.
+
+The cached response looks something like (condensed for brevity):
+
+```yaml
+http_interactions:
+- request:
+    method: get
+    uri: https://eu.httpbin.org/get
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.2
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+    body:
+      encoding: UTF-8
+      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"application/json,
+        text/xml, application/xml, */*\", \n    \"Accept-Encoding\": \"gzip, deflate\",
+        \n    \"Connection\": \"close\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\":
+        \"libcurl/7.54.0 r-curl/3.2 crul/0.5.2\"\n  }, \n  \"origin\": \"111.222.333.444\",
+        \n  \"url\": \"https://eu.httpbin.org/get\"\n}\n"
+  recorded_at: 2018-04-03 22:55:02 GMT
+  recorded_with: vcr/0.1.0, webmockr/0.2.4, crul/0.5.2
+```
+
+All components of both the request and response are preserved, so that the HTTP client (in this case `crul`) can reconstruct its own response just as it would if it wasn't using `vcr`.
+
+### Less basic usage
+
+For tweaking things to your needs, make sure to read the docs about [configuration](https://docs.ropensci.org/vcr/articles/configuration.html) (e.g., where are the fixtures saved? can they be re-recorded automatically regulary?) and [request matching](https://docs.ropensci.org/vcr/articles/request_matching.html) (how does vcr match a request to a recorded interaction?)
 
 ## Terminology
+* _vcr_: the name comes from the idea that we want to record something and play it back later, like a vcr
+* _cassette_: A _thing_ to record HTTP interactions to. Right now the only option is the file system (writing to files), but in the future could be other things, e.g. a key-value store like Redis
+* _fixture_: A fixture is something used to consistently test a piece of software. In this case, a cassette (just defined above) is a fixture - used in unit tests. If you use our setup function `vcr_setup()` the default directory created to hold cassettes is called `fixtures/` as a signal as to what the folder contains.
+* Persisters: how to save requests - currently only option is the file system
+* _serialize_: translating data into a format that can be stored; here, translate HTTP request and response data into a representation on disk to read back later
+* Serializers: how to serialize the HTTP response - currently only option is YAML; other options in the future could include e.g. JSON
+* _insert cassette_: create a cassette (all HTTP interactions will be recorded to this cassette)
+* _eject cassette_: eject the cassette (no longer recording to that cassette)
+* _replay_: refers to using a cached result of an http request that was recorded earlier
 
-```{r child='../man/rmdhunks/glossary.Rmd', eval=TRUE} 
-```
+## Missing features
 
-## Workflows
+There's a number of features in this package that are not yet supported, but for which their parameters are found in the package. 
 
-```{r child='../man/rmdhunks/workflows.Rmd', eval=TRUE} 
-```
-
-## Configuration
-
-```{r child='../man/rmdhunks/configuration.Rmd', eval=TRUE} 
-```
-
-## Note about missing features
-
-```{r child='../man/rmdhunks/missing-features.Rmd', eval=TRUE} 
-```
+We've tried to make sure the parameters that are ignored are marked as such. Keep an eye out for package updates for changes in these parameters, and/or let us know you want it and we can move it up in the priority list.

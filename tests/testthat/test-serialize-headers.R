@@ -1,5 +1,15 @@
+test_that("by default, headers left unchanged", {
+  headers <- list(x = "a", y = "b")
+  expect_equal(encode_headers(headers, "request"), headers)
+  expect_equal(encode_headers(headers, "response"), headers)
+
+  # even empty headers
+  headers <- list()
+  expect_equal(encode_headers(headers, "request"), headers)
+  expect_equal(encode_headers(headers, "response"), headers)
+})
+
 test_that("filter_headers/request/remove", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # request headers: remove only
@@ -57,7 +67,7 @@ test_that("filter_headers/request/remove", {
     "Accept-Encoding" %in%
       names(yaml_no_filter$http_interactions[[1]]$request$headers)
   )
-  # casette objects from both requests identical
+  # cassette objects from both requests identical
   expect_identical(
     yaml::yaml.load_file(cas1$file()),
     yaml::yaml.load_file(cas2$file())
@@ -65,7 +75,6 @@ test_that("filter_headers/request/remove", {
 })
 
 test_that("filter_headers/request/replace", {
-  skip_on_cran()
   local_vcr_configure(dir = withr::local_tempdir())
 
   # request headers: replace only
@@ -115,8 +124,6 @@ test_that("filter_headers/request/replace", {
 })
 
 test_that("filter_headers doesn't add a header that doesn't exist", {
-  skip_on_cran()
-
   mydir <- file.path(tempdir(), "filter_headers_doesnt_add_header")
   local_vcr_configure(
     dir = withr::local_tempdir(),
@@ -183,7 +190,6 @@ test_that("filter_headers/response/replace", {
   use_cassette("test", res2 <- con$get())
   expect_equal(res2$response_headers$foo, "foo")
 })
-
 
 test_that("dedup_keys", {
   # no modification

@@ -37,16 +37,8 @@ Configurable options that define vcr's default behavior.
 \itemize{
 \item \code{dir} Cassette directory
 \item \code{write_disk_path} (character) path to write files to
-for any requests that write responses to disk. by default this parameter
-is \code{NULL}. For testing a package, you'll probably want this path to
-be in your \verb{tests/} directory, perhaps next to your cassettes
-directory, e.g., where your cassettes are in \code{tests/fixtures}, your
-files from requests that write to disk are in \code{tests/files}.
-If you want to ignore these files in your installed package,
-add them to \code{.Rinstignore}. If you want these files ignored on build
-then add them to \code{.Rbuildignore} (though if you do, tests that depend
-on these files probably will not work because they won't be found; so
-you'll likely have to skip the associated tests as well).
+for any requests that write responses to disk. By default this will be
+\verb{\{cassette-name\}-files/} inside the cassette directory.
 }
 }
 

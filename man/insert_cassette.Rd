@@ -24,8 +24,8 @@ eject_cassette()
 \item{name}{The name of the cassette. This is used to name a file on
 disk, so it must be valid file name.}
 
-\item{dir}{The directory where the cassette will be stored. Defaults
-to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
+\item{dir}{The directory where the cassette will be stored. If unspecified,
+(and hasn't been set in \code{\link[=vcr_configure]{vcr_configure()}}) will use \code{test_path("_vcr")}.}
 
 \item{record}{Record mode that dictates how HTTP requests/responses are
 recorded. Possible values are:
@@ -50,6 +50,7 @@ determine which recorded HTTP interaction to replay. Possible values are:
 \item \code{path}: the \strong{path} component of the URI.
 \item \code{query}: the \strong{query} component of the URI.
 \item \code{body}: the request body.
+\item \code{body_json}: the request body, parsed as JSON.
 \item \code{header}: all request headers.
 }
 

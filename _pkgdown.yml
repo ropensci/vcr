@@ -1,57 +1,31 @@
 reference:
-  - title: "vcr"
-    desc: >
-      High level overview of package
-    contents:
-      - vcr
-      - vcr-package
-  - title: "Configuration"
-    desc: >
-      Use use_vcr to get started
-    contents:
-      - use_vcr
-      - starts_with("vcr_config")
-  - title: "Main functions"
+  - title: Main functions
     desc: >
       Probably the only functions you'll need
     contents:
       - use_cassette
-  - title: "vcr in tests"
-    desc: >
-      Functions for more custom workflows
-    contents:
-      - skip_if_vcr_off
-      - vcr_test_path
-  - title: "Enable/Disable vcr"
-    contents:
-      - turn_off
-      - turn_on
-      - turned_off
-      - turned_on
-  - title: "Managing cassettes"
+      - vcr_configure
+      - vcr_configure_log
+  - title: Managing cassettes
     contents:
       - cassette_path
       - cassettes
       - current_cassette
       - check_cassette_names
-  - title: "Internals"
-    desc: >
-      You shouldn't need to use these directly
+  - title: Other helpers
     contents:
-      - Cassette
-      - UnhandledHTTPRequestError
-      - request_summary
-      - response_summary
-
+      - vcr_last_error
+      - skip_if_vcr_off
+      - vcr_test_path
+      - turn_off
+      - use_vcr
+      
 articles:
   - title: All vignettes
     desc: ~
+    navbar: ~
     contents:
-      - "`vcr`"
-      - "`cassette-manual-editing`"
-      - "`configuration`"
-      - "`debugging`"
-      - "`write-to-disk`"
-      - "`lightswitch`"
-      - "`internals`"
-      - "`design`"
+      - secrets
+      - configuration
+      - debugging
+      - design

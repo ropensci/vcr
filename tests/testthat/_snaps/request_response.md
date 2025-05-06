@@ -20,21 +20,15 @@
 # response_summary works
 
     Code
-      response_summary(response)
+      response_summary(response_raw)
     Output
-      [1] "200 bodybodybodybodybodybodybodybodybodybodybodybodybodybodybodybodybodybodybodybody"
-
-# response_summary works with raw body
-
+      [1] "200 with 4 bytes of binary data"
     Code
-      response_summary(response)
+      response_summary(response_unknown)
     Output
-      [1] "200 <raw>"
-
-# response_summary - handles bad multibyte characters by changing encoding
-
+      [1] "200 with 400 bytes of text data"
     Code
-      response_summary(response)
+      response_summary(response_json)
     Output
-      [1] "200 "
+      [1] "200 with 400 bytes of application/json data"
 

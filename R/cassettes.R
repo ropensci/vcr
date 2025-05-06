@@ -28,17 +28,8 @@ insert_cassette <- function(
   clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 ) {
-  if (!turned_on()) {
-    if (!the$light_switch$ignore_cassettes) {
-      cli::cli_abort(c(
-        "vcr is turned off.",
-        i = "Use {.fun turn_on} to turn it back on.",
-        i = "Or use {.code turn_off(ignore_cassettes = TRUE)} to cassettes completely."
-      ))
-    } else {
-      # vcr is turned off and `ignore_cassettes=TRUE`, returns NULL
-      return(NULL)
-    }
+  if (vcr_turned_off()) {
+    return(invisible())
   }
   # enable webmockr
   webmockr::enable(quiet = TRUE)
@@ -58,8 +49,13 @@ insert_cassette <- function(
     warn_on_empty = warn_on_empty
   )
   cassette_push(cassette)
-  vcr_log_sprintf("Inserting")
-  cassette$insert()
+  # $insert() might error if there's a bug in the decoder, so we need to
+  # make sure to unload it. We can't call `cassette_push()` after `$insert()`
+  # because it the active casssette name is used for logging.
+  withCallingHandlers(
+    cassette$insert(),
+    error = function(e) cassette_pop()
+  )
 
   invisible(cassette)
 }
@@ -71,9 +67,8 @@ eject_cassette <- function() {
     cli::cli_abort("No cassette in use.")
   }
 
-  vcr_log_sprintf("Ejecting")
+  cassette_peek()$eject()
   cassette <- cassette_pop()
-  cassette$eject()
 
   webmockr::disable(quiet = TRUE)
   if (!cassette_active()) {
@@ -155,6 +150,10 @@ cassette_pop <- function() {
   the$cassettes <- the$cassettes[-n]
 
   cassette
+}
+cassette_peek <- function() {
+  n <- length(the$cassettes)
+  the$cassettes[[n]]
 }
 cassette_active <- function() {
   length(the$cassettes) > 0

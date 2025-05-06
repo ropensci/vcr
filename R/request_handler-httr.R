@@ -38,12 +38,9 @@ RequestHandlerHttr <- R6::R6Class(
       return(response)
     },
 
-    on_stubbed_by_vcr_request = function() {
+    on_stubbed_by_vcr_request = function(vcr_response) {
       # return stubbed vcr response - no real response to do
-      serialize_to_httr(
-        self$request_original,
-        super$get_stubbed_response(self$request)
-      )
+      serialize_to_httr(self$request_original, vcr_response)
     },
 
     on_recordable_request = function() {
@@ -132,32 +129,29 @@ curl_body <- function(x) {
 
   if (!is.null(x$fields)) {
     # multipart body
-    tmp <- x$fields
+    x$fields
   } else if (!is.null(x$options$postfields) && is.raw(x$options$postfields)) {
     # json/raw-encoded body
-    tmp <- rawToChar(x$options$postfields)
+    rawToChar(x$options$postfields)
   } else if (!is.null(x$options$postfieldsize_large)) {
     # upload not in a list
     # seems like we can't get the file path anyway from the request
     # in both crul and httr - so may be stuck with this
-    tmp <- paste0("upload, file size: ", x$options$postfieldsize_large)
+    paste0("upload, file size: ", x$options$postfieldsize_large)
   } else {
     # unknown, fail out
     cli::cli_abort("couldn't fetch request body; please file an issue")
   }
-  if (inherits(tmp, "raw")) rawToChar(tmp) else tmp
 }
 
 save_file <- function(path) {
-  if (is.null(vcr_c$write_disk_path)) {
-    cli::cli_abort(c(
-      "`write_disk_path` must be set when writing to disk.",
-      i = "See ?vcr_configure for details."
-    ))
+  basepath <- vcr_c$write_disk_path
+  if (is.null(basepath)) {
+    basepath <- file.path(vcr_c$dir, paste0(current_cassette()$name, "-files"))
   }
-  dir_create(vcr_c$write_disk_path)
-  out_path <- file.path(vcr_c$write_disk_path, basename(path))
+  dir_create(basepath)
 
+  out_path <- file.path(basepath, basename(path))
   file.copy(path, out_path, overwrite = TRUE)
   out_path
 }
