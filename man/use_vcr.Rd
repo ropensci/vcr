@@ -22,7 +22,7 @@ only messages about progress, returns invisible()
 without any need for additional configuration.
 }
 \details{
-Sets a mimimum vcr version, which is usually the latest
+Sets a minimum vcr version, which is usually the latest
 (stable) version on CRAN. You can of course easily remove or change
 the version requirement yourself after running this function.
 }

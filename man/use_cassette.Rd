@@ -50,7 +50,7 @@ recorded. Possible values are:
 \item \strong{once}, the default: Replays recorded interactions, records new ones
 if no cassette exists, and errors on new requests if cassette exists.
 \item \strong{none}: Replays recorded interactions, and errors on any new requests.
-Guarnants that no HTTP requests occur.
+Guarantees that no HTTP requests occur.
 \item \strong{new_episodes}: Replays recorded interactions and always records new
 ones, even if similar interactions exist.
 \item \strong{all}: Never replays recorded interactions, always recording new.
@@ -85,9 +85,9 @@ serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
-representation of the request and response bondies? By default, vcr
+representation of the request and response bodies? By default, vcr
 will look at the \code{Content-Type} header to determine if this is necessary,
-but if it doesn't work you can set \code{prevsere_exact_body_bytes = TRUE} to
+but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
 force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the

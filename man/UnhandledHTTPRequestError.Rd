@@ -11,6 +11,7 @@ Get full suggestion messages for the last vcr cassette failure
 }
 \examples{
 \dontrun{
-# vcr_last_error()
+# Run after encountering a cassette error to get detailed information
+vcr_last_error()
 }
 }

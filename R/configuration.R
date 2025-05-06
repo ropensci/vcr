@@ -104,6 +104,7 @@
 #' - `json_pretty`: (logical) want JSON to be newline separated to be easier
 #' to read? Or remove newlines to save disk space? default: FALSE
 #' - `preserve_exact_body_bytes` (logical) preserve exact body bytes for
+#'   binary content.
 #' - `re_record_interval` (numeric) When given, the cassette will be
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions

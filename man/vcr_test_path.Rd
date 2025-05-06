@@ -7,8 +7,8 @@
 vcr_test_path(...)
 }
 \arguments{
-\item{...}{Character vectors giving path component. each character string
-gets added on to the path, e.g., \code{vcr_test_path("a", "b")} becomes
+\item{...}{Character vectors giving path components. Each character string
+gets added to the path, e.g., \code{vcr_test_path("a", "b")} becomes
 \code{tests/a/b} relative to the root of the package.}
 }
 \value{

@@ -7,17 +7,17 @@
 #' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
 #' @section Points of webmockr integration:
 #' - `initialize()`: webmockr is used in the `initialize()` method to
-#' create webmockr stubs. stubs are created on call to `Cassette$new()`
-#' within `insert_cassette()`, but then on exiting `use_cassette()`,
-#' or calling `eject()` on `Cassette` class from `insert_cassette()`,
-#' stubs are cleaned up.
+#'   create webmockr stubs. Stubs are created on call to `Cassette$new()`
+#'   within `insert_cassette()`, but then on exiting `use_cassette()`,
+#'   or calling `eject()` on `Cassette` class from `insert_cassette()`,
+#'   stubs are cleaned up.
 #' - `eject()` method: [webmockr::disable()] is called before exiting
-#' eject to disable webmock so that webmockr does not affect any HTTP
-#' requests that happen afterwards
-#' - `serialize_to_crul()` method: method: [webmockr::RequestSignature] and
-#' [webmockr::Response] are used to build a request and response,
-#' respectively, then passed to [webmockr::build_crul_response()]
-#' to make a complete `crul` HTTP response object
+#'   eject to disable webmock so that webmockr does not affect any HTTP
+#'   requests that happen afterwards.
+#' - `serialize_to_crul()` method: [webmockr::RequestSignature] and
+#'   [webmockr::Response] are used to build a request and response,
+#'   respectively, then passed to [webmockr::build_crul_response()]
+#'   to make a complete `crul` HTTP response object.
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
