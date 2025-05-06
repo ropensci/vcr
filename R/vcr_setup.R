@@ -68,15 +68,23 @@ test_r_file_exists <- function(dir) {
 
 #' Setup vcr for a package
 #'
+#' `r lifecycle::badge('deprecated')`
+#' `use_vcr()` is deprecated because it is no longer needed. In lifecycle v2,
+#' [local_cassette()] and friends automatically use `tests/testthat/_vcr`
+#' without any need for additional configuration.
+#'
 #' @export
 #' @param dir (character) path to package root. default's to
 #' current directory
+#' @keywords internal
 #' @param verbose (logical) print progress messages. default: `TRUE`
 #' @return only messages about progress, returns invisible()
 #' @details Sets a mimimum vcr version, which is usually the latest
 #' (stable) version on CRAN. You can of course easily remove or change
 #' the version requirement yourself after running this function.
 use_vcr <- function(dir = ".", verbose = TRUE) {
+  lifecycle::deprecate_warn("2.0.0", "vcr::use_vcr()")
+
   assert(dir, "character")
   stopifnot(length(dir) == 1)
   if (!dir.exists(dir)) stop("'dir' does not exist")

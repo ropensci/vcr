@@ -243,7 +243,7 @@ vcr 0.3.0
 ### NEW FEATURES
 
 * new internal method `up_to_date_interactions` in `cassette_class` now allows filtering cassettes by user specified date (#96) (#104)
-* re-recording now works - see new `use_casette()` parameters `re_record_interval` and `clean_outdated_http_interactions`; you can now set a re-record interval (in seconds) so that you can for example always re-record cassettes if you don't want cassettes to be more than X days old; depends on new internal method `up_to_date_interactions` (#104) (#105)
+* re-recording now works - see new `use_cassette()` parameters `re_record_interval` and `clean_outdated_http_interactions`; you can now set a re-record interval (in seconds) so that you can for example always re-record cassettes if you don't want cassettes to be more than X days old; depends on new internal method `up_to_date_interactions` (#104) (#105)
 
 ### MINOR IMPROVEMENTS
 
