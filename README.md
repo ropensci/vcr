@@ -26,16 +26,17 @@ your package. {vcr} works with {crul}, {httr} and {httr2}.
 ## Installation
 
 ``` r
-# Install the latest version from CRAN
+# Install the latest released version from CRAN
 install.packages("vcr")
 
-# Or from R-universe
+# Or install the development version
+# from R-universe
 install.packages(
   "vcr",
   repos = c("https://ropensci.r-universe.dev", "https://cloud.r-project.org")
 )
 
-# Or the get development version from GitHub:
+# Or from GitHub:
 # install.packages("pak")
 pak::pak("ropensci/vcr")
 ```
