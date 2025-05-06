@@ -6,19 +6,14 @@ http_interactions:
       string: ''
     headers: []
   response:
-    status: 200
+    status: 503
     headers:
-      date: Mon, 05 May 2025 21:52:58 GMT
-      content-type: application/json
-      content-length: '323'
-      server: gunicorn/19.9.0
-      access-control-allow-origin: '*'
-      access-control-allow-credentials: 'true'
+      server: awselb/2.0
+      date: Tue, 06 May 2025 13:01:06 GMT
+      content-type: text/html
+      content-length: '162'
     body:
-      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"*/*\", \n
-        \   \"Accept-Encoding\": \"deflate, gzip\", \n    \"Host\": \"httpbin.org\",
-        \n    \"User-Agent\": \"httr2/1.1.2 r-curl/6.2.2 libcurl/8.11.1\", \n    \"X-Amzn-Trace-Id\":
-        \"Root=1-6819333a-3d833c165a5870126d63b4c0\"\n  }, \n  \"origin\": \"99.64.56.135\",
-        \n  \"url\": \"https://httpbin.org/get\"\n}\n"
-  recorded_at: 2025-05-05 21:52:58
+      string: "<html>\r\n<head><title>503 Service Temporarily Unavailable</title></head>\r\n<body>\r\n<center><h1>503
+        Service Temporarily Unavailable</h1></center>\r\n</body>\r\n</html>\r\n"
+  recorded_at: 2025-05-06 13:01:06
 recorded_with: vcr/1.7.0.91, webmockr/2.0.0
