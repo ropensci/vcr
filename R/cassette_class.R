@@ -101,7 +101,7 @@ Cassette <- R6::R6Class(
 
       self$name <- name
       self$root_dir <- dir %||% config$dir %||% testthat::test_path("_vcr")
-      self$record <- check_record_mode(record %||% config$record)
+      self$record <- check_record_mode(record) %||% config$record
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
         config$match_requests_on
       self$serialize_with <- serialize_with %||% config$serialize_with
@@ -283,63 +283,3 @@ Cassette <- R6::R6Class(
     }
   )
 )
-
-check_cassette_name <- function(x, call = caller_env()) {
-  if (length(x) != 1 || !is.character(x)) {
-    cli::cli_abort("{.arg name} must be a single string.", call = call)
-  }
-
-  if (any(x %in% cassette_names())) {
-    cli::cli_abort(
-      "{.arg name} must not be the same as an existing cassette.",
-      call = call
-    )
-  }
-
-  if (grepl("\\s", x)) {
-    cli::cli_abort("{.arg name} must not contain spaces.", call = call)
-  }
-
-  if (grepl("\\.yml$|\\.yaml$", x)) {
-    cli::cli_abort("{.arg name} must not include an extension.", call = call)
-  }
-
-  # the below adapted from fs::path_sanitize, which adapted
-  # from the npm package sanitize-filename
-  illegal <- "[/\\?<>\\:*|\":]"
-  control <- "[[:cntrl:]]"
-  reserved <- "^[.]+$"
-  windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
-  windows_trailing <- "[. ]+$"
-  if (grepl(illegal, x))
-    cli::cli_abort(
-      "{.arg name} must not contain '/', '?', '<', '>', '\\', ':', '*', '|', or '\"'",
-      call = call
-    )
-  if (grepl(control, x)) {
-    cli::cli_abort(
-      "{.arg name} must not contain control characters.",
-      call = call
-    )
-  }
-  if (grepl(reserved, x)) {
-    cli::cli_abort(
-      "{.arg name} must not be '.', '..', etc.",
-      call = call
-    )
-  }
-  if (grepl(windows_reserved, x)) {
-    cli::cli_abort(
-      "{.arg name} must not contain reserved windows strings.",
-      call = call
-    )
-  }
-  if (grepl(windows_trailing, x)) {
-    cli::cli_abort("{.arg name} must not end in '.'.", call = call)
-  }
-  if (nchar(x) > 255) {
-    cli::cli_abort("{.arg name} must be less than 256 characters.", call = call)
-  }
-
-  invisible()
-}
