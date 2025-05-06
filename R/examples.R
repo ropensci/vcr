@@ -20,7 +20,7 @@
 #'
 #' insert_example_cassette("httpbin-get", package = "vcr")
 #'
-#' req <- httr2::request("https://httpbin.org/get")
+#' req <- httr2::request("https://hb.cran.dev/get")
 #' resp <- httr2::req_perform(req)
 #'
 #' str(httr2::resp_body_json(resp))
