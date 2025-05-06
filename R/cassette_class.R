@@ -97,26 +97,25 @@ Cassette <- R6::R6Class(
       warn_on_empty = NULL
     ) {
       check_cassette_name(name)
-      config <- vcr_configuration()
 
       self$name <- name
-      self$root_dir <- dir %||% config$dir %||% testthat::test_path("_vcr")
-      self$record <- check_record_mode(record) %||% config$record
+      self$root_dir <- dir %||% the$config$dir %||% testthat::test_path("_vcr")
+      self$record <- check_record_mode(record) %||% the$config$record
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
-        config$match_requests_on
-      self$serialize_with <- serialize_with %||% config$serialize_with
+        the$config$match_requests_on
+      self$serialize_with <- serialize_with %||% the$config$serialize_with
       self$re_record_interval <- re_record_interval %||%
-        config$re_record_interval
+        the$config$re_record_interval
       self$allow_playback_repeats = allow_playback_repeats
 
       assert(preserve_exact_body_bytes, "logical")
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
-        config$preserve_exact_body_bytes
+        the$config$preserve_exact_body_bytes
 
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
-        config$clean_outdated_http_interactions
+        the$config$clean_outdated_http_interactions
 
-      self$warn_on_empty <- warn_on_empty %||% config$warn_on_empty_cassette
+      self$warn_on_empty <- warn_on_empty %||% the$config$warn_on_empty_cassette
 
       self$serializer <- serializer_fetch(
         self$serialize_with,

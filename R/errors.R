@@ -38,9 +38,9 @@ UnhandledHTTPRequestError <- R6::R6Class(
           paste0(rep("=", 80), collapse = ""),
           "An HTTP request has been made that vcr does not know how to handle:",
           self$request_description(),
-          if (vcr_c$verbose_errors) self$cassettes_description() else
+          if (the$config$verbose_errors) self$cassettes_description() else
             self$cassettes_list(),
-          if (vcr_c$verbose_errors) the$last_error$formatted_suggestion else
+          if (the$config$verbose_errors) the$last_error$formatted_suggestion else
             self$get_help(),
           paste0(rep("=", 80), collapse = "")
         ),

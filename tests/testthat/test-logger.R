@@ -3,10 +3,10 @@ test_that("can locally change logging settings", {
 
   local({
     local_vcr_configure_log(file = "y")
-    expect_equal(vcr_c$log_opts$file, "y")
+    expect_equal(the$config$log_opts$file, "y")
   })
 
-  expect_equal(vcr_c$log_opts$file, "x")
+  expect_equal(the$config$log_opts$file, "x")
 })
 
 test_that("logging is silent unless enabled", {

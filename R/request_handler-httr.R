@@ -127,9 +127,12 @@ vcr_body <- function(body, headers) {
   list(body = body, is_disk = is_disk)
 }
 save_file <- function(path) {
-  basepath <- vcr_c$write_disk_path
+  basepath <- the$config$write_disk_path
   if (is.null(basepath)) {
-    basepath <- file.path(vcr_c$dir, paste0(current_cassette()$name, "-files"))
+    basepath <- file.path(
+      the$config$dir,
+      paste0(current_cassette()$name, "-files")
+    )
   }
   dir_create(basepath)
 

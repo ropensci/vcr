@@ -21,7 +21,7 @@ test_that("record mode: once", {
   expect_equal(res2$content, res1$content)
 
   # delete cassette file, new interaction should be recorded successfully
-  unlink(file.path(vcr_c$dir, "test.yml"))
+  unlink(file.path(the$config$dir, "test.yml"))
   three <- use_cassette("test", res3 <- conn$get("get"))
   expect_equal(res3$content, res1$content)
 

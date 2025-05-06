@@ -39,7 +39,7 @@ JSON <- R6::R6Class(
         out,
         self$path,
         auto_unbox = TRUE,
-        pretty = vcr_c$json_pretty
+        pretty = the$config$json_pretty
       )
     },
 
