@@ -16,55 +16,22 @@ RequestHandlerHttr <- R6::R6Class(
   ),
 
   private = list(
-    # these will replace those in
     on_ignored_request = function() {
-      # perform and return REAL http response
-      # * make real request
-      # * give back real response
-
-      # real request
       webmockr::httr_mock(FALSE)
       withr::defer(webmockr::httr_mock(TRUE))
 
-      tmp2 <- httr::VERB(
-        verb = self$request$method,
-        url = self$request$url,
-        body = curl_body(self$request),
-        do.call(httr::config, self$request$options),
-        httr::add_headers(self$request$headers)
-      )
-
-      # return real response
-      return(response)
+      httr_perform(self$request_original)
     },
 
     on_stubbed_by_vcr_request = function(vcr_response) {
-      # return stubbed vcr response - no real response to do
       serialize_to_httr(self$request_original, vcr_response)
     },
 
     on_recordable_request = function() {
-      if (!cassette_active()) {
-        cli::cli_abort("No cassette in use.")
-      }
-
-      # real request
       webmockr::httr_mock(FALSE)
       withr::defer(webmockr::httr_mock(TRUE))
 
-      httr_response <- httr::VERB(
-        verb = self$request_original$method,
-        url = self$request_original$url,
-        body = curl_body(self$request_original),
-        do.call(httr::config, self$request_original$options),
-        httr::add_headers(self$request_original$headers),
-        if (!is.null(self$request_original$output$path))
-          httr::write_disk(self$request_original$output$path, TRUE)
-      )
-      response <- webmockr::build_httr_response(
-        self$request_original,
-        httr_response
-      )
+      response <- httr_perform(self$request_original)
 
       body <- vcr_body(response$content, response$headers)
       vcr_response <- vcr_response(
@@ -74,33 +41,12 @@ RequestHandlerHttr <- R6::R6Class(
         disk = body$is_disk
       )
 
-      # make vcr response | then record interaction
       current_cassette()$record_http_interaction(self$request, vcr_response)
       return(response)
     }
   )
 )
 
-vcr_body <- function(body, headers) {
-  if (is.null(body)) {
-    body <- NULL
-    is_disk <- FALSE
-  } else if (is.raw(body)) {
-    if (has_binary_content(headers)) {
-      body <- body
-    } else {
-      body <- rawToChar(body)
-    }
-    is_disk <- FALSE
-  } else if (inherits(body, "path") || (is_string(body) && file.exists(body))) {
-    body <- save_file(body)
-    is_disk <- TRUE
-  } else {
-    cli::cli_abort("Unrecognized response content type.", .internal = TRUE)
-  }
-
-  list(body = body, is_disk = is_disk)
-}
 
 # generate actual httr response
 serialize_to_httr <- function(httr_request, vcr_response) {
@@ -119,6 +65,20 @@ serialize_to_httr <- function(httr_request, vcr_response) {
 
   # generate httr response
   webmockr::build_httr_response(httr_request, resp)
+}
+
+# Helpers to create httr request from vcr request -----------------------------
+
+httr_perform <- function(request) {
+  httr::VERB(
+    verb = request$method,
+    url = request$url,
+    body = curl_body(request),
+    do.call(httr::config, request$options),
+    httr::add_headers(request$headers),
+    if (!is.null(request$output$path))
+      httr::write_disk(request$output$path, TRUE)
+  )
 }
 
 curl_body <- function(x) {
@@ -144,6 +104,28 @@ curl_body <- function(x) {
   }
 }
 
+# Helpers to create vcr response from httr response ----------------------------
+
+vcr_body <- function(body, headers) {
+  if (is.null(body)) {
+    body <- NULL
+    is_disk <- FALSE
+  } else if (is.raw(body)) {
+    if (has_binary_content(headers)) {
+      body <- body
+    } else {
+      body <- rawToChar(body)
+    }
+    is_disk <- FALSE
+  } else if (inherits(body, "path") || (is_string(body) && file.exists(body))) {
+    body <- save_file(body)
+    is_disk <- TRUE
+  } else {
+    cli::cli_abort("Unrecognized response content type.", .internal = TRUE)
+  }
+
+  list(body = body, is_disk = is_disk)
+}
 save_file <- function(path) {
   basepath <- vcr_c$write_disk_path
   if (is.null(basepath)) {

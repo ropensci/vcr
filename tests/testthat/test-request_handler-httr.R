@@ -50,45 +50,42 @@ test_that('issue 249 is correctly handled.', {
   expect_true(res$status_code == 401)
 })
 
+test_that("can ignore a request", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    ignore_localhost = TRUE,
+    warn_on_empty_cassette = FALSE
+  )
+
+  use_cassette("test", res <- httr::GET(hb('/status/400')))
+  expect_true(res$status_code == 400)
+})
+
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
   local_vcr_configure(dir = withr::local_tempdir())
 
-  out <- use_cassette(
-    "httr_test1",
-    x <- httr::GET(hb("/404"))
-  )
-  invisible(use_cassette(
-    "httr_test1",
-    x2 <- httr::GET(hb("/404"))
-  ))
-
-  # cassette
-  expect_s3_class(out, "Cassette")
-  expect_match(out$file(), "httr_test1")
-  expect_s3_class(out$recorded_at, "POSIXct")
-
-  # request - 1st http call
+  # recorded
+  use_cassette("httr_test1", x <- httr::GET(hb("/404")))
+  expect_s3_class(x, "response")
+  expect_equal(x$status_code, 404)
+  expect_equal(x$url, hb("/404"))
   expect_s3_class(x$request, "request")
   expect_equal(x$request$method, "GET")
   expect_equal(x$request$url, hb("/404"))
-  expect_named(x$request$headers, "Accept")
+  expect_named(x$request$headers, c("Content-Type", "Accept"))
   expect_null(x$request$fields)
   expect_true(x$request$options$httpget)
   expect_s3_class(x$request$output, "write_function")
 
-  # request - 2nd http call
+  # replayed
+  use_cassette("httr_test1", x2 <- httr::GET(hb("/404")))
   expect_s3_class(x2$request, "request")
   expect_equal(x2$request$method, "GET")
   expect_equal(x2$request$url, hb("/404"))
   expect_named(x2$request$headers, "Accept")
   expect_null(x2$request$fields)
   expect_true(x2$request$options$httpget)
-
-  # response
-  expect_s3_class(x, "response")
-  expect_equal(x$status_code, 404)
-  expect_equal(x$url, hb("/404"))
 })
 
 test_that("httr use_cassette works", {
