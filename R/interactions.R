@@ -38,10 +38,7 @@ Interactions <- R6::R6Class(
     },
 
     add = function(request, response) {
-      idx <- self$find_request(request, allow_playback = TRUE)
-      if (is.na(idx)) {
-        idx <- length(self$interactions) + 1
-      }
+      idx <- length(self$interactions) + 1
 
       interaction <- vcr_interaction(request, response)
       self$interactions[[idx]] <- interaction

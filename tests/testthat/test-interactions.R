@@ -84,7 +84,8 @@ test_that("can add interactions", {
   # newly added interactions can not be replayed
   expect_equal(interactions$replayable, FALSE)
 
-  # same request replaces response
+  # always add interactions
   interactions$add(req1, resp2)
-  expect_equal(interactions$interactions[[1]]$response, resp2)
+  expect_equal(interactions$interactions[[1]]$request, req1)
+  expect_equal(interactions$interactions[[2]]$response, resp2)
 })
