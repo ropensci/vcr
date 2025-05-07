@@ -15,3 +15,6 @@ notes-redirects.R
 CLAUDE.md
 
 /.quarto/
+docs/
+
+**/.claude/settings.local.json

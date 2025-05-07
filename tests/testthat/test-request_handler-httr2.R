@@ -88,7 +88,10 @@ test_that("can capture errors", {
 })
 
 test_that("httr2 redacts auth header", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    match_requests_on = c("uri", "headers")
+  )
 
   request <- httr2::request(hb("/basic-auth/foo/bar"))
   request <- httr2::req_auth_basic(request, "foo", "bar")
@@ -210,7 +213,10 @@ test_that("can capture body: file", {
 })
 
 test_that("redacted headers handled appropriately", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    match_requests_on = c("uri", "headers")
+  )
 
   use_cassette("redacted_httr2", {
     httr2::request(hb("/get")) %>%

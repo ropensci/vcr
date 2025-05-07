@@ -116,7 +116,7 @@ test_that("can match empty bodies", {
 
   # the request body in the cassette is empty
   cas <- read_cassette("test.yml")
-  expect_equal(cas$http_interactions[[1]]$request$body, set_names(list()))
+  expect_false(has_name(cas$http_interactions[[1]]$request, "body"))
 })
 
 test_that('request matching is not sensitive to escaping special characters', {

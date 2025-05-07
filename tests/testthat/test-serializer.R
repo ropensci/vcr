@@ -149,7 +149,7 @@ test_that("generates correct path", {
   expect_equal(aa$path, "path/name.json")
 })
 
-test_that("generates expected yaml", {
+test_that("generates expected json", {
   local_vcr_configure(json_pretty = TRUE)
   local_mocked_bindings(
     Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC"),

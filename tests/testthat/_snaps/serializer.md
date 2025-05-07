@@ -6,7 +6,7 @@
       Error in `serializer_fetch()`:
       ! Unsupported cassette serializer "foo".
 
-# generates expected yaml
+# generates expected json
 
     Code
       writeLines(readLines(ser$path))
@@ -16,9 +16,7 @@
           {
             "request": {
               "method": "GET",
-              "uri": "http://example.com",
-              "body": {},
-              "headers": []
+              "uri": "http://example.com"
             },
             "response": {
               "status": 200,
@@ -35,7 +33,7 @@
         "recorded_with": "<package_versions>"
       }
 
----
+# generates expected yaml
 
     Code
       writeLines(readLines(ser$path))
@@ -44,8 +42,6 @@
       - request:
           method: GET
           uri: http://example.com
-          body: {}
-          headers: []
         response:
           status: 200
           headers:
