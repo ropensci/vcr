@@ -16,7 +16,11 @@ test_that("encode_decode_interaction roundtrip works", {
   )
 
   # Roundtrip: encode then decode
-  encoded <- encode_interaction(interaction, preserve_bytes = FALSE)
+  encoded <- encode_interaction(
+    interaction,
+    preserve_bytes = FALSE,
+    matchers = c("method", "uri", "body", "headers")
+  )
   decoded <- decode_interaction(encoded, preserve_bytes = FALSE)
   expect_equal(decoded, interaction)
 })
@@ -78,4 +82,19 @@ test_that("preserve_bytes parameter affects body encoding", {
 
   encoded_true <- encode_interaction(interaction, preserve_bytes = TRUE)
   expect_named(encoded_true$response$body, "raw_gzip")
+})
+
+test_that("header/body only included if needed", {
+  interaction <- vcr_interaction(
+    vcr_request(
+      method = "GET",
+      uri = "http://example.com",
+      body = "body",
+      headers = list(x = 1, y = 2)
+    ),
+    vcr_response(status = 200L, list(), NULL)
+  )
+
+  encoded <- encode_interaction(interaction, matchers = c("method", "uri"))
+  expect_named(encoded$request, c("method", "uri"))
 })
