@@ -61,7 +61,7 @@ encode_interaction <- function(
   )
 }
 
-decode_interaction <- function(interaction, preserve_bytes) {
+decode_interaction <- function(interaction, preserve_bytes = FALSE) {
   request <- interaction$request
   response <- interaction$response
 
