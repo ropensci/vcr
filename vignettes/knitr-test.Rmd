@@ -23,6 +23,8 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 vcr::setup_knitr(record = "none")
 ```
 
+This vignette tests that we can replay cassettes created by `vcr::setup_knitr()`.
+
 ```{r}
 #| cassette: test
 req <- request(httpbin$url("/get"))
