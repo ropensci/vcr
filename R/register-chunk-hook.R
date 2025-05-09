@@ -11,7 +11,7 @@
 #' ```
 #' ````
 #'
-#' Then in a chunk you want to use a cassette, set the `cassette` chunk option
+#' Then in a chunk where you want to use a cassette, set the `cassette` chunk option
 #' to the name of the cassette:
 #'
 #' ````
@@ -23,7 +23,7 @@
 #' ````
 #'
 #' @param prefix An optional prefix for the cassette name so that you only
-#'   need to make sure that casssette names are unique within the current
+#'   need to make sure that cassette names are unique within the current
 #'   vignette. Default: `""``.
 #' @param dir Directory where to create the cassette file. Default: `"_vcr"``.
 #' @param ... Other arguments passed on to [insert_cassette()].
