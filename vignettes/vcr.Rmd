@@ -14,13 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr} and {httr2}. 
+{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr}, and {httr2}. 
 
 The central metaphor of vcr is a video **cassette**. This is what records your HTTP **interactions**, the pairs of HTTP request and response. You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done.
 
 This vignette will introduce you to the basics of vcr. If you have bigger questions remaining after reading it, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on vcr, webmockr, crul, and more.
 
-re we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
+Here we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
 
 ```{r setup}
 library(vcr)
@@ -58,7 +58,7 @@ test_that("my test", {
 
 The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`. Then in the second and subsequent runs, it will replay those responses, meaning that you test will now run independently of the internet, making it both faster and more realiable.
 
-You can see exactly what's happening in a test by using `local_vcr_configure_log()`. In this case, since it's the second run of the test you can see that it loads the previously saved interaction and replay its.
+You can see exactly what's happening in a test by using `local_vcr_configure_log()`. In this case, since it's the second run of the test you can see that it loads the previously saved interaction and replay it.
 
 ```{r}
 test_that("my test", {
@@ -83,14 +83,10 @@ It's good practice to look at the cassette files that are saved to disk. This wi
 writeLines(readLines("_vcr/get.yml"))
 ```
 
-You can see that it records all components of the request and response, as well as when the request was made. The first time you use vcr with your package, it's a really good idea to closely look at this file to make sure that you aren't accidentally leaking any private information. Learn more about what vcr does by default and how you can customise in `vignette("secrets")`.
+You can see that it records all components of the request and response, as well as when the request was made. The first time you use vcr with your package, it's a really good idea to closely look at this file to make sure that you aren't accidentally leaking any private information. Learn more about what vcr does by default and how you can customize in `vignette("secrets")`.
 
 Sometimes it also makes sense to manually edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
 
 ### Request matching
  
-By default, looks for matching requests using just the HTTP method and the uri. If you are submitting data in the body, you will also want to match on that. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will pass the body as JSON 
-
-## Vignettes
-
-## Examples
+By default, vcr looks for matching requests using just the HTTP method and the URI. If you are submitting data in the body, you will also want to match on that. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will parse the body as JSON so you'll get more informative messages if a new request doesn't match a request saved in a cassette.
