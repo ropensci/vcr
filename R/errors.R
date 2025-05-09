@@ -234,7 +234,7 @@ UnhandledHTTPRequestError <- R6::R6Class(
       num_remaining_interactions <- sum(vapply(
         the$cassettes,
         function(z) {
-          z$http_interactions$remaining_unused_interaction_count()
+          z$http_interactions$n_replayable()
         },
         numeric(1)
       ))

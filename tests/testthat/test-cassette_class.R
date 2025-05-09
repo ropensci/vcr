@@ -38,15 +38,44 @@ test_that("cassette inherit options from vcr_configuration()", {
 })
 
 test_that("important interactions are logged", {
-  local_vcr_configure(dir = withr::local_tempdir())
+  dir <- withr::local_tempdir()
+  local_vcr_configure(dir = dir)
   local_vcr_configure_log(file = stdout())
 
   expect_snapshot(
     {
       use_cassette("test", httr::GET(hb("/html")))
       use_cassette("test", httr::GET(hb("/html")))
-      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
+      use_cassette("test", httr::GET(hb("/404")))
     },
-    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
+    error = TRUE,
+    transform = \(x)
+      x |>
+        gsub(hb(), "{httpbin}", x = _, fixed = TRUE) |>
+        gsub(dir, "{dir}", x = _, fixed = TRUE)
   )
+})
+
+test_that("can allow for repeated playback", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  use_cassette("test", httr::GET(hb("/html")))
+
+  expect_error(
+    use_cassette("test", {
+      resp1 <- httr::GET(hb("/html"))
+      resp2 <- httr::GET(hb("/html"))
+    }),
+    class = "vcr_unhandled"
+  )
+
+  use_cassette(
+    "test",
+    {
+      resp1 <- httr::GET(hb("/html"))
+      resp2 <- httr::GET(hb("/html"))
+    },
+    allow_playback_repeats = TRUE
+  )
+  expect_equal(resp1, resp2)
 })

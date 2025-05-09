@@ -42,13 +42,13 @@ test_that("response_for marks as used", {
   ))
 
   expect_equal(interactions$replayable, c(TRUE, TRUE))
-  expect_equal(interactions$remaining_unused_interaction_count(), 2)
+  expect_equal(interactions$n_replayable(), 2)
   expect_false(interactions$has_used_interaction(req2))
   expect_equal(interactions$find_request(req2), 2)
 
   interactions$response_for(2)
   expect_equal(interactions$replayable, c(TRUE, FALSE))
-  expect_equal(interactions$remaining_unused_interaction_count(), 1)
+  expect_equal(interactions$n_replayable(), 1)
   expect_true(interactions$has_used_interaction(req2))
   expect_equal(interactions$find_request(req2), NA_integer_)
 })

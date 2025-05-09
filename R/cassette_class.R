@@ -139,14 +139,15 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      dir_create(self$root_dir)
-
       if (!file.exists(self$file())) {
+        vcr_log_sprintf("Inserting %s (new cassette)", self$file())
         self$new_cassette <- TRUE
         interactions <- list()
       } else {
         self$new_cassette <- FALSE
         interactions <- self$serializer$deserialize()$http_interactions
+        n <- length(interactions)
+        vcr_log_sprintf("Inserting %s (%d interactions)", self$file(), n)
         interactions <- Filter(\(x) !should_be_ignored(x$request), interactions)
 
         if (self$clean_outdated_http_interactions) {
@@ -155,27 +156,23 @@ Cassette <- R6::R6Class(
             interactions <- Filter(\(x) x$recorded_at > threshold, interactions)
           }
         }
+        m <- length(interactions)
+        if (m < n) {
+          vcr_log_sprintf("Filtering: removed %d interactions", n - m)
+        }
       }
-      vcr_log_sprintf(
-        "Inserting: loading %d interactions from disk",
-        length(interactions)
-      )
 
       self$http_interactions <- Interactions$new(
         interactions = interactions,
         request_matchers = self$match_requests_on,
+        allow_playback_repeats = self$allow_playback_repeats,
         replayable = self$record != "all"
       )
 
-      vcr_log_sprintf("  record: %s", self$record)
-      vcr_log_sprintf("  serialize_with: %s", self$serialize_with)
+      vcr_log_sprintf("  recording: %s", self$recording())
       vcr_log_sprintf(
         "  allow_playback_repeats: %s",
         self$allow_playback_repeats
-      )
-      vcr_log_sprintf(
-        "  preserve_exact_body_bytes: %s",
-        self$preserve_exact_body_bytes
       )
     },
 
@@ -275,7 +272,8 @@ Cassette <- R6::R6Class(
     #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
-      vcr_log_sprintf("  recording response: %s", response_summary(response))
+      vcr_log_sprintf("  Recording response: %s", response_summary(response))
+      local_vcr_configure_log(log = FALSE)
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)
