@@ -91,40 +91,6 @@ Sometimes it also makes sense to manually edit the cassettes. Manually editing i
  
 By default, looks for matching requests using just the HTTP method and the uri. If you are submitting data in the body, you will also want to match on that. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will pass the body as JSON 
 
-### Writing to disk
-
-If you have http requests for which you write the response to disk, then
-use `vcr_configure()` to set the `write_disk_path` option. 
-
-Here, we create a temporary directory, then set the fixtures
-
-```{r}
-tmpdir <- tempdir()
-vcr_configure(
-  dir = file.path(tmpdir, "fixtures"),
-  write_disk_path = file.path(tmpdir, "files")
-)
-```
-
-Then pass a file path (that doesn't exist yet) to crul's `disk` parameter.
-`vcr` will take care of handling writing the response to that file in
-addition to the cassette.
-
-```{r}
-library(crul)
-## make a temp file
-f <- tempfile(fileext = ".json")
-## make a request
-cas <- use_cassette("test_write_to_disk", {
-  out <- HttpClient$new("https://httpbin.org/get")$get(disk = f)
-})
-file.exists(out$content)
-out$parse()
-```
-
-This also works with `httr`. The only difference is that you write to disk
-with a function `httr::write_disk(path)` rather than a parameter.
-
 ## Vignettes
 
 ## Examples
