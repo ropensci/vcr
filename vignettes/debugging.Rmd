@@ -89,7 +89,7 @@ local({
 
 This time you can see vcr didn't find any matches because there was only one request, and that request (`recorded`) had a different method to the request we were trying to match.
 
-Or we could change the URL by adding a parameter:
+What happens if change the URL?
 
 ```{r}
 #| error: true
@@ -102,8 +102,7 @@ local({
 })
 ```
 
-vcr uses {waldo} to generate 
-
+Again, you can see why the request didn't match. vcr uses {waldo} to generate diffs, that hopefully make it easy to see what's different.
 
 ### Multiple requests
 
@@ -151,7 +150,7 @@ local({
 })
 ```
 
-On replay, the second request will fail because my default, vcr does not allow you to replay the same request multiple times:
+On replay, the second request will fail because by default, vcr does not allow you to replay the same request multiple times:
 
 ```{r}
 #| error: true
