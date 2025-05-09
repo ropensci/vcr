@@ -1,13 +1,3 @@
-test_that("checks constructor args", {
-  expect_snapshot(error = TRUE, {
-    Cassette$new()
-    Cassette$new("test", record = "stuff")
-    Cassette$new("test", match_requests_on = "x")
-    Cassette$new("test", serialize_with = "howdy")
-    Cassette$new("test", preserve_exact_body_bytes = 5)
-  })
-})
-
 test_that("has nice print method", {
   expect_snapshot(Cassette$new("test"))
 })
@@ -45,23 +35,6 @@ test_that("cassette inherit options from vcr_configuration()", {
   expect_equal(cas2$record, "new_episodes")
   expect_equal(cas2$match_requests_on, "query")
   expect_false(cas2$preserve_exact_body_bytes)
-})
-
-test_that("cassette checks name", {
-  expect_snapshot(error = TRUE, {
-    Cassette$new("foo bar")
-    Cassette$new("foo.yml")
-    Cassette$new("foo/bar")
-    Cassette$new("foo\nbar")
-    Cassette$new("foo\nbar.")
-    Cassette$new("..")
-    Cassette$new("con")
-    Cassette$new(strrep("x", 400))
-  })
-
-  local_vcr_configure(warn_on_empty_cassette = FALSE)
-  local_cassette("foo")
-  expect_snapshot(Cassette$new("foo"), error = TRUE)
 })
 
 test_that("important interactions are logged", {

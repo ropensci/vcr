@@ -13,16 +13,8 @@
 #'
 #' - `dir` Cassette directory
 #' - `write_disk_path` (character) path to write files to
-#' for any requests that write responses to disk. by default this parameter
-#' is `NULL`. For testing a package, you'll probably want this path to
-#' be in your `tests/` directory, perhaps next to your cassettes
-#' directory, e.g., where your cassettes are in `tests/fixtures`, your
-#' files from requests that write to disk are in `tests/files`.
-#' If you want to ignore these files in your installed package,
-#' add them to `.Rinstignore`. If you want these files ignored on build
-#' then add them to `.Rbuildignore` (though if you do, tests that depend
-#' on these files probably will not work because they won't be found; so
-#' you'll likely have to skip the associated tests as well).
+#' for any requests that write responses to disk. By default this will be
+#' `{cassette-name}-files/` inside the cassette directory.
 #'
 #' ### Contexts
 #'
@@ -33,10 +25,10 @@
 #' ### Filtering
 #'
 #' - `ignore_hosts` (character) Vector of hosts to ignore. e.g., localhost, or
-#' google.com. These hosts are ignored and real HTTP requests allowed to go
-#' through
+#' google.com. These hosts are ignored and real HTTP requests are allowed to go
+#' through.
 #' - `ignore_localhost` (logical) Default: `FALSE`
-#' - `ignore_request` List of requests to ignore. NOT USED RIGHT NOW, sorry
+#' - `ignore_request` List of requests to ignore (feature not implemented yet).
 #' - `filter_sensitive_data` named list of values to replace. Format is:
 #'   ```
 #'   list(thing_to_replace_it_with = thing_to_replace)
@@ -61,12 +53,12 @@
 #' real value of the request header. Note that for the `httr2` package only
 #' we redact request headers automatically that are marked (via attributes)
 #' as redacted.
-#' - `filter_response_headers` (named list) **response** headers to filter.
+#' - `filter_response_headers` (character/list) **response** headers to filter.
 #' A character vector of response headers to remove - the headers will not be
 #' recorded to disk. Alternatively, a named list similar to
 #' `filter_sensitive_data` instructing vcr with what value to replace the
 #' real value of the response header.
-#' - `filter_query_parameters` (named list) query parameters to filter.
+#' - `filter_query_parameters` (character/list) query parameters to filter.
 #' A character vector of query parameters to remove - the query parameters
 #' will not be recorded to disk. Alternatively, a named list similar to
 #' `filter_sensitive_data` instructing vcr with what value to replace the
@@ -74,21 +66,20 @@
 #'
 #' ## Errors
 #'
-#' - `verbose_errors` Do you want more verbose errors or less verbose
-#' errors when cassette recording/usage fails? Default is `FALSE`, that is,
-#' less verbose errors. If `TRUE`, error messages will include more details
-#' about what went wrong and suggest possible solutions. For testing
-#' in an interactive R session, if `verbose_errors=FALSE`, you can run
-#' `vcr_last_error()` to get the full error. If in non-interactive mode,
-#' which most users will be in when running the entire test suite for a
-#' package, you can set an environment variable (`VCR_VERBOSE_ERRORS`)
+#' - `verbose_errors` (logical) Controls verbosity of errors when cassette 
+#' recording/usage fails. Default is `FALSE` (less verbose errors). If `TRUE`, 
+#' error messages will include more details about what went wrong and suggest 
+#' possible solutions. For testing in an interactive R session, if 
+#' `verbose_errors=FALSE`, you can run `vcr_last_error()` to get the full error. 
+#' If in non-interactive mode, which most users will be in when running the entire 
+#' test suite for a package, you can set an environment variable (`VCR_VERBOSE_ERRORS`)
 #' to toggle this setting (e.g.,
-#' `Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()`)
+#' `Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()`).
 #'
 #' ### Internals
 #'
-#' - `cassettes` (list) don't use
-#' - `linked_context` (logical) linked context
+#' - `cassettes` (list) Internal use only.
+#' - `linked_context` (logical) Linked context. <FIXME>
 #'
 #' ### Logging
 #'
@@ -109,17 +100,19 @@
 #' multiple cassettes with the same name as long as they use different
 #' serializers; so if you only want one cassette for a given cassette name,
 #' make sure to not switch serializers, or clean up files you no longer need.
-#' - `json_pretty`: (logical) want JSON to be newline separated to be easier
-#' to read? Or remove newlines to save disk space? default: FALSE
-#' - `preserve_exact_body_bytes` (logical) preserve exact body bytes for
+#' - `json_pretty`: (logical) Should JSON be newline separated to be easier
+#' to read? If `FALSE`, remove newlines to save disk space. Default: `FALSE`.
+#' - `preserve_exact_body_bytes` (logical) Force a binary (base64) representation 
+#'   of the request and response bodies for binary content. By default, vcr will 
+#'   look at the Content-Type header to determine if this is necessary.
 #' - `re_record_interval` (numeric) When given, the cassette will be
 #' re-recorded at the given interval, in seconds.
 #' - `clean_outdated_http_interactions` (logical) Should outdated interactions
-#' be recorded back to file. Default: `FALSE`
+#' be recorded back to file? Default: `FALSE`.
 #' - `warn_on_empty_cassette` (logical) Should a warning be thrown when an
 #' empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 #' way. This option only determines whether a warning is thrown or not.
-#' Default: `FALSE`
+#' Default: `FALSE`.
 #'
 #' @examples
 #' vcr_configure(dir = tempdir())

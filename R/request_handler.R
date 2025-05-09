@@ -1,6 +1,6 @@
 #' Request handlers
 #'
-#' This are internal classes that should not be used by users.
+#' These are internal classes that should not be used by users.
 #'
 #' @keywords internal
 #' @aliases RequestHandlerHttr2 RequestHandlerHttr RequestHandlerCrul
