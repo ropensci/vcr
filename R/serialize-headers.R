@@ -13,7 +13,7 @@ encode_headers <- function(headers, type = c("request", "response")) {
     headers <- request_headers_redact(headers)
   }
 
-  headers <- encode_sensitive(headers)
+  headers <- lapply(headers, encode_sensitive)
 
   headers <- unclass(headers)
   headers
@@ -23,7 +23,7 @@ decode_headers <- function(headers) {
   if (is.null(headers)) {
     list()
   } else {
-    decode_sensitive(headers)
+    lapply(headers, decode_sensitive)
   }
 }
 
