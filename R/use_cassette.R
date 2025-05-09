@@ -18,7 +18,7 @@
 #'   * **once**, the default: Replays recorded interactions, records new ones
 #'     if no cassette exists, and errors on new requests if cassette exists.
 #'   * **none**: Replays recorded interactions, and errors on any new requests.
-#'     Guarnants that no HTTP requests occur.
+#'     Guarantees that no HTTP requests occur.
 #'   * **new_episodes**: Replays recorded interactions and always records new
 #'     ones, even if similar interactions exist.
 #'   * **all**: Never replays recorded interactions, always recording new.
@@ -39,6 +39,10 @@
 #'   If more than one is specified, all components must match in order for the
 #'   request to match. If not supplied, defaults to `c("method", "uri")`.
 #'
+#'   Note that the request header and body will only be included in the
+#'   cassette if  `match_requests_on` includes "header" or "body" respectively.
+#'   This keeps the recorded request as lightweight as possible.
+#'
 #' @param allow_playback_repeats (logical) Whether or not to
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
@@ -48,16 +52,16 @@
 #' serializers; so if you only want one cassette for a given cassette name,
 #' make sure to not switch serializers, or clean up files you no longer need.
 #' @param preserve_exact_body_bytes (logical) Force a binary (base64)
-#'   representation of the request and response bondies? By default, vcr
+#'   representation of the request and response bodies? By default, vcr
 #'   will look at the `Content-Type` header to determine if this is necessary,
-#'   but if it doesn't work you can set `prevsere_exact_body_bytes = TRUE` to
+#'   but if it doesn't work you can set `preserve_exact_body_bytes = TRUE` to
 #'   force it.
 #' @param re_record_interval (integer) How frequently (in seconds) the
-#' cassette should be re-recorded. default: `NULL` (not re-recorded)
+#' cassette should be re-recorded. Default: `NULL` (not re-recorded).
 #' @param clean_outdated_http_interactions (logical) Should outdated
-#' interactions be recorded back to file? default: `FALSE`
-#' @param warn_on_empty Warn if the cassette is ejected but no interactions
-#'   have been recorded?
+#' interactions be recorded back to file? Default: `FALSE`.
+#' @param warn_on_empty (logical) Warn if the cassette is ejected but no interactions
+#'   have been recorded. Default: `NULL` (inherits from global configuration).
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
 #'   functions.
 #' @section Cassette options:
@@ -155,7 +159,7 @@
 #' ## first use record mode 'once' to record to a cassette
 #' one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
 #' one; res
-#' ## then use record mode 'none' to see it's behavior
+#' ## then use record mode 'none' to see its behavior
 #' two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
 #' two; res2
 #' }
@@ -219,6 +223,15 @@ local_cassette <- function(
   warn_on_empty = NULL,
   frame = parent.frame()
 ) {
+  check_string(name, allow_empty = FALSE)
+  check_cassette_name(name)
+  check_string(dir, allow_null = TRUE)
+  check_record_mode(record)
+  check_request_matchers(match_requests_on)
+  check_bool(allow_playback_repeats, allow_null = TRUE)
+  check_bool(clean_outdated_http_interactions, allow_null = TRUE)
+  check_bool(warn_on_empty, allow_null = TRUE)
+
   cassette <- insert_cassette(
     name,
     dir = dir,
@@ -236,4 +249,60 @@ local_cassette <- function(
   }
 
   invisible(cassette)
+}
+
+check_cassette_name <- function(x, call = caller_env()) {
+  if (any(x %in% cassette_names())) {
+    cli::cli_abort(
+      "{.arg name} must not be the same as an existing cassette.",
+      call = call
+    )
+  }
+
+  if (grepl("\\s", x)) {
+    cli::cli_abort("{.arg name} must not contain spaces.", call = call)
+  }
+
+  if (grepl("\\.yml$|\\.yaml$", x)) {
+    cli::cli_abort("{.arg name} must not include an extension.", call = call)
+  }
+
+  # the below adapted from fs::path_sanitize, which adapted
+  # from the npm package sanitize-filename
+  illegal <- "[/\\?<>\\:*|\":]"
+  control <- "[[:cntrl:]]"
+  reserved <- "^[.]+$"
+  windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
+  windows_trailing <- "[. ]+$"
+  if (grepl(illegal, x))
+    cli::cli_abort(
+      "{.arg name} must not contain '/', '?', '<', '>', '\\', ':', '*', '|', or '\"'",
+      call = call
+    )
+  if (grepl(control, x)) {
+    cli::cli_abort(
+      "{.arg name} must not contain control characters.",
+      call = call
+    )
+  }
+  if (grepl(reserved, x)) {
+    cli::cli_abort(
+      "{.arg name} must not be '.', '..', etc.",
+      call = call
+    )
+  }
+  if (grepl(windows_reserved, x)) {
+    cli::cli_abort(
+      "{.arg name} must not contain reserved windows strings.",
+      call = call
+    )
+  }
+  if (grepl(windows_trailing, x)) {
+    cli::cli_abort("{.arg name} must not end in '.'.", call = call)
+  }
+  if (nchar(x) > 255) {
+    cli::cli_abort("{.arg name} must be less than 256 characters.", call = call)
+  }
+
+  invisible()
 }

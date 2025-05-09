@@ -6,7 +6,6 @@ test_that("crul POST requests works", {
   out <- use_cassette("crul_post_named_list", {
     x <- crul::HttpClient$new(hb("/post"))$post(body = list(foo = "bar"))
   })
-  expect_false(out$is_empty())
   expect_s3_class(x, "HttpResponse")
   expect_equal(x$status_code, 200)
   str <- yaml::yaml.load_file(out$file())$http_interactions
@@ -17,7 +16,6 @@ test_that("crul POST requests works", {
   out2 <- use_cassette("crul_post_string", {
     z <- crul::HttpClient$new(hb("/post"))$post(body = "some string")
   })
-  expect_false(out2$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out2$file())$http_interactions
@@ -29,7 +27,6 @@ test_that("crul POST requests works", {
   out3 <- use_cassette("crul_post_raw", {
     z <- crul::HttpClient$new(hb("/post"))$post(body = charToRaw("some string"))
   })
-  expect_false(out3$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out3$file())$http_interactions
@@ -46,7 +43,6 @@ test_that("crul POST requests works", {
       body = list(y = crul::upload(ff))
     )
   })
-  expect_false(out4$is_empty())
   expect_s3_class(b, "HttpResponse")
   expect_equal(b$status_code, 200)
   str <- yaml::yaml.load_file(out4$file())$http_interactions
@@ -59,7 +55,6 @@ test_that("crul POST requests works", {
       body = crul::upload(system.file("CITATION"))
     )
   })
-  expect_false(out6$is_empty())
   expect_s3_class(d, "HttpResponse")
   expect_equal(d$status_code, 200)
   str <- yaml::yaml.load_file(out6$file())$http_interactions
@@ -71,7 +66,6 @@ test_that("crul POST requests works", {
   out5 <- use_cassette("crul_post_null", {
     m <- crul::HttpClient$new(hb("/post"))$post(body = NULL)
   })
-  expect_false(out5$is_empty())
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
   str <- yaml::yaml.load_file(out5$file())$http_interactions

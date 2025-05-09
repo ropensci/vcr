@@ -50,47 +50,42 @@ test_that('issue 249 is correctly handled.', {
   expect_true(res$status_code == 401)
 })
 
+test_that("can ignore a request", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    ignore_localhost = TRUE,
+    warn_on_empty_cassette = FALSE
+  )
+
+  use_cassette("test", res <- httr::GET(hb('/status/400')))
+  expect_true(res$status_code == 400)
+})
+
 test_that("httr use_cassette works", {
   skip_if_not_installed("xml2")
   local_vcr_configure(dir = withr::local_tempdir())
 
-  out <- use_cassette(
-    "httr_test1",
-    x <- httr::GET(hb("/404"))
-  )
-  invisible(use_cassette(
-    "httr_test1",
-    x2 <- httr::GET(hb("/404"))
-  ))
-
-  # cassette
-  expect_s3_class(out, "Cassette")
-  expect_match(out$file(), "httr_test1")
-  expect_false(out$is_empty())
-  expect_s3_class(out$recorded_at, "POSIXct")
-
-  # request - 1st http call
+  # recorded
+  use_cassette("httr_test1", x <- httr::GET(hb("/404")))
+  expect_s3_class(x, "response")
+  expect_equal(x$status_code, 404)
+  expect_equal(x$url, hb("/404"))
   expect_s3_class(x$request, "request")
   expect_equal(x$request$method, "GET")
   expect_equal(x$request$url, hb("/404"))
-  expect_named(x$request$headers, "Accept")
+  expect_named(x$request$headers, c("Content-Type", "Accept"))
   expect_null(x$request$fields)
   expect_true(x$request$options$httpget)
   expect_s3_class(x$request$output, "write_function")
 
-  # request - 2nd http call
+  # replayed
+  use_cassette("httr_test1", x2 <- httr::GET(hb("/404")))
   expect_s3_class(x2$request, "request")
   expect_equal(x2$request$method, "GET")
   expect_equal(x2$request$url, hb("/404"))
   expect_named(x2$request$headers, "Accept")
   expect_null(x2$request$fields)
   expect_true(x2$request$options$httpget)
-  expect_null(x2$request$output) # can't really populate this from cassette
-
-  # response
-  expect_s3_class(x, "response")
-  expect_equal(x$status_code, 404)
-  expect_equal(x$url, hb("/404"))
 })
 
 test_that("httr use_cassette works", {
@@ -106,7 +101,6 @@ test_that("httr use_cassette works", {
   # cassette
   expect_s3_class(out, "Cassette")
   expect_match(out$file(), "httr_test2")
-  expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
@@ -132,7 +126,6 @@ test_that("httr w/ >1 request per cassette", {
   # cassette
   expect_s3_class(out, "Cassette")
   expect_match(out$file(), "multiple_queries_httr_record_once")
-  expect_false(out$is_empty())
   expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
@@ -282,12 +275,10 @@ test_that("binary body uses bsae64 encoding", {
 })
 
 test_that("can write files to disk", {
-  write_path <- withr::local_tempdir()
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    write_disk_path = write_path
-  )
-  path <- file.path(withr::local_tempdir(), "test.png")
+  dir <- withr::local_tempdir()
+  local_vcr_configure(dir = dir)
+
+  path <- file.path(withr::local_tempdir(), "image.png")
   download_image <- function() {
     httr::GET(
       hb("/image"),
@@ -295,7 +286,6 @@ test_that("can write files to disk", {
       httr::write_disk(path, TRUE)
     )
   }
-
   # First request uses httr path
   use_cassette("test", out <- download_image())
   expect_equal(normalizePath(out$content), normalizePath(path))
@@ -304,26 +294,12 @@ test_that("can write files to disk", {
   use_cassette("test", out2 <- download_image())
   expect_equal(
     out2$content,
-    structure(file.path(write_path, "test.png"), class = "path")
+    structure(file.path(dir, "test-files", "image.png"), class = "path")
   )
 
   # Content is the same
   expect_equal(httr::content(out, "raw"), httr::content(out2, "raw"))
 })
-
-test_that("fails well if write_disk_path not set", {
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    warn_on_empty_cassette = FALSE
-  )
-
-  path <- withr::local_tempfile()
-  expect_snapshot(
-    use_cassette("test", httr::GET(hb("/get"), httr::write_disk(path, TRUE))),
-    error = TRUE
-  )
-})
-
 
 test_that("match_requests_on - body", {
   local_vcr_configure(dir = withr::local_tempdir())

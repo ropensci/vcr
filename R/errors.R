@@ -264,7 +264,8 @@ UnhandledHTTPRequestError <- R6::R6Class(
 #' @export
 #' @rdname UnhandledHTTPRequestError
 #' @examples \dontrun{
-#' # vcr_last_error()
+#' # Run after encountering a cassette error to get detailed information
+#' vcr_last_error()
 #' }
 vcr_last_error <- function() {
   if (is.null(the$last_error) || length(the$last_error) == 0) {

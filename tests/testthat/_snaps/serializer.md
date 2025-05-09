@@ -6,15 +6,7 @@
       Error in `serializer_fetch()`:
       ! Unsupported cassette serializer "foo".
 
-# warns if you reload string with preserve_exact_body_bytes
-
-    Code
-      use_cassette("test", httr::GET(hb("/get")), preserve_exact_body_bytes = TRUE)
-    Condition
-      Warning in `decode_body()`:
-      re-record cassettes using 'preserve_exact_body_bytes = TRUE'
-
-# generates expected yaml
+# generates expected json
 
     Code
       writeLines(readLines(ser$path))
@@ -24,9 +16,7 @@
           {
             "request": {
               "method": "GET",
-              "uri": "http://example.com",
-              "body": {},
-              "headers": []
+              "uri": "http://example.com"
             },
             "response": {
               "status": 200,
@@ -43,7 +33,7 @@
         "recorded_with": "<package_versions>"
       }
 
----
+# generates expected yaml
 
     Code
       writeLines(readLines(ser$path))
@@ -52,8 +42,6 @@
       - request:
           method: GET
           uri: http://example.com
-          body: {}
-          headers: []
         response:
           status: 200
           headers:

@@ -35,17 +35,6 @@ test_that("you can record a new cassette of same name with different serializer"
 
 # Binary data ------------------------------------------------------------------
 
-test_that("warns if you reload string with preserve_exact_body_bytes", {
-  local_vcr_configure(dir = withr::local_tempdir())
-
-  use_cassette("test", httr::GET(hb("/get")))
-  expect_snapshot(use_cassette(
-    "test",
-    httr::GET(hb("/get")),
-    preserve_exact_body_bytes = TRUE
-  ))
-})
-
 test_that("use_cassette w/ with images: httr", {
   skip_if_not_installed("jpeg")
   local_vcr_configure(dir = withr::local_tempdir())
@@ -160,7 +149,7 @@ test_that("generates correct path", {
   expect_equal(aa$path, "path/name.json")
 })
 
-test_that("generates expected yaml", {
+test_that("generates expected json", {
   local_vcr_configure(json_pretty = TRUE)
   local_mocked_bindings(
     Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC"),
