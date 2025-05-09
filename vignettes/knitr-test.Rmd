@@ -20,7 +20,7 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 
 # Set record = "none" so that this vignette will fail if it doesn't replay
 # from the casssette
-vcr::register_chunk_hook(record = "none")
+vcr::setup_knitr(record = "none")
 ```
 
 ```{r}

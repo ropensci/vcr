@@ -17,7 +17,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
-* New `register_chunk_hook()` makes it easier to use vcr from within a vignette (#308).
+* New `setup_knitr()` makes it easier to use vcr from within a vignette (#308).
 * The `Authorization` header is never written to disk.
 * The request body and headers are only written to disk if actually used for matching (#417).
 * Writing files to disk now works with out any additional config. Files are saved in a directory called `{cassette-name}-files` inside of the cassette directory. You can override this default with `vrc_configure(write_disk_path)`.

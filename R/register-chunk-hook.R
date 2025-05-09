@@ -1,13 +1,13 @@
 #' Use vcr in vignettes
 #'
 #' @description
-#' `register_chunk_hook()` registers a `use_cassette` hook so that you map
+#' `setup_knitr()` registers a `use_cassette` hook so that you map
 #' a vcr cassette to a knitr chunk. Call it in your setup chunk:
 #'
 #' ````
 #' ```{r setup}
 #' #| include: false
-#' vcr::register_chunk_hook()
+#' vcr::setup_knitr()
 #' ```
 #' ````
 #'
@@ -28,7 +28,7 @@
 #' @param dir Directory where to create the cassette file. Default: `"_vcr"``.
 #' @param ... Other arguments passed on to [insert_cassette()].
 #' @export
-register_chunk_hook <- function(prefix = "", dir = "_vcr", ...) {
+setup_knitr <- function(prefix = "", dir = "_vcr", ...) {
   force(prefix)
   dir_create(dir)
 
