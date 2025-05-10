@@ -6,6 +6,7 @@ reference:
       - use_cassette
       - vcr_configure
       - vcr_configure_log
+      - insert_example_cassette
   - title: Managing cassettes
     contents:
       - cassette_path

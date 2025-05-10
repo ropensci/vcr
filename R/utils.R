@@ -55,6 +55,7 @@ check_record_mode <- function(
 
 dir_create <- function(path) {
   dir.create(path, showWarnings = FALSE, recursive = TRUE)
+  path
 }
 
 cur_time <- function(tz = "") {

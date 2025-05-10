@@ -78,7 +78,6 @@ eject_cassette <- function() {
   invisible(cassette)
 }
 
-
 #' List cassettes, get current cassette, etc.
 #'
 #' @export

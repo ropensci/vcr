@@ -165,3 +165,27 @@ For tweaking things to your needs, make sure to read the docs about [configurati
 There's a number of features in this package that are not yet supported, but for which their parameters are found in the package. 
 
 We've tried to make sure the parameters that are ignored are marked as such. Keep an eye out for package updates for changes in these parameters, and/or let us know you want it and we can move it up in the priority list.
+
+## Examples
+
+It's also possible to use vcr in an example. It's not possible to use `local_cassette()` (or `use_cassette()` inside an example), so the basic idea is to call `insert_example_cassette()` at the start of the example and `eject_cassette()` at the end. There's just one small wrinkle: you probably don't want to show the cassette usage in the example (because the user won't need it in their code), so you'll want to wrap the inserting and ejecting functions `\dontshow{}`.
+
+All together, this will lead to roxygen2 code that looks something like this:
+
+```{r}
+#' @examples
+#' \dontshow{
+#' vcr::insert_example_cassette("casette-name", "package-name")
+#' }
+#' 
+#' output <- my_api_calling_function()
+#' str(output)
+#' 
+#' \dontshow{
+#' vcr::eject_cassette()
+#' }
+```
+
+You'll then need to step through the example line by line to record the casssette for the first time.
+
+Remember that every casssette used in an example has to be stored inside your package, making it larger, so we recommend that you use this technique sparingly.
