@@ -51,7 +51,7 @@ insert_cassette <- function(
   cassette_push(cassette)
   # $insert() might error if there's a bug in the decoder, so we need to
   # make sure to unload it. We can't call `cassette_push()` after `$insert()`
-  # because it the active casssette name is used for logging.
+  # because the active cassette name is used for logging.
   withCallingHandlers(
     cassette$insert(),
     error = function(e) cassette_pop()
@@ -83,7 +83,7 @@ eject_cassette <- function() {
 #' @export
 #' @details
 #'
-#' - `cassettes()`: returns cassettes all active cassettes in the current
+#' - `cassettes()`: returns all active cassettes in the current
 #'   session.
 #' - `current_cassette()`: returns `NULL` when no cassettes are in use;
 #' returns the current cassette (a `Cassette` object) when one is in use

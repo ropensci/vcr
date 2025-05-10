@@ -3,7 +3,7 @@ encode_body <- function(body, file = FALSE, preserve_bytes = FALSE) {
     list(on_disk = body)
   } else {
     if (is.null(body)) {
-      set_names(list())
+      NULL
     } else if (is.list(body)) {
       list(fields = body)
     } else if (is_string(body) && !preserve_bytes) {

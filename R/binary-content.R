@@ -30,7 +30,6 @@ is_binary_type <- function(content_type) {
 
 # Copied from httr2::parse_content_type
 parse_content_type <- function(x) {
-  stopifnot(length(x) == 1)
   regex <- "^(?<type>application|audio|font|example|image|message|model|multipart|text|video)/(?<subtype>(?:(?:vnd|prs|x)\\.)?(?:[^+;])+)(?:\\+(?<suffix>(?:[^;])+))?(?:;(?<parameters>(?:.)+))?$"
   if (!grepl(regex, x, perl = TRUE)) {
     out <- list(
