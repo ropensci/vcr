@@ -141,3 +141,21 @@ test_that("Authorization is always redacted", {
     list(AUTHORIZATION = "<redacted>")
   )
 })
+
+test_that("filter_sensitive_data usage works for headers", {
+  local_vcr_configure(
+    filter_sensitive_data = list(
+      "<some_env_var>" = "string_to_match"
+    )
+  )
+
+  expect_equal(
+    encode_headers(list(SomeSecret = "string_to_match")),
+    list(SomeSecret = "<some_env_var>")
+  )
+
+  expect_equal(
+    decode_headers(list(SomeSecret = "<some_env_var>")),
+    list(SomeSecret = "string_to_match")
+  )
+})
