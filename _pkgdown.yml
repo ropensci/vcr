@@ -26,6 +26,5 @@ articles:
     navbar: ~
     contents:
       - secrets
-      - configuration
       - debugging
       - design

@@ -42,7 +42,7 @@ vcr_configuration()
 vcr_config_defaults()
 }
 \arguments{
-\item{dir}{Cassette directory}
+\item{dir}{Directory where cassettes are stored.}
 
 \item{record}{Record mode that dictates how HTTP requests/responses are
 recorded. Possible values are:
@@ -78,11 +78,8 @@ Note that the request header and body will only be included in the
 cassette if  \code{match_requests_on} includes "header" or "body" respectively.
 This keeps the recorded request as lightweight as possible.}
 
-\item{serialize_with}{(character) Which serializer to use.
-Valid values are "yaml" (default) and "json". Note that you can have
-multiple cassettes with the same name as long as they use different
-serializers; so if you only want one cassette for a given cassette name,
-make sure to not switch serializers, or clean up files you no longer need.}
+\item{serialize_with}{(string) Which serializer to use:
+\code{"yaml"} (the default) or \code{"json"}.}
 
 \item{json_pretty}{(logical) want JSON to be newline separated to be easier
 to read? Or remove newlines to save disk space? default: \code{FALSE}.`}

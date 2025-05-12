@@ -3,7 +3,7 @@
 #' Configurable options that define vcr's default behavior.
 #'
 #' @param ... Configuration settings used to override defaults.
-#' @param dir Cassette directory
+#' @param dir Directory where cassettes are stored.
 #' @param log,log_opts See [vcr_configure_log()].
 #' @param write_disk_path (character) path to write files to
 #'   for any requests that write responses to disk.  By default this will be
