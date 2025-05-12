@@ -46,11 +46,8 @@
 #' @param allow_playback_repeats (logical) Whether or not to
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
-#' @param serialize_with (character) Which serializer to use.
-#' Valid values are "yaml" (default) and "json". Note that you can have
-#' multiple cassettes with the same name as long as they use different
-#' serializers; so if you only want one cassette for a given cassette name,
-#' make sure to not switch serializers, or clean up files you no longer need.
+#' @param serialize_with (string) Which serializer to use:
+#'   `"yaml"` (the default) or `"json"`.
 #' @param preserve_exact_body_bytes (logical) Force a binary (base64)
 #'   representation of the request and response bodies? By default, vcr
 #'   will look at the `Content-Type` header to determine if this is necessary,
