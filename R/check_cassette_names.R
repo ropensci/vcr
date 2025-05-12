@@ -5,9 +5,10 @@
 #'
 #' This function has been deprecated because it's not possible for it to
 #' detect re-used cassette names 100% correctly and the problem of duplicated
-#' cassette names relatively easy to debug by hand.
+#' cassette names is relatively easy to debug by hand.
 #'
 #' @export
+#' @keywords internal
 #' @param pattern (character) regex pattern for file paths to check.
 #' this is done inside of `tests/testthat/`. default: "test-"
 #' @param behavior (character) "stop" (default) or "warning". if "warning",
