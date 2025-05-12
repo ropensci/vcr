@@ -1,5 +1,5 @@
 decode_sensitive <- function(x) {
-  if (!is.null(vcr_c$filter_sensitive_data)) {
+  if (!is.null(vcr_c$filter_sensitive_data) && !is_empty(x)) {
     fsd <- vcr_c$filter_sensitive_data
     for (i in seq_along(fsd)) {
       x <- gsub(names(fsd)[i], fsd[[i]], x, fixed = TRUE)

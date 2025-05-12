@@ -35,3 +35,12 @@ test_that("filter sensitive regex strings", {
   # we stored it somehow, but that seems like an added security risk
   # expect_identical(decode_sensitive(encode_sensitive(x)), x)
 })
+
+test_that("decode_sensitive handles zero length raw", {
+  local_vcr_configure(
+    filter_sensitive_data = list("<<a>>" = "asdfasdf")
+  )
+
+  expect_type(vcr_c$filter_sensitive_data, "list")
+  expect_identical(decode_sensitive(raw()), raw())
+})

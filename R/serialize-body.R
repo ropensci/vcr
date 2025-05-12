@@ -23,7 +23,9 @@ decode_body <- function(body, preserve_bytes = FALSE) {
     cli::cli_warn(
       "{.str {name}} cassette uses outdated encoding. Please rerecord it."
     )
-    body$string <- from_base64(body$string)
+    if (is_base64(body$string)) {
+      body$string <- from_base64(body$string)
+    }
   }
 
   if (has_name(body, "on_disk")) {
@@ -56,10 +58,50 @@ decode_body <- function(body, preserve_bytes = FALSE) {
 }
 
 # Helpers --------------------------------------------------------------------
-
 from_base64 <- function(x) {
-  x <- gsub("[\r\n]", "", x)
+  if (is.character(x)) {
+    x <- gsub("[\r\n]", "", x)
+  }
   jsonlite::base64_dec(x)
+}
+
+is_base64 <- function(x) {
+  if (!is.character(x) || length(x) != 1 || is.na(x) || nchar(x) == 0) {
+    return(FALSE)
+  }
+
+  # Remove newlines that might be present in formatted base64
+  x <- gsub("[\r\n]", "", x)
+
+  # Check if string length is divisible by 4 (base64 requirement)
+  if (nchar(x) %% 4 != 0) {
+    return(FALSE)
+  }
+
+  # Check if string only contains valid base64 characters
+  # Valid chars: A-Z, a-z, 0-9, +, /, and = (for padding)
+  valid_chars <- grepl("^[A-Za-z0-9+/=]+$", x)
+  if (!valid_chars) {
+    return(FALSE)
+  }
+
+  # Check if padding is valid (if present)
+  # Can only be at the end and max 2 '=' characters
+  padding_match <- grepl("^[A-Za-z0-9+/]+={0,2}$", x)
+  if (!padding_match) {
+    return(FALSE)
+  }
+
+  # Try to decode and check if it returns raw bytes
+  tryCatch(
+    {
+      decoded <- jsonlite::base64_dec(x)
+      is.raw(decoded)
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
 }
 
 to_base64 <- function(x) {
