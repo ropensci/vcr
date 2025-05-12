@@ -14,11 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr}, and {httr2}. 
-
-The central metaphor of vcr is a video **cassette**. This is what records your HTTP **interactions**, the pairs of HTTP request and response. You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done.
-
-This vignette will introduce you to the basics of vcr for testing. To learn more about testing web requests in generally, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on vcr, webmockr, crul, and more. You can also use vcr in vignettes and examples. See `setup_knitr()` and `insert_example_cassette()` for details. 
+{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr}, and {httr2}. This vignette will introduce you to the basics of vcr for testing. To learn more about testing web requests in generally, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on all the packages involved. Once you're familiar with vcr for testing, you'll also find it easy to use in vignettes and examples: see `setup_knitr()` and `insert_example_cassette()` for the details. 
 
 Here we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
 
@@ -28,7 +24,6 @@ library(testthat)
 library(httr2, warn.conflicts = FALSE)
 
 httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
-httpbin$url()
 ```
 
 ```{r}
@@ -38,7 +33,7 @@ vcr_configure(dir = "_vcr")
 
 ## Getting started
 
-To use vcr in a test, include a call to `vcr::local_cassette()`:
+The central metaphor of vcr is a video cassette. This is what records your HTTP **interactions**, the pairs of HTTP request and response. You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done. To use vcr in a test, include a call to `vcr::local_cassette()`: it inserts the cassette and automatically ejects it when the test is done.
 
 ```{r}
 test_that("my test", {
@@ -52,9 +47,9 @@ test_that("my test", {
 })
 ```
 
-The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`. Then in the second and subsequent runs, it will replay those responses, meaning that you test will now run independently of the internet, making it both faster and more realiable.
+The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`. In future runs, it will replay those responses, freeing your test from the vagaries of the internet, making it both faster and more realiable.
 
-You can see exactly what's happening in a test by using `local_vcr_configure_log()`. In this case, since it's the second run of the test you can see that it loads the previously saved interaction and replay it.
+You can see exactly what vcr is doing with `local_vcr_configure_log()`. This turns logging on so you can see each step in the recording and replaying process. In this case, since it's the second run of the test, you can see that vcr loads the previously saved interaction then replays it.
 
 ```{r}
 test_that("my test", {
@@ -79,7 +74,7 @@ It's good practice to look at the cassette files that are saved to disk. This wi
 writeLines(readLines("_vcr/get.yml"))
 ```
 
-You can see that it records all components of the request and response, as well as when the request was made. The first time you use vcr with your package, it's a really good idea to closely look at this file to make sure that you aren't accidentally leaking any private information. Learn more about what vcr does by default and how you can customize in `vignette("secrets")`.
+You can see that it records all components of the response, along  with the components of the request used for matching (which defaults to `method` and `uri`; more on that shortly). The first time you use vcr with your package, it's a really good idea to closely look at this file to make sure that you aren't accidentally leaking any secrets. Learn the details in `vignette("secrets")`.
 
 Sometimes it also makes sense to manually edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
 
