@@ -29,6 +29,7 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 ```{r}
 #| include: false
 vcr_configure(dir = "_vcr")
+setHook("rmarkdown.onKnitCompleted", \(...) unlink("_vcr/get.yml"))
 ```
 
 ## Getting started
