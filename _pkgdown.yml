@@ -12,14 +12,12 @@ reference:
       - cassette_path
       - cassettes
       - current_cassette
-      - check_cassette_names
   - title: Other helpers
     contents:
       - vcr_last_error
       - skip_if_vcr_off
       - vcr_test_path
       - turn_off
-      - use_vcr
       
 articles:
   - title: All vignettes
@@ -27,6 +25,8 @@ articles:
     navbar: ~
     contents:
       - secrets
-      - configuration
       - debugging
       - design
+  - title: internal
+    contents:
+      - knitr-test

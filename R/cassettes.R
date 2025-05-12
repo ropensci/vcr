@@ -136,7 +136,7 @@ current_cassette <- function() {
 
 #' @export
 #' @rdname cassettes
-cassette_path <- function() vcr_c$dir
+cassette_path <- function() the$config$dir
 
 cassette_push <- function(cassette) {
   n <- length(the$cassettes)

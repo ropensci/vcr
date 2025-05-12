@@ -3,6 +3,7 @@ vcr (development version)
 
 ### BREAKING CHANGES
 
+* `check_cassette_names()` has been deprecated since it can't be implemented 100% correctly and diagnoses a relatively rare problem (#166).
 * `RequestHandler` and its subclasses are no longer exported.
 * Internal `real_http_connections_allowed()` is no longer exported and has been removed.
 * Internal `Request` and `VcrResponse` classes are no longer exported and have been removed.
@@ -18,9 +19,10 @@ vcr (development version)
 ## NEW FEATURES
 
 * New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
+* New `setup_knitr()` makes it easier to use vcr from within a vignette (#308).
 * The `Authorization` header is never written to disk.
 * The request body and headers are only written to disk if actually used for matching (#417).
-* Writing files to disk now works with out any additional config. Files are saved in a directory called `{cassette-name}-files` inside of the casssette directory. You can override this default with `vrc_configure(write_disk_path)`.
+* Writing files to disk now works with out any additional config. Files are saved in a directory called `{cassette-name}-files` inside of the cassette directory. You can override this default with `vrc_configure(write_disk_path)`.
 * New `body_json` request matcher that compares the parsed JSON. This both ignores differences in the textual representation of the JSON and gives more informative messages when requests don't match. (#421)
 * Raw bodies are now automatically gzipped before being converted to base64 (#343).
 * The default path is now `tests/testthat/_vcr`. This should not affect existing packages that used `use_vcr()` because these set up a helper that sets the default directory with `vcr_configure()` (#395).
