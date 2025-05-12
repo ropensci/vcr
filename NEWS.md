@@ -18,6 +18,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
 * New `setup_knitr()` makes it easier to use vcr from within a vignette (#308).
 * The `Authorization` header is never written to disk.
 * The request body and headers are only written to disk if actually used for matching (#417).
