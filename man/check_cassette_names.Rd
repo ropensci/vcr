@@ -26,5 +26,6 @@ by default)}
 
 This function has been deprecated because it's not possible for it to
 detect re-used cassette names 100\% correctly and the problem of duplicated
-cassette names relatively easy to debug by hand.
+cassette names is relatively easy to debug by hand.
 }
+\keyword{internal}
