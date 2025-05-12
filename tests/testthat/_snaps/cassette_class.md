@@ -26,42 +26,31 @@
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output
-      [Cassette: "test"] Inserting: loading 0 interactions from disk
-      [Cassette: "test"]   record: once
-      [Cassette: "test"]   serialize_with: yaml
-      [Cassette: "test"]   allow_playback_repeats: FALSE
-      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
-      [Cassette: "test"] Handling request: GET {httpbin}/html
-      [Cassette: "test"]   looking for existing requests using method/uri
-      [Cassette: "test"]   no matching requests
-      [Cassette: "test"]   recording response: 200 with 1443 bytes of text/html data
-      [Cassette: "test"] Ejecting
+      [Cassette: test] Inserting 'test.yml' (new cassette)
+      [Cassette: test]   recording: TRUE
+      [Cassette: test] Handling request: GET {httpbin}/html
+      [Cassette: test]   recording response: 200 with 1443 bytes of text/html data
+      [Cassette: test] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output
-      [Cassette: "test"] Inserting: loading 1 interactions from disk
-      [Cassette: "test"]   record: once
-      [Cassette: "test"]   serialize_with: yaml
-      [Cassette: "test"]   allow_playback_repeats: FALSE
-      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
-      [Cassette: "test"] Handling request: GET {httpbin}/html
-      [Cassette: "test"]   looking for existing requests using method/uri
-      [Cassette: "test"]   match: GET {httpbin}/html
-      [Cassette: "test"]   matched response 1
-      [Cassette: "test"] Ejecting
+      [Cassette: test] Inserting 'test.yml' (with 1 interactions)
+      [Cassette: test]   recording: FALSE
+      [Cassette: test] Handling request: GET {httpbin}/html
+      [Cassette: test]   Looking for existing requests using method/uri
+      [Cassette: test]     Request 1: MATCH
+      [Cassette: test]   Replaying response 1
+      [Cassette: test] Ejecting
     Code
       try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
     Output
-      [Cassette: "test"] Inserting: loading 1 interactions from disk
-      [Cassette: "test"]   record: once
-      [Cassette: "test"]   serialize_with: yaml
-      [Cassette: "test"]   allow_playback_repeats: FALSE
-      [Cassette: "test"]   preserve_exact_body_bytes: FALSE
-      [Cassette: "test"] Handling request: GET {httpbin}/404
-      [Cassette: "test"]   looking for existing requests using method/uri
-      [Cassette: "test"]   no match: GET {httpbin}/404
-      [Cassette: "test"]   `matching$uri$path`: "/404" 
-      [Cassette: "test"]   `recorded$uri$path`: "/html"
-      [Cassette: "test"]   no matching requests
-      [Cassette: "test"] Ejecting
+      [Cassette: test] Inserting 'test.yml' (with 1 interactions)
+      [Cassette: test]   recording: FALSE
+      [Cassette: test] Handling request: GET {httpbin}/404
+      [Cassette: test]   Looking for existing requests using method/uri
+      [Cassette: test]     Request 1: NO MATCH
+      [Cassette: test]     `matching$uri$path`: "/404" 
+      [Cassette: test]     `recorded$uri$path`: "/html"
+      [Cassette: test]   No matching requests
+      [Cassette: test] Ejecting
 
