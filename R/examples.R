@@ -1,9 +1,14 @@
 #' Use casssettes in examples
 #'
+#' @description
 #' `insert_example_cassette()` is a wrapper around [insert_cassette()] that
 #' stores casssettes in `inst/_vcr/`. Call it in the first line of your examples
 #' (typically wrapped in `\dontshow{}`), and call `eject_cassette()` on the
 #' last line.
+#'
+#' Run the example manually once to record the vignettte, then it will be
+#' replayed during `R CMD check`, ensuring that your example no longer uses
+#' the internet.
 #'
 #' @export
 #' @param package Package name.
@@ -38,15 +43,12 @@ insert_example_cassette <- function(
   clean_outdated_http_interactions = NULL
 ) {
   dir <- example_cassette_path(package)
-  if (is.null(dir)) {
-    cli::cli_abort("`inst/_vcr` not found; please create.")
-  }
-
+  in_dev <- is_dev_package(package)
   if (is.null(record)) {
-    record <- if (is_dev_package(package) && !in_pkgdown()) "all" else "none"
+    record <- if (in_dev && !in_pkgdown()) "all" else "none"
   }
 
-  insert_cassette(
+  cassette <- insert_cassette(
     name = name,
     dir = dir,
     record = record,
@@ -57,39 +59,45 @@ insert_example_cassette <- function(
     re_record_interval = re_record_interval,
     clean_outdated_http_interactions = clean_outdated_http_interactions
   )
+
+  path <- cassette$file()
+  if (record == "none" && !in_dev && !file.exists(path)) {
+    cli::cli_abort(
+      c(
+        "Can't find pre-recorded cassette {.path inst/_vcr/{basename(path)}}.",
+        i = "Do you need to run {.fn insert_example_cassette} in a live session?"
+      )
+    )
+  }
+
+  invisible(cassette)
+}
+
+example_cassette_path <- function(package, call = caller_env()) {
+  if (is_dev_package(package)) {
+    path <- file.path(find.package(package), "inst", "_vcr")
+    if (!dir.exists(path)) {
+      cli::cli_inform("Creating {.path inst/_vcr}.")
+      dir_create(path)
+    }
+  } else {
+    path <- system.file("_vcr", package = package)
+    if (path == "") {
+      cli::cli_abort(
+        c(
+          "Can't find {.path inst/_vcr} directory.",
+          i = "Do you need to run {.fn insert_example_cassette} in a live session?"
+        ),
+        call = call
+      )
+    }
+  }
+
+  path
 }
 
 in_pkgdown <- function() {
   identical(Sys.getenv("IN_PKGDOWN"), "true")
-}
-
-example_cassette_path <- function(package) {
-  path <- system_file("_vcr", package = package)
-  if (path != "") {
-    path
-  } else if (is_dev_package(package)) {
-    cli::cli_inform("Creating {.path inst/_vcr}")
-    dir_create(file.path(system_file(package = package), "inst", "_vcr"))
-  } else {
-    NULL
-  }
-}
-
-# partial system.file() shim that looks in the right place for packages
-# loaded with devtools. pkgload takes care of this when calling system.file
-# from the command line, but we need to implement from first principles inside
-# a package.
-system_file <- function(path = "", package, error_call = caller_env()) {
-  if (is_dev_package(package)) {
-    path_inst <- file.path(find.package(package), "inst", path)
-    if (file.exists(path_inst)) {
-      path_inst
-    } else {
-      ""
-    }
-  } else {
-    system.file(path, package = package)
-  }
 }
 
 is_dev_package <- function(name) {

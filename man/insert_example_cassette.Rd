@@ -43,7 +43,11 @@ determine which recorded HTTP interaction to replay. Possible values are:
 }
 
 If more than one is specified, all components must match in order for the
-request to match. If not supplied, defaults to \code{c("method", "uri")}.}
+request to match. If not supplied, defaults to \code{c("method", "uri")}.
+
+Note that the request header and body will only be included in the
+cassette if  \code{match_requests_on} includes "header" or "body" respectively.
+This keeps the recorded request as lightweight as possible.}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
@@ -56,22 +60,26 @@ serializers; so if you only want one cassette for a given cassette name,
 make sure to not switch serializers, or clean up files you no longer need.}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
-representation of the request and response bondies? By default, vcr
+representation of the request and response bodies? By default, vcr
 will look at the \code{Content-Type} header to determine if this is necessary,
-but if it doesn't work you can set \code{prevsere_exact_body_bytes = TRUE} to
+but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
 force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
-cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? default: \code{FALSE}}
+interactions be recorded back to file? Default: \code{FALSE}.}
 }
 \description{
 \code{insert_example_cassette()} is a wrapper around \code{\link[=insert_cassette]{insert_cassette()}} that
 stores casssettes in \verb{inst/_vcr/}. Call it in the first line of your examples
 (typically wrapped in \verb{\dontshow{}}), and call \code{eject_cassette()} on the
 last line.
+
+Run the example manually once to record the vignettte, then it will be
+replayed during \verb{R CMD check}, ensuring that your example no longer uses
+the internet.
 }
 \examples{
 \dontshow{if (requireNamespace("httr2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
