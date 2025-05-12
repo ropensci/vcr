@@ -27,3 +27,6 @@ articles:
       - configuration
       - debugging
       - design
+  - title: internal
+    contents:
+      - knitr-test
