@@ -41,6 +41,6 @@ test_that("decode_sensitive handles zero length raw", {
     filter_sensitive_data = list("<<a>>" = "asdfasdf")
   )
 
-  expect_type(vcr_c$filter_sensitive_data, "list")
+  expect_type(the$config$filter_sensitive_data, "list")
   expect_identical(decode_sensitive(raw()), raw())
 })
