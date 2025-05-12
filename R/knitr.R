@@ -1,8 +1,9 @@
 #' Use vcr in vignettes
 #'
 #' @description
-#' `setup_knitr()` registers a `use_cassette` hook so that you map
-#' a vcr cassette to a knitr chunk. Call it in your setup chunk:
+#' `setup_knitr()` registers a knitr hook to make it easy to use vcr inside a
+#' vignette. First call `setup_knitr()` in your setup chunk (or other chunk
+#' early in the document):
 #'
 #' ````
 #' ```{r setup}
@@ -11,8 +12,8 @@
 #' ```
 #' ````
 #'
-#' Then in a chunk where you want to use a cassette, set the `cassette` chunk option
-#' to the name of the cassette:
+#' Then, in a chunk where you want to use a cassette, set the `cassette` chunk
+#' option to the name of the cassette:
 #'
 #' ````
 #' ```{r}
@@ -22,14 +23,16 @@
 #' ```
 #' ````
 #'
-#' @param prefix An optional prefix for the cassette name so that you only
-#'   need to make sure that cassette names are unique within the current
-#'   vignette. Default: `""``.
+#' @param prefix An prefix for the cassette name to make cassettes unique across
+#'   vignettes. Defaults to the file name (without extension) of the currently
+#'   executing vignette.
 #' @param dir Directory where to create the cassette file. Default: `"_vcr"``.
 #' @param ... Other arguments passed on to [insert_cassette()].
 #' @export
-setup_knitr <- function(prefix = "", dir = "_vcr", ...) {
-  force(prefix)
+setup_knitr <- function(prefix = NULL, dir = "_vcr", ...) {
+  if (is.null(prefix)) {
+    prefix <- paste0(tools::file_path_sans_ext(knitr::current_input()), "-")
+  }
   dir_create(dir)
 
   chunk_hook <- function(before, options, name) {
