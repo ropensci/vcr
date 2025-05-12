@@ -7,6 +7,6 @@
 \alias{RequestHandlerCrul}
 \title{Request handlers}
 \description{
-This are internal classes that should not be used by users.
+These are internal classes that should not be used by users.
 }
 \keyword{internal}

@@ -16,3 +16,5 @@ CLAUDE.md
 
 /.quarto/
 docs/
+
+**/.claude/settings.local.json
