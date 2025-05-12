@@ -96,18 +96,6 @@ Customize how `vcr` matches requests
 vcr_configure(match_requests_on = c('query', 'headers'))
 ```
 
-### allow_unused_http_interactions
-
-Allow HTTP connections when no cassette
-
-Default is `TRUE`, and thus does not error when http interactions are unused. You
-can set to `FALSE` in which case vcr errors when a cassette is ejected and
-not all http interactions have been used.
-
-```{r}
-vcr_configure(allow_unused_http_interactions = FALSE)
-```
-
 ### serialize_with
 
 Which serializer to use: "yaml" or "json". Note that you can have

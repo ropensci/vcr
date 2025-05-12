@@ -10,7 +10,6 @@
 #'   `{cassette-name}-files/` inside the cassette directory.
 #' @param turned_off (logical) VCR is turned on by default. Default:
 #'   `FALSE`.
-#' @param allow_unused_http_interactions (logical) Default: `TRUE`.
 #' @param ignore_hosts (character) Vector of hosts to ignore. e.g.,
 #'   `"localhost"`, or `"google.com"`. These hosts are ignored and real HTTP
 #'   requests are allowed to go through.
@@ -85,7 +84,6 @@ vcr_configure <- function(
   dir,
   record,
   match_requests_on,
-  allow_unused_http_interactions,
   serialize_with,
   json_pretty,
   ignore_hosts,
@@ -120,12 +118,6 @@ vcr_configure <- function(
   if (!missing(match_requests_on)) {
     check_request_matchers(match_requests_on)
     new_params["match_requests_on"] <- list(match_requests_on)
-  }
-  if (!missing(allow_unused_http_interactions)) {
-    check_bool(allow_unused_http_interactions, allow_null = TRUE)
-    new_params["allow_unused_http_interactions"] <- list(
-      allow_unused_http_interactions
-    )
   }
   if (!missing(serialize_with)) {
     check_string(serialize_with, allow_null = TRUE)
@@ -269,7 +261,6 @@ vcr_config_defaults <- function() {
     dir = NULL,
     record = "once",
     match_requests_on = c("method", "uri"),
-    allow_unused_http_interactions = TRUE,
     serialize_with = "yaml",
     json_pretty = FALSE,
     ignore_hosts = NULL,

@@ -12,7 +12,6 @@ vcr_configure(
   dir,
   record,
   match_requests_on,
-  allow_unused_http_interactions,
   serialize_with,
   json_pretty,
   ignore_hosts,
@@ -78,8 +77,6 @@ request to match. If not supplied, defaults to \code{c("method", "uri")}.
 Note that the request header and body will only be included in the
 cassette if  \code{match_requests_on} includes "header" or "body" respectively.
 This keeps the recorded request as lightweight as possible.}
-
-\item{allow_unused_http_interactions}{(logical) Default: \code{TRUE}.}
 
 \item{serialize_with}{(character) Which serializer to use.
 Valid values are "yaml" (default) and "json". Note that you can have
