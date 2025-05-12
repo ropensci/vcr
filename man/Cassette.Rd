@@ -14,17 +14,17 @@ function \code{\link[=use_cassette]{use_cassette()}}
 
 \itemize{
 \item \code{initialize()}: webmockr is used in the \code{initialize()} method to
-create webmockr stubs. stubs are created on call to \code{Cassette$new()}
+create webmockr stubs. Stubs are created on call to \code{Cassette$new()}
 within \code{insert_cassette()}, but then on exiting \code{use_cassette()},
 or calling \code{eject()} on \code{Cassette} class from \code{insert_cassette()},
 stubs are cleaned up.
 \item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
 eject to disable webmock so that webmockr does not affect any HTTP
-requests that happen afterwards
-\item \code{serialize_to_crul()} method: method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
+requests that happen afterwards.
+\item \code{serialize_to_crul()} method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
 \link[webmockr:Response]{webmockr::Response} are used to build a request and response,
 respectively, then passed to \code{\link[webmockr:build_crul_response]{webmockr::build_crul_response()}}
-to make a complete \code{crul} HTTP response object
+to make a complete \code{crul} HTTP response object.
 }
 }
 

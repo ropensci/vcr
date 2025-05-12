@@ -5,8 +5,8 @@
 #'
 #' @note `vcr_test_path()` assumes you are using testthat for your unit tests.
 #'
-#' @param ...	Character vectors giving path component. each character string
-#' gets added on to the path, e.g., `vcr_test_path("a", "b")` becomes
+#' @param ... Character vectors giving path components. Each character string
+#' gets added to the path, e.g., `vcr_test_path("a", "b")` becomes
 #' `tests/a/b` relative to the root of the package.
 #'
 #' @return A character vector giving the path
