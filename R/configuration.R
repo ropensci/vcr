@@ -12,8 +12,8 @@
 #'   `FALSE`.
 #' @param allow_unused_http_interactions (logical) Default: `TRUE`.
 #' @param ignore_hosts (character) Vector of hosts to ignore. e.g.,
-#'   `"localhost"`, or `"google.com"`. These hosts are ignored and real
-#'   HTTP requests allowed to go through
+#'   `"localhost"`, or `"google.com"`. These hosts are ignored and real HTTP
+#'   requests are allowed to go through.
 #' @param ignore_localhost (logical) Default: `FALSE`
 #' @param ignore_request List of requests to ignore. NOT USED RIGHT NOW, sorry
 #' @param filter_sensitive_data named list of values to replace. Format is:
@@ -38,7 +38,7 @@
 #'   real value of the request header. Note that for the `httr2` package only
 #'   we redact request headers automatically that are marked (via attributes)
 #'   as redacted.
-#' @param filter_response_headers (named list) **response** headers to filter.
+#' @param filter_response_headers (character/list) **response** headers to filter.
 #'   A character vector of response headers to remove - the headers will not be
 #'   recorded to disk. Alternatively, a named list similar to
 #'   `filter_sensitive_data` instructing vcr with what value to replace the

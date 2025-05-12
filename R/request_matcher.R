@@ -31,7 +31,8 @@ make_comparison <- function(matches, req) {
     method = if ("method" %in% matches) req$method,
     body = if ("body" %in% matches) normalize_body(req$body),
     body = if ("body_json" %in% matches) try_json(req$body),
-    headers = if ("headers" %in% matches) req$headers,
+    headers = if ("headers" %in% matches)
+      encode_headers(req$headers, "request"),
     uri = if (needs_uri) uri,
     host = if ("host" %in% matches) uri$host,
     path = if ("path" %in% matches) uri$path,

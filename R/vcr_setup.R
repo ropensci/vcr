@@ -79,7 +79,7 @@ test_r_file_exists <- function(dir) {
 #' @keywords internal
 #' @param verbose (logical) print progress messages. default: `TRUE`
 #' @return only messages about progress, returns invisible()
-#' @details Sets a mimimum vcr version, which is usually the latest
+#' @details Sets a minimum vcr version, which is usually the latest
 #' (stable) version on CRAN. You can of course easily remove or change
 #' the version requirement yourself after running this function.
 use_vcr <- function(dir = ".", verbose = TRUE) {

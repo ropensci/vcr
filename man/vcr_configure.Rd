@@ -51,7 +51,7 @@ recorded. Possible values are:
 \item \strong{once}, the default: Replays recorded interactions, records new ones
 if no cassette exists, and errors on new requests if cassette exists.
 \item \strong{none}: Replays recorded interactions, and errors on any new requests.
-Guarnants that no HTTP requests occur.
+Guarantees that no HTTP requests occur.
 \item \strong{new_episodes}: Replays recorded interactions and always records new
 ones, even if similar interactions exist.
 \item \strong{all}: Never replays recorded interactions, always recording new.
@@ -73,7 +73,11 @@ determine which recorded HTTP interaction to replay. Possible values are:
 }
 
 If more than one is specified, all components must match in order for the
-request to match. If not supplied, defaults to \code{c("method", "uri")}.}
+request to match. If not supplied, defaults to \code{c("method", "uri")}.
+
+Note that the request header and body will only be included in the
+cassette if  \code{match_requests_on} includes "header" or "body" respectively.
+This keeps the recorded request as lightweight as possible.}
 
 \item{allow_unused_http_interactions}{(logical) Default: \code{TRUE}.}
 
@@ -87,27 +91,27 @@ make sure to not switch serializers, or clean up files you no longer need.}
 to read? Or remove newlines to save disk space? default: \code{FALSE}.`}
 
 \item{ignore_hosts}{(character) Vector of hosts to ignore. e.g.,
-\code{"localhost"}, or \code{"google.com"}. These hosts are ignored and real
-HTTP requests allowed to go through}
+\code{"localhost"}, or \code{"google.com"}. These hosts are ignored and real HTTP
+requests are allowed to go through.}
 
 \item{ignore_localhost}{(logical) Default: \code{FALSE}}
 
 \item{ignore_request}{List of requests to ignore. NOT USED RIGHT NOW, sorry}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
-representation of the request and response bondies? By default, vcr
+representation of the request and response bodies? By default, vcr
 will look at the \code{Content-Type} header to determine if this is necessary,
-but if it doesn't work you can set \code{prevsere_exact_body_bytes = TRUE} to
+but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
 force it.}
 
 \item{turned_off}{(logical) VCR is turned on by default. Default:
 \code{FALSE}.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
-cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? default: \code{FALSE}}
+interactions be recorded back to file? Default: \code{FALSE}.}
 
 \item{log, log_opts}{See \code{\link[=vcr_configure_log]{vcr_configure_log()}}.}
 
@@ -123,7 +127,7 @@ pattern.}
 A character vector of request headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to}
 
-\item{filter_response_headers}{(named list) \strong{response} headers to filter.
+\item{filter_response_headers}{(character/list) \strong{response} headers to filter.
 A character vector of response headers to remove - the headers will not be
 recorded to disk. Alternatively, a named list similar to
 \code{filter_sensitive_data} instructing vcr with what value to replace the

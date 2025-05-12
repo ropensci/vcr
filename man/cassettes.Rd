@@ -17,7 +17,7 @@ List cassettes, get current cassette, etc.
 }
 \details{
 \itemize{
-\item \code{cassettes()}: returns cassettes all active cassettes in the current
+\item \code{cassettes()}: returns all active cassettes in the current
 session.
 \item \code{current_cassette()}: returns \code{NULL} when no cassettes are in use;
 returns the current cassette (a \code{Cassette} object) when one is in use
