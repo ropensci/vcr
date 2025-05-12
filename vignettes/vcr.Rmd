@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 The central metaphor of vcr is a video **cassette**. This is what records your HTTP **interactions**, the pairs of HTTP request and response. You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done.
 
-This vignette will introduce you to the basics of vcr. If you have bigger questions remaining after reading it, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on vcr, webmockr, crul, and more.
+This vignette will introduce you to the basics of vcr for testing. To learn more about testing web requests in generally, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on vcr, webmockr, crul, and more. You can also use vcr in vignettes and examples. See `setup_knitr()` and `insert_example_cassette()` for details. 
 
 Here we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
 
@@ -36,11 +36,7 @@ httpbin$url()
 vcr_configure(dir = "_vcr")
 ```
 
-## Tests
-
-We'll first discuss how to use vcr in tests, because this is the most common application. 
-
-### Getting started
+## Getting started
 
 To use vcr in a test, include a call to `vcr::local_cassette()`:
 
@@ -75,7 +71,7 @@ test_that("my test", {
 
 You can learn more about logging and how to use it to debug cases where vcr behaves unexpectedly in `vignette("debugging")`.
 
-### Cassette files
+## Cassette files
 
 It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. Here's the cassette we created above:
 
@@ -87,30 +83,6 @@ You can see that it records all components of the request and response, as well 
 
 Sometimes it also makes sense to manually edit the cassettes. Manually editing is typically most useful when you're testing error handling code, because it allows you to create responses that would otherwise be hard to get the API to generate.
 
-### Request matching
+## Request matching
  
 By default, vcr looks for matching requests using just the HTTP method and the URI. If you are submitting data in the body, you will also want to match on that. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will parse the body as JSON so you'll get more informative messages if a new request doesn't match a request saved in a cassette.
-
-## Examples
-
-It's also possible to use vcr in an example. It's not possible to use `local_cassette()` (or `use_cassette()` inside an example), so the basic idea is to call `insert_example_cassette()` at the start of the example and `eject_cassette()` at the end. There's just one small wrinkle: you probably don't want to show the cassette usage in the example (because the user won't need it in their code), so you'll want to wrap the inserting and ejecting functions `\dontshow{}`.
-
-All together, this will lead to roxygen2 code that looks something like this:
-
-```{r}
-#' @examples
-#' \dontshow{
-#' vcr::insert_example_cassette("casette-name", "package-name")
-#' }
-#' 
-#' output <- my_api_calling_function()
-#' str(output)
-#' 
-#' \dontshow{
-#' vcr::eject_cassette()
-#' }
-```
-
-You'll then need to step through the example line by line to record the casssette for the first time.
-
-Remember that every casssette used in an example has to be stored inside your package, making it larger, so we recommend that you use this technique sparingly.
