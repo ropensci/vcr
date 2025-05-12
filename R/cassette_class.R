@@ -138,8 +138,6 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      dir_create(self$root_dir)
-
       if (!file.exists(self$file())) {
         self$new_cassette <- TRUE
         interactions <- list()
@@ -278,6 +276,8 @@ Cassette <- R6::R6Class(
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)
+
+      dir_create(self$root_dir)
       self$serializer$serialize(self$http_interactions$interactions)
     }
   )
