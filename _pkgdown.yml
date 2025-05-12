@@ -7,6 +7,7 @@ reference:
       - vcr_configure
       - vcr_configure_log
       - insert_example_cassette
+      - setup_knitr
   - title: Managing cassettes
     contents:
       - cassette_path
