@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr}, and {httr2}. This vignette will introduce you to the basics of vcr for testing. To learn more about testing web requests in generally, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on all the packages involved. Once you're familiar with vcr for testing, you'll also find it easy to use in vignettes and examples: see `setup_knitr()` and `insert_example_cassette()` for the details. 
+{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. vcr works with {crul}, {httr}, and {httr2}. This vignette will introduce you to the basics of vcr for testing. To learn more about testing web requests in general, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on all the packages involved. Once you're familiar with vcr for testing, you'll also find it easy to use in vignettes and examples: see `setup_knitr()` and `insert_example_cassette()` for the details. 
 
 Here we'll use httr2 for generating the requests. The same principles apply if you're working with crul or httr, just the code for making requests will look different. I'm also going to start up a local httpbin server using webfakes. This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
 
@@ -28,6 +28,7 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 
 ```{r}
 #| include: false
+# Don't reocrd any cassette for this vignette so they're always created afresh
 vcr_configure(dir = tempdir())
 ```
 
@@ -48,7 +49,9 @@ test_that("my test", {
 })
 ```
 
-The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`. In future runs, it will replay those responses, freeing your test from the vagaries of the internet, making it both faster and more realiable.
+The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`. In future runs, it will replay those responses, freeing your test from the vagaries of the internet, making it both faster and more reliable.
+
+It's important to ensure that every test has a uniquely named cassette. Otherwise your tests will fail when they attempt to reload a request from the recording of a different test.
 
 You can see exactly what vcr is doing with `local_vcr_configure_log()`. This turns logging on so you can see each step in the recording and replaying process. In this case, since it's the second run of the test, you can see that vcr loads the previously saved interaction then replays it.
 
@@ -70,7 +73,7 @@ You can learn more about logging and how to use it to debug cases where vcr beha
 
 ## Cassette files
 
-It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. Here's the cassette we created above:
+It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it uses. Here's the cassette we created above:
 
 ```{r}
 #| label: get-show
@@ -119,6 +122,21 @@ test_that("my test", {
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
   vcr::local_cassette("body", match_requests_on = c("method", "uri", "body_json"))
+  
+  data <- get_data(b = 2)
+  expect_named(data$json, c("x", "y"))
+})
+```
+
+If you look at the log you'll note that we see exactly where the difference is in the json, even though it's buried several layers deep. Compare this to just using `"body"`, where you have to carefully compare two strings.
+
+```{r}
+#| label: body-replay-raw
+#| error: true
+
+test_that("my test", {
+  vcr::local_vcr_configure_log(file = stdout())
+  vcr::local_cassette("body", match_requests_on = c("method", "uri", "body"))
   
   data <- get_data(b = 2)
   expect_named(data$json, c("x", "y"))
