@@ -88,7 +88,7 @@ YAML <- R6::R6Class(
         name,
         ".yml",
         preserve_bytes = preserve_bytes,
-        matchers
+        matchers = matchers
       )
     },
 
@@ -124,7 +124,7 @@ QS2 <- R6::R6Class(
         name,
         ".qs2",
         preserve_bytes = preserve_bytes,
-        matchers
+        matchers = matchers
       )
     },
 
