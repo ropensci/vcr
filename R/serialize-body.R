@@ -65,8 +65,9 @@ from_base64 <- function(x) {
   jsonlite::base64_dec(x)
 }
 
+# https://datatracker.ietf.org/doc/html/rfc4648#section-4
 is_base64 <- function(x) {
-  if (!is.character(x) || length(x) != 1 || is.na(x) || nchar(x) == 0) {
+  if (!is_string(x) || is.na(x) || !nzchar(x)) {
     return(FALSE)
   }
 
