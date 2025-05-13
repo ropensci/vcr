@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
 ```
 
 {vcr} records and replays HTTP requests so you can test your API package with speed and confidence.
-It makes your tests independent of your internet connection and because your tests get much much faster, you can write even more, increasing the coverage of your package.
+It makes your tests independent of your internet connection. 
+That makes your tests faster and more reliable, so you write even more, increasing the coverage of your package.
 vcr is particularly important if your package is on CRAN, because CRAN's stringent requirements for package reproducibility are hard to satisfy when you're at the mercy of a server on the internet.
 Using vcr ensures your tests return the same results regardless of when and where they are run, letting you submit to CRAN with confidence.
 
@@ -27,7 +28,7 @@ To learn more about testing web requests in general, we recommend that you check
 While vcr works with {crul}, {httr}, and {httr2}, in this vignette, we'll focus on using httr2 to generate HTTP requests.
 The same principles apply if you're working with crul or httr, you'll just use different code for making the requests.
 I'm also going to use {webfakes} to run a local web version of <https://hb.cran.dev>.
-This lets us make real HTTP requests without having to worrying about whether or not the internet is working.
+This lets us make real HTTP requests without having to worry about whether or not the internet is working.
 
 ```{r setup}
 library(vcr)
@@ -116,7 +117,7 @@ Manually editing is typically most useful when you're testing error handling cod
 ## Request matching
 
 By default, vcr looks for matching requests using just the HTTP method and the URI.
-If you need to match requests differently you can use `match_requests_on` parameter.
+If you need to match requests differently you can use the `match_requests_on` parameter.
 The most likely reason to change this is to also match on the request body.
 You can do this in two ways: with `"body"` or with `"body_json"`.
 If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will parse the body as JSON so you'll get more informative messages if a new request doesn't match a request saved in a cassette.
@@ -174,7 +175,7 @@ test_that("my test", {
 })
 ```
 
-## What happens in the API changes?
+## What happens if the API changes?
 
 vcr isolates your tests from the internet.
 Most of the time that's great because it keeps your tests fast and protects them against any minor glitches.
@@ -184,11 +185,11 @@ This shouldn't generally be a problem with well designed APIs, because a well de
 But not every API is well designed, and you probably want some protection in either case.
 There are two main options:
 
--   Include a small number of tests that don't cassettes, so that they always use the live API.
+-   Include a small number of tests that don't use cassettes, so that they always use the live API.
     These tests should be protected by `skip_on_cran()` so that they never run on CRAN.
 
 -   Set up a GitHub action (or similar) that runs `R CMD check` with env var `VCR_TURN_OFF=true`.
-    This turns of all vcr usage so that all requests are live.
+    This turns off all vcr usage so that all requests are live.
     You might want to set this up to run weekly, so you find out when the API changes (even when your package doesn't), but aren't overwhelmed with notifications.
 
 ## Other uses
@@ -199,7 +200,7 @@ Two other important use cases are in examples and vignettes:
 
 -   Use `vcr::setup_knitr()` in your vignettes to enable a special knitr chunk hook that allows you to use vcr cassettes by setting the `cassette` chunk option.
 
--   Use `vcr::insert_example_cassette()` and `vcr::eject_casssette()` in examples.
+-   Use `vcr::insert_example_cassette()` and `vcr::eject_cassette()` in examples.
     You can surround these commands in `\dontshow{}` so your users don't see them, but they're still run.
 
 Read the documentation for these functions to get all the details.
