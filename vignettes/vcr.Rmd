@@ -18,13 +18,12 @@ knitr::opts_chunk$set(
 ```
 
 {vcr} records and replays HTTP requests so you can test your API package with speed and confidence.
-It makes your tests independent of your internet connection. 
+It makes your tests independent of your internet connection.
 That makes your tests faster and more reliable, so you write even more, increasing the coverage of your package.
 vcr is particularly important if your package is on CRAN, because CRAN's stringent requirements for package reproducibility are hard to satisfy when you're at the mercy of a server on the internet.
 Using vcr ensures your tests return the same results regardless of when and where they are run, letting you submit to CRAN with confidence.
 
-This vignette will introduce you to the basics of vcr for testing.
-To learn more about testing web requests in general, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on all the packages involved.
+This vignette will introduce you to the basics of vcr.
 While vcr works with {crul}, {httr}, and {httr2}, in this vignette, we'll focus on using httr2 to generate HTTP requests.
 The same principles apply if you're working with crul or httr, you'll just use different code for making the requests.
 I'm also going to use {webfakes} to run a local web version of <https://hb.cran.dev>.
@@ -204,3 +203,21 @@ Two other important use cases are in examples and vignettes:
     You can surround these commands in `\dontshow{}` so your users don't see them, but they're still run.
 
 Read the documentation for these functions to get all the details.
+
+Here's a suggested conclusion for the "Getting started with vcr" vignette:
+
+## Conclusion
+
+vcr offers a powerful solution for testing API-dependent packages, making your tests faster, more reliable, and CRAN-friendly.
+By recording HTTP interactions and replaying them in subsequent test runs, it isolates your tests from internet connectivity issues and API fluctuations.
+
+To recap the key points:
+
+-   Use `vcr::local_cassette()` in your tests to record and replay HTTP interactions.
+-   Examine cassette files to understand what's being recorded and to ensure no secrets are leaked.
+-   Customize request matching with `match_requests_on` when needed.
+-   Consider strategies for detecting API changes, like occasional live tests.
+-   Use `vcr::setup_knitr()` and `vcr::insert_example_cassette()` to also use vcr in examples and vignettes.
+
+For more advanced use cases and troubleshooting, explore the other vignettes in the package, particularly `vignette("debugging")` and `vignette("secrets")`.
+The [HTTP testing book](https://books.ropensci.org/http-testing/) is also an excellent resource for deepening your understanding of HTTP testing in R.
