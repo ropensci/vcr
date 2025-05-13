@@ -53,8 +53,13 @@ RequestHandler <- R6::R6Class(
         return(private$on_recordable_request())
       }
 
-      err <- UnhandledHTTPRequestError$new(self$request)
-      err$run()
+      if (the$config$log) {
+        # Log messages already give the details
+        cli::cli_abort("Failed to find matching request in active cassette.")
+      } else {
+        err <- UnhandledHTTPRequestError$new(self$request)
+        err$run()
+      }
     }
   ),
 
