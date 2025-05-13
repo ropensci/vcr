@@ -39,7 +39,7 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 
 ```{r}
 #| include: false
-# Don't reocrd any cassette for this vignette so they're always created afresh
+# Don't record any cassette for this vignette so they're always created afresh
 vcr_configure(dir = tempdir())
 ```
 
@@ -47,7 +47,7 @@ vcr_configure(dir = tempdir())
 
 The central metaphor of vcr is a video cassette.
 This is what records your HTTP **interactions**, the pairs of HTTP request and response.
-You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done.
+You **insert** a cassette to start the recording or begin the replay, and **eject** it when you're done.
 To use vcr in a test, include a call to `vcr::local_cassette()`: it inserts the cassette and automatically ejects it when the test is done.
 
 ```{r}
@@ -91,7 +91,7 @@ You can learn more about logging and how to use it to debug cases where vcr beha
 
 ## Cassette files
 
-It's good practice to look at the cassette files that are saved to disk.
+It's good practice to look at the cassette files that are saved to disk, for instance before committing them to Git or before merging a PR.
 This will help you understand how vcr works by seeing exactly what data it uses.
 Here's the cassette we created above:
 
