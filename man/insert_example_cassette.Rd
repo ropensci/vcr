@@ -2,7 +2,7 @@
 % Please edit documentation in R/examples.R
 \name{insert_example_cassette}
 \alias{insert_example_cassette}
-\title{Use casssettes in examples}
+\title{Use cassettes in examples}
 \usage{
 insert_example_cassette(
   name,
@@ -70,7 +70,7 @@ interactions be recorded back to file? Default: \code{FALSE}.}
 }
 \description{
 \code{insert_example_cassette()} is a wrapper around \code{\link[=insert_cassette]{insert_cassette()}} that
-stores casssettes in \verb{inst/_vcr/}. Call it in the first line of your examples
+stores cassettes in \verb{inst/_vcr/}. Call it in the first line of your examples
 (typically wrapped in \verb{\dontshow{}}), and call \code{eject_cassette()} on the
 last line.
 
@@ -79,7 +79,7 @@ replayed during \verb{R CMD check}, ensuring that your example no longer uses
 the internet.
 }
 \examples{
-\dontshow{if (requireNamespace("httr2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("httr2")) withAutoprint(\{ # examplesIf}
 # In this example I'm showing the insert and eject commands, but you'd
 # usually wrap these in \dontshow{} so the user doesn't see them and
 # think that they're something they need to copy.

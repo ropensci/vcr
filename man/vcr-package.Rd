@@ -63,7 +63,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item rOpenSci (019jywm96) [funder]
+  \item rOpenSci (\href{https://ror.org/019jywm96}{ROR}) [funder]
 }
 
 }

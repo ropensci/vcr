@@ -1,8 +1,8 @@
-#' Use casssettes in examples
+#' Use cassettes in examples
 #'
 #' @description
 #' `insert_example_cassette()` is a wrapper around [insert_cassette()] that
-#' stores casssettes in `inst/_vcr/`. Call it in the first line of your examples
+#' stores cassettes in `inst/_vcr/`. Call it in the first line of your examples
 #' (typically wrapped in `\dontshow{}`), and call `eject_cassette()` on the
 #' last line.
 #'
