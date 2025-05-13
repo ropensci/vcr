@@ -12,8 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-vcr::vcr_configure(dir = ".")
-setHook("rmarkdown.onKnitCompleted", \(...) unlink(dir(pattern = "\\.yml$")))
+# We want to re-record these cassettes every time
+vcr::vcr_configure(dir = tempdir())
 ```
 
 This vignette helps you debug the vcr error that you're most likely to encounter: "An HTTP request has been made that vcr does not know how to handle". If you're lucky the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂. Otherwise, you'll need to do some debugging. 
@@ -26,7 +26,6 @@ In this vignette, we'll use httr2 for generating the requests. The same principl
 library(vcr)
 library(httr2)
 httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
-httpbin$url()
 ```
 
 ```{r}
