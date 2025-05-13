@@ -260,50 +260,17 @@ test_that("generates correct path", {
   expect_equal(aa$path, "path/name.qs2")
 })
 
-test_that("QS2 usage", {
-  skip_on_cran()
-  local_vcr_configure(
-    dir = withr::local_tempdir(),
-    serialize_with = "qs2"
+test_that("qs2 is idempotent", {
+  local_mocked_bindings(
+    Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC")
   )
 
-  # does one request work?
-  aa <- use_cassette(
-    "testing2",
-    res <- crul::HttpClient$new(hb("/get"))$get()
+  interaction <- vcr_interaction(
+    vcr_request(method = "GET", uri = "http://example.com"),
+    vcr_response(status = 200L, list(name = "val"), body = "body")
   )
-  expect_s3_class(aa, "Cassette")
-  expect_s3_class(res, "HttpResponse")
-  interactions <- qs2::qs_read(aa$file())
-  expect_length(interactions$http_interactions, 1)
 
-  # do two requests work?
-  cc <- use_cassette("testing4", {
-    ref <- crul::HttpClient$new(hb("/get"))$get()
-    the <- crul::HttpClient$new(hb("/post"))$post(body = "fafaa")
-  })
-  expect_s3_class(ref, "HttpResponse")
-  expect_s3_class(the, "HttpResponse")
-  interactions <- qs2::qs_read(cc$file())
-  expect_length(interactions$http_interactions, 2)
-
-  # preserve exact body bytes
-  dd <- use_cassette(
-    "testing5",
-    {
-      raf <- crul::HttpClient$new(hb("/get"))$get(
-        query = list(cheese = "string")
-      )
-      raz <- crul::HttpClient$new(hb("/post"))$post(
-        body = list(foo = "bar", baz = "ball")
-      )
-    },
-    preserve_exact_body_bytes = TRUE
-  )
-  expect_s3_class(raf, "HttpResponse")
-  expect_s3_class(raz, "HttpResponse")
-  interactions <- qs2::qs_read(dd$file())
-  expect_length(interactions$http_interactions, 2)
-  bodies <- interactions$http_interactions[[1]]$response$body$string
-  for (i in bodies) expect_true(is_base64(i))
+  ser <- QS2$new(withr::local_tempdir(), "name")
+  ser$serialize(list(interaction))
+  expect_equal(list(interaction), ser$deserialize()$http_interactions)
 })
