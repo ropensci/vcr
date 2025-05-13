@@ -47,7 +47,7 @@ encode_interaction <- function(
     request = compact(list(
       method = request$method,
       uri = encode_uri(request$uri),
-      body = if ("body" %in% matchers)
+      body = if ("body" %in% matchers || "body_json" %in% matchers)
         encode_body(request$body, NULL, preserve_bytes),
       headers = if ("headers" %in% matchers)
         encode_headers(request$headers, "request")

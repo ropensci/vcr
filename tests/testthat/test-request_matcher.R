@@ -119,6 +119,23 @@ test_that("can match empty bodies", {
   expect_false(has_name(cas$http_interactions[[1]]$request, "body"))
 })
 
+test_that("can match json bodies", {
+  local_vcr_configure(
+    dir = withr::local_tempdir(),
+    match_requests_on = c("method", "uri", "body_json")
+  )
+
+  req <- httr2::request(hb("/post"))
+  req <- httr2::req_body_json(req, list(foo = "bar"))
+  # record
+  use_cassette("test", res1 <- httr2::req_perform(req))
+  # replay
+  use_cassette("test", res1 <- httr2::req_perform(req))
+
+  cas <- read_cassette("test.yml")
+  expect_equal(cas$http_interactions[[1]]$request$body$string, '{"foo":"bar"}')
+})
+
 test_that('request matching is not sensitive to escaping special characters', {
   local_vcr_configure(dir = withr::local_tempdir())
   url <- hb("/get?update=2022-01-01T00:00:00&p2=ok")

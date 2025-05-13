@@ -28,8 +28,7 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 
 ```{r}
 #| include: false
-vcr_configure(dir = "_vcr")
-setHook("rmarkdown.onKnitCompleted", \(...) unlink("_vcr/get.yml"))
+vcr_configure(dir = tempdir())
 ```
 
 ## Getting started
@@ -37,6 +36,7 @@ setHook("rmarkdown.onKnitCompleted", \(...) unlink("_vcr/get.yml"))
 The central metaphor of vcr is a video cassette. This is what records your HTTP **interactions**, the pairs of HTTP request and response. You **insert** a cassette to begin the replay (or start the recording) and **eject** it when you're done. To use vcr in a test, include a call to `vcr::local_cassette()`: it inserts the cassette and automatically ejects it when the test is done.
 
 ```{r}
+#| label: get-record
 test_that("my test", {
   vcr::local_cassette("get")
   
@@ -53,6 +53,7 @@ The first time you run the test it will record all request and responses in a **
 You can see exactly what vcr is doing with `local_vcr_configure_log()`. This turns logging on so you can see each step in the recording and replaying process. In this case, since it's the second run of the test, you can see that vcr loads the previously saved interaction then replays it.
 
 ```{r}
+#| label: get-replay
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
   vcr::local_cassette("get")
@@ -72,7 +73,13 @@ You can learn more about logging and how to use it to debug cases where vcr beha
 It's good practice to look at the cassette files that are saved to disk. This will help you understand how vcr works by seeing exactly what data it has to work with. Here's the cassette we created above:
 
 ```{r}
-writeLines(readLines("_vcr/get.yml"))
+#| label: get-show
+#| echo: false
+#| output: asis
+
+cat("```yaml\n")
+writeLines(readLines(file.path(cassette_path(), "get.yml")))
+cat("\n```")
 ```
 
 You can see that it records all components of the response, along  with the components of the request used for matching (which defaults to `method` and `uri`; more on that shortly). The first time you use vcr with your package, it's a really good idea to closely look at this file to make sure that you aren't accidentally leaking any secrets. Learn the details in `vignette("secrets")`.
@@ -81,4 +88,39 @@ Sometimes it also makes sense to manually edit the cassettes. Manually editing i
 
 ## Request matching
  
-By default, vcr looks for matching requests using just the HTTP method and the URI. If you are submitting data in the body, you will also want to match on that. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will parse the body as JSON so you'll get more informative messages if a new request doesn't match a request saved in a cassette.
+By default, vcr looks for matching requests using just the HTTP method and the URI. If you need to match requests differently you can use `match_requests_on` parameter. The most likely reason to change this is to also match on the request body. You can do this in two ways: with `"body"` or with `"body_json"`. If your API uses JSON (like most modern APIs) you should use the `body_json` request matcher: that will parse the body as JSON so you'll get more informative messages if a new request doesn't match a request saved in a cassette.
+
+Here's a little example with logging turned on, so you can see exactly what's happening:
+
+```{r}
+#| label: body-record
+
+get_data <- function(b = 1) {
+  req <- request(httpbin$url("/post"))
+  req <- req_body_json(req, list(x = 1, y = list(a = 1, b = b)))
+  resp <- req_perform(req)
+
+  resp_body_json(resp)
+}
+
+test_that("my test", {
+  vcr::local_vcr_configure_log(file = stdout())
+  vcr::local_cassette("body", match_requests_on = c("method", "uri", "body_json"))
+  
+  data <- get_data(b = 1)
+  expect_named(data$json, c("x", "y"))
+})
+```
+
+```{r}
+#| label: body-replay
+#| error: true
+
+test_that("my test", {
+  vcr::local_vcr_configure_log(file = stdout())
+  vcr::local_cassette("body", match_requests_on = c("method", "uri", "body_json"))
+  
+  data <- get_data(b = 2)
+  expect_named(data$json, c("x", "y"))
+})
+```
