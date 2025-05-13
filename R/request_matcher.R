@@ -19,7 +19,7 @@ request_matches <- function(
   } else {
     vcr_log_sprintf("    Request %i: NO MATCH", i)
     lines <- strsplit(paste0(compare, collapse = "\n"), "\n")[[1]]
-    lapply(lines, \(line) vcr_log_sprintf("      %s", line))
+    lapply(lines, \(line) vcr_log_sprintf("    %s", line))
     FALSE
   }
 }

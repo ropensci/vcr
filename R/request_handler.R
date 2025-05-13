@@ -33,7 +33,7 @@ RequestHandler <- R6::R6Class(
         return(private$on_ignored_request())
       }
 
-      if (cassette_active()) {
+      if (casette_is_replayable()) {
         interactions <- current_cassette()$http_interactions
         if (interactions$n_replayable() > 0) {
           vcr_log_sprintf(
@@ -114,10 +114,17 @@ cassette_is_recording <- function() {
   }
 }
 
+casette_is_replayable <- function() {
+  if (cassette_active()) {
+    current_cassette()$http_interactions$n_replayable() > 0
+  } else {
+    FALSE
+  }
+}
+
 cassette_has_response <- function(request) {
   if (cassette_active()) {
-    interactions <- current_cassette()$http_interactions
-    interactions$has_interaction(request)
+    current_cassette()$http_interactions$has_interaction(request)
   } else {
     FALSE
   }

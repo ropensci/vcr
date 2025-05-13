@@ -30,7 +30,7 @@ Interactions <- R6::R6Class(
         }
 
         request_i <- self$interactions[[i]]$request
-        if (request_matches(request, request_i, self$request_matchers)) {
+        if (request_matches(request, request_i, self$request_matchers, i)) {
           return(i)
         }
       }

@@ -97,26 +97,25 @@ Cassette <- R6::R6Class(
       warn_on_empty = NULL
     ) {
       check_cassette_name(name)
-      config <- vcr_configuration()
 
       self$name <- name
-      self$root_dir <- dir %||% config$dir %||% testthat::test_path("_vcr")
-      self$record <- check_record_mode(record) %||% config$record
+      self$root_dir <- dir %||% the$config$dir %||% testthat::test_path("_vcr")
+      self$record <- check_record_mode(record) %||% the$config$record
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
-        config$match_requests_on
-      self$serialize_with <- serialize_with %||% config$serialize_with
+        the$config$match_requests_on
+      self$serialize_with <- serialize_with %||% the$config$serialize_with
       self$re_record_interval <- re_record_interval %||%
-        config$re_record_interval
+        the$config$re_record_interval
       self$allow_playback_repeats = allow_playback_repeats
 
       assert(preserve_exact_body_bytes, "logical")
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
-        config$preserve_exact_body_bytes
+        the$config$preserve_exact_body_bytes
 
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
-        config$clean_outdated_http_interactions
+        the$config$clean_outdated_http_interactions
 
-      self$warn_on_empty <- warn_on_empty %||% config$warn_on_empty_cassette
+      self$warn_on_empty <- warn_on_empty %||% the$config$warn_on_empty_cassette
 
       self$serializer <- serializer_fetch(
         self$serialize_with,
@@ -139,26 +138,20 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
+      name <- basename(self$file())
+
       if (!file.exists(self$file())) {
-        vcr_log_sprintf("Inserting %s (new cassette)", self$file())
         self$new_cassette <- TRUE
         interactions <- list()
       } else {
         self$new_cassette <- FALSE
         interactions <- self$serializer$deserialize()$http_interactions
-        n <- length(interactions)
-        vcr_log_sprintf("Inserting %s (%d interactions)", self$file(), n)
         interactions <- Filter(\(x) !should_be_ignored(x$request), interactions)
-
         if (self$clean_outdated_http_interactions) {
           if (!is.null(self$re_record_interval)) {
             threshold <- Sys.time() - self$re_record_interval
             interactions <- Filter(\(x) x$recorded_at > threshold, interactions)
           }
-        }
-        m <- length(interactions)
-        if (m < n) {
-          vcr_log_sprintf("Filtering: removed %d interactions", n - m)
         }
       }
 
@@ -169,10 +162,15 @@ Cassette <- R6::R6Class(
         replayable = self$record != "all"
       )
 
-      vcr_log_sprintf("  recording: %s", self$recording())
+      vcr_log_sprintf("  record: %s", self$record)
+      vcr_log_sprintf("  serialize_with: %s", self$serialize_with)
       vcr_log_sprintf(
         "  allow_playback_repeats: %s",
         self$allow_playback_repeats
+      )
+      vcr_log_sprintf(
+        "  preserve_exact_body_bytes: %s",
+        self$preserve_exact_body_bytes
       )
     },
 
@@ -277,6 +275,8 @@ Cassette <- R6::R6Class(
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)
+
+      dir_create(self$root_dir)
       self$serializer$serialize(self$http_interactions$interactions)
     }
   )

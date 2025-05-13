@@ -137,6 +137,10 @@ You'll notice that this is substantially more complicated to understand, and you
 
 Now that you understand how to use logging to see exactly what vcr is doing, we can talk about some solutions to common problems.
 
+### Re-used cassette name
+
+You need to make sure that every test has it's own unique cassette name, otherwise you won't find the responses that you're expecting. This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the test you're currently in, a different test will break.
+
 ### Replaying requests
 
 What happens if you make the same request multiple times in a single cassette?
