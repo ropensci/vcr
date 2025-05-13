@@ -252,3 +252,25 @@ test_that("Windows encoding", {
 
   expect_type(ser$deserialize(), "list") # could fail on Windows
 })
+
+# QS2 -------------------------------------------------------------------
+
+test_that("generates correct path", {
+  aa <- QS2$new("path", "name")
+  expect_equal(aa$path, "path/name.qs2")
+})
+
+test_that("qs2 is idempotent", {
+  local_mocked_bindings(
+    Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC")
+  )
+
+  interaction <- vcr_interaction(
+    vcr_request(method = "GET", uri = "http://example.com"),
+    vcr_response(status = 200L, list(name = "val"), body = "body")
+  )
+
+  ser <- QS2$new(withr::local_tempdir(), "name")
+  ser$serialize(list(interaction))
+  expect_equal(list(interaction), ser$deserialize()$http_interactions)
+})

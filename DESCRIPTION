@@ -49,6 +49,7 @@ Suggests:
     httr,
     httr2,
     knitr,
+    qs2,
     rmarkdown,
     roxygen2 (>= 7.2.1),
     testthat (>= 3.0.0),

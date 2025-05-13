@@ -79,7 +79,7 @@ cassette if  \code{match_requests_on} includes "header" or "body" respectively.
 This keeps the recorded request as lightweight as possible.}
 
 \item{serialize_with}{(string) Which serializer to use:
-\code{"yaml"} (the default) or \code{"json"}.}
+\code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
 \item{json_pretty}{(logical) want JSON to be newline separated to be easier
 to read? Or remove newlines to save disk space? default: \code{FALSE}.`}
