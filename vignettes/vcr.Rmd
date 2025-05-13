@@ -18,16 +18,16 @@ knitr::opts_chunk$set(
 ```
 
 {vcr} records and replays HTTP requests so you can test your API package with speed and confidence.
-It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package.
-vcr works with {crul}, {httr}, and {httr2}.
+It makes your tests independent of your internet connection and because your tests get much much faster, you can write even more, increasing the coverage of your package.
+vcr is particularly important if your package is on CRAN, because CRAN's stringent requirements for package reproducibility are hard to satisfy when you're at the mercy of a server on the internet.
+Using vcr ensures your tests return the same results regardless of when and where they are run, letting you submit to CRAN with confidence.
+
 This vignette will introduce you to the basics of vcr for testing.
 To learn more about testing web requests in general, we recommend that you check out the [HTTP testing book](https://books.ropensci.org/http-testing/) which has a lot more documentation on all the packages involved.
-Once you're familiar with vcr for testing, you'll also find it easy to use in vignettes and examples: see `setup_knitr()` and `insert_example_cassette()` for the details.
-
-Here we'll use httr2 for generating the requests.
-The same principles apply if you're working with crul or httr, just the code for making requests will look different.
-I'm also going to start up a local httpbin server using webfakes.
-This will let us make some requests to a server that we're running locally so we don't need to worry about the internet being down.
+While vcr works with {crul}, {httr}, and {httr2}, in this vignette, we'll focus on using httr2 to generate HTTP requests.
+The same principles apply if you're working with crul or httr, you'll just use different code for making the requests.
+I'm also going to use {webfakes} to run a local web version of <https://hb.cran.dev>.
+This lets us make real HTTP requests without having to worrying about whether or not the internet is working.
 
 ```{r setup}
 library(vcr)
@@ -43,7 +43,7 @@ httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 vcr_configure(dir = tempdir())
 ```
 
-## Getting started
+## Testing with vcr
 
 The central metaphor of vcr is a video cassette.
 This is what records your HTTP **interactions**, the pairs of HTTP request and response.
@@ -63,11 +63,12 @@ test_that("my test", {
 })
 ```
 
-The first time you run the test it will record all request and responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`.
-In future runs, it will replay those responses, freeing your test from the vagaries of the internet, making it both faster and more reliable.
+The first time this test runs, vcr will record the requests and their responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`.
+In subsequent runs, vcr will replay those cached responses, freeing your test from the vagaries of the internet, making it both faster and more reliable.
+You might notice that this makes vcr a bit like a web cache (in that it replays previously saved responses) and a bit like [snapshot testing](https://testthat.r-lib.org/articles/snapshotting.html) (in that we're storing human-readable data in the test directory).
 
-It's important to ensure that every test has a uniquely named cassette.
-Otherwise your tests will fail when they attempt to reload a request from the recording of a different test.
+Generally, you will want to ensure that every test has a uniquely named cassette, unless you are deliberately re-using the same request-response pair to test different parts of your package code.
+If you try to use the same cassette for different requests, you'll discover that it errors because once a cassette has been recorded, it ensures that httr2, httr, and crul can only generate responses from the cached interactions.
 
 You can see exactly what vcr is doing with `local_vcr_configure_log()`.
 This turns logging on so you can see each step in the recording and replaying process.
@@ -125,6 +126,7 @@ Here's a little example with logging turned on, so you can see exactly what's ha
 ```{r}
 #| label: body-record
 
+# A pretend function that would normally be found somewhere in `R/`
 get_data <- function(b = 1) {
   req <- request(httpbin$url("/post"))
   req <- req_body_json(req, list(x = 1, y = list(a = 1, b = b)))
@@ -133,6 +135,7 @@ get_data <- function(b = 1) {
   resp_body_json(resp)
 }
 
+# A pretend test that would normally be found in `test/testthat/`.
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
   vcr::local_cassette("body", match_requests_on = c("method", "uri", "body_json"))
@@ -170,3 +173,33 @@ test_that("my test", {
   expect_named(data$json, c("x", "y"))
 })
 ```
+
+## What happens in the API changes?
+
+vcr isolates your tests from the internet.
+Most of the time that's great because it keeps your tests fast and protects them against any minor glitches.
+But what happens if the API fundamentally changes?
+Your tests will continue to pass but real code will fail.
+This shouldn't generally be a problem with well designed APIs, because a well designed API will include an explicit version either in the URL or in a header.
+But not every API is well designed, and you probably want some protection in either case.
+There are two main options:
+
+-   Include a small number of tests that don't cassettes, so that they always use the live API.
+    These tests should be protected by `skip_on_cran()` so that they never run on CRAN.
+
+-   Set up a GitHub action (or similar) that runs `R CMD check` with env var `VCR_TURN_OFF=true`.
+    This turns of all vcr usage so that all requests are live.
+    You might want to set this up to run weekly, so you find out when the API changes (even when your package doesn't), but aren't overwhelmed with notifications.
+
+## Other uses
+
+Now that you're familiar using vcr for your unit tests, you might wonder if there are other places you can use it in your packages.
+There are!
+Two other important use cases are in examples and vignettes:
+
+-   Use `vcr::setup_knitr()` in your vignettes to enable a special knitr chunk hook that allows you to use vcr cassettes by setting the `cassette` chunk option.
+
+-   Use `vcr::insert_example_cassette()` and `vcr::eject_casssette()` in examples.
+    You can surround these commands in `\dontshow{}` so your users don't see them, but they're still run.
+
+Read the documentation for these functions to get all the details.
