@@ -18,14 +18,12 @@ test_that("request_matches has useful logging", {
   req2 <- list(uri = "http://example.com/foo", method = "GET")
   req3 <- list(uri = "http://example.com", method = "POST")
   req4 <- list(uri = "http://example.com/foo", method = "POST")
-  req5 <- list(uri = "http://example.com/?x=1", method = "GET")
 
   expect_snapshot({
     . <- request_matches(req1, req1)
     . <- request_matches(req1, req2)
     . <- request_matches(req1, req3)
     . <- request_matches(req1, req4)
-    . <- request_matches(req1, req5)
   })
 })
 
@@ -53,7 +51,7 @@ test_that("make_comparison extracts expected componets", {
   # URI manipulation
   expect_equal(make_comparison("host", req), list(host = "a.com"))
   expect_equal(make_comparison("path", req), list(path = "/foo"))
-  expect_equal(make_comparison("query", req), list(query = list(bar = "baz")))
+  expect_equal(make_comparison("query", req), list(query = c(bar = "baz")))
 })
 
 test_that("default uri extraction ignores port", {
@@ -61,33 +59,18 @@ test_that("default uri extraction ignores port", {
 
   expect_equal(
     make_comparison("uri", req),
-    list(
-      uri = list(
-        scheme = "http",
-        host = "x.com",
-        path = "",
-        params = set_names(list())
-      )
-    )
+    list(uri = list(scheme = "http", host = "x.com", path = ""))
   )
   expect_equal(
     make_comparison("uri_with_port", req),
-    list(
-      uri = list(
-        scheme = "http",
-        host = "x.com",
-        port = '123',
-        path = "",
-        params = set_names(list())
-      )
-    )
+    list(uri = list(scheme = "http", host = "x.com", port = '123', path = ""))
   )
 })
 
 test_that("query params are normalized", {
   expect_equal(
     make_comparison("query", list(uri = "http://a.com/foo?foo=%C2%B5")),
-    list(query = list(foo = "\u00b5"))
+    list(query = c(foo = "\u00b5"))
   )
 })
 
@@ -96,12 +79,12 @@ test_that("query params are filtered", {
 
   expect_equal(
     make_comparison("query", list(uri = "http://a.com/")),
-    list(query = set_names(list()))
+    set_names(list())
   )
 
   expect_equal(
     make_comparison("query", list(uri = "http://a.com/?foo=x")),
-    list(query = set_names(list()))
+    set_names(list())
   )
 })
 

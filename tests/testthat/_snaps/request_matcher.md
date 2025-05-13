@@ -24,3 +24,4 @@
       [Cassette: <none>]     `recorded$method`: "POST"
       [Cassette: <none>]     `matching$uri$path`: ""    
       [Cassette: <none>]     `recorded$uri$path`: "/foo"
+

@@ -42,7 +42,7 @@
       [Cassette: test]   Replaying response 1
       [Cassette: test] Ejecting
     Code
-      use_cassette("test", httr::GET(hb("/404")))
+      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
     Output
       [Cassette: test] Inserting 'test.yml' (with 1 interactions)
       [Cassette: test]   recording: FALSE
@@ -53,3 +53,4 @@
       [Cassette: test]     `recorded$uri$path`: "/html"
       [Cassette: test]   No matching requests
       [Cassette: test] Ejecting
+
