@@ -16,10 +16,14 @@ current directory}
 only messages about progress, returns invisible()
 }
 \description{
-Setup vcr for a package
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\code{use_vcr()} is deprecated because it is no longer needed. In lifecycle v2,
+\code{\link[=local_cassette]{local_cassette()}} and friends automatically use \verb{tests/testthat/_vcr}
+without any need for additional configuration.
 }
 \details{
-Sets a mimimum vcr version, which is usually the latest
+Sets a minimum vcr version, which is usually the latest
 (stable) version on CRAN. You can of course easily remove or change
 the version requirement yourself after running this function.
 }
+\keyword{internal}

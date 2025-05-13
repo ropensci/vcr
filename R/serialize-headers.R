@@ -5,8 +5,8 @@ encode_headers <- function(headers, type = c("request", "response")) {
 
   headers <- switch(
     type,
-    request = headers_remove(headers, vcr_c$filter_request_headers),
-    response = headers_remove(headers, vcr_c$filter_response_headers)
+    request = headers_remove(headers, the$config$filter_request_headers),
+    response = headers_remove(headers, the$config$filter_response_headers)
   )
 
   if (type == "request") {
@@ -20,7 +20,11 @@ encode_headers <- function(headers, type = c("request", "response")) {
 }
 
 decode_headers <- function(headers) {
-  decode_sensitive(headers)
+  if (is.null(headers)) {
+    list()
+  } else {
+    decode_sensitive(headers)
+  }
 }
 
 headers_remove <- function(headers, filter) {
@@ -41,8 +45,11 @@ headers_remove <- function(headers, filter) {
 }
 
 request_headers_redact <- function(headers) {
-  redacted_headers <- attr(headers, "redact")
-  headers[intersect(redacted_headers, names(headers))] <- "<redacted>"
+  to_redact <- union(attr(headers, "redact"), "authorization")
+  matches <- match(tolower(to_redact), tolower(names(headers)))
+  matches <- matches[!is.na(matches)]
+
+  headers[matches] <- "<redacted>"
   headers
 }
 

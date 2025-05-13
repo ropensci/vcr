@@ -18,18 +18,18 @@ how the canonical version works.
 
 \section{Main functions}{
 
-The \link{use_cassette} function is most likely what you'll want to use. It
+The \code{\link[=use_cassette]{use_cassette()}} function is most likely what you'll want to use. It
 sets the cassette you want to record to, inserts the cassette, and then
 ejects the cassette, recording the interactions to the cassette.
 
-Instead, you can use \link{insert_cassette}, but then you have to make sure
-to use \link{eject_cassette}.
+Alternatively, you can use \code{\link[=insert_cassette]{insert_cassette()}} for more control, but then
+you have to make sure to use \code{\link[=eject_cassette]{eject_cassette()}}.
 }
 
 \section{vcr configuration}{
 
-\link{vcr_configure} is the function to use to set R session wide settings.
-See it's manual file for help.
+\code{\link[=vcr_configure]{vcr_configure()}} is the function to use to set R session-wide settings.
+See its manual file for help.
 }
 
 \section{Async}{
@@ -37,7 +37,7 @@ See it's manual file for help.
 As of \pkg{crul} v1.5, \code{vcr} will work for async http requests with
 \pkg{crul}. \pkg{httr} does not do async requests, and \pkg{httr2}
 async plumbing does not have any hooks for mocking via \pkg{webmockr}
-or recording real requests via this package
+or recording real requests via this package.
 }
 
 \seealso{

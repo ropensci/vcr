@@ -24,3 +24,6 @@ inst/ignore
 ^LICENSE\.md$
 ^[\.]?air\.toml$
 ^\.vscode$
+^\.github$
+^CLAUDE\.md$
+^\.claude$

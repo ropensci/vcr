@@ -1,42 +1,46 @@
 #' Turn vcr on and off
 #'
+#' @description
+#'
 #' * `turn_on()` and `turn_off()` turn on and off for the whole session.
-#' * `turned_off(code)` temporarily turns off while `code` is running.
+#' * `turned_off(code)` temporarily turns off while `code` is running,
+#'   guaranteeing that you make a real HTTP request.
 #' * `turned_on()` reports on if vcr is turned on or not.
 #' * `skip_if_vcr_off()` skips a test if vcr is turned off. This is
-#'   occassionally useful if you're using a cassette to simulate a faked
-#'   request, or if the real request would return differents values (e.g.
+#'   occasionally useful if you're using a cassette to simulate a faked
+#'   request, or if the real request would return different values (e.g.
 #'   you're testing date parsing and the request returns the current date).
+#'
+#' You can also control the default behaviour in a new session by setting the
+#' following environment variables before R starts:
+#'
+#' * Use `VCR_TURN_OFF=true` to suppress all vcr usage, ignoring all
+#'   cassettes. This is useful for CI/CD workflows where you want to ensure
+#'   the test suite is run against the live API.
+#' * Set `VCR_TURNED_OFF=true` to turn off vcr, but still use cassettes.
 #'
 #' @export
 #' @name lightswitch
-#' @param code Any block of code to run, presumably an http request
+#' @param code Any block of code to run, presumably an HTTP request.
 #' @param ignore_cassettes (logical) Controls what happens when a cassette is
 #' inserted while vcr is turned off. If `TRUE` is passed, the cassette
 #' insertion will be ignored; otherwise an error will be raised.
 #' Default: `FALSE`
-#' @includeRmd man/rmdhunks/lightswitch.Rmd
-#' @examples \dontrun{
-#' vcr_configure(dir = tempdir())
-#'
-#' turn_on()
+#' @examples
+#' # By default, vcr is turned on
 #' turned_on()
-#' turn_off()
 #'
-#' # turn off for duration of a block
-#' library(crul)
-#' turned_off({
-#'  res <- HttpClient$new(url = "https://hb.opencpu.org/get")$get()
-#' })
-#' res
-#'
-#' # turn completely off
+#' # you can turn off for the rest of the session
 #' turn_off()
-#' library(webmockr)
-#' crul::mock()
-#' # HttpClient$new(url = "https://hb.opencpu.org/get")$get(verbose = TRUE)
+#' turned_on()
+#' # turn on again
 #' turn_on()
-#' }
+#'
+#' # or just turn it on turn off temporarily
+#' turned_off({
+#'   # some HTTP requests here
+#'   turned_on()
+#' })
 turn_on <- function() {
   the$light_switch$on <- TRUE
   invisible()
@@ -81,6 +85,26 @@ skip_if_vcr_off <- function() {
   }
   invisible()
 }
+
+vcr_turned_off <- function(error_call = caller_env()) {
+  if (the$light_switch$on) {
+    return(FALSE)
+  }
+
+  if (!the$light_switch$ignore_cassettes) {
+    cli::cli_abort(
+      c(
+        "vcr is turned off.",
+        i = "Use {.fun turn_on} to turn it back on.",
+        i = "Or use {.code turn_off(ignore_cassettes = TRUE)} to ignore cassettes completely."
+      ),
+      call = error_call
+    )
+  } else {
+    TRUE
+  }
+}
+
 
 # Initial values from env vars ------------------------------------------------
 

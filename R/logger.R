@@ -6,9 +6,9 @@
 #'
 #' @param log Should we log important vcr things?
 #' @param file A path or connection to log to
-#' @param include_date (boolean) include date and time in each log entry?
-#' @param log_prefix "Cassette". We insert the cassette name after this prefix.
-#'     that prefix, then the rest of the message.
+#' @param include_date (boolean) Include date and time in each log entry.
+#' @param log_prefix "Cassette". We insert the cassette name after this prefix,
+#'     followed by the rest of the message.
 #' @export
 #' @examples
 #' # The default logs to stderr()
@@ -60,34 +60,34 @@ local_vcr_configure_log <- function(
     include_date = include_date,
     log_prefix = log_prefix
   )
-  withr::defer(vcr_configure(!!!old), envir = frame)
+  withr::defer(exec(vcr_configure, !!!old), envir = frame)
 
   invisible()
 }
 
 vcr_log_sprintf <- function(message, ...) {
-  if (!vcr_c$log) {
+  if (!the$config$log) {
     return(invisible())
   }
 
   message <- sprintf(message, ...)
 
-  if (vcr_c$log_opts$include_date) {
+  if (the$config$log_opts$include_date) {
     date <- cur_time()
   } else {
     date <- NULL
   }
 
   if (cassette_active()) {
-    cassette_name <- paste0('"', current_cassette()$name, '"')
+    cassette_name <- current_cassette()$name
   } else {
     cassette_name <- "<none>"
   }
-  prefix <- sprintf("[%s: %s]", vcr_c$log_opts$log_prefix, cassette_name)
+  prefix <- sprintf("[%s: %s]", the$config$log_opts$log_prefix, cassette_name)
 
-  message <- paste(c(date, prefix, message), collapse = " - ")
+  message <- paste(c(date, prefix, message), collapse = " ")
 
-  file <- vcr_c$log_opts$file
+  file <- the$config$log_opts$file
   if (is.function(file)) {
     file <- file()
   }

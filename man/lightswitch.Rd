@@ -25,192 +25,42 @@ inserted while vcr is turned off. If \code{TRUE} is passed, the cassette
 insertion will be ignored; otherwise an error will be raised.
 Default: \code{FALSE}}
 
-\item{code}{Any block of code to run, presumably an http request}
+\item{code}{Any block of code to run, presumably an HTTP request.}
 }
 \description{
 \itemize{
 \item \code{turn_on()} and \code{turn_off()} turn on and off for the whole session.
-\item \code{turned_off(code)} temporarily turns off while \code{code} is running.
+\item \code{turned_off(code)} temporarily turns off while \code{code} is running,
+guaranteeing that you make a real HTTP request.
 \item \code{turned_on()} reports on if vcr is turned on or not.
 \item \code{skip_if_vcr_off()} skips a test if vcr is turned off. This is
-occassionally useful if you're using a cassette to simulate a faked
-request, or if the real request would return differents values (e.g.
+occasionally useful if you're using a cassette to simulate a faked
+request, or if the real request would return different values (e.g.
 you're testing date parsing and the request returns the current date).
 }
-}
-\details{
-Sometimes you may need to turn off \code{vcr}, either for individual function
-calls, individual test blocks, whole test files, or for the entire
-package. The following attempts to break down all the options.
 
-\code{vcr} has the following four exported functions:
+You can also control the default behaviour in a new session by setting the
+following environment variables before R starts:
 \itemize{
-\item \code{turned_off()} - Turns vcr off for the duration of a code block
-\item \code{turn_off()} - Turns vcr off completely, so that it no longer handles
-every HTTP request
-\item \code{turn_on()} - turns vcr on; the opposite of \code{turn_off()}
-\item \code{turned_on()} - Asks if vcr is turned on, returns a boolean
-}
-
-Instead of using the above four functions, you could use environment
-variables to achieve the same thing. This way you could enable/disable
-\code{vcr} in non-interactive environments such as continuous integration,
-Docker containers, or running R non-interactively from the command line.
-The full set of environment variables \code{vcr} uses, all of which accept
-only \code{TRUE} or \code{FALSE}:
-\itemize{
-\item \code{VCR_TURN_OFF}: turn off vcr altogether; set to \code{TRUE} to skip any vcr
-usage; default: \code{FALSE}
-\item \code{VCR_TURNED_OFF}: set the \code{turned_off} internal package setting; this
-does not turn off vcr completely as does \code{VCR_TURN_OFF} does, but
-rather is looked at together with \code{VCR_IGNORE_CASSETTES}
-\item \code{VCR_IGNORE_CASSETTES}: set the \code{ignore_cassettes} internal package
-setting; this is looked at together with \code{VCR_TURNED_OFF}
-}
-\subsection{turned_off}{
-
-\code{turned_off()} lets you temporarily make a real HTTP request without
-completely turning \code{vcr} off, unloading it, etc.
-
-What happens internally is we turn off \code{vcr}, run your code block, then
-on exit turn \code{vcr} back on - such that \code{vcr} is only turned off for the
-duration of your code block. Even if your code block errors, \code{vcr} will
-be turned back on due to use of \code{on.exit(turn_on())}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(vcr)
-library(crul)
-turned_off(\{
-  con <- HttpClient$new(url = "https://httpbin.org/get")
-  con$get()
-\})
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{#> <crul response>
-#>   url: https://httpbin.org/get
-#>   request_headers:
-#>     User-Agent: libcurl/7.54.0 r-curl/4.3 crul/0.9.0
-#>     Accept-Encoding: gzip, deflate
-#>     Accept: application/json, text/xml, application/xml, */*
-#>   response_headers:
-#>     status: HTTP/1.1 200 OK
-#>     date: Fri, 14 Feb 2020 19:44:46 GMT
-#>     content-type: application/json
-#>     content-length: 365
-#>     connection: keep-alive
-#>     server: gunicorn/19.9.0
-#>     access-control-allow-origin: *
-#>     access-control-allow-credentials: true
-#>   status: 200
-}\if{html}{\out{</div>}}
-}
-
-\subsection{turn_off/turn_on}{
-
-\code{turn_off()} is different from \code{turned_off()} in that \code{turn_off()} is
-not aimed at a single call block, but rather it turns \code{vcr} off for the
-entire package. \code{turn_off()} does check first before turning \code{vcr} off
-that there is not currently a cassette in use. \code{turn_off()} is meant to
-make R ignore \code{vcr::insert_cassette()} and \code{vcr::use_cassette()} blocks
-in your test suite - letting the code in the block run as if they were
-not wrapped in \code{vcr} code - so that all you have to do to run your tests
-with cached requests/responses AND with real HTTP requests is toggle a
-single R function or environment variable.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(vcr)
-vcr_configure(dir = tempdir())
-# real HTTP request works - vcr is not engaged here
-crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
-# wrap HTTP request in use_cassette() - vcr is engaged here
-use_cassette("foo_bar", \{
-  crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
-\})
-# turn off & ignore cassettes - use_cassette is ignored, real HTTP request made
-turn_off(ignore_cassettes = TRUE)
-use_cassette("foo_bar", \{
-  crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
-\})
-# if you turn off and don't ignore cassettes, error thrown
-turn_off(ignore_cassettes = FALSE)
-use_cassette("foo_bar", \{
-  res2=crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
-\})
-# vcr back on - now use_cassette behaves as before
-turn_on()
-use_cassette("foo_bar3", \{
-  res2=crul::HttpClient$new(url = "https://eu.httpbin.org/get")$get()
-\})
-}\if{html}{\out{</div>}}
-}
-
-\subsection{turned_on}{
-
-\code{turned_on()} does what it says on the tin - it tells you if \code{vcr} is
-turned on or not.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(vcr)
-turn_on()
-turned_on()
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] TRUE
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{turn_off()
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## vcr turned off; see ?turn_on to turn vcr back on
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{turned_on()
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## [1] FALSE
-}\if{html}{\out{</div>}}
-}
-
-\subsection{Environment variables}{
-
-The \code{VCR_TURN_OFF} environment variable can be used within R or on the
-command line to turn off \code{vcr}. For example, you can run tests for a
-package that uses \code{vcr}, but ignore any \code{use_cassette}/\code{insert_cassette}
-usage, by running this on the command line in the root of your package:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{VCR_TURN_OFF=true Rscript -e "devtools::test()"
-}\if{html}{\out{</div>}}
-
-Or, similarly within R:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{Sys.setenv(VCR_TURN_OFF = TRUE)
-devtools::test()
-}\if{html}{\out{</div>}}
-
-The \code{VCR_TURNED_OFF} and \code{VCR_IGNORE_CASSETTES} environment variables
-can be used in combination to achieve the same thing as \code{VCR_TURN_OFF}:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{VCR_TURNED_OFF=true VCR_IGNORE_CASSETTES=true Rscript -e "devtools::test()"
-}\if{html}{\out{</div>}}
+\item Use \code{VCR_TURN_OFF=true} to suppress all vcr usage, ignoring all
+cassettes. This is useful for CI/CD workflows where you want to ensure
+the test suite is run against the live API.
+\item Set \code{VCR_TURNED_OFF=true} to turn off vcr, but still use cassettes.
 }
 }
 \examples{
-\dontrun{
-vcr_configure(dir = tempdir())
-
-turn_on()
+# By default, vcr is turned on
 turned_on()
-turn_off()
 
-# turn off for duration of a block
-library(crul)
-turned_off({
- res <- HttpClient$new(url = "https://hb.opencpu.org/get")$get()
-})
-res
-
-# turn completely off
+# you can turn off for the rest of the session
 turn_off()
-library(webmockr)
-crul::mock()
-# HttpClient$new(url = "https://hb.opencpu.org/get")$get(verbose = TRUE)
+turned_on()
+# turn on again
 turn_on()
-}
+
+# or just turn it on turn off temporarily
+turned_off({
+  # some HTTP requests here
+  turned_on()
+})
 }

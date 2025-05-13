@@ -41,8 +41,8 @@ disk, so it must be valid file name.}
 curly braces to encapsulate multi-line code blocks. If you can't pass a code
 block use \code{\link[=insert_cassette]{insert_cassette()}} instead.}
 
-\item{dir}{The directory where the cassette will be stored. Defaults
-to the default configured by \code{\link[=vcr_configure]{vcr_configure()}}.}
+\item{dir}{The directory where the cassette will be stored. If unspecified,
+(and hasn't been set in \code{\link[=vcr_configure]{vcr_configure()}}) will use \code{test_path("_vcr")}.}
 
 \item{record}{Record mode that dictates how HTTP requests/responses are
 recorded. Possible values are:
@@ -50,7 +50,7 @@ recorded. Possible values are:
 \item \strong{once}, the default: Replays recorded interactions, records new ones
 if no cassette exists, and errors on new requests if cassette exists.
 \item \strong{none}: Replays recorded interactions, and errors on any new requests.
-Guarnants that no HTTP requests occur.
+Guarantees that no HTTP requests occur.
 \item \strong{new_episodes}: Replays recorded interactions and always records new
 ones, even if similar interactions exist.
 \item \strong{all}: Never replays recorded interactions, always recording new.
@@ -67,35 +67,38 @@ determine which recorded HTTP interaction to replay. Possible values are:
 \item \code{path}: the \strong{path} component of the URI.
 \item \code{query}: the \strong{query} component of the URI.
 \item \code{body}: the request body.
+\item \code{body_json}: the request body, parsed as JSON.
 \item \code{header}: all request headers.
 }
 
 If more than one is specified, all components must match in order for the
-request to match. If not supplied, defaults to \code{c("method", "uri")}.}
+request to match. If not supplied, defaults to \code{c("method", "uri")}.
+
+Note that the request header and body will only be included in the
+cassette if  \code{match_requests_on} includes "header" or "body" respectively.
+This keeps the recorded request as lightweight as possible.}
 
 \item{allow_playback_repeats}{(logical) Whether or not to
 allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
-\item{serialize_with}{(character) Which serializer to use.
-Valid values are "yaml" (default) "json", and "qs2". Note that you
-can have multiple cassettes with the same name as long as they use different
-serializers; so if you only want one cassette for a given cassette name,
-make sure to not switch serializers, or clean up files you no longer need.}
+\item{serialize_with}{(string) Which serializer to use:
+\code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
-\item{preserve_exact_body_bytes}{(logical) Whether or not
-to base64 encode the bytes of the requests and responses for
-this cassette when serializing it. See also \code{preserve_exact_body_bytes}
-in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
+\item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
+representation of the request and response bodies? By default, vcr
+will look at the \code{Content-Type} header to determine if this is necessary,
+but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
+force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
-cassette should be re-recorded. default: \code{NULL} (not re-recorded)}
+cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? default: \code{FALSE}}
+interactions be recorded back to file? Default: \code{FALSE}.}
 
-\item{warn_on_empty}{Warn if the cassette is ejected but no interactions
-have been recorded?}
+\item{warn_on_empty}{(logical) Warn if the cassette is ejected but no interactions
+have been recorded. Default: \code{NULL} (inherits from global configuration).}
 
 \item{frame}{Attach exit handlers to this environment. Typically, this
 should be either the current environment or a parent frame (accessed
@@ -213,7 +216,7 @@ conn <- crul::HttpClient$new("https://eu.httpbin.org")
 ## first use record mode 'once' to record to a cassette
 one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
 one; res
-## then use record mode 'none' to see it's behavior
+## then use record mode 'none' to see its behavior
 two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
 two; res2
 }

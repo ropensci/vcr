@@ -17,25 +17,6 @@ test_that("ejecting errors if no cassettes", {
   expect_snapshot(eject_cassette(), error = TRUE)
 })
 
-test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE", {
-  local_vcr_configure(warn_on_empty_cassette = FALSE)
-  local_light_switch()
-
-  # after being turned off, insert_cassette throws an error
-  suppressMessages(turn_off())
-  expect_snapshot(insert_cassette("test"), error = TRUE)
-
-  suppressMessages(turn_off(ignore_cassettes = TRUE))
-  expect_no_error(insert_cassette("test", warn_on_empty = FALSE))
-})
-
-test_that("inserting and ejecting is logged", {
-  local_vcr_configure(warn_on_empty_cassette = FALSE)
-  local_vcr_configure_log(file = stdout())
-
-  expect_snapshot(. <- use_cassette("test", NULL))
-})
-
 test_that("cassettes are a stack", {
   expect_equal(current_cassette(), NULL)
   expect_equal(cassettes(), list())
