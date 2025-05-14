@@ -29,7 +29,7 @@
       [Cassette: test] Inserting 'test.yml' (new cassette)
       [Cassette: test]   recording: TRUE
       [Cassette: test] Handling request: GET {httpbin}/html
-      [Cassette: test]   recording response: 200 with 1443 bytes of text/html data
+      [Cassette: test]   Recording response: 200 with 1443 bytes of text/html data
       [Cassette: test] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
