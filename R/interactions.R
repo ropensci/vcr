@@ -8,11 +8,10 @@ Interactions <- R6::R6Class(
 
     initialize = function(
       interactions = list(),
-      request_matchers = c("method", "uri"),
-      replayable = TRUE
+      request_matchers = c("method", "uri")
     ) {
       self$interactions <- interactions
-      self$replayable <- rep(replayable, length(interactions))
+      self$replayable <- rep(TRUE, length(interactions))
 
       self$request_matchers <- request_matchers
     },

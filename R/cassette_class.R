@@ -158,8 +158,7 @@ Cassette <- R6::R6Class(
 
       self$http_interactions <- Interactions$new(
         interactions = interactions,
-        request_matchers = self$match_requests_on,
-        replayable = self$record != "all"
+        request_matchers = self$match_requests_on
       )
 
       vcr_log_sprintf("  recording: %s", self$recording())
