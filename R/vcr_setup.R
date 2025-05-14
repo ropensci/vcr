@@ -85,8 +85,7 @@ test_r_file_exists <- function(dir) {
 use_vcr <- function(dir = ".", verbose = TRUE) {
   lifecycle::deprecate_warn("2.0.0", "vcr::use_vcr()")
 
-  assert(dir, "character")
-  stopifnot(length(dir) == 1)
+  check_string(dir)
   if (!dir.exists(dir)) stop("'dir' does not exist")
   check_installed(c("desc", "cli", "crayon"))
 
