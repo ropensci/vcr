@@ -27,6 +27,17 @@ test_that("request_matches has useful logging", {
   })
 })
 
+test_that("informative feedback for components that are absent", {
+  local_vcr_configure_log(file = stdout())
+
+  req1 <- list(uri = "http://example.com", method = "GET")
+  req2 <- list(uri = "http://example.com?q=1", method = "GET")
+
+  expect_snapshot({
+    . <- request_matches(req1, req2)
+  })
+})
+
 test_that("query parameters are normalised", {
   expect_true(request_matches(
     list(uri = "http://a.com/foo?foo=%C2%B5"),
@@ -51,26 +62,20 @@ test_that("make_comparison extracts expected componets", {
   # URI manipulation
   expect_equal(make_comparison("host", req), list(host = "a.com"))
   expect_equal(make_comparison("path", req), list(path = "/foo"))
-  expect_equal(make_comparison("query", req), list(query = c(bar = "baz")))
+  expect_equal(make_comparison("query", req), list(query = list(bar = "baz")))
 })
 
 test_that("default uri extraction ignores port", {
   req <- list(method = "GET", uri = "http://x.com:123")
 
-  expect_equal(
-    make_comparison("uri", req),
-    list(uri = list(scheme = "http", host = "x.com", path = ""))
-  )
-  expect_equal(
-    make_comparison("uri_with_port", req),
-    list(uri = list(scheme = "http", host = "x.com", port = '123', path = ""))
-  )
+  expect_equal(make_comparison("uri", req)$uri$port, NULL)
+  expect_equal(make_comparison("uri_with_port", req)$uri$port, "123")
 })
 
 test_that("query params are normalized", {
   expect_equal(
     make_comparison("query", list(uri = "http://a.com/foo?foo=%C2%B5")),
-    list(query = c(foo = "\u00b5"))
+    list(query = list(foo = "\u00b5"))
   )
 })
 
@@ -78,12 +83,12 @@ test_that("query params are filtered", {
   local_vcr_configure(filter_query_parameters = "foo")
 
   expect_equal(
-    make_comparison("query", list(uri = "http://a.com/")),
+    make_comparison("query", list(uri = "http://a.com/"))$query,
     set_names(list())
   )
 
   expect_equal(
-    make_comparison("query", list(uri = "http://a.com/?foo=x")),
+    make_comparison("query", list(uri = "http://a.com/?foo=x"))$query,
     set_names(list())
   )
 })
