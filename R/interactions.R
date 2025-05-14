@@ -5,25 +5,20 @@ Interactions <- R6::R6Class(
     replayable = logical(),
 
     request_matchers = NULL,
-    allow_playback_repeats = FALSE,
 
     initialize = function(
       interactions = list(),
       request_matchers = c("method", "uri"),
-      allow_playback_repeats = FALSE,
       replayable = TRUE
     ) {
       self$interactions <- interactions
       self$replayable <- rep(replayable, length(interactions))
 
       self$request_matchers <- request_matchers
-      self$allow_playback_repeats <- allow_playback_repeats
     },
 
     # Returns index; powers all other methods
-    find_request = function(request, allow_playback = NULL) {
-      allow_playback <- allow_playback %||% self$allow_playback_repeats
-
+    find_request = function(request, allow_playback = FALSE) {
       for (i in seq_along(self$interactions)) {
         if (!self$replayable[[i]] && !allow_playback) {
           next
@@ -58,17 +53,14 @@ Interactions <- R6::R6Class(
       !is.na(idx)
     },
 
+    # TODO: can be removed if https://github.com/ropensci/vcr/pull/488 is merged
     has_used_interaction = function(request) {
       idx <- self$find_request(request, allow_playback = TRUE)
       !is.na(idx) && !self$replayable[[idx]]
     },
 
     n_replayable = function() {
-      if (self$allow_playback_repeats) {
-        length(self$interactions)
-      } else {
-        sum(self$replayable)
-      }
+      sum(self$replayable)
     },
 
     length = function() {

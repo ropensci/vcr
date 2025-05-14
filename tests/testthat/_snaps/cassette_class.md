@@ -8,7 +8,6 @@
         Serialize with: yaml
         Re-record interval (s): 
         Clean outdated interactions?: FALSE
-        allow_playback_repeats: FALSE
         preserve_exact_body_bytes: FALSE
 
 # cassette warns if ejected with no interactions
