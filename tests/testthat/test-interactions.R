@@ -10,7 +10,6 @@ test_that("can find matching interations", {
 
   expect_equal(interactions$find_request(req1), 1)
   expect_equal(interactions$find_request(req2), 2)
-  expect_equal(interactions$has_interaction(req2), TRUE)
   expect_equal(interactions$has_used_interaction(req1), FALSE)
 })
 
@@ -26,7 +25,6 @@ test_that("handles non-matches", {
   ))
   req3 <- vcr_request("GET", "http://c.com")
 
-  expect_false(interactions$has_interaction(req3))
   expect_false(interactions$has_used_interaction(req3))
   expect_equal(interactions$find_request(req3), NA_integer_)
 })

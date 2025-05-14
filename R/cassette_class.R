@@ -100,7 +100,7 @@ Cassette <- R6::R6Class(
       self$re_record_interval <- re_record_interval %||%
         the$config$re_record_interval
 
-      assert(preserve_exact_body_bytes, "logical")
+      check_bool(preserve_exact_body_bytes, allow_null = TRUE)
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
         the$config$preserve_exact_body_bytes
 
@@ -256,7 +256,7 @@ Cassette <- R6::R6Class(
     #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
-      vcr_log_sprintf("  recording response: %s", response_summary(response))
+      vcr_log_sprintf("  Recording response: %s", response_summary(response))
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)
