@@ -53,13 +53,22 @@ RequestHandler <- R6::R6Class(
         return(private$on_recordable_request())
       }
 
-      if (the$config$log) {
-        # Log messages already give the details
-        cli::cli_abort("Failed to find matching request in active cassette.")
-      } else {
-        err <- UnhandledHTTPRequestError$new(self$request)
-        err$run()
+      # Since it errored, there's no point in also giving a warning about the
+      # cassette being empty
+      if (cassette_active()) {
+        cassette <- current_cassette()
+        cassette$warn_on_empty <- FALSE
       }
+
+      cli::cli_abort(
+        c(
+          "Failed to find matching request in active cassette.",
+          i = if (!the$config$log)
+            "Use {.fn local_vcr_configure_log} to get more details.",
+          i = "Learn more in {.vignette debugging}."
+        ),
+        class = "vcr_unhandled"
+      )
     }
   ),
 

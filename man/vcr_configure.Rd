@@ -29,7 +29,6 @@ vcr_configure(
   filter_response_headers,
   filter_query_parameters,
   write_disk_path,
-  verbose_errors,
   warn_on_empty_cassette
 )
 
@@ -134,17 +133,6 @@ will not be recorded to disk. Alternatively, a named list similar to}
 \item{write_disk_path}{(character) path to write files to
 for any requests that write responses to disk.  By default this will be
 \verb{\{cassette-name\}-files/} inside the cassette directory.}
-
-\item{verbose_errors}{Do you want more verbose errors or less verbose
-errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
-less verbose errors. If \code{TRUE}, error messages will include more details
-about what went wrong and suggest possible solutions. For testing
-in an interactive R session, if \code{verbose_errors=FALSE}, you can run
-\code{vcr_last_error()} to get the full error. If in non-interactive mode,
-which most users will be in when running the entire test suite for a
-package, you can set an environment variable (\code{VCR_VERBOSE_ERRORS})
-to toggle this setting (e.g.,
-\verb{Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()})}
 
 \item{warn_on_empty_cassette}{(logical) Should a warning be thrown when an
 empty cassette is detected? Empty cassettes are cleaned up (deleted) either

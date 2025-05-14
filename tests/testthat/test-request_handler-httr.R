@@ -242,20 +242,16 @@ test_that("JSON-encoded body", {
   expect_error(
     use_cassette(
       "testing2",
-      res <- httr::POST(
-        hb("/post"),
-        body = list(foo = "bar1"),
-        encode = "json"
-      ),
+      res <- httr::POST(hb("/post"), body = list(foo = "baz"), encode = "json"),
       match_requests_on = "body"
     ),
-    "An HTTP request has been made that vcr does not know how to handle"
+    class = "vcr_unhandled"
   )
 
   # matching succeeds when the changed body is ignored
   cc <- use_cassette(
     "testing2",
-    res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("uri", "method")
   )
   expect_identical(recorded_at(aa), recorded_at(cc))

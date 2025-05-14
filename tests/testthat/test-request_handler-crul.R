@@ -108,7 +108,7 @@ test_that("JSON-encoded body", {
       cli$post("post", body = list(foo = "bar")),
       match_requests_on = c("method", "uri", "body")
     ),
-    "An HTTP request has been made that vcr does not know how to handle"
+    class = "vcr_unhandled"
   )
 
   # matching fails when the body changes
@@ -118,7 +118,7 @@ test_that("JSON-encoded body", {
       res <- cli$post("post", body = list(foo = "baz"), encode = "json"),
       match_requests_on = "body"
     ),
-    "An HTTP request has been made that vcr does not know how to handle"
+    class = "vcr_unhandled"
   )
 
   # matching succeeds when the changed body is ignored

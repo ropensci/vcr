@@ -6,5 +6,4 @@ the <- NULL
   the$config <- vcr_config_defaults()
   the$cassettes <- list()
   the$light_switch <- lightswitch_init()
-  the$last_error <- list()
 } # nocov end
