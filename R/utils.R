@@ -1,19 +1,5 @@
 compact <- function(x) Filter(Negate(is.null), x)
 
-assert <- function(x, y) {
-  if (!is.null(x)) {
-    if (!inherits(x, y)) {
-      stop(
-        deparse(substitute(x)),
-        " must be of class ",
-        paste0(y, collapse = ", "),
-        call. = FALSE
-      )
-    }
-  }
-  invisible(x)
-}
-
 check_request_matchers <- function(
   x,
   error_arg = caller_arg(x),

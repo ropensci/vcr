@@ -36,8 +36,8 @@ decode_uri <- function(uri, filter = the$config$filter_query_parameters) {
 # drop_param(url="https://hb.opencpu.org/get?foo=bar&baz=3&z=4", name="z")
 # => "https://hb.opencpu.org/get?foo=bar&baz=3"
 drop_param <- function(url, name) {
-  assert(name, "character")
-  stopifnot("can only drop one name at a time" = length(name) == 1)
+  check_string(name)
+
   z <- parseurl(url)
   if (!is.list(z$parameter)) return(url)
   z$parameter[[name]] <- NULL
@@ -52,8 +52,8 @@ drop_param <- function(url, name) {
 # replace_param(url="https://hb.opencpu.org/get", name="foo", value=4)
 # => "https://hb.opencpu.org/get"
 replace_param <- function(url, name, value) {
-  assert(name, "character")
-  stopifnot("can only replace one name at a time" = length(name) == 1)
+  check_string(name)
+
   z <- parseurl(url)
   if (!is.list(z$parameter)) return(url)
   if (is.null(z$parameter[[name]])) return(url)
@@ -62,8 +62,8 @@ replace_param <- function(url, name, value) {
 }
 
 replace_param_with <- function(url, name, fake, real) {
-  assert(name, "character")
-  stopifnot("can only replace one name at a time" = length(name) == 1)
+  check_string(name)
+
   z <- parseurl(url)
   if (!is.list(z$parameter)) return(url)
   if (is.null(z$parameter[[name]])) return(url)

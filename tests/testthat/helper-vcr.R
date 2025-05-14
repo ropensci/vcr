@@ -37,19 +37,6 @@ recorded_at <- function(x) {
   yaml::yaml.load_file(x$file())$http_interactions[[1]]$recorded_at
 }
 
-extract_vcr_config_args <- function(rdfile) {
-  stopifnot(file.exists(rdfile))
-
-  rdtext <- paste0(readLines(rdfile), collapse = "")
-  rdhits <- gregexpr("item \\\\code\\{([a-z_]+)\\}", rdtext, perl = TRUE)[[1]]
-
-  substring(
-    rdtext,
-    attr(rdhits, "capture.start"),
-    attr(rdhits, "capture.start") + attr(rdhits, "capture.length") - 1
-  )
-}
-
 check_url <- function(x, ...) {
   suppressWarnings(suppressMessages(crul::ok(x, ...)))
 }
