@@ -21,13 +21,6 @@ RequestHandler <- R6::R6Class(
         private$request_summary(self$request)
       )
 
-      if (private$externally_stubbed()) {
-        # FIXME: not quite sure what externally_stubbed is meant for
-        #   perhaps we can get rid of it here if only applicable in Ruby
-        vcr_log_sprintf("  externally stubbed")
-        return(private$on_externally_stubbed_request())
-      }
-
       if (should_be_ignored(self$request)) {
         vcr_log_sprintf("  ignored")
         return(private$on_ignored_request())
@@ -70,8 +63,6 @@ RequestHandler <- R6::R6Class(
     },
 
     # request type helpers
-    externally_stubbed = function() FALSE,
-
     get_stubbed_response = function(request) {
       if (!cassette_active()) {
         return(NULL)
@@ -86,8 +77,6 @@ RequestHandler <- R6::R6Class(
     ###   - all fxns take `request` param for consistentcy, even if they dont use it
     ##### so we can "monkey patch" these in each HTTP client adapter by
     #####   reassigning some of these functions with ones specific to the HTTP client
-
-    on_externally_stubbed_request = function() NULL,
 
     on_ignored_request = function() {
       # perform and return REAL http response
