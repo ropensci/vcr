@@ -47,7 +47,7 @@
 #' allow a single HTTP interaction to be played back multiple times.
 #' Default: `FALSE`.
 #' @param serialize_with (string) Which serializer to use:
-#'   `"yaml"` (the default) or `"json"`.
+#'   `"yaml"` (the default), `"json"`, or `"qs2"`.
 #' @param preserve_exact_body_bytes (logical) Force a binary (base64)
 #'   representation of the request and response bodies? By default, vcr
 #'   will look at the `Content-Type` header to determine if this is necessary,

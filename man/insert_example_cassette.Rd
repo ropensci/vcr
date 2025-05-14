@@ -2,7 +2,7 @@
 % Please edit documentation in R/examples.R
 \name{insert_example_cassette}
 \alias{insert_example_cassette}
-\title{Use casssettes in examples}
+\title{Use cassettes in examples}
 \usage{
 insert_example_cassette(
   name,
@@ -54,7 +54,7 @@ allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
 \item{serialize_with}{(string) Which serializer to use:
-\code{"yaml"} (the default) or \code{"json"}.}
+\code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
 representation of the request and response bodies? By default, vcr
@@ -70,7 +70,7 @@ interactions be recorded back to file? Default: \code{FALSE}.}
 }
 \description{
 \code{insert_example_cassette()} is a wrapper around \code{\link[=insert_cassette]{insert_cassette()}} that
-stores casssettes in \verb{inst/_vcr/}. Call it in the first line of your examples
+stores cassettes in \verb{inst/_vcr/}. Call it in the first line of your examples
 (typically wrapped in \verb{\dontshow{}}), and call \code{eject_cassette()} on the
 last line.
 

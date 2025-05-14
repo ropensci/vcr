@@ -83,7 +83,7 @@ allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
 \item{serialize_with}{(string) Which serializer to use:
-\code{"yaml"} (the default) or \code{"json"}.}
+\code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
 representation of the request and response bodies? By default, vcr

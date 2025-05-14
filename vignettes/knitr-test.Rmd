@@ -19,7 +19,7 @@ library(httr2)
 httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 
 # Set record = "none" so that this vignette will fail if it doesn't replay
-# from the casssette
+# from the cassette
 vcr::setup_knitr(record = "none")
 ```
 
