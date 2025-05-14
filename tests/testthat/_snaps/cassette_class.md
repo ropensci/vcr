@@ -49,8 +49,8 @@
       [Cassette: test] Handling request: GET {httpbin}/404
       [Cassette: test]   Looking for existing requests using method/uri
       [Cassette: test]     Request 1: NO MATCH
-      [Cassette: test]     `matching$uri$path`: "/404" 
-      [Cassette: test]     `recorded$uri$path`: "/html"
+      [Cassette: test]       `matching$uri$path`: "/404" 
+      [Cassette: test]       `recorded$uri$path`: "/html"
       [Cassette: test]   No matching requests
     Condition
       Error:
