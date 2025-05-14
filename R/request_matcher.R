@@ -73,7 +73,9 @@ normalize_uri <- function(x, drop_port = TRUE) {
   }
 
   if (length(parsed$params) == 0) {
-    parsed$params <- NULL
+    parsed$params <- set_names(list())
+  } else {
+    parsed$params <- as.list(parsed$params)
   }
   compact(parsed)
 }
