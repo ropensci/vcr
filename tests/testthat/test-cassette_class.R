@@ -45,8 +45,11 @@ test_that("important interactions are logged", {
     {
       use_cassette("test", httr::GET(hb("/html")))
       use_cassette("test", httr::GET(hb("/html")))
-      try(use_cassette("test", httr::GET(hb("/404"))), silent = TRUE)
+      # Fails to capture ejecting message due to
+      # https://github.com/r-lib/testthat/issues/2081
+      use_cassette("test", httr::GET(hb("/404")))
     },
+    error = TRUE,
     transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
   )
 })
