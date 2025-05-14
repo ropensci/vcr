@@ -193,7 +193,7 @@ There are two main options:
 
 ## Other uses
 
-Now that you're familiar using vcr for your unit tests, you might wonder if there are other places you can use it in your packages.
+Now that you're familiar with using vcr for your unit tests, you might wonder if there are other places you can use it in your packages.
 There are!
 Two other important use cases are in examples and vignettes:
 
