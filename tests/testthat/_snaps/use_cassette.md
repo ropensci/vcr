@@ -19,8 +19,8 @@
     Code
       local_cassette("text", NULL, preserve_exact_body_bytes = "xxx")
     Condition
-      Error:
-      ! preserve_exact_body_bytes must be of class logical
+      Error in `initialize()`:
+      ! `preserve_exact_body_bytes` must be `TRUE`, `FALSE`, or `NULL`, not the string "xxx".
     Code
       local_cassette("test", NULL, serialize_with = "howdy")
     Condition

@@ -29,7 +29,7 @@
       [Cassette: test] Inserting 'test.yml' (new cassette)
       [Cassette: test]   recording: TRUE
       [Cassette: test] Handling request: GET {httpbin}/html
-      [Cassette: test]   recording response: 200 with 1443 bytes of text/html data
+      [Cassette: test]   Recording response: 200 with 1443 bytes of text/html data
       [Cassette: test] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
@@ -49,8 +49,8 @@
       [Cassette: test] Handling request: GET {httpbin}/404
       [Cassette: test]   Looking for existing requests using method/uri
       [Cassette: test]     Request 1: NO MATCH
-      [Cassette: test]     `matching$uri$path`: "/404" 
-      [Cassette: test]     `recorded$uri$path`: "/html"
+      [Cassette: test]       `matching$uri$path`: "/404" 
+      [Cassette: test]       `recorded$uri$path`: "/html"
       [Cassette: test]   No matching requests
     Condition
       Error:
