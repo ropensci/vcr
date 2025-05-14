@@ -26,24 +26,28 @@ RequestHandler <- R6::R6Class(
         return(private$on_ignored_request())
       }
 
-      if (casette_is_replayable()) {
-        interactions <- current_cassette()$http_interactions
-        vcr_log_sprintf(
-          "  Looking for existing requests using %s",
-          paste0(interactions$request_matchers, collapse = "/")
-        )
-        idx <- interactions$find_request(self$request)
-        if (!is.na(idx)) {
-          vcr_response <- interactions$response_for(idx)
-          vcr_log_sprintf("  Replaying response %i", idx)
-          return(private$on_stubbed_by_vcr_request(vcr_response))
-        } else {
-          vcr_log_sprintf("  No matching requests")
-        }
-      }
+      if (cassette_active()) {
+        cassette <- current_cassette()
 
-      if (cassette_is_recording()) {
-        return(private$on_recordable_request())
+        if (cassette$http_interactions$n_replayable() > 0) {
+          interactions <- cassette$http_interactions
+          vcr_log_sprintf(
+            "  Looking for existing requests using %s",
+            paste0(interactions$request_matchers, collapse = "/")
+          )
+          idx <- interactions$find_request(self$request)
+          if (!is.na(idx)) {
+            vcr_response <- interactions$response_for(idx)
+            vcr_log_sprintf("  Replaying response %i", idx)
+            return(private$on_stubbed_by_vcr_request(vcr_response))
+          } else {
+            vcr_log_sprintf("  No matching requests")
+          }
+        }
+
+        if (cassette$recording()) {
+          return(private$on_recordable_request())
+        }
       }
 
       if (the$config$log) {
@@ -93,19 +97,3 @@ RequestHandler <- R6::R6Class(
     }
   )
 )
-
-cassette_is_recording <- function() {
-  if (cassette_active()) {
-    current_cassette()$recording()
-  } else {
-    FALSE
-  }
-}
-
-casette_is_replayable <- function() {
-  if (cassette_active()) {
-    current_cassette()$http_interactions$n_replayable() > 0
-  } else {
-    FALSE
-  }
-}
