@@ -1,5 +1,7 @@
 request_summary <- function(request, request_matchers = "") {
-  stopifnot(inherits(request_matchers, "character"))
+  check_vcr_request(request)
+  check_character(request_matchers)
+
   atts <- c(request$method, request$uri)
   if ("body" %in% request_matchers) {
     atts <- c(atts, substring(request$body, 0, 80))
@@ -11,7 +13,7 @@ request_summary <- function(request, request_matchers = "") {
 }
 
 response_summary <- function(response) {
-  stopifnot(inherits(response, "vcr_response"))
+  check_vcr_response(response)
 
   # if body is raw, state that it's raw
   if (is.null(response$body)) {

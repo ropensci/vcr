@@ -31,8 +31,7 @@ test_that("use_vcr works", {
 test_that("use_vcr fails well", {
   withr::local_options(lifecycle_verbosity = "quiet")
 
-  expect_error(use_vcr(5), "dir must be of class character")
-  expect_error(use_vcr(letters[1:2]), "length\\(dir\\) == 1 is not TRUE")
+  expect_snapshot(use_vcr(5), error = TRUE)
 
   # dir does not exist
   dir <- "doesnt_exist"

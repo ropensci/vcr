@@ -108,7 +108,7 @@ Cassette <- R6::R6Class(
         the$config$re_record_interval
       self$allow_playback_repeats = allow_playback_repeats
 
-      assert(preserve_exact_body_bytes, "logical")
+      check_bool(preserve_exact_body_bytes, allow_null = TRUE)
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
         the$config$preserve_exact_body_bytes
 
