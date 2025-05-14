@@ -56,11 +56,6 @@ Interactions <- R6::R6Class(
       self$interactions[[i]]$response
     },
 
-    has_interaction = function(request) {
-      idx <- self$find_request(request)
-      !is.na(idx)
-    },
-
     has_used_interaction = function(request) {
       idx <- self$find_request(request, allow_playback = TRUE)
       !is.na(idx) && !self$replayable[[idx]]

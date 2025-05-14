@@ -120,11 +120,3 @@ casette_is_replayable <- function() {
     FALSE
   }
 }
-
-cassette_has_response <- function(request) {
-  if (cassette_active()) {
-    current_cassette()$http_interactions$has_interaction(request)
-  } else {
-    FALSE
-  }
-}
