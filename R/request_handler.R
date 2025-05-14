@@ -1,6 +1,6 @@
 #' Request handlers
 #'
-#' This are internal classes that should not be used by users.
+#' These are internal classes that should not be used by users.
 #'
 #' @keywords internal
 #' @aliases RequestHandlerHttr2 RequestHandlerHttr RequestHandlerCrul
@@ -33,19 +33,19 @@ RequestHandler <- R6::R6Class(
         return(private$on_ignored_request())
       }
 
-      if (cassette_active()) {
+      if (casette_is_replayable()) {
         interactions <- current_cassette()$http_interactions
         vcr_log_sprintf(
-          "  looking for existing requests using %s",
+          "  Looking for existing requests using %s",
           paste0(interactions$request_matchers, collapse = "/")
         )
         idx <- interactions$find_request(self$request)
         if (!is.na(idx)) {
           vcr_response <- interactions$response_for(idx)
-          vcr_log_sprintf("  matched response %i", idx)
+          vcr_log_sprintf("  Replaying response %i", idx)
           return(private$on_stubbed_by_vcr_request(vcr_response))
         } else {
-          vcr_log_sprintf("  no matching requests")
+          vcr_log_sprintf("  No matching requests")
         }
       }
 
@@ -53,8 +53,13 @@ RequestHandler <- R6::R6Class(
         return(private$on_recordable_request())
       }
 
-      err <- UnhandledHTTPRequestError$new(self$request)
-      err$run()
+      if (the$config$log) {
+        # Log messages already give the details
+        cli::cli_abort("Failed to find matching request in active cassette.")
+      } else {
+        err <- UnhandledHTTPRequestError$new(self$request)
+        err$run()
+      }
     }
   ),
 
@@ -108,10 +113,17 @@ cassette_is_recording <- function() {
   }
 }
 
+casette_is_replayable <- function() {
+  if (cassette_active()) {
+    current_cassette()$http_interactions$n_replayable() > 0
+  } else {
+    FALSE
+  }
+}
+
 cassette_has_response <- function(request) {
   if (cassette_active()) {
-    interactions <- current_cassette()$http_interactions
-    interactions$has_interaction(request)
+    current_cassette()$http_interactions$has_interaction(request)
   } else {
     FALSE
   }

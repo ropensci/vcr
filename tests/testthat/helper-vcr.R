@@ -20,6 +20,7 @@ make_pkg <- function(frame = parent.frame()) {
 
   dir_create(file.path(dir, "man"))
   dir_create(file.path(dir, "R"))
+  dir_create(file.path(dir, "tests", "testthat"))
   cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
 
   dir
@@ -100,7 +101,7 @@ find_httpbin_server <- function() {
 }
 
 read_cassette <- function(name) {
-  yaml::yaml.load_file(file.path(vcr_c$dir, name))
+  yaml::yaml.load_file(file.path(the$config$dir, name))
 }
 
 testthat::set_state_inspector(\() {
@@ -111,6 +112,6 @@ testthat::set_state_inspector(\() {
   list(
     temp_files = temp_files,
     wd_files = dir(),
-    vcr_config = vcr_c$as_list()
+    vcr_config = the$config
   )
 })

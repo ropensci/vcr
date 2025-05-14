@@ -1,7 +1,8 @@
 request_matches <- function(
   req1,
   req2,
-  match_requests_on = c("method", "uri")
+  match_requests_on = c("method", "uri"),
+  i = 1
 ) {
   match_1 <- make_comparison(match_requests_on, req1)
   match_2 <- make_comparison(match_requests_on, req2)
@@ -13,12 +14,12 @@ request_matches <- function(
   )
 
   if (length(compare) == 0) {
-    vcr_log_sprintf("  match: %s", request_summary(req1))
+    vcr_log_sprintf("    Request %i: MATCH", i)
     TRUE
   } else {
-    vcr_log_sprintf("  no match: %s", request_summary(req1))
+    vcr_log_sprintf("    Request %i: NO MATCH", i)
     lines <- strsplit(paste0(compare, collapse = "\n"), "\n")[[1]]
-    lapply(lines, \(line) vcr_log_sprintf("  %s", line))
+    lapply(lines, \(line) vcr_log_sprintf("    %s", line))
     FALSE
   }
 }
@@ -31,7 +32,8 @@ make_comparison <- function(matches, req) {
     method = if ("method" %in% matches) req$method,
     body = if ("body" %in% matches) normalize_body(req$body),
     body = if ("body_json" %in% matches) try_json(req$body),
-    headers = if ("headers" %in% matches) req$headers,
+    headers = if ("headers" %in% matches)
+      encode_headers(req$headers, "request"),
     uri = if (needs_uri) uri,
     host = if ("host" %in% matches) uri$host,
     path = if ("path" %in% matches) uri$path,

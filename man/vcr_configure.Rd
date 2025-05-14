@@ -8,7 +8,30 @@
 \alias{vcr_config_defaults}
 \title{Global Configuration Options}
 \usage{
-vcr_configure(...)
+vcr_configure(
+  dir,
+  record,
+  match_requests_on,
+  serialize_with,
+  json_pretty,
+  ignore_hosts,
+  ignore_localhost,
+  ignore_request,
+  preserve_exact_body_bytes,
+  turned_off,
+  re_record_interval,
+  clean_outdated_http_interactions,
+  log,
+  log_opts,
+  filter_sensitive_data,
+  filter_sensitive_data_regex,
+  filter_request_headers,
+  filter_response_headers,
+  filter_query_parameters,
+  write_disk_path,
+  verbose_errors,
+  warn_on_empty_cassette
+)
 
 local_vcr_configure(..., .frame = parent.frame())
 
@@ -19,8 +42,116 @@ vcr_configuration()
 vcr_config_defaults()
 }
 \arguments{
-\item{...}{configuration settings used to override defaults. See below for a
-complete list of valid arguments.}
+\item{dir}{Directory where cassettes are stored.}
+
+\item{record}{Record mode that dictates how HTTP requests/responses are
+recorded. Possible values are:
+\itemize{
+\item \strong{once}, the default: Replays recorded interactions, records new ones
+if no cassette exists, and errors on new requests if cassette exists.
+\item \strong{none}: Replays recorded interactions, and errors on any new requests.
+Guarantees that no HTTP requests occur.
+\item \strong{new_episodes}: Replays recorded interactions and always records new
+ones, even if similar interactions exist.
+\item \strong{all}: Never replays recorded interactions, always recording new.
+Useful for re-recording outdated responses or logging all HTTP requests.
+}}
+
+\item{match_requests_on}{Character vector of request matchers used to
+determine which recorded HTTP interaction to replay. Possible values are:
+\itemize{
+\item \code{method}: the HTTP method.
+\item \code{uri}: the complete request URI, excluding the port.
+\item \code{uri_with_port}: the complete request URI, including the port.
+\item \code{host}: the \strong{host} component of the URI.
+\item \code{path}: the \strong{path} component of the URI.
+\item \code{query}: the \strong{query} component of the URI.
+\item \code{body}: the request body.
+\item \code{body_json}: the request body, parsed as JSON.
+\item \code{header}: all request headers.
+}
+
+If more than one is specified, all components must match in order for the
+request to match. If not supplied, defaults to \code{c("method", "uri")}.
+
+Note that the request header and body will only be included in the
+cassette if  \code{match_requests_on} includes "header" or "body" respectively.
+This keeps the recorded request as lightweight as possible.}
+
+\item{serialize_with}{(string) Which serializer to use:
+\code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
+
+\item{json_pretty}{(logical) want JSON to be newline separated to be easier
+to read? Or remove newlines to save disk space? default: \code{FALSE}.`}
+
+\item{ignore_hosts}{(character) Vector of hosts to ignore. e.g.,
+\code{"localhost"}, or \code{"google.com"}. These hosts are ignored and real HTTP
+requests are allowed to go through.}
+
+\item{ignore_localhost}{(logical) Default: \code{FALSE}}
+
+\item{ignore_request}{List of requests to ignore. NOT USED RIGHT NOW, sorry}
+
+\item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
+representation of the request and response bodies? By default, vcr
+will look at the \code{Content-Type} header to determine if this is necessary,
+but if it doesn't work you can set \code{preserve_exact_body_bytes = TRUE} to
+force it.}
+
+\item{turned_off}{(logical) VCR is turned on by default. Default:
+\code{FALSE}.}
+
+\item{re_record_interval}{(integer) How frequently (in seconds) the
+cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
+
+\item{clean_outdated_http_interactions}{(logical) Should outdated
+interactions be recorded back to file? Default: \code{FALSE}.}
+
+\item{log, log_opts}{See \code{\link[=vcr_configure_log]{vcr_configure_log()}}.}
+
+\item{filter_sensitive_data}{instructing vcr with what value to replace the
+real value of the query parameter.}
+
+\item{filter_sensitive_data_regex}{named list of values to replace. Follows
+\code{filter_sensitive_data} format, except uses \code{fixed=FALSE} in the \code{\link[=gsub]{gsub()}}
+function call; this means that the value in \code{thing_to_replace} is a regex
+pattern.}
+
+\item{filter_request_headers}{(character/list) \strong{request} headers to filter.
+A character vector of request headers to remove - the headers will not be
+recorded to disk. Alternatively, a named list similar to}
+
+\item{filter_response_headers}{(character/list) \strong{response} headers to filter.
+A character vector of response headers to remove - the headers will not be
+recorded to disk. Alternatively, a named list similar to
+\code{filter_sensitive_data} instructing vcr with what value to replace the
+real value of the response header.}
+
+\item{filter_query_parameters}{(named list) query parameters to filter.
+A character vector of query parameters to remove - the query parameters
+will not be recorded to disk. Alternatively, a named list similar to}
+
+\item{write_disk_path}{(character) path to write files to
+for any requests that write responses to disk.  By default this will be
+\verb{\{cassette-name\}-files/} inside the cassette directory.}
+
+\item{verbose_errors}{Do you want more verbose errors or less verbose
+errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
+less verbose errors. If \code{TRUE}, error messages will include more details
+about what went wrong and suggest possible solutions. For testing
+in an interactive R session, if \code{verbose_errors=FALSE}, you can run
+\code{vcr_last_error()} to get the full error. If in non-interactive mode,
+which most users will be in when running the entire test suite for a
+package, you can set an environment variable (\code{VCR_VERBOSE_ERRORS})
+to toggle this setting (e.g.,
+\verb{Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()})}
+
+\item{warn_on_empty_cassette}{(logical) Should a warning be thrown when an
+empty cassette is detected? Empty cassettes are cleaned up (deleted) either
+way. This option only determines whether a warning is thrown or not.
+Default: \code{FALSE}}
+
+\item{...}{Configuration settings used to override defaults.}
 
 \item{.frame}{Attach exit handlers to this environment. Typically, this
 should be either the current environment or a parent frame (accessed
@@ -30,128 +161,6 @@ for more details.}
 \description{
 Configurable options that define vcr's default behavior.
 }
-\section{Configurable settings}{
-
-\subsection{vcr options}{
-\subsection{File locations}{
-\itemize{
-\item \code{dir} Cassette directory
-\item \code{write_disk_path} (character) path to write files to
-for any requests that write responses to disk. By default this will be
-\verb{\{cassette-name\}-files/} inside the cassette directory.
-}
-}
-
-\subsection{Contexts}{
-\itemize{
-\item \code{turned_off} (logical) VCR is turned on by default. Default:
-\code{FALSE}
-\item \code{allow_unused_http_interactions} (logical) Default: \code{TRUE}
-}
-}
-
-\subsection{Filtering}{
-\itemize{
-\item \code{ignore_hosts} (character) Vector of hosts to ignore. e.g., localhost, or
-google.com. These hosts are ignored and real HTTP requests allowed to go
-through
-\item \code{ignore_localhost} (logical) Default: \code{FALSE}
-\item \code{ignore_request} List of requests to ignore. NOT USED RIGHT NOW, sorry
-\item \code{filter_sensitive_data} named list of values to replace. Format is:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{list(thing_to_replace_it_with = thing_to_replace)
-}\if{html}{\out{</div>}}
-
-We replace all instances of \code{thing_to_replace} with
-\code{thing_to_replace_it_with}. Uses \code{\link[=gsub]{gsub()}} internally, with \code{fixed=TRUE};
-so does exact matches. Before recording (writing to a cassette) we do
-the replacement and then when reading from the cassette we do the reverse
-replacement to get back to the real data. Before record replacement happens
-in internal function \code{write_interactions()}, while before playback
-replacement happens in internal function \code{YAML$deserialize()}
-\item \code{filter_sensitive_data_regex} named list of values to replace. Follows
-\code{filter_sensitive_data} format, except uses \code{fixed=FALSE} in the \code{\link[=gsub]{gsub()}}
-function call; this means that the value in \code{thing_to_replace} is a regex
-pattern.
-\item \code{filter_request_headers} (character/list) \strong{request} headers to filter.
-A character vector of request headers to remove - the headers will not be
-recorded to disk. Alternatively, a named list similar to
-\code{filter_sensitive_data} instructing vcr with what value to replace the
-real value of the request header. Note that for the \code{httr2} package only
-we redact request headers automatically that are marked (via attributes)
-as redacted.
-\item \code{filter_response_headers} (named list) \strong{response} headers to filter.
-A character vector of response headers to remove - the headers will not be
-recorded to disk. Alternatively, a named list similar to
-\code{filter_sensitive_data} instructing vcr with what value to replace the
-real value of the response header.
-\item \code{filter_query_parameters} (named list) query parameters to filter.
-A character vector of query parameters to remove - the query parameters
-will not be recorded to disk. Alternatively, a named list similar to
-\code{filter_sensitive_data} instructing vcr with what value to replace the
-real value of the query parameter.
-}
-}
-
-}
-
-\subsection{Errors}{
-\itemize{
-\item \code{verbose_errors} Do you want more verbose errors or less verbose
-errors when cassette recording/usage fails? Default is \code{FALSE}, that is,
-less verbose errors. If \code{TRUE}, error messages will include more details
-about what went wrong and suggest possible solutions. For testing
-in an interactive R session, if \code{verbose_errors=FALSE}, you can run
-\code{vcr_last_error()} to get the full error. If in non-interactive mode,
-which most users will be in when running the entire test suite for a
-package, you can set an environment variable (\code{VCR_VERBOSE_ERRORS})
-to toggle this setting (e.g.,
-\verb{Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()})
-}
-\subsection{Internals}{
-\itemize{
-\item \code{cassettes} (list) don't use
-\item \code{linked_context} (logical) linked context
-}
-}
-
-\subsection{Logging}{
-
-See \code{\link[=vcr_configure_log]{vcr_configure_log()}}
-}
-
-}
-
-\subsection{Cassette Options}{
-
-These settings can be configured globally, using \code{vcr_configure()}, or
-locally, using either \code{use_cassette()} or \code{insert_cassette()}. Global
-settings are applied to \emph{all} cassettes but are overridden by settings
-defined locally for individual cassettes.
-\itemize{
-\item \code{record} (character) One of 'all', 'none', 'new_episodes', or 'once'.
-See \code{\link[=use_cassette]{use_cassette()}} for details.
-\item \code{match_requests_on} vector of matchers. Default: (\code{method}, \code{uri})
-See \code{\link[=use_cassette]{use_cassette()}} for details.
-\item \code{serialize_with}: (character) "yaml" or "json". Note that you can have
-multiple cassettes with the same name as long as they use different
-serializers; so if you only want one cassette for a given cassette name,
-make sure to not switch serializers, or clean up files you no longer need.
-\item \code{json_pretty}: (logical) want JSON to be newline separated to be easier
-to read? Or remove newlines to save disk space? default: FALSE
-\item \code{preserve_exact_body_bytes} (logical) preserve exact body bytes for
-\item \code{re_record_interval} (numeric) When given, the cassette will be
-re-recorded at the given interval, in seconds.
-\item \code{clean_outdated_http_interactions} (logical) Should outdated interactions
-be recorded back to file. Default: \code{FALSE}
-\item \code{warn_on_empty_cassette} (logical) Should a warning be thrown when an
-empty cassette is detected? Empty cassettes are cleaned up (deleted) either
-way. This option only determines whether a warning is thrown or not.
-Default: \code{FALSE}
-}
-}
-}
-
 \examples{
 vcr_configure(dir = tempdir())
 vcr_configure(dir = tempdir(), record = "all")

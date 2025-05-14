@@ -143,3 +143,7 @@ Make sure you ejected the cassette you were using!
 
 Unless your vcr helper/setup file tweaked more things than you would like, 
 you do not even need to re-start R, but you could, just to be on the safe side.
+
+### Re-used cassestte name
+
+You need to make sure that every test has it's own unique cassette name, otherwise you won't find the responses that you're expecting. This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the test you're currently in, a different test will break.

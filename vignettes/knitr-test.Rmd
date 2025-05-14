@@ -1,0 +1,32 @@
+---
+title: "cassette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cassette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(vcr)
+library(httr2)
+httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
+
+# Set record = "none" so that this vignette will fail if it doesn't replay
+# from the cassette
+vcr::setup_knitr(record = "none")
+```
+
+This vignette tests that we can replay cassettes created by `vcr::setup_knitr()`.
+
+```{r}
+#| cassette: test
+req <- request(httpbin$url("/get"))
+req_perform(req)
+```

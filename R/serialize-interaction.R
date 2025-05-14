@@ -1,14 +1,26 @@
 # Interactions -----------------------------------------------------------------
 
-encode_interactions <- function(interactions, preserve_bytes = FALSE) {
-  interactions <- lapply(interactions, encode_interaction, preserve_bytes)
+encode_interactions <- function(
+  interactions,
+  preserve_bytes = FALSE,
+  matchers = c("method", "uri")
+) {
+  interactions <- lapply(
+    interactions,
+    encode_interaction,
+    preserve_bytes = preserve_bytes,
+    matchers = matchers
+  )
   list(
     http_interactions = interactions,
     recorded_with = pkg_versions()
   )
 }
 
-decode_interactions <- function(interactions, preserve_bytes = FALSE) {
+decode_interactions <- function(
+  interactions,
+  preserve_bytes = FALSE
+) {
   if (is.null(interactions)) {
     return(list())
   }
@@ -23,17 +35,23 @@ decode_interactions <- function(interactions, preserve_bytes = FALSE) {
 
 # Interaction ------------------------------------------------------------------
 
-encode_interaction <- function(interaction, preserve_bytes) {
+encode_interaction <- function(
+  interaction,
+  preserve_bytes = FALSE,
+  matchers = c("method", "uri")
+) {
   request <- interaction$request
   response <- interaction$response
 
   list(
-    request = list(
+    request = compact(list(
       method = request$method,
       uri = encode_uri(request$uri),
-      body = encode_body(request$body, NULL, preserve_bytes),
-      headers = encode_headers(request$headers, "request")
-    ),
+      body = if ("body" %in% matchers)
+        encode_body(request$body, NULL, preserve_bytes),
+      headers = if ("headers" %in% matchers)
+        encode_headers(request$headers, "request")
+    )),
     response = list(
       status = response$status,
       headers = encode_headers(response$headers, "response"),
@@ -43,7 +61,7 @@ encode_interaction <- function(interaction, preserve_bytes) {
   )
 }
 
-decode_interaction <- function(interaction, preserve_bytes) {
+decode_interaction <- function(interaction, preserve_bytes = FALSE) {
   request <- interaction$request
   response <- interaction$response
 

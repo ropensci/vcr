@@ -1,6 +1,6 @@
 encode_uri <- function(
   uri,
-  filter = vcr_c$filter_query_parameters,
+  filter = the$config$filter_query_parameters,
   flip = FALSE
 ) {
   is_named <- names2(filter) != ""
@@ -29,7 +29,7 @@ encode_uri <- function(
   uri
 }
 
-decode_uri <- function(uri, filter = vcr_c$filter_query_parameters) {
+decode_uri <- function(uri, filter = the$config$filter_query_parameters) {
   encode_uri(uri, filter, flip = TRUE)
 }
 

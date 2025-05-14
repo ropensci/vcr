@@ -7,7 +7,7 @@ test_that("vcr_last_error fails well", {
   expect_error(vcr_last_error(), "no error to report")
 })
 
-test_that("vcr_last_error works: no casssette in use yet", {
+test_that("vcr_last_error works: no cassette in use yet", {
   request <- vcr_request("post", hb("/post?a=5"), "", list(foo = "bar"))
   err <- UnhandledHTTPRequestError$new(request)
   expect_error(err$construct_message())
@@ -16,7 +16,7 @@ test_that("vcr_last_error works: no casssette in use yet", {
   expect_message(vcr_last_error(), "http-testing/debugging-")
 })
 
-test_that("vcr_last_error works: casssette in use", {
+test_that("vcr_last_error works: cassette in use", {
   request <- vcr_request("post", hb("/post?a=5"), "", list(foo = "bar"))
 
   local_cassette("bunny", warn_on_empty = FALSE)

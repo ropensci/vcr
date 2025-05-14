@@ -14,17 +14,17 @@ function \code{\link[=use_cassette]{use_cassette()}}
 
 \itemize{
 \item \code{initialize()}: webmockr is used in the \code{initialize()} method to
-create webmockr stubs. stubs are created on call to \code{Cassette$new()}
+create webmockr stubs. Stubs are created on call to \code{Cassette$new()}
 within \code{insert_cassette()}, but then on exiting \code{use_cassette()},
 or calling \code{eject()} on \code{Cassette} class from \code{insert_cassette()},
 stubs are cleaned up.
 \item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
 eject to disable webmock so that webmockr does not affect any HTTP
-requests that happen afterwards
-\item \code{serialize_to_crul()} method: method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
+requests that happen afterwards.
+\item \code{serialize_to_crul()} method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
 \link[webmockr:Response]{webmockr::Response} are used to build a request and response,
 respectively, then passed to \code{\link[webmockr:build_crul_response]{webmockr::build_crul_response()}}
-to make a complete \code{crul} HTTP response object
+to make a complete \code{crul} HTTP response object.
 }
 }
 
@@ -41,9 +41,9 @@ to make a complete \code{crul} HTTP response object
 
 \item{\code{recorded_at}}{(character) date/time recorded at}
 
-\item{\code{serialize_with}}{(character) serializer to use (yaml|json)}
+\item{\code{serialize_with}}{(character) serializer (yaml|json|qs2)}
 
-\item{\code{serializer}}{(character) serializer to use (yaml|json)}
+\item{\code{serializer}}{(Serializer) serializer (YAML|JSON|QS2)}
 
 \item{\code{match_requests_on}}{(character) matchers to use
 default: method & uri}
@@ -128,7 +128,7 @@ allow a single HTTP interaction to be played back multiple times.
 Default: \code{FALSE}.}
 
 \item{\code{serialize_with}}{(character) Which serializer to use.
-Valid values are "yaml" (default), the only one supported for now.}
+Valid values are "yaml" (default), "json", and "qs2".}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for
