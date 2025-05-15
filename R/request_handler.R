@@ -37,7 +37,7 @@ RequestHandler <- R6::R6Class(
           )
           idx <- interactions$find_request(self$request)
           if (!is.na(idx)) {
-            vcr_response <- interactions$response_for(idx)
+            vcr_response <- interactions$replay_request(idx)
             vcr_log_sprintf("  Replaying response %i", idx)
             return(private$on_stubbed_by_vcr_request(vcr_response))
           } else {
@@ -81,7 +81,7 @@ RequestHandler <- R6::R6Class(
         return(NULL)
       }
       interactions <- current_cassette()$http_interactions
-      interactions$response_for(request)
+      interactions$replay_request(request)
     },
 
     #####################################################################
