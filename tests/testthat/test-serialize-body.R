@@ -93,6 +93,10 @@ test_that("warns about v1 bodies with a string that's base64", {
   body <- list(string = to_base64("hello world"), file = FALSE)
   expect_snapshot(out <- decode_body(body, preserve_bytes = TRUE))
   expect_equal(out$data, charToRaw("hello world"))
+
+  # but doesn't warn if the string isn't base64
+  body <- list(string = "hello world", file = FALSE)
+  expect_no_warning(out <- decode_body(body, preserve_bytes = TRUE))
 })
 
 test_that("v1 bodies works for v2 vcr", {
@@ -103,6 +107,6 @@ test_that("v1 bodies works for v2 vcr", {
 
   expect_equal(
     decode_body(list(string = "")),
-    list(data = "", on_disk = FALSE)
+    list(data = NULL, on_disk = FALSE)
   )
 })

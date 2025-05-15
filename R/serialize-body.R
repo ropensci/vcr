@@ -18,14 +18,13 @@ encode_body <- function(body, file = FALSE, preserve_bytes = FALSE) {
 }
 
 decode_body <- function(body, preserve_bytes = FALSE) {
-  if (has_name(body, "string") && preserve_bytes) {
+  if (preserve_bytes && has_name(body, "string") && is_base64(body$string)) {
     name <- current_cassette()$name
     cli::cli_warn(
       "{.str {name}} cassette uses outdated encoding. Please rerecord it."
     )
-    if (is_base64(body$string)) {
-      body$string <- from_base64(body$string)
-    }
+    body$base64_string <- body$string
+    body$string <- NULL
   }
 
   if (has_name(body, "on_disk")) {
@@ -35,7 +34,7 @@ decode_body <- function(body, preserve_bytes = FALSE) {
     # a `string` body giving the path.
     list(data = body$string, on_disk = TRUE)
   } else if (has_name(body, "string")) {
-    if (isFALSE(body$string)) {
+    if (isFALSE(body$string) || identical(body$string, "")) {
       # v1 encoding
       list(data = NULL, on_disk = FALSE)
     } else {
