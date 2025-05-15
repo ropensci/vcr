@@ -54,6 +54,8 @@ Cassette <- R6::R6Class(
     warn_on_empty = TRUE,
     #' @field new_cassette is this a new cassette?
     new_cassette = TRUE,
+    #' @field state Cassette state, is it recording, replaying, etc
+    state = NULL,
 
     #' @description Create a new `Cassette` object
     #' @param dir The directory where the cassette will be stored.
@@ -161,6 +163,9 @@ Cassette <- R6::R6Class(
         request_matchers = self$match_requests_on
       )
 
+      if (self$recording()) {
+        self$state <- "recording"
+      }
       vcr_log_sprintf("  recording: %s", self$recording())
     },
 

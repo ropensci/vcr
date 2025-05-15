@@ -136,6 +136,14 @@ current_cassette <- function() {
 #' @rdname cassettes
 cassette_path <- function() the$config$dir
 
+#' @export
+#' @rdname cassettes
+cassette_state <- function() {
+  cas <- current_cassette()
+  if (is.null(cas)) return(NULL)
+  cas$state
+}
+
 cassette_push <- function(cassette) {
   n <- length(the$cassettes)
   the$cassettes[[n + 1]] <- cassette

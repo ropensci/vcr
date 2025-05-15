@@ -39,6 +39,7 @@ RequestHandler <- R6::R6Class(
           if (!is.na(idx)) {
             vcr_response <- interactions$response_for(idx)
             vcr_log_sprintf("  Replaying response %i", idx)
+            cassette$state <- "replaying"
             return(private$on_stubbed_by_vcr_request(vcr_response))
           } else {
             vcr_log_sprintf("  No matching requests")
@@ -46,6 +47,7 @@ RequestHandler <- R6::R6Class(
         }
 
         if (cassette$recording()) {
+          cassette$state <- "recording"
           return(private$on_recordable_request())
         }
       }
