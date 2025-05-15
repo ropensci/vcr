@@ -52,9 +52,6 @@ default: method & uri}
 
 \item{\code{root_dir}}{root dir, gathered from \code{\link[=vcr_configuration]{vcr_configuration()}}}
 
-\item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
-interaction to be played back multiple times}
-
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
 
@@ -98,7 +95,6 @@ Create a new \code{Cassette} object
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -122,10 +118,6 @@ to use to determine what recorded HTTP interaction to replay. Defaults to
 \verb{["method", "uri"]}. The built-in matchers are "method", "uri",
 "headers" and "body" ("host" and "path" not supported yet, but should
 be in a future version)}
-
-\item{\code{allow_playback_repeats}}{(logical) Whether or not to
-allow a single HTTP interaction to be played back multiple times.
-Default: \code{FALSE}.}
 
 \item{\code{serialize_with}}{(character) Which serializer to use.
 Valid values are "yaml" (default), "json", and "qs2".}

@@ -43,9 +43,6 @@
 #'   cassette if  `match_requests_on` includes "header" or "body" respectively.
 #'   This keeps the recorded request as lightweight as possible.
 #'
-#' @param allow_playback_repeats (logical) Whether or not to
-#' allow a single HTTP interaction to be played back multiple times.
-#' Default: `FALSE`.
 #' @param serialize_with (string) Which serializer to use:
 #'   `"yaml"` (the default), `"json"`, or `"qs2"`.
 #' @param preserve_exact_body_bytes (logical) Force a binary (base64)
@@ -167,7 +164,6 @@ use_cassette <- function(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -187,7 +183,6 @@ use_cassette <- function(
     dir = dir,
     record = record,
     match_requests_on = match_requests_on,
-    allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
@@ -212,7 +207,6 @@ local_cassette <- function(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -225,7 +219,6 @@ local_cassette <- function(
   check_string(dir, allow_null = TRUE)
   check_record_mode(record)
   check_request_matchers(match_requests_on)
-  check_bool(allow_playback_repeats, allow_null = TRUE)
   check_bool(clean_outdated_http_interactions, allow_null = TRUE)
   check_bool(warn_on_empty, allow_null = TRUE)
 
@@ -234,7 +227,6 @@ local_cassette <- function(
     dir = dir,
     record = record,
     match_requests_on = match_requests_on,
-    allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
