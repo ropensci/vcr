@@ -51,24 +51,6 @@ test_that("response_for marks as used", {
   expect_equal(interactions$find_request(req2), NA_integer_)
 })
 
-test_that("can optionally replay", {
-  req1 <- vcr_request("GET", "http://a.com")
-  req2 <- vcr_request("GET", "http://b.com")
-  resp1 <- vcr_response(200, body = "a")
-  resp2 <- vcr_response(200, body = "b")
-  interactions <- Interactions$new(
-    list(
-      vcr_interaction(req1, resp1),
-      vcr_interaction(req2, resp2)
-    ),
-    allow_playback_repeats = TRUE
-  )
-
-  expect_equal(interactions$find_request(req2), 2)
-  interactions$response_for(2)
-  expect_equal(interactions$find_request(req2), 2)
-})
-
 test_that("can add interactions", {
   req1 <- vcr_request("GET", "http://a.com")
   resp1 <- vcr_response(200, body = "a")
@@ -82,7 +64,8 @@ test_that("can add interactions", {
   # newly added interactions can not be replayed
   expect_equal(interactions$replayable, FALSE)
 
-  # same request replaces response
+  # always add interactions
   interactions$add(req1, resp2)
-  expect_equal(interactions$interactions[[1]]$response, resp2)
+  expect_equal(interactions$interactions[[1]]$request, req1)
+  expect_equal(interactions$interactions[[2]]$response, resp2)
 })

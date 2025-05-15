@@ -43,7 +43,6 @@ Imports:
     withr,
     yaml
 Suggests:
-    crayon,
     crul (>= 0.8.4),
     desc,
     httr,
