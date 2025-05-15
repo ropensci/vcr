@@ -21,7 +21,6 @@ insert_cassette <- function(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -41,7 +40,6 @@ insert_cassette <- function(
     dir = dir,
     record = record,
     match_requests_on = match_requests_on,
-    allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
@@ -77,7 +75,6 @@ eject_cassette <- function() {
 
   invisible(cassette)
 }
-
 
 #' List cassettes, get current cassette, etc.
 #'
@@ -137,7 +134,7 @@ current_cassette <- function() {
 
 #' @export
 #' @rdname cassettes
-cassette_path <- function() vcr_c$dir
+cassette_path <- function() the$config$dir
 
 cassette_push <- function(cassette) {
   n <- length(the$cassettes)

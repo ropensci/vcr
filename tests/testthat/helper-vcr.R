@@ -20,6 +20,7 @@ make_pkg <- function(frame = parent.frame()) {
 
   dir_create(file.path(dir, "man"))
   dir_create(file.path(dir, "R"))
+  dir_create(file.path(dir, "tests", "testthat"))
   cat(sprintf(desc_text, basename(dir)), file = file.path(dir, "DESCRIPTION"))
 
   dir
@@ -34,19 +35,6 @@ skip_if_localhost_8000_gone <- function() {
 
 recorded_at <- function(x) {
   yaml::yaml.load_file(x$file())$http_interactions[[1]]$recorded_at
-}
-
-extract_vcr_config_args <- function(rdfile) {
-  stopifnot(file.exists(rdfile))
-
-  rdtext <- paste0(readLines(rdfile), collapse = "")
-  rdhits <- gregexpr("item \\\\code\\{([a-z_]+)\\}", rdtext, perl = TRUE)[[1]]
-
-  substring(
-    rdtext,
-    attr(rdhits, "capture.start"),
-    attr(rdhits, "capture.start") + attr(rdhits, "capture.length") - 1
-  )
 }
 
 check_url <- function(x, ...) {
@@ -100,7 +88,7 @@ find_httpbin_server <- function() {
 }
 
 read_cassette <- function(name) {
-  yaml::yaml.load_file(file.path(vcr_c$dir, name))
+  yaml::yaml.load_file(file.path(the$config$dir, name))
 }
 
 testthat::set_state_inspector(\() {
@@ -111,6 +99,6 @@ testthat::set_state_inspector(\() {
   list(
     temp_files = temp_files,
     wd_files = dir(),
-    vcr_config = vcr_c$as_list()
+    vcr_config = the$config
   )
 })

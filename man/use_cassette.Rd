@@ -11,7 +11,6 @@ use_cassette(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -24,7 +23,6 @@ local_cassette(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -78,15 +76,8 @@ Note that the request header and body will only be included in the
 cassette if  \code{match_requests_on} includes "header" or "body" respectively.
 This keeps the recorded request as lightweight as possible.}
 
-\item{allow_playback_repeats}{(logical) Whether or not to
-allow a single HTTP interaction to be played back multiple times.
-Default: \code{FALSE}.}
-
-\item{serialize_with}{(character) Which serializer to use.
-Valid values are "yaml" (default) and "json". Note that you can have
-multiple cassettes with the same name as long as they use different
-serializers; so if you only want one cassette for a given cassette name,
-make sure to not switch serializers, or clean up files you no longer need.}
+\item{serialize_with}{(string) Which serializer to use:
+\code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
 representation of the request and response bodies? By default, vcr

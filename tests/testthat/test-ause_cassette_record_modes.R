@@ -21,7 +21,7 @@ test_that("record mode: once", {
   expect_equal(res2$content, res1$content)
 
   # delete cassette file, new interaction should be recorded successfully
-  unlink(file.path(vcr_c$dir, "test.yml"))
+  unlink(file.path(the$config$dir, "test.yml"))
   three <- use_cassette("test", res3 <- conn$get("get"))
   expect_equal(res3$content, res1$content)
 
@@ -51,6 +51,19 @@ test_that("record mode: none", {
     use_cassette("test", conn$get("get", query = list(foo = "bar"))),
     class = "vcr_unhandled",
   )
+})
+
+test_that("can replay two requests to the same url", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  use_cassette("test", {
+    res_record <- list(httr::GET(hb("/get")), httr::GET(hb("/get")))
+  })
+  use_cassette("test", {
+    res_replay <- list(httr::GET(hb("/get")), httr::GET(hb("/get")))
+  })
+
+  expect_equal(res_record[[1]]$content, res_replay[[1]]$content)
 })
 
 test_that("record mode: new_episodes", {
@@ -121,5 +134,5 @@ test_that("record mode: all", {
   # new interactions are recorded
   three <- use_cassette("test", res3 <- conn$get("get", query = list(x = "a")))
   expect_equal(three$new_interactions, TRUE)
-  expect_equal(three$http_interactions$length(), 2)
+  expect_equal(three$http_interactions$length(), 1)
 })

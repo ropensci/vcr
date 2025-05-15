@@ -5,15 +5,15 @@ encode_headers <- function(headers, type = c("request", "response")) {
 
   headers <- switch(
     type,
-    request = headers_remove(headers, vcr_c$filter_request_headers),
-    response = headers_remove(headers, vcr_c$filter_response_headers)
+    request = headers_remove(headers, the$config$filter_request_headers),
+    response = headers_remove(headers, the$config$filter_response_headers)
   )
 
   if (type == "request") {
     headers <- request_headers_redact(headers)
   }
 
-  headers <- encode_sensitive(headers)
+  headers <- lapply(headers, encode_sensitive)
 
   headers <- unclass(headers)
   headers
@@ -23,7 +23,7 @@ decode_headers <- function(headers) {
   if (is.null(headers)) {
     list()
   } else {
-    decode_sensitive(headers)
+    lapply(headers, decode_sensitive)
   }
 }
 

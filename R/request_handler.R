@@ -21,40 +21,42 @@ RequestHandler <- R6::R6Class(
         private$request_summary(self$request)
       )
 
-      if (private$externally_stubbed()) {
-        # FIXME: not quite sure what externally_stubbed is meant for
-        #   perhaps we can get rid of it here if only applicable in Ruby
-        vcr_log_sprintf("  externally stubbed")
-        return(private$on_externally_stubbed_request())
-      }
-
       if (should_be_ignored(self$request)) {
         vcr_log_sprintf("  ignored")
         return(private$on_ignored_request())
       }
 
       if (cassette_active()) {
-        interactions <- current_cassette()$http_interactions
-        vcr_log_sprintf(
-          "  looking for existing requests using %s",
-          paste0(interactions$request_matchers, collapse = "/")
-        )
-        idx <- interactions$find_request(self$request)
-        if (!is.na(idx)) {
-          vcr_response <- interactions$response_for(idx)
-          vcr_log_sprintf("  matched response %i", idx)
-          return(private$on_stubbed_by_vcr_request(vcr_response))
-        } else {
-          vcr_log_sprintf("  no matching requests")
+        cassette <- current_cassette()
+
+        if (cassette$http_interactions$n_replayable() > 0) {
+          interactions <- cassette$http_interactions
+          vcr_log_sprintf(
+            "  Looking for existing requests using %s",
+            paste0(interactions$request_matchers, collapse = "/")
+          )
+          idx <- interactions$find_request(self$request)
+          if (!is.na(idx)) {
+            vcr_response <- interactions$response_for(idx)
+            vcr_log_sprintf("  Replaying response %i", idx)
+            return(private$on_stubbed_by_vcr_request(vcr_response))
+          } else {
+            vcr_log_sprintf("  No matching requests")
+          }
+        }
+
+        if (cassette$recording()) {
+          return(private$on_recordable_request())
         }
       }
 
-      if (cassette_is_recording()) {
-        return(private$on_recordable_request())
+      if (the$config$log) {
+        # Log messages already give the details
+        cli::cli_abort("Failed to find matching request in active cassette.")
+      } else {
+        err <- UnhandledHTTPRequestError$new(self$request)
+        err$run()
       }
-
-      err <- UnhandledHTTPRequestError$new(self$request)
-      err$run()
     }
   ),
 
@@ -65,8 +67,6 @@ RequestHandler <- R6::R6Class(
     },
 
     # request type helpers
-    externally_stubbed = function() FALSE,
-
     get_stubbed_response = function(request) {
       if (!cassette_active()) {
         return(NULL)
@@ -81,8 +81,6 @@ RequestHandler <- R6::R6Class(
     ###   - all fxns take `request` param for consistentcy, even if they dont use it
     ##### so we can "monkey patch" these in each HTTP client adapter by
     #####   reassigning some of these functions with ones specific to the HTTP client
-
-    on_externally_stubbed_request = function() NULL,
 
     on_ignored_request = function() {
       # perform and return REAL http response
@@ -99,20 +97,3 @@ RequestHandler <- R6::R6Class(
     }
   )
 )
-
-cassette_is_recording <- function() {
-  if (cassette_active()) {
-    current_cassette()$recording()
-  } else {
-    FALSE
-  }
-}
-
-cassette_has_response <- function(request) {
-  if (cassette_active()) {
-    interactions <- current_cassette()$http_interactions
-    interactions$has_interaction(request)
-  } else {
-    FALSE
-  }
-}

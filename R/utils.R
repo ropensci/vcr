@@ -1,19 +1,5 @@
 compact <- function(x) Filter(Negate(is.null), x)
 
-assert <- function(x, y) {
-  if (!is.null(x)) {
-    if (!inherits(x, y)) {
-      stop(
-        deparse(substitute(x)),
-        " must be of class ",
-        paste0(y, collapse = ", "),
-        call. = FALSE
-      )
-    }
-  }
-  invisible(x)
-}
-
 check_request_matchers <- function(
   x,
   error_arg = caller_arg(x),
@@ -53,8 +39,25 @@ check_record_mode <- function(
   arg_match(x, vals, error_arg = error_arg, error_call = error_call)
 }
 
+check_list <- function(
+  x,
+  allow_null = FALSE,
+  error_arg = caller_arg(x),
+  error_call = caller_env()
+) {
+  if (is.list(x)) {
+    return()
+  }
+  if (is.null(x) && allow_null) {
+    return()
+  }
+
+  stop_input_type(x, "a list", arg = error_arg, call = error_call)
+}
+
 dir_create <- function(path) {
   dir.create(path, showWarnings = FALSE, recursive = TRUE)
+  path
 }
 
 cur_time <- function(tz = "") {

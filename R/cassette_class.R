@@ -25,9 +25,9 @@ Cassette <- R6::R6Class(
     name = NA,
     #' @field record (character) record mode
     record = "all",
-    #' @field serialize_with (character) serializer to use (yaml|json)
+    #' @field serialize_with (character) serializer (yaml|json|qs2)
     serialize_with = "yaml",
-    #' @field serializer (character) serializer to use (yaml|json)
+    #' @field serializer (Serializer) serializer (YAML|JSON|QS2)
     serializer = NA,
     #' @field match_requests_on (character) matchers to use
     #' default: method & uri
@@ -36,9 +36,6 @@ Cassette <- R6::R6Class(
     re_record_interval = NULL,
     #' @field root_dir root dir, gathered from [vcr_configuration()]
     root_dir = NA,
-    #' @field allow_playback_repeats (logical) Whether to allow a single HTTP
-    #' interaction to be played back multiple times
-    allow_playback_repeats = FALSE,
     #' @field preserve_exact_body_bytes (logical) Whether to base64 encode the
     #' bytes of the requests and responses
     preserve_exact_body_bytes = FALSE,
@@ -62,7 +59,7 @@ Cassette <- R6::R6Class(
     #' is a valid file name.
     #' @param record The record mode. Default: "once".
     #' @param serialize_with (character) Which serializer to use.
-    #'  Valid values are "yaml" (default), the only one supported for now.
+    #' Valid values are "yaml" (default), "json", and "qs2".
     #' @param match_requests_on List of request matchers
     #' to use to determine what recorded HTTP interaction to replay. Defaults to
     #' `["method", "uri"]`. The built-in matchers are "method", "uri",
@@ -70,9 +67,6 @@ Cassette <- R6::R6Class(
     #' be in a future version)
     #' @param re_record_interval (numeric) When given, the cassette will be
     #' re-recorded at the given interval, in seconds.
-    #' @param allow_playback_repeats (logical) Whether or not to
-    #' allow a single HTTP interaction to be played back multiple times.
-    #' Default: `FALSE`.
     #' @param preserve_exact_body_bytes (logical) Whether or not
     #' to base64 encode the bytes of the requests and responses for
     #' this cassette when serializing it. See also `preserve_exact_body_bytes`
@@ -87,7 +81,6 @@ Cassette <- R6::R6Class(
       dir = NULL,
       record = NULL,
       match_requests_on = NULL,
-      allow_playback_repeats = FALSE,
       serialize_with = NULL,
       preserve_exact_body_bytes = NULL,
       re_record_interval = NULL,
@@ -95,26 +88,24 @@ Cassette <- R6::R6Class(
       warn_on_empty = NULL
     ) {
       check_cassette_name(name)
-      config <- vcr_configuration()
 
       self$name <- name
-      self$root_dir <- dir %||% config$dir %||% testthat::test_path("_vcr")
-      self$record <- check_record_mode(record) %||% config$record
+      self$root_dir <- dir %||% the$config$dir %||% testthat::test_path("_vcr")
+      self$record <- check_record_mode(record) %||% the$config$record
       self$match_requests_on <- check_request_matchers(match_requests_on) %||%
-        config$match_requests_on
-      self$serialize_with <- serialize_with %||% config$serialize_with
+        the$config$match_requests_on
+      self$serialize_with <- serialize_with %||% the$config$serialize_with
       self$re_record_interval <- re_record_interval %||%
-        config$re_record_interval
-      self$allow_playback_repeats = allow_playback_repeats
+        the$config$re_record_interval
 
-      assert(preserve_exact_body_bytes, "logical")
+      check_bool(preserve_exact_body_bytes, allow_null = TRUE)
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
-        config$preserve_exact_body_bytes
+        the$config$preserve_exact_body_bytes
 
       self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
-        config$clean_outdated_http_interactions
+        the$config$clean_outdated_http_interactions
 
-      self$warn_on_empty <- warn_on_empty %||% config$warn_on_empty_cassette
+      self$warn_on_empty <- warn_on_empty %||% the$config$warn_on_empty_cassette
 
       self$serializer <- serializer_fetch(
         self$serialize_with,
@@ -128,38 +119,26 @@ Cassette <- R6::R6Class(
     #' @description insert the cassette
     #' @return self
     insert = function() {
-      dir_create(self$root_dir)
+      name <- basename(self$file())
 
-      if (!file.exists(self$file())) {
+      if (!file.exists(self$file()) || self$record == "all") {
+        vcr_log_sprintf("Inserting '%s' (new cassette)", name)
         self$new_cassette <- TRUE
         interactions <- list()
       } else {
         self$new_cassette <- FALSE
         interactions <- self$serializer$deserialize()$http_interactions
-        interactions <- Filter(\(x) !should_be_ignored(x$request), interactions)
+        n <- length(interactions)
+        vcr_log_sprintf("Inserting '%s' (with %d interactions)", name, n)
       }
-      vcr_log_sprintf(
-        "Inserting: loading %d interactions from disk",
-        length(interactions)
-      )
 
       self$http_interactions <- Interactions$new(
         interactions = interactions,
-        request_matchers = self$match_requests_on,
-        replayable = self$record != "all"
+        request_matchers = self$match_requests_on
       )
       self$remove_outdated_interactions()
 
-      vcr_log_sprintf("  record: %s", self$record)
-      vcr_log_sprintf("  serialize_with: %s", self$serialize_with)
-      vcr_log_sprintf(
-        "  allow_playback_repeats: %s",
-        self$allow_playback_repeats
-      )
-      vcr_log_sprintf(
-        "  preserve_exact_body_bytes: %s",
-        self$preserve_exact_body_bytes
-      )
+      vcr_log_sprintf("  recording: %s", self$recording())
     },
 
     #' @description ejects the cassette
@@ -193,10 +172,6 @@ Cassette <- R6::R6Class(
           "  Clean outdated interactions?: ",
           self$clean_outdated_http_interactions
         ),
-        sep = "\n"
-      )
-      cat(
-        paste0("  allow_playback_repeats: ", self$allow_playback_repeats),
         sep = "\n"
       )
       cat(
@@ -255,10 +230,12 @@ Cassette <- R6::R6Class(
     #' @param response A `vcr_response`.
     #' @return an interaction as a list with request and response slots
     record_http_interaction = function(request, response) {
-      vcr_log_sprintf("  recording response: %s", response_summary(response))
+      vcr_log_sprintf("  Recording response: %s", response_summary(response))
 
       self$new_interactions <- TRUE
       self$http_interactions$add(request, response)
+
+      dir_create(self$root_dir)
       self$serializer$serialize(self$http_interactions$interactions)
     }
   )

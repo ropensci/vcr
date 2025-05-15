@@ -39,9 +39,9 @@ to make a complete \code{crul} HTTP response object.
 
 \item{\code{record}}{(character) record mode}
 
-\item{\code{serialize_with}}{(character) serializer to use (yaml|json)}
+\item{\code{serialize_with}}{(character) serializer (yaml|json|qs2)}
 
-\item{\code{serializer}}{(character) serializer to use (yaml|json)}
+\item{\code{serializer}}{(Serializer) serializer (YAML|JSON|QS2)}
 
 \item{\code{match_requests_on}}{(character) matchers to use
 default: method & uri}
@@ -49,9 +49,6 @@ default: method & uri}
 \item{\code{re_record_interval}}{(numeric) the re-record interval}
 
 \item{\code{root_dir}}{root dir, gathered from \code{\link[=vcr_configuration]{vcr_configuration()}}}
-
-\item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
-interaction to be played back multiple times}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
@@ -96,7 +93,6 @@ Create a new \code{Cassette} object
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
@@ -121,12 +117,8 @@ to use to determine what recorded HTTP interaction to replay. Defaults to
 "headers" and "body" ("host" and "path" not supported yet, but should
 be in a future version)}
 
-\item{\code{allow_playback_repeats}}{(logical) Whether or not to
-allow a single HTTP interaction to be played back multiple times.
-Default: \code{FALSE}.}
-
 \item{\code{serialize_with}}{(character) Which serializer to use.
-Valid values are "yaml" (default), the only one supported for now.}
+Valid values are "yaml" (default), "json", and "qs2".}
 
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether or not
 to base64 encode the bytes of the requests and responses for

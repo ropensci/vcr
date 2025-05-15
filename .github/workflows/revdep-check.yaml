@@ -28,7 +28,7 @@ jobs:
             any::pak
 
       - name: Revdepcheck
-        run: Rscript -e "pak::pak('r-lib/revdepcheck')" -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=4)"
+        run: Rscript -e "pak::pak('r-lib/revdepcheck')" -e "revdepcheck::revdep_reset()" -e "revdepcheck::revdep_check(num_workers=12)"
 
       - name: Upload revdepcheck results
         uses: actions/upload-artifact@v4

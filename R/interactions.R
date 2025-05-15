@@ -5,32 +5,26 @@ Interactions <- R6::R6Class(
     replayable = logical(),
 
     request_matchers = NULL,
-    allow_playback_repeats = FALSE,
 
     initialize = function(
       interactions = list(),
-      request_matchers = c("method", "uri"),
-      allow_playback_repeats = FALSE,
-      replayable = TRUE
+      request_matchers = c("method", "uri")
     ) {
       self$interactions <- interactions
-      self$replayable <- rep(replayable, length(interactions))
+      self$replayable <- rep(TRUE, length(interactions))
 
       self$request_matchers <- request_matchers
-      self$allow_playback_repeats <- allow_playback_repeats
     },
 
     # Returns index; powers all other methods
-    find_request = function(request, allow_playback = NULL) {
-      allow_playback <- allow_playback %||% self$allow_playback_repeats
-
+    find_request = function(request, allow_playback = FALSE) {
       for (i in seq_along(self$interactions)) {
         if (!self$replayable[[i]] && !allow_playback) {
           next
         }
 
         request_i <- self$interactions[[i]]$request
-        if (request_matches(request, request_i, self$request_matchers)) {
+        if (request_matches(request, request_i, self$request_matchers, i)) {
           return(i)
         }
       }
@@ -38,10 +32,7 @@ Interactions <- R6::R6Class(
     },
 
     add = function(request, response) {
-      idx <- self$find_request(request, allow_playback = TRUE)
-      if (is.na(idx)) {
-        idx <- length(self$interactions) + 1
-      }
+      idx <- length(self$interactions) + 1
 
       interaction <- vcr_interaction(request, response)
       self$interactions[[idx]] <- interaction
@@ -61,12 +52,13 @@ Interactions <- R6::R6Class(
       !is.na(idx)
     },
 
+    # TODO: can be removed if https://github.com/ropensci/vcr/pull/488 is merged
     has_used_interaction = function(request) {
       idx <- self$find_request(request, allow_playback = TRUE)
       !is.na(idx) && !self$replayable[[idx]]
     },
 
-    remaining_unused_interaction_count = function() {
+    n_replayable = function() {
       sum(self$replayable)
     },
 

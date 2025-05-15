@@ -1,15 +1,14 @@
 #' Check cassette names
 #'
 #' @description
-#' This function is meant to be run during your tests, from a
-#' [`helper-*.R` file](https://testthat.r-lib.org/reference/test_dir.html#special-files)
-#' inside the `tests/testthat` directory.
+#' `r lifecycle::badge("deprecated")`
 #'
-#' It only checks that cassette names are not duplicated. Note that if you do
-#' need to have duplicated cassette names you can do so by using the
-#' `allowed_duplicates` parameter in `check_cassette_names()`.
+#' This function has been deprecated because it's not possible for it to
+#' detect re-used cassette names 100% correctly and the problem of duplicated
+#' cassette names is relatively easy to debug by hand.
 #'
 #' @export
+#' @keywords internal
 #' @param pattern (character) regex pattern for file paths to check.
 #' This is done inside of `tests/testthat/`. Default: "test-".
 #' @param behavior (character) "stop" (default) or "warning". If "warning",
@@ -23,9 +22,11 @@ check_cassette_names <- function(
   behavior = "stop",
   allowed_duplicates = NULL
 ) {
-  assert(allowed_duplicates, "character")
+  lifecycle::deprecate_warn("2.0.0", "check_cassette_names()")
+
+  check_character(allowed_duplicates, allow_null = TRUE)
   files <- list.files(".", pattern = pattern, full.names = TRUE)
-  if (length(files) == 0) return()
+  if (length(files) == 0) return(invisible())
   cassette_names <- function(x) {
     tmp <- parse(x, keep.source = TRUE)
     df <- utils::getParseData(tmp)
@@ -59,4 +60,5 @@ check_cassette_names <- function(
       warning = warning(mssg, call. = FALSE, immediate. = TRUE)
     )
   }
+  invisible()
 }

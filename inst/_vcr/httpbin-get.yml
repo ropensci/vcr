@@ -1,0 +1,34 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hb.cran.dev/get
+    body:
+      string: ''
+    headers: []
+  response:
+    status: 200
+    headers:
+      date: Tue, 06 May 2025 13:04:11 GMT
+      content-type: application/json
+      server: cloudflare
+      nel: '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      access-control-allow-origin: '*'
+      access-control-allow-credentials: 'true'
+      x-powered-by: Flask
+      x-processed-time: '0'
+      cf-cache-status: DYNAMIC
+      report-to: '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=6KRZgVCSKUucryb19ukZBo5kvwTKV2g9PpWEvmZ5MG%2FZS1a3NdpUB%2F%2FCcCAc9sNuC%2FiOrDv66EVEFk474F7tWkRDwBlt50gzkcitNSLnrHjJMw2GxkseVjHiKp84Y9ZyptRJAFm3unSTGg%3D%3D"}]}'
+      content-encoding: gzip
+      cf-ray: 93b8ae95e81469de-DFW
+      alt-svc: h3=":443"; ma=86400
+    body:
+      string: "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept\": \"*/*\", \n
+        \   \"Accept-Encoding\": \"gzip, br\", \n    \"Cdn-Loop\": \"cloudflare; loops=1\",
+        \n    \"Cf-Connecting-Ip\": \"2600:1700:d01:845f:f8e0:f28d:f0a:d1f\", \n    \"Cf-Ipcountry\":
+        \"US\", \n    \"Cf-Ray\": \"93b8ae95e81469de-DFW\", \n    \"Cf-Visitor\":
+        \"{\\\"scheme\\\":\\\"https\\\"}\", \n    \"Connection\": \"close\", \n    \"Host\":
+        \"httpbin:8080\", \n    \"User-Agent\": \"httr2/1.1.2 r-curl/6.2.2 libcurl/8.11.1\"\n
+        \ }, \n  \"origin\": \"2600:1700:d01:845f:f8e0:f28d:f0a:d1f\", \n  \"url\":
+        \"https://httpbin:8080/get\"\n}\n"
+  recorded_at: 2025-05-06 13:04:11
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0
