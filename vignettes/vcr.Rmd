@@ -45,7 +45,7 @@ vcr_configure(dir = tempdir())
 
 ## Testing with vcr
 
-The central metaphor of vcr is a video cassette.
+The central metaphor of vcr is a video cassette/video tape.
 This is what records your HTTP **interactions**, the pairs of HTTP request and response.
 You **insert** a cassette to start the recording or begin the replay, and **eject** it when you're done.
 To use vcr in a test, include a call to `vcr::local_cassette()`: it inserts the cassette and automatically ejects it when the test is done.
@@ -191,7 +191,9 @@ There are two main options:
     This turns off all vcr usage so that all requests are live.
     You might want to set this up to run weekly, so you find out when the API changes (even when your package doesn't), but aren't overwhelmed with notifications.
 
-## Other uses
+Learn more in <https://books.ropensci.org/http-testing/real-requests-chapter.html>.
+
+## Other uses: examples and vignettes
 
 Now that you're familiar with using vcr for your unit tests, you might wonder if there are other places you can use it in your packages.
 There are!
