@@ -17,17 +17,13 @@ test_that("use_cassette options: re_record_interval", {
   expect_equal(rr1$recorded_at, rr2$recorded_at)
 
   # third use, Sys.sleep, now expired, A change in recorded_at value
-  Sys.sleep(1L)
+  Sys.sleep(1.1)
   local_vcr_configure_log(file = stdout())
   expect_snapshot(
     use_cassette("test", res <- conn$get("get")),
     transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE)
   )
   rr3 <- read_cassette("test.yml")
-
-  # tests
-  # expect_equal(rr1$http_interactions[[1]]$re_record_interval, 10)
-  # expect_true(rr1$http_interactions[[1]]$clean_outdated_http_interactions)
 
   ## 1st and 2nd should be identical
   expect_true(
