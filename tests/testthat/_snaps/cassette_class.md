@@ -52,4 +52,5 @@
     Condition
       Error:
       ! Failed to find matching request in active cassette.
+      i Learn more in `vignette(vcr::debugging)`.
 

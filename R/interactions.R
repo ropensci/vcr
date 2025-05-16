@@ -42,7 +42,7 @@ Interactions <- R6::R6Class(
     },
 
     # Returns response
-    response_for = function(i) {
+    replay_request = function(i) {
       self$replayable[[i]] <- FALSE
       self$interactions[[i]]$response
     },
@@ -50,12 +50,6 @@ Interactions <- R6::R6Class(
     has_interaction = function(request) {
       idx <- self$find_request(request)
       !is.na(idx)
-    },
-
-    # TODO: can be removed if https://github.com/ropensci/vcr/pull/488 is merged
-    has_used_interaction = function(request) {
-      idx <- self$find_request(request, allow_playback = TRUE)
-      !is.na(idx) && !self$replayable[[idx]]
     },
 
     n_replayable = function() {
