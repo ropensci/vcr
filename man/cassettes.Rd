@@ -4,6 +4,7 @@
 \alias{cassettes}
 \alias{current_cassette}
 \alias{cassette_path}
+\alias{cassette_state}
 \title{List cassettes, get current cassette, etc.}
 \usage{
 cassettes()
@@ -11,6 +12,8 @@ cassettes()
 current_cassette()
 
 cassette_path()
+
+cassette_state()
 }
 \description{
 List cassettes, get current cassette, etc.

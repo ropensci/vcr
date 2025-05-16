@@ -62,6 +62,8 @@ bytes of the requests and responses}
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
 
 \item{\code{new_cassette}}{is this a new cassette?}
+
+\item{\code{state}}{Cassette state, is it recording, replaying, etc}
 }
 \if{html}{\out{</div>}}
 }
