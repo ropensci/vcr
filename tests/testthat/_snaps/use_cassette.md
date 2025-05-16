@@ -19,7 +19,7 @@
     Code
       local_cassette("text", NULL, preserve_exact_body_bytes = "xxx")
     Condition
-      Error in `initialize()`:
+      Error in `local_cassette()`:
       ! `preserve_exact_body_bytes` must be `TRUE`, `FALSE`, or `NULL`, not the string "xxx".
     Code
       local_cassette("test", NULL, serialize_with = "howdy")

@@ -43,9 +43,6 @@ Cassette <- R6::R6Class(
     http_interactions = NULL,
     #' @field new_interactions (boolean) Have any interactions been recorded?
     new_interactions = FALSE,
-    #' @field clean_outdated_http_interactions (logical) Should outdated interactions
-    #' be recorded back to file
-    clean_outdated_http_interactions = FALSE,
     #' @field to_return (logical) internal use
     to_return = NULL,
     #' @field warn_on_empty (logical) warn if no interactions recorded
@@ -71,8 +68,6 @@ Cassette <- R6::R6Class(
     #' to base64 encode the bytes of the requests and responses for
     #' this cassette when serializing it. See also `preserve_exact_body_bytes`
     #' in [vcr_configure()]. Default: `FALSE`
-    #' @param clean_outdated_http_interactions (logical) Should outdated interactions
-    #' be recorded back to file. Default: `FALSE`
     #' @param warn_on_empty Warn when ejecting the cassette if no interactions
     #'   have been recorded.
     #' @return A new `Cassette` object
@@ -84,7 +79,6 @@ Cassette <- R6::R6Class(
       serialize_with = NULL,
       preserve_exact_body_bytes = NULL,
       re_record_interval = NULL,
-      clean_outdated_http_interactions = NULL,
       warn_on_empty = NULL
     ) {
       check_cassette_name(name)
@@ -101,9 +95,6 @@ Cassette <- R6::R6Class(
       check_bool(preserve_exact_body_bytes, allow_null = TRUE)
       self$preserve_exact_body_bytes <- preserve_exact_body_bytes %||%
         the$config$preserve_exact_body_bytes
-
-      self$clean_outdated_http_interactions <- clean_outdated_http_interactions %||%
-        the$config$clean_outdated_http_interactions
 
       self$warn_on_empty <- warn_on_empty %||% the$config$warn_on_empty_cassette
 
@@ -160,24 +151,13 @@ Cassette <- R6::R6Class(
     #' @param x self
     #' @param ... ignored
     print = function(x, ...) {
-      cat(paste0("<vcr - Cassette> ", self$name), sep = "\n")
-      cat(paste0("  Record method: ", self$record), sep = "\n")
-      cat(paste0("  Serialize with: ", self$serialize_with), sep = "\n")
-      cat(
-        paste0("  Re-record interval (s): ", self$re_record_interval),
-        sep = "\n"
-      )
-      cat(
-        paste0(
-          "  Clean outdated interactions?: ",
-          self$clean_outdated_http_interactions
-        ),
-        sep = "\n"
-      )
-      cat(
-        paste0("  preserve_exact_body_bytes: ", self$preserve_exact_body_bytes),
-        sep = "\n"
-      )
+      cat_line("<vcr - Cassette> ", self$name)
+      cat_line("  Record method: ", self$record)
+      cat_line("  Serialize with: ", self$serialize_with)
+      if (!is.null(self$re_record_interval)) {
+        cat_line("  Re-record interval (s): ", self$re_record_interval)
+      }
+      cat_line("  preserve_exact_body_bytes: ", self$preserve_exact_body_bytes)
       invisible(self)
     },
 
@@ -214,15 +194,13 @@ Cassette <- R6::R6Class(
         return()
       }
       self$record <- "new_episodes"
-      if (self$clean_outdated_http_interactions) {
-        vcr_log_sprintf(
-          "Removing %i outdated interactions and re-recording.",
-          sum(outdated)
-        )
-        self$http_interactions$interactions <- self$http_interactions$interactions[
-          !outdated
-        ]
-      }
+      vcr_log_sprintf(
+        "Removing %i outdated interactions and re-recording.",
+        sum(outdated)
+      )
+      self$http_interactions$interactions <- self$http_interactions$interactions[
+        !outdated
+      ]
     },
 
     #' @description record an http interaction (doesn't write to disk)

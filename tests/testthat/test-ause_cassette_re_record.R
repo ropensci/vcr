@@ -1,8 +1,7 @@
 test_that("use_cassette options: re_record_interval", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
-    re_record_interval = 1L,
-    clean_outdated_http_interactions = TRUE
+    re_record_interval = 1L
   )
 
   conn <- crul::HttpClient$new(hb())

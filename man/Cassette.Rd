@@ -57,9 +57,6 @@ bytes of the requests and responses}
 
 \item{\code{new_interactions}}{(boolean) Have any interactions been recorded?}
 
-\item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
-be recorded back to file}
-
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
@@ -96,7 +93,6 @@ Create a new \code{Cassette} object
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -127,9 +123,6 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{re_record_interval}}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}
-
-\item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
-be recorded back to file. Default: \code{FALSE}}
 
 \item{\code{warn_on_empty}}{Warn when ejecting the cassette if no interactions
 have been recorded.}
