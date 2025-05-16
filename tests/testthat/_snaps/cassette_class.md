@@ -6,8 +6,6 @@
       <vcr - Cassette> test
         Record method: once
         Serialize with: yaml
-        Re-record interval (s): 
-        Clean outdated interactions?: FALSE
         preserve_exact_body_bytes: FALSE
 
 # cassette warns if ejected with no interactions
@@ -48,10 +46,9 @@
       [Cassette: test] Handling request: GET {httpbin}/404
       [Cassette: test]   Looking for existing requests using method/uri
       [Cassette: test]     Request 1: NO MATCH
-      [Cassette: test]       `matching$uri$path`: "/404" 
+      [Cassette: test]       `matching$uri$path`: "/404"
       [Cassette: test]       `recorded$uri$path`: "/html"
       [Cassette: test]   No matching requests
     Condition
       Error:
       ! Failed to find matching request in active cassette.
-

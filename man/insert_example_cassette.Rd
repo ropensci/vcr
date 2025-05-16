@@ -11,8 +11,7 @@ insert_example_cassette(
   match_requests_on = NULL,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
-  re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  re_record_interval = NULL
 )
 }
 \arguments{
@@ -59,9 +58,6 @@ force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
 cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
-
-\item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? Default: \code{FALSE}.}
 }
 \description{
 \code{insert_example_cassette()} is a wrapper around \code{\link[=insert_cassette]{insert_cassette()}} that

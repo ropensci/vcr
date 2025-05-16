@@ -14,8 +14,7 @@ test_that("cassette inherit options from vcr_configuration()", {
     match_requests_on = "body",
     serialize_with = "json",
     re_record_interval = 1,
-    preserve_exact_body_bytes = TRUE,
-    clean_outdated_http_interactions = TRUE
+    preserve_exact_body_bytes = TRUE
   )
   cas1 <- Cassette$new("test")
   expect_equal(cas1$record, "none")
@@ -23,7 +22,6 @@ test_that("cassette inherit options from vcr_configuration()", {
   expect_equal(cas1$serialize_with, "json")
   expect_equal(cas1$re_record_interval, 1)
   expect_true(cas1$preserve_exact_body_bytes)
-  expect_true(cas1$clean_outdated_http_interactions)
 
   # But can override as needed
   cas2 <- Cassette$new(

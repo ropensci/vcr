@@ -28,6 +28,17 @@ test_that("use_vcr works", {
   expect_true(any(grepl("tests/fixtures", gitatts)))
 })
 
+test_that("use_vcr works", {
+  withr::local_options(lifecycle_verbosity = "quiet")
+  expect_type(use_vcr, "closure")
+
+  dir <- make_pkg()
+  expect_snapshot(
+    use_vcr(dir),
+    transform = \(x) gsub(basename(dir), "{dir}", x)
+  )
+})
+
 test_that("use_vcr fails well", {
   withr::local_options(lifecycle_verbosity = "quiet")
 

@@ -52,8 +52,6 @@
 #'   force it.
 #' @param re_record_interval (integer) How frequently (in seconds) the
 #' cassette should be re-recorded. Default: `NULL` (not re-recorded).
-#' @param clean_outdated_http_interactions (logical) Should outdated
-#' interactions be recorded back to file? Default: `FALSE`.
 #' @param warn_on_empty (logical) Warn if the cassette is ejected but no interactions
 #'   have been recorded. Default: `NULL` (inherits from global configuration).
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
@@ -167,7 +165,6 @@ use_cassette <- function(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 ) {
   check_required(name)
@@ -186,7 +183,6 @@ use_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions,
     warn_on_empty = warn_on_empty
   )
 
@@ -210,16 +206,16 @@ local_cassette <- function(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL,
   frame = parent.frame()
 ) {
   check_string(name, allow_empty = FALSE)
   check_cassette_name(name)
   check_string(dir, allow_null = TRUE)
-  check_record_mode(record)
   check_request_matchers(match_requests_on)
-  check_bool(clean_outdated_http_interactions, allow_null = TRUE)
+  check_record_mode(record)
+  check_bool(preserve_exact_body_bytes, allow_null = TRUE)
+  check_number_whole(re_record_interval, allow_null = TRUE)
   check_bool(warn_on_empty, allow_null = TRUE)
 
   cassette <- insert_cassette(
@@ -230,7 +226,6 @@ local_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions,
     warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {

@@ -89,3 +89,7 @@ parse_http_date <- function(x) {
   attr(out, "tzone") <- NULL
   out
 }
+
+cat_line <- function(...) {
+  cat(paste0(..., "\n", collapse = ""))
+}

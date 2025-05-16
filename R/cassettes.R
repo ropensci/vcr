@@ -24,7 +24,6 @@ insert_cassette <- function(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 ) {
   if (vcr_turned_off()) {
@@ -43,7 +42,6 @@ insert_cassette <- function(
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions,
     warn_on_empty = warn_on_empty
   )
   cassette_push(cassette)
