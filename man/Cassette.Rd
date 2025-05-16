@@ -39,8 +39,6 @@ to make a complete \code{crul} HTTP response object.
 
 \item{\code{record}}{(character) record mode}
 
-\item{\code{recorded_at}}{(character) date/time recorded at}
-
 \item{\code{serialize_with}}{(character) serializer (yaml|json|qs2)}
 
 \item{\code{serializer}}{(Serializer) serializer (YAML|JSON|QS2)}
@@ -59,9 +57,6 @@ bytes of the requests and responses}
 
 \item{\code{new_interactions}}{(boolean) Have any interactions been recorded?}
 
-\item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
-be recorded back to file}
-
 \item{\code{to_return}}{(logical) internal use}
 
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
@@ -79,7 +74,7 @@ be recorded back to file}
 \item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
-\item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
+\item \href{#method-Cassette-remove_outdated_interactions}{\code{Cassette$remove_outdated_interactions()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
@@ -98,7 +93,6 @@ Create a new \code{Cassette} object
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -129,9 +123,6 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{re_record_interval}}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}
-
-\item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
-be recorded back to file. Default: \code{FALSE}}
 
 \item{\code{warn_on_empty}}{Warn when ejecting the cassette if no interactions
 have been recorded.}
@@ -214,17 +205,14 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-should_re_record"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-should_re_record}{}}}
-\subsection{Method \code{should_re_record()}}{
-Should re-record interactions?
+\if{html}{\out{<a id="method-Cassette-remove_outdated_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-remove_outdated_interactions}{}}}
+\subsection{Method \code{remove_outdated_interactions()}}{
+Remove outdated interactions
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$should_re_record()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$remove_outdated_interactions()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-logical
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-record_http_interaction"></a>}}

@@ -20,7 +20,6 @@ vcr_configure(
   preserve_exact_body_bytes,
   turned_off,
   re_record_interval,
-  clean_outdated_http_interactions,
   log,
   log_opts,
   filter_sensitive_data,
@@ -103,9 +102,6 @@ force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
 cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
-
-\item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? Default: \code{FALSE}.}
 
 \item{log, log_opts}{See \code{\link[=vcr_configure_log]{vcr_configure_log()}}.}
 

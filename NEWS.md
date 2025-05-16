@@ -3,6 +3,7 @@ vcr (development version)
 
 ## BREAKING CHANGES
 
+* `clean_outdated_http_interactions` has been removed; now all you need to do is set `re_record_interval`.
 * `check_cassette_names()` has been deprecated since it can't be implemented 100% correctly and diagnoses a relatively rare problem (#166).
 * `RequestHandler` and its subclasses are no longer exported.
 * Internal `real_http_connections_allowed()` is no longer exported and has been removed.

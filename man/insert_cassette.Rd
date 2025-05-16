@@ -13,7 +13,6 @@ insert_cassette(
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 )
 
@@ -71,9 +70,6 @@ force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
 cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
-
-\item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? Default: \code{FALSE}.}
 
 \item{warn_on_empty}{(logical) Warn if the cassette is ejected but no interactions
 have been recorded. Default: \code{NULL} (inherits from global configuration).}
