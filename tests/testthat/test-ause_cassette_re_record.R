@@ -20,7 +20,11 @@ test_that("use_cassette options: re_record_interval", {
   local_vcr_configure_log(file = stdout())
   expect_snapshot(
     use_cassette("test", res <- conn$get("get")),
-    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE)
+    transform = function(x) {
+      x |>
+        gsub(hb(), "{httpbin}", x = _, fixed = TRUE) |>
+        gsub("\\d+ bytes", "{bytes} bytes", x = _)
+    }
   )
   rr3 <- read_cassette("test.yml")
 

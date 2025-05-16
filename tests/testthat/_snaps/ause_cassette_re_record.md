@@ -9,6 +9,6 @@
       [Cassette: test] Handling request: GET {httpbin}/get
       [Cassette: test]   Looking for existing requests using method/uri
       [Cassette: test]   No matching requests
-      [Cassette: test]   Recording response: 200 with 314 bytes of application/json data
+      [Cassette: test]   Recording response: 200 with {bytes} bytes of application/json data
       [Cassette: test] Ejecting
 
