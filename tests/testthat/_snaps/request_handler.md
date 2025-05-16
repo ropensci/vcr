@@ -6,5 +6,5 @@
       Error:
       ! Failed to find matching request in active cassette.
       i Use `local_vcr_configure_log()` to get more details.
-      i Learn more in `vignette(debugging)`.
+      i Learn more in `vignette(vcr::debugging)`.
 
