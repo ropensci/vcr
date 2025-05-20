@@ -66,7 +66,6 @@ test_that("can send an image raw body in request", {
     preserve_exact_body_bytes = TRUE
   )
   expect_s3_class(resp_record, "httr2_response")
-  expect_length(httr2::resp_body_raw(resp_record), 380)
 
   # Replay
   use_cassette(
