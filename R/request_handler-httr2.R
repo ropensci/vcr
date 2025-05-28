@@ -81,7 +81,29 @@ httr2_body <- function(x) {
     x$body$type,
     raw = {
       # httr2::req_body_raw allows raw or string
-      if (is_raw(x$body$data)) rawToChar(x$body$data) else x$body$data
+      if (has_binary_content(x$headers)) {
+        tryCatch(
+          {
+            # Check if there are any null bytes which would indicate binary data
+            if (
+              any(x$body$data == as.raw(0)) ||
+                has_binary_content(x$headers)
+            ) {
+              # Raw for binary data
+              x$body$data
+            } else {
+              # Convert to character for text data
+              rawToChar(x$body$data)
+            }
+          },
+          error = function(e) {
+            # fall back upon error
+            x$body$data
+          }
+        )
+      } else {
+        x$body$data
+      }
     },
     form = {
       data <- x$body$data # need to put back unobfuscate?

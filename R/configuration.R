@@ -82,7 +82,6 @@ vcr_configure <- function(
   preserve_exact_body_bytes,
   turned_off,
   re_record_interval,
-  clean_outdated_http_interactions,
   log,
   log_opts,
   filter_sensitive_data,
@@ -138,12 +137,6 @@ vcr_configure <- function(
   if (!missing(re_record_interval)) {
     check_number_decimal(re_record_interval, allow_null = TRUE)
     new_params["re_record_interval"] <- list(re_record_interval)
-  }
-  if (!missing(clean_outdated_http_interactions)) {
-    check_bool(clean_outdated_http_interactions, allow_null = TRUE)
-    new_params["clean_outdated_http_interactions"] <- list(
-      clean_outdated_http_interactions
-    )
   }
   if (!missing(log)) {
     check_bool(log, allow_null = TRUE)
@@ -254,7 +247,6 @@ vcr_config_defaults <- function() {
     preserve_exact_body_bytes = FALSE,
     turned_off = FALSE,
     re_record_interval = NULL,
-    clean_outdated_http_interactions = FALSE,
     log = FALSE,
     log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
     filter_sensitive_data = NULL,

@@ -6,8 +6,6 @@
       <vcr - Cassette> test
         Record method: once
         Serialize with: yaml
-        Re-record interval (s): 
-        Clean outdated interactions?: FALSE
         preserve_exact_body_bytes: FALSE
 
 # cassette warns if ejected with no interactions
