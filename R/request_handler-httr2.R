@@ -81,7 +81,7 @@ httr2_body <- function(x) {
     x$body$type,
     raw = {
       # httr2::req_body_raw allows raw or string
-      if (is_raw(x$body$data)) {
+      if (has_binary_content(x$headers)) {
         tryCatch(
           {
             # Check if there are any null bytes which would indicate binary data
