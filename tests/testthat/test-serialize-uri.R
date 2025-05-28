@@ -46,6 +46,5 @@ test_that("query param is not recorded on disk", {
   con <- crul::HttpClient$new(hb("/get"))
   use_cassette("test", con$get(query = list(x = "x", y = "y")))
 
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$uri, hb("/get?y=Y"))
+  expect_equal(vcr_last_request()$uri, hb("/get?y=Y"))
 })

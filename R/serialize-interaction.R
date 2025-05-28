@@ -40,25 +40,38 @@ encode_interaction <- function(
   preserve_bytes = FALSE,
   matchers = c("method", "uri")
 ) {
-  request <- interaction$request
-  response <- interaction$response
-
   list(
-    request = compact(list(
-      method = request$method,
-      uri = encode_uri(request$uri),
-      body = if ("body" %in% matchers || "body_json" %in% matchers)
-        encode_body(request$body, NULL, preserve_bytes),
-      headers = if ("headers" %in% matchers)
-        encode_headers(request$headers, "request")
-    )),
-    response = list(
-      status = response$status,
-      headers = encode_headers(response$headers, "response"),
-      body = encode_body(response$body, response$disk, preserve_bytes)
-    ),
+    request = encode_request(interaction$request, preserve_bytes, matchers),
+    response = encode_response(interaction$response, preserve_bytes),
     recorded_at = format_time(interaction$recorded_at)
   )
+}
+
+encode_request <- function(
+  request,
+  preserve_bytes = FALSE,
+  matchers = c("method", "uri")
+) {
+  compact(list(
+    method = request$method,
+    uri = encode_uri(request$uri),
+    body = if ("body" %in% matchers || "body_json" %in% matchers)
+      encode_body(request$body, NULL, preserve_bytes),
+    headers = if ("headers" %in% matchers)
+      encode_headers(request$headers, "request")
+  ))
+}
+
+encode_response <- function(response, preserve_bytes = FALSE) {
+  if (is.null(response)) {
+    return(NULL)
+  }
+
+  compact(list(
+    status = response$status,
+    headers = encode_headers(response$headers, "response"),
+    body = encode_body(response$body, response$disk, preserve_bytes)
+  ))
 }
 
 decode_interaction <- function(interaction, preserve_bytes = FALSE) {

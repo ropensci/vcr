@@ -120,8 +120,7 @@ test_that("can match empty bodies", {
   expect_null(res1_replay$request$body)
 
   # the request body in the cassette is empty
-  cas <- read_cassette("test.yml")
-  expect_false(has_name(cas$http_interactions[[1]]$request, "body"))
+  expect_false(has_name(vcr_last_request(), "body"))
 })
 
 test_that("can match json bodies", {
@@ -137,8 +136,7 @@ test_that("can match json bodies", {
   # replay
   use_cassette("test", res1 <- httr2::req_perform(req))
 
-  cas <- read_cassette("test.yml")
-  expect_equal(cas$http_interactions[[1]]$request$body$string, '{"foo":"bar"}')
+  expect_equal(vcr_last_request()$body, list(string = '{"foo":"bar"}'))
 })
 
 test_that('request matching is not sensitive to escaping special characters', {

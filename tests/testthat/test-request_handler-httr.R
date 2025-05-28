@@ -153,10 +153,7 @@ test_that("httr works with simple auth and hides auth details", {
   expect_equal(x$status_code, 200)
 
   # no auth details in the cassette
-  yml <- read_cassette("httr_test_simple_auth.yml")
-  expect_false(
-    "Authorization" %in% names(yml$http_interactions[[1]]$request$headers)
-  )
+  expect_false(has_name(vcr_last_request()$headers, "Authorization"))
 })
 
 test_that("string body works", {
@@ -264,8 +261,7 @@ test_that("binary body uses bsae64 encoding", {
     "test",
     httr::GET(hb("/image"), httr::add_headers("Accept" = "image/png"))
   )
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "raw_gzip")
+  expect_named(vcr_last_response()$body, "raw_gzip")
 })
 
 test_that("can write files to disk", {

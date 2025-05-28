@@ -19,9 +19,7 @@ test_that("can remove headers on disk", {
   con <- crul::HttpClient$new(hb("/get"), headers = list(x = "live"))
   use_cassette("test", res1 <- con$get())
   expect_equal(res1$request_headers$x, "live")
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$headers$x, NULL)
+  expect_equal(vcr_last_request()$headers$x, NULL)
 
   use_cassette("test", res2 <- con$get())
   expect_equal(res2$request_headers$x, "live")
@@ -37,9 +35,7 @@ test_that("can replace headers on disk", {
   con <- crul::HttpClient$new(hb("/get"), headers = list(x = "live"))
   use_cassette("test", res1 <- con$get())
   expect_equal(res1$request_headers$x, "live")
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$headers$x, "ondisk")
+  expect_equal(vcr_last_request()$headers$x, "ondisk")
 
   use_cassette("test", res2 <- con$get())
   expect_equal(res2$request_headers$x, "live")
@@ -52,25 +48,16 @@ test_that("filter_headers doesn't add a header that doesn't exist", {
     filter_request_headers = list("Authorization" = "XXXXXXX")
   )
   con1 <- crul::HttpClient$new(hb("/get"))
-  cas_nh1 <- use_cassette(name = "filterheaders_no_header", {
-    res <- con1$get()
-  })
-  cas_nh2 <- use_cassette(name = "filterheaders_no_header", {
-    res2 <- con1$get()
-  })
 
-  # request's don't have Authorization header
-  invisible(lapply(list(res, res2), function(z) {
-    expect_null(z$request_headers$Authorization)
-  }))
+  # record
+  use_cassette("test", res <- con1$get())
+  expect_null(res$request_headers$Authorization)
+  expect_null(vcr_last_request()$headers$Authorization)
 
-  # compare cassettes
-  yaml1 <- yaml::yaml.load_file(cas_nh1$file())
-  yaml2 <- yaml::yaml.load_file(cas_nh2$file())
-  # no Authorization is added
-  expect_null(yaml1$http_interactions[[1]]$request$headers$Authorization)
-  # still no Authorization header in subsequent use_cassette runs
-  expect_null(yaml2$http_interactions[[1]]$request$headers$Authorization)
+  # replay
+  use_cassette("test", res <- con1$get())
+  expect_null(res$request_headers$Authorization)
+  expect_null(vcr_last_request()$headers$Authorization)
 })
 
 test_that("filter_headers/response/remove", {
@@ -83,10 +70,8 @@ test_that("filter_headers/response/remove", {
   use_cassette("test", res1 <- con$get())
   # first response returns unfiltered headers
   expect_equal(res1$response_headers$foo, "bar")
-
-  cassette <- read_cassette("test.yml")
   # but foo is removed on disk
-  expect_equal(cassette$http_interactions[[1]]$response$headers$foo, NULL)
+  expect_equal(vcr_last_response()$headers$foo, NULL)
 
   # and in the recorded response
   use_cassette("test", res2 <- con$get())
@@ -103,10 +88,8 @@ test_that("filter_headers/response/replace", {
   use_cassette("test", res1 <- con$get())
   # first response returns unfiltered headers
   expect_equal(res1$response_headers$foo, "bar")
-
-  cassette <- read_cassette("test.yml")
   # but foo is recorded on disk
-  expect_equal(cassette$http_interactions[[1]]$response$headers$foo, "foo")
+  expect_equal(vcr_last_response()$headers$foo, "foo")
 
   # and in the recorded response
   use_cassette("test", res2 <- con$get())

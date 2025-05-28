@@ -9,7 +9,12 @@ test_that("can find matching interations", {
   ))
 
   expect_equal(interactions$find_request(req1), 1)
+  expect_equal(vcr_last_request(), encode_request(req1))
+  expect_equal(vcr_last_response(), encode_response(resp1))
+
   expect_equal(interactions$find_request(req2), 2)
+  expect_equal(vcr_last_request(), encode_request(req2))
+  expect_equal(vcr_last_response(), encode_response(resp2))
 })
 
 test_that("handles non-matches", {
@@ -25,6 +30,8 @@ test_that("handles non-matches", {
   req3 <- vcr_request("GET", "http://c.com")
 
   expect_equal(interactions$find_request(req3), NA_integer_)
+  expect_equal(vcr_last_request(), encode_request(req3))
+  expect_equal(vcr_last_response(), NULL)
 })
 
 test_that("replay_request marks as used", {
