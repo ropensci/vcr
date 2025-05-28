@@ -82,25 +82,12 @@ httr2_body <- function(x) {
     raw = {
       # httr2::req_body_raw allows raw or string
       if (has_binary_content(x$headers)) {
-        tryCatch(
-          {
-            # Check if there are any null bytes which would indicate binary data
-            if (
-              any(x$body$data == as.raw(0)) ||
-                has_binary_content(x$headers)
-            ) {
-              # Raw for binary data
-              x$body$data
-            } else {
-              # Convert to character for text data
-              rawToChar(x$body$data)
-            }
-          },
-          error = function(e) {
-            # fall back upon error
-            x$body$data
-          }
-        )
+        # Check if there are any null bytes indicating non-text data
+        if (any(x$body$data == as.raw(0))) {
+          x$body$data
+        } else {
+          rawToChar(x$body$data)
+        }
       } else {
         x$body$data
       }
