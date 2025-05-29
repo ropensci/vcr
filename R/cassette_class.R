@@ -3,21 +3,8 @@
 #' function [use_cassette()]
 #' @export
 #' @keywords internal
-#' @return an object of class `Cassette`
+#' @return An R6 `Cassette` pbject.
 #' @seealso [vcr_configure()], [use_cassette()], [insert_cassette()]
-#' @section Points of webmockr integration:
-#' - `initialize()`: webmockr is used in the `initialize()` method to
-#'   create webmockr stubs. Stubs are created on call to `Cassette$new()`
-#'   within `insert_cassette()`, but then on exiting `use_cassette()`,
-#'   or calling `eject()` on `Cassette` class from `insert_cassette()`,
-#'   stubs are cleaned up.
-#' - `eject()` method: [webmockr::disable()] is called before exiting
-#'   eject to disable webmock so that webmockr does not affect any HTTP
-#'   requests that happen afterwards.
-#' - `serialize_to_crul()` method: [webmockr::RequestSignature] and
-#'   [webmockr::Response] are used to build a request and response,
-#'   respectively, then passed to [webmockr::build_crul_response()]
-#'   to make a complete `crul` HTTP response object.
 Cassette <- R6::R6Class(
   "Cassette",
   public = list(
@@ -43,8 +30,6 @@ Cassette <- R6::R6Class(
     http_interactions = NULL,
     #' @field new_interactions (boolean) Have any interactions been recorded?
     new_interactions = FALSE,
-    #' @field to_return (logical) internal use
-    to_return = NULL,
     #' @field warn_on_empty (logical) warn if no interactions recorded
     warn_on_empty = TRUE,
     #' @field new_cassette is this a new cassette?

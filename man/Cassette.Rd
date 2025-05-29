@@ -4,30 +4,12 @@
 \alias{Cassette}
 \title{Cassette handler}
 \value{
-an object of class \code{Cassette}
+An R6 \code{Cassette} pbject.
 }
 \description{
 Main R6 class that is called from the main user facing
 function \code{\link[=use_cassette]{use_cassette()}}
 }
-\section{Points of webmockr integration}{
-
-\itemize{
-\item \code{initialize()}: webmockr is used in the \code{initialize()} method to
-create webmockr stubs. Stubs are created on call to \code{Cassette$new()}
-within \code{insert_cassette()}, but then on exiting \code{use_cassette()},
-or calling \code{eject()} on \code{Cassette} class from \code{insert_cassette()},
-stubs are cleaned up.
-\item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
-eject to disable webmock so that webmockr does not affect any HTTP
-requests that happen afterwards.
-\item \code{serialize_to_crul()} method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
-\link[webmockr:Response]{webmockr::Response} are used to build a request and response,
-respectively, then passed to \code{\link[webmockr:build_crul_response]{webmockr::build_crul_response()}}
-to make a complete \code{crul} HTTP response object.
-}
-}
-
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
 }
@@ -56,8 +38,6 @@ bytes of the requests and responses}
 \item{\code{http_interactions}}{(list) internal use}
 
 \item{\code{new_interactions}}{(boolean) Have any interactions been recorded?}
-
-\item{\code{to_return}}{(logical) internal use}
 
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
 
