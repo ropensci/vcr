@@ -54,10 +54,10 @@ RequestHandlerHttr2 <- R6::R6Class(
 
       if (!httr2::resp_has_body(response)) {
         body <- NULL
-      } else if (has_binary_content(response$headers)) {
-        body <- httr2::resp_body_raw(response)
-      } else {
+      } else if (has_text_content(response$headers)) {
         body <- httr2::resp_body_string(response)
+      } else {
+        body <- httr2::resp_body_raw(response)
       }
       vcr_response <- vcr_response(
         status = response$status_code,
@@ -81,7 +81,11 @@ httr2_body <- function(x) {
     x$body$type,
     raw = {
       # httr2::req_body_raw allows raw or string
-      if (is_raw(x$body$data)) rawToChar(x$body$data) else x$body$data
+      if (is.raw(x$body$data) && has_text_content(x$headers)) {
+        rawToChar(x$body$data)
+      } else {
+        x$body$data
+      }
     },
     form = {
       data <- x$body$data # need to put back unobfuscate?

@@ -4,30 +4,12 @@
 \alias{Cassette}
 \title{Cassette handler}
 \value{
-an object of class \code{Cassette}
+An R6 \code{Cassette} pbject.
 }
 \description{
 Main R6 class that is called from the main user facing
 function \code{\link[=use_cassette]{use_cassette()}}
 }
-\section{Points of webmockr integration}{
-
-\itemize{
-\item \code{initialize()}: webmockr is used in the \code{initialize()} method to
-create webmockr stubs. Stubs are created on call to \code{Cassette$new()}
-within \code{insert_cassette()}, but then on exiting \code{use_cassette()},
-or calling \code{eject()} on \code{Cassette} class from \code{insert_cassette()},
-stubs are cleaned up.
-\item \code{eject()} method: \code{\link[webmockr:enable]{webmockr::disable()}} is called before exiting
-eject to disable webmock so that webmockr does not affect any HTTP
-requests that happen afterwards.
-\item \code{serialize_to_crul()} method: \link[webmockr:RequestSignature]{webmockr::RequestSignature} and
-\link[webmockr:Response]{webmockr::Response} are used to build a request and response,
-respectively, then passed to \code{\link[webmockr:build_crul_response]{webmockr::build_crul_response()}}
-to make a complete \code{crul} HTTP response object.
-}
-}
-
 \seealso{
 \code{\link[=vcr_configure]{vcr_configure()}}, \code{\link[=use_cassette]{use_cassette()}}, \code{\link[=insert_cassette]{insert_cassette()}}
 }
@@ -38,8 +20,6 @@ to make a complete \code{crul} HTTP response object.
 \item{\code{name}}{(character) cassette name}
 
 \item{\code{record}}{(character) record mode}
-
-\item{\code{recorded_at}}{(character) date/time recorded at}
 
 \item{\code{serialize_with}}{(character) serializer (yaml|json|qs2)}
 
@@ -52,20 +32,12 @@ default: method & uri}
 
 \item{\code{root_dir}}{root dir, gathered from \code{\link[=vcr_configuration]{vcr_configuration()}}}
 
-\item{\code{allow_playback_repeats}}{(logical) Whether to allow a single HTTP
-interaction to be played back multiple times}
-
 \item{\code{preserve_exact_body_bytes}}{(logical) Whether to base64 encode the
 bytes of the requests and responses}
 
 \item{\code{http_interactions}}{(list) internal use}
 
 \item{\code{new_interactions}}{(boolean) Have any interactions been recorded?}
-
-\item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
-be recorded back to file}
-
-\item{\code{to_return}}{(logical) internal use}
 
 \item{\code{warn_on_empty}}{(logical) warn if no interactions recorded}
 
@@ -82,7 +54,8 @@ be recorded back to file}
 \item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
-\item \href{#method-Cassette-should_re_record}{\code{Cassette$should_re_record()}}
+\item \href{#method-Cassette-replaying}{\code{Cassette$replaying()}}
+\item \href{#method-Cassette-remove_outdated_interactions}{\code{Cassette$remove_outdated_interactions()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
 }
@@ -98,11 +71,9 @@ Create a new \code{Cassette} object
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -123,10 +94,6 @@ to use to determine what recorded HTTP interaction to replay. Defaults to
 "headers" and "body" ("host" and "path" not supported yet, but should
 be in a future version)}
 
-\item{\code{allow_playback_repeats}}{(logical) Whether or not to
-allow a single HTTP interaction to be played back multiple times.
-Default: \code{FALSE}.}
-
 \item{\code{serialize_with}}{(character) Which serializer to use.
 Valid values are "yaml" (default), "json", and "qs2".}
 
@@ -137,9 +104,6 @@ in \code{\link[=vcr_configure]{vcr_configure()}}. Default: \code{FALSE}}
 
 \item{\code{re_record_interval}}{(numeric) When given, the cassette will be
 re-recorded at the given interval, in seconds.}
-
-\item{\code{clean_outdated_http_interactions}}{(logical) Should outdated interactions
-be recorded back to file. Default: \code{FALSE}}
 
 \item{\code{warn_on_empty}}{Warn when ejecting the cassette if no interactions
 have been recorded.}
@@ -212,7 +176,7 @@ character
 \if{html}{\out{<a id="method-Cassette-recording"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-recording}{}}}
 \subsection{Method \code{recording()}}{
-is the cassette in recording mode?
+Is the cassette in recording mode?
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$recording()}\if{html}{\out{</div>}}
 }
@@ -222,17 +186,27 @@ logical
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Cassette-should_re_record"></a>}}
-\if{latex}{\out{\hypertarget{method-Cassette-should_re_record}{}}}
-\subsection{Method \code{should_re_record()}}{
-Should re-record interactions?
+\if{html}{\out{<a id="method-Cassette-replaying"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-replaying}{}}}
+\subsection{Method \code{replaying()}}{
+Is the cassette in replaying mode?
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Cassette$should_re_record()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$replaying()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 logical
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Cassette-remove_outdated_interactions"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-remove_outdated_interactions}{}}}
+\subsection{Method \code{remove_outdated_interactions()}}{
+Remove outdated interactions
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$remove_outdated_interactions()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Cassette-record_http_interaction"></a>}}

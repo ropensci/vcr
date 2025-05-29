@@ -15,10 +15,10 @@ reference:
       - current_cassette
   - title: Other helpers
     contents:
-      - vcr_last_error
       - skip_if_vcr_off
       - vcr_test_path
       - turn_off
+      - vcr_last_request
       
 articles:
   - title: All vignettes

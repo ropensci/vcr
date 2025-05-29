@@ -24,7 +24,7 @@ check_cassette_names <- function(
 ) {
   lifecycle::deprecate_warn("2.0.0", "check_cassette_names()")
 
-  assert(allowed_duplicates, "character")
+  check_character(allowed_duplicates, allow_null = TRUE)
   files <- list.files(".", pattern = pattern, full.names = TRUE)
   if (length(files) == 0) return(invisible())
   cassette_names <- function(x) {

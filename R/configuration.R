@@ -47,16 +47,6 @@
 #'   will not be recorded to disk. Alternatively, a named list similar to
 #' @param filter_sensitive_data instructing vcr with what value to replace the
 #'   real value of the query parameter.
-#' @param verbose_errors Do you want more verbose errors or less verbose
-#'  errors when cassette recording/usage fails? Default is `FALSE`, that is,
-#'  less verbose errors. If `TRUE`, error messages will include more details
-#'  about what went wrong and suggest possible solutions. For testing
-#'  in an interactive R session, if `verbose_errors=FALSE`, you can run
-#'  `vcr_last_error()` to get the full error. If in non-interactive mode,
-#'  which most users will be in when running the entire test suite for a
-#'  package, you can set an environment variable (`VCR_VERBOSE_ERRORS`)
-#'  to toggle this setting (e.g.,
-#'  `Sys.setenv(VCR_VERBOSE_ERRORS=TRUE); devtools::test()`)
 #' @inheritParams use_cassette
 #' @param json_pretty (logical) want JSON to be newline separated to be easier
 #'   to read? Or remove newlines to save disk space? default: `FALSE`.`
@@ -92,7 +82,6 @@ vcr_configure <- function(
   preserve_exact_body_bytes,
   turned_off,
   re_record_interval,
-  clean_outdated_http_interactions,
   log,
   log_opts,
   filter_sensitive_data,
@@ -101,7 +90,6 @@ vcr_configure <- function(
   filter_response_headers,
   filter_query_parameters,
   write_disk_path,
-  verbose_errors,
   warn_on_empty_cassette
 ) {
   # Get non-missing arguments
@@ -149,12 +137,6 @@ vcr_configure <- function(
   if (!missing(re_record_interval)) {
     check_number_decimal(re_record_interval, allow_null = TRUE)
     new_params["re_record_interval"] <- list(re_record_interval)
-  }
-  if (!missing(clean_outdated_http_interactions)) {
-    check_bool(clean_outdated_http_interactions, allow_null = TRUE)
-    new_params["clean_outdated_http_interactions"] <- list(
-      clean_outdated_http_interactions
-    )
   }
   if (!missing(log)) {
     check_bool(log, allow_null = TRUE)
@@ -217,10 +199,6 @@ vcr_configure <- function(
     check_string(write_disk_path, allow_null = TRUE)
     new_params["write_disk_path"] <- list(write_disk_path)
   }
-  if (!missing(verbose_errors)) {
-    check_bool(verbose_errors, allow_null = TRUE)
-    new_params["verbose_errors"] <- list(verbose_errors)
-  }
   if (!missing(warn_on_empty_cassette)) {
     check_bool(warn_on_empty_cassette, allow_null = TRUE)
     new_params["warn_on_empty_cassette"] <- list(warn_on_empty_cassette)
@@ -269,7 +247,6 @@ vcr_config_defaults <- function() {
     preserve_exact_body_bytes = FALSE,
     turned_off = FALSE,
     re_record_interval = NULL,
-    clean_outdated_http_interactions = FALSE,
     log = FALSE,
     log_opts = list(file = "vcr.log", log_prefix = "Cassette", date = TRUE),
     filter_sensitive_data = NULL,
@@ -278,7 +255,6 @@ vcr_config_defaults <- function() {
     filter_response_headers = NULL,
     filter_query_parameters = NULL,
     write_disk_path = NULL,
-    verbose_errors = get_envvar_lgl("VCR_VERBOSE_ERRORS", FALSE),
     warn_on_empty_cassette = TRUE
   )
 }

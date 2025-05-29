@@ -3,6 +3,9 @@ vcr (development version)
 
 ## BREAKING CHANGES
 
+* `vcr_last_error()` has been removed (#488).
+* The `verbose_errors` errors options is no longer supported.
+* `clean_outdated_http_interactions` has been removed; now all you need to do is set `re_record_interval`.
 * `check_cassette_names()` has been deprecated since it can't be implemented 100% correctly and diagnoses a relatively rare problem (#166).
 * `RequestHandler` and its subclasses are no longer exported.
 * Internal `real_http_connections_allowed()` is no longer exported and has been removed.
@@ -18,6 +21,9 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* New `current_cassette_recording()` and `current_cassette_replaying()` tell you if the current cassette is recording or replaying (or neither or both).
+* New `vcr_last_request()` and `vcr_last_response()` to get last request and response respectively (#488).
+* The vignettes have been updated for all the new changes and generally polished.
 * New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
 * New `setup_knitr()` makes it easier to use vcr from within a vignette (#308).
 * The `Authorization` header is never written to disk.

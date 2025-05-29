@@ -1,19 +1,5 @@
 compact <- function(x) Filter(Negate(is.null), x)
 
-assert <- function(x, y) {
-  if (!is.null(x)) {
-    if (!inherits(x, y)) {
-      stop(
-        deparse(substitute(x)),
-        " must be of class ",
-        paste0(y, collapse = ", "),
-        call. = FALSE
-      )
-    }
-  }
-  invisible(x)
-}
-
 check_request_matchers <- function(
   x,
   error_arg = caller_arg(x),
@@ -102,4 +88,8 @@ parse_http_date <- function(x) {
   out <- as.POSIXct(strptime(x, "%a, %d %b %Y %H:%M:%S", tz = "UTC"))
   attr(out, "tzone") <- NULL
   out
+}
+
+cat_line <- function(...) {
+  cat(paste0(..., "\n", collapse = ""))
 }

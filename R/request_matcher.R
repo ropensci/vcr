@@ -19,7 +19,7 @@ request_matches <- function(
   } else {
     vcr_log_sprintf("    Request %i: NO MATCH", i)
     lines <- strsplit(paste0(compare, collapse = "\n"), "\n")[[1]]
-    lapply(lines, \(line) vcr_log_sprintf("    %s", line))
+    lapply(lines, \(line) vcr_log_sprintf("      %s", line))
     FALSE
   }
 }
@@ -73,7 +73,9 @@ normalize_uri <- function(x, drop_port = TRUE) {
   }
 
   if (length(parsed$params) == 0) {
-    parsed$params <- NULL
+    parsed$params <- set_names(list())
+  } else {
+    parsed$params <- as.list(parsed$params)
   }
   compact(parsed)
 }

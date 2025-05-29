@@ -43,9 +43,6 @@
 #'   cassette if  `match_requests_on` includes "header" or "body" respectively.
 #'   This keeps the recorded request as lightweight as possible.
 #'
-#' @param allow_playback_repeats (logical) Whether or not to
-#' allow a single HTTP interaction to be played back multiple times.
-#' Default: `FALSE`.
 #' @param serialize_with (string) Which serializer to use:
 #'   `"yaml"` (the default), `"json"`, or `"qs2"`.
 #' @param preserve_exact_body_bytes (logical) Force a binary (base64)
@@ -55,8 +52,6 @@
 #'   force it.
 #' @param re_record_interval (integer) How frequently (in seconds) the
 #' cassette should be re-recorded. Default: `NULL` (not re-recorded).
-#' @param clean_outdated_http_interactions (logical) Should outdated
-#' interactions be recorded back to file? Default: `FALSE`.
 #' @param warn_on_empty (logical) Warn if the cassette is ejected but no interactions
 #'   have been recorded. Default: `NULL` (inherits from global configuration).
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
@@ -167,11 +162,9 @@ use_cassette <- function(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 ) {
   check_required(name)
@@ -187,11 +180,9 @@ use_cassette <- function(
     dir = dir,
     record = record,
     match_requests_on = match_requests_on,
-    allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions,
     warn_on_empty = warn_on_empty
   )
 
@@ -212,21 +203,19 @@ local_cassette <- function(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL,
   frame = parent.frame()
 ) {
   check_string(name, allow_empty = FALSE)
   check_cassette_name(name)
   check_string(dir, allow_null = TRUE)
-  check_record_mode(record)
   check_request_matchers(match_requests_on)
-  check_bool(allow_playback_repeats, allow_null = TRUE)
-  check_bool(clean_outdated_http_interactions, allow_null = TRUE)
+  check_record_mode(record)
+  check_bool(preserve_exact_body_bytes, allow_null = TRUE)
+  check_number_whole(re_record_interval, allow_null = TRUE)
   check_bool(warn_on_empty, allow_null = TRUE)
 
   cassette <- insert_cassette(
@@ -234,11 +223,9 @@ local_cassette <- function(
     dir = dir,
     record = record,
     match_requests_on = match_requests_on,
-    allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
     re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions,
     warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {

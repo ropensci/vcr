@@ -18,12 +18,13 @@ encode_body <- function(body, file = FALSE, preserve_bytes = FALSE) {
 }
 
 decode_body <- function(body, preserve_bytes = FALSE) {
-  if (has_name(body, "string") && preserve_bytes) {
+  if (preserve_bytes && has_name(body, "string") && is_base64(body$string)) {
     name <- current_cassette()$name
     cli::cli_warn(
       "{.str {name}} cassette uses outdated encoding. Please rerecord it."
     )
-    body$string <- from_base64(body$string)
+    body$base64_string <- body$string
+    body$string <- NULL
   }
 
   if (has_name(body, "on_disk")) {
@@ -33,7 +34,7 @@ decode_body <- function(body, preserve_bytes = FALSE) {
     # a `string` body giving the path.
     list(data = body$string, on_disk = TRUE)
   } else if (has_name(body, "string")) {
-    if (isFALSE(body$string)) {
+    if (isFALSE(body$string) || identical(body$string, "")) {
       # v1 encoding
       list(data = NULL, on_disk = FALSE)
     } else {
@@ -56,10 +57,51 @@ decode_body <- function(body, preserve_bytes = FALSE) {
 }
 
 # Helpers --------------------------------------------------------------------
-
 from_base64 <- function(x) {
-  x <- gsub("[\r\n]", "", x)
+  if (is.character(x)) {
+    x <- gsub("[\r\n]", "", x)
+  }
   jsonlite::base64_dec(x)
+}
+
+# https://datatracker.ietf.org/doc/html/rfc4648#section-4
+is_base64 <- function(x) {
+  if (!is_string(x) || is.na(x) || !nzchar(x)) {
+    return(FALSE)
+  }
+
+  # Remove newlines that might be present in formatted base64
+  x <- gsub("[\r\n]", "", x)
+
+  # Check if string length is divisible by 4 (base64 requirement)
+  if (nchar(x) %% 4 != 0) {
+    return(FALSE)
+  }
+
+  # Check if string only contains valid base64 characters
+  # Valid chars: A-Z, a-z, 0-9, +, /, and = (for padding)
+  valid_chars <- grepl("^[A-Za-z0-9+/=]+$", x)
+  if (!valid_chars) {
+    return(FALSE)
+  }
+
+  # Check if padding is valid (if present)
+  # Can only be at the end and max 2 '=' characters
+  padding_match <- grepl("^[A-Za-z0-9+/]+={0,2}$", x)
+  if (!padding_match) {
+    return(FALSE)
+  }
+
+  # Try to decode and check if it returns raw bytes
+  tryCatch(
+    {
+      decoded <- jsonlite::base64_dec(x)
+      is.raw(decoded)
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
 }
 
 to_base64 <- function(x) {

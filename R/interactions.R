@@ -5,24 +5,23 @@ Interactions <- R6::R6Class(
     replayable = logical(),
 
     request_matchers = NULL,
-    allow_playback_repeats = FALSE,
 
     initialize = function(
       interactions = list(),
-      request_matchers = c("method", "uri"),
-      allow_playback_repeats = FALSE,
-      replayable = TRUE
+      request_matchers = c("method", "uri")
     ) {
       self$interactions <- interactions
-      self$replayable <- rep(replayable, length(interactions))
+      self$replayable <- rep(TRUE, length(interactions))
 
       self$request_matchers <- request_matchers
-      self$allow_playback_repeats <- allow_playback_repeats
     },
 
     # Returns index; powers all other methods
-    find_request = function(request, allow_playback = NULL) {
-      allow_playback <- allow_playback %||% self$allow_playback_repeats
+    find_request = function(request, allow_playback = FALSE) {
+      the$last_request <- encode_request(
+        request,
+        matchers = self$request_matchers
+      )
 
       for (i in seq_along(self$interactions)) {
         if (!self$replayable[[i]] && !allow_playback) {
@@ -31,19 +30,24 @@ Interactions <- R6::R6Class(
 
         request_i <- self$interactions[[i]]$request
         if (request_matches(request, request_i, self$request_matchers, i)) {
+          the$last_response <- encode_response(self$interactions[[i]]$response)
           return(i)
         }
       }
+
+      the$last_response <- NULL
       return(NA_integer_)
     },
 
     add = function(request, response) {
-      idx <- self$find_request(request, allow_playback = TRUE)
-      if (is.na(idx)) {
-        idx <- length(self$interactions) + 1
-      }
-
+      the$last_request <- encode_request(
+        request,
+        matchers = self$request_matchers
+      )
+      the$last_response <- encode_response(response)
       interaction <- vcr_interaction(request, response)
+
+      idx <- length(self$interactions) + 1
       self$interactions[[idx]] <- interaction
       self$replayable[[idx]] <- FALSE # don't allow playback for new interactions
 
@@ -51,7 +55,7 @@ Interactions <- R6::R6Class(
     },
 
     # Returns response
-    response_for = function(i) {
+    replay_request = function(i) {
       self$replayable[[i]] <- FALSE
       self$interactions[[i]]$response
     },
@@ -61,17 +65,8 @@ Interactions <- R6::R6Class(
       !is.na(idx)
     },
 
-    has_used_interaction = function(request) {
-      idx <- self$find_request(request, allow_playback = TRUE)
-      !is.na(idx) && !self$replayable[[idx]]
-    },
-
     n_replayable = function() {
-      if (self$allow_playback_repeats) {
-        length(self$interactions)
-      } else {
-        sum(self$replayable)
-      }
+      sum(self$replayable)
     },
 
     length = function() {
@@ -79,3 +74,21 @@ Interactions <- R6::R6Class(
     }
   )
 )
+
+#' Retrieve last vcr request/response
+#'
+#' When debugging, it's often useful to see the last request and response
+#' respectively. These functions give you what would have been recorded to disk
+#' or replayed from disk. If the last request wasn't recorded, and there was
+#' no matching request, `vcr_last_response` will return `NULL`.
+#'
+#' @export
+vcr_last_request <- function() {
+  the$last_request
+}
+
+#' @export
+#' @rdname vcr_last_request
+vcr_last_response <- function() {
+  the$last_response
+}

@@ -36,11 +36,9 @@ insert_example_cassette <- function(
   package,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = NULL,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
-  re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL
+  re_record_interval = NULL
 ) {
   dir <- example_cassette_path(package)
   in_dev <- is_dev_package(package)
@@ -53,11 +51,9 @@ insert_example_cassette <- function(
     dir = dir,
     record = record,
     match_requests_on = match_requests_on,
-    allow_playback_repeats = allow_playback_repeats,
     serialize_with = serialize_with,
     preserve_exact_body_bytes = preserve_exact_body_bytes,
-    re_record_interval = re_record_interval,
-    clean_outdated_http_interactions = clean_outdated_http_interactions
+    re_record_interval = re_record_interval
   )
 
   path <- cassette$file()

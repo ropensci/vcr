@@ -11,11 +11,9 @@ use_cassette(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL
 )
 
@@ -24,11 +22,9 @@ local_cassette(
   dir = NULL,
   record = NULL,
   match_requests_on = NULL,
-  allow_playback_repeats = FALSE,
   serialize_with = NULL,
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL,
-  clean_outdated_http_interactions = NULL,
   warn_on_empty = NULL,
   frame = parent.frame()
 )
@@ -78,10 +74,6 @@ Note that the request header and body will only be included in the
 cassette if  \code{match_requests_on} includes "header" or "body" respectively.
 This keeps the recorded request as lightweight as possible.}
 
-\item{allow_playback_repeats}{(logical) Whether or not to
-allow a single HTTP interaction to be played back multiple times.
-Default: \code{FALSE}.}
-
 \item{serialize_with}{(string) Which serializer to use:
 \code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
@@ -93,9 +85,6 @@ force it.}
 
 \item{re_record_interval}{(integer) How frequently (in seconds) the
 cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
-
-\item{clean_outdated_http_interactions}{(logical) Should outdated
-interactions be recorded back to file? Default: \code{FALSE}.}
 
 \item{warn_on_empty}{(logical) Warn if the cassette is ejected but no interactions
 have been recorded. Default: \code{NULL} (inherits from global configuration).}

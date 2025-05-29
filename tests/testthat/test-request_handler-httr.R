@@ -101,7 +101,6 @@ test_that("httr use_cassette works", {
   # cassette
   expect_s3_class(out, "Cassette")
   expect_match(out$file(), "httr_test2")
-  expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
   expect_s3_class(x, "response")
@@ -113,7 +112,7 @@ test_that("httr w/ >1 request per cassette", {
   skip_if_not_installed("xml2")
   local_vcr_configure(dir = withr::local_tempdir())
 
-  out <- use_cassette("multiple_queries_httr_record_once", {
+  use_cassette("multiple_queries_httr_record_once", {
     x404 <- httr::GET(hb("/status/404"))
     x500 <- httr::GET(hb("/status/500"))
     x418 <- httr::GET(hb("/status/418"))
@@ -122,11 +121,6 @@ test_that("httr w/ >1 request per cassette", {
     expect_equal(httr::status_code(x500), 500)
     expect_equal(httr::status_code(x418), 418)
   })
-
-  # cassette
-  expect_s3_class(out, "Cassette")
-  expect_match(out$file(), "multiple_queries_httr_record_once")
-  expect_s3_class(out$recorded_at, "POSIXct")
 
   # response
   expect_s3_class(x404, "response")
@@ -137,11 +131,8 @@ test_that("httr w/ >1 request per cassette", {
   expect_equal(x418$status_code, 418)
 
   # response body
-  str <- yaml::yaml.load_file(out$file())$http_interactions
-  expect_type(str, "list")
-  expect_type(str[[3]], "list")
-  expect_match(str[[3]]$request$uri, "418")
-  expect_match(str[[3]]$response$body$string, "teapot")
+  expect_match(vcr_last_request()$uri, "418")
+  expect_match(vcr_last_response()$body$string, "teapot")
 })
 
 test_that("httr works with simple auth and hides auth details", {
@@ -155,10 +146,7 @@ test_that("httr works with simple auth and hides auth details", {
   expect_equal(x$status_code, 200)
 
   # no auth details in the cassette
-  yml <- read_cassette("httr_test_simple_auth.yml")
-  expect_false(
-    "Authorization" %in% names(yml$http_interactions[[1]]$request$headers)
-  )
+  expect_false(has_name(vcr_last_request()$headers, "Authorization"))
 })
 
 test_that("string body works", {
@@ -242,20 +230,16 @@ test_that("JSON-encoded body", {
   expect_error(
     use_cassette(
       "testing2",
-      res <- httr::POST(
-        hb("/post"),
-        body = list(foo = "bar1"),
-        encode = "json"
-      ),
+      res <- httr::POST(hb("/post"), body = list(foo = "baz"), encode = "json"),
       match_requests_on = "body"
     ),
-    "An HTTP request has been made that vcr does not know how to handle"
+    class = "vcr_unhandled"
   )
 
   # matching succeeds when the changed body is ignored
   cc <- use_cassette(
     "testing2",
-    res <- httr::POST(hb("/post"), body = list(foo = "bar1"), encode = "json"),
+    res <- httr::POST(hb("/post"), body = list(foo = "bar"), encode = "json"),
     match_requests_on = c("uri", "method")
   )
   expect_identical(recorded_at(aa), recorded_at(cc))
@@ -270,8 +254,7 @@ test_that("binary body uses bsae64 encoding", {
     "test",
     httr::GET(hb("/image"), httr::add_headers("Accept" = "image/png"))
   )
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "raw_gzip")
+  expect_named(vcr_last_response()$body, "raw_gzip")
 })
 
 test_that("can write files to disk", {
