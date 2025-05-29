@@ -74,6 +74,7 @@ bytes of the requests and responses}
 \item \href{#method-Cassette-print}{\code{Cassette$print()}}
 \item \href{#method-Cassette-file}{\code{Cassette$file()}}
 \item \href{#method-Cassette-recording}{\code{Cassette$recording()}}
+\item \href{#method-Cassette-replaying}{\code{Cassette$replaying()}}
 \item \href{#method-Cassette-remove_outdated_interactions}{\code{Cassette$remove_outdated_interactions()}}
 \item \href{#method-Cassette-record_http_interaction}{\code{Cassette$record_http_interaction()}}
 \item \href{#method-Cassette-clone}{\code{Cassette$clone()}}
@@ -195,9 +196,22 @@ character
 \if{html}{\out{<a id="method-Cassette-recording"></a>}}
 \if{latex}{\out{\hypertarget{method-Cassette-recording}{}}}
 \subsection{Method \code{recording()}}{
-is the cassette in recording mode?
+Is the cassette in recording mode?
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Cassette$recording()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Cassette-replaying"></a>}}
+\if{latex}{\out{\hypertarget{method-Cassette-replaying}{}}}
+\subsection{Method \code{replaying()}}{
+Is the cassette in replaying mode?
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Cassette$replaying()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

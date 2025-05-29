@@ -19,6 +19,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* New `current_cassette_recording()` and `current_cassette_replaying()` tell you if the current cassette is recording or replaying (or neither or both).
 * The vignettes have been updated for all the new changes and generally polished.
 * New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
 * New `setup_knitr()` makes it easier to use vcr from within a vignette (#308).

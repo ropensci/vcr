@@ -83,6 +83,9 @@ eject_cassette <- function() {
 #'   session.
 #' - `current_cassette()`: returns `NULL` when no cassettes are in use;
 #' returns the current cassette (a `Cassette` object) when one is in use
+#' - `currrent_cassette_recording()` and `current_cassette_replaying()`:
+#'   tell you if the current cassette is recording and/or replaying. They
+#'   both return `FALSE` if there is no cassette in use.
 #' - `cassette_path()`: returns the current directory path where cassettes
 #' will be stored
 #'
@@ -127,6 +130,26 @@ current_cassette <- function() {
     the$cassettes[[n]]
   } else {
     NULL
+  }
+}
+
+#' @export
+#' @rdname cassettes
+current_cassette_recording <- function() {
+  if (cassette_active()) {
+    current_cassette()$recording()
+  } else {
+    FALSE
+  }
+}
+
+#' @export
+#' @rdname cassettes
+current_cassette_replaying <- function() {
+  if (cassette_active()) {
+    current_cassette()$replaying()
+  } else {
+    FALSE
   }
 }
 
