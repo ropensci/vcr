@@ -1,6 +1,7 @@
 has_text_content <- function(headers) {
   idx <- match("content-type", tolower(names(headers)))
   if (is.na(idx)) {
+    # If no content type, assume it's binary
     FALSE
   } else {
     is_text_type(headers[[idx]])
@@ -13,6 +14,7 @@ is_text_type <- function(content_type) {
     return(TRUE)
   }
 
+  # Otherwise assume it's binary, unless it's one of a handful of special cases
   special_cases <- c(
     "application/xml",
     "application/x-www-form-urlencoded",
