@@ -3,34 +3,31 @@ test_that("crul POST requests works", {
   local_vcr_configure(dir = withr::local_tempdir())
 
   # body type: named list
-  out <- use_cassette("crul_post_named_list", {
+  use_cassette("crul_post_named_list", {
     x <- crul::HttpClient$new(hb("/post"))$post(body = list(foo = "bar"))
   })
   expect_s3_class(x, "HttpResponse")
   expect_equal(x$status_code, 200)
-  str <- yaml::yaml.load_file(out$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  strj <- jsonlite::fromJSON(vcr_last_response()$body$string)
   expect_equal(strj$form, list(foo = "bar"))
 
   # body type: character
-  out2 <- use_cassette("crul_post_string", {
+  use_cassette("crul_post_string", {
     z <- crul::HttpClient$new(hb("/post"))$post(body = "some string")
   })
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out2$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  strj <- jsonlite::fromJSON(vcr_last_response()$body$string)
   # FIXME: the body should be found in data slot, fix in crul
   expect_named(strj$form, "some string")
 
   # body type: raw
-  out3 <- use_cassette("crul_post_raw", {
+  use_cassette("crul_post_raw", {
     z <- crul::HttpClient$new(hb("/post"))$post(body = charToRaw("some string"))
   })
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out3$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  strj <- jsonlite::fromJSON(vcr_last_response()$body$string)
   # FIXME: the body should be found in data slot, fix in crul
   expect_named(strj$form, "some string")
 
@@ -38,38 +35,35 @@ test_that("crul POST requests works", {
   ## upload_file in a list
   ff <- withr::local_tempfile(fileext = ".txt")
   cat("hello world\n", file = ff)
-  out4 <- use_cassette("crul_post_upload_file", {
+  use_cassette("crul_post_upload_file", {
     b <- crul::HttpClient$new(hb("/post"))$post(
       body = list(y = crul::upload(ff))
     )
   })
   expect_s3_class(b, "HttpResponse")
   expect_equal(b$status_code, 200)
-  str <- yaml::yaml.load_file(out4$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  strj <- jsonlite::fromJSON(vcr_last_response()$body$string)
   expect_equal(strj$files$y$filename, basename(ff)) # files not empty
 
   ## upload_file not in a list
-  out6 <- use_cassette("crul_post_upload_file_no_list", {
+  use_cassette("crul_post_upload_file_no_list", {
     d <- crul::HttpClient$new(hb("/post"))$post(
       body = crul::upload(system.file("CITATION"))
     )
   })
   expect_s3_class(d, "HttpResponse")
   expect_equal(d$status_code, 200)
-  str <- yaml::yaml.load_file(out6$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  strj <- jsonlite::fromJSON(vcr_last_response()$body$string)
   expect_equal(length(strj$files), 0) # files empty
   expect_match(strj$data, "bibentry\\(") # data not empty
 
   # body type: NULL
-  out5 <- use_cassette("crul_post_null", {
+  use_cassette("crul_post_null", {
     m <- crul::HttpClient$new(hb("/post"))$post(body = NULL)
   })
   expect_s3_class(z, "HttpResponse")
   expect_equal(z$status_code, 200)
-  str <- yaml::yaml.load_file(out5$file())$http_interactions
-  strj <- jsonlite::fromJSON(str[[1]]$response$body$string)
+  strj <- jsonlite::fromJSON(vcr_last_response()$body$string)
   expect_equal(strj$headers$`Content-Length`, "0")
 })
 
@@ -108,7 +102,7 @@ test_that("JSON-encoded body", {
       cli$post("post", body = list(foo = "bar")),
       match_requests_on = c("method", "uri", "body")
     ),
-    "An HTTP request has been made that vcr does not know how to handle"
+    class = "vcr_unhandled"
   )
 
   # matching fails when the body changes
@@ -118,7 +112,7 @@ test_that("JSON-encoded body", {
       res <- cli$post("post", body = list(foo = "baz"), encode = "json"),
       match_requests_on = "body"
     ),
-    "An HTTP request has been made that vcr does not know how to handle"
+    class = "vcr_unhandled"
   )
 
   # matching succeeds when the changed body is ignored

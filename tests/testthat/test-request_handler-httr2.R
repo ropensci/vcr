@@ -124,12 +124,7 @@ test_that("httr2 redacts auth header", {
   request <- httr2::request(hb("/basic-auth/foo/bar"))
   request <- httr2::req_auth_basic(request, "foo", "bar")
   use_cassette("test", response <- httr2::req_perform(request))
-
-  yml <- read_cassette("test.yml")
-  expect_equal(
-    yml$http_interactions[[1]]$request$headers,
-    list(Authorization = "<redacted>")
-  )
+  expect_equal(vcr_last_request()$headers, list(Authorization = "<redacted>"))
 })
 
 test_that("can capture body: string", {
@@ -146,9 +141,7 @@ test_that("can capture body: string", {
     httr2::resp_body_json(resp_record),
     httr2::resp_body_json(resp_replay)
   )
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, "body")
+  expect_equal(vcr_last_request()$body, list(string = "body"))
 })
 
 test_that("binary body uses base64 encoding", {
@@ -159,8 +152,7 @@ test_that("binary body uses base64 encoding", {
   req <- httr2::req_headers(req, "Accept" = "image/png")
 
   use_cassette("test", httr2::req_perform(req))
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_named(interaction$response$body, "raw_gzip")
+  expect_named(vcr_last_response()$body, "raw_gzip")
 })
 
 test_that("can capture body: json", {
@@ -177,9 +169,7 @@ test_that("can capture body: json", {
     httr2::resp_body_json(resp_record),
     httr2::resp_body_json(resp_replay)
   )
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, "{\"foo\":\"bar\"}")
+  expect_equal(vcr_last_request()$body, list(string = "{\"foo\":\"bar\"}"))
 })
 
 test_that("can capture body: form", {
@@ -196,9 +186,7 @@ test_that("can capture body: form", {
     httr2::resp_body_json(resp_record),
     httr2::resp_body_json(resp_replay)
   )
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, "a=x&b=y")
+  expect_equal(vcr_last_request()$body, list(string = "a=x&b=y"))
 })
 
 test_that("can capture body: multipart", {
@@ -215,9 +203,7 @@ test_that("can capture body: multipart", {
     httr2::resp_body_json(resp_record),
     httr2::resp_body_json(resp_replay)
   )
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$fields, list(a = "x", b = "y"))
+  expect_equal(vcr_last_request()$body, list(fields = list(a = "x", b = "y")))
 })
 
 test_that("can capture body: file", {
@@ -235,9 +221,7 @@ test_that("can capture body: file", {
     httr2::resp_body_json(resp_record),
     httr2::resp_body_json(resp_replay)
   )
-
-  interaction <- read_cassette("test.yml")$http_interactions[[1]]
-  expect_equal(interaction$request$body$string, path)
+  expect_equal(vcr_last_request()$body, list(string = path))
 })
 
 test_that("redacted headers handled appropriately", {
@@ -253,8 +237,8 @@ test_that("redacted headers handled appropriately", {
       httr2::req_perform()
   })
 
-  cas <- read_cassette("redacted_httr2.yml")
-  headers <- cas$http_interactions[[1]]$request$headers
-  expect_equal(headers$NotASecret, "NotHidden")
-  expect_equal(headers$SecretHeader, "<redacted>")
+  expect_equal(
+    vcr_last_request()$headers,
+    list(NotASecret = "NotHidden", SecretHeader = "<redacted>")
+  )
 })

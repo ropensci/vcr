@@ -35,7 +35,7 @@ RequestHandler <- R6::R6Class(
         )
         idx <- interactions$find_request(self$request)
         if (!is.na(idx)) {
-          vcr_response <- interactions$response_for(idx)
+          vcr_response <- interactions$replay_request(idx)
           vcr_log_sprintf("  Replaying response %i", idx)
           return(private$on_stubbed_by_vcr_request(vcr_response))
         } else {
@@ -47,13 +47,21 @@ RequestHandler <- R6::R6Class(
         return(private$on_recordable_request())
       }
 
-      if (the$config$log) {
-        # Log messages already give the details
-        cli::cli_abort("Failed to find matching request in active cassette.")
-      } else {
-        err <- UnhandledHTTPRequestError$new(self$request)
-        err$run()
+      # Since it's going to error, there's no point in also giving a warning
+      # about the cassette being empty
+      if (cassette_active()) {
+        cassette <- current_cassette()
+        cassette$warn_on_empty <- FALSE
       }
+      cli::cli_abort(
+        c(
+          "Failed to find matching request in active cassette.",
+          i = if (!the$config$log)
+            "Use {.fn local_vcr_configure_log} to get more details.",
+          i = "Learn more in {.vignette vcr::debugging}."
+        ),
+        class = "vcr_unhandled"
+      )
     }
   ),
 
@@ -69,7 +77,7 @@ RequestHandler <- R6::R6Class(
         return(NULL)
       }
       interactions <- current_cassette()$http_interactions
-      interactions$response_for(request)
+      interactions$replay_request(request)
     },
 
     #####################################################################
