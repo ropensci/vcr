@@ -50,13 +50,12 @@ RequestHandler <- R6::R6Class(
         }
       }
 
-      # Since it errored, there's no point in also giving a warning about the
-      # cassette being empty
+      # Since it's going to error, there's no point in also giving a warning
+      # about the cassette being empty
       if (cassette_active()) {
         cassette <- current_cassette()
         cassette$warn_on_empty <- FALSE
       }
-
       cli::cli_abort(
         c(
           "Failed to find matching request in active cassette.",
