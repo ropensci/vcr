@@ -112,7 +112,7 @@ test_that("httr w/ >1 request per cassette", {
   skip_if_not_installed("xml2")
   local_vcr_configure(dir = withr::local_tempdir())
 
-  out <- use_cassette("multiple_queries_httr_record_once", {
+  use_cassette("multiple_queries_httr_record_once", {
     x404 <- httr::GET(hb("/status/404"))
     x500 <- httr::GET(hb("/status/500"))
     x418 <- httr::GET(hb("/status/418"))
@@ -121,10 +121,6 @@ test_that("httr w/ >1 request per cassette", {
     expect_equal(httr::status_code(x500), 500)
     expect_equal(httr::status_code(x418), 418)
   })
-
-  # cassette
-  expect_s3_class(out, "Cassette")
-  expect_match(out$file(), "multiple_queries_httr_record_once")
 
   # response
   expect_s3_class(x404, "response")
@@ -135,11 +131,8 @@ test_that("httr w/ >1 request per cassette", {
   expect_equal(x418$status_code, 418)
 
   # response body
-  str <- yaml::yaml.load_file(out$file())$http_interactions
-  expect_type(str, "list")
-  expect_type(str[[3]], "list")
-  expect_match(str[[3]]$request$uri, "418")
-  expect_match(str[[3]]$response$body$string, "teapot")
+  expect_match(vcr_last_request()$uri, "418")
+  expect_match(vcr_last_response()$body$string, "teapot")
 })
 
 test_that("httr works with simple auth and hides auth details", {
