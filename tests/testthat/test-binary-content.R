@@ -1,32 +1,35 @@
-test_that("has_binary_content handles headers correctly", {
+test_that("has_text_content handles headers correctly", {
   # When content-type is not present
-  expect_false(has_binary_content(list()))
-  expect_false(has_binary_content(list(other = "value")))
+  expect_false(has_text_content(list()))
+  expect_false(has_text_content(list(other = "value")))
 
   # Case insensitive matching for content-type header
-  expect_true(has_binary_content(list(`content-type` = "image/jpeg")))
-  expect_true(has_binary_content(list(`Content-Type` = "image/jpeg")))
+  expect_false(has_text_content(list(`content-type` = "image/jpeg")))
+  expect_false(has_text_content(list(`Content-Type` = "image/jpeg")))
+
+  # Known text type
+  expect_true(has_text_content(list(`Content-Type` = "application/json")))
 })
 
 test_that("is_binary_type correctly identifies binary content types", {
   # Text types are not binary
-  expect_false(is_binary_type("text/plain"))
-  expect_false(is_binary_type("text/html"))
-  expect_false(is_binary_type("text/csv"))
+  expect_true(is_text_type("text/plain"))
+  expect_true(is_text_type("text/html"))
+  expect_true(is_text_type("text/csv"))
 
   # Special case application types that are not binary
-  expect_false(is_binary_type("application/json"))
-  expect_false(is_binary_type("application/xml"))
-  expect_false(is_binary_type("application/x-www-form-urlencoded"))
-  expect_false(is_binary_type("multipart/form-data"))
+  expect_true(is_text_type("application/json"))
+  expect_true(is_text_type("application/xml"))
+  expect_true(is_text_type("application/x-www-form-urlencoded"))
+  expect_true(is_text_type("multipart/form-data"))
 
   # Binary content types
-  expect_true(is_binary_type("image/jpeg"))
-  expect_true(is_binary_type("image/png"))
-  expect_true(is_binary_type("application/pdf"))
-  expect_true(is_binary_type("application/octet-stream"))
-  expect_true(is_binary_type("audio/mpeg"))
-  expect_true(is_binary_type("video/mp4"))
+  expect_false(is_text_type("image/jpeg"))
+  expect_false(is_text_type("image/png"))
+  expect_false(is_text_type("application/pdf"))
+  expect_false(is_text_type("application/octet-stream"))
+  expect_false(is_text_type("audio/mpeg"))
+  expect_false(is_text_type("video/mp4"))
 })
 
 test_that("parse_content_type correctly parses content type headers", {

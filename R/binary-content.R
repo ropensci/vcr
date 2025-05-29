@@ -1,16 +1,16 @@
-has_binary_content <- function(headers) {
+has_text_content <- function(headers) {
   idx <- match("content-type", tolower(names(headers)))
   if (is.na(idx)) {
     FALSE
   } else {
-    is_binary_type(headers[[idx]])
+    is_text_type(headers[[idx]])
   }
 }
 
-is_binary_type <- function(content_type) {
+is_text_type <- function(content_type) {
   parsed <- parse_content_type(content_type)
   if (parsed$type == "text") {
-    return(FALSE)
+    return(TRUE)
   }
 
   special_cases <- c(
@@ -21,11 +21,7 @@ is_binary_type <- function(content_type) {
     "multipart/form-data"
   )
   base_type <- paste0(parsed$type, "/", parsed$subtype)
-  if (base_type %in% special_cases) {
-    return(FALSE)
-  }
-
-  TRUE
+  base_type %in% special_cases
 }
 
 # Copied from httr2::parse_content_type
