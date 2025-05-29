@@ -111,9 +111,7 @@ vcr_body <- function(body, headers) {
     body <- NULL
     is_disk <- FALSE
   } else if (is.raw(body)) {
-    if (has_binary_content(headers)) {
-      body <- body
-    } else {
+    if (has_text_content(headers)) {
       body <- rawToChar(body)
     }
     is_disk <- FALSE

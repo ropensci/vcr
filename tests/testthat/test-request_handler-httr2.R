@@ -52,7 +52,36 @@ test_that("can capture & replay raw body", {
   )
 })
 
-test_that("can send an image raw body in request", {
+test_that("can send an image raw body in request - w/ appropriate header", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  request <- httr2::request(hb("/post"))
+  img <- system.file(package = 'httr2', 'help/figures/logo.png')
+  bin <- readBin(img, what = 'raw', n = file.size(img))
+  request <- httr2::req_headers(request, 'Content-Type' = 'image/png')
+  request <- httr2::req_body_raw(request, bin)
+
+  # Record
+  use_cassette(
+    "test",
+    resp_record <- httr2::req_perform(request),
+    preserve_exact_body_bytes = TRUE
+  )
+  expect_s3_class(resp_record, "httr2_response")
+
+  # Replay
+  use_cassette(
+    "test",
+    resp_replay <- httr2::req_perform(request),
+    preserve_exact_body_bytes = TRUE
+  )
+  expect_s3_class(resp_replay, "httr2_response")
+  expect_equal(
+    httr2::resp_body_raw(resp_replay),
+    httr2::resp_body_raw(resp_record)
+  )
+})
+
+test_that("can send an image raw body in request - w/o appropriate header", {
   local_vcr_configure(dir = withr::local_tempdir())
   request <- httr2::request(hb("/post"))
   img <- system.file(package = 'httr2', 'help/figures/logo.png')
