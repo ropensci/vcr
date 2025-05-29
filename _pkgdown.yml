@@ -18,6 +18,7 @@ reference:
       - skip_if_vcr_off
       - vcr_test_path
       - turn_off
+      - vcr_last_request
       
 articles:
   - title: All vignettes
