@@ -150,7 +150,7 @@ Cassette <- R6::R6Class(
     #' @return character
     file = function() self$serializer$path,
 
-    #' @description is the cassette in recording mode?
+    #' @description Is the cassette in recording mode?
     #' @return logical
     recording = function() {
       if (self$record == "none") {
@@ -160,6 +160,12 @@ Cassette <- R6::R6Class(
       } else {
         TRUE
       }
+    },
+
+    #' @description Is the cassette in replaying mode?
+    #' @return logical
+    replaying = function() {
+      self$http_interactions$n_replayable() > 0
     },
 
     #' @description Remove outdated interactions

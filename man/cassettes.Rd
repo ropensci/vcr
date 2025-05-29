@@ -3,12 +3,18 @@
 \name{cassettes}
 \alias{cassettes}
 \alias{current_cassette}
+\alias{current_cassette_recording}
+\alias{current_cassette_replaying}
 \alias{cassette_path}
 \title{List cassettes, get current cassette, etc.}
 \usage{
 cassettes()
 
 current_cassette()
+
+current_cassette_recording()
+
+current_cassette_replaying()
 
 cassette_path()
 }
@@ -21,6 +27,9 @@ List cassettes, get current cassette, etc.
 session.
 \item \code{current_cassette()}: returns \code{NULL} when no cassettes are in use;
 returns the current cassette (a \code{Cassette} object) when one is in use
+\item \code{currrent_cassette_recording()} and \code{current_cassette_replaying()}:
+tell you if the current cassette is recording and/or replaying. They
+both return \code{FALSE} if there is no cassette in use.
 \item \code{cassette_path()}: returns the current directory path where cassettes
 will be stored
 }

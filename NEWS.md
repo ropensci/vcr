@@ -21,6 +21,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* New `current_cassette_recording()` and `current_cassette_replaying()` tell you if the current cassette is recording or replaying (or neither or both).
 * New `vcr_last_request()` and `vcr_last_response()` to get last request and response respectively (#488).
 * The vignettes have been updated for all the new changes and generally polished.
 * New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
