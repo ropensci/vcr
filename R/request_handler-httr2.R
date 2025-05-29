@@ -81,7 +81,7 @@ httr2_body <- function(x) {
     x$body$type,
     raw = {
       # httr2::req_body_raw allows raw or string
-      if (has_text_content(x$headers) && is.raw(x$body$data)) {
+      if (is.raw(x$body$data) && has_text_content(x$headers)) {
         rawToChar(x$body$data)
       } else {
         x$body$data
