@@ -52,11 +52,12 @@ test_that("can capture & replay raw body", {
   )
 })
 
-test_that("can send an image raw body in request", {
+test_that("can send an image raw body in request - with appropriate header", {
   local_vcr_configure(dir = withr::local_tempdir())
   request <- httr2::request(hb("/post"))
   img <- system.file(package = 'httr2', 'help/figures/logo.png')
   bin <- readBin(img, what = 'raw', n = file.size(img))
+  request <- httr2::req_headers(request, 'Content-Type' = 'image/png')
   request <- httr2::req_body_raw(request, bin)
 
   # Record

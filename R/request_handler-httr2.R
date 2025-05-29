@@ -81,15 +81,10 @@ httr2_body <- function(x) {
     x$body$type,
     raw = {
       # httr2::req_body_raw allows raw or string
-      if (has_binary_content(x$headers)) {
-        # Check if there are any null bytes indicating non-text data
-        if (any(x$body$data == as.raw(0))) {
-          x$body$data
-        } else {
-          rawToChar(x$body$data)
-        }
-      } else {
+      if (has_binary_content(x$headers) || is_character(x$body$data)) {
         x$body$data
+      } else {
+        rawToChar(x$body$data)
       }
     },
     form = {
