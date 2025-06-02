@@ -15,10 +15,7 @@ RequestHandlerHttr2 <- R6::R6Class(
         httr2_body(request),
         request$headers
       )
-    }
-  ),
-
-  private = list(
+    },
     on_ignored_request = function() {
       httr2::local_mocked_responses(NULL)
       httr2::req_perform(self$request_original)

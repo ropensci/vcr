@@ -1,6 +1,7 @@
 #' Request handlers
 #'
 #' These are internal classes that should not be used by users.
+#' They are exported because they are used from \pkg{webmockr}.
 #'
 #' @keywords internal
 #' @aliases RequestHandlerHttr2 RequestHandlerHttr RequestHandlerCrul
@@ -16,14 +17,13 @@ RequestHandler <- R6::R6Class(
     request = NULL,
 
     handle = function() {
-      vcr_log_sprintf(
-        "Handling request: %s",
-        private$request_summary(self$request)
-      )
+      matchers <- current_cassette()$match_requests_on
+      summary <- request_summary(self$request, matchers)
+      vcr_log_sprintf("Handling request: %s", summary)
 
       if (should_be_ignored(self$request)) {
         vcr_log_sprintf("  ignored")
-        return(private$on_ignored_request())
+        return(self$on_ignored_request())
       }
 
       if (current_cassette_replaying()) {
@@ -37,14 +37,14 @@ RequestHandler <- R6::R6Class(
         if (!is.na(idx)) {
           vcr_response <- interactions$replay_request(idx)
           vcr_log_sprintf("  Replaying response %i", idx)
-          return(private$on_stubbed_by_vcr_request(vcr_response))
+          return(self$on_stubbed_by_vcr_request(vcr_response))
         } else {
           vcr_log_sprintf("  No matching requests")
         }
       }
 
       if (current_cassette_recording()) {
-        return(private$on_recordable_request())
+        return(self$on_recordable_request())
       }
 
       # Since it's going to error, there's no point in also giving a warning
@@ -62,43 +62,18 @@ RequestHandler <- R6::R6Class(
         ),
         class = "vcr_unhandled"
       )
-    }
-  ),
-
-  private = list(
-    request_summary = function(request) {
-      request_matchers <- current_cassette()$match_requests_on
-      request_summary(request, request_matchers)
     },
 
-    # request type helpers
-    get_stubbed_response = function(request) {
-      if (!cassette_active()) {
-        return(NULL)
-      }
-      interactions <- current_cassette()$http_interactions
-      interactions$replay_request(request)
-    },
-
-    #####################################################################
-    ### various on* methods, some global for any adapter,
-    ###   and some may be specific to an adapter
-    ###   - all fxns take `request` param for consistentcy, even if they dont use it
-    ##### so we can "monkey patch" these in each HTTP client adapter by
-    #####   reassigning some of these functions with ones specific to the HTTP client
-
+    # The following three methods are overriden by subclasses, providing
+    # the specifics of request handling for different packages
     on_ignored_request = function() {
-      # perform and return REAL http response
-      # reassign per adapter
+      # Perform real request and return response
     },
     on_stubbed_by_vcr_request = function() {
-      # return stubbed vcr response - no real response to do
-      # reassign per adapter
+      # Return stubbed response
     },
     on_recordable_request = function() {
-      # do real request - then stub response - then return stubbed vcr response
-      # - this may need to be called from webmockr cruladapter?
-      # reassign per adapter
+      # Perform real request, save response as stub, return reponse
     }
   )
 )
