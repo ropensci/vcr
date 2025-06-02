@@ -25,18 +25,27 @@
     Output
       [Cassette: test] Inserting 'test.yml' (new cassette)
       [Cassette: test]   mode: recording
-      [Cassette: test] Handling request: GET {httpbin}/html
-      [Cassette: test]   Recording response: 200 with 1443 bytes of text/html data
+      stdout:]
+        
+      stderr:]
+        
+    Condition
+      Error:
+      ! Could not start R session, timed out
+    Output
       [Cassette: test] Ejecting
+    Condition
+      Warning:
+      x "test" cassette ejected without recording any interactions.
+      i Did you use {curl}, `download.file()`, or other unsupported tool?
+      i If you are using crul/httr/httr2, are you sure you made an HTTP request?
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output
-      [Cassette: test] Inserting 'test.yml' (with 1 interactions)
-      [Cassette: test]   mode: replaying
+      [Cassette: test] Inserting 'test.yml' (new cassette)
+      [Cassette: test]   mode: recording
       [Cassette: test] Handling request: GET {httpbin}/html
-      [Cassette: test]   Looking for existing requests using method/uri
-      [Cassette: test]     Request 1: MATCH
-      [Cassette: test]   Replaying response 1
+      [Cassette: test]   Recording response: 200 with 1443 bytes of text/html data
       [Cassette: test] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/404")))

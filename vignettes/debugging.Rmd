@@ -19,13 +19,11 @@ knitr::opts_chunk$set(
 vcr::vcr_configure(dir = tempdir())
 ```
 
-This vignette helps you debug the vcr error that you're most likely to encounter: "An HTTP request has been made that vcr does not know how to handle".
-If you're lucky the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂.
+This vignette helps you debug the vcr error that you're most likely to encounter: "Failed to find matching request in active cassette.".
+If you're lucky, the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂.
 Otherwise, you'll need to do some debugging.
-
-This vignette will teach you how to identify and resolve the most common issues you'll encounter with vcr.
 First we'll talk about logging, and how you can use it to better understand vcr's request matching process.
-Then we'll work through the most common problems and identify their solutions.
+Then we'll work through a few of the most common problems and discuss specific solutions.
 
 In this vignette, we'll use httr2 for generating the requests.
 The same principles apply if you're working with crul or httr, just the code for making requests will look different.
@@ -52,7 +50,7 @@ local_vcr_configure_log <- function(..., frame = parent.frame()) {
 
 The best tool to understand why your request isn't matching is logging.
 You can turn logging on for a single test with `local_vcr_configure_log()`.
-Now lets look at what happens the first time you make a request:
+Lets us logging to look at what happens the first time you make a request:
 
 ```{r}
 local({
@@ -64,7 +62,7 @@ local({
 })
 ```
 
-We can see a new cassettte gets inserted with recording turned on.
+First a new cassette is inserted with recording turned on.
 Then it handles a request, recording it to disk.
 Finally the cassette is ejected.
 
@@ -82,8 +80,8 @@ local({
 })
 ```
 
-This time it loads one interaction from disk and it's no longer recording new requests.
-This time it matches the request to one that was saved earlier and replays the response.
+Now when vcr inserts the cassette, it loads one interaction from disk and is in replaying mode, rather than recording.
+Then it matches the request to one that was saved earlier and replays the response.
 
 ### A match failure
 
@@ -101,7 +99,7 @@ local({
 })
 ```
 
-This time you can see vcr didn't find any matches because there was only one request, and that request (`recorded`) had a different method to the request we were trying to match.
+This time you can see vcr didn't find any matches because there was only one request, and that request (`matching`) had a different method to the request we were trying to match.
 
 What happens if change the URL?
 
@@ -111,13 +109,13 @@ local({
   local_vcr_configure_log()
   local_cassette("debugging-1")
 
-  req <- request(httpbin$url("/get?x=1"))
+  req <- request(httpbin$url("/set"))
   resp <- req_perform(req)
 })
 ```
 
 Again, you can see why the request didn't match.
-vcr uses {waldo} to generate diffs, that hopefully make it easy to see what's different.
+vcr compares the parsed urls using {waldo}, hopefully making it easy to see exactly what's different.
 
 ### Multiple requests
 
@@ -149,53 +147,15 @@ local({
 You'll notice that this is substantially more complicated to understand, and you can imagine it only gets harder the more requests you have.
 That's a good reason to keep your tests small and simple, and limited to only a couple of requests.
 
-## Solutions
+## Common problems and theirs solutions
 
 Now that you understand how to use logging to see exactly what vcr is doing, we can talk about some solutions to common problems.
 
 ### Re-used cassette name
 
 You need to make sure that every test has it's own unique cassette name, otherwise you won't find the responses that you're expecting.
-This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the test you're currently in, a different test will break.
-
-### Replaying requests
-
-What happens if you make the same request multiple times in a single cassette?
-
-```{r}
-local({
-  local_cassette("debugging-3")
-
-  resp1 <- req_perform(request(httpbin$url("/get")))
-  resp2 <- req_perform(request(httpbin$url("/get")))
-})
-```
-
-On replay, the second request will fail because by default, vcr does not allow you to replay the same request multiple times:
-
-```{r}
-#| error: true
-local({
-  local_vcr_configure_log()
-  local_cassette("debugging-3")
-
-  resp1 <- req_perform(request(httpbin$url("/get")))
-  resp2 <- req_perform(request(httpbin$url("/get")))
-})
-```
-
-You can resolve that problem by setting `allow_playback_repeats = TRUE`;
-
-```{r}
-#| error: true
-local({
-  local_vcr_configure_log()
-  local_cassette("debugging-3", allow_playback_repeats = TRUE)
-
-  resp1 <- req_perform(request(httpbin$url("/get")))
-  resp2 <- req_perform(request(httpbin$url("/get")))
-})
-```
+This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the one test, a different test will break.
+(Technically, it is ok to share the same cassette name if you want to use the same request for different tests. That's one of the reasons that vcr can't automatically spot this problem for you.)
 
 ### Non-determinstic requests
 
@@ -204,6 +164,8 @@ For example, in some cases an API will require a "nonce", a random string used t
 
 ```{r}
 #| error: true
+
+# Imagine this function is in R/
 make_request <- function() {
   nonce <- paste0(sample(letters, 10, replace = TRUE), collapse = "")
 
@@ -212,6 +174,7 @@ make_request <- function() {
   req_perform(req)
 }
 
+# And this code is in tests/testthat/
 local({ 
   local_cassette("nondeterministic")
   
