@@ -13,9 +13,7 @@ RequestHandlerCrul <- R6::R6Class(
         curl_body(request),
         as.list(fake_resp$request_headers)
       )
-    }
-  ),
-  private = list(
+    },
     on_ignored_request = function() {
       tmp2 <- webmockr::webmockr_crul_fetch(self$request_original)
       response <- webmockr::build_crul_response(self$request_original, tmp2)

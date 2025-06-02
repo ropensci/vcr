@@ -12,10 +12,7 @@ RequestHandlerHttr <- R6::R6Class(
         curl_body(request),
         as.list(request$headers)
       )
-    }
-  ),
-
-  private = list(
+    },
     on_ignored_request = function() {
       webmockr::httr_mock(FALSE)
       withr::defer(webmockr::httr_mock(TRUE))
