@@ -1,0 +1,30 @@
+http_interactions:
+- request:
+    method: GET
+    uri: http://127.0.0.1:59601/get?nonce=zaiphfhran
+  response:
+    status: 200
+    headers:
+      Connection: close
+      Date: Mon, 02 Jun 2025 16:30:12 GMT
+      Content-Type: application/json
+      Content-Length: '299'
+      ETag: '"ee5799cb"'
+    body:
+      string: |-
+        {
+          "args": {
+            "nonce": "zaiphfhran"
+          },
+          "headers": {
+            "Host": "127.0.0.1:59601",
+            "User-Agent": "httr2/1.1.2 r-curl/6.2.2 libcurl/8.11.1",
+            "Accept": "*/*",
+            "Accept-Encoding": "deflate, gzip"
+          },
+          "origin": "127.0.0.1",
+          "path": "/get",
+          "url": "http://127.0.0.1:59601/get"
+        }
+  recorded_at: 2025-06-02 16:30:12
+recorded_with: vcr/1.7.0.91, webmockr/2.0.0

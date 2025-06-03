@@ -114,7 +114,15 @@ Cassette <- R6::R6Class(
       )
       self$remove_outdated_interactions()
 
-      vcr_log_sprintf("  recording: %s", self$recording())
+      if (self$recording() && self$replaying()) {
+        vcr_log_sprintf("  mode: recording and replaying")
+      } else if (self$recording()) {
+        vcr_log_sprintf("  mode: recording")
+      } else if (self$replaying()) {
+        vcr_log_sprintf("  mode: replaying")
+      } else {
+        vcr_log_sprintf("  mode: disabled")
+      }
     },
 
     #' @description ejects the cassette
