@@ -1,8 +1,8 @@
 ---
-title: "Debugging your tests that use vcr"
+title: "Debugging vcr failures"
 output: html_vignette
 vignette: >
-  %\VignetteIndexEntry{4. vcr tests debugging}
+  %\VignetteIndexEntry{Debugging vcr failures}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 editor:

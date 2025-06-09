@@ -1,8 +1,8 @@
 ---
-title: "Debugging vcr failures"
+title: "Getting started with vcr"
 output: html_vignette
 vignette: >
-  %\VignetteIndexEntry{Debugging vcr failures}
+  %\VignetteIndexEntry{Getting started with vcr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 editor:
