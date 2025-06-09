@@ -16,7 +16,7 @@
           {
             "request": {
               "method": "GET",
-              "uri": "http://example.com"
+              "uri": "http://example.com/"
             },
             "response": {
               "status": 200,
@@ -41,7 +41,7 @@
       http_interactions:
       - request:
           method: GET
-          uri: http://example.com
+          uri: http://example.com/
         response:
           status: 200
           headers:

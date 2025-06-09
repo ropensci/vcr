@@ -100,3 +100,7 @@ httr2_body <- function(x) {
     cli::cli_abort("Unsupported request body type {.str {x$body$type}}.")
   )
 }
+
+list2str <- function(w) {
+  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
+}
