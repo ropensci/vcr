@@ -24,6 +24,7 @@ encode_uri <- function(
     }
   }
 
+  # TODO: remove once curl 6.3.1 is on CRAN
   if (length(params) == 0) {
     uri <- curl::curl_modify_url(uri, query = "")
   } else {
