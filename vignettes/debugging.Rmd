@@ -22,7 +22,7 @@ vcr::vcr_configure(dir = tempdir())
 This vignette helps you debug the vcr error that you're most likely to encounter: "Failed to find matching request in active cassette.".
 If you're lucky, the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂.
 Otherwise, you'll need to do some debugging.
-First we'll talk about logging, and how you can use it to better understand vcr's request matching process.
+First we'll talk about logging, and how you can use it to better understand the process by which vcr matches the requests you maketo the request-response pairs saved in a cassette.
 Then we'll work through a few of the most common problems and discuss specific solutions.
 
 In this vignette, we'll use httr2 for generating the requests.
