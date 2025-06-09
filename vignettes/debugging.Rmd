@@ -50,7 +50,7 @@ local_vcr_configure_log <- function(..., frame = parent.frame()) {
 
 The best tool to understand why your request isn't matching is logging.
 You can turn logging on for a single test with `local_vcr_configure_log()`.
-Lets us logging to look at what happens the first time you make a request:
+Lets look at logging to see what happens the first time you make a request:
 
 ```{r}
 local({
@@ -62,9 +62,9 @@ local({
 })
 ```
 
-First a new cassette is inserted with recording turned on.
+1. First a new cassette is inserted with recording turned on.
 Then it handles a request, recording it to disk.
-Finally the cassette is ejected.
+3. Finally the cassette is ejected.
 
 ### Second and subsequent requests
 
@@ -119,7 +119,7 @@ vcr compares the parsed urls using {waldo}, hopefully making it easy to see exac
 
 ### Multiple requests
 
-Before we move on to specific scenarios, lets look at a case where we record multiple requests:
+Before we move on to specific scenarios, let's look at a case where we record multiple requests:
 
 ```{r}
 local({
@@ -153,11 +153,11 @@ Now that you understand how to use logging to see exactly what vcr is doing, we 
 
 ### Re-used cassette name
 
-You need to make sure that every test has it's own unique cassette name, otherwise you won't find the responses that you're expecting.
+You need to make sure that every test has its own unique cassette name, otherwise you won't find the responses that you're expecting.
 This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the one test, a different test will break.
 (Technically, it is ok to share the same cassette name if you want to use the same request for different tests. That's one of the reasons that vcr can't automatically spot this problem for you.)
 
-### Non-determinstic requests
+### Non-deterministic requests
 
 Sometimes it's not possible to make the same request again and again.
 For example, in some cases an API will require a "nonce", a random string used to ensure that every request is unique:
