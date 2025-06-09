@@ -62,9 +62,9 @@ local({
 })
 ```
 
-1. First a new cassette is inserted with recording turned on.
-Then it handles a request, recording it to disk.
-3. Finally the cassette is ejected.
+1. A new cassette is inserted, and is placed in recording mode.
+2. The request is handled, and because we're in recording mode, it's recorded to disk.
+3. The cassette is ejected.
 
 ### Second and subsequent requests
 
@@ -80,8 +80,9 @@ local({
 })
 ```
 
-Now when vcr inserts the cassette, it loads one interaction from disk and is in replaying mode, rather than recording.
-Then it matches the request to one that was saved earlier and replays the response.
+1. The previously created cassette is inserted, loading one interaction from disk. This time it's in replaying mode.
+2. The request is handled, but this time we're in replay mode, so vcr looks for it in the cassette. vcr finds it so it can replay the recorded response.
+3. The cassette is ejected.
 
 ### A match failure
 
