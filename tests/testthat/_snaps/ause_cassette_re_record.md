@@ -5,7 +5,7 @@
     Output
       [Cassette: test] Inserting 'test.yml' (with 1 interactions)
       [Cassette: test] Removing 1 outdated interactions and re-recording.
-      [Cassette: test]   mode: recording and replaying
+      [Cassette: test]   Mode: recording and replaying
       [Cassette: test] Handling request: GET {httpbin}/get
       [Cassette: test]   Looking for existing requests using method/uri
       [Cassette: test]   No matching requests
