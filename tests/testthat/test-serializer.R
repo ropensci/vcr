@@ -266,7 +266,7 @@ test_that("qs2 is idempotent", {
   )
 
   interaction <- vcr_interaction(
-    vcr_request(method = "GET", uri = "http://example.com"),
+    vcr_request(method = "GET", uri = "http://example.com/"),
     vcr_response(status = 200L, list(name = "val"), body = "body")
   )
 

@@ -12,8 +12,8 @@ test_that("can remove query parameters", {
 
 test_that("replace entire query parameters", {
   expect_equal(
-    encode_uri("https://example.com/?x=abc&y=def", list(x = "<X>")),
-    "https://example.com/?x=<X>&y=def"
+    encode_uri("https://example.com/?x=abc&y=def", list(x = "XXX")),
+    "https://example.com/?x=XXX&y=def"
   )
 })
 
@@ -28,9 +28,9 @@ test_that("can do a combination of all of the above", {
   expect_equal(
     encode_uri(
       "https://example.com/?x=abc&y=def&z=ghi",
-      list("x", y = "<Y>", z = c("g", "G"))
+      list("x", y = "YYY", z = c("g", "G"))
     ),
-    "https://example.com/?y=<Y>&z=Ghi"
+    "https://example.com/?y=YYY&z=Ghi"
   )
 })
 
