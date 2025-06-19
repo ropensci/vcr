@@ -1,11 +1,13 @@
 ---
-title: "Debugging your tests that use vcr"
-date: "`r Sys.Date()`"
+title: "Debugging vcr failures"
 output: html_vignette
 vignette: >
-  %\VignetteIndexEntry{4. vcr tests debugging}
+  %\VignetteIndexEntry{Debugging vcr failures}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+editor:
+  markdown:
+    wrap: sentence
 ---
 
 ```{r, include = FALSE}
@@ -13,137 +15,198 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+# We want to re-record these cassettes every time
+vcr::vcr_configure(dir = tempdir())
 ```
+
+This vignette helps you debug the vcr error that you're most likely to encounter: "Failed to find matching request in active cassette.".
+If you're lucky, the request has genuinely changed, and you can make this problem go away by deleting the previous cassette so vcr can re-record it 🙂.
+Otherwise, you'll need to do some debugging.
+First we'll talk about logging, and how you can use it to better understand the process by which vcr matches the requests you make to the request-response pairs saved in a cassette.
+Then we'll work through a few of the most common problems and discuss specific solutions.
+
+In this vignette, we'll use httr2 for generating the requests.
+The same principles apply if you're working with crul or httr, just the code for making requests will look different.
+We'll also start up a local httpbin server using {webfakes}: this will let us make some practice requests to a local server.
 
 ```{r setup}
 library(vcr)
+library(httr2)
+httpbin <- webfakes::local_app_process(webfakes::httpbin_app())
 ```
 
-Sometimes your tests using a vcr cassette will fail and you will want to debug them.
+```{r}
+#| include: false
 
-## An HTTP request has been made that vcr does not know how to handle
+# Override default logging output so we don't need to explain the difference
+# between logging in vignettes and tests, and the reader can just copy and 
+# paste code
+local_vcr_configure_log <- function(..., frame = parent.frame()) {
+  vcr::local_vcr_configure_log(..., file = stdout(), frame = frame)
+}
 
-If you get an error starting with "An HTTP request has been made that vcr does not know how to handle:" when running your tests, 
-it means that the code in your test makes an HTTP request 
-for which there is no matching information in the cassette you are using. 
-You might have added a request, or changed one slightly.
-
-The easy fix is: delete the cassette and re-run the test to re-record the cassette. 
-Run the test a second time to ensure all is well. 
-If not, escalate to the next paragraph.
-
-Maybe you didn't actually want to change the request you are making.
-Make sure the requests do not contain something random, or something related to e.g. what time it is now, in the URI (`http://foo.com?time=13`).
-To make sure things are not varying, you might want to use mocking (of e.g. a function returning the current time), setting a random seed, using [`withr`](https://withr.r-lib.org/) (for e.g. setting an option to a certain value in your test).
-
-### Actual debugging
-
-Ideally you will want to run the code of the tests as if it were run inside tests, 
-in particular, using the same vcr cassette.
-
-### Prepare your debugging environment
-
-You will first need to load either the vcr helper `tests/testthat/helper-vcr.R` (e.g. via `devtools::load_all()`) 
-or source the vcr setup file `tests/testthat/setup-vcr.R` i.e. the file with these lines (and maybe others)
-
-```r
-library("vcr")
-invisible(vcr::vcr_configure(
-  dir = vcr::vcr_test_path("fixtures"),
-  filter_sensitive_data = list("<<github_api_token>>" = Sys.getenv('GITHUB_PAT'))
-))
-vcr::check_cassette_names()
-
+# Make a dummy test_that() that basically works the same way as local()
+# Using testthat::test_that() adds a bit too much noise to the examples.
+test_that <- function(desc, code) {
+  eval(substitute(code), new.env(parent = parent.frame()))
+}
 ```
 
-If instead of `vcr::vcr_test_path("fixtures")` you see `"../fixtures"`, 
-replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`,
-as `vcr::vcr_test_path()` is a function that is meant to help exactly what you will want: 
-have the path to `tests/fixtures/` work from tests and from the root (which is where you will be running the code to debug it).
+## Logging basics
 
-So that is one step (loading the vcr helper or sourcing the vcr setup file), 
-or maybe two (if you also had to replace `"../fixtures"` with `vcr::vcr_test_path("fixtures")`).
+The best tool to understand why your request isn't matching is logging.
+You can turn logging on for a single test with `local_vcr_configure_log()`.
+Let's turn on logging and see what happens the first time you make a request:
 
-### Debugging itself
+```{r}
+test_that("example test", {
+  local_vcr_configure_log()
+  local_cassette("debugging-1")
 
-Now look at the test whose code you are trying to debug e.g.
-
-```r
-foo <- function() crul::ok('https://httpbin.org/get')
-
-test_that("foo works", {
-  vcr::use_cassette("testing", {
-    x <- foo()
-  })
-  expect_true(x)
+  req <- request(httpbin$url("/get"))
+  resp <- req_perform(req)
 })
 ```
 
-If you want to run the code as if you were in the test,
+1. A new cassette is inserted, and is placed in recording mode.
+2. The request is handled, and because we're in recording mode, it's recorded to disk.
+3. The cassette is ejected.
 
-```r
-foo <- function() crul::ok('https://httpbin.org/get')
-vcr::insert_cassette("testing") # it will be created if needed
-x <- foo()
-x
-# further interactive debugging and fixes
-vcr::eject_cassette("testing")
-```
+### Second and subsequent requests
 
-### Logging
+If we run that code another time, the flow is slightly different:
 
-You can use vcr's built in logging to help in your debugging process. To configure logging,
-use the `vcr_configure()` function, and set `log=TRUE` and set options for logging on the
-`log_opts` parameter as a named list. See `?vcr_configure` for details.
+```{r}
+test_that("example test", {
+  local_vcr_configure_log()
+  local_cassette("debugging-1")
 
-Here, we are setting our log file to be a temporary file that will be cleaned up at the end
-of the R session. Here, the file extension is `.log`, but the file extension does not matter.
-
-```r
-vcr::vcr_configure(
-  dir = vcr::vcr_test_path("fixtures"),
-  log = TRUE,
-  log_opts = list(file = file.path(tempdir(), "vcr.log"))
-)
-```
-
-With `log=TRUE` you can continue with debugging. Open the log file you set in a text
-editor or other location; or examine in your shell/terminal.
-
-As an example, after running the block above
-
-```r
-foo <- function() crul::ok('https://httpbin.org/get')
-
-test_that("foo works", {
-  vcr::use_cassette("testing", {
-    x <- foo()
-  })
-  expect_true(x)
+  req <- request(httpbin$url("/get"))
+  resp <- req_perform(req)
 })
 ```
 
-If we open the log file we'll see the logs for each step vcr takes in handling an HTTP request.
-The logs have information on what cassette was used, what exact time it was recorded, what 
-matchers were in use, the cassette options, and how a request is handled.
+1. The previously created cassette is inserted, loading one interaction from disk. This time it's in replaying mode.
+2. The request is handled, but this time we're in replay mode, so vcr looks for it in the cassette. vcr finds it so it can replay the recorded response.
+3. The cassette is ejected.
 
+### A match failure
+
+We can now deliberately make a different request to see what happens.
+We'll leave everything the same but change the method to `POST`:
+
+```{r}
+#| error: true
+test_that("example test", {
+  local_vcr_configure_log()
+  local_cassette("debugging-1")
+
+  req <- request(httpbin$url("/get")) |> req_method("POST")
+  resp <- req_perform(req)
+})
 ```
-[Cassette: 'testing'] - 2020-11-24 16:05:17 - Init. HTTPInteractionList w/ request matchers [method, uri] & 0 interaction(s): {  }
-[Cassette: 'testing'] - 2020-11-24 16:05:17 - Initialized with options: {name: testing, record: once, serialize_with: yaml, persist_with: FileSystem, match_requests_on: c("method", "uri"), update_content_length_header: FALSE, allow_playback_repeats: FALSE, preserve_exact_body_bytes: FALSE}
-[Cassette: 'testing'] - 2020-11-24 16:05:17 - Handling request: head https://httpbin.org/get (disabled: FALSE)
-[Cassette: 'testing'] - 2020-11-24 16:05:17 - Identified request type: (recordable) for head https://httpbin.org/get
-[Cassette: 'testing'] - 2020-11-24 16:05:17 -    Recorded HTTP interaction: head https://httpbin.org/get => 200 
+
+This time you can see vcr didn't find any matches because there was only one request, and that request (`matching`) had a different method to the request we were trying to match.
+
+What happens if we change the URL?
+
+```{r}
+#| error: true
+test_that("example test", {
+  local_vcr_configure_log()
+  local_cassette("debugging-1")
+
+  req <- request(httpbin$url("/set"))
+  resp <- req_perform(req)
+})
 ```
 
-Logging isn't meant to be turned on all the time - rather only for debugging/informational purposes.
+Again, you can see why the request didn't match.
+vcr compares the parsed urls using {waldo}, hopefully making it easy to see exactly what's different.
 
-### Return to normal development
+### Multiple requests
 
-Make sure you ejected the cassette you were using!
+Before we move on to specific scenarios, let's look at a case where we record multiple requests:
 
-Unless your vcr helper/setup file tweaked more things than you would like, 
-you do not even need to re-start R, but you could, just to be on the safe side.
+```{r}
+test_that("example test", {
+  local_vcr_configure_log()
+  local_cassette("debugging-2")
 
-### Re-used cassestte name
+  resp1 <- req_perform(request(httpbin$url("/get?x=1")))
+  resp2 <- req_perform(request(httpbin$url("/get?x=2")))
+  resp3 <- req_perform(request(httpbin$url("/get?x=3")))
+})
+```
 
-You need to make sure that every test has it's own unique cassette name, otherwise you won't find the responses that you're expecting. This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the test you're currently in, a different test will break.
+Now if we deliberately change the url, you can see that it looks at all three previously saved requests before giving up.
+
+```{r}
+#| error: true
+test_that("example test", {
+  local_vcr_configure_log()
+  local_cassette("debugging-2")
+
+  resp4 <- req_perform(request(httpbin$url("/get?x=4")))
+})
+```
+
+You'll notice that this is substantially more complicated to understand, and you can imagine it only gets harder the more requests you have.
+That's a good reason to keep your tests small and simple, and limited to only a couple of requests.
+
+## Common problems and their solutions
+
+Now that you understand how to use logging to see exactly what vcr is doing, we can talk about some solutions to common problems.
+
+### Re-used cassette name
+
+You need to make sure that every test has its own unique cassette name, otherwise you won't find the responses that you're expecting.
+This is generally a fairly easy problem to diagnose if you're aware of it: if you re-record the cassette to fix the one test, a different test will break.
+(Technically, it is ok to share the same cassette name if you want to use the same request for different tests. That's one of the reasons that vcr can't automatically spot this problem for you.)
+
+### Non-deterministic requests
+
+Sometimes it's not possible to make the same request again and again.
+For example, in some cases an API will require a "nonce", a random string used to ensure that every request is unique:
+
+```{r}
+#| error: true
+
+# Imagine this function is in R/
+make_request <- function() {
+  nonce <- paste0(sample(letters, 10, replace = TRUE), collapse = "")
+
+  req <- request(httpbin$url("/get")) 
+  req <- req_url_query(req, nonce = nonce)
+  req_perform(req)
+}
+
+# And this code is in tests/testthat/
+test_that("example test", { 
+  local_cassette("nondeterministic")
+  
+  resp <- make_request()
+})
+
+test_that("example test", { 
+  local_vcr_configure_log()
+  local_cassette("nondeterministic")
+  
+  resp <- make_request()
+})
+```
+
+You can solve this problem by trimming that component from the query string using the `filter_query_parameters` option.
+This will remove the specific query parameter names from the uri being matched.
+
+```{r}
+test_that("example test", { 
+  local_vcr_configure_log()
+  local_vcr_configure(filter_query_parameters = "nonce")
+  local_cassette("nondeterministic")
+  
+  resp <- make_request()
+})
+```
+
+In the less common case where you're matching on headers, you can use the `filter_request_headers` configuration to achieve the same effect.
