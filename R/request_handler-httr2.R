@@ -23,7 +23,7 @@ RequestHandlerHttr2 <- R6::R6Class(
 
     on_stubbed_by_vcr_request = function(vcr_response) {
       if (is.null(vcr_response$body)) {
-        body <- NULL
+        body <- raw()
       } else if (is.raw(vcr_response$body)) {
         body <- vcr_response$body
       } else {
@@ -71,6 +71,15 @@ RequestHandlerHttr2 <- R6::R6Class(
 )
 
 httr2_body <- function(x) {
+  if (modern_httr2()) {
+    if (identical(x$body$type, "file")) {
+      # Preserve existing handling of file bodies
+      return(x$body$data)
+    } else {
+      return(httr2::req_get_body(x))
+    }
+  }
+
   if (is.null(x$body)) {
     return("")
   }
@@ -100,6 +109,11 @@ httr2_body <- function(x) {
     cli::cli_abort("Unsupported request body type {.str {x$body$type}}.")
   )
 }
+
+modern_httr2 <- function() {
+  exists("req_get_body", asNamespace("httr2"))
+}
+
 
 list2str <- function(w) {
   paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")

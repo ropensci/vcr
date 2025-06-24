@@ -19,6 +19,7 @@ test_that("can generate all three types of response", {
     resp$cache <- NULL
     resp$url <- NULL
     resp$headers["Date"] <- NULL
+    resp$timing <- NULL
     resp
   }
   expect_equal(compare(resp_replay), compare(resp_record))
