@@ -72,8 +72,8 @@ RequestHandlerHttr2 <- R6::R6Class(
 
 httr2_body <- function(x) {
   if (modern_httr2()) {
-    type <- httr2::req_get_body_type(x)
-    data <- httr2::req_get_body(x)
+    type <- getNamespace("httr2")$req_get_body_type(x)
+    data <- getNamespace("httr2")$req_get_body(x)
   } else {
     type <- x$body$type %||% "empty"
     data <- x$body$data
