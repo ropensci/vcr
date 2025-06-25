@@ -14,39 +14,24 @@
 #'   `"localhost"`, or `"google.com"`. These hosts are ignored and real HTTP
 #'   requests are allowed to go through.
 #' @param ignore_localhost (logical) Default: `FALSE`
-#' @param ignore_request List of requests to ignore. NOT USED RIGHT NOW, sorry
-#' @param filter_sensitive_data named list of values to replace. Format is:
-#'     ```
-#'     list(thing_to_replace_it_with = thing_to_replace)
-#'     ```
-#'   We replace all instances of `thing_to_replace` with
-#'   `thing_to_replace_it_with`. Uses [gsub()] internally, with `fixed=TRUE`;
-#'   so does exact matches. Before recording (writing to a cassette) we do
-#'   the replacement and then when reading from the cassette we do the reverse
-#'   replacement to get back to the real data. Before record replacement happens
-#'   in internal function `write_interactions()`, while before playback
-#'   replacement happens in internal function `YAML$deserialize()`
-#' @param filter_sensitive_data_regex named list of values to replace. Follows
-#'   `filter_sensitive_data` format, except uses `fixed=FALSE` in the [gsub()]
-#'   function call; this means that the value in `thing_to_replace` is a regex
-#'   pattern.
-#' @param filter_request_headers (character/list) **request** headers to filter.
-#'   A character vector of request headers to remove - the headers will not be
-#'   recorded to disk. Alternatively, a named list similar to
-#' @param filter_sensitive_data instructing vcr with what value to replace the
-#'   real value of the request header. Note that for the `httr2` package only
-#'   we redact request headers automatically that are marked (via attributes)
-#'   as redacted.
-#' @param filter_response_headers (character/list) **response** headers to filter.
-#'   A character vector of response headers to remove - the headers will not be
-#'   recorded to disk. Alternatively, a named list similar to
-#'   `filter_sensitive_data` instructing vcr with what value to replace the
-#'   real value of the response header.
-#' @param filter_query_parameters (named list) query parameters to filter.
-#'   A character vector of query parameters to remove - the query parameters
-#'   will not be recorded to disk. Alternatively, a named list similar to
-#' @param filter_sensitive_data instructing vcr with what value to replace the
-#'   real value of the query parameter.
+#' @param filter_sensitive_data,filter_sensitive_data_regex
+#'   Transform header and/body in the request and response.
+#'   Named list of substitutions to apply to the headers and body of the
+#'   request and response. Format is `list(new = "old")` where `old` is
+#'   a string that must be matched exactly for `filter_sensitive_data` and
+#'   a regular expression for `filter_sensitive_data_regex`.
+#' @param filter_request_headers,filter_response_headers
+#'   Filter request or response headers. Should be a list:
+#'   unnamed components#' are removed, and named components are transformed.
+#'   For example, `list("api_key")` would remove the `api_key` header and
+#'   `list(api_key = "***")` would replace the `api_key` header with `***`.
+#'
+#'   httr2's redacted headers are automatically removed.
+#' @param filter_query_parameters
+#'   Filter query parameters in the request. A list where unnamed components
+#'   are removed, and named components are transformed. For example,
+#'   `list("api_key")` would remove the `api_key` header and
+#'   `list(api_key = "***")` would replace the `api_key` header with `***`.
 #' @inheritParams use_cassette
 #' @param json_pretty (logical) want JSON to be newline separated to be easier
 #'   to read? Or remove newlines to save disk space? default: `FALSE`.`
@@ -78,7 +63,6 @@ vcr_configure <- function(
   json_pretty,
   ignore_hosts,
   ignore_localhost,
-  ignore_request,
   preserve_exact_body_bytes,
   turned_off,
   re_record_interval,
@@ -122,9 +106,6 @@ vcr_configure <- function(
   if (!missing(ignore_localhost)) {
     check_bool(ignore_localhost, allow_null = TRUE)
     new_params["ignore_localhost"] <- list(ignore_localhost)
-  }
-  if (!missing(ignore_request)) {
-    new_params["ignore_request"] <- list(ignore_request)
   }
   if (!missing(preserve_exact_body_bytes)) {
     check_bool(preserve_exact_body_bytes, allow_null = TRUE)
@@ -190,8 +171,9 @@ vcr_configure <- function(
     }
     check_list(filter_query_parameters, allow_null = TRUE)
     lapply(filter_query_parameters, function(w) {
-      if (!length(w) %in% 0:2)
+      if (!length(w) %in% 0:2) {
         stop("filter query values must be of length 1 or 2", call. = FALSE)
+      }
     })
     new_params["filter_query_parameters"] <- list(filter_query_parameters)
   }
@@ -243,7 +225,6 @@ vcr_config_defaults <- function() {
     json_pretty = FALSE,
     ignore_hosts = NULL,
     ignore_localhost = FALSE,
-    ignore_request = NULL,
     preserve_exact_body_bytes = FALSE,
     turned_off = FALSE,
     re_record_interval = NULL,

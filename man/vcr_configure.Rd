@@ -16,7 +16,6 @@ vcr_configure(
   json_pretty,
   ignore_hosts,
   ignore_localhost,
-  ignore_request,
   preserve_exact_body_bytes,
   turned_off,
   re_record_interval,
@@ -88,8 +87,6 @@ requests are allowed to go through.}
 
 \item{ignore_localhost}{(logical) Default: \code{FALSE}}
 
-\item{ignore_request}{List of requests to ignore. NOT USED RIGHT NOW, sorry}
-
 \item{preserve_exact_body_bytes}{(logical) Force a binary (base64)
 representation of the request and response bodies? By default, vcr
 will look at the \code{Content-Type} header to determine if this is necessary,
@@ -104,27 +101,23 @@ cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{log, log_opts}{See \code{\link[=vcr_configure_log]{vcr_configure_log()}}.}
 
-\item{filter_sensitive_data}{instructing vcr with what value to replace the
-real value of the query parameter.}
+\item{filter_sensitive_data, filter_sensitive_data_regex}{Transform header and/body in the request and response.
+Named list of substitutions to apply to the headers and body of the
+request and response. Format is \code{list(new = "old")} where \code{old} is
+a string that must be matched exactly for \code{filter_sensitive_data} and
+a regular expression for \code{filter_sensitive_data_regex}.}
 
-\item{filter_sensitive_data_regex}{named list of values to replace. Follows
-\code{filter_sensitive_data} format, except uses \code{fixed=FALSE} in the \code{\link[=gsub]{gsub()}}
-function call; this means that the value in \code{thing_to_replace} is a regex
-pattern.}
+\item{filter_request_headers, filter_response_headers}{Filter request or response headers. Should be a list:
+unnamed components#' are removed, and named components are transformed.
+For example, \code{list("api_key")} would remove the \code{api_key} header and
+\code{list(api_key = "***")} would replace the \code{api_key} header with \verb{***}.
 
-\item{filter_request_headers}{(character/list) \strong{request} headers to filter.
-A character vector of request headers to remove - the headers will not be
-recorded to disk. Alternatively, a named list similar to}
+httr2's redacted headers are automatically removed.}
 
-\item{filter_response_headers}{(character/list) \strong{response} headers to filter.
-A character vector of response headers to remove - the headers will not be
-recorded to disk. Alternatively, a named list similar to
-\code{filter_sensitive_data} instructing vcr with what value to replace the
-real value of the response header.}
-
-\item{filter_query_parameters}{(named list) query parameters to filter.
-A character vector of query parameters to remove - the query parameters
-will not be recorded to disk. Alternatively, a named list similar to}
+\item{filter_query_parameters}{Filter query parameters in the request. A list where unnamed components
+are removed, and named components are transformed. For example,
+\code{list("api_key")} would remove the \code{api_key} header and
+\code{list(api_key = "***")} would replace the \code{api_key} header with \verb{***}.}
 
 \item{write_disk_path}{(character) path to write files to
 for any requests that write responses to disk.  By default this will be
