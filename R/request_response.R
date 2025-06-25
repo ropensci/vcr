@@ -1,6 +1,6 @@
-request_summary <- function(request, request_matchers = "") {
+request_summary <- function(request, request_matchers = NULL) {
   check_vcr_request(request)
-  check_character(request_matchers)
+  check_request_matchers(request_matchers)
 
   atts <- c(request$method, request$uri)
   if ("body" %in% request_matchers) {
