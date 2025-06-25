@@ -13,7 +13,7 @@ RequestHandlerHttr2 <- R6::R6Class(
         request$method,
         request$url,
         httr2_body(request),
-        request$headers
+        if (modern_httr2()) httr2::req_get_headers(request) else request$headers
       )
     },
     on_ignored_request = function() {
@@ -72,41 +72,39 @@ RequestHandlerHttr2 <- R6::R6Class(
 
 httr2_body <- function(x) {
   if (modern_httr2()) {
-    if (identical(x$body$type, "file")) {
-      # Preserve existing handling of file bodies
-      return(x$body$data)
-    } else {
-      return(httr2::req_get_body(x))
-    }
-  }
-
-  if (is.null(x$body)) {
-    return("")
+    type <- httr2::req_get_body_type(x)
+    data <- httr2::req_get_body(x)
+  } else {
+    type <- x$body$type %||% "empty"
+    data <- x$body$data
   }
   switch(
-    x$body$type,
+    type,
+    # old & new
+    empty = NULL,
+    # old & new, but old can be string or raw
     raw = {
-      # httr2::req_body_raw allows raw or string
-      if (is.raw(x$body$data) && has_text_content(x$headers)) {
-        rawToChar(x$body$data)
+      if (is.raw(data) && has_text_content(x$headers)) {
+        rawToChar(data)
       } else {
-        x$body$data
+        data
       }
     },
-    form = {
-      data <- x$body$data # need to put back unobfuscate?
-      list2str(data)
-    },
-    json = unclass(rlang::exec(
-      jsonlite::toJSON,
-      x$body$data,
-      !!!x$body$params
-    )),
+    # new
+    string = data,
+    # old and new
+    form = list2str(data),
+    # old and new
+    json = unclass(rlang::exec(jsonlite::toJSON, data, !!!x$body$params)),
+    # old
     # FIXME: for now take the file path - would be good to get what would
     # be sent in a real request
-    "raw-file" = unclass(x$body$data),
-    multipart = x$body$data,
-    cli::cli_abort("Unsupported request body type {.str {x$body$type}}.")
+    "raw-file" = unclass(data),
+    # new
+    file = unclass(data),
+    # old and new
+    multipart = data,
+    cli::cli_abort("Unsupported request body type {.str {type}}.")
   )
 }
 
@@ -114,7 +112,7 @@ modern_httr2 <- function() {
   exists("req_get_body", asNamespace("httr2"))
 }
 
-
 list2str <- function(w) {
+  # TODO: replace with url_query_build() once we depend on modern httr2
   paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
 }

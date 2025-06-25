@@ -115,13 +115,13 @@ test_that("dedup_keys", {
 test_that("Authorization is always redacted", {
   expect_equal(
     encode_headers(list(Authorization = "mysecret")),
-    list(Authorization = "<redacted>")
+    set_names(list())
   )
 
   # And it's case insensitive
   expect_equal(
     encode_headers(list(AUTHORIZATION = "mysecret")),
-    list(AUTHORIZATION = "<redacted>")
+    set_names(list())
   )
 })
 

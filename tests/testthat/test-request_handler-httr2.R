@@ -154,7 +154,7 @@ test_that("httr2 redacts auth header", {
   request <- httr2::request(hb("/basic-auth/foo/bar"))
   request <- httr2::req_auth_basic(request, "foo", "bar")
   use_cassette("test", response <- httr2::req_perform(request))
-  expect_equal(vcr_last_request()$headers, list(Authorization = "<redacted>"))
+  expect_equal(vcr_last_request()$headers, set_names(list()))
 })
 
 test_that("can capture body: string", {
@@ -267,8 +267,5 @@ test_that("redacted headers handled appropriately", {
       httr2::req_perform()
   })
 
-  expect_equal(
-    vcr_last_request()$headers,
-    list(NotASecret = "NotHidden", SecretHeader = "<redacted>")
-  )
+  expect_equal(vcr_last_request()$headers, list(NotASecret = "NotHidden"))
 })
