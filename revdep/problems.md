@@ -1,44 +1,3 @@
-# ipumsr
-
-<details>
-
-* Version: 0.8.2
-* GitHub: https://github.com/ipums/ipumsr
-* Source code: https://github.com/cran/ipumsr
-* Date/Publication: 2025-02-24 21:40:02 UTC
-* Number of recursive dependencies: 135
-
-Run `revdepcheck::cloud_details(, "ipumsr")` for more info
-
-</details>
-
-## Newly broken
-
-*   checking re-building of vignette outputs ... ERROR
-    ```
-    Error(s) in re-building vignettes:
-    --- re-building ‘ipums-api-micro.Rmd’ using rmarkdown
-    
-    Quitting from ipums-api-micro.Rmd:159-161 [unnamed-chunk-7]
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    <error/rlang_error>
-    Error in `eject_cassette()`:
-    ! unused argument ("micro-sample-ids")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    ...
-    --- finished re-building ‘ipums.Rmd’
-    
-    --- re-building ‘value-labels.Rmd’ using rmarkdown
-    --- finished re-building ‘value-labels.Rmd’
-    
-    SUMMARY: processing the following files failed:
-      ‘ipums-api-micro.Rmd’ ‘ipums-api-nhgis.Rmd’ ‘ipums-api.Rmd’
-    
-    Error: Vignette re-building failed.
-    Execution halted
-    ```
-
 # qualtRics
 
 <details>
@@ -47,7 +6,7 @@ Run `revdepcheck::cloud_details(, "ipumsr")` for more info
 * GitHub: https://github.com/ropensci/qualtRics
 * Source code: https://github.com/cran/qualtRics
 * Date/Publication: 2024-08-16 16:20:02 UTC
-* Number of recursive dependencies: 88
+* Number of recursive dependencies: 87
 
 Run `revdepcheck::cloud_details(, "qualtRics")` for more info
 
@@ -80,47 +39,6 @@ Run `revdepcheck::cloud_details(, "qualtRics")` for more info
       Execution halted
     ```
 
-# rATTAINS
-
-<details>
-
-* Version: 1.0.0
-* GitHub: https://github.com/mps9506/rATTAINS
-* Source code: https://github.com/cran/rATTAINS
-* Date/Publication: 2023-04-25 14:00:02 UTC
-* Number of recursive dependencies: 76
-
-Run `revdepcheck::cloud_details(, "rATTAINS")` for more info
-
-</details>
-
-## Newly broken
-
-*   checking re-building of vignette outputs ... ERROR
-    ```
-    Error(s) in re-building vignettes:
-      ...
-    --- re-building ‘Introduction.Rmd’ using rmarkdown
-    
-    Quitting from Introduction.Rmd:48-50 [unnamed-chunk-2]
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    <error/rlang_error>
-    Error in `vcr::eject_cassette()`:
-    ! unused argument ("state_summary")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ...
-    
-    Error: processing vignette 'Introduction.Rmd' failed with diagnostics:
-    unused argument ("state_summary")
-    --- failed re-building ‘Introduction.Rmd’
-    
-    SUMMARY: processing the following file failed:
-      ‘Introduction.Rmd’
-    
-    Error: Vignette re-building failed.
-    Execution halted
-    ```
-
 # Rtumblr
 
 <details>
@@ -129,7 +47,7 @@ Run `revdepcheck::cloud_details(, "rATTAINS")` for more info
 * GitHub: https://github.com/schochastics/Rtumblr
 * Source code: https://github.com/cran/Rtumblr
 * Date/Publication: 2023-04-05 10:23:18 UTC
-* Number of recursive dependencies: 52
+* Number of recursive dependencies: 51
 
 Run `revdepcheck::cloud_details(, "Rtumblr")` for more info
 
