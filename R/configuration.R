@@ -15,14 +15,15 @@
 #'   requests are allowed to go through.
 #' @param ignore_localhost (logical) Default: `FALSE`
 #' @param filter_sensitive_data,filter_sensitive_data_regex
-#'   Transform header and/body in the request and response.
+#'   Transform header and/or body in the request and response.
 #'   Named list of substitutions to apply to the headers and body of the
-#'   request and response. Format is `list(new = "old")` where `old` is
-#'   a string that must be matched exactly for `filter_sensitive_data` and
-#'   a regular expression for `filter_sensitive_data_regex`.
+#'   request and response. Format is `list(replacement = "original")` where
+#'   `replacement` is a string that is matched exactly for
+#'   `filter_sensitive_data` and a regular expression for
+#'   `filter_sensitive_data_regex`.
 #' @param filter_request_headers,filter_response_headers
 #'   Filter request or response headers. Should be a list:
-#'   unnamed components#' are removed, and named components are transformed.
+#'   unnamed components are removed, and named components are transformed.
 #'   For example, `list("api_key")` would remove the `api_key` header and
 #'   `list(api_key = "***")` would replace the `api_key` header with `***`.
 #'
@@ -30,15 +31,15 @@
 #' @param filter_query_parameters
 #'   Filter query parameters in the request. A list where unnamed components
 #'   are removed, and named components are transformed. For example,
-#'   `list("api_key")` would remove the `api_key` header and
-#'   `list(api_key = "***")` would replace the `api_key` header with `***`.
+#'   `list("api_key")` would remove the `api_key` parameter and
+#'   `list(api_key = "***")` would replace the `api_key` parameter with `***`.
 #' @inheritParams use_cassette
 #' @param json_pretty (logical) want JSON to be newline separated to be easier
-#'   to read? Or remove newlines to save disk space? default: `FALSE`.`
+#'   to read? Or remove newlines to save disk space? default: `FALSE`.
 #' @param warn_on_empty_cassette (logical) Should a warning be thrown when an
 #'   empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 #'   way. This option only determines whether a warning is thrown or not.
-#'   Default: `FALSE`
+#'   Default: `TRUE`
 #' @examples
 #' vcr_configure(dir = tempdir())
 #' vcr_configure(dir = tempdir(), record = "all")

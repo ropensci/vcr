@@ -79,7 +79,7 @@ This keeps the recorded request as lightweight as possible.}
 \code{"yaml"} (the default), \code{"json"}, or \code{"qs2"}.}
 
 \item{json_pretty}{(logical) want JSON to be newline separated to be easier
-to read? Or remove newlines to save disk space? default: \code{FALSE}.`}
+to read? Or remove newlines to save disk space? default: \code{FALSE}.}
 
 \item{ignore_hosts}{(character) Vector of hosts to ignore. e.g.,
 \code{"localhost"}, or \code{"google.com"}. These hosts are ignored and real HTTP
@@ -101,14 +101,15 @@ cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 
 \item{log, log_opts}{See \code{\link[=vcr_configure_log]{vcr_configure_log()}}.}
 
-\item{filter_sensitive_data, filter_sensitive_data_regex}{Transform header and/body in the request and response.
+\item{filter_sensitive_data, filter_sensitive_data_regex}{Transform header and/or body in the request and response.
 Named list of substitutions to apply to the headers and body of the
-request and response. Format is \code{list(new = "old")} where \code{old} is
-a string that must be matched exactly for \code{filter_sensitive_data} and
-a regular expression for \code{filter_sensitive_data_regex}.}
+request and response. Format is \code{list(replacement = "original")} where
+\code{replacement} is a string that is matched exactly for
+\code{filter_sensitive_data} and a regular expression for
+\code{filter_sensitive_data_regex}.}
 
 \item{filter_request_headers, filter_response_headers}{Filter request or response headers. Should be a list:
-unnamed components#' are removed, and named components are transformed.
+unnamed components are removed, and named components are transformed.
 For example, \code{list("api_key")} would remove the \code{api_key} header and
 \code{list(api_key = "***")} would replace the \code{api_key} header with \verb{***}.
 
@@ -116,8 +117,8 @@ httr2's redacted headers are automatically removed.}
 
 \item{filter_query_parameters}{Filter query parameters in the request. A list where unnamed components
 are removed, and named components are transformed. For example,
-\code{list("api_key")} would remove the \code{api_key} header and
-\code{list(api_key = "***")} would replace the \code{api_key} header with \verb{***}.}
+\code{list("api_key")} would remove the \code{api_key} parameter and
+\code{list(api_key = "***")} would replace the \code{api_key} parameter with \verb{***}.}
 
 \item{write_disk_path}{(character) path to write files to
 for any requests that write responses to disk.  By default this will be
@@ -126,7 +127,7 @@ for any requests that write responses to disk.  By default this will be
 \item{warn_on_empty_cassette}{(logical) Should a warning be thrown when an
 empty cassette is detected? Empty cassettes are cleaned up (deleted) either
 way. This option only determines whether a warning is thrown or not.
-Default: \code{FALSE}}
+Default: \code{TRUE}}
 
 \item{...}{Configuration settings used to override defaults.}
 
