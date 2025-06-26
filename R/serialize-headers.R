@@ -45,12 +45,16 @@ headers_remove <- function(headers, filter) {
 }
 
 request_headers_redact <- function(headers) {
+  # TODO: remove once we depend on modern httr2
   to_redact <- union(attr(headers, "redact"), "authorization")
   matches <- match(tolower(to_redact), tolower(names(headers)))
   matches <- matches[!is.na(matches)]
 
-  headers[matches] <- "<redacted>"
-  headers
+  if (length(matches) == 0) {
+    headers
+  } else {
+    headers[-matches]
+  }
 }
 
 # dedup header keys so we have unique yaml keys
@@ -59,7 +63,9 @@ request_headers_redact <- function(headers) {
 # (x <- list(b = "foo", a = 5, a = 6))
 # dedup_keys(x)
 dedup_keys <- function(x) {
-  if (length(x) == 0 || is.null(x)) return(x)
+  if (length(x) == 0 || is.null(x)) {
+    return(x)
+  }
   nms <- names(x)
   # if repeats, collapse dups under single name
   if (length(unique(nms)) != length(nms)) {
