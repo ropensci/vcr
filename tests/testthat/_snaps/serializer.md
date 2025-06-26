@@ -30,7 +30,7 @@
             "recorded_at": "2024-01-01 12:00:00"
           }
         ],
-        "recorded_with": "<package_versions>"
+        "recorded_with": "VCR-<package_versions>"
       }
 
 # generates expected yaml
@@ -49,5 +49,5 @@
           body:
             string: body
         recorded_at: 2024-01-01 12:00:00
-      recorded_with: <package_versions>
+      recorded_with: VCR-<package_versions>
 

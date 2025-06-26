@@ -1,3 +1,12 @@
+test_that("local_cassette() integration test", {
+  # This tests that everything works together AND ensures that we have
+  # one cassette file on disk
+  local_cassette("integration")
+
+  req <- httr2::request(hb("/get"))
+  expect_no_error(httr2::req_perform(req))
+})
+
 test_that("use_cassette returns a cassette", {
   cassette <- use_cassette("testing1", NULL, warn_on_empty = FALSE)
   expect_s3_class(cassette, "Cassette")
