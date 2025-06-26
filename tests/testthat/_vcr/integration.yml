@@ -1,0 +1,28 @@
+http_interactions:
+- request:
+    method: GET
+    uri: http://127.0.0.1:51778/get
+  response:
+    status: 200
+    headers:
+      Connection: close
+      Date: Thu, 26 Jun 2025 13:27:20 GMT
+      Content-Type: application/json
+      Content-Length: '270'
+      ETag: '"b9f30070"'
+    body:
+      string: |-
+        {
+          "args": {},
+          "headers": {
+            "Host": "127.0.0.1:51778",
+            "User-Agent": "httr2/1.1.2 r-curl/6.4.0 libcurl/8.14.1",
+            "Accept": "*/*",
+            "Accept-Encoding": "deflate, gzip"
+          },
+          "origin": "127.0.0.1",
+          "path": "/get",
+          "url": "http://127.0.0.1:51778/get"
+        }
+  recorded_at: 2025-06-26 13:27:20
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.0.0.91
