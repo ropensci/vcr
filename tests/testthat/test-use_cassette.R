@@ -57,6 +57,27 @@ test_that("local_cassette sets up temporary cassette", {
   expect_equal(current_cassette(), NULL)
 })
 
+test_that("local_cassette sets env vars", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  expect_false(is_recording())
+  expect_false(is_replaying())
+
+  local({
+    local_cassette("test")
+    expect_true(is_recording())
+    expect_false(is_replaying())
+    httr::GET(hb("/get"))
+  })
+
+  local({
+    local_cassette("test")
+    expect_false(is_recording())
+    expect_true(is_replaying())
+    httr::GET(hb("/get"))
+  })
+})
+
 test_that("can control output directory directly", {
   dir1 <- withr::local_tempdir()
   dir2 <- withr::local_tempdir()
