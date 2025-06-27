@@ -299,7 +299,7 @@ check_cassette_name <- function(x, call = caller_env()) {
 
 #' Determine if vcr is recording/replaying
 #'
-#' [local_cassette()] and `with_cassette()` set the `VCR_IS_RECORDING`
+#' [local_cassette()] and `use_cassette()` set the `VCR_IS_RECORDING`
 #' and `VCR_IS_REPLAYING` environment variables to make it easy to determine
 #' vcr state without to take a dependency on vcr. These functions show you
 #' how to use them; we expect you to copy and paste these functions into your
