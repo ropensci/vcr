@@ -229,6 +229,11 @@ local_cassette <- function(
     warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {
+    withr::local_envvar(
+      VCR_IS_RECORDING = cassette$recording(),
+      VCR_IS_REPLAYING = cassette$replaying(),
+      .local_envir = frame
+    )
     withr::defer(eject_cassette(), envir = frame)
   }
 
@@ -289,4 +294,25 @@ check_cassette_name <- function(x, call = caller_env()) {
   }
 
   invisible()
+}
+
+
+#' Determine if vcr is recording/replaying
+#'
+#' [local_cassette()] and [with_cassette()] set the `VCR_IS_RECORDING
+#' and `VCR_IS_REPLAYING` environment variables to make it easy to determine
+#' vcr state without to take a dependency on vcr. These functions show you
+#' how to use them; we expect you to copy and paste these functions into your
+#' own package
+#'
+#' @export
+#' @return `TRUE` or `FALSE`.
+is_recording <- function() {
+  as.logical(Sys.getenv("VCR_IS_RECORDING", "FALSE"))
+}
+
+#' @export
+#' @rdname is_recording
+is_replaying <- function() {
+  as.logical(Sys.getenv("VCR_IS_REPLAYING", "FALSE"))
 }
