@@ -93,3 +93,19 @@ parse_http_date <- function(x) {
 cat_line <- function(...) {
   cat(paste0(..., "\n", collapse = ""))
 }
+
+set_env_var <- function(values) {
+  check_list(values)
+  old <- as.list(Sys.getenv(names(values), unset = NA, names = TRUE))
+
+  for (nm in names(values)) {
+    val <- values[[nm]]
+    if (is.na(val)) {
+      Sys.unsetenv(nm)
+    } else {
+      exec(Sys.setenv, !!!set_names(list(val), nm))
+    }
+  }
+
+  invisible(old)
+}

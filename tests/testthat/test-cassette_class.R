@@ -51,3 +51,16 @@ test_that("important interactions are logged", {
     transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
   )
 })
+
+test_that("inserting and ejecting updates env vars", {
+  local_vcr_configure(dir = withr::local_tempdir())
+
+  cl <- Cassette$new("test", warn_on_empty = FALSE)
+  expect_false(is_recording())
+
+  cl$insert()
+  expect_true(is_recording())
+
+  cl$eject()
+  expect_false(is_recording())
+})

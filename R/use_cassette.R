@@ -235,11 +235,6 @@ local_cassette <- function(
     warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {
-    withr::local_envvar(
-      VCR_IS_RECORDING = cassette$recording(),
-      VCR_IS_REPLAYING = cassette$replaying(),
-      .local_envir = frame
-    )
     withr::defer(eject_cassette(), envir = frame)
   }
 
