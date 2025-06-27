@@ -16,8 +16,12 @@
 #' vcr_test_path("fixtures")
 #' }
 vcr_test_path <- function(...) {
-  if (missing(...)) stop("Please provide a directory name.")
-  if (any(!nzchar(...))) stop("Please use non empty path elements.")
+  if (missing(...)) {
+    stop("Please provide a directory name.")
+  }
+  if (any(!nzchar(...))) {
+    stop("Please use non empty path elements.")
+  }
 
   # dirname () moves up one level from testthat dir
   root <- dirname(rprojroot::find_testthat_root_file())

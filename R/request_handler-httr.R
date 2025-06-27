@@ -73,8 +73,9 @@ httr_perform <- function(request) {
     body = curl_body(request),
     do.call(httr::config, request$options),
     httr::add_headers(request$headers),
-    if (!is.null(request$output$path))
+    if (!is.null(request$output$path)) {
       httr::write_disk(request$output$path, TRUE)
+    }
   )
 }
 

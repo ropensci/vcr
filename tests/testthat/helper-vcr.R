@@ -29,7 +29,9 @@ make_pkg <- function(frame = parent.frame()) {
 has_port <- function(port) crul::ok(paste0('http://localhost:', port))
 
 skip_if_localhost_8000_gone <- function() {
-  if (has_port(8000)) return()
+  if (has_port(8000)) {
+    return()
+  }
   testthat::skip("port 8000 not available")
 }
 

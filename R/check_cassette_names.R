@@ -26,7 +26,9 @@ check_cassette_names <- function(
 
   check_character(allowed_duplicates, allow_null = TRUE)
   files <- list.files(".", pattern = pattern, full.names = TRUE)
-  if (length(files) == 0) return(invisible())
+  if (length(files) == 0) {
+    return(invisible())
+  }
   cassette_names <- function(x) {
     tmp <- parse(x, keep.source = TRUE)
     df <- utils::getParseData(tmp)
