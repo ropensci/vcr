@@ -13,9 +13,9 @@ is_replaying()
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-\code{\link[=local_cassette]{local_cassette()}} and \code{with_cassette()} set the \code{VCR_IS_RECORDING}
+\code{\link[=local_cassette]{local_cassette()}} and \code{use_cassette()} set the \code{VCR_IS_RECORDING}
 and \code{VCR_IS_REPLAYING} environment variables to make it easy to determine
-vcr state without to take a dependency on vcr. These functions show you
+vcr state without taking a dependency on vcr. These functions show you
 how to use them; we expect you to copy and paste these functions into your
 own package
 }
