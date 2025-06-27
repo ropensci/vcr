@@ -301,7 +301,7 @@ check_cassette_name <- function(x, call = caller_env()) {
 #'
 #' [local_cassette()] and `use_cassette()` set the `VCR_IS_RECORDING`
 #' and `VCR_IS_REPLAYING` environment variables to make it easy to determine
-#' vcr state without to take a dependency on vcr. These functions show you
+#' vcr state without taking a dependency on vcr. These functions show you
 #' how to use them; we expect you to copy and paste these functions into your
 #' own package
 #'
