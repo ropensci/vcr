@@ -56,8 +56,9 @@ RequestHandler <- R6::R6Class(
       cli::cli_abort(
         c(
           "Failed to find matching request in active cassette.",
-          i = if (!the$config$log)
-            "Use {.fn local_vcr_configure_log} to get more details.",
+          i = if (!the$config$log) {
+            "Use {.fn local_vcr_configure_log} to get more details."
+          },
           i = "Learn more in {.vignette vcr::debugging}."
         ),
         class = "vcr_unhandled"
