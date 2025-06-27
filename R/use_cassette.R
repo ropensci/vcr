@@ -187,7 +187,13 @@ use_cassette <- function(
   )
 
   # force all arguments
-  list(...)
+  withCallingHandlers(
+    list(...),
+    error = function(cnd) {
+      # Don't warn if there was also an error
+      cassette$warn_on_empty <- FALSE
+    }
+  )
 
   invisible(cassette)
 }
@@ -263,11 +269,12 @@ check_cassette_name <- function(x, call = caller_env()) {
   reserved <- "^[.]+$"
   windows_reserved <- "^(con|prn|aux|nul|com[0-9]|lpt[0-9])([.].*)?$"
   windows_trailing <- "[. ]+$"
-  if (grepl(illegal, x))
+  if (grepl(illegal, x)) {
     cli::cli_abort(
       "{.arg name} must not contain '/', '?', '<', '>', '\\', ':', '*', '|', or '\"'",
       call = call
     )
+  }
   if (grepl(control, x)) {
     cli::cli_abort(
       "{.arg name} must not contain control characters.",
