@@ -114,6 +114,11 @@ Cassette <- R6::R6Class(
       )
       self$remove_outdated_interactions()
 
+      private$old_env_var <- set_env_var(list(
+        VCR_IS_RECORDING = self$recording(),
+        VCR_IS_REPLAYING = self$replaying()
+      ))
+
       if (self$recording() && self$replaying()) {
         vcr_log_sprintf("  Mode: recording and replaying")
       } else if (self$recording()) {
@@ -129,6 +134,8 @@ Cassette <- R6::R6Class(
     #' @return self
     eject = function() {
       vcr_log_sprintf("Ejecting")
+
+      set_env_var(private$old_env_var)
 
       if (self$http_interactions$length() == 0 && self$warn_on_empty) {
         cli::cli_warn(c(
@@ -215,5 +222,8 @@ Cassette <- R6::R6Class(
       dir_create(self$root_dir)
       self$serializer$serialize(self$http_interactions$interactions)
     }
+  ),
+  private = list(
+    old_env_var = character()
   )
 )
