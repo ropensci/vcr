@@ -23,6 +23,18 @@
 #' ```
 #' ````
 #'
+#' Or if you have labelled the chunk, you can use `cassette: true` to use the
+#' chunk label as the cassette name:
+#'
+#' ````
+#' ```{r}
+#' #| label: cassette-name
+#' #| cassette: true
+#' req <- httr2::request("http://r-project.org")
+#' resp <- httr2::req_perform(req)
+#' ```
+#' ````
+#'
 #' @param prefix An prefix for the cassette name to make cassettes unique across
 #'   vignettes. Defaults to the file name (without extension) of the currently
 #'   executing vignette.
@@ -35,16 +47,32 @@ setup_knitr <- function(prefix = NULL, dir = "_vcr", ...) {
   }
   dir_create(dir)
 
-  chunk_hook <- function(before, options, name) {
-    cassette_name <- options$cassette
-    check_string(name)
+  knitr::knit_hooks$set(cassette = vcr_hook(prefix, dir, ...))
+}
 
-    if (before) {
-      insert_cassette(paste0(prefix, cassette_name), ..., dir = dir)
-    } else {
+vcr_hook <- function(prefix, dir, ...) {
+  force(prefix)
+  force(dir)
+
+  function(before, options, name) {
+    if (!before) {
       eject_cassette()
     }
-  }
 
-  knitr::knit_hooks$set(cassette = chunk_hook)
+    cassette_name <- options$cassette
+    if (isTRUE(cassette_name)) {
+      cassette_name <- options$label
+    } else if (is_string(cassette_name)) {
+      # ok
+    } else {
+      stop_input_type(
+        cassette_name,
+        c("a string", "TRUE"),
+        arg = "cassette",
+        call = quote(`options$cassette`())
+      )
+    }
+
+    insert_cassette(paste0(prefix, cassette_name), ..., dir = dir)
+  }
 }

@@ -30,3 +30,10 @@ This vignette tests that we can replay cassettes created by `vcr::setup_knitr()`
 req <- request(httpbin$url("/get"))
 req_perform(req)
 ```
+
+```{r}
+#| label: test-2
+#| cassette: 1
+req <- request(httpbin$url("/get?x=1"))
+req_perform(req)
+```

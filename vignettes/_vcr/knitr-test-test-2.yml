@@ -1,0 +1,30 @@
+http_interactions:
+- request:
+    method: GET
+    uri: http://127.0.0.1:62450/get?x=1
+  response:
+    status: 200
+    headers:
+      Connection: close
+      Date: Mon, 30 Jun 2025 12:48:07 GMT
+      Content-Type: application/json
+      Content-Length: '286'
+      ETag: '"9f7bd10f"'
+    body:
+      string: |-
+        {
+          "args": {
+            "x": "1"
+          },
+          "headers": {
+            "Host": "127.0.0.1:62450",
+            "User-Agent": "httr2/1.1.2 r-curl/6.4.0 libcurl/8.14.1",
+            "Accept": "*/*",
+            "Accept-Encoding": "deflate, gzip"
+          },
+          "origin": "127.0.0.1",
+          "path": "/get",
+          "url": "http://127.0.0.1:62450/get"
+        }
+  recorded_at: 2025-06-30 12:48:07
+recorded_with: VCR-vcr/1.7.0.91, webmockr/2.1.0
