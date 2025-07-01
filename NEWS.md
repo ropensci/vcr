@@ -21,6 +21,7 @@ vcr (development version)
 
 ## NEW FEATURES
 
+* The default request matcher now uses method, uri, and body if present.
 * `local_casette()` and `use_cassette()` set env vars `VCR_IS_RECORDING` and `VCR_IS_REPLAYING` and provide helpers `is_recording()` and `is_replaying()`. 
 * New `current_cassette_recording()` and `current_cassette_replaying()` tell you if the current cassette is recording or replaying (or neither or both).
 * New `vcr_last_request()` and `vcr_last_response()` to get last request and response respectively (#488).

@@ -25,8 +25,7 @@ function \code{\link[=use_cassette]{use_cassette()}}
 
 \item{\code{serializer}}{(Serializer) serializer (YAML|JSON|QS2)}
 
-\item{\code{match_requests_on}}{(character) matchers to use
-default: method & uri}
+\item{\code{match_requests_on}}{(character) matchers to use}
 
 \item{\code{re_record_interval}}{(numeric) the re-record interval}
 
@@ -88,11 +87,7 @@ is a valid file name.}
 
 \item{\code{record}}{The record mode. Default: "once".}
 
-\item{\code{match_requests_on}}{List of request matchers
-to use to determine what recorded HTTP interaction to replay. Defaults to
-\verb{["method", "uri"]}. The built-in matchers are "method", "uri",
-"headers" and "body" ("host" and "path" not supported yet, but should
-be in a future version)}
+\item{\code{match_requests_on}}{HTTP request components to use when matching.}
 
 \item{\code{serialize_with}}{(character) Which serializer to use.
 Valid values are "yaml" (default), "json", and "qs2".}

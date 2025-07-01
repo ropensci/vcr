@@ -139,6 +139,40 @@ test_that("can match json bodies", {
   expect_equal(vcr_last_request()$body, list(string = '{"foo":"bar"}'))
 })
 
+
+test_that("default matcher includes body_json", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure_log(file = stdout())
+
+  req <- httr2::request(hb("/post"))
+  req1 <- httr2::req_body_json(req, list(foo = "bar"))
+  req2 <- httr2::req_body_json(req, list(foo = "baz"))
+
+  use_cassette("test", httr2::req_perform(req1))
+  expect_snapshot(
+    use_cassette("test", httr2::req_perform(req2)),
+    error = TRUE,
+    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
+  )
+})
+
+test_that("default matcher includes body", {
+  local_vcr_configure(dir = withr::local_tempdir())
+  local_vcr_configure_log(file = stdout())
+
+  req <- httr2::request(hb("/post"))
+  req1 <- httr2::req_body_form(req, foo = "bar")
+  req2 <- httr2::req_body_form(req, foo = "baz")
+
+  use_cassette("test", httr2::req_perform(req1))
+  expect_snapshot(
+    use_cassette("test", httr2::req_perform(req2)),
+    error = TRUE,
+    transform = \(x) gsub(hb(), "{httpbin}", x, fixed = TRUE),
+  )
+})
+
+
 test_that('request matching is not sensitive to escaping special characters', {
   local_vcr_configure(dir = withr::local_tempdir())
   url <- hb("/get?update=2022-01-01T00:00:00&p2=ok")

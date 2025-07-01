@@ -1,9 +1,13 @@
 request_matches <- function(
   req1,
   req2,
-  match_requests_on = c("method", "uri"),
+  match_requests_on = "default",
   i = 1
 ) {
+  if (identical(match_requests_on, "default")) {
+    match_requests_on <- default_matcher(req1)
+  }
+
   match_1 <- make_comparison(match_requests_on, req1)
   match_2 <- make_comparison(match_requests_on, req2)
   compare <- waldo::compare(
@@ -22,6 +26,15 @@ request_matches <- function(
     lapply(lines, \(line) vcr_log_sprintf("      %s", line))
     FALSE
   }
+}
+
+default_matcher <- function(req) {
+  if (is.null(req$body)) {
+    body <- NULL
+  } else {
+    body <- if (is_json(req$body)) "body_json" else "body"
+  }
+  c("method", "uri", body)
 }
 
 make_comparison <- function(matches, req) {
@@ -44,6 +57,15 @@ make_comparison <- function(matches, req) {
 
 try_json <- function(x) {
   tryCatch(jsonlite::parse_json(x), error = function(e) x)
+}
+is_json <- function(x) {
+  tryCatch(
+    {
+      jsonlite::parse_json(x)
+      TRUE
+    },
+    error = function(e) FALSE
+  )
 }
 
 normalize_body <- function(body) {

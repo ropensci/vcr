@@ -17,8 +17,7 @@ Cassette <- R6::R6Class(
     #' @field serializer (Serializer) serializer (YAML|JSON|QS2)
     serializer = NA,
     #' @field match_requests_on (character) matchers to use
-    #' default: method & uri
-    match_requests_on = c("method", "uri"),
+    match_requests_on = "default",
     #' @field re_record_interval (numeric) the re-record interval
     re_record_interval = NULL,
     #' @field root_dir root dir, gathered from [vcr_configuration()]
@@ -42,11 +41,7 @@ Cassette <- R6::R6Class(
     #' @param record The record mode. Default: "once".
     #' @param serialize_with (character) Which serializer to use.
     #' Valid values are "yaml" (default), "json", and "qs2".
-    #' @param match_requests_on List of request matchers
-    #' to use to determine what recorded HTTP interaction to replay. Defaults to
-    #' `["method", "uri"]`. The built-in matchers are "method", "uri",
-    #' "headers" and "body" ("host" and "path" not supported yet, but should
-    #' be in a future version)
+    #' @param match_requests_on HTTP request components to use when matching.
     #' @param re_record_interval (numeric) When given, the cassette will be
     #' re-recorded at the given interval, in seconds.
     #' @param preserve_exact_body_bytes (logical) Whether or not

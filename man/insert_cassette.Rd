@@ -39,7 +39,11 @@ Useful for re-recording outdated responses or logging all HTTP requests.
 }}
 
 \item{match_requests_on}{Character vector of request matchers used to
-determine which recorded HTTP interaction to replay. Possible values are:
+determine which recorded HTTP interaction to replay. The default matches
+on the \code{"method"}, \code{"uri"}, and either \code{"body"} (if present)
+or \code{"body_json"} (if the content-type is \code{application/json}).
+
+The full set of possible values are:
 \itemize{
 \item \code{method}: the HTTP method.
 \item \code{uri}: the complete request URI, excluding the port.
