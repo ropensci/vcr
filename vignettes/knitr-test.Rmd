@@ -33,7 +33,7 @@ req_perform(req)
 
 ```{r}
 #| label: test-2
-#| cassette: 1
+#| cassette: true
 req <- request(httpbin$url("/get?x=1"))
 req_perform(req)
 ```
