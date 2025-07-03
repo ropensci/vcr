@@ -12,11 +12,13 @@
 #'
 #' @export
 #' @param package Package name.
-#' @param record Record mode. This will be `"all"` if `package` is under
-#'   development, (i.e. loaded by devtools) and `"none"` otherwise. These
-#'   defaults ensure that you can easily re-record the cassette during
-#'   development and the example will never make HTTP requests while
-#'   testing.
+#' @param record Record mode. This will be `"once"` if `package` is under
+#'   development, (i.e. loaded by devtools) and `"none"` otherwise. This makes
+#'   it easy to record during development and ensure that cassettes HTTP
+#'   requests are never made on CRAN.
+#'
+#'   To re-record all cassettes, you can delete `inst/_vcr` then run
+#'   `pkgdown::build_reference(lazy = FALSE)`.
 #' @inheritParams insert_cassette
 #' @examplesIf requireNamespace("httr2")
 #' # In this example I'm showing the insert and eject commands, but you'd
@@ -43,7 +45,7 @@ insert_example_cassette <- function(
   dir <- example_cassette_path(package)
   in_dev <- is_dev_package(package)
   if (is.null(record)) {
-    record <- if (in_dev && !in_pkgdown()) "all" else "none"
+    record <- if (in_dev) "once" else "none"
   }
 
   cassette <- insert_cassette(
