@@ -97,4 +97,10 @@ test_that("header/body only included if needed", {
 
   encoded <- encode_interaction(interaction, matchers = c("method", "uri"))
   expect_named(encoded$request, c("method", "uri"))
+
+  encoded <- encode_interaction(interaction, matchers = "default")
+  expect_named(encoded$request, c("method", "uri", "body"))
+
+  encoded <- encode_interaction(interaction, matchers = "headers")
+  expect_named(encoded$request, c("method", "uri", "headers"))
 })

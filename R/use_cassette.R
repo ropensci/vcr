@@ -24,7 +24,11 @@
 #'   * **all**: Never replays recorded interactions, always recording new.
 #'     Useful for re-recording outdated responses or logging all HTTP requests.
 #' @param match_requests_on Character vector of request matchers used to
-#'   determine which recorded HTTP interaction to replay. Possible values are:
+#'   determine which recorded HTTP interaction to replay. The default matches
+#'   on the `"method"`, `"uri"`, and either `"body"` (if present)
+#'   or `"body_json"` (if the content-type is `application/json`).
+#'
+#'   The full set of possible values are:
 #'
 #'   * `method`: the HTTP method.
 #'   * `uri`: the complete request URI, excluding the port.

@@ -18,6 +18,9 @@ RequestHandler <- R6::R6Class(
 
     handle = function() {
       matchers <- current_cassette()$match_requests_on
+      if (identical(matchers, "default")) {
+        matchers <- default_matcher(self$request)
+      }
       summary <- request_summary(self$request, matchers)
       vcr_log_sprintf("Handling request: %s", summary)
 
@@ -27,12 +30,13 @@ RequestHandler <- R6::R6Class(
       }
 
       if (current_cassette_replaying()) {
-        cassette <- current_cassette()
-        interactions <- cassette$http_interactions
         vcr_log_sprintf(
           "  Looking for existing requests using %s",
-          paste0(interactions$request_matchers, collapse = "/")
+          paste0(matchers, collapse = "/")
         )
+
+        cassette <- current_cassette()
+        interactions <- cassette$http_interactions
         idx <- interactions$find_request(self$request)
         if (!is.na(idx)) {
           vcr_response <- interactions$replay_request(idx)

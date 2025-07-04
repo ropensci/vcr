@@ -221,7 +221,7 @@ vcr_config_defaults <- function() {
   list(
     dir = NULL,
     record = "once",
-    match_requests_on = c("method", "uri"),
+    match_requests_on = "default",
     serialize_with = "yaml",
     json_pretty = FALSE,
     ignore_hosts = NULL,

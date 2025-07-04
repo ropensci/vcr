@@ -25,11 +25,15 @@ development, (i.e. loaded by devtools) and \code{"none"} otherwise. This makes
 it easy to record during development and ensure that cassettes HTTP
 requests are never made on CRAN.
 
-To re-record all the cassettes, you can delete \verb{inst/_vcr} and run
+To re-record all cassettes, you can delete \verb{inst/_vcr} then run
 \code{pkgdown::build_reference(lazy = FALSE)}.}
 
 \item{match_requests_on}{Character vector of request matchers used to
-determine which recorded HTTP interaction to replay. Possible values are:
+determine which recorded HTTP interaction to replay. The default matches
+on the \code{"method"}, \code{"uri"}, and either \code{"body"} (if present)
+or \code{"body_json"} (if the content-type is \code{application/json}).
+
+The full set of possible values are:
 \itemize{
 \item \code{method}: the HTTP method.
 \item \code{uri}: the complete request URI, excluding the port.

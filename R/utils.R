@@ -8,6 +8,9 @@ check_request_matchers <- function(
   if (is.null(x)) {
     return()
   }
+  if (identical(x, "default")) {
+    return()
+  }
   vals <- c(
     "method",
     "uri",

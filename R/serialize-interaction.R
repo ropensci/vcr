@@ -3,7 +3,7 @@
 encode_interactions <- function(
   interactions,
   preserve_bytes = FALSE,
-  matchers = c("method", "uri")
+  matchers = "default"
 ) {
   interactions <- lapply(
     interactions,
@@ -40,7 +40,7 @@ decode_interactions <- function(
 encode_interaction <- function(
   interaction,
   preserve_bytes = FALSE,
-  matchers = c("method", "uri")
+  matchers = "default"
 ) {
   list(
     request = encode_request(interaction$request, preserve_bytes, matchers),
@@ -52,12 +52,12 @@ encode_interaction <- function(
 encode_request <- function(
   request,
   preserve_bytes = FALSE,
-  matchers = c("method", "uri")
+  matchers = "default"
 ) {
   compact(list(
     method = request$method,
     uri = encode_uri(request$uri),
-    body = if ("body" %in% matchers || "body_json" %in% matchers) {
+    body = if (any(c("body", "body_json", "default") %in% matchers)) {
       encode_body(request$body, NULL, preserve_bytes)
     },
     headers = if ("headers" %in% matchers) {
