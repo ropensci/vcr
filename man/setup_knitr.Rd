@@ -35,4 +35,15 @@ req <- httr2::request("http://r-project.org")
 resp <- httr2::req_perform(req)
 ```
 }\if{html}{\out{</div>}}
+
+Or if you have labelled the chunk, you can use \code{cassette: true} to use the
+chunk label as the cassette name:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{```\{r\}
+#| label: cassette-name
+#| cassette: true
+req <- httr2::request("http://r-project.org")
+resp <- httr2::req_perform(req)
+```
+}\if{html}{\out{</div>}}
 }
