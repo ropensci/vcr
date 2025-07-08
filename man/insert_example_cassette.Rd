@@ -25,7 +25,7 @@ development, (i.e. loaded by devtools) and \code{"none"} otherwise. This makes
 it easy to record during development and ensure that cassettes HTTP
 requests are never made on CRAN.
 
-To re-record all the cassettes, you can delete \verb{inst/_vcr} and run
+To re-record all cassettes, you can delete \verb{inst/_vcr} then run
 \code{pkgdown::build_reference(lazy = FALSE)}.}
 
 \item{match_requests_on}{Character vector of request matchers used to
