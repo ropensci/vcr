@@ -45,7 +45,7 @@ Suggests:
     crul (>= 0.8.4),
     desc,
     httr,
-    httr2,
+    httr2 (>= 1.1.2.9000),
     knitr,
     qs2,
     rmarkdown,
@@ -54,6 +54,7 @@ Suggests:
     webfakes
 VignetteBuilder:
     knitr
+Remotes: r-lib/httr2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: ause_cassette_re_record
