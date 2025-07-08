@@ -4,9 +4,12 @@ test_that("use_cassette options: re_record_interval", {
     re_record_interval = 1L
   )
 
-  conn <- crul::HttpClient$new(hb())
   # first use
-  use_cassette("test", res <- conn$get("get"))
+  # use_cassette("test", res <- conn$get("get"))
+  use_cassette("test", {
+    conn <- crul::HttpClient$new(hb())
+    res <- conn$get("get")
+  })
   rr1 <- read_cassette("test.yml")
 
   # second use, not expired, no change in recorded_at value

@@ -72,7 +72,6 @@ format_time <- function(x, tz = "UTC") {
 pkg_versions <- function() {
   paste(
     paste0("vcr/", utils::packageVersion("vcr")),
-    paste0("webmockr/", utils::packageVersion("webmockr")),
     sep = ", "
   )
 }
@@ -108,4 +107,15 @@ set_env_var <- function(values) {
   }
 
   invisible(old)
+}
+
+# modified from purrr:::has_names
+along_rep <- function(x, y) rep(y, length.out = length(x))
+hz_namez <- function(x) {
+  nms <- names(x)
+  if (is_null(nms)) {
+    along_rep(x, FALSE)
+  } else {
+    !(is.na(nms) | nms == "")
+  }
 }
