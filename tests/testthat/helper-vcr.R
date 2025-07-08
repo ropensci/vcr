@@ -73,7 +73,7 @@ hb_remote <- function(x = NULL) {
 find_httpbin_server <- function() {
   urls <- c(
     "https://hb.cran.dev",
-    "https://hb.opencpu.org",
+    # "https://hb.opencpu.org",
     "https://nghttp2.org/httpbin"
   )
   h <- curl::new_handle(timeout = 10, failonerror = FALSE)
