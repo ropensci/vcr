@@ -29,7 +29,7 @@ insert_cassette <- function(
   if (vcr_turned_off()) {
     return(invisible())
   }
-  vcr_enable()
+  enable_mocks()
 
   # make cassette
   cassette <- Cassette$new(
@@ -64,7 +64,7 @@ eject_cassette <- function() {
   cassette_peek()$eject()
   cassette <- cassette_pop()
 
-  vcr_disable()
+  disable_mocks()
 
   invisible(cassette)
 }

@@ -28,13 +28,13 @@ vcr_crul_mock <- function(on = TRUE) {
   invisible(on)
 }
 
-vcr_enable <- function() {
+enable_mocks <- function() {
   vcr_httr_mock(on = TRUE)
   vcr_httr2_mock(on = TRUE)
   vcr_crul_mock(on = TRUE)
 }
 
-vcr_disable <- function() {
+disable_mocks <- function() {
   vcr_httr_mock(on = FALSE)
   vcr_httr2_mock(on = FALSE)
   vcr_crul_mock(on = FALSE)
