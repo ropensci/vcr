@@ -1,4 +1,3 @@
-#' @export
 RequestHandlerHttr2 <- R6::R6Class(
   "RequestHandlerHttr2",
   inherit = RequestHandler,
@@ -6,7 +5,7 @@ RequestHandlerHttr2 <- R6::R6Class(
   public = list(
     initialize = function(request) {
       if (!length(request$method)) {
-        request$method <- webmockr:::req_method_get_w(request)
+        request$method <- httr2::req_get_method(request)
       }
       self$request_original <- request
       self$request <- vcr_request(
@@ -33,7 +32,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::response(
         status_code = vcr_response$status,
         url = self$request_original$url,
-        method = webmockr:::req_method_get_w(self$request_original),
+        method = httr2::req_get_method(self$request_original),
         headers = vcr_response$headers,
         body = body
       )

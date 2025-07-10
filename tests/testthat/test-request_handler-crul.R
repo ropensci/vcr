@@ -132,13 +132,18 @@ test_that("can write files to disk", {
     write_disk_path = write_path
   )
   path <- file.path(withr::local_tempdir(), "test.png")
-  download_image <- \() crul::HttpClient$new(hb("/image"))$get(disk = path)
+  download_image <- \() {
+    crul::HttpClient$new(
+      url = hb("/image"),
+      headers = list(Accept = "image/png")
+    )$get(disk = path)
+  }
 
   # Both requests use vcr path
-  use_cassette("test", out <- download_image())
+  use_cassette("test3", out <- download_image())
   expect_equal(out$content, file.path(write_path, "test.png"))
 
-  use_cassette("test", out2 <- download_image())
+  use_cassette("test3", out2 <- download_image())
   expect_equal(out2$content, file.path(write_path, "test.png"))
 
   # Content is the same

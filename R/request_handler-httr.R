@@ -1,4 +1,3 @@
-#' @export
 RequestHandlerHttr <- R6::R6Class(
   "RequestHandlerHttr",
   inherit = RequestHandler,
@@ -14,8 +13,8 @@ RequestHandlerHttr <- R6::R6Class(
       )
     },
     on_ignored_request = function() {
-      webmockr::httr_mock(FALSE)
-      withr::defer(webmockr::httr_mock(TRUE))
+      vcr_httr_mock(FALSE)
+      withr::defer(vcr_httr_mock(TRUE))
 
       httr_perform(self$request_original)
     },
@@ -25,8 +24,8 @@ RequestHandlerHttr <- R6::R6Class(
     },
 
     on_recordable_request = function() {
-      webmockr::httr_mock(FALSE)
-      withr::defer(webmockr::httr_mock(TRUE))
+      vcr_httr_mock(FALSE)
+      withr::defer(vcr_httr_mock(TRUE))
 
       response <- httr_perform(self$request_original)
 
@@ -43,26 +42,6 @@ RequestHandlerHttr <- R6::R6Class(
     }
   )
 )
-
-
-# generate actual httr response
-serialize_to_httr <- function(httr_request, vcr_response) {
-  resp <- webmockr::Response$new()
-  resp$set_url(httr_request$uri)
-  # in vcr >= v0.4, "disk" is in the response, but in older versions
-  # its missing - use response$body if disk is not present
-  response_body <- vcr_response$body
-  if (vcr_response$disk) {
-    response_body <- structure(vcr_response$body, class = "path")
-  }
-  resp$set_body(response_body, vcr_response$disk)
-  resp$set_request_headers(httr_request$headers, capitalize = FALSE)
-  resp$set_response_headers(vcr_response$headers, capitalize = FALSE)
-  resp$set_status(status = vcr_response$status)
-
-  # generate httr response
-  webmockr::build_httr_response(httr_request, resp)
-}
 
 # Helpers to create httr request from vcr request -----------------------------
 
@@ -135,4 +114,90 @@ save_file <- function(path) {
   out_path <- file.path(basepath, basename(path))
   file.copy(path, out_path, overwrite = TRUE)
   out_path
+}
+
+# Helpers to create httr response from vcr response ----------------------------
+
+vcr_build_httr_response <- function(req, resp) {
+  lst <- list(
+    url = req$url,
+    status_code = as.integer(resp$status_code),
+    headers = {
+      if (grepl("^ftp://", resp$url %||% "")) {
+        # in case uri_regex only
+        list()
+      } else {
+        hds <- resp$headers
+
+        if (is.null(hds)) {
+          hds <- resp$response_headers
+
+          if (is.null(hds)) {
+            list()
+          } else {
+            stopifnot(is.list(hds))
+            stopifnot(is.character(hds[[1]]))
+            httr::insensitive(hds)
+          }
+        } else {
+          httr::insensitive(hds)
+        }
+      }
+    },
+    all_headers = list(),
+    cookies = httr_cookies_df(),
+    content = resp$content,
+    date = {
+      if (!is.null(resp$response_headers$date)) {
+        httr::parse_http_date(resp$response_headers$date)
+      } else {
+        Sys.time()
+      }
+    },
+    times = numeric(0),
+    request = req,
+    handle = NA
+  )
+  lst$all_headers <- list(list(
+    status = lst$status_code,
+    version = "",
+    headers = lst$headers
+  ))
+  structure(lst, class = "response")
+}
+
+httr_cookies_df <- function() {
+  df <- data.frame(matrix(ncol = 7, nrow = 0))
+  x <- c("domain", "flag", "path", "secure", "expiration", "name", "value")
+  colnames(df) <- x
+  df
+}
+
+set_body <- function(body, disk = FALSE) {
+  if (is.character(body)) {
+    stopifnot(length(body) <= 1)
+    if (disk) body else charToRaw(body)
+  } else if (is.raw(body)) {
+    body
+  } else {
+    raw(0)
+  }
+}
+
+# generate actual httr response
+serialize_to_httr <- function(httr_request, vcr_response) {
+  response_body <- vcr_response$body
+  if (vcr_response$disk) {
+    response_body <- structure(vcr_response$body, class = "path")
+  }
+
+  resp <- list(
+    url = httr_request$uri,
+    status_code = vcr_response$status,
+    response_headers = vcr_response$headers,
+    content = set_body(response_body, vcr_response$disk)
+  )
+
+  # generate httr response
+  vcr_build_httr_response(httr_request, resp)
 }

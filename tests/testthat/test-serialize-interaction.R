@@ -35,7 +35,6 @@ test_that("encode_interactions includes recording metadata", {
 
   # Check that version info is included correctly
   expect_match(encoded$recorded_with, "vcr/")
-  expect_match(encoded$recorded_with, "webmockr/")
 })
 
 test_that("decode_interactions handles empty and NULL inputs", {

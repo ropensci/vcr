@@ -29,9 +29,7 @@ insert_cassette <- function(
   if (vcr_turned_off()) {
     return(invisible())
   }
-  # enable webmockr
-  webmockr::enable(quiet = TRUE)
-  suppressMessages(webmockr::webmockr_allow_net_connect())
+  enable_mocks()
 
   # make cassette
   cassette <- Cassette$new(
@@ -66,10 +64,7 @@ eject_cassette <- function() {
   cassette_peek()$eject()
   cassette <- cassette_pop()
 
-  webmockr::disable(quiet = TRUE)
-  if (!cassette_active()) {
-    suppressMessages(webmockr::webmockr_disable_net_connect())
-  }
+  disable_mocks()
 
   invisible(cassette)
 }

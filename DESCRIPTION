@@ -1,6 +1,6 @@
 Package: vcr
 Title: Record 'HTTP' Calls to Disk
-Version: 1.7.0.91
+Version: 1.7.1.91
 Authors@R: c(
     person("Scott", "Chamberlain", , "myrmecocystus@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-1444-9135")),
@@ -38,14 +38,13 @@ Imports:
     rlang (>= 1.1.0),
     rprojroot,
     waldo,
-    webmockr (>= 2.1.0),
     withr,
     yaml
 Suggests:
     crul (>= 0.8.4),
     desc,
     httr,
-    httr2,
+    httr2 (>= 1.1.2.9000),
     knitr,
     qs2,
     rmarkdown,
@@ -54,6 +53,7 @@ Suggests:
     webfakes
 VignetteBuilder:
     knitr
+Remotes: r-lib/httr2, ropensci/crul@change-mocking
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: ause_cassette_re_record
