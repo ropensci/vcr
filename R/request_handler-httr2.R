@@ -87,7 +87,7 @@ httr2_method <- function(req) {
 
 httr2_headers <- function(req) {
   if (modern_httr2()) {
-    httr2::req_get_headers(req)
+    getNamespace("httr2")$req_get_headers(req)
   } else {
     req$headers
   }
