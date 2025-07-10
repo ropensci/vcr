@@ -5,14 +5,14 @@ RequestHandlerHttr2 <- R6::R6Class(
   public = list(
     initialize = function(request) {
       if (!length(request$method)) {
-        request$method <- httr2::req_get_method(request)
+        request$method <- httr2_method(request)
       }
       self$request_original <- request
       self$request <- vcr_request(
         request$method,
         request$url,
         httr2_body(request),
-        if (modern_httr2()) httr2::req_get_headers(request) else request$headers
+        httr2_headers(request)
       )
     },
     on_ignored_request = function() {
@@ -32,7 +32,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::response(
         status_code = vcr_response$status,
         url = self$request_original$url,
-        method = httr2::req_get_method(self$request_original),
+        method = httr2_method(self$request_original),
         headers = vcr_response$headers,
         body = body
       )
@@ -68,6 +68,30 @@ RequestHandlerHttr2 <- R6::R6Class(
     }
   )
 )
+
+httr2_method <- function(req) {
+  if (modern_httr2()) {
+    return(getNamespace("httr2")$req_get_method(req))
+  }
+
+  if (!is.null(req$method)) {
+    req$method
+  } else if ("nobody" %in% names(req$options)) {
+    "HEAD"
+  } else if (!is.null(req$body)) {
+    "POST"
+  } else {
+    "GET"
+  }
+}
+
+httr2_headers <- function(req) {
+  if (modern_httr2()) {
+    getNamespace("httr2")$req_get_headers(req)
+  } else {
+    req$headers
+  }
+}
 
 httr2_body <- function(x) {
   if (modern_httr2()) {
