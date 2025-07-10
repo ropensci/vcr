@@ -13,13 +13,14 @@ reference:
       - cassette_path
       - cassettes
       - current_cassette
+      - is_recording
   - title: Other helpers
     contents:
       - skip_if_vcr_off
       - vcr_test_path
       - turn_off
       - vcr_last_request
-      
+
 articles:
   - title: All vignettes
     desc: ~
