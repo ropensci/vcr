@@ -63,8 +63,9 @@ eject_cassette <- function() {
 
   cassette_peek()$eject()
   cassette <- cassette_pop()
-
-  disable_mocks()
+  if (!cassette_active()) {
+    disable_mocks()
+  }
 
   invisible(cassette)
 }
