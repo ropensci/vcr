@@ -71,7 +71,7 @@ RequestHandlerHttr2 <- R6::R6Class(
 
 req_get_method <- function(req) {
   if (modern_httr2()) {
-    return(httr2::req_get_method(request))
+    return(getNamespace("httr2")$req_get_method(req))
   }
 
   if (!is.null(req$method)) {
