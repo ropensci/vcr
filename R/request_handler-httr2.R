@@ -5,7 +5,7 @@ RequestHandlerHttr2 <- R6::R6Class(
   public = list(
     initialize = function(request) {
       if (!length(request$method)) {
-        request$method <- httr2::req_get_method(request)
+        request$method <- req_get_method(request)
       }
       self$request_original <- request
       self$request <- vcr_request(
@@ -32,7 +32,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::response(
         status_code = vcr_response$status,
         url = self$request_original$url,
-        method = httr2::req_get_method(self$request_original),
+        method = req_get_method(self$request_original),
         headers = vcr_response$headers,
         body = body
       )
@@ -68,6 +68,22 @@ RequestHandlerHttr2 <- R6::R6Class(
     }
   )
 )
+
+req_get_method <- function(req) {
+  if (modern_httr2()) {
+    return(httr2::req_get_method(request))
+  }
+
+  if (!is.null(req$method)) {
+    req$method
+  } else if ("nobody" %in% names(req$options)) {
+    "HEAD"
+  } else if (!is.null(req$body)) {
+    "POST"
+  } else {
+    "GET"
+  }
+}
 
 httr2_body <- function(x) {
   if (modern_httr2()) {
