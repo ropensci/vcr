@@ -1,31 +1,37 @@
-vcr_httr_mock <- function(on = TRUE) {
-  check_installed("httr")
+vcr_httr_mock <- function(on) {
+  if (!is_installed("httr")) {
+    return()
+  }
+
   if (on) {
     httr::set_callback("request", \(req) RequestHandlerHttr$new(req)$handle())
   } else {
     httr::set_callback("request", NULL)
   }
-  invisible(on)
 }
 
-vcr_httr2_mock <- function(on = TRUE) {
-  check_installed("httr2")
+vcr_httr2_mock <- function(on) {
+  if (!is_installed("httr2")) {
+    return()
+  }
+
   if (on) {
     options(httr2_mock = \(req) RequestHandlerHttr2$new(req)$handle())
   } else {
     options(httr2_mock = NULL)
   }
-  invisible(on)
 }
 
-vcr_crul_mock <- function(on = TRUE) {
-  check_installed("crul")
+vcr_crul_mock <- function(on) {
+  if (!is_installed("crul")) {
+    return()
+  }
+
   if (on) {
     options(crul_mock = \(req) RequestHandlerCrul$new(req)$handle())
   } else {
     options(crul_mock = NULL)
   }
-  invisible(on)
 }
 
 enable_mocks <- function() {
