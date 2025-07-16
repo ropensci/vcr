@@ -12,8 +12,8 @@ editor:
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(
-	comment = "#>",
-	collapse = TRUE
+  comment = "#>",
+  collapse = TRUE
 )
 ```
 
@@ -54,7 +54,7 @@ To use vcr in a test, include a call to `vcr::local_cassette()`: it inserts the 
 #| label: get-record
 test_that("my test", {
   vcr::local_cassette("get")
-  
+
   req <- request(httpbin$url("/get"))
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -66,6 +66,8 @@ test_that("my test", {
 The first time this test runs, vcr will record the requests and their responses in a **cassette**, a YAML file that lives in `test/testthat/_vcr`.
 In subsequent runs, vcr will replay those cached responses, freeing your test from the vagaries of the internet, making it both faster and more reliable.
 You might notice that this makes vcr a bit like a web cache (in that it replays previously saved responses) and a bit like [snapshot testing](https://testthat.r-lib.org/articles/snapshotting.html) (in that we're storing human-readable data in the test directory).
+
+Get in the habit of running tests twice that use {vcr}, once to record new cassettes, and a second time immediately after to replay cassettes to make sure your tests work with recorded cassettes.
 
 Generally, you will want to ensure that every test has a uniquely named cassette, unless you are deliberately re-using the same request-response pair to test different parts of your package code.
 If you try to use the same cassette for different requests, you'll discover that it errors because once a cassette has been recorded, it ensures that httr2, httr, and crul can only generate responses from the cached interactions.
@@ -79,7 +81,7 @@ In this case, since it's the second run of the test, you can see that vcr loads 
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
   vcr::local_cassette("get")
-  
+
   req <- request(httpbin$url("/get"))
   resp <- req_perform(req)
   json <- resp_body_json(resp)
@@ -138,8 +140,11 @@ get_data <- function(b = 1) {
 # A pretend test that would normally be found in `test/testthat/`.
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
-  vcr::local_cassette("body", match_requests_on = c("method", "uri", "body_json"))
-  
+  vcr::local_cassette(
+    "body",
+    match_requests_on = c("method", "uri", "body_json")
+  )
+
   data <- get_data(b = 1)
   expect_named(data$json, c("x", "y"))
 })
@@ -151,8 +156,11 @@ test_that("my test", {
 
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
-  vcr::local_cassette("body", match_requests_on = c("method", "uri", "body_json"))
-  
+  vcr::local_cassette(
+    "body",
+    match_requests_on = c("method", "uri", "body_json")
+  )
+
   data <- get_data(b = 2)
   expect_named(data$json, c("x", "y"))
 })
@@ -168,7 +176,7 @@ Compare this to just using `"body"`, where you have to carefully compare two str
 test_that("my test", {
   vcr::local_vcr_configure_log(file = stdout())
   vcr::local_cassette("body", match_requests_on = c("method", "uri", "body"))
-  
+
   data <- get_data(b = 2)
   expect_named(data$json, c("x", "y"))
 })
@@ -204,9 +212,11 @@ Two other important use cases are in examples and vignettes:
 -   Use `vcr::insert_example_cassette()` and `vcr::eject_cassette()` in examples.
     You can surround these commands in `\dontshow{}` so your users don't see them, but they're still run.
 
-Read the documentation for these functions to get all the details.
+Just as in testing, for both of these use cases immediately replay the cassettes after first recording any new ones to make sure the replayed cassettes work.
 
-Here's a suggested conclusion for the "Getting started with vcr" vignette:
+If you use {pkgdown} to generate package documentation, using it to build examples and vignettes is a great way to both create cassettes on a first run of `pkgdown::build_site()` and make sure they work on a second and any subsequent runs.
+
+Read the documentation for these functions to get all the details.
 
 ## Conclusion
 
