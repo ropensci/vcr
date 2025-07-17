@@ -35,6 +35,9 @@
 #' ```
 #' ````
 #'
+#' You can build your vignettes however you usually do (from the command line,
+#' with pkgdown, with RStudio/Positron, etc).
+#'
 #' @param prefix An prefix for the cassette name to make cassettes unique across
 #'   vignettes. Defaults to the file name (without extension) of the currently
 #'   executing vignette.
@@ -56,7 +59,7 @@ vcr_hook <- function(prefix, dir, ...) {
 
   function(before, options, name) {
     if (!before) {
-      eject_cassette()
+      return(eject_cassette())
     }
 
     cassette_name <- options$cassette

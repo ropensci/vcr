@@ -46,4 +46,7 @@ req <- httr2::request("http://r-project.org")
 resp <- httr2::req_perform(req)
 ```
 }\if{html}{\out{</div>}}
+
+You can build your vignettes however you usually do (from the command line,
+with pkgdown, with RStudio/Positron, etc).
 }
