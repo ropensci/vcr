@@ -1,29 +1,26 @@
+vcr
+===
 
-# vcr
+
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![cran
-checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+# vcr <img src="man/figures/logo.png" align="right" height="120" alt="" />
+
+[![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/vcr)
-[![rstudio mirror
-downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
-[![cran
-version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
+[![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
 
-{vcr} records and replays HTTP requests so you can test your API package
-with speed and confidence. It makes your tests independent of your
-internet connection (so they work on CRAN!) and because your tests get
-much much faster, you can write even more, increasing the coverage of
-your package. {vcr} works with {crul}, {httr} and {httr2}.
 
-{vcr} draws inspiration from Ruby’s [vcr](https://github.com/vcr/vcr).
+{vcr} records and replays HTTP requests so you can test your API package with speed and confidence. It makes your tests independent of your internet connection (so they work on CRAN!) and because your tests get much much faster, you can write even more, increasing the coverage of your package. {vcr} works with {crul}, {httr} and {httr2}.
+
+{vcr} draws inspiration from Ruby's [vcr](https://github.com/vcr/vcr).
 
 ## Installation
+
 
 ``` r
 # Install the latest released version from CRAN
@@ -43,11 +40,8 @@ pak::pak("ropensci/vcr")
 
 ## Usage
 
-Using vcr in a test is straightforward: just call
-`vcr::local_cassette()`. The first time your test is run, vcr will
-automatically record every HTTP request, saving the request and reponse
-in `tests/testthat/_vcr`. After that, it will replay those recorded
-requests, meaning that your test no longer needs an active connection.
+Using vcr in a test is straightforward: just call `vcr::local_cassette()`. The first time your test is run, vcr will automatically record every HTTP request, saving the request and reponse in `tests/testthat/_vcr`. After that, it will replay those recorded requests, meaning that your test no longer needs an active connection.
+
 
 ``` r
 test_that("can retrieve current version", {
@@ -56,12 +50,9 @@ test_that("can retrieve current version", {
 })
 ```
 
-The first argument to `local_cassette()` is the cassette name: it’s used
-to name the cassette file so needs to be unique across tests. In this
-case, running the above test will generate
-`tests/testthat/_vcr/rl_version.yaml` which looks something like this:
+The first argument to `local_cassette()` is the cassette name: it's used to name the cassette file so needs to be unique across tests. In this case, running the above test will generate `tests/testthat/_vcr/rl_version.yaml` which looks something like this:
 
-``` yaml
+```yaml
 http_interactions:
 - request:
     method: GET
@@ -80,26 +71,15 @@ http_interactions:
 recorded_with: vcr/1.7.0.91, webmockr/2.0.0
 ```
 
-If you look carefully at this file, you’ll notice an `Authorization`
-header is not recorded in the request headers despite it being used in
-the actual HTTP request. Read more about protecting secrets in the
-vignette `vignette("secrets")`.
+If you look carefully at this file, you'll notice an `Authorization` header is not recorded in the request headers despite it being used in the actual HTTP request. Read more about protecting secrets in the vignette `vignette("secrets")`.
 
 ## Learn more
 
-Start with `vignette("vcr")` to learn more about how {vcr} works,
-especially how requests are matched to the recordeded cassette. You
-might also enjoy the [HTTP
-testing](https://books.ropensci.org/http-testing/) book for a lot more
-details about {vcr}, {webmockr}, {curl} and more.
+Start with `vignette("vcr")` to learn more about how {vcr} works, especially how requests are matched to the recordeded cassette. You might also enjoy the [HTTP testing](https://books.ropensci.org/http-testing/) book for a lot more details about {vcr}, {webmockr}, {curl} and more.
 
 ## Meta
 
-- Please [report any issues or
-  bugs](https://github.com/ropensci/vcr/issues)
-- License: MIT
-- Get citation information for `vcr` in R doing
-  `citation(package = 'vcr')`
-- Please note that this package is released with a [Contributor Code of
-  Conduct](https://ropensci.org/code-of-conduct/). By contributing to
-  this project, you agree to abide by its terms.
+* Please [report any issues or bugs](https://github.com/ropensci/vcr/issues)
+* License: MIT
+* Get citation information for `vcr` in R doing `citation(package = 'vcr')`
+* Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
