@@ -3,6 +3,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# vcr <img src="man/figures/logo.png" align="right" height="120" alt="" />
+
 [![cran
 checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
 [![Project Status: Active – The project has reached a stable, usable
