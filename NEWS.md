@@ -1,14 +1,15 @@
-vcr (development version)
+vcr 2.0.0
 =========
 
 ## BREAKING CHANGES
 
 * `vcr_last_error()` has been removed (#488).
+* `vcr_log_file()` and `vcr_log_info()` have been removed.
 * The `verbose_errors` errors options is no longer supported.
 * `clean_outdated_http_interactions` has been removed; now all you need to do is set `re_record_interval`.
 * `check_cassette_names()` has been deprecated since it can't be implemented 100% correctly and diagnoses a relatively rare problem (#166).
-* `RequestHandler` and its subclasses are no longer exported.
-* Internal `real_http_connections_allowed()` is no longer exported and has been removed.
+* `RequestHandler` and its subclasses are no longer exported. (#)
+* Internal `real_http_connections_allowed()` is no longer exported and has been removed. (#409)
 * Internal `Request` and `VcrResponse` classes are no longer exported and have been removed.
 * `HTTPInteractionList` is no longer exported; it's an internal implementation detail.
 * The `uri_parser` option is no longer supported.
@@ -17,25 +18,28 @@ vcr (development version)
 * `str_splitter()` has been removed; it was accidentally exported as it's not part of the core vcrs API.
 * `cassettes()` are now a stack. The most important consequence of this is that `eject_cassette()` can only remove the most recently inserted cassette.
 * `as.cassette()` has been removed. It's not used, and not needed anymore.
-* `cassettes()` no longer has `on_disk` or `verb` arguments and now only ever lists currently active cassettes().
+* `cassettes()` no longer has `on_disk` or `verb` arguments and now only ever lists currently active cassettes.
 
 ## NEW FEATURES
 
 * The default request matcher now uses method, uri, and body if present.
-* `local_casette()` and `use_cassette()` set env vars `VCR_IS_RECORDING` and `VCR_IS_REPLAYING` and provide helpers `is_recording()` and `is_replaying()`. 
-* New `current_cassette_recording()` and `current_cassette_replaying()` tell you if the current cassette is recording or replaying (or neither or both).
+* New function `local_cassette()` to create a local cassette that is used for the current function scope and ejected on exit - this is now the suggested way to use vcr in tests.
+* New functions `vcr_configure_log()` and `local_vcr_configure_log()` to configure logging; the former sets logging for the R session, while the latter sets logging for the current function scope.
+* `local_casette()` and `use_cassette()` set env vars `VCR_IS_RECORDING` and `VCR_IS_REPLAYING` and provide helpers `is_recording()` and `is_replaying()`. (#520)
+* New `current_cassette_recording()` and `current_cassette_replaying()` tell you if the current cassette is recording or replaying (or neither or both). (#505)
 * New `vcr_last_request()` and `vcr_last_response()` to get last request and response respectively (#488).
 * The vignettes have been updated for all the new changes and generally polished.
 * New `insert_example_cassette()` makes it easier to use vcr in examples (#309).
 * New `setup_knitr()` makes it easier to use vcr from within a vignette (#308).
-* The `Authorization` header is never written to disk.
+* The `Authorization` header is never written to disk. (#450)
 * The request body and headers are only written to disk if actually used for matching (#417).
 * Writing files to disk now works with out any additional config. Files are saved in a directory called `{cassette-name}-files` inside of the cassette directory. You can override this default with `vrc_configure(write_disk_path)`.
 * New `body_json` request matcher that compares the parsed JSON. This both ignores differences in the textual representation of the JSON and gives more informative messages when requests don't match. (#421)
 * Raw bodies are now automatically gzipped before being converted to base64 (#343).
 * The default path is now `tests/testthat/_vcr`. This should not affect existing packages that used `use_vcr()` because these set up a helper that sets the default directory with `vcr_configure()` (#395).
-* `local_vcr_configure()` allows you to temporarily affect vcr configuration.
-* New serializer option `qs2`, using the `qs2` package, generating compressed binary cassette files that are smaller than YAML or JSON files. compressed will have the greatest proportional disk space savings as cassettes have more data in them.
+* New function `local_vcr_configure()` allows you to temporarily affect vcr configuration. (#285)
+* New serializer option `qs2`, using the `qs2` package, generating compressed binary cassette files that are smaller than YAML or JSON files. `compressed` will have the greatest proportional disk space savings as cassettes have more data in them. (#396)
+
 
 vcr 1.7.0
 =========
