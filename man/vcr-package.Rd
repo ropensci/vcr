@@ -6,7 +6,7 @@
 \alias{vcr-package}
 \title{vcr: Record 'HTTP' Calls to Disk}
 \description{
-Record test suite 'HTTP' requests and replays them during future runs. A port of the Ruby gem of the same name (\url{https://github.com/vcr/vcr/}). Works by hooking into the 'webmockr' R package for matching 'HTTP' requests by various rules ('HTTP' method, 'URL', query parameters, headers, body, etc.), and then caching real 'HTTP' responses on disk in 'cassettes'. Subsequent 'HTTP' requests matching any previous requests in the same 'cassette' use a cached 'HTTP' response.
+Record test suite 'HTTP' requests and replays them during future runs. A port of the Ruby gem of the same name (\url{https://github.com/vcr/vcr/}). Works by recording real 'HTTP' requests/responses on disk in 'cassettes', and then replaying matching responses on subsequent requests.
 }
 \section{Backstory}{
 

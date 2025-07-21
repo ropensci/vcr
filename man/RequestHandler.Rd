@@ -8,6 +8,5 @@
 \title{Request handlers}
 \description{
 These are internal classes that should not be used by users.
-They are exported because they are used from \pkg{webmockr}.
 }
 \keyword{internal}
