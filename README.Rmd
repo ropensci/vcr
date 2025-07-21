@@ -79,7 +79,7 @@ http_interactions:
     body:
       string: '{"red_list_version":"2025-1"}'
   recorded_at: 2025-05-06 20:52:21
-recorded_with: vcr/1.7.0.91, webmockr/2.0.0
+recorded_with: VCR-vcr/2.0.0
 ```
 
 If you look carefully at this file, you'll notice an `Authorization` header is not recorded in the request headers despite it being used in the actual HTTP request. Read more about protecting secrets in the vignette `vignette("secrets")`.
