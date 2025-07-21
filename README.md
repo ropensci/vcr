@@ -7,11 +7,6 @@ vcr
 
 # vcr <img src="man/figures/logo.png" align="right" height="120" alt="" />
 
-[![cran
-checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
