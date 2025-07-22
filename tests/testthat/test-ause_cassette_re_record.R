@@ -1,6 +1,4 @@
 test_that("use_cassette options: re_record_interval", {
-  skip_on_cran()
-
   local_vcr_configure(
     dir = withr::local_tempdir(),
     re_record_interval = 1L
@@ -8,15 +6,15 @@ test_that("use_cassette options: re_record_interval", {
 
   # first use
   # use_cassette("test", res <- conn$get("get"))
-  use_cassette("testing1", {
+  use_cassette("test", {
     conn <- crul::HttpClient$new(hb())
     res <- conn$get("get")
   })
-  rr1 <- read_cassette("testing1.yml")
+  rr1 <- read_cassette("test.yml")
 
   # second use, not expired, no change in recorded_at value
-  use_cassette("testing1", res <- conn$get("get"))
-  rr2 <- read_cassette("testing1.yml")
+  use_cassette("test", res <- conn$get("get"))
+  rr2 <- read_cassette("test.yml")
 
   expect_equal(rr1$recorded_at, rr2$recorded_at)
 
@@ -24,14 +22,14 @@ test_that("use_cassette options: re_record_interval", {
   Sys.sleep(1.1)
   local_vcr_configure_log(file = stdout())
   expect_snapshot(
-    use_cassette("testing1", res <- conn$get("get")),
+    use_cassette("test", res <- conn$get("get")),
     transform = function(x) {
       x |>
         gsub(hb(), "{httpbin}", x = _, fixed = TRUE) |>
         gsub("\\d+ bytes", "{bytes} bytes", x = _)
     }
   )
-  rr3 <- read_cassette("testing1.yml")
+  rr3 <- read_cassette("test.yml")
 
   ## 1st and 2nd should be identical
   expect_true(

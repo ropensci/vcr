@@ -59,8 +59,8 @@ test_that("local_cassette sets up temporary cassette", {
   expect_equal(current_cassette(), NULL)
 
   local({
-    local_cassette("foo1")
-    expect_equal(current_cassette()$name, "foo1")
+    local_cassette("foo")
+    expect_equal(current_cassette()$name, "foo")
   })
 
   expect_equal(current_cassette(), NULL)
