@@ -8,14 +8,13 @@ test_that("can turn off and turn on", {
   expect_true(turned_on())
 })
 
-test_that("turned_off works iif no cassettes active", {
-  insert_cassette("test", warn_on_empty = FALSE)
-  expect_snapshot(turned_off(5 + 5), error = TRUE)
-  eject_cassette()
+test_that("turned_off works if and only if no cassettes active", {
+  expect_no_error(turned_off({}))
 
-  expect_no_error(turned_off({
-    beetle <- crul::HttpClient$new(url = hb("/get"))$get()
-  }))
+  local({
+    local_cassette("test", warn_on_empty = FALSE)
+    expect_snapshot(turned_off(5 + 5), error = TRUE)
+  })
 })
 
 test_that("skip_if_vcr_off works", {
