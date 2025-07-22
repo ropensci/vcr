@@ -1,4 +1,6 @@
 test_that("check_cassette_names is deprecated", {
+  skip_on_cran()
+
   dir <- make_pkg()
   expect_snapshot(check_cassette_names(dir))
 })

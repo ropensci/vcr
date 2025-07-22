@@ -7,27 +7,27 @@ test_that("record mode: once", {
   conn <- crul::HttpClient$new(hb())
 
   # record interaction
-  one <- use_cassette("test", res1 <- conn$get("get"))
+  one <- use_cassette("testing4", res1 <- conn$get("get"))
   expect_equal(one$new_interactions, TRUE)
   expect_equal(one$http_interactions$length(), 1)
 
   # interaction should replay
   #  - we know it replayed if it doesn't timeout as timeout only
   #   used in real request
-  two <- use_cassette("test", res2 <- conn$get("get", timeout_ms = 1))
+  two <- use_cassette("testing4", res2 <- conn$get("get", timeout_ms = 1))
   expect_equal(two$new_interactions, FALSE)
   expect_equal(two$http_interactions$length(), 1)
   # check recorded interactions
   expect_equal(res2$content, res1$content)
 
   # delete cassette file, new interaction should be recorded successfully
-  unlink(file.path(the$config$dir, "test.yml"))
-  three <- use_cassette("test", res3 <- conn$get("get"))
+  unlink(file.path(the$config$dir, "testing4.yml"))
+  three <- use_cassette("testing5", res3 <- conn$get("get"))
   expect_equal(res3$content, res1$content)
 
   # raise error on attempted NEW INTERACTION on existing cassette file
   expect_error(
-    use_cassette("test", conn$get("get", query = list(foo = "bar"))),
+    use_cassette("testing5", conn$get("get", query = list(foo = "bar"))),
     class = "vcr_unhandled"
   )
 })
@@ -40,15 +40,15 @@ test_that("record mode: none", {
   conn <- crul::HttpClient$new(hb())
 
   # record first with another record mode to make the cassette
-  use_cassette("test", res1 <- conn$get("get"), record = "once")
+  use_cassette("testing6", res1 <- conn$get("get"), record = "once")
 
   # previously recorded interaction should replay
-  one <- use_cassette("test", res2 <- conn$get("get"))
+  one <- use_cassette("testing6", res2 <- conn$get("get"))
   expect_equal(res2$content, res1$content)
 
   # raise error if any NEW INTERACTIONS attempted
   expect_error(
-    use_cassette("test", conn$get("get", query = list(foo = "bar"))),
+    use_cassette("testing6", conn$get("get", query = list(foo = "bar"))),
     class = "vcr_unhandled",
   )
 })
@@ -56,10 +56,10 @@ test_that("record mode: none", {
 test_that("can replay two requests to the same url", {
   local_vcr_configure(dir = withr::local_tempdir())
 
-  use_cassette("test", {
+  use_cassette("testing7", {
     res_record <- list(httr::GET(hb("/get")), httr::GET(hb("/get")))
   })
-  use_cassette("test", {
+  use_cassette("testing7", {
     res_replay <- list(httr::GET(hb("/get")), httr::GET(hb("/get")))
   })
 
@@ -74,23 +74,26 @@ test_that("record mode: new_episodes", {
   conn <- crul::HttpClient$new(hb())
 
   # record first interaction
-  one <- use_cassette("test", res1 <- conn$get("get"))
+  one <- use_cassette("testing8", res1 <- conn$get("get"))
   expect_equal(one$new_interactions, TRUE)
   expect_equal(one$http_interactions$length(), 1)
 
   # first interaction again, should be played back
-  one_replay <- use_cassette("test", res1_replay <- conn$get("get"))
+  one_replay <- use_cassette("testing8", res1_replay <- conn$get("get"))
   expect_equal(one_replay$new_interactions, FALSE)
   expect_equal(one_replay$http_interactions$length(), 1)
   expect_equal(res1_replay$content, res1$content)
 
   # record new interaction, is recorded below first one above
-  two <- use_cassette("test", res2 <- conn$get("get", query = list(x = "a")))
+  two <- use_cassette(
+    "testing8",
+    res2 <- conn$get("get", query = list(x = "a"))
+  )
   expect_equal(two$new_interactions, TRUE)
   expect_equal(two$http_interactions$length(), 2)
 
   # first and second interaction again together, both should be played back
-  two_replay <- use_cassette("test", {
+  two_replay <- use_cassette("testing8", {
     res1_replay <- conn$get("get")
     res2_replay <- conn$get("get", query = list(x = "a"))
   })
@@ -108,7 +111,7 @@ test_that("record mode: all", {
   conn <- crul::HttpClient$new(hb())
 
   # record first interaction
-  one <- use_cassette("test", res1 <- conn$get("get"))
+  one <- use_cassette("testing9", res1 <- conn$get("get"))
   expect_equal(one$new_interactions, TRUE)
   expect_equal(one$http_interactions$length(), 1)
   interactions_1 <- one$http_interactions$interactions
@@ -118,7 +121,7 @@ test_that("record mode: all", {
 
   # previously recorded interactions do not playback
   # - recorded time and response header time have changed
-  two <- use_cassette("test", res2 <- conn$get("get"))
+  two <- use_cassette("testing9", res2 <- conn$get("get"))
   expect_equal(two$new_interactions, TRUE)
   expect_equal(two$http_interactions$length(), 1)
   interactions_2 <- two$http_interactions$interactions
@@ -132,7 +135,10 @@ test_that("record mode: all", {
   )
 
   # new interactions are recorded
-  three <- use_cassette("test", res3 <- conn$get("get", query = list(x = "a")))
+  three <- use_cassette(
+    "testing9",
+    res3 <- conn$get("get", query = list(x = "a"))
+  )
   expect_equal(three$new_interactions, TRUE)
   expect_equal(three$http_interactions$length(), 1)
 })
