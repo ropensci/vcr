@@ -1,4 +1,6 @@
 test_that("can turn off and turn on", {
+  skip_on_cran()
+
   local_light_switch()
 
   expect_snapshot(turn_off())
@@ -9,6 +11,8 @@ test_that("can turn off and turn on", {
 })
 
 test_that("turned_off works iif no cassettes active", {
+  skip_on_cran()
+
   insert_cassette("test", warn_on_empty = FALSE)
   expect_snapshot(turned_off(5 + 5), error = TRUE)
   eject_cassette()
@@ -28,6 +32,8 @@ test_that("skip_if_vcr_off works", {
 })
 
 test_that("inserting a cassette errors when vcr turned off and ignore_cassettes=FALSE", {
+  skip_on_cran()
+
   local_vcr_configure(warn_on_empty_cassette = FALSE)
   local_light_switch()
 
@@ -79,6 +85,8 @@ test_that("lightswitch_init() respects env vars", {
 })
 
 test_that("lightswitch env var handles varying inputs", {
+  skip_on_cran()
+
   withr::local_envvar(VCR_TURN_OFF = "true")
   expect_equal(lightswitch_init()$on, FALSE)
 
