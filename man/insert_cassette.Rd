@@ -22,8 +22,8 @@ eject_cassette()
 \item{name}{The name of the cassette. This is used to name a file on
 disk, so it must be valid file name.}
 
-\item{dir}{The directory where the cassette will be stored. If unspecified,
-(and hasn't been set in \code{\link[=vcr_configure]{vcr_configure()}}) will use \code{test_path("_vcr")}.}
+\item{dir}{The directory where the cassette will be stored. Defaults to
+\code{test_path("_vcr")}.}
 
 \item{record}{Record mode that dictates how HTTP requests/responses are
 recorded. Possible values are:
@@ -87,13 +87,6 @@ Generally you should not need to use these functions, instead preferring
 }
 \section{Cassette options}{
 
-
-Default values for arguments controlling cassette behavior are
-inherited from vcr's global configuration. See \code{\link[=vcr_configure]{vcr_configure()}} for a
-complete list of options and their default settings. You can override these
-options for a specific cassette by changing an argument's value to something
-other than \code{NULL} when calling either \code{insert_cassette()} or
-\code{use_cassette()}.
 }
 
 \examples{

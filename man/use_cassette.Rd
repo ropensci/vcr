@@ -37,8 +37,8 @@ disk, so it must be valid file name.}
 curly braces to encapsulate multi-line code blocks. If you can't pass a code
 block use \code{\link[=insert_cassette]{insert_cassette()}} instead.}
 
-\item{dir}{The directory where the cassette will be stored. If unspecified,
-(and hasn't been set in \code{\link[=vcr_configure]{vcr_configure()}}) will use \code{test_path("_vcr")}.}
+\item{dir}{The directory where the cassette will be stored. Defaults to
+\code{test_path("_vcr")}.}
 
 \item{record}{Record mode that dictates how HTTP requests/responses are
 recorded. Possible values are:
@@ -98,122 +98,19 @@ should be either the current environment or a parent frame (accessed
 through \code{\link[=parent.frame]{parent.frame()}}). See \code{vignette("withr", package = "withr")}
 for more details.}
 }
-\value{
-an object of class \code{Cassette}
-}
 \description{
-\code{use_cassette(...)} uses a cassette for the code in \code{...},
+\code{use_cassette(...)} uses a cassette for the code in \code{...};
 \code{local_cassette()} uses a cassette for the current function scope (e.g.
-for one test).
+for one test). Learn more in \code{vignette("vcr")}.
+
+Note that defaults for most arguments are controlled by \code{\link[=vcr_configure]{vcr_configure()}},
+so you may want to use that instead if you are changing the defaults for
+all cassettes.
 }
 \section{Cassette options}{
 
-
-Default values for arguments controlling cassette behavior are
-inherited from vcr's global configuration. See \code{\link[=vcr_configure]{vcr_configure()}} for a
-complete list of options and their default settings. You can override these
-options for a specific cassette by changing an argument's value to something
-other than \code{NULL} when calling either \code{insert_cassette()} or
-\code{use_cassette()}.
 }
 
-\section{Behavior}{
-
-This function handles a few different scenarios:
-\itemize{
-\item when everything runs smoothly, and we return a \code{Cassette} class object
-so you can inspect the cassette, and the cassette is ejected
-\item when there is an invalid parameter input on cassette creation,
-we fail with a useful message, we don't return a cassette, and the
-cassette is ejected
-\item when there is an error in calling your passed in code block,
-we return with a useful message, and since we use \code{on.exit()}
-the cassette is still ejected even though there was an error,
-but you don't get an object back
-\item whenever an empty cassette (a yml/json file) is found, we delete it
-before returning from the \code{use_cassette()} function call. we achieve
-this via use of \code{on.exit()} so an empty cassette is deleted even
-if there was an error in the code block you passed in
-}
-}
-
-\section{Cassettes on disk}{
-
-Note that \emph{"eject"} only means that the R session cassette is no longer
-in use. If any interactions were recorded to disk, then there is a file
-on disk with those interactions.
-}
-
-\section{Using with tests (specifically \pkg{testthat})}{
-
-There's a few ways to get correct line numbers for failed tests and
-one way to not get correct line numbers:
-
-\emph{Correct}: Either wrap your \code{test_that()} block inside your \code{use_cassette()}
-block, OR if you put your \code{use_cassette()} block inside your \code{test_that()}
-block put your \code{testthat} expectations outside of the \code{use_cassette()}
-block.
-
-\emph{Incorrect}: By wrapping the \code{use_cassette()} block inside your
-\code{test_that()} block with your \pkg{testthat} expectations inside the
-\code{use_cassette()} block, you'll only get the line number that the
-\code{use_cassette()} block starts on.
-}
-
-\examples{
-\dontrun{
-library(vcr)
-library(crul)
-vcr_configure(dir = tempdir())
-
-use_cassette(name = "apple7", {
-  cli <- HttpClient$new(url = "https://hb.opencpu.org")
-  resp <- cli$get("get")
-})
-readLines(file.path(tempdir(), "apple7.yml"))
-
-# preserve exact body bytes - records in base64 encoding
-use_cassette("things4", {
-  cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
-  bbb <- cli$get("get")
-}, preserve_exact_body_bytes = TRUE)
-## see the body string value in the output here
-readLines(file.path(tempdir(), "things4.yml"))
-
-# cleanup
-unlink(file.path(tempdir(), c("things4.yml", "apple7.yml")))
-
-
-# with httr
-library(vcr)
-library(httr)
-vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = file.path(tempdir(), "vcr.log")))
-
-use_cassette(name = "stuff350", {
-  res <- GET("https://hb.opencpu.org/get")
-})
-readLines(file.path(tempdir(), "stuff350.yml"))
-
-use_cassette(name = "catfact456", {
-  res <- GET("https://catfact.ninja/fact")
-})
-
-# record mode: none
-library(crul)
-vcr_configure(dir = tempdir())
-
-## make a connection first
-conn <- crul::HttpClient$new("https://eu.httpbin.org")
-## this errors because 'none' disallows any new requests
-# use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
-## first use record mode 'once' to record to a cassette
-one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
-one; res
-## then use record mode 'none' to see its behavior
-two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
-two; res2
-}
-}
 \seealso{
 \code{\link[=insert_cassette]{insert_cassette()}} and \code{\link[=eject_cassette]{eject_cassette()}} for the underlying
 functions.
