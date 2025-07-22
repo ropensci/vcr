@@ -14,7 +14,7 @@ RequestHandlerHttr <- R6::R6Class(
     },
     on_ignored_request = function() {
       vcr_httr_mock(FALSE)
-      withr::defer(vcr_httr_mock(TRUE))
+      defer(vcr_httr_mock(TRUE))
 
       httr_perform(self$request_original)
     },
@@ -25,7 +25,7 @@ RequestHandlerHttr <- R6::R6Class(
 
     on_recordable_request = function() {
       vcr_httr_mock(FALSE)
-      withr::defer(vcr_httr_mock(TRUE))
+      defer(vcr_httr_mock(TRUE))
 
       response <- httr_perform(self$request_original)
 

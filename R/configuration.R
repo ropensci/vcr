@@ -201,7 +201,7 @@ vcr_configure <- function(
 #' @inheritParams local_cassette
 local_vcr_configure <- function(..., .frame = parent.frame()) {
   old <- vcr_configure(...)
-  withr::defer(exec(vcr_configure, !!!old), envir = .frame)
+  defer(exec(vcr_configure, !!!old), .frame)
   invisible()
 }
 

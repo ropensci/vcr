@@ -65,7 +65,7 @@ turn_off <- function(ignore_cassettes = FALSE) {
 #' @export
 turned_off <- function(code, ignore_cassettes = FALSE) {
   suppressMessages(turn_off(ignore_cassettes = ignore_cassettes))
-  on.exit(turn_on())
+  defer(turn_on())
 
   code
 }

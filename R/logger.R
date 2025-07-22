@@ -60,7 +60,7 @@ local_vcr_configure_log <- function(
     include_date = include_date,
     log_prefix = log_prefix
   )
-  withr::defer(exec(vcr_configure, !!!old), envir = frame)
+  defer(exec(vcr_configure, !!!old), frame)
 
   invisible()
 }
