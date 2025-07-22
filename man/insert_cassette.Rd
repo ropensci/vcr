@@ -85,10 +85,6 @@ A \link{Cassette}, invisibly.
 Generally you should not need to use these functions, instead preferring
 \code{\link[=use_cassette]{use_cassette()}} or \code{\link[=local_cassette]{local_cassette()}}
 }
-\section{Cassette options}{
-
-}
-
 \examples{
 vcr_configure(dir = tempdir())
 

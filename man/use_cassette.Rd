@@ -107,10 +107,6 @@ Note that defaults for most arguments are controlled by \code{\link[=vcr_configu
 so you may want to use that instead if you are changing the defaults for
 all cassettes.
 }
-\section{Cassette options}{
-
-}
-
 \seealso{
 \code{\link[=insert_cassette]{insert_cassette()}} and \code{\link[=eject_cassette]{eject_cassette()}} for the underlying
 functions.

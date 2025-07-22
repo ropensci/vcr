@@ -65,7 +65,6 @@
 #'   have been recorded. Default: `NULL` (inherits from global configuration).
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
 #'   functions.
-#' @section Cassette options:
 use_cassette <- function(
   name,
   ...,
