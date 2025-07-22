@@ -58,7 +58,7 @@ RequestHandler <- R6::R6Class(
       }
       cli::cli_abort(
         c(
-          "Failed to find matching request in active cassette.",
+          "Failed to find matching request in active cassette, {.str {cassette$name}}.",
           i = if (!the$config$log) {
             "Use {.fn local_vcr_configure_log} to get more details."
           },
