@@ -239,7 +239,7 @@ local_cassette <- function(
     warn_on_empty = warn_on_empty
   )
   if (!is.null(cassette)) {
-    withr::defer(eject_cassette(), envir = frame)
+    defer(eject_cassette(), frame)
   }
 
   invisible(cassette)
