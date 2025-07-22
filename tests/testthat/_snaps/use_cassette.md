@@ -33,12 +33,12 @@
       local_cassette("foo bar")
     Condition
       Error in `local_cassette()`:
-      ! `name` must not contain spaces.
+      ! `name`, "foo bar", must not contain spaces.
     Code
       local_cassette("foo.yml")
     Condition
       Error in `local_cassette()`:
-      ! `name` must not include an extension.
+      ! `name`, "foo.yml", must not include an extension.
     Code
       local_cassette("foo/bar")
     Condition
@@ -48,12 +48,12 @@
       local_cassette("foo\nbar")
     Condition
       Error in `local_cassette()`:
-      ! `name` must not contain spaces.
+      ! `name`, "foo bar", must not contain spaces.
     Code
       local_cassette("foo\nbar.")
     Condition
       Error in `local_cassette()`:
-      ! `name` must not contain spaces.
+      ! `name`, "foo bar.", must not contain spaces.
     Code
       local_cassette("..")
     Condition
@@ -79,5 +79,5 @@
       })
     Condition
       Error in `local_cassette()`:
-      ! `name` must not be the same as an existing cassette.
+      ! `name`, "foo", must not be the same as an existing cassette.
 

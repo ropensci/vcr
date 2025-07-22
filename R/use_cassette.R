@@ -248,17 +248,23 @@ local_cassette <- function(
 check_cassette_name <- function(x, call = caller_env()) {
   if (any(x %in% cassette_names())) {
     cli::cli_abort(
-      "{.arg name} must not be the same as an existing cassette.",
+      "{.arg name}, {.str {x}}, must not be the same as an existing cassette.",
       call = call
     )
   }
 
   if (grepl("\\s", x)) {
-    cli::cli_abort("{.arg name} must not contain spaces.", call = call)
+    cli::cli_abort(
+      "{.arg name}, {.str {x}}, must not contain spaces.",
+      call = call
+    )
   }
 
   if (grepl("\\.yml$|\\.yaml$", x)) {
-    cli::cli_abort("{.arg name} must not include an extension.", call = call)
+    cli::cli_abort(
+      "{.arg name}, {.str {x}}, must not include an extension.",
+      call = call
+    )
   }
 
   # the below adapted from fs::path_sanitize, which adapted
