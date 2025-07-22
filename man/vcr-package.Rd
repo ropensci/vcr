@@ -6,6 +6,8 @@
 \alias{vcr-package}
 \title{vcr: Record 'HTTP' Calls to Disk}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Record test suite 'HTTP' requests and replays them during future runs. A port of the Ruby gem of the same name (\url{https://github.com/vcr/vcr/}). Works by recording real 'HTTP' requests/responses on disk in 'cassettes', and then replaying matching responses on subsequent requests.
 }
 \section{Backstory}{

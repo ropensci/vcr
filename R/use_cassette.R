@@ -1,8 +1,13 @@
 #' Use a cassette to record HTTP requests
 #'
-#' `use_cassette(...)` uses a cassette for the code in `...`,
+#' @description
+#' `use_cassette(...)` uses a cassette for the code in `...`;
 #' `local_cassette()` uses a cassette for the current function scope (e.g.
-#' for one test).
+#' for one test). Learn more in `vignette("vcr")`.
+#'
+#' Note that defaults for most arguments are controlled by [vcr_configure()],
+#' so you may want to use that instead if you are changing the defaults for
+#' all cassettes.
 #'
 #' @export
 #' @param name The name of the cassette. This is used to name a file on
@@ -10,8 +15,8 @@
 #' @param ... a block of code containing one or more requests (required). Use
 #' curly braces to encapsulate multi-line code blocks. If you can't pass a code
 #' block use [insert_cassette()] instead.
-#' @param dir The directory where the cassette will be stored. If unspecified,
-#'   (and hasn't been set in [vcr_configure()]) will use `test_path("_vcr")`.
+#' @param dir The directory where the cassette will be stored. Defaults to
+#'   `test_path("_vcr")`.
 #' @param record Record mode that dictates how HTTP requests/responses are
 #'   recorded. Possible values are:
 #'
@@ -60,106 +65,6 @@
 #'   have been recorded. Default: `NULL` (inherits from global configuration).
 #' @seealso [insert_cassette()] and [eject_cassette()] for the underlying
 #'   functions.
-#' @section Cassette options:
-#'
-#' Default values for arguments controlling cassette behavior are
-#' inherited from vcr's global configuration. See [`vcr_configure()`] for a
-#' complete list of options and their default settings. You can override these
-#' options for a specific cassette by changing an argument's value to something
-#' other than `NULL` when calling either `insert_cassette()` or
-#' `use_cassette()`.
-#'
-#' @section Behavior:
-#' This function handles a few different scenarios:
-#'
-#' - when everything runs smoothly, and we return a `Cassette` class object
-#' so you can inspect the cassette, and the cassette is ejected
-#' - when there is an invalid parameter input on cassette creation,
-#' we fail with a useful message, we don't return a cassette, and the
-#' cassette is ejected
-#' - when there is an error in calling your passed in code block,
-#' we return with a useful message, and since we use `on.exit()`
-#' the cassette is still ejected even though there was an error,
-#' but you don't get an object back
-#' - whenever an empty cassette (a yml/json file) is found, we delete it
-#' before returning from the `use_cassette()` function call. we achieve
-#' this via use of `on.exit()` so an empty cassette is deleted even
-#' if there was an error in the code block you passed in
-#'
-#' @section Cassettes on disk:
-#' Note that _"eject"_ only means that the R session cassette is no longer
-#' in use. If any interactions were recorded to disk, then there is a file
-#' on disk with those interactions.
-#'
-#' @section Using with tests (specifically \pkg{testthat}):
-#' There's a few ways to get correct line numbers for failed tests and
-#' one way to not get correct line numbers:
-#'
-#' *Correct*: Either wrap your `test_that()` block inside your `use_cassette()`
-#' block, OR if you put your `use_cassette()` block inside your `test_that()`
-#' block put your `testthat` expectations outside of the `use_cassette()`
-#' block.
-#'
-#' *Incorrect*: By wrapping the `use_cassette()` block inside your
-#' `test_that()` block with your \pkg{testthat} expectations inside the
-#' `use_cassette()` block, you'll only get the line number that the
-#' `use_cassette()` block starts on.
-#'
-#' @return an object of class `Cassette`
-#'
-#' @examples \dontrun{
-#' library(vcr)
-#' library(crul)
-#' vcr_configure(dir = tempdir())
-#'
-#' use_cassette(name = "apple7", {
-#'   cli <- HttpClient$new(url = "https://hb.opencpu.org")
-#'   resp <- cli$get("get")
-#' })
-#' readLines(file.path(tempdir(), "apple7.yml"))
-#'
-#' # preserve exact body bytes - records in base64 encoding
-#' use_cassette("things4", {
-#'   cli <- crul::HttpClient$new(url = "https://hb.opencpu.org")
-#'   bbb <- cli$get("get")
-#' }, preserve_exact_body_bytes = TRUE)
-#' ## see the body string value in the output here
-#' readLines(file.path(tempdir(), "things4.yml"))
-#'
-#' # cleanup
-#' unlink(file.path(tempdir(), c("things4.yml", "apple7.yml")))
-#'
-#'
-#' # with httr
-#' library(vcr)
-#' library(httr)
-#' vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = file.path(tempdir(), "vcr.log")))
-#'
-#' use_cassette(name = "stuff350", {
-#'   res <- GET("https://hb.opencpu.org/get")
-#' })
-#' readLines(file.path(tempdir(), "stuff350.yml"))
-#'
-#' use_cassette(name = "catfact456", {
-#'   res <- GET("https://catfact.ninja/fact")
-#' })
-#'
-#' # record mode: none
-#' library(crul)
-#' vcr_configure(dir = tempdir())
-#'
-#' ## make a connection first
-#' conn <- crul::HttpClient$new("https://eu.httpbin.org")
-#' ## this errors because 'none' disallows any new requests
-#' # use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
-#' ## first use record mode 'once' to record to a cassette
-#' one <- use_cassette("none_eg", (res <- conn$get("get")), record = "once")
-#' one; res
-#' ## then use record mode 'none' to see its behavior
-#' two <- use_cassette("none_eg", (res2 <- conn$get("get")), record = "none")
-#' two; res2
-#' }
-
 use_cassette <- function(
   name,
   ...,
