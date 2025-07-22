@@ -1,6 +1,6 @@
 local_light_switch <- function(frame = parent.frame()) {
   old <- the$light_switch
-  withr::defer(the$light_switch <- old, envir = frame)
+  defer(the$light_switch <- old, frame)
 }
 
 desc_text <- "Package: %s
@@ -33,10 +33,6 @@ skip_if_localhost_8000_gone <- function() {
     return()
   }
   testthat::skip("port 8000 not available")
-}
-
-recorded_at <- function(x) {
-  yaml::yaml.load_file(x$file())$http_interactions[[1]]$recorded_at
 }
 
 check_url <- function(x, ...) {
@@ -89,8 +85,17 @@ find_httpbin_server <- function() {
   stop("all httpbin servers down")
 }
 
+recorded_at <- function(x) {
+  read_yaml(x$file())$http_interactions[[1]]$recorded_at
+}
 read_cassette <- function(name) {
-  yaml::yaml.load_file(file.path(the$config$dir, name))
+  read_yaml(file.path(the$config$dir, name))
+}
+read_yaml <- function(path) {
+  if (!file.exists(path)) {
+    cli::cli_abort("{.path {path}} does not exist.")
+  }
+  yaml::yaml.load_file(path)
 }
 
 testthat::set_state_inspector(\() {

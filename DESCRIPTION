@@ -35,7 +35,6 @@ Imports:
     rlang (>= 1.1.0),
     rprojroot,
     waldo,
-    withr,
     yaml
 Suggests:
     crul (>= 1.6.0),
@@ -47,7 +46,8 @@ Suggests:
     rmarkdown,
     roxygen2 (>= 7.2.1),
     testthat (>= 3.0.0),
-    webfakes
+    webfakes,
+    withr
 VignetteBuilder:
     knitr
 Remotes: ropensci/crul

@@ -51,6 +51,6 @@
       [Cassette: test]   No matching requests
     Condition
       Error:
-      ! Failed to find matching request in active cassette.
+      ! Failed to find matching request in active cassette, "test".
       i Learn more in `vignette(vcr::debugging)`.
 

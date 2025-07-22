@@ -127,8 +127,8 @@ test_that("record mode: all", {
   expect_lt(interactions_1[[1]]$recorded_at, interactions_2[[1]]$recorded_at)
   # and request is re-perf
   expect_lt(
-    parse_http_date(res1$response_headers$date),
-    parse_http_date(res2$response_headers$date)
+    httr::parse_http_date(res1$response_headers$date),
+    httr::parse_http_date(res2$response_headers$date)
   )
 
   # new interactions are recorded

@@ -82,16 +82,6 @@ pkg_versions <- function() {
 # for mocking
 Sys.time <- NULL
 
-parse_http_date <- function(x) {
-  check_string(x)
-
-  withr::local_locale(LC_TIME = "C")
-  # https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.1.1
-  out <- as.POSIXct(strptime(x, "%a, %d %b %Y %H:%M:%S", tz = "UTC"))
-  attr(out, "tzone") <- NULL
-  out
-}
-
 cat_line <- function(...) {
   cat(paste0(..., "\n", collapse = ""))
 }
@@ -121,4 +111,9 @@ hz_namez <- function(x) {
   } else {
     !(is.na(nms) | nms == "")
   }
+}
+
+defer <- function(expr, env = caller_env(), after = FALSE) {
+  thunk <- as.call(list(function() expr))
+  do.call(on.exit, list(thunk, TRUE, after), envir = env)
 }
