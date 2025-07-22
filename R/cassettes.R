@@ -5,7 +5,6 @@
 #'
 #' @export
 #' @inheritParams use_cassette
-#' @inheritSection use_cassette Cassette options
 #' @return A [Cassette], invisibly.
 #' @keywords internal
 #' @examples
