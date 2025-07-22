@@ -25,21 +25,18 @@
     Output
       [Cassette: test] Inserting 'test.yml' (new cassette)
       [Cassette: test]   Mode: recording
-      stdout:]
-        
-      stderr:]
-        
-    Condition
-      Error:
-      ! Could not start R session, timed out
+      [Cassette: test] Handling request: GET {httpbin}/html
+      [Cassette: test]   Recording response: 200 with 1443 bytes of text/html data
+      [Cassette: test] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/html")))
     Output
-      [Cassette: test] Ejecting
-      [Cassette: test] Inserting 'test.yml' (new cassette)
-      [Cassette: test]   Mode: recording
+      [Cassette: test] Inserting 'test.yml' (with 1 interactions)
+      [Cassette: test]   Mode: replaying
       [Cassette: test] Handling request: GET {httpbin}/html
-      [Cassette: test]   Recording response: 200 with 1443 bytes of text/html data
+      [Cassette: test]   Looking for existing requests using method/uri
+      [Cassette: test]     Request 1: MATCH
+      [Cassette: test]   Replaying response 1
       [Cassette: test] Ejecting
     Code
       use_cassette("test", httr::GET(hb("/404")))
