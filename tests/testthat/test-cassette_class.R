@@ -3,6 +3,8 @@ test_that("has nice print method", {
 })
 
 test_that("cassette warns if ejected with no interactions", {
+  skip_on_cran() # snapshots not run on CRAN so never ejected
+
   cl <- Cassette$new("test")
   cl$insert()
   expect_snapshot(. <- cl$eject())
