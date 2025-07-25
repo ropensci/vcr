@@ -8,7 +8,7 @@ vcr 2.0.0
 * The `verbose_errors` errors options is no longer supported.
 * `clean_outdated_http_interactions` has been removed; now all you need to do is set `re_record_interval`.
 * `check_cassette_names()` has been deprecated since it can't be implemented 100% correctly and diagnoses a relatively rare problem (#166).
-* `RequestHandler` and its subclasses are no longer exported. (#)
+* `RequestHandler` and its subclasses are no longer exported.
 * Internal `real_http_connections_allowed()` is no longer exported and has been removed. (#409)
 * Internal `Request` and `VcrResponse` classes are no longer exported and have been removed.
 * `HTTPInteractionList` is no longer exported; it's an internal implementation detail.
