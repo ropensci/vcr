@@ -32,3 +32,8 @@ articles:
   - title: internal
     contents:
       - knitr-test
+
+news:
+  releases:
+    - text: vcr 2.0.0
+      href: https://recology.info/2025/07/vcr-v2/
