@@ -108,7 +108,7 @@ use_vcr_examples <- function(path = ".") {
 #' @param y Value to append
 #'
 #' @return A character string
-#' @dev
+#' @noRd
 #'
 #' @examples
 #' paste_desc(NA, 1)
