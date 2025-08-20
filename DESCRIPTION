@@ -33,6 +33,7 @@ Imports:
     lifecycle,
     R6,
     rlang (>= 1.1.0),
+    roxygen2,
     rprojroot,
     waldo,
     yaml
@@ -44,7 +45,6 @@ Suggests:
     knitr,
     qs2,
     rmarkdown,
-    roxygen2 (>= 7.2.1),
     testthat (>= 3.0.0),
     webfakes,
     withr
