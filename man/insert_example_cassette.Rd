@@ -67,16 +67,22 @@ cassette should be re-recorded. Default: \code{NULL} (not re-recorded).}
 }
 \description{
 \code{insert_example_cassette()} is a wrapper around \code{\link[=insert_cassette]{insert_cassette()}} that
-stores cassettes in \verb{inst/_vcr/}. Call it in the first line of your examples
+stores cassettes in \verb{inst/_vcr/}. Either:
+\itemize{
+\item Use the vcr-specific \verb{@examplesVCR} tag instead of the \verb{@examples} tag.
+For this to work you need to register vcr in your DESCRIPTION by running
+\code{vcr::use_vcr_examples()} once per package.
+\item Call it in the first line of your examples
 (typically wrapped in \verb{\dontshow{}}), and call \code{eject_cassette()} on the
 last line.
+}
 
 Run the example manually once to record the vignettte, then it will be
 replayed during \verb{R CMD check}, ensuring that your example no longer uses
 the internet.
 }
 \examples{
-\dontshow{if (requireNamespace("httr2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("httr2")) withAutoprint(\{ # examplesIf}
 # In this example I'm showing the insert and eject commands, but you'd
 # usually wrap these in \dontshow{} so the user doesn't see them and
 # think that they're something they need to copy.
