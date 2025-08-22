@@ -1,18 +1,7 @@
-#' @importFrom roxygen2 roxy_tag_parse
-#' @importFrom roxygen2 roxy_tag_rd
-NULL
-
-#' @export
-roxy_tag_parse.roxy_tag_examplesVCR <- function(x) {
-  roxygen2::tag_markdown(x)
-}
-
-#' @export
 roxy_tag_rd.roxy_tag_examplesVCR <- function(x, base_path, env) {
   roxygen2::rd_section("examples", x$val)
 }
 
-#' @export
 roxy_tag_parse.roxy_tag_examplesVCR <- function(x, ...) {
   lines <- unlist(strsplit(x$raw, "\r?\n"))
 
@@ -37,22 +26,17 @@ roxy_tag_parse.roxy_tag_examplesVCR <- function(x, ...) {
 
 
 #' @export
+#' @keywords internal
+#' @title Roclet for VCR examples
 # https://github.com/shahronak47/informationtag
 examplesVCR_roclet <- function() {
   roxygen2::roclet("examplesVCR")
 }
 
-#' @importFrom roxygen2 block_get_tags roclet_process
-#' @method roclet_process roclet_examplesVCR
-#' @export
-# https://github.com/shahronak47/informationtag
 roclet_process.roclet_examplesVCR <- function(x, blocks, env, base_path) {
   x
 }
 
-
-#' @export
-#' @importFrom roxygen2 block_get_tags roclet_output
 roclet_output.roclet_examplesVCR <- function(x, results, base_path, ...) {
   x
 }

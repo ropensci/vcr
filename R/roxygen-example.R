@@ -3,5 +3,7 @@
 #' @title Trying out our custom tag
 #' @keywords internal
 #' @examplesVCR bla
-#' 1 + 1
+#' if (rlang::check_installed("httr2")) {
+#'   httr2::request("http://r-project.org")
+#' }
 NULL

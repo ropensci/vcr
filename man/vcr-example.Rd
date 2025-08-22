@@ -8,7 +8,9 @@ Trying out our custom tag
 }
 \examples{
 \dontshow{vcr::insert_example_cassette('bla', package = 'vcr')}
-1 + 1
+if (rlang::check_installed("httr2")) {
+  httr2::request("http://r-project.org")
+}
 \dontshow{vcr::eject_cassette()}
 }
 \keyword{internal}
