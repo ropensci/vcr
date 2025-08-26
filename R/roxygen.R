@@ -1,7 +1,9 @@
+#' @exportS3Method roxygen2::roxy_tag_rd
 roxy_tag_rd.roxy_tag_examplesVCR <- function(x, base_path, env) {
   roxygen2::rd_section("examples", x$val)
 }
 
+#' @exportS3Method roxygen2::roxy_tag_parse
 roxy_tag_parse.roxy_tag_examplesVCR <- function(x, ...) {
   lines <- unlist(strsplit(x$raw, "\r?\n"))
 
@@ -33,10 +35,12 @@ examplesVCR_roclet <- function() {
   roxygen2::roclet("examplesVCR")
 }
 
+#' @exportS3Method roxygen2::roclet_process
 roclet_process.roclet_examplesVCR <- function(x, blocks, env, base_path) {
   x
 }
 
+#' @exportS3Method roxygen2::roclet_output
 roclet_output.roclet_examplesVCR <- function(x, results, base_path, ...) {
   x
 }
