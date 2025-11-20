@@ -61,4 +61,4 @@ RoxygenNote: 7.3.2
 X-schema.org-applicationCategory: Web
 X-schema.org-isPartOf: https://ropensci.org
 X-schema.org-keywords: http, https, API, web-services, curl, mock,
-    mocking, http-mocking, testing, testing-tools, tdd
+    mocking, http-mocking, testing, testing-tools, tdd, tests
