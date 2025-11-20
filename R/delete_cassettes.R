@@ -25,10 +25,10 @@
 #' @details
 #' The function will:
 #' 1. Look for cassettes (`.yml`, `.yaml`, `.json`, or `.qs2` extensions)
-#'    in the specified directory or directories
-#' 2. Match cassettes whose names start with the given prefix
-#' 3. Delete all matching cassettes
-#' 4. Report how many cassettes were deleted
+#'    in the specified directory or directories.
+#' 2. Match cassettes whose names start with the given prefix.
+#' 3. Delete all matching cassettes.
+#' 4. Report how many cassettes were deleted.
 #'
 #' @seealso [cassette_path()] for locating cassettes, [use_cassette()] for
 #'   creating cassettes.
@@ -54,9 +54,9 @@ delete_cassettes <- function(
   check_string(prefix, allow_empty = FALSE)
   type <- arg_match(type, multiple = TRUE)
 
-  all_deleted <- purrr::map(type, delete_type_cassettes, prefix = prefix)
+  all_deleted <- map(type, delete_type_cassettes, prefix = prefix)
 
-  all_deleted <- purrr::flatten_chr(all_deleted)
+  all_deleted <- unlist(all_deleted)
 
   if (length(all_deleted) == 0) {
     cli::cli_inform(
@@ -68,7 +68,7 @@ delete_cassettes <- function(
   cli::cli_alert_success(
     "Deleted {length(all_deleted)} cassette{?s} matching prefix {.str {prefix}}:"
   )
-  purrr::walk(all_deleted, function(cassette) {
+  walk(all_deleted, function(cassette) {
     cli::cli_bullets(c("*" = "{.file {basename(cassette)}}"))
   })
 
@@ -109,7 +109,7 @@ delete_type_cassettes <- function(type, prefix) {
   }
 
   # Delete the matching cassettes
-  deleted <- purrr::keep(matching_cassettes, function(cassette) {
+  deleted <- keep(matching_cassettes, function(cassette) {
     success <- file.remove(cassette)
     if (!success) {
       cli::cli_warn("Failed to delete {.path {cassette}}.")
