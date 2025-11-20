@@ -32,7 +32,7 @@ Imports:
     jsonlite,
     lifecycle,
     R6,
-    rlang,
+    rlang (>= 1.1.0),
     rprojroot,
     waldo,
     yaml
