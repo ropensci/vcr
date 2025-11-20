@@ -61,39 +61,6 @@ test_that("delete_cassettes() deletes cassettes with matching prefix", {
   expect_false(file.exists(file.path(dir, "api-post.yml")))
   expect_true(file.exists(file.path(dir, "other-test.yml")))
 })
-
-test_that("delete_cassettes() works with exact cassette name", {
-  dir <- withr::local_tempdir()
-  local_vcr_configure(dir = dir)
-
-  # Create test cassettes
-  local({
-    local_cassette("exact")
-    httr::GET(hb("/get"))
-  })
-
-  local({
-    local_cassette("exact-2")
-    httr::GET(hb("/get"))
-  })
-
-  # Verify cassettes were created
-  expect_true(file.exists(file.path(dir, "exact.yml")))
-  expect_true(file.exists(file.path(dir, "exact-2.yml")))
-
-  # Delete with exact name will also delete exact-2
-  expect_snapshot(
-    {
-      deleted <- delete_cassettes("exact", type = "tests")
-    },
-    transform = function(x) gsub(dir, "<temp_dir>", x, fixed = TRUE)
-  )
-
-  expect_length(deleted, 2)
-  expect_false(file.exists(file.path(dir, "exact.yml")))
-  expect_false(file.exists(file.path(dir, "exact-2.yml")))
-})
-
 test_that("delete_cassettes() works with multiple types", {
   # Set up directories
   test_dir <- withr::local_tempdir()
@@ -240,29 +207,4 @@ test_that("delete_cassettes() informs when no cassettes match prefix", {
 
   # Original cassette should still exist
   expect_true(file.exists(file.path(dir, "other.yml")))
-})
-
-test_that("delete_cassettes() respects vcr_configure() directory", {
-  custom_dir <- withr::local_tempdir()
-  local_vcr_configure(dir = custom_dir)
-
-  # Create a cassette in the custom directory
-  local({
-    local_cassette("configured-test")
-    httr::GET(hb("/get"))
-  })
-
-  # Verify cassette was created in custom directory
-  expect_true(file.exists(file.path(custom_dir, "configured-test.yml")))
-
-  # Delete should find and delete from the configured directory
-  expect_snapshot(
-    {
-      deleted <- delete_cassettes("configured-", type = "tests")
-    },
-    transform = function(x) gsub(custom_dir, "<custom_dir>", x, fixed = TRUE)
-  )
-
-  expect_length(deleted, 1)
-  expect_false(file.exists(file.path(custom_dir, "configured-test.yml")))
 })

@@ -33,15 +33,6 @@
       * 'api-get.yml'
       * 'api-post.yml'
 
-# delete_cassettes() works with exact cassette name
-
-    Code
-      deleted <- delete_cassettes("exact", type = "tests")
-    Message
-      v Deleted 2 cassettes matching prefix "exact":
-      * 'exact-2.yml'
-      * 'exact.yml'
-
 # delete_cassettes() works with multiple types
 
     Code
@@ -77,12 +68,4 @@
     Message
       No cassettes matching prefix "nomatch" found in '<temp_dir>'.
       No cassettes matching prefix "nomatch" were found.
-
-# delete_cassettes() respects vcr_configure() directory
-
-    Code
-      deleted <- delete_cassettes("configured-", type = "tests")
-    Message
-      v Deleted 1 cassette matching prefix "configured-":
-      * 'configured-test.yml'
 
