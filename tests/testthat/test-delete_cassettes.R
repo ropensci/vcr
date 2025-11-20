@@ -54,7 +54,7 @@ test_that("delete_cassettes() deletes cassettes with matching prefix", {
 
   # Check that the right cassettes were deleted
   expect_length(deleted, 2)
-  expect_true(all(grepl("api-", basename(deleted))))
+  expect_all_true(grepl("api-", basename(deleted)))
 
   # Verify cassettes were actually deleted
   expect_false(file.exists(file.path(dir, "api-get.yml")))
@@ -133,12 +133,25 @@ test_that("delete_cassettes() works with multiple types", {
   # Delete cassettes with "multi-" prefix from multiple locations
   expect_snapshot(
     {
-      deleted <- delete_cassettes("multi-", type = c("tests", "examples", "vignettes"))
+      deleted <- delete_cassettes(
+        "multi-",
+        type = c("tests", "examples", "vignettes")
+      )
     },
     transform = function(x) {
       x <- gsub(test_dir, "<test_dir>", x, fixed = TRUE)
-      x <- gsub(file.path(pkg_root, "inst", "_vcr"), "<inst_vcr>", x, fixed = TRUE)
-      x <- gsub(file.path(pkg_root, "vignettes", "_vcr"), "<vignettes_vcr>", x, fixed = TRUE)
+      x <- gsub(
+        file.path(pkg_root, "inst", "_vcr"),
+        "<inst_vcr>",
+        x,
+        fixed = TRUE
+      )
+      x <- gsub(
+        file.path(pkg_root, "vignettes", "_vcr"),
+        "<vignettes_vcr>",
+        x,
+        fixed = TRUE
+      )
       x
     }
   )
@@ -200,7 +213,9 @@ test_that("delete_cassettes() informs when directory doesn't exist", {
     {
       result <- delete_cassettes("test", type = "examples")
     },
-    transform = function(x) gsub(file.path(pkg_root, "inst", "_vcr"), "<inst_vcr>", x, fixed = TRUE)
+    transform = function(x) {
+      gsub(file.path(pkg_root, "inst", "_vcr"), "<inst_vcr>", x, fixed = TRUE)
+    }
   )
   expect_identical(result, character(0))
 })
