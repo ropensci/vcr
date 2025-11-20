@@ -109,10 +109,10 @@ delete_type_cassettes <- function(type, prefix) {
   }
 
   # Delete the matching cassettes
-  deleted <- keep(matching_cassettes, function(cassette) {
-    success <- file.remove(cassette)
+  deleted <- keep(matching_cassettes, \(x) {
+    success <- file.remove(x)
     if (!success) {
-      cli::cli_warn("Failed to delete {.path {cassette}}.")
+      cli::cli_warn("Failed to delete {.path {x}}.")
     }
     success
   })
