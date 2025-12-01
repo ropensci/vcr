@@ -1,6 +1,7 @@
 test_that("check_cassette_names is deprecated", {
   dir <- make_pkg()
-  expect_snapshot(check_cassette_names(dir))
+  withr::local_dir(file.path(dir, "tests/testthat"))
+  expect_snapshot(check_cassette_names())
 })
 
 test_that("check_cassette_names", {
