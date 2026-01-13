@@ -3,19 +3,23 @@ roxy_tag_rd.roxy_tag_examplesVCR <- function(x, base_path, env) {
   roxygen2::rd_section("examples", x$val)
 }
 
+# for mocking in tests
+current_package <- function() {
+  roxygen2::roxy_meta_get("current_package")
+}
+
 #' @exportS3Method roxygen2::roxy_tag_parse
 roxy_tag_parse.roxy_tag_examplesVCR <- function(x, ...) {
   lines <- unlist(strsplit(x$raw, "\r?\n"))
 
   cassette_name <- trimws(lines[1])
-  package_name <- roxygen2::roxy_meta_get("current_package")
 
   x$raw <- paste(
     c(
       sprintf(
         "\\dontshow{vcr::insert_example_cassette('%s', package = '%s')}",
         cassette_name,
-        package_name
+        current_package()
       ),
       lines[-1],
       "\\dontshow{vcr::eject_cassette()}"
@@ -32,17 +36,17 @@ roxy_tag_parse.roxy_tag_examplesVCR <- function(x, ...) {
 #' @title Roclet for VCR examples
 # https://github.com/shahronak47/informationtag
 examplesVCR_roclet <- function() {
-  roxygen2::roclet("examplesVCR")
+  roxygen2::roclet(c("examplesVCR", "rd"))
 }
 
 #' @exportS3Method roxygen2::roclet_process
 roclet_process.roclet_examplesVCR <- function(x, blocks, env, base_path) {
-  x
+  NextMethod()
 }
 
 #' @exportS3Method roxygen2::roclet_output
 roclet_output.roclet_examplesVCR <- function(x, results, base_path, ...) {
-  x
+  NextMethod()
 }
 
 #' Use 'vcr' for examples in your package

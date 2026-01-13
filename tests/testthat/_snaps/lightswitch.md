@@ -5,7 +5,7 @@
     Message
       vcr turned off; see ?turn_on to turn vcr back on
 
-# turned_off works iif no cassettes active
+# turned_off works if and only if no cassettes active
 
     Code
       turned_off(5 + 5)
