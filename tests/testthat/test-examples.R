@@ -9,7 +9,7 @@ test_that("insert_example_cassette works as expected", {
     # insert_example_cassette shouldn't actually create a file
     # under this test scenario
     inserted_cas <- insert_example_cassette("fiz-baz", package = "vcr")
-    req <- httr2::request("https://hb.cran.dev/get")
+    req <- httr2::request(hb("/get"))
     resp <- httr2::req_perform(req)
     ejected_cas <- eject_cassette()
 
