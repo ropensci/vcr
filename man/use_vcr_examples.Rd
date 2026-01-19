@@ -14,5 +14,5 @@ Nothing: called for file system side effects.
 }
 \description{
 This functions amends DESCRIPTION to set up vcr's roxygen2 machinery.
-Call it once when you're setting a new package.
+Call it once when you're setting up a new package.
 }

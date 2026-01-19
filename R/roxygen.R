@@ -52,7 +52,7 @@ roclet_output.roclet_examplesVCR <- function(x, results, base_path, ...) {
 #' Use 'vcr' for examples in your package
 #'
 #' This functions amends DESCRIPTION to set up vcr's roxygen2 machinery.
-#' Call it once when you're setting a new package.
+#' Call it once when you're setting up a new package.
 #'
 #' @param path character path to the package
 #'
