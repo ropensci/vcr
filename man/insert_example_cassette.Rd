@@ -75,11 +75,14 @@ For this to work you need to register vcr in your DESCRIPTION by running
 \item Call it in the first line of your examples
 (typically wrapped in \verb{\dontshow{}}), and call \code{eject_cassette()} on the
 last line.
-}
-
-Run the example manually once to record the vignettte, then it will be
+\item Run \code{document()}
+\item Run the example manually once to record the cassette, either with \code{devtools::run_examples()}
+(which will run all examples) or by copy pasting the relevant lines from the Rd files
+in your console.
+\item Then the cassette will be
 replayed during \verb{R CMD check}, ensuring that your example no longer uses
 the internet.
+}
 }
 \examples{
 \dontshow{if (requireNamespace("httr2")) withAutoprint(\{ # examplesIf}
