@@ -29,26 +29,6 @@ roxy_tag_parse.roxy_tag_examplesVCR <- function(x, ...) {
   x$value <- ""
   roxygen2::tag_examples(x)
 }
-
-
-#' @export
-#' @keywords internal
-#' @title Roclet for VCR examples
-# https://github.com/shahronak47/informationtag
-examplesVCR_roclet <- function() {
-  roxygen2::roclet(c("examplesVCR", "rd"))
-}
-
-#' @exportS3Method roxygen2::roclet_process
-roclet_process.roclet_examplesVCR <- function(x, blocks, env, base_path) {
-  NextMethod()
-}
-
-#' @exportS3Method roxygen2::roclet_output
-roclet_output.roclet_examplesVCR <- function(x, results, base_path, ...) {
-  NextMethod()
-}
-
 #' Use 'vcr' for examples in your package
 #'
 #' This functions amends DESCRIPTION to set up vcr's roxygen2 machinery.
@@ -68,15 +48,11 @@ use_vcr_examples <- function(path = ".") {
   if (is.na(current_roxy)) {
     desc::desc_set(
       "Roxygen",
-      'list(markdown = TRUE, roclets = c("collate", "rd", "namespace", "vcr::examplesVCR_roclet", packages = "vcr"))'
+      'list(markdown = TRUE, packages = "vcr"))'
     )
   } else {
     current <- eval(parse(text = current_roxy))
     new <- current
-    new[["roclets"]] <- union(
-      current[["roclets"]],
-      c("collate", "rd", "namespace", "vcr::examplesVCR_roclet")
-    )
     new[["packages"]] <- union(current[["packages"]], "vcr")
 
     new_string <- paste(deparse(new), collapse = "")

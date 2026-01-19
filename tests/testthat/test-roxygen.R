@@ -4,7 +4,7 @@ test_that("@examplesVCR", {
   )
 
   out <- roxygen2::roc_proc_text(
-    examplesVCR_roclet(),
+    roxygen2::rd_roclet(),
     "
     #' @name a
     #' @title a
