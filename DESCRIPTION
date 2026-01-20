@@ -44,7 +44,7 @@ Suggests:
     knitr,
     qs2,
     rmarkdown,
-    roxygen2 (>= 7.2.1),
+    roxygen2,
     testthat (>= 3.0.0),
     webfakes,
     withr
@@ -56,7 +56,7 @@ Config/testthat/start-first: ause_cassette_re_record
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+RoxygenNote: 7.3.3.9000
 X-schema.org-applicationCategory: Web
 X-schema.org-isPartOf: https://ropensci.org
 X-schema.org-keywords: http, https, API, web-services, curl, mock,
