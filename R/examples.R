@@ -49,6 +49,9 @@ insert_example_cassette <- function(
   preserve_exact_body_bytes = NULL,
   re_record_interval = NULL
 ) {
+  if (vcr_turned_off()) {
+    return(invisible())
+  }
   dir <- example_cassette_path(package)
   in_dev <- is_dev_package(package)
   if (is.null(record)) {
