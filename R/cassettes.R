@@ -56,6 +56,10 @@ insert_cassette <- function(
 #' @export
 #' @rdname insert_cassette
 eject_cassette <- function() {
+  if (vcr_turned_off()) {
+    return(invisible())
+  }
+
   if (!cassette_active()) {
     cli::cli_abort("No cassette in use.")
   }
