@@ -1,7 +1,7 @@
 test_that("use_cassette options: re_record_interval", {
   local_vcr_configure(
     dir = withr::local_tempdir(),
-    re_record_interval = 1L
+    re_record_interval = 3L
   )
 
   # first use
@@ -19,7 +19,7 @@ test_that("use_cassette options: re_record_interval", {
   expect_equal(rr1$recorded_at, rr2$recorded_at)
 
   # third use, Sys.sleep, now expired, A change in recorded_at value
-  Sys.sleep(1.1)
+  Sys.sleep(3L)
   local_vcr_configure_log(file = stdout())
   expect_snapshot(
     use_cassette("test", res <- conn$get("get")),
