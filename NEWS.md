@@ -1,3 +1,8 @@
+vcr 2.1.0
+=========
+
+* Fix a few breaking tests on CRAN
+
 vcr 2.0.0
 =========
 
