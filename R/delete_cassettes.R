@@ -78,7 +78,17 @@ delete_cassettes <- function(
 delete_type_cassettes <- function(type, prefix) {
   dir <- switch(
     type,
-    tests = cassette_path(),
+    tests = {
+      path <- cassette_path()
+      if (is.null(path)) {
+        cli::cli_abort(c(
+          "No cassette directory has been configured.",
+          i = "Call {.fn vcr_configure} or {.fn local_vcr_configure} with a {.arg dir} argument before using {.fn delete_cassettes}.",
+          i = "Example: {.code vcr_configure(dir = \"tests/testthat/_vcr\")}"
+        ))
+      }
+      path
+    },
     examples = file.path(rprojroot::find_package_root_file(), "inst", "_vcr"),
     vignettes = file.path(
       rprojroot::find_package_root_file(),

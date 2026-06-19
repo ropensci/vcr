@@ -187,6 +187,14 @@ test_that("delete_cassettes() informs when directory doesn't exist", {
   expect_identical(result, character(0))
 })
 
+test_that("delete_cassettes() errors when no cassette directory is configured", {
+  local_vcr_configure(dir = NULL)
+
+  expect_snapshot(error = TRUE, {
+    delete_cassettes("api-", type = "tests")
+  })
+})
+
 test_that("delete_cassettes() informs when no cassettes match prefix", {
   dir <- withr::local_tempdir()
   local_vcr_configure(dir = dir)

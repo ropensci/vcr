@@ -61,6 +61,16 @@
       Directory '<inst_vcr>' does not exist. Nothing to delete.
       No cassettes matching prefix "test" were found.
 
+# delete_cassettes() errors when no cassette directory is configured
+
+    Code
+      delete_cassettes("api-", type = "tests")
+    Condition
+      Error in `FUN()`:
+      ! No cassette directory has been configured.
+      i Call `vcr_configure()` or `local_vcr_configure()` with a `dir` argument before using `delete_cassettes()`.
+      i Example: `vcr_configure(dir = "tests/testthat/_vcr")`
+
 # delete_cassettes() informs when no cassettes match prefix
 
     Code
