@@ -66,7 +66,7 @@
     Code
       delete_cassettes("api-", type = "tests")
     Condition
-      Error in `FUN()`:
+      Error in `test_cassette_dir()`:
       ! No cassette directory has been configured.
       i Call `vcr_configure()` or `local_vcr_configure()` with a `dir` argument before using `delete_cassettes()`.
       i Example: `vcr_configure(dir = "tests/testthat/_vcr")`
