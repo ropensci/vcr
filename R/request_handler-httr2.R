@@ -4,6 +4,7 @@ RequestHandlerHttr2 <- R6::R6Class(
 
   public = list(
     initialize = function(request) {
+      check_httr2_version()
       if (!length(request$method)) {
         request$method <- httr2_method(request)
       }
@@ -68,6 +69,19 @@ RequestHandlerHttr2 <- R6::R6Class(
     }
   )
 )
+
+check_httr2_version <- function(call = rlang::caller_env()) {
+  if (!is_installed("httr2", version = "1.2.0")) {
+    cli::cli_abort(
+      c(
+        "vcr requires {.pkg httr2} >= 1.2.0.",
+        "i" = "Installed version: {.val {as.character(utils::packageVersion('httr2'))}}.",
+        "i" = "Please update httr2 with {.code install.packages(\"httr2\")}."
+      ),
+      call = call
+    )
+  }
+}
 
 httr2_method <- function(req) {
   getNamespace("httr2")$req_get_method(req)
