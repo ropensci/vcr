@@ -155,7 +155,7 @@ test_that("string body works", {
   body <- "thisisastring"
 
   # Check that we make the request correctly
-  use_cassette("test", res1 <- httr::POST(hb_remote("/post"), body = body))
+  use_cassette("test", res1 <- httr::POST(hb("/post"), body = body))
   content1 <- httr::content(res1, "parsed")
   expect_equal(content1$data, body)
 

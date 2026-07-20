@@ -160,7 +160,7 @@ test_that("httr2 redacts auth header", {
 test_that("can capture body: string", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  req <- httr2::request(hb_remote("/post"))
+  req <- httr2::request(hb("/post"))
   req <- httr2::req_body_raw(req, "body")
 
   use_cassette("test", resp_record <- httr2::req_perform(req))
@@ -188,7 +188,7 @@ test_that("binary body uses base64 encoding", {
 test_that("can capture body: json", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
-  req <- httr2::request(hb_remote("/post"))
+  req <- httr2::request(hb("/post"))
   req <- httr2::req_body_json(req, list(foo = "bar"))
 
   use_cassette("test", resp_record <- httr2::req_perform(req))
@@ -240,7 +240,7 @@ test_that("can capture body: file", {
   local_vcr_configure(dir = withr::local_tempdir(), match_requests_on = "body")
 
   path <- withr::local_tempfile(fileext = ".txt", lines = "hello world")
-  req <- httr2::request(hb_remote("/post"))
+  req <- httr2::request(hb("/post"))
   req <- httr2::req_body_file(req, path)
 
   use_cassette("test", resp_record <- httr2::req_perform(req))

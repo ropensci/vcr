@@ -50,41 +50,6 @@ hb <- function(x = NULL) {
   server$url(x)
 }
 
-hb_remote <- function(x = NULL) {
-  skip_on_cran()
-
-  base_url <- getOption("vcr::httpbin_server")
-  if (is.null(base_url)) {
-    base_url <- find_httpbin_server()
-    options(`vcr::httpbin_server` = base_url)
-  }
-
-  if (is.null(x)) {
-    base_url
-  } else {
-    paste0(base_url, x)
-  }
-}
-
-find_httpbin_server <- function() {
-  urls <- c(
-    "https://hb.cran.dev",
-    # "https://hb.opencpu.org",
-    "https://nghttp2.org/httpbin"
-  )
-  h <- curl::new_handle(timeout = 10, failonerror = FALSE)
-
-  for (i in seq_along(urls)) {
-    url <- urls[[i]]
-    out <- curl::curl_fetch_memory(url, handle = h)
-    if (out$status_code == 200) {
-      cat(paste0("using base url for tests: ", url), sep = "\n")
-      return(url)
-    }
-  }
-  stop("all httpbin servers down")
-}
-
 recorded_at <- function(x) {
   read_yaml(x$file())$http_interactions[[1]]$recorded_at
 }

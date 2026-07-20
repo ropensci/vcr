@@ -46,7 +46,7 @@ Suggests:
     rmarkdown,
     roxygen2 (>= 7.2.1),
     testthat (>= 3.0.0),
-    webfakes,
+    webfakes (>= 1.5.0),
     withr
 VignetteBuilder:
     knitr
