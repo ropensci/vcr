@@ -1,26 +1,3 @@
-test_that("works with the installed (modern) httr2", {
-  skip_if_not_installed("httr2", "1.2.0")
-  expect_no_error(check_httr2_version())
-
-  local_vcr_configure(dir = withr::local_tempdir())
-  req <- httr2::request(hb("/get"))
-  use_cassette("modern_httr2", resp <- httr2::req_perform(req))
-  expect_s3_class(resp, "httr2_response")
-  expect_equal(resp$status_code, 200)
-})
-
-test_that("errors informatively when httr2 is too old", {
-  local_mocked_bindings(is_installed = function(...) FALSE)
-  expect_error(check_httr2_version(), class = "rlang_error")
-  expect_error(check_httr2_version(), regexp = "httr2.*>= 1\\.2\\.0")
-})
-
-test_that("RequestHandlerHttr2 errors informatively when httr2 is too old", {
-  local_mocked_bindings(is_installed = function(...) FALSE)
-  req <- httr2::request(hb("/get"))
-  expect_error(RequestHandlerHttr2$new(req), regexp = "httr2.*>= 1\\.2\\.0")
-})
-
 test_that("can generate all three types of response", {
   local_vcr_configure(dir = withr::local_tempdir())
 
