@@ -6,14 +6,14 @@ RequestHandlerHttr2 <- R6::R6Class(
     initialize = function(request) {
       check_installed("httr2", version = "1.2.0")
       if (!length(request$method)) {
-        request$method <- httr2_method(request)
+        request$method <- httr2::req_get_method(request)
       }
       self$request_original <- request
       self$request <- vcr_request(
         request$method,
         request$url,
         httr2_body(request),
-        httr2_headers(request)
+        httr2::req_get_headers(request)
       )
     },
     on_ignored_request = function() {
@@ -33,7 +33,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::response(
         status_code = vcr_response$status,
         url = self$request_original$url,
-        method = httr2_method(self$request_original),
+        method = httr2::req_get_method(self$request_original),
         headers = vcr_response$headers,
         body = body
       )
@@ -70,17 +70,9 @@ RequestHandlerHttr2 <- R6::R6Class(
   )
 )
 
-httr2_method <- function(req) {
-  getNamespace("httr2")$req_get_method(req)
-}
-
-httr2_headers <- function(req) {
-  getNamespace("httr2")$req_get_headers(req)
-}
-
 httr2_body <- function(x) {
-  type <- getNamespace("httr2")$req_get_body_type(x)
-  data <- getNamespace("httr2")$req_get_body(x)
+  type <- httr2::req_get_body_type(x)
+  data <- httr2::req_get_body(x)
   switch(
     type,
     # old & new
