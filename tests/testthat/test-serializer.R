@@ -234,14 +234,14 @@ test_that("YAML usage", {
   expect_equal(basename(z$path), "name.yml")
 
   # before file exists:
-  expect_error(suppressWarnings(z$deserialize()), "cannot open")
+  expect_error(z$deserialize(), "Failed to read")
 
   # after file exists, before any yaml in it:
   file.create(z$path)
   expect_equal(z$deserialize(), list())
   # after file exists, with yaml in it, with incomplete final line:
   cat("foo: 123\nbar: 456", file = z$path)
-  expect_warning(z$deserialize(), "incomplete final line")
+  expect_type(z$deserialize(), "list")
   # after file exists, with yaml in it, without incomplete final line:
   cat("foo: 123\nbar: 456\n", file = z$path)
   expect_type(z$deserialize(), "list")

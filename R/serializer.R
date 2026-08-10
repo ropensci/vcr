@@ -25,7 +25,7 @@ Serializer <- R6::R6Class(
     ) {
       self$file_extension <- ext
       self$path <- paste0(path, "/", name, self$file_extension)
-      self$preserve_bytes = preserve_bytes
+      self$preserve_bytes <- preserve_bytes
       self$matchers <- matchers
     },
     serialize = function(data) NULL,
@@ -98,11 +98,11 @@ YAML <- R6::R6Class(
         preserve_bytes = self$preserve_bytes,
         matchers = self$matchers
       )
-      yaml::write_yaml(out, self$path)
+      yaml12::write_yaml(out, self$path)
     },
 
     deserialize = function() {
-      input <- yaml::read_yaml(self$path)
+      input <- yaml12::read_yaml(self$path)
       decode_interactions(input, self$preserve_bytes)
     }
   )

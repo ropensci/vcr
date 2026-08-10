@@ -38,16 +38,18 @@
     Code
       writeLines(readLines(ser$path))
     Output
+      ---
       http_interactions:
-      - request:
-          method: GET
-          uri: http://example.com/
-        response:
-          status: 200
-          headers:
-            name: val
-          body:
-            string: body
-        recorded_at: 2024-01-01 12:00:00
+        - request:
+            method: GET
+            uri: "http://example.com/"
+          response:
+            status: 200
+            headers:
+              name: val
+            body:
+              string: body
+          recorded_at: "2024-01-01 12:00:00"
       recorded_with: VCR-<package_versions>
+      ...
 
