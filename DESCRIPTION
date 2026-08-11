@@ -40,7 +40,7 @@ Suggests:
     crul (>= 1.6.0),
     desc,
     httr,
-    httr2 (>= 1.1.2),
+    httr2 (>= 1.2.0),
     knitr,
     qs2,
     rmarkdown,

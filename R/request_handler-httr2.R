@@ -4,15 +4,16 @@ RequestHandlerHttr2 <- R6::R6Class(
 
   public = list(
     initialize = function(request) {
+      check_installed("httr2", version = "1.2.0")
       if (!length(request$method)) {
-        request$method <- httr2_method(request)
+        request$method <- httr2::req_get_method(request)
       }
       self$request_original <- request
       self$request <- vcr_request(
         request$method,
         request$url,
         httr2_body(request),
-        httr2_headers(request)
+        httr2::req_get_headers(request)
       )
     },
     on_ignored_request = function() {
@@ -32,7 +33,7 @@ RequestHandlerHttr2 <- R6::R6Class(
       httr2::response(
         status_code = vcr_response$status,
         url = self$request_original$url,
-        method = httr2_method(self$request_original),
+        method = httr2::req_get_method(self$request_original),
         headers = vcr_response$headers,
         body = body
       )
@@ -69,38 +70,9 @@ RequestHandlerHttr2 <- R6::R6Class(
   )
 )
 
-httr2_method <- function(req) {
-  if (modern_httr2()) {
-    return(getNamespace("httr2")$req_get_method(req))
-  }
-
-  if (!is.null(req$method)) {
-    req$method
-  } else if ("nobody" %in% names(req$options)) {
-    "HEAD"
-  } else if (!is.null(req$body)) {
-    "POST"
-  } else {
-    "GET"
-  }
-}
-
-httr2_headers <- function(req) {
-  if (modern_httr2()) {
-    getNamespace("httr2")$req_get_headers(req)
-  } else {
-    req$headers
-  }
-}
-
 httr2_body <- function(x) {
-  if (modern_httr2()) {
-    type <- getNamespace("httr2")$req_get_body_type(x)
-    data <- getNamespace("httr2")$req_get_body(x)
-  } else {
-    type <- x$body$type %||% "empty"
-    data <- x$body$data
-  }
+  type <- httr2::req_get_body_type(x)
+  data <- httr2::req_get_body(x)
   switch(
     type,
     # old & new
@@ -116,7 +88,7 @@ httr2_body <- function(x) {
     # new
     string = data,
     # old and new
-    form = list2str(data),
+    form = httr2::url_query_build(data),
     # old and new
     json = unclass(rlang::exec(jsonlite::toJSON, data, !!!x$body$params)),
     # old
@@ -129,13 +101,4 @@ httr2_body <- function(x) {
     multipart = data,
     cli::cli_abort("Unsupported request body type {.str {type}}.")
   )
-}
-
-modern_httr2 <- function() {
-  exists("req_get_body", asNamespace("httr2"))
-}
-
-list2str <- function(w) {
-  # TODO: replace with url_query_build() once we depend on modern httr2
-  paste(names(w), unlist(unname(w)), sep = "=", collapse = "&")
 }
