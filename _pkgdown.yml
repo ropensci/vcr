@@ -13,6 +13,7 @@ reference:
       - cassette_path
       - cassettes
       - current_cassette
+      - delete_cassettes
       - is_recording
   - title: Other helpers
     contents:
