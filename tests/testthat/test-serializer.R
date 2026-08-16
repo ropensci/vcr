@@ -256,11 +256,13 @@ test_that("Windows encoding", {
 # QS2 -------------------------------------------------------------------
 
 test_that("generates correct path", {
+  skip_if_not_installed("qs2")
   aa <- QS2$new("path", "name")
   expect_equal(aa$path, "path/name.qs2")
 })
 
 test_that("qs2 is idempotent", {
+  skip_if_not_installed("qs2")
   local_mocked_bindings(
     Sys.time = function(tz) as.POSIXct("2024-01-01 12:00:00", tz = "UTC")
   )
