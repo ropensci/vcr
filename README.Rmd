@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 [![cran checks](https://badges.cranchecks.info/worst/vcr.svg)](https://CRAN.R-project.org/package=vcr)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![R-check](https://github.com/ropensci/vcr/workflows/R-check/badge.svg)](https://github.com/ropensci/vcr/actions/)
+[![R-check](https://github.com/ropensci/vcr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/vcr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/ropensci/vcr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/vcr)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/vcr)](https://github.com/r-hub/cranlogs.app)
 [![cran version](https://www.r-pkg.org/badges/version/vcr)](https://cran.r-project.org/package=vcr)
