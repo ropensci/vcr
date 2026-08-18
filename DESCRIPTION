@@ -35,7 +35,7 @@ Imports:
     rlang (>= 1.1.0),
     rprojroot,
     waldo,
-    yaml12
+    yaml
 Suggests:
     crul (>= 1.6.0),
     desc,

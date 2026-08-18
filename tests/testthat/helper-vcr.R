@@ -95,7 +95,7 @@ read_yaml <- function(path) {
   if (!file.exists(path)) {
     cli::cli_abort("{.path {path}} does not exist.")
   }
-  yaml12::read_yaml(path)
+  yaml::yaml.load_file(path)
 }
 
 testthat::set_state_inspector(\() {
