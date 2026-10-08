@@ -56,6 +56,14 @@ decode_body <- function(body, preserve_bytes = FALSE) {
   }
 }
 
+decode_body_chunks <- function(x) {
+  if (is.null(x)) {
+    NULL
+  } else {
+    as.integer(unlist(x))
+  }
+}
+
 # Helpers --------------------------------------------------------------------
 from_base64 <- function(x) {
   if (is.character(x)) {
