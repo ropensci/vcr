@@ -42,9 +42,11 @@ vcr_request <- function(method, uri, body = NULL, headers = list()) {
   )
 }
 
-# `body_chunks` is only set for streamed responses. It records the size in
-# bytes of each chunk the body was received in, so that replay can hand them
-# back with the same boundaries. `body` always holds the complete body.
+#' @noRd
+#' @description `body_chunks` is only set for streamed responses. It records
+#' the size in bytes of each chunk the body was received in, so that replay
+#' can hand them back with the same boundaries. `body` always holds the
+#' complete body.
 vcr_response <- function(
   status,
   headers = list(),

@@ -96,7 +96,7 @@ RequestHandlerHttr2 <- R6::R6Class(
   )
 )
 
-# `req_perform_connection()` adds this policy before calling the mock
+# `httr2::req_perform_connection()` adds this policy before calling the mock
 is_streaming_request <- function(req) {
   isTRUE(req$policies$connection)
 }
