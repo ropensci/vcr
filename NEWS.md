@@ -1,3 +1,9 @@
+vcr (development version)
+=========================
+
+* httr2 requests made with `req_perform_connection()` (and the superseded `req_perform_stream()`) are now recorded and replayed (#273)
+* vcr now requires httr2 1.2.0 or greater, the first version that allows `req_perform_connection()` to be mocked
+
 vcr 2.1.0
 =========
 

@@ -103,3 +103,39 @@ test_that("header/body only included if needed", {
   encoded <- encode_interaction(interaction, matchers = "headers")
   expect_named(encoded$request, c("method", "uri", "headers"))
 })
+
+test_that("body_chunks survive an encode/decode roundtrip", {
+  interaction <- vcr_interaction(
+    vcr_request("GET", "https://example.com/stream"),
+    vcr_response(200, body = "abcdefghij", body_chunks = c(3, 5, 2)),
+    recorded_at = as.POSIXct("2023-01-01 12:00:00", tz = "UTC")
+  )
+
+  encoded <- encode_interaction(interaction)
+  expect_equal(encoded$response$body_chunks, list(3L, 5L, 2L))
+  expect_equal(decode_interaction(encoded), interaction)
+
+  # and through the file formats, where length one vectors are unboxed
+  for (type in c("yaml", "json")) {
+    dir <- withr::local_tempdir()
+    serializer <- serializer_fetch(type, dir, "test")
+    for (chunks in list(c(3, 5, 2), 10)) {
+      interaction$response$body_chunks <- as.integer(chunks)
+      serializer$serialize(list(interaction))
+      expect_equal(serializer$deserialize()$http_interactions[[1]], interaction)
+    }
+  }
+})
+
+test_that("responses without body_chunks don't write the field", {
+  response <- vcr_response(200, body = "abc")
+  expect_null(response$body_chunks)
+  expect_false("body_chunks" %in% names(encode_response(response)))
+  expect_null(decode_body_chunks(NULL))
+})
+
+test_that("vcr_response() validates body_chunks", {
+  expect_error(vcr_response(200, body_chunks = "a"), "body_chunks")
+  expect_error(vcr_response(200, body_chunks = -1), "body_chunks")
+  expect_error(vcr_response(200, body_chunks = NA_real_), "body_chunks")
+})
