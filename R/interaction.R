@@ -42,7 +42,18 @@ vcr_request <- function(method, uri, body = NULL, headers = list()) {
   )
 }
 
-vcr_response <- function(status, headers = list(), body = NULL, disk = FALSE) {
+#' @noRd
+#' @description `body_chunks` is only set for streamed responses. It records
+#' the size in bytes of each chunk the body was received in, so that replay
+#' can hand them back with the same boundaries. `body` always holds the
+#' complete body.
+vcr_response <- function(
+  status,
+  headers = list(),
+  body = NULL,
+  disk = FALSE,
+  body_chunks = NULL
+) {
   check_number_whole(status)
   if (!is.list(headers)) {
     stop_input_type(headers, "a list")
@@ -51,13 +62,25 @@ vcr_response <- function(status, headers = list(), body = NULL, disk = FALSE) {
     stop_input_type(body, "a string, raw vector, or NULL")
   }
   check_bool(disk)
+  if (!is.null(body_chunks)) {
+    if (
+      !is.numeric(body_chunks) || anyNA(body_chunks) || any(body_chunks < 0)
+    ) {
+      stop_input_type(
+        body_chunks,
+        "a vector of non-negative whole numbers, or NULL"
+      )
+    }
+    body_chunks <- as.integer(body_chunks)
+  }
 
   structure(
     list(
       status = status,
       headers = headers,
       body = body,
-      disk = disk
+      disk = disk,
+      body_chunks = body_chunks
     ),
     class = "vcr_response"
   )

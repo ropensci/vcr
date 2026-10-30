@@ -25,7 +25,7 @@ Serializer <- R6::R6Class(
     ) {
       self$file_extension <- ext
       self$path <- paste0(path, "/", name, self$file_extension)
-      self$preserve_bytes = preserve_bytes
+      self$preserve_bytes <- preserve_bytes
       self$matchers <- matchers
     },
     serialize = function(data) NULL,

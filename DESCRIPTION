@@ -45,7 +45,7 @@ Suggests:
     qs2,
     rmarkdown,
     roxygen2 (>= 7.2.1),
-    testthat (>= 3.0.0),
+    testthat (>= 3.3.0),
     webfakes,
     withr
 VignetteBuilder:
@@ -60,4 +60,4 @@ X-schema.org-applicationCategory: Web
 X-schema.org-isPartOf: https://ropensci.org
 X-schema.org-keywords: http, https, API, web-services, curl, mock,
     mocking, http-mocking, testing, testing-tools, tdd
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

@@ -32,7 +32,7 @@ check_cassette_names <- function(
   cassette_names <- function(x) {
     tmp <- parse(x, keep.source = TRUE)
     df <- utils::getParseData(tmp)
-    row.names(df) = NULL
+    row.names(df) <- NULL
     z <- as.numeric(row.names(df[df$text == "use_cassette", ])) + 2
     gsub("\"", "", df[z, "text"])
   }
