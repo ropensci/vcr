@@ -292,7 +292,12 @@ stream_sizes <- function(resp, kb = 64) {
   sizes
 }
 
-record_stream_interaction <- function(url, body, body_chunks, headers = list()) {
+record_stream_interaction <- function(
+  url,
+  body,
+  body_chunks,
+  headers = list()
+) {
   current_cassette()$record_http_interaction(
     vcr_request("GET", url, headers = list()),
     vcr_response(200, headers = headers, body = body, body_chunks = body_chunks)
@@ -439,7 +444,11 @@ test_that("can stream server sent events", {
   body <- "data: one\n\ndata: two\n\nevent: done\ndata: three\n\n"
   use_cassette("test", {
     # split in the middle of the second event
-    record_stream_interaction(url, body, body_chunks = c(14, 6, nchar(body) - 20))
+    record_stream_interaction(
+      url,
+      body,
+      body_chunks = c(14, 6, nchar(body) - 20)
+    )
   })
 
   use_cassette("test", resp <- httr2::req_perform_connection(req))
@@ -480,10 +489,16 @@ test_that("can capture streaming errors", {
   req_404 <- httr2::request(hb("/status/404"))
 
   use_cassette("test", {
-    expect_error(httr2::req_perform_connection(req_404), class = "httr2_http_404")
+    expect_error(
+      httr2::req_perform_connection(req_404),
+      class = "httr2_http_404"
+    )
   })
   use_cassette("test", {
-    expect_error(httr2::req_perform_connection(req_404), class = "httr2_http_404")
+    expect_error(
+      httr2::req_perform_connection(req_404),
+      class = "httr2_http_404"
+    )
   })
 
   # and can capture them when errors are suppressed
@@ -498,9 +513,13 @@ test_that("ignored streaming requests are still streamed", {
   local_vcr_configure(dir = withr::local_tempdir(), ignore_localhost = TRUE)
   req <- httr2::request(hb("/stream-bytes/1000"))
 
-  use_cassette("test", {
-    resp <- httr2::req_perform_connection(req)
-  }, warn_on_empty = FALSE)
+  use_cassette(
+    "test",
+    {
+      resp <- httr2::req_perform_connection(req)
+    },
+    warn_on_empty = FALSE
+  )
   expect_true(is_stream(resp))
   expect_equal(sum(stream_sizes(resp)), 1000)
 })
@@ -508,7 +527,10 @@ test_that("ignored streaming requests are still streamed", {
 test_that("streaming requests that aren't in the cassette error when replaying", {
   local_vcr_configure(dir = withr::local_tempdir())
 
-  use_cassette("test", httr2::req_perform_connection(httr2::request(hb("/get"))))
+  use_cassette(
+    "test",
+    httr2::req_perform_connection(httr2::request(hb("/get")))
+  )
   expect_snapshot(
     use_cassette(
       "test",
