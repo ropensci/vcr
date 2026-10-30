@@ -112,30 +112,6 @@ httr2_response_body <- function(response) {
   }
 }
 
-httr2_method <- function(req) {
-  if (modern_httr2()) {
-    return(getNamespace("httr2")$req_get_method(req))
-  }
-
-  if (!is.null(req$method)) {
-    req$method
-  } else if ("nobody" %in% names(req$options)) {
-    "HEAD"
-  } else if (!is.null(req$body)) {
-    "POST"
-  } else {
-    "GET"
-  }
-}
-
-httr2_headers <- function(req) {
-  if (modern_httr2()) {
-    getNamespace("httr2")$req_get_headers(req)
-  } else {
-    req$headers
-  }
-}
-
 httr2_body <- function(x) {
   type <- httr2::req_get_body_type(x)
   data <- httr2::req_get_body(x)
