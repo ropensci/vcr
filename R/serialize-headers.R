@@ -45,9 +45,7 @@ headers_remove <- function(headers, filter) {
 }
 
 request_headers_redact <- function(headers) {
-  # TODO: remove once we depend on modern httr2
-  to_redact <- union(attr(headers, "redact"), "authorization")
-  matches <- match(tolower(to_redact), tolower(names(headers)))
+  matches <- match("authorization", tolower(names(headers)))
   matches <- matches[!is.na(matches)]
 
   if (length(matches) == 0) {
