@@ -20,3 +20,5 @@ docs/
 **/.claude/settings.local.json
 
 README.html
+
+.posit/

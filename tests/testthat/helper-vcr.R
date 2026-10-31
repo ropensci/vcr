@@ -109,3 +109,58 @@ testthat::set_state_inspector(\() {
     vcr_config = the$config
   )
 })
+
+chat_app <- function() {
+  app <- webfakes::new_app()
+  app$use(webfakes::mw_log())
+  app$use(webfakes::mw_json())
+
+  app$post("/v1/chat/completions", function(req, res) {
+    msgs <- req$json$messages
+    last <- msgs[[length(msgs)]]$content
+
+    # failure injection via header
+    if (identical(req$get_header("X-Mock-Error"), "429")) {
+      res$set_status(429)$send_json(
+        list(error = list(message = "rate limited", type = "rate_limit_error")),
+        auto_unbox = TRUE
+      )
+      return()
+    }
+
+    res$send_json(
+      list(
+        id = "chatcmpl-mock",
+        object = "chat.completion",
+        model = if (is.null(req$json$model)) "mock-model" else req$json$model,
+        choices = list(list(
+          index = 0L,
+          message = list(role = "assistant", content = paste("echo:", last)),
+          finish_reason = "stop"
+        )),
+        usage = list(
+          prompt_tokens = 1L,
+          completion_tokens = 1L,
+          total_tokens = 2L
+        )
+      ),
+      auto_unbox = TRUE
+    )
+  })
+
+  # streaming (SSE) variant
+  app$post("/v1/chat/completions/stream", function(req, res) {
+    res$set_header("Content-Type", "text/event-stream")
+    for (w in c("Hello", " from", " mock")) {
+      chunk <- list(choices = list(list(delta = list(content = w), index = 0L)))
+      res$send_chunk(paste0(
+        "data: ",
+        jsonlite::toJSON(chunk, auto_unbox = TRUE),
+        "\n\n"
+      ))
+    }
+    res$send_chunk("data: [DONE]\n\n")
+  })
+
+  app
+}

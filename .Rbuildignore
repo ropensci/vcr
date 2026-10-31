@@ -27,3 +27,4 @@ inst/ignore
 ^\.github$
 ^CLAUDE\.md$
 ^\.claude$
+^\.posit$

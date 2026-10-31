@@ -74,7 +74,10 @@ encode_response <- function(response, preserve_bytes = FALSE) {
   compact(list(
     status = response$status,
     headers = encode_headers(response$headers, "response"),
-    body = encode_body(response$body, response$disk, preserve_bytes)
+    body = encode_body(response$body, response$disk, preserve_bytes),
+    body_chunks = if (!is.null(response$body_chunks)) {
+      as.list(response$body_chunks)
+    }
   ))
 }
 
@@ -102,7 +105,8 @@ decode_interaction <- function(interaction, preserve_bytes = FALSE) {
       status = status,
       headers = decode_headers(response$headers),
       body = response_body$data,
-      disk = response_body$on_disk
+      disk = response_body$on_disk,
+      body_chunks = decode_body_chunks(response$body_chunks)
     ),
     as.POSIXct(interaction$recorded_at, tz = "UTC")
   )
