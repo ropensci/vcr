@@ -1,5 +1,6 @@
 # Reading a streamed response in chunks
 test_that("downloads a large export in chunks", {
+  local_vcr_configure(dir = withr::local_tempdir())
   vcr::local_cassette("export-stream")
 
   resp <- httr2::request("https://hb.cran.dev/stream-bytes/100000") |>
@@ -17,6 +18,7 @@ test_that("downloads a large export in chunks", {
 
 # Reading line-delimited JSON (NDJSON)
 test_that("parses each record from an NDJSON stream", {
+  local_vcr_configure(dir = withr::local_tempdir())
   vcr::local_cassette("ndjson-records")
 
   resp <- httr2::request("https://hb.cran.dev/stream/3") |>
@@ -37,8 +39,9 @@ test_that("parses each record from an NDJSON stream", {
   )
 })
 
-# Server-sent events
+# Server-sent events------------------------------------------------------------
 test_that("collects tokens from a chat completion stream", {
+  local_vcr_configure(dir = withr::local_tempdir())
   vcr::local_cassette("chat-stream", match_requests_on = c("method", "path"))
 
   srv <- webfakes::local_app_process(chat_app(), .local_envir = environment())
@@ -59,6 +62,7 @@ test_that("collects tokens from a chat completion stream", {
 
 # httr2::req_perform_stream is soft-deprecated
 test_that("callback sees every chunk", {
+  local_vcr_configure(dir = withr::local_tempdir())
   vcr::local_cassette("stream-callback")
   rlang::local_options(lifecycle_verbosity = "quiet")
 
