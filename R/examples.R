@@ -2,11 +2,18 @@
 #'
 #' @description
 #' `insert_example_cassette()` is a wrapper around [insert_cassette()] that
-#' stores cassettes in `inst/_vcr/`. Call it in the first line of your examples
+#' stores cassettes in `inst/_vcr/`. Either:
+#' - Use the vcr-specific `@examplesVCR` tag instead of the `@examples` tag.
+#' For this to work you need to register vcr in your DESCRIPTION by running
+#' `vcr::use_vcr_examples()` once per package.
+#' - Call it in the first line of your examples
 #' (typically wrapped in `\dontshow{}`), and call `eject_cassette()` on the
 #' last line.
-#'
-#' Run the example manually once to record the vignettte, then it will be
+#' - Run `document()`
+#' - Run the example manually once to record the cassette, either with `devtools::run_examples()`
+#' (which will run all examples) or by copy pasting the relevant lines from the Rd files
+#' in your console.
+#' - Then the cassette will be
 #' replayed during `R CMD check`, ensuring that your example no longer uses
 #' the internet.
 #'
